@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary color -->
+    <color name="primary">#212121</color>
+    <color name="primaryVariant">#484848</color>
+    <color name="onPrimary">#000000</color>
+    <!-- Secondary color -->
+    <color name="secondary">#aeea00</color>
+    <color name="secondaryVariant">#e4ff54</color>
+    <color name="onSecondary">#79b700</color>
+
+    <!-- Night background color -->
+    <color name="backgroundPrimary">#ffffff</color>
+    <color name="backgroundPrimarySecondary">#c2c2c2</color>
+
+    <!-- Night primary color -->
+    <color name="nightPrimary">#212121</color>
+    <color name="nightPrimaryVariant">#484848</color>
+    <color name="nightOnPrimary">#000000</color>
+    <!-- Night secondary color -->
+    <color name="nightSecondary">#546e7a</color>
+    <color name="nightSecondaryVariant">#819ca9</color>
+    <color name="nightOnSecondary">#29434e</color>
+
+    <!-- Night background color -->
+    <color name="nightBackgroundPrimary">#4f5b62</color>
+    <color name="nightBackgroundPrimarySecondary">#000a12</color>
+
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>

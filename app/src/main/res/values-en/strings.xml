@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Manga Reader</string>
+    <string name="menu_search" translatable="false">Search</string>
+    <string name="menu_help" translatable="false">Help</string>
+    <string name="menu_config" translatable="false">Config</string>
+</resources>

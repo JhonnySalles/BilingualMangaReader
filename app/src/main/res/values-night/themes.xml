@@ -1,0 +1,16 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.MangaReader" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/nightPrimary</item>
+        <item name="colorPrimaryVariant">@color/nightPrimaryVariant</item>
+        <item name="colorOnPrimary">@color/nightOnPrimary</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/nightSecondary</item>
+        <item name="colorSecondaryVariant">@color/nightSecondaryVariant</item>
+        <item name="colorOnSecondary">@color/nightOnSecondary</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+    </style>
+
+</resources>
