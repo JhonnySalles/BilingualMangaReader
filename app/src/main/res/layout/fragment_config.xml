@@ -26,7 +26,8 @@
             app:boxStrokeColor="@color/onSecondary"
             app:startIconTint="@color/onSecondary"
             app:startIconDrawable="@drawable/ic_order"
-            app:placeholderTextColor="@color/textPrimary">
+            app:placeholderTextColor="@color/textPrimary"
+            app:hintTextColor="@color/onSecondary">
 
             <AutoCompleteTextView
                 android:id="@+id/menu_autocomplete_library_order"
@@ -51,6 +52,7 @@
             app:boxBackgroundColor="@color/primary"
             app:boxStrokeColor="@color/onSecondary"
             app:placeholderTextColor="@color/textPrimary"
+            app:hintTextColor="@color/onSecondary"
             app:startIconDrawable="@drawable/ic_sd_storage"
             app:startIconTint="@color/onSecondary"
             app:layout_constraintEnd_toEndOf="parent"

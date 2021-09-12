@@ -14,12 +14,11 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import br.com.fenix.mangareader.service.Storage
 import java.io.File
 
 class LibraryFragment : Fragment() {
     private var libraryPath: String = ""
-
-    var permissions =arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE)
 
     private var listFiles: ArrayList<File>? = null
     private var listBooks: ArrayList<Book>? = ArrayList()
@@ -30,18 +29,9 @@ class LibraryFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loadConfig()
-        if (ActivityCompat.checkSelfPermission(
-                requireActivity(),
-                permissions[0]
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                permissions,
-                121
-            )
-        }
 
+        if (!Storage.isPermissionGranted(requireContext()))
+            Storage.takePermission(requireContext(), requireActivity())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -85,12 +75,7 @@ class LibraryFragment : Fragment() {
 
         listFiles = ArrayList()
 
-        println(libraryPath)
         var file : File = File(libraryPath)
-        var files : Array<out File>? = file.listFiles()
-        files?.forEach {
-            print(it) }
-
         file.walk()
             .filterNot { it.isDirectory() }.forEach {
             println(it)
