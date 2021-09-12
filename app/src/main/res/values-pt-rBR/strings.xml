@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Manga Reader</string>
+    <string name="app_name">Bilingual Manga Reader</string>
+
+    <!-- MENU -->
     <string name="menu_search" translatable="false">Procurar</string>
     <string name="menu_help" translatable="false">Ajuda</string>
     <string name="menu_config" translatable="false">Configuração</string>
+    <string name="menu_library" translatable="false">Biblioteca</string>
+    <string name="menu_history">Histórico</string>
+
+    <!-- CONFIG -->
+    <string name="text_library_folder" translatable="false">Pasta biblioteca</string>
+    <string name="text_library_order">Ordenação da biblioteca</string>
+    <string name="option_order_name">Por nome</string>
+    <string name="option_order_date">Por data</string>
+    <string name="option_order_access">Último acesso</string>
+    <string name="choose_library_folder">Escolha a pasta da biblioteca</string>
+
 </resources>

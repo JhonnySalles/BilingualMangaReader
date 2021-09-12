@@ -6,16 +6,7 @@
         android:icon="@drawable/ic_search"
         android:iconTint="#FFFFFF"
         android:title="@string/menu_search"
+        android:orderInCategory="100"
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="always" />
-    <item
-        android:id="@+id/configuration"
-        android:icon="@drawable/ic_settings"
-        android:iconTint="@color/white"
-        android:title="@string/menu_config"/>
-    <item
-        android:id="@+id/help"
-        android:icon="@drawable/ic_help"
-        android:iconTint="@color/white"
-        android:title="@string/menu_help" />
 </menu>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_library"
+            android:icon="@drawable/ic_library"
+            android:iconTint="@color/white"
+            android:orderInCategory="100"
+            android:title="@string/menu_library" />
+
+        <item
+            android:id="@+id/menu_history"
+            android:icon="@drawable/ic_help"
+            android:iconTint="@color/white"
+            android:orderInCategory="100"
+            android:title="@string/menu_history" />
+
+        <item
+            android:id="@+id/menu_configuration"
+            android:icon="@drawable/ic_settings"
+            android:iconTint="@color/white"
+            android:orderInCategory="100"
+            android:title="@string/menu_config" />
+
+        <item
+            android:id="@+id/menu_help"
+            android:icon="@drawable/ic_help"
+            android:iconTint="@color/white"
+            android:orderInCategory="100"
+            android:title="@string/menu_help" />
+    </group>
+</menu>
