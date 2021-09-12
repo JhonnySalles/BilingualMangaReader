@@ -1,4 +1,4 @@
-package br.com.fenix.mangareader
+package br.com.fenix.mangareader.fragment
 
 import android.app.Activity.RESULT_OK
 import android.content.Context
@@ -12,6 +12,8 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import androidx.fragment.app.Fragment
+import br.com.fenix.mangareader.model.Consts
+import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.service.Storage
 import com.google.android.material.textfield.TextInputLayout
 

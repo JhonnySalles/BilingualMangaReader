@@ -1,4 +1,4 @@
-package br.com.fenix.mangareader
+package br.com.fenix.mangareader.model
 
 class Consts {
     companion object{

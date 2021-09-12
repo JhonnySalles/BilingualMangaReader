@@ -1,19 +1,20 @@
-package br.com.fenix.mangareader
+package br.com.fenix.mangareader.fragment
 
-import android.Manifest
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import br.com.fenix.mangareader.model.BookItemAdapter
+import br.com.fenix.mangareader.model.Consts
+import br.com.fenix.mangareader.ImageCover
+import br.com.fenix.mangareader.R
+import br.com.fenix.mangareader.model.Book
 import br.com.fenix.mangareader.service.Storage
 import java.io.File
 
@@ -93,9 +94,11 @@ class LibraryFragment : Fragment() {
         if (listFiles == null || listFiles!!.isEmpty()) {
             listBooks?.clear()
         } else {
+            var id : Int = 0
             for (file in listFiles!!) {
-                val book = Book(file.nameWithoutExtension, "", file)
-                book.image_cover = ImageCover.instance.getImage(file)
+                id++
+                val book = Book(id, file.nameWithoutExtension, "", file, file.extension)
+                book.tumbnail = ImageCover.instance.getImage(file)
                 listBooks?.add(book)
             }
         }

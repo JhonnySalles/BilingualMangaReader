@@ -1,7 +1,8 @@
-package br.com.fenix.mangareader
+package br.com.fenix.mangareader.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import br.com.fenix.mangareader.R
 
 class ReaderActivity : AppCompatActivity() {
 

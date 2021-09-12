@@ -1,4 +1,4 @@
-package br.com.fenix.mangareader
+package br.com.fenix.mangareader.model
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,6 +9,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import br.com.fenix.mangareader.R
 
 class BookItemAdapter(private val data: List<Book>, val context: Context) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -58,9 +59,9 @@ class BookItemAdapter(private val data: List<Book>, val context: Context) :
                     context.packageName
                 )
             )
-            bookTitle.text = book.Title
-            bookSubTitle.text = book.SubTitle
-            bookProgress.setProgress(book.bookMark / book.Pages, false)
+            bookTitle.text = book.title
+            bookSubTitle.text = book.subTitle
+            bookProgress.setProgress(book.bookMark / book.pages, false)
         }
 
         override fun onClick(p0: View?) {

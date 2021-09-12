@@ -15,7 +15,7 @@
         android:theme="@style/Theme.MangaReader"
         android:requestLegacyExternalStorage="true">
         <activity
-            android:name=".ReaderActivity"
+            android:name=".activity.ReaderActivity"
             android:exported="true" />
         <activity
             android:name=".MainActivity"
