@@ -7,6 +7,7 @@
     <string name="menu_history">History</string>
     <string name="menu_help">Help</string>
     <string name="menu_config">Config</string>
+    <string name="menu_grid_type">Grid type</string>
 
     <!-- CONFIG -->
     <string name="text_library_folder">Library folder</string>

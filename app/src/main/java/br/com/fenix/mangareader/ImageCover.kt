@@ -6,7 +6,6 @@ import java.io.File
 
 
 class ImageCover private constructor() {
-
     private object HOLDER {
         val INSTANCE = ImageCover()
     }
@@ -40,7 +39,7 @@ class ImageCover private constructor() {
     fun getImage(file : File): Bitmap? {
         var image = retrieveBitmapFromCache(file.name)
 
-        //if (image == null) {
+        if (image == null) {
 
           //  val coverImage = null
             //if (file.extension.endsWith(".rar")) {
@@ -51,7 +50,7 @@ class ImageCover private constructor() {
 
 
             //saveBitmapToCahche(file.name, bitmap: Bitmap)
-        //}
+        }
 
         return image;
     }

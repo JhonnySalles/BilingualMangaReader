@@ -1,31 +1,33 @@
 package br.com.fenix.mangareader.fragment
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import br.com.fenix.mangareader.model.BookItemAdapter
-import br.com.fenix.mangareader.model.Consts
 import br.com.fenix.mangareader.ImageCover
 import br.com.fenix.mangareader.R
+import br.com.fenix.mangareader.adapter.BookGridCardAdapter
+import br.com.fenix.mangareader.adapter.BookLineCardAdapter
+import br.com.fenix.mangareader.enums.LibraryType
 import br.com.fenix.mangareader.model.Book
+import br.com.fenix.mangareader.model.Consts
 import br.com.fenix.mangareader.service.Storage
 import java.io.File
 
-class LibraryFragment : Fragment() {
+class LibraryFragment : Fragment(), Toolbar.OnMenuItemClickListener,
+    MenuItem.OnMenuItemClickListener {
     private var libraryPath: String = ""
 
     private var listFiles: ArrayList<File>? = null
     private var listBooks: ArrayList<Book>? = ArrayList()
 
     private lateinit var recycleView : RecyclerView
-    private lateinit var recyAdapter : BookItemAdapter
+    private var gridType : LibraryType = LibraryType.LINE
+    private lateinit var miGridType : MenuItem
+    private lateinit var miSearch : MenuItem
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,14 +37,52 @@ class LibraryFragment : Fragment() {
             Storage.takePermission(requireContext(), requireActivity())
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.main_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        recycleView = view.findViewById(R.id.recicle_view)
-        recycleView.layoutManager = GridLayoutManager(requireActivity(), 3)
-        recyAdapter = listBooks?.let { BookItemAdapter(it, requireActivity()) }!!
+        setHasOptionsMenu(true)
 
-        printImages()
+        //miGridType = inflater.findViewById(R.id.grid_type)
+        //miGridType.setOnMenuItemClickListener(this)
+        //miSearch = view.findViewById(R.id.search)
+
+        val sharedPreferences = Consts.getSharedPreferences(requireContext())
+        gridType = LibraryType.valueOf(
+            sharedPreferences?.getString(Consts.getKeyLastLibraryType(), "LINE")
+            .toString())
+
+        recycleView = view.findViewById(R.id.rv_library)
+        generatedBookList()
+    }
+
+    override fun onMenuItemClick(menuItem: MenuItem): Boolean {
+        when (menuItem.getItemId()) {
+            R.id.grid_type -> {
+                onChangeLayout()
+                return true
+            }
+        }
+        return false
+    }
+
+    fun onChangeLayout() {
+        if (gridType.equals(LibraryType.LINE))
+            gridType = LibraryType.GRID
+        else
+            gridType = LibraryType.LINE
+
+        val sharedPreferences = Consts.getSharedPreferences(requireContext())
+        with(sharedPreferences?.edit()) {
+            this!!.putString(Consts.getKeyLastLibraryType(), gridType.toString())
+            this.commit()
+        }
+
+        printLibraryData()
     }
 
     override fun onCreateView(
@@ -54,8 +94,7 @@ class LibraryFragment : Fragment() {
     }
 
     private fun loadConfig() {
-        val sharedPreferences: SharedPreferences? =
-            activity?.getSharedPreferences(Consts.getKeySharedPrefs(), Context.MODE_PRIVATE)
+        val sharedPreferences = Consts.getSharedPreferences(requireContext())
         libraryPath = sharedPreferences?.getString(Consts.getKeyLibraryFolder(), "").toString()
     }
 
@@ -67,19 +106,18 @@ class LibraryFragment : Fragment() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         if (requestCode == 121 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-            readFiles()
+            generatedBookList()
     }
 
-    private fun readFiles() {
+    private fun readFilesInLibrary() {
         if (libraryPath.isEmpty())
             return
 
         listFiles = ArrayList()
 
-        var file : File = File(libraryPath)
+        var file = File(libraryPath)
         file.walk()
             .filterNot { it.isDirectory() }.forEach {
-            println(it)
                 if (it.name.endsWith(".rar") ||
                     it.name.endsWith(".zip") ||
                     it.name.endsWith(".cbr") ||
@@ -89,11 +127,10 @@ class LibraryFragment : Fragment() {
         }
     }
 
-    private fun printImages() {
-        readFiles()
-        if (listFiles == null || listFiles!!.isEmpty()) {
-            listBooks?.clear()
-        } else {
+    private fun generatedBookList() {
+        readFilesInLibrary()
+        listBooks?.clear()
+        if (listFiles != null && listFiles!!.isNotEmpty()) {
             var id : Int = 0
             for (file in listFiles!!) {
                 id++
@@ -102,8 +139,19 @@ class LibraryFragment : Fragment() {
                 listBooks?.add(book)
             }
         }
+        printLibraryData()
     }
 
-
+    private fun printLibraryData() {
+        if (gridType.equals(LibraryType.GRID)){
+            var gridAdapter = BookGridCardAdapter(listBooks!!, requireActivity())
+            recycleView.adapter = gridAdapter
+            recycleView.layoutManager = GridLayoutManager(requireContext(), 2)
+        } else {
+            var lineAdapter = BookLineCardAdapter(listBooks!!, requireActivity())
+            recycleView.adapter = lineAdapter
+            recycleView.layoutManager = GridLayoutManager(requireContext(), 1)
+        }
+    }
 
 }

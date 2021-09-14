@@ -1,28 +1,31 @@
-package br.com.fenix.mangareader.model
+package br.com.fenix.mangareader.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.mangareader.R
+import br.com.fenix.mangareader.model.Book
+import br.com.fenix.mangareader.model.Consts
 
-class BookItemAdapter(private val data: List<Book>, val context: Context) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class BookLineCardAdapter(private val data: ArrayList<Book>, val context: Context) :
+    RecyclerView.Adapter<BookLineCardAdapter.ViewHolder>() {
 
     lateinit var click: ClickListener
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as ViewHolder).bind(data[position])
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(data[position])
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val inflater: LayoutInflater = LayoutInflater.from(context)
-        return ViewHolder(inflater.inflate(R.layout.book_item, parent, false))
+        val inflater: LayoutInflater = LayoutInflater.from(parent.context)
+        return ViewHolder(inflater.inflate(R.layout.book_line_card, parent, false))
     }
 
     override fun getItemCount(): Int {
@@ -40,25 +43,22 @@ class BookItemAdapter(private val data: List<Book>, val context: Context) :
         var bookTitle: TextView
         var bookSubTitle: TextView
         var bookProgress: ProgressBar
-        var cardView: CardView
+        var cardView: LinearLayout
 
         init {
             itemView.setOnClickListener(this)
-            bookImage = itemView.findViewById(R.id.image_cover)
-            bookTitle = itemView.findViewById(R.id.text_title)
-            bookSubTitle = itemView.findViewById(R.id.sub_title)
-            bookProgress = itemView.findViewById(R.id.book_progress)
-            cardView = itemView.findViewById(R.id.card_view)
+
+            cardView = itemView.findViewById(R.id.book_line_card)
+            bookImage = itemView.findViewById(R.id.book_line_image_cover)
+            bookTitle = itemView.findViewById(R.id.book_line_text_title)
+            bookSubTitle = itemView.findViewById(R.id.book_line_sub_title)
+            bookProgress = itemView.findViewById(R.id.book_line_book_progress)
         }
 
         fun bind(book: Book) {
-            bookImage.setImageResource(
-                context.resources.getIdentifier(
-                    R.mipmap.book.toString(),
-                    "drawable",
-                    context.packageName
-                )
-            )
+            if (book.tumbnail != null)
+                bookImage.setImageBitmap(book.tumbnail)
+
             bookTitle.text = book.title
             bookSubTitle.text = book.subTitle
             bookProgress.setProgress(book.bookMark / book.pages, false)
@@ -67,8 +67,6 @@ class BookItemAdapter(private val data: List<Book>, val context: Context) :
         override fun onClick(p0: View?) {
             click.onClick(adapterPosition, itemView)
         }
-
     }
-
 
 }

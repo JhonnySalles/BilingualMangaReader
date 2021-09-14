@@ -8,6 +8,7 @@
     <string name="menu_config" translatable="false">Config</string>
     <string name="menu_library" translatable="false">Libra</string>
     <string name="menu_history">History</string>
+    <string name="menu_grid_type">Grid type</string>
 
     <!-- CONFIG -->
     <string name="text_library_folder">Library folder</string>

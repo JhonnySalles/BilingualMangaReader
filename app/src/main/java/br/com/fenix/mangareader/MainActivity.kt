@@ -1,5 +1,7 @@
 package br.com.fenix.mangareader
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -14,28 +16,29 @@ import br.com.fenix.mangareader.fragment.ConfigFragment
 import br.com.fenix.mangareader.fragment.HelpFragment
 import br.com.fenix.mangareader.fragment.HistoryFragment
 import br.com.fenix.mangareader.fragment.LibraryFragment
+import br.com.fenix.mangareader.model.Consts
 import com.google.android.material.navigation.NavigationView
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
-    private lateinit var toolbar: Toolbar;
+    private lateinit var toolBar: Toolbar
     private lateinit var fragmentManager: FragmentManager
-    private lateinit var navigationView: NavigationView;
-    private lateinit var menu: Menu;
+    private lateinit var navigationView: NavigationView
+    private lateinit var menu: Menu
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        toolbar = findViewById(R.id.main_toolbar);
-        setSupportActionBar(toolbar);
+        toolBar = findViewById(R.id.main_toolbar)
+        setSupportActionBar(toolBar)
 
         // drawer_Layout é o layout padrão do aplicativo
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         val toggle = ActionBarDrawerToggle(
             this,
             drawer,
-            toolbar,
+            toolBar,
             R.string.navigation_drawer_open,
             R.string.navigation_drawer_close
         )
@@ -53,35 +56,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .commit()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        super.onCreateOptionsMenu(menu)
-        menuInflater.inflate(R.menu.main_menu, menu);
-        return true
-    }
-
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
-        val id = item.itemId
-
-        // TODO: opter ID para a opção selecionada no MENU DRAWER
-        if (id == R.id.menu_library) {
-            menu = navigationView.menu
-            fragmentManager.beginTransaction().replace(R.id.content_root, LibraryFragment())
+        menu = navigationView.menu
+        when (item.itemId) {
+            R.id.menu_library -> fragmentManager.beginTransaction()
+                .replace(R.id.content_root, LibraryFragment())
                 .commit()
-        } else if (id == R.id.menu_configuration) {
-            menu = navigationView.menu
-            fragmentManager.beginTransaction()
+            R.id.menu_configuration -> fragmentManager.beginTransaction()
                 .replace(R.id.content_root, ConfigFragment()).commit()
-        } else if (id == R.id.menu_help) {
-            menu = navigationView.menu
-            fragmentManager.beginTransaction().replace(R.id.content_root, HelpFragment())
+            R.id.menu_help -> fragmentManager.beginTransaction()
+                .replace(R.id.content_root, HelpFragment())
                 .commit()
-        } else if (id == R.id.menu_history) {
-            menu = navigationView.menu
-            fragmentManager.beginTransaction().replace(R.id.content_root, HistoryFragment())
+            R.id.menu_history -> fragmentManager.beginTransaction()
+                .replace(R.id.content_root, HistoryFragment())
                 .commit()
         }
-
         val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
         drawer.closeDrawer(GravityCompat.START)
         return true

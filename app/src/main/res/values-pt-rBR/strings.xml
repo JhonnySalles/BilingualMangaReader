@@ -8,6 +8,7 @@
     <string name="menu_config" translatable="false">Configuração</string>
     <string name="menu_library" translatable="false">Biblioteca</string>
     <string name="menu_history">Histórico</string>
+    <string name="menu_grid_type">Tipo da grid</string>
 
     <!-- CONFIG -->
     <string name="text_library_folder" translatable="false">Pasta biblioteca</string>
