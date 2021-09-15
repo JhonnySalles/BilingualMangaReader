@@ -1,7 +1,6 @@
 package br.com.fenix.mangareader.fragment
 
 import android.app.Activity.RESULT_OK
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -14,8 +13,8 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import androidx.fragment.app.Fragment
 import br.com.fenix.mangareader.R
-import br.com.fenix.mangareader.model.Consts
-import br.com.fenix.mangareader.service.Storage
+import br.com.fenix.mangareader.constants.GeneralConsts
+import br.com.fenix.mangareader.repository.Storage
 import com.google.android.material.textfield.TextInputLayout
 
 
@@ -89,33 +88,30 @@ class ConfigFragment : Fragment() {
     }
 
     private fun saveConfig() {
-        val sharedPreferences: SharedPreferences? = activity?.getSharedPreferences(
-            Consts.getKeySharedPrefs(),
-            Context.MODE_PRIVATE
-        )
+        val sharedPreferences: SharedPreferences? = GeneralConsts.getSharedPreferences(requireContext())
         with(sharedPreferences?.edit()) {
-            this!!.putString(Consts.getKeyLibraryFolder(), txtLibraryPath.editText?.text.toString())
-            this.putString(Consts.getKeyLibraryOrder(), txtLibraryOrder.editText?.text.toString())
+            this!!.putString(GeneralConsts.KEYS.LIBRARY.FOLDER, txtLibraryPath.editText?.text.toString())
+            this.putString(GeneralConsts.KEYS.LIBRARY.ORDER, txtLibraryOrder.editText?.text.toString())
             this.commit()
         }
 
-        Log.i(Consts.getTagLog(), "Save prefer CONFIG: " + "Path " + txtLibraryPath.editText?.text + " - Order " + txtLibraryOrder.editText?.text)
+        Log.i(GeneralConsts.TAG.LOG, "Save prefer CONFIG: " + "Path " + txtLibraryPath.editText?.text + " - Order " + txtLibraryOrder.editText?.text)
 
         //Toast.makeText(requireActivity(), getString(R.string.alert_save_sucess), Toast.LENGTH_SHORT).show()
     }
 
     private fun loadConfig() {
-        val sharedPreferences = Consts.getSharedPreferences(requireContext())
+        val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
 
         txtLibraryPath.editText?.setText(
             sharedPreferences?.getString(
-                Consts.getKeyLibraryFolder(),
+                GeneralConsts.KEYS.LIBRARY.FOLDER,
                 ""
             )
         )
         inputLibraryOrder.setText(
             sharedPreferences?.getString(
-                Consts.getKeyLibraryOrder(),
+                GeneralConsts.KEYS.LIBRARY.ORDER,
                 ""
             ), false
         )

@@ -1,4 +1,4 @@
-package br.com.fenix.mangareader.service
+package br.com.fenix.mangareader.repository
 
 import android.Manifest
 import android.app.Activity
@@ -13,6 +13,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
 class Storage {
+    // Used to get the cache images
     companion object Storage {
         val EXTERNAL_PERMS = arrayOf(
             Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE

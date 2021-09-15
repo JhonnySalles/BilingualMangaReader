@@ -1,7 +1,5 @@
 package br.com.fenix.mangareader
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -16,7 +14,6 @@ import br.com.fenix.mangareader.fragment.ConfigFragment
 import br.com.fenix.mangareader.fragment.HelpFragment
 import br.com.fenix.mangareader.fragment.HistoryFragment
 import br.com.fenix.mangareader.fragment.LibraryFragment
-import br.com.fenix.mangareader.model.Consts
 import com.google.android.material.navigation.NavigationView
 
 

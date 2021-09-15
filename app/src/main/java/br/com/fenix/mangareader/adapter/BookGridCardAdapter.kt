@@ -13,8 +13,8 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.activity.ReaderActivity
+import br.com.fenix.mangareader.constants.GeneralConsts
 import br.com.fenix.mangareader.model.Book
-import br.com.fenix.mangareader.model.Consts
 
 class BookGridCardAdapter(private val data: ArrayList<Book>, val context: Context) :
     RecyclerView.Adapter<BookGridCardAdapter.ViewHolder>() {
@@ -68,8 +68,8 @@ class BookGridCardAdapter(private val data: ArrayList<Book>, val context: Contex
             val book = data[adapterPosition]
             val intent = Intent(context, ReaderActivity::class.java)
             val bundle = Bundle()
-            bundle.putString(Consts.getKeyBookPath(), book.file.path)
-            bundle.putInt(Consts.getKeyBookMark(), book.bookMark)
+            bundle.putString(GeneralConsts.KEYS.BOOK.PATH, book.file.path)
+            bundle.putInt(GeneralConsts.KEYS.BOOK.MARK, book.bookMark)
             intent.putExtras(bundle)
             context.startActivity(intent)
         }

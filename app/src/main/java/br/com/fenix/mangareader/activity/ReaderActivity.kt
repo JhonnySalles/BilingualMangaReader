@@ -3,7 +3,7 @@ package br.com.fenix.mangareader.activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import br.com.fenix.mangareader.R
-import br.com.fenix.mangareader.model.Consts
+import br.com.fenix.mangareader.constants.GeneralConsts
 
 class ReaderActivity : AppCompatActivity() {
 
@@ -17,8 +17,8 @@ class ReaderActivity : AppCompatActivity() {
         val bundle = intent.extras
 
         if (bundle != null) {
-            bookPath = bundle.getString(Consts.getKeyBookPath())!!
-            bookMark = bundle.getInt(Consts.getKeyBookMark())
+            bookPath = bundle.getString(GeneralConsts.KEYS.BOOK.PATH)!!
+            bookMark = bundle.getInt(GeneralConsts.KEYS.BOOK.MARK)
         }
     }
 }

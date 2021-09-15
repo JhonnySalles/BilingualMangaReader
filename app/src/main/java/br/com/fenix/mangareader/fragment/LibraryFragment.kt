@@ -11,10 +11,10 @@ import br.com.fenix.mangareader.ImageCover
 import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.adapter.BookGridCardAdapter
 import br.com.fenix.mangareader.adapter.BookLineCardAdapter
+import br.com.fenix.mangareader.constants.GeneralConsts
 import br.com.fenix.mangareader.enums.LibraryType
 import br.com.fenix.mangareader.model.Book
-import br.com.fenix.mangareader.model.Consts
-import br.com.fenix.mangareader.service.Storage
+import br.com.fenix.mangareader.repository.Storage
 import java.io.File
 
 class LibraryFragment : Fragment(), Toolbar.OnMenuItemClickListener,
@@ -51,9 +51,9 @@ class LibraryFragment : Fragment(), Toolbar.OnMenuItemClickListener,
         //miGridType.setOnMenuItemClickListener(this)
         //miSearch = view.findViewById(R.id.search)
 
-        val sharedPreferences = Consts.getSharedPreferences(requireContext())
+        val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
         gridType = LibraryType.valueOf(
-            sharedPreferences?.getString(Consts.getKeyLastLibraryType(), "LINE")
+            sharedPreferences?.getString(GeneralConsts.KEYS.LIBRARY.LIBRARY_TYPE, "LINE")
             .toString())
 
         recycleView = view.findViewById(R.id.rv_library)
@@ -76,9 +76,9 @@ class LibraryFragment : Fragment(), Toolbar.OnMenuItemClickListener,
         else
             gridType = LibraryType.LINE
 
-        val sharedPreferences = Consts.getSharedPreferences(requireContext())
+        val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
         with(sharedPreferences?.edit()) {
-            this!!.putString(Consts.getKeyLastLibraryType(), gridType.toString())
+            this!!.putString(GeneralConsts.KEYS.LIBRARY.LIBRARY_TYPE, gridType.toString())
             this.commit()
         }
 
@@ -94,8 +94,8 @@ class LibraryFragment : Fragment(), Toolbar.OnMenuItemClickListener,
     }
 
     private fun loadConfig() {
-        val sharedPreferences = Consts.getSharedPreferences(requireContext())
-        libraryPath = sharedPreferences?.getString(Consts.getKeyLibraryFolder(), "").toString()
+        val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
+        libraryPath = sharedPreferences?.getString(GeneralConsts.KEYS.LIBRARY.FOLDER, "").toString()
     }
 
     override fun onRequestPermissionsResult(

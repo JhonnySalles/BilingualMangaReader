@@ -1,7 +1,6 @@
 package br.com.fenix.mangareader.adapter
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.model.Book
-import br.com.fenix.mangareader.model.Consts
 
 class BookLineCardAdapter(private val data: ArrayList<Book>, val context: Context) :
     RecyclerView.Adapter<BookLineCardAdapter.ViewHolder>() {
@@ -56,8 +54,8 @@ class BookLineCardAdapter(private val data: ArrayList<Book>, val context: Contex
         }
 
         fun bind(book: Book) {
-            if (book.tumbnail != null)
-                bookImage.setImageBitmap(book.tumbnail)
+            if (book.tumbnail != null && book.tumbnail!!.image != null)
+                bookImage.setImageBitmap(book.tumbnail!!.image)
 
             bookTitle.text = book.title
             bookSubTitle.text = book.subTitle
