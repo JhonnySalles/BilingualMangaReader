@@ -1,6 +1,6 @@
 package br.com.fenix.mangareader.constants
 
-class DataBaseConsts {
+class DataBaseConsts private constructor() {
     object BOOK {
         const val TABLE_NAME = "Book"
 
@@ -15,6 +15,7 @@ class DataBaseConsts {
             const val FILE_TYPE = "type"
             const val FAVORITE = "favorite"
             const val DATE_CREATE = "dateCreate"
+            const val LAST_ACCESS = "lastAccess"
         }
     }
 

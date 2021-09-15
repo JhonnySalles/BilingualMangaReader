@@ -46,7 +46,7 @@ class CoverService(application: Application) : BaseService<Cover>(application) {
     }
 
     fun saveOrUpdate(idBook: Long, cover: Cover) {
-        if (cover.id == null || cover.id <= 0)
+        if (cover.id <= 0)
             save(idBook, cover)
         else
             update(idBook, cover)
@@ -59,32 +59,32 @@ class CoverService(application: Application) : BaseService<Cover>(application) {
             imports = ["br.com.fenix.mangareader.service.CoverService"]
         )
     )
-    override fun save(cover: Cover) {
+    override fun save(obj: Cover) {
         throw IllegalArgumentException("Necessary to inform id book for a cover")
     }
 
-    fun save(idBook: Long, cover: Cover) {
-        val contents: ContentValues = getContents(idBook, cover)
+    fun save(idBook: Long, obj: Cover) {
+        val contents: ContentValues = getContents(idBook, obj)
         mDBRepository.save(DataBaseConsts.COVER.TABLE_NAME, contents)
     }
 
-    override fun update(cover: Cover) {
-        val contents: ContentValues = getContents(null, cover)
+    override fun update(obj: Cover) {
+        val contents: ContentValues = getContents(null, obj)
         val selection = DataBaseConsts.COVER.COLUMNS.ID + " = ?"
-        val args = arrayOf(cover.id.toString())
+        val args = arrayOf(obj.id.toString())
         mDBRepository.update(DataBaseConsts.COVER.TABLE_NAME, contents, selection, args)
     }
 
-    fun update(idBook: Long, cover: Cover) {
-        val contents: ContentValues = getContents(idBook, cover)
+    fun update(idBook: Long, obj: Cover) {
+        val contents: ContentValues = getContents(idBook, obj)
         val selection = DataBaseConsts.COVER.COLUMNS.ID + " = ?"
-        val args = arrayOf(cover.id.toString())
+        val args = arrayOf(obj.id.toString())
         mDBRepository.update(DataBaseConsts.COVER.TABLE_NAME, contents, selection, args)
     }
 
-    override fun delete(cover: Cover) {
+    override fun delete(obj: Cover) {
         val selection = DataBaseConsts.COVER.COLUMNS.ID + " = ?"
-        val args = arrayOf(cover.id.toString())
+        val args = arrayOf(obj.id.toString())
         mDBRepository.delete(DataBaseConsts.COVER.TABLE_NAME, selection, args)
     }
 
@@ -95,7 +95,7 @@ class CoverService(application: Application) : BaseService<Cover>(application) {
     }
 
     override fun list(): List<Cover>? {
-        var cursor: Cursor? =
+        val cursor: Cursor? =
             mDBRepository.query(DataBaseConsts.COVER.TABLE_NAME, getProjection(), null, null)
         val covers: MutableList<Cover> = ArrayList()
         return try {
@@ -115,7 +115,7 @@ class CoverService(application: Application) : BaseService<Cover>(application) {
     override fun get(id: Long): Cover? {
         val selection = DataBaseConsts.COVER.COLUMNS.ID + " = ?"
         val args = arrayOf(id.toString())
-        var cursor: Cursor? = mDBRepository.query(
+        val cursor: Cursor? = mDBRepository.query(
             DataBaseConsts.COVER.TABLE_NAME, getProjection(),
             selection, args
         )
@@ -135,7 +135,7 @@ class CoverService(application: Application) : BaseService<Cover>(application) {
     fun findFirstByIdBook(id: Long): Cover? {
         val selection = DataBaseConsts.COVER.COLUMNS.FK_ID_BOOK + " = ?"
         val args = arrayOf(id.toString())
-        var cursor: Cursor? = mDBRepository.query(
+        val cursor: Cursor? = mDBRepository.query(
             DataBaseConsts.COVER.TABLE_NAME, getProjection(),
             selection, args
         )
@@ -156,7 +156,7 @@ class CoverService(application: Application) : BaseService<Cover>(application) {
         val selection = DataBaseConsts.COVER.COLUMNS.FK_ID_BOOK + " = ?"
         val args = arrayOf(id.toString())
         val covers: MutableList<Cover> = ArrayList()
-        var cursor: Cursor? = mDBRepository.query(
+        val cursor: Cursor? = mDBRepository.query(
             DataBaseConsts.COVER.TABLE_NAME, getProjection(),
             selection, args
         )

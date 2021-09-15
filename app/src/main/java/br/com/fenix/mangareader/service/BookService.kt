@@ -9,6 +9,7 @@ import br.com.fenix.mangareader.constants.GeneralConsts
 import br.com.fenix.mangareader.model.Book
 import br.com.fenix.mangareader.model.Cover
 import java.io.File
+import java.time.LocalDateTime
 
 class BookService(application: Application) : BaseService<Book>(application) {
 
@@ -24,7 +25,7 @@ class BookService(application: Application) : BaseService<Book>(application) {
         contentsValues.put(DataBaseConsts.BOOK.COLUMNS.FILE_NAME, book.file.name)
         contentsValues.put(DataBaseConsts.BOOK.COLUMNS.FILE_TYPE, book.file.extension)
         contentsValues.put(DataBaseConsts.BOOK.COLUMNS.FAVORITE, book.favorite)
-        contentsValues.put(DataBaseConsts.BOOK.COLUMNS.DATE_CREATE, book.title)
+        contentsValues.put(DataBaseConsts.BOOK.COLUMNS.LAST_ACCESS, book.lastAccess.toString())
         return contentsValues
     }
 
@@ -39,7 +40,8 @@ class BookService(application: Application) : BaseService<Book>(application) {
             DataBaseConsts.BOOK.COLUMNS.FILE_NAME,
             DataBaseConsts.BOOK.COLUMNS.FILE_TYPE,
             DataBaseConsts.BOOK.COLUMNS.FAVORITE,
-            DataBaseConsts.BOOK.COLUMNS.DATE_CREATE
+            DataBaseConsts.BOOK.COLUMNS.DATE_CREATE,
+            DataBaseConsts.BOOK.COLUMNS.LAST_ACCESS
         )
     }
 
@@ -58,6 +60,7 @@ class BookService(application: Application) : BaseService<Book>(application) {
             cursor.getInt(cursor.getColumnIndexOrThrow(DataBaseConsts.BOOK.COLUMNS.BOOK_MARK))
         book.favorite =
             cursor.getInt(cursor.getColumnIndexOrThrow(DataBaseConsts.BOOK.COLUMNS.FAVORITE)) == 1
+        book.lastAccess = LocalDateTime.parse(cursor.getString(cursor.getColumnIndexOrThrow(DataBaseConsts.BOOK.COLUMNS.LAST_ACCESS)))
         book.tumbnail = coverService.findFirstByIdBook(book.id)
         return book
     }
@@ -67,29 +70,30 @@ class BookService(application: Application) : BaseService<Book>(application) {
             coverService.saveOrUpdate(idBook, cover)
     }
 
-    override fun save(book: Book) {
-        val contents: ContentValues = getContents(book)
-        book.id = mDBRepository.save(DataBaseConsts.BOOK.TABLE_NAME, contents)
-        saveCover(book.id, book.tumbnail)
+    override fun save(obj: Book) {
+        val contents: ContentValues = getContents(obj)
+        contents.put(DataBaseConsts.BOOK.COLUMNS.DATE_CREATE, LocalDateTime.now().toString())
+        obj.id = mDBRepository.save(DataBaseConsts.BOOK.TABLE_NAME, contents)
+        saveCover(obj.id, obj.tumbnail)
     }
 
-    override fun update(book: Book) {
-        val contents: ContentValues = getContents(book)
+    override fun update(obj: Book) {
+        val contents: ContentValues = getContents(obj)
         val selection = DataBaseConsts.BOOK.COLUMNS.ID + " = ?"
-        val args = arrayOf(book.id.toString())
+        val args = arrayOf(obj.id.toString())
         mDBRepository.update(DataBaseConsts.BOOK.TABLE_NAME, contents, selection, args)
-        saveCover(book.id, book.tumbnail)
+        saveCover(obj.id, obj.tumbnail)
     }
 
-    override fun delete(book: Book) {
-        coverService.deleteByIdBook(book.id)
+    override fun delete(obj: Book) {
+        coverService.deleteByIdBook(obj.id)
         val selection = DataBaseConsts.BOOK.COLUMNS.ID + " = ?"
-        val args = arrayOf(book.id.toString())
+        val args = arrayOf(obj.id.toString())
         mDBRepository.delete(DataBaseConsts.BOOK.TABLE_NAME, selection, args)
     }
 
     override fun list(): List<Book>? {
-        var cursor: Cursor? =
+        val cursor: Cursor? =
             mDBRepository.query(DataBaseConsts.BOOK.TABLE_NAME, getProjection(), null, null)
         val books: MutableList<Book> = ArrayList()
         return try {
@@ -109,7 +113,7 @@ class BookService(application: Application) : BaseService<Book>(application) {
     override fun get(id: Long): Book? {
         val selection = DataBaseConsts.BOOK.COLUMNS.ID + " = ?"
         val args = arrayOf(id.toString())
-        var cursor: Cursor? = mDBRepository.query(
+        val cursor: Cursor? = mDBRepository.query(
             DataBaseConsts.BOOK.TABLE_NAME, getProjection(),
             selection, args
         )
@@ -129,7 +133,7 @@ class BookService(application: Application) : BaseService<Book>(application) {
     fun findByFileName(name: String): Book? {
         val selection = DataBaseConsts.BOOK.COLUMNS.FILE_NAME + " = ?"
         val args = arrayOf(name)
-        var cursor: Cursor? = mDBRepository.query(
+        val cursor: Cursor? = mDBRepository.query(
             DataBaseConsts.BOOK.TABLE_NAME, getProjection(),
             selection, args
         )

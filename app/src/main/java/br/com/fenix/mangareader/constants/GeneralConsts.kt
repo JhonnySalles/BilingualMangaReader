@@ -3,7 +3,7 @@ package br.com.fenix.mangareader.constants
 import android.content.Context
 import android.content.SharedPreferences
 
-class GeneralConsts {
+class GeneralConsts private constructor() {
     companion object {
         fun getSharedPreferences(context: Context): SharedPreferences? {
             return context.getSharedPreferences(KEYS.PREFERENCE_NAME, Context.MODE_PRIVATE)

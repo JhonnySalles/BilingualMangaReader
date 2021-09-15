@@ -1,6 +1,7 @@
 package br.com.fenix.mangareader.model
 
 import java.io.File
+import java.time.LocalDateTime
 
 class Book(Id: Long, Title: String, SubTitle: String, Archive: File, Type: String) {
 
@@ -12,6 +13,7 @@ class Book(Id: Long, Title: String, SubTitle: String, Archive: File, Type: Strin
     var file: File = Archive
     var type: String = Type
     var favorite: Boolean = false
+    var lastAccess : LocalDateTime? = LocalDateTime.MIN
     var tumbnail: Cover? = null
     var update: Boolean = false
 

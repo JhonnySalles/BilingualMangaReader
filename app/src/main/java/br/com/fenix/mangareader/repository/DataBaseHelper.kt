@@ -23,7 +23,8 @@ class DataBaseHelper(context: Context) :
                 DataBaseConsts.BOOK.COLUMNS.FILE_NAME + " text, " +
                 DataBaseConsts.BOOK.COLUMNS.FILE_TYPE + " text, " +
                 DataBaseConsts.BOOK.COLUMNS.FAVORITE + " integer, " +
-                DataBaseConsts.BOOK.COLUMNS.DATE_CREATE + " text); "
+                DataBaseConsts.BOOK.COLUMNS.DATE_CREATE + " text, " +
+                DataBaseConsts.BOOK.COLUMNS.LAST_ACCESS + " text); "
                 )
 
         private const val CREATE_TABLE_COVER = ("create table " +
