@@ -1,4 +1,4 @@
-package br.com.fenix.mangareader.fragment
+package br.com.fenix.mangareader.ui.configuration
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent

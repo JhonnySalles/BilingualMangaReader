@@ -1,4 +1,4 @@
-package br.com.fenix.mangareader
+package br.com.fenix.mangareader.service
 
 import android.graphics.Bitmap
 import androidx.collection.LruCache
@@ -21,7 +21,7 @@ class ImageCover private constructor() {
 
     fun saveBitmapToCahche(key: String, bitmap: Bitmap) {
         try {
-            ImageCover.instance.lru.put(key, bitmap)
+            instance.lru.put(key, bitmap)
         } catch (e: Exception) {
         }
     }
@@ -29,7 +29,7 @@ class ImageCover private constructor() {
     fun retrieveBitmapFromCache(key: String): Bitmap? {
 
         try {
-            return ImageCover.instance.lru.get(key) as Bitmap?
+            return instance.lru.get(key) as Bitmap?
         } catch (e: Exception) {
         }
 

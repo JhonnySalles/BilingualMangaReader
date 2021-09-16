@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/onPrimary"
-    tools:context=".fragment.HelpFragment">
+    tools:context=".ui.help.HelpFragment">
 
     <TextView
         android:id="@+id/txtTitulo"

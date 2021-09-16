@@ -144,14 +144,14 @@ class Util {
             }
         }
 
-        fun encodeImageBase64(image: Bitmap): String? {
+        fun encodeImageBase64(image: Bitmap): String {
             return android.util.Base64.encodeToString(
                 imateToByteArray(image),
                 android.util.Base64.DEFAULT
             )
         }
 
-        fun decodeImageBase64(image: String?): Bitmap? {
+        fun decodeImageBase64(image: String): Bitmap {
             val imageBytes = android.util.Base64.decode(image, android.util.Base64.DEFAULT)
             return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
         }

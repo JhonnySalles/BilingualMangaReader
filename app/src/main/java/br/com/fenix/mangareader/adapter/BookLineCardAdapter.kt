@@ -1,6 +1,5 @@
 package br.com.fenix.mangareader.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,10 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.model.Book
 
-class BookLineCardAdapter(private val data: ArrayList<Book>, val context: Context) :
-    RecyclerView.Adapter<BookLineCardAdapter.ViewHolder>() {
+class BookLineCardAdapter() : RecyclerView.Adapter<BookLineCardAdapter.ViewHolder>() {
 
+    private val data: List<Book> = arrayListOf()
     lateinit var click: ClickListener
+    private var mBookList: ArrayList<Book> = arrayListOf()
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(data[position])
@@ -28,6 +28,11 @@ class BookLineCardAdapter(private val data: ArrayList<Book>, val context: Contex
 
     override fun getItemCount(): Int {
         return data.size
+    }
+
+    fun updateList(list: ArrayList<Book>) {
+        mBookList = list
+        notifyDataSetChanged()
     }
 
     interface ClickListener {

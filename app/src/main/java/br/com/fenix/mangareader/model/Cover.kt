@@ -1,15 +1,30 @@
 package br.com.fenix.mangareader.model
 
 import android.graphics.Bitmap
+import androidx.room.*
+import br.com.fenix.mangareader.constants.DataBaseConsts
 
-class Cover(Id: Long, Name: String, Size: Int, Type: String, Image: Bitmap?) {
+@Entity(tableName = DataBaseConsts.COVER.TABLE_NAME, indices = [Index(value = [DataBaseConsts.COVER.COLUMNS.NAME])])
+data class Cover(
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = DataBaseConsts.COVER.COLUMNS.ID)
+    var id: Long = 0,
 
-    var id: Long = Id
-    var name: String = Name
-    var size: Int = Size
-    var type: String = Type
-    var image: Bitmap? = Image
+    @ColumnInfo(name = DataBaseConsts.COVER.COLUMNS.NAME)
+    var name: String = "",
+
+    @ColumnInfo(name = DataBaseConsts.COVER.COLUMNS.SIZE)
+    var size: Int = 0,
+
+    @ColumnInfo(name = DataBaseConsts.COVER.COLUMNS.TYPE)
+    var type: String = "",
+
+    @ColumnInfo(name = DataBaseConsts.COVER.COLUMNS.IMAGE)
+    var image: Bitmap? = null,
+
+    @Ignore
     var update: Boolean = false
+) {
 
     override fun toString(): String {
         return "Cover(id=$id, name='$name', size=$size, type='$type', update=$update)"
