@@ -13,8 +13,8 @@ class BookRepository(context: Context) {
     fun save(obj: Book): Long {
         val id = mDataBase.save(obj)
 
-        if (obj.tumbnail != null)
-            mCoverRepository.save(obj.tumbnail!!)
+        if (obj.thumbnail != null)
+            mCoverRepository.save(obj.thumbnail!!)
 
         return id
     }
@@ -22,18 +22,23 @@ class BookRepository(context: Context) {
     fun update(obj: Book) {
         mDataBase.update(obj)
 
-        if (obj.tumbnail != null && obj.tumbnail!!.update)
-            mCoverRepository.save(obj.tumbnail!!)
+        if (obj.thumbnail != null && obj.thumbnail!!.update)
+            mCoverRepository.save(obj.thumbnail!!)
     }
 
     fun delete(obj: Book) {
-        mCoverRepository.deleteAll(obj.id)
+        mCoverRepository.deleteAll(obj.id!!)
         mDataBase.delete(obj)
     }
 
     fun list(): List<Book>? {
         return try {
-            mDataBase.list()
+            var list = mDataBase.list()
+
+            for (book in list)
+                book.thumbnail = mCoverRepository.findFirstByIdBook(book.id!!)
+
+            list
         } catch (e: Exception) {
             Log.e(GeneralConsts.TAG.LOG, e.message.toString())
             null

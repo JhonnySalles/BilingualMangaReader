@@ -1,32 +1,36 @@
 package br.com.fenix.mangareader.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
-import androidx.cardview.widget.CardView
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.mangareader.R
+import br.com.fenix.mangareader.listener.BookCardListener
 import br.com.fenix.mangareader.model.Book
+import java.util.*
+import kotlin.collections.ArrayList
 
-class BookGridCardAdapter() : RecyclerView.Adapter<BookGridCardAdapter.ViewHolder>() {
+class BookGridCardAdapter() : RecyclerView.Adapter<GridViewHolder>(), Filterable {
 
+    lateinit var mListener: BookCardListener
     private var mBookList: ArrayList<Book> = arrayListOf()
-    lateinit var click: BookLineCardAdapter.ClickListener
+    private var mBookListFull: ArrayList<Book> = arrayListOf()
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: GridViewHolder, position: Int) {
         holder.bind(mBookList[position])
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GridViewHolder {
         val inflater: LayoutInflater = LayoutInflater.from(parent.context)
-        return ViewHolder(inflater.inflate(R.layout.book_grid_card, parent, false))
+        return GridViewHolder(inflater.inflate(R.layout.book_grid_card, parent, false), mListener)
     }
 
     override fun getItemCount(): Int {
         return mBookList.size
+    }
+
+    fun attachListener(listener: BookCardListener) {
+        mListener = listener
     }
 
     fun updateList(list: ArrayList<Book>) {
@@ -34,42 +38,35 @@ class BookGridCardAdapter() : RecyclerView.Adapter<BookGridCardAdapter.ViewHolde
         notifyDataSetChanged()
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
-        View.OnClickListener {
+    override fun getFilter(): Filter {
+        return bookFilter
+    }
 
-        var bookImage: ImageView
-        var bookTitle: TextView
-        var bookSubTitle: TextView
-        var bookProgress: ProgressBar
-        var cardView: CardView
+    private val bookFilter = object : Filter() {
+        override fun performFiltering(constraint: CharSequence?): FilterResults {
+            val filteredList: MutableList<Book> = ArrayList()
 
-        init {
-            itemView.setOnClickListener(this)
+            if (constraint == null || constraint.length === 0) {
+                filteredList.addAll(mBookListFull)
+            } else {
+                val filterPattern = constraint.toString().lowercase(Locale.getDefault()).trim()
 
-            cardView = itemView.findViewById(R.id.book_grid_card)
-            bookImage = itemView.findViewById(R.id.book_grid_image_cover)
-            bookTitle = itemView.findViewById(R.id.book_grid_text_title)
-            bookSubTitle = itemView.findViewById(R.id.book_grid_sub_title)
-            bookProgress = itemView.findViewById(R.id.book_grid_book_progress)
+                filteredList.addAll(mBookListFull.filter {
+                    it.name.lowercase(Locale.getDefault()).contains(filterPattern) ||
+                            it.type.lowercase(Locale.getDefault()).contains(filterPattern)
+                })
+            }
+
+            val results = FilterResults()
+            results.values = filteredList
+
+            return results
         }
 
-        fun bind(book: Book) {
-            if (book.tumbnail != null && book.tumbnail!!.image != null)
-                bookImage.setImageBitmap(book.tumbnail!!.image)
-
-            bookTitle.text = book.title
-            bookSubTitle.text = book.subTitle
-            bookProgress.setProgress(book.bookMark / book.pages, false)
-        }
-
-        override fun onClick(p0: View?) {
-            /*val book = data[adapterPosition]
-            val intent = Intent(context, ReaderActivity::class.java)
-            val bundle = Bundle()
-            bundle.putString(GeneralConsts.KEYS.BOOK.PATH, book.file.path)
-            bundle.putInt(GeneralConsts.KEYS.BOOK.MARK, book.bookMark)
-            intent.putExtras(bundle)
-            context.startActivity(intent)*/
+        override fun publishResults(constraint: CharSequence?, filterResults: FilterResults?) {
+            mBookList.clear()
+            mBookList.addAll(filterResults!!.values as Collection<Book>)
+            notifyDataSetChanged()
         }
     }
 }

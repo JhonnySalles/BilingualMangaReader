@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/book_line_card_layout_height"
     android:layout_marginBottom="1dp"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:background="@color/primary">
     <!-- Media -->
     <ImageView
         android:id="@+id/book_line_image_cover"
@@ -30,7 +31,7 @@
             android:layout_height="wrap_content"
             android:text="Book title"
             android:textAppearance="?attr/textAppearanceHeadline6"
-            android:textColor="?android:attr/textColorPrimary"
+            android:textColor="@color/textPrimary"
             android:textSize="15dp" />
 
         <TextView
@@ -40,7 +41,7 @@
             android:layout_marginTop="1dp"
             android:text="Book reference"
             android:textAppearance="?attr/textAppearanceSubtitle2"
-            android:textColor="?android:attr/textColorSecondary"
+            android:textColor="@color/textPrimary"
             android:textSize="10dp" />
 
         <ProgressBar
@@ -48,6 +49,7 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:indeterminateTint="@color/secondary"
             android:max="100"
             android:min="0" />
     </LinearLayout>

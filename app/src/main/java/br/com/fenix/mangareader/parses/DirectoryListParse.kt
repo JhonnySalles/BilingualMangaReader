@@ -13,15 +13,15 @@ class DirectoryListParse {
 
     fun DirectoryListingManager(comics: List<Book>?, libraryDir: String?) {
         Collections.sort(comics, Comparator<Any> { lhs, rhs ->
-            val leftPath: String = (lhs as Book).file.parentFile.absolutePath
-            val rightPath: String = (rhs as Book).file.parentFile.absolutePath
+            val leftPath: String = (lhs as Book).file!!.parentFile.absolutePath
+            val rightPath: String = (rhs as Book).file!!.parentFile.absolutePath
             leftPath.compareTo(rightPath)
         })
         mComics = comics
         mLibraryDir = File(libraryDir ?: "/")
         val directoryDisplays: MutableList<String> = ArrayList()
         for (comic in mComics!!) {
-            val comicDir: File = comic.file.getParentFile()
+            val comicDir: File = comic.file!!.parentFile
             if (comicDir == mLibraryDir) {
                 directoryDisplays.add("~ (" + comicDir.name + ")")
             } else if (comicDir.parentFile == mLibraryDir) {
@@ -52,7 +52,7 @@ class DirectoryListParse {
     }
 
     fun getDirectoryAtIndex(idx: Int): String? {
-        return mComics!![idx].file.getParent()
+        return mComics!![idx].file!!.parent
     }
 
     fun getCount(): Int {

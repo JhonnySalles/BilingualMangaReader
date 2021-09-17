@@ -1,9 +1,11 @@
 package br.com.fenix.mangareader.ui.library
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import br.com.fenix.mangareader.constants.GeneralConsts
 import br.com.fenix.mangareader.model.Book
 import br.com.fenix.mangareader.model.Cover
 import br.com.fenix.mangareader.repository.BookRepository
@@ -33,28 +35,31 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
                     it.name.endsWith(".cbz")
                 ){
                     var book : Book? = mBookRepository.findByFileName(it.name)
-
                     if (book == null){
-                        book = Book(0, file.nameWithoutExtension, "", file, file.extension)
-                        book.id = mBookRepository.save(book)
+                        book = save(Book(null, it.nameWithoutExtension, "", it.path, it.name, it.extension))
+                        book.file = it
                     }
-                    mListBooks.value?.add(book)
+                    save.value?.add(book)
                 }
             }
     }
 
-    fun save(obj: Book) {
+    fun save(obj: Book) : Book {
         if (obj.id == 0L)
-            mBookRepository.save(obj)
+            obj.id = mBookRepository.save(obj)
         else
             mBookRepository.update(obj)
+
+        return obj
     }
 
-    fun save(obj: Cover) {
+    fun save(obj: Cover) : Cover {
         if (obj.id == 0L)
-            mCoverRepository.save(obj)
+            obj.id = mCoverRepository.save(obj)
         else
             mCoverRepository.update(obj)
+
+        return obj
     }
 
 

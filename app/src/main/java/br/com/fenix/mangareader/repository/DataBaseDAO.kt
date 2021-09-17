@@ -11,7 +11,7 @@ interface DataBaseDAO<T> {
     fun save(obj: T): Long
 
     @Insert
-    fun insert(entities: List<T>)
+    fun save(entities: List<T>)
 
     @Update
     fun update(obj: T): Int
