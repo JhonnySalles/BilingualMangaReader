@@ -9,8 +9,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/onPrimary">
+        android:background="@color/onPrimary"
+        android:orientation="vertical">
 
         <!-- Media -->
         <ImageView
@@ -18,7 +18,6 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/book_grid_card_image"
             android:background="@color/primaryVariant"
-            android:contentDescription=""
             app:srcCompat="@mipmap/book" />
 
         <LinearLayout
@@ -34,20 +33,18 @@
                 android:id="@+id/book_grid_text_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Book title"
                 android:textAppearance="?attr/textAppearanceHeadline6"
                 android:textColor="@color/textPrimary"
-                android:textSize="15dp"/>
+                android:textSize="@dimen/book_grid_title_size" />
 
             <TextView
                 android:id="@+id/book_grid_sub_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="Book reference"
                 android:textAppearance="?attr/textAppearanceSubtitle2"
                 android:textColor="@color/textPrimary"
-                android:textSize="10dp"/>
+                android:textSize="@dimen/book_grid_sub_title" />
 
             <ProgressBar
                 android:id="@+id/book_grid_book_progress"
@@ -56,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:indeterminateTint="@color/secondary"
                 android:max="100"
-                android:min="0"/>
+                android:min="0" />
 
         </LinearLayout>
 

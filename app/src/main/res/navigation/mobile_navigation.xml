@@ -7,25 +7,25 @@
 
     <fragment
         android:id="@+id/nav_library"
-        android:name="br.com.fenix.mangareader.ui.library.LibraryFragment"
+        android:name="br.com.fenix.mangareader.view.ui.library.LibraryFragment"
         android:label="@string/menu_library"
         tools:layout="@layout/fragment_library" />
 
     <fragment
         android:id="@+id/nav_history"
-        android:name="br.com.fenix.mangareader.ui.library.LibraryFragment"
+        android:name="br.com.fenix.mangareader.view.ui.library.LibraryFragment"
         android:label="@string/menu_history"
         tools:layout="@layout/fragment_history" />
 
     <fragment
         android:id="@+id/nav_config"
-        android:name="br.com.fenix.mangareader.ui.library.LibraryFragment"
+        android:name="br.com.fenix.mangareader.view.ui.library.LibraryFragment"
         android:label="@string/menu_config"
         tools:layout="@layout/fragment_config" />
 
     <fragment
         android:id="@+id/nav_help"
-        android:name="br.com.fenix.mangareader.ui.library.LibraryFragment"
+        android:name="br.com.fenix.mangareader.view.ui.library.LibraryFragment"
         android:label="@string/menu_help"
         tools:layout="@layout/fragment_help" />
 

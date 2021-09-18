@@ -10,10 +10,10 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
-import br.com.fenix.mangareader.ui.configuration.ConfigFragment
-import br.com.fenix.mangareader.ui.help.HelpFragment
-import br.com.fenix.mangareader.ui.history.HistoryFragment
-import br.com.fenix.mangareader.ui.library.LibraryFragment
+import br.com.fenix.mangareader.view.ui.configuration.ConfigFragment
+import br.com.fenix.mangareader.view.ui.help.HelpFragment
+import br.com.fenix.mangareader.view.ui.history.HistoryFragment
+import br.com.fenix.mangareader.view.ui.library.LibraryFragment
 import com.google.android.material.navigation.NavigationView
 
 

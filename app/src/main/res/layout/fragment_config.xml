@@ -5,66 +5,249 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/onPrimary"
-    tools:context=".ui.configuration.ConfigFragment">
+    tools:context=".view.ui.configuration.ConfigFragment">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="@dimen/margin"
-        android:layout_marginBottom="@dimen/margin">
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/txt_library_order"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+        android:layout_height="match_parent">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_small"
-            android:hint="@string/text_library_order"
-            android:textColorHint="@color/textPrimary"
-            app:boxBackgroundColor="@color/primary"
-            app:boxStrokeColor="@color/onSecondary"
-            app:startIconTint="@color/onSecondary"
-            app:startIconDrawable="@drawable/ic_order"
-            app:placeholderTextColor="@color/textPrimary"
-            app:hintTextColor="@color/onSecondary">
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/margin"
+            android:layout_marginBottom="@dimen/margin">
 
-            <AutoCompleteTextView
-                android:id="@+id/menu_autocomplete_library_order"
+            <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="none"
-                android:textColor="@color/textPrimary"
-                android:hint="@string/text_library_order"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:background="@color/secondary"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:layout_marginLeft="@dimen/margin"
+                android:layout_marginRight="@dimen/margin"
+                app:dividerInsetStart="16dp"
+                app:dividerInsetEnd="16dp"/>
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-            android:id="@+id/txt_library_path"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_small"
-            android:layout_marginStart="@dimen/margin"
-            android:layout_marginEnd="32dp"
-            android:layout_marginTop="32dp"
-            android:hint="@string/text_library_folder"
-            android:textColorHint="@color/textPrimary"
-            app:boxBackgroundColor="@color/primary"
-            app:boxStrokeColor="@color/onSecondary"
-            app:placeholderTextColor="@color/textPrimary"
-            app:hintTextColor="@color/onSecondary"
-            app:startIconDrawable="@drawable/ic_sd_storage"
-            app:startIconTint="@color/onSecondary"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-            <AutoCompleteTextView
-                android:id="@+id/input_library_path"
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:textColor="@color/onSecondary"
+                android:text="@string/config_title_library"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txt_library_order"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="none"
-                android:textColor="@color/textPrimary"
-                android:hint="@string/text_library_order"/>
-        </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
+                android:layout_margin="@dimen/margin_small"
+                android:hint="@string/config_text_library_order"
+                android:textColorHint="@color/textPrimary"
+                app:boxBackgroundColor="@color/primary"
+                app:boxStrokeColor="@color/onSecondary"
+                app:startIconTint="@color/onSecondary"
+                app:startIconDrawable="@drawable/ic_order"
+                app:placeholderTextColor="@color/textPrimary"
+                app:hintTextColor="@color/onSecondary">
+
+                <AutoCompleteTextView
+                    android:id="@+id/menu_autocomplete_library_order"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:textColor="@color/textPrimary"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                android:id="@+id/txt_library_path"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_small"
+                android:layout_marginStart="@dimen/margin"
+                android:layout_marginEnd="32dp"
+                android:layout_marginTop="32dp"
+                android:hint="@string/config_text_library_folder"
+                android:textColorHint="@color/textPrimary"
+                app:boxBackgroundColor="@color/primary"
+                app:boxStrokeColor="@color/onSecondary"
+                app:placeholderTextColor="@color/textPrimary"
+                app:hintTextColor="@color/onSecondary"
+                app:startIconDrawable="@drawable/ic_sd_storage"
+                app:startIconTint="@color/onSecondary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+                <AutoCompleteTextView
+                    android:id="@+id/menu_autocomplete_library_path"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:textColor="@color/textPrimary"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/secondary"
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginLeft="@dimen/margin"
+                android:layout_marginRight="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin_small"
+                app:dividerInsetStart="16dp"
+                app:dividerInsetEnd="16dp"/>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:textColor="@color/onSecondary"
+                android:text="@string/config_title_sub_title"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                android:id="@+id/txt_subtitle_path"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_small"
+                android:layout_marginStart="@dimen/margin"
+                android:layout_marginEnd="32dp"
+                android:layout_marginTop="32dp"
+                android:hint="@string/config_text_subtitle_folder"
+                android:textColorHint="@color/textPrimary"
+                app:boxBackgroundColor="@color/primary"
+                app:boxStrokeColor="@color/onSecondary"
+                app:placeholderTextColor="@color/textPrimary"
+                app:hintTextColor="@color/onSecondary"
+                app:startIconDrawable="@drawable/ic_sd_storage"
+                app:startIconTint="@color/onSecondary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+                <AutoCompleteTextView
+                    android:id="@+id/menu_autocomplete_subtitle_path"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:textColor="@color/textPrimary"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txt_default_subtitle_language"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_small"
+                android:hint="@string/config_text_default_subtitle_language"
+                android:textColorHint="@color/textPrimary"
+                app:boxBackgroundColor="@color/primary"
+                app:boxStrokeColor="@color/onSecondary"
+                app:startIconTint="@color/onSecondary"
+                app:startIconDrawable="@drawable/ic_language"
+                app:placeholderTextColor="@color/textPrimary"
+                app:hintTextColor="@color/onSecondary">
+
+                <AutoCompleteTextView
+                    android:id="@+id/menu_autocomplete_default_subtitle_language"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:textColor="@color/textPrimary"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txt_default_subtitle_translate"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_small"
+                android:hint="@string/config_text_default_subtitle_translate"
+                android:textColorHint="@color/textPrimary"
+                app:boxBackgroundColor="@color/primary"
+                app:boxStrokeColor="@color/onSecondary"
+                app:startIconTint="@color/onSecondary"
+                app:startIconDrawable="@drawable/ic_translate"
+                app:placeholderTextColor="@color/textPrimary"
+                app:hintTextColor="@color/onSecondary">
+
+                <AutoCompleteTextView
+                    android:id="@+id/menu_autocomplete_default_subtitle_translate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:textColor="@color/textPrimary"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/secondary"
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginLeft="@dimen/margin"
+                android:layout_marginRight="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin_small"
+                app:dividerInsetStart="16dp"
+                app:dividerInsetEnd="16dp"/>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:textColor="@color/onSecondary"
+                android:text="@string/config_title_system"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txt_system_format_date"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_small"
+                android:hint="@string/config_system_farmat_date"
+                android:textColorHint="@color/textPrimary"
+                app:boxBackgroundColor="@color/primary"
+                app:boxStrokeColor="@color/onSecondary"
+                app:startIconTint="@color/onSecondary"
+                app:startIconDrawable="@drawable/ic_format_date"
+                app:placeholderTextColor="@color/textPrimary"
+                app:hintTextColor="@color/onSecondary">
+
+                <AutoCompleteTextView
+                    android:id="@+id/menu_autocomplete_system_format_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:textColor="@color/textPrimary"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txt_system_language"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_small"
+                android:hint="@string/config_system_language"
+                android:textColorHint="@color/textPrimary"
+                app:boxBackgroundColor="@color/primary"
+                app:boxStrokeColor="@color/onSecondary"
+                app:startIconTint="@color/onSecondary"
+                app:startIconDrawable="@drawable/ic_language"
+                app:placeholderTextColor="@color/textPrimary"
+                app:hintTextColor="@color/onSecondary">
+
+                <AutoCompleteTextView
+                    android:id="@+id/menu_autocomplete_system_language"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:textColor="@color/textPrimary"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+    </ScrollView>
 </FrameLayout>

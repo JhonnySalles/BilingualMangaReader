@@ -3,19 +3,38 @@
     <string name="app_name">Bilingual Manga Reader</string>
 
     <!-- MENU -->
-    <string name="menu_search" translatable="false">Procurar</string>
-    <string name="menu_help" translatable="false">Ajuda</string>
-    <string name="menu_config" translatable="false">Configuração</string>
-    <string name="menu_library" translatable="false">Biblioteca</string>
+    <string name="menu_search">Procurar</string>
+    <string name="menu_help">Ajuda</string>
+    <string name="menu_config">Configuração</string>
+    <string name="menu_library">Biblioteca</string>
     <string name="menu_history">Histórico</string>
     <string name="menu_grid_type">Tipo da grid</string>
 
     <!-- CONFIG -->
-    <string name="text_library_folder" translatable="false">Pasta biblioteca</string>
-    <string name="text_library_order">Ordenação da biblioteca</string>
-    <string name="option_order_name">Por nome</string>
-    <string name="option_order_date">Por data</string>
-    <string name="option_order_access">Último acesso</string>
-    <string name="choose_library_folder">Escolha a pasta da biblioteca</string>
+    <string name="config_title_library">Biblioteca</string>
+    <string name="config_title_sub_title">Legenda</string>
+    <string name="config_title_system">Sistema</string>
+
+    <string name="config_text_library_folder">Caminho da biblioteca</string>
+    <string name="config_text_library_order">Ordenação da biblioteca</string>
+    <string name="config_text_default_subtitle_language">Linguagem padrão</string>
+    <string name="config_text_default_subtitle_translate">Tradução padrão</string>
+    <string name="config_text_subtitle_folder">Caminho das legendas</string>
+    <string name="config_option_order_name">Por nome</string>
+    <string name="config_option_order_date">Por data</string>
+    <string name="config_option_order_access">Último acesso</string>
+
+    <string name="config_system_language">Linguagem do sistema</string>
+    <string name="config_system_farmat_date">Formato de data</string>
+    <string name="config_choose_library_folder">Escolha a pasta da biblioteca</string>
+    <string name="config_choose_subtitle_folder">Escolha a pasta das legendas</string>
+    <string name="config_option_date_time_format_0">Padrão (%s)</string>
+
+    <!-- LANGUAGE -->
+    <string-array name="languages">
+        <item>Português</item>
+        <item>Inglês</item>
+        <item>Japonês</item>
+    </string-array>
 
 </resources>

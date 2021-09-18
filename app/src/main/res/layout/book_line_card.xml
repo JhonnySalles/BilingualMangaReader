@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/book_line_card_layout_height"
     android:layout_marginBottom="1dp"
-    android:orientation="horizontal"
-    android:background="@color/primary">
+    android:background="@color/primary"
+    android:orientation="horizontal">
     <!-- Media -->
     <ImageView
         android:id="@+id/book_line_image_cover"
         android:layout_width="@dimen/book_line_card_image"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/book_line_card_image"
         android:background="@color/onPrimary"
         android:contentDescription=""
         app:srcCompat="@mipmap/book_icon" />
@@ -29,20 +29,18 @@
             android:id="@+id/book_line_text_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Book title"
             android:textAppearance="?attr/textAppearanceHeadline6"
             android:textColor="@color/textPrimary"
-            android:textSize="15dp" />
+            android:textSize="@dimen/book_line_title_size" />
 
         <TextView
             android:id="@+id/book_line_sub_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
-            android:text="Book reference"
             android:textAppearance="?attr/textAppearanceSubtitle2"
             android:textColor="@color/textPrimary"
-            android:textSize="10dp" />
+            android:textSize="@dimen/book_line_sub_title" />
 
         <ProgressBar
             android:id="@+id/book_line_book_progress"

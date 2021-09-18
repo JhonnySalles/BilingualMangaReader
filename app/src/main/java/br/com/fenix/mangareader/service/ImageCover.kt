@@ -13,6 +13,7 @@ class ImageCover private constructor() {
     companion object {
         val instance: ImageCover by lazy { HOLDER.INSTANCE }
     }
+
     val lru: LruCache<Any, Any>
 
     init {
@@ -36,23 +37,23 @@ class ImageCover private constructor() {
         return null
     }
 
-    fun getImage(file : File): Bitmap? {
+    fun getImage(file: File): Bitmap? {
         var image = retrieveBitmapFromCache(file.name)
 
         if (image == null) {
 
-          //  val coverImage = null
+            //  val coverImage = null
             //if (file.extension.endsWith(".rar")) {
-                //val conteudo : List<ContentDescription> = Junrar.getContentsDescription(file)
+            //val conteudo : List<ContentDescription> = Junrar.getContentsDescription(file)
 
-                //Junrar.extractFile(conteudo[0], coverImage)
+            //Junrar.extractFile(conteudo[0], coverImage)
             //}
 
 
             //saveBitmapToCahche(file.name, bitmap: Bitmap)
         }
 
-        return image;
+        return image
     }
 
 }

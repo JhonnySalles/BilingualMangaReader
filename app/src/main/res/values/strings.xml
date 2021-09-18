@@ -10,12 +10,36 @@
     <string name="menu_grid_type">Grid type</string>
 
     <!-- CONFIG -->
-    <string name="text_library_folder">Library folder</string>
-    <string name="text_library_order">Library order</string>
-    <string name="option_order_name">For name</string>
-    <string name="option_order_date">For date</string>
-    <string name="option_order_access">Last access</string>
-    <string name="choose_library_folder">Choose library folder</string>
+    <string name="config_title_library">Library</string>
+    <string name="config_title_sub_title">SubTitle</string>
+    <string name="config_title_system">System</string>
+
+    <string name="config_text_library_folder">Library folder</string>
+    <string name="config_text_library_order">Library order</string>
+    <string name="config_text_subtitle_folder">Subtitle folder</string>
+    <string name="config_text_default_subtitle_language">Default language</string>
+    <string name="config_text_default_subtitle_translate">Default translate</string>
+    <string name="config_option_order_name">For name</string>
+    <string name="config_option_order_date">For date</string>
+    <string name="config_option_order_access">Last access</string>
+
+    <string name="config_system_farmat_date">Date format</string>
+    <string name="config_system_language">System language</string>
+
+    <string name="config_choose_library_folder">Choose library folder</string>
+    <string name="config_choose_subtitle_folder">Choose subtitle folder</string>
+
+    <string name="config_option_date_time_format_0">Defalt (%s)</string>
+    <string name="config_option_date_time_format_1" translatable="false">MM/dd/yy (%s)</string>
+    <string name="config_option_date_time_format_2" translatable="false">dd/MM/yy (%s)</string>
+    <string name="config_option_date_time_format_3" translatable="false">yyyy-MM-dd (%s)</string>
+
+    <!-- LANGUAGE -->
+    <string-array name="languages">
+        <item>Portuguese</item>
+        <item>English</item>
+        <item>Japanese</item>
+    </string-array>
 
     <!-- OTHERS -->
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>

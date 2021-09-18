@@ -11,9 +11,13 @@
     <dimen name="book_grid_card_image">150dp</dimen>
     <dimen name="book_grid_card_layout_width">150dp</dimen>
     <dimen name="book_grid_card_layout_height">200dp</dimen>
+    <dimen name="book_grid_title_size">15dp</dimen>
+    <dimen name="book_grid_sub_title">10dp</dimen>
 
     <dimen name="book_line_card_image">50dp</dimen>
     <dimen name="book_line_card_layout_height">50dp</dimen>
+    <dimen name="book_line_title_size">15dp</dimen>
+    <dimen name="book_line_sub_title">10dp</dimen>
 
     <dimen name="title_size">22sp</dimen>
     <dimen name="title_small_size">20sp</dimen>
