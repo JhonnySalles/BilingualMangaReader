@@ -37,6 +37,9 @@ abstract class BookDAO : DataBaseDAO<Book> {
     @Query("SELECT * FROM " + DataBaseConsts.BOOK.TABLE_NAME + " WHERE " + DataBaseConsts.BOOK.COLUMNS.FILE_NAME + " = :name")
     abstract fun get(name: String): Book
 
+    @Query("SELECT * FROM " + DataBaseConsts.BOOK.TABLE_NAME + " WHERE " + DataBaseConsts.BOOK.COLUMNS.FILE_PATH + " = :path ")
+    abstract fun listByPath(path : String?): List<Book>
+
 }
 
 

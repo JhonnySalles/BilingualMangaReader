@@ -41,10 +41,11 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
                                 "",
                                 it.path,
                                 it.name,
-                                it.extension
+                                it.extension,
+                                1
                             )
                         )
-                        book.file = it
+                        book!!.file = it
                     }
                     save.value?.add(book)
                 }
@@ -68,6 +69,5 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
 
         return obj
     }
-
 
 }

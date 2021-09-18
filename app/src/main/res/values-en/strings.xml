@@ -38,4 +38,20 @@
         <item>Japanese</item>
     </string-array>
 
+    <!-- READER -->
+    <string name="menu_view_mode">View Mode</string>
+    <string name="menu_view_mode_aspect_fill">Aspect Fill</string>
+    <string name="menu_view_mode_aspect_fit">Aspect Fit</string>
+    <string name="menu_view_mode_fit_width">Fit Width</string>
+
+    <string name="menu_reading_mode">Reading Mode</string>
+    <string name="menu_reading_mode_left_to_right">Comics</string>
+    <string name="menu_reading_mode_right_to_left">Manga</string>
+
+    <!-- ALERT -->
+    <string name="switch_action_positive">Yes</string>
+    <string name="switch_action_negative">No</string>
+    <string name="switch_next_comic">Would you like to switch to the next comic?</string>
+    <string name="switch_prev_comic">Would you like to switch to the previous comic?</string>
+
 </resources>

@@ -4,10 +4,12 @@
     <color name="primary">#212121</color>
     <color name="primaryVariant">#484848</color>
     <color name="onPrimary">#000000</color>
+    <color name="primarySemitransparent">#ce212121</color>
     <!-- Secondary color -->
     <color name="secondary">#aeea00</color>
     <color name="secondaryVariant">#e4ff54</color>
     <color name="onSecondary">#79b700</color>
+    <color name="secondarySemitransparent">#ceaeea00</color>
 
     <!-- Night background color -->
     <color name="backgroundPrimary">#ffffff</color>

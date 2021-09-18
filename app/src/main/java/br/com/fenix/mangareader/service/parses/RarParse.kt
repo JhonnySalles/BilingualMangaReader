@@ -87,7 +87,7 @@ class RarParse : Parse {
 
     override fun destroy() {
         if (mCacheDir != null) {
-            for (f in mCacheDir!!.listFiles())
+            for (f in mCacheDir?.listFiles()!!)
                 f.delete()
 
             mCacheDir!!.delete()
@@ -105,7 +105,7 @@ class RarParse : Parse {
             mCacheDir!!.mkdir()
         }
         if (mCacheDir!!.listFiles() != null) {
-            for (f in mCacheDir!!.listFiles()) {
+            for (f in mCacheDir?.listFiles()!!) {
                 f.delete()
             }
         }

@@ -3,21 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Projeto/MangaReader/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2203125" />
-        <entry key="..\:/Projeto/MangaReader/app/src/main/res/drawable/ic_baseline_screen_rotation.xml" value="0.2203125" />
-        <entry key="..\:/Projeto/MangaReader/app/src/main/res/drawable/ic_library.xml" value="0.1125" />
-        <entry key="..\:/Projeto/MangaReader/app/src/main/res/layout/activity_main.xml" value="0.25" />
-        <entry key="..\:/Projeto/MangaReader/app/src/main/res/layout/bar_menu_root.xml" value="0.1" />
-        <entry key="..\:/Projeto/MangaReader/app/src/main/res/layout/book_grid_card.xml" value="0.5013550135501355" />
-        <entry key="..\:/Projeto/MangaReader/app/src/main/res/layout/book_item.xml" value="0.18885869565217392" />
-        <entry key="..\:/Projeto/MangaReader/app/src/main/res/layout/book_line_card.xml" value="0.515625" />
-        <entry key="..\:/Projeto/MangaReader/app/src/main/res/layout/fragment_config.xml" value="0.1" />
-        <entry key="..\:/Projeto/MangaReader/app/src/main/res/layout/fragment_history.xml" value="0.12083333333333333" />
-        <entry key="..\:/Projeto/MangaReader/app/src/main/res/layout/fragment_library.xml" value="0.18885869565217392" />
-        <entry key="..\:/Projeto/MangaReader/app/src/main/res/layout/list_item.xml" value="0.20416666666666666" />
-        <entry key="..\:/Projeto/MangaReader/app/src/main/res/layout/nav_header_main.xml" value="0.12083333333333333" />
-        <entry key="..\:/Projeto/MangaReader/app/src/main/res/menu/main_menu.xml" value="0.20416666666666666" />
-        <entry key="..\:/Projeto/MangaReader/app/src/main/res/menu/main_menu_drawer.xml" value="0.1" />
+        <entry key="..\:/Projeto/MangaReader/app/src/main/res/layout/fragment_config.xml" value="0.19293478260869565" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.38333333333333336" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/drawable/ic_baseline_fullscreen.xml" value="0.38333333333333336" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/drawable/ic_baseline_landscape.xml" value="0.38333333333333336" />
@@ -34,6 +20,10 @@
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/drawable/ic_menu_open.xml" value="0.38333333333333336" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/drawable/ic_search.xml" value="0.38333333333333336" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/drawable/ic_search_black_24dp.xml" value="0.38333333333333336" />
+        <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/drawable/reader_nav_bg.xml" value="0.221875" />
+        <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/drawable/reader_nav_progress.xml" value="0.221875" />
+        <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/drawable/reader_nav_progress_inverse.xml" value="0.221875" />
+        <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/drawable/reader_nav_thumb.xml" value="0.221875" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/drawable/side_nav_bar.xml" value="0.21822916666666667" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/activity_config.xml" value="0.20572916666666666" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/activity_help.xml" value="0.20572916666666666" />
@@ -52,10 +42,13 @@
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/fragment_help.xml" value="0.20572916666666666" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/fragment_history.xml" value="0.20572916666666666" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/fragment_library.xml" value="0.20572916666666666" />
+        <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/fragment_reader.xml" value="0.20572916666666666" />
+        <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/fragment_reader_page.xml" value="0.20572916666666666" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/list_item.xml" value="0.20572916666666666" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/nav_header_main.xml" value="0.20208333333333334" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/menu/main_menu.xml" value="0.20208333333333334" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/menu/main_menu_drawer.xml" value="0.20208333333333334" />
+        <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/menu/menu_reader.xml" value="0.20572916666666666" />
         <entry key="..\:/Users/Jhonn/AndroidStudioProjects/MangaReader/app/src/main/res/drawable/ic_baseline_phonelink_setup_24.xml" value="0.20208333333333334" />
         <entry key="..\:/Users/Jhonn/AndroidStudioProjects/MangaReader/app/src/main/res/drawable/ic_launcher_background.xml" value="0.22708333333333333" />
         <entry key="..\:/Users/Jhonn/AndroidStudioProjects/MangaReader/app/src/main/res/layout/activity_config.xml" value="0.25" />
@@ -73,7 +66,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_15" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_15_PREVIEW" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

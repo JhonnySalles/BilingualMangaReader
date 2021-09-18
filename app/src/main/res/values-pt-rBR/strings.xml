@@ -37,4 +37,20 @@
         <item>Japonês</item>
     </string-array>
 
+    <!-- READER -->
+    <string name="menu_view_mode">Modo de preenchimento</string>
+    <string name="menu_view_mode_aspect_fill">Aspect Fill</string>
+    <string name="menu_view_mode_aspect_fit">Aspect Fit</string>
+    <string name="menu_view_mode_fit_width">Fit Width</string>
+
+    <string name="menu_reading_mode">Modo de leitura</string>
+    <string name="menu_reading_mode_left_to_right">Comic</string>
+    <string name="menu_reading_mode_right_to_left">Manga</string>
+
+    <!-- ALERT -->
+    <string name="switch_action_positive">Sim</string>
+    <string name="switch_action_negative">Não</string>
+    <string name="switch_next_comic">Deseja trocar para o próximo livro?</string>
+    <string name="switch_prev_comic">Deseja trocar para o livro anterio?</string>
+
 </resources>

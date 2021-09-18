@@ -40,7 +40,7 @@ class BookRepository(context: Context) {
 
             list
         } catch (e: Exception) {
-            Log.e(GeneralConsts.TAG.LOG, e.message.toString())
+            Log.e(GeneralConsts.TAG.DATABASE.LIST, e.message.toString())
             null
         }
     }
@@ -49,7 +49,7 @@ class BookRepository(context: Context) {
         return try {
             mDataBase.get(id)
         } catch (e: Exception) {
-            Log.e(GeneralConsts.TAG.LOG, e.message.toString())
+            Log.e(GeneralConsts.TAG.DATABASE.SELECT, e.message.toString())
             null
         }
     }
@@ -58,7 +58,16 @@ class BookRepository(context: Context) {
         return try {
             mDataBase.get(name)
         } catch (e: Exception) {
-            Log.e(GeneralConsts.TAG.LOG, e.message.toString())
+            Log.e(GeneralConsts.TAG.DATABASE.SELECT, e.message.toString())
+            null
+        }
+    }
+
+    fun findByFilePath(path: String?): List<Book>? {
+        return try {
+            mDataBase.listByPath(path)
+        } catch (e: Exception) {
+            Log.e(GeneralConsts.TAG.DATABASE.LIST, e.message.toString())
             null
         }
     }

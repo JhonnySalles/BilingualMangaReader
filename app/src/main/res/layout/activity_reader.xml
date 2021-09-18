@@ -4,21 +4,71 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primary">
+    android:background="@color/primary"
+    tools:context=".view.ui.reader.ReaderActivity">
 
-    <ScrollView
+    <FrameLayout
+        android:id="@+id/root_frame_reader"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="1dp">
+        android:fitsSystemWindows="false"
+        android:background="@color/onPrimary"/>
 
-        <ListView
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_reader"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="?android:attr/actionBarSize"
+            android:background="@color/primarySemitransparent"
+            app:theme="@style/ToolbarTheme">
+        <TextView
+            android:id="@+id/tolbar_title_custom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/onSecondary"
+            android:textSize="@dimen/title_size"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:maxLines="1"/>
+        </androidx.appcompat.widget.Toolbar>
 
+        <LinearLayout
+            android:id="@+id/nav_reader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="40dp"
+            android:orientation="vertical"
+            android:background="@drawable/reader_nav_bg"
+            android:gravity="center_horizontal"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
-        </ListView>
-    </ScrollView>
+            <TextView
+                android:id="@+id/nav_reader_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/title_size"/>
+
+            <SeekBar
+                android:id="@+id/nav_reader_progress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="20dp"
+                android:minHeight="2dp"
+                android:maxHeight="2dp"
+                android:thumb="@drawable/reader_nav_thumb"
+                android:thumbOffset="6dp"
+                android:progressDrawable="@drawable/reader_nav_progress"/>
+        </LinearLayout>
+    </RelativeLayout>
 
 </FrameLayout>

@@ -72,9 +72,9 @@ class Util {
             return Math.round(displayMetrics.heightPixels / displayMetrics.density)
         }
 
-        fun MD5(string: String?): String? {
+        fun MD5(string: String): String {
             return try {
-                val strBytes = string?.toByteArray()
+                val strBytes = string.toByteArray()
                 val messageDigest = MessageDigest.getInstance("MD5")
                 val digest = messageDigest.digest(strBytes)
                 val sb = StringBuffer()
@@ -86,7 +86,7 @@ class Util {
 
                 sb.toString()
             } catch (e: NoSuchAlgorithmException) {
-                string?.replace("/", ".")
+                string.replace("/", ".")
             }
         }
 
@@ -118,7 +118,7 @@ class Util {
             return 1024 * 1024 * memoryClass / percentage
         }
 
-        fun getCacheFile(context: Context, identifier: String?): File? {
+        fun getCacheFile(context: Context, identifier: String): File? {
             return File(context.externalCacheDir, this.MD5(identifier))
         }
 
@@ -126,7 +126,7 @@ class Util {
             val output = ByteArrayOutputStream()
             return try {
                 val b = ByteArray(4096)
-                var n = 0
+                var n: Int
                 while (`is`.read(b).also { n = it } != -1) {
                     output.write(b, 0, n)
                 }

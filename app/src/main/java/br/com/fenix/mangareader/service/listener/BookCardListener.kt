@@ -6,5 +6,4 @@ interface BookCardListener {
     fun onClick(book: Book)
     fun onClickLong(book: Book)
     fun onAddFavorite(book: Book)
-    fun onRemFavorite(book: Book)
 }

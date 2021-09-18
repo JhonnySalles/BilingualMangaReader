@@ -5,14 +5,43 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import br.com.fenix.mangareader.model.entity.Book
+import java.util.ArrayList
 
-class Storage {
+class Storage(context: Context) {
+    private val mRepository = BookRepository(context)
+
+    fun getPrevBook(book: Book): Book? {
+        val books: List<Book>? = mRepository.findByFilePath(book.file!!.parent)
+        val idx = books!!.indexOf(book)
+        return if (idx != 0) books[idx - 1] else null
+    }
+
+    fun getNextBook(book: Book): Book? {
+        val books: List<Book>? = mRepository.findByFilePath(book.file!!.parent)
+        val idx = books!!.indexOf(book)
+        return if (idx != books.size - 1) books[idx + 1] else null
+    }
+
+    fun get(idBook: Long): Book? = mRepository.get(idBook)
+
+    fun findByName(name: String): Book? = mRepository.findByFileName(name)
+
+    fun listBook() : List<Book>? = mRepository.list()
+
+    fun delete(book: Book) {
+        mRepository.delete(book)
+    }
+
+    fun save(book: Book) : Long = mRepository.save(book)
+
     // Used to get the cache images
     companion object Storage {
         private val EXTERNAL_PERMS = arrayOf(

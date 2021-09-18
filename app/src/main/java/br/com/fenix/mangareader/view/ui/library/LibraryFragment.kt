@@ -3,7 +3,6 @@ package br.com.fenix.mangareader.view.ui.library
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.SearchView
@@ -117,8 +116,9 @@ class LibraryFragment : Fragment() {
         mListener = object : BookCardListener {
             override fun onClick(book: Book) {
                 val intent = Intent(context, ReaderActivity::class.java)
+                intent.putExtra(GeneralConsts.KEYS.OBJECT.BOOK, book)
                 val bundle = Bundle()
-                bundle.putString(GeneralConsts.KEYS.BOOK.PATH, book.file?.path)
+                bundle.putString(GeneralConsts.KEYS.BOOK.NAME, book.file?.path)
                 bundle.putInt(GeneralConsts.KEYS.BOOK.MARK, book.bookMark)
                 intent.putExtras(bundle)
                 context?.startActivity(intent)
@@ -132,9 +132,6 @@ class LibraryFragment : Fragment() {
                 TODO("Not yet implemented")
             }
 
-            override fun onRemFavorite(book: Book) {
-                TODO("Not yet implemented")
-            }
         }
         generateLayout()
         observer()

@@ -3,21 +3,21 @@ package br.com.fenix.mangareader.model.entity
 import androidx.room.*
 import br.com.fenix.mangareader.util.constants.DataBaseConsts
 import java.io.File
+import java.io.Serializable
 import java.time.LocalDateTime
 
 @Entity(
     tableName = DataBaseConsts.BOOK.TABLE_NAME,
     indices = [Index(value = [DataBaseConsts.BOOK.COLUMNS.FILE_NAME, DataBaseConsts.BOOK.COLUMNS.TITLE])]
 )
-class Book(id: Long?, title: String, subTitle: String, path: String, name: String, type: String) {
+class Book(id: Long?, title: String, subTitle: String, path: String, name: String, type: String, pages: Int) : Serializable {
 
     constructor(
         id: Long?, title: String, subTitle: String,
         path: String, name: String, type: String, pages: Int,
         bookMark: Int, favorite: Boolean,
         dateCreate: LocalDateTime?, lastAccess: LocalDateTime?
-    ) : this(id, title, subTitle, path, name, type) {
-        this.pages = pages
+    ) : this(id, title, subTitle, path, name, type, pages) {
         this.bookMark = bookMark
         this.favorite = favorite
         this.dateCreate = dateCreate
@@ -35,7 +35,7 @@ class Book(id: Long?, title: String, subTitle: String, path: String, name: Strin
     var subTitle: String = subTitle
 
     @ColumnInfo(name = DataBaseConsts.BOOK.COLUMNS.PAGES)
-    var pages: Int = 1
+    var pages: Int = pages
 
     @ColumnInfo(name = DataBaseConsts.BOOK.COLUMNS.BOOK_MARK)
     var bookMark: Int = 0

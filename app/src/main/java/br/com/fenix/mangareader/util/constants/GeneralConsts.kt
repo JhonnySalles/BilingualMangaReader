@@ -32,17 +32,33 @@ class GeneralConsts private constructor() {
         }
 
         object BOOK {
-            const val PATH = "BOOK_PATH"
+            const val NAME = "BOOK_NAME"
             const val MARK = "BOOK_MARK"
+        }
+
+        object OBJECT {
+            const val BOOK = "BOOK_OBJECT"
+            const val FILE = "FILE_OBJECT"
         }
     }
 
     object TAG {
         const val LOG = "MangaReader"
+        object DATABASE {
+            const val INSERT = "$LOG - [DATABASE] INSERT"
+            const val SELECT = "$LOG - [DATABASE] SELECT"
+            const val DELETE = "$LOG - [DATABASE] DELETE"
+            const val LIST = "$LOG - [DATABASE] LIST"
+        }
     }
 
     object CONFIG {
         val DATA_FORMAT = listOf("dd/MM/yyyy", "MM/dd/yy", "dd/MM/yy", "yyyy-MM-dd")
+    }
+
+    object SCANNER {
+        const val MESSAGE_MEDIA_UPDATE_FINISHED = 0
+        const val MESSAGE_MEDIA_UPDATED = 1
     }
 
 }
