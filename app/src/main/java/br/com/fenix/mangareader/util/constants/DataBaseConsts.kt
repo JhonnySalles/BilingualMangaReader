@@ -13,6 +13,7 @@ class DataBaseConsts private constructor() {
             const val FILE_PATH = "path"
             const val FILE_NAME = "name"
             const val FILE_TYPE = "type"
+            const val FILE_FOLDER = "folder"
             const val FAVORITE = "favorite"
             const val DATE_CREATE = "dateCreate"
             const val LAST_ACCESS = "lastAccess"

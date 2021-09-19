@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.InputStream
+import java.math.BigInteger
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.util.*
@@ -74,17 +75,8 @@ class Util {
 
         fun MD5(string: String): String {
             return try {
-                val strBytes = string.toByteArray()
-                val messageDigest = MessageDigest.getInstance("MD5")
-                val digest = messageDigest.digest(strBytes)
-                val sb = StringBuffer()
-                for (i in digest.indices)
-                    sb.append(
-                        Integer.toHexString((digest[i] and 0xFF.toByte() or 0x100.toByte()).toInt())
-                            .substring(1, 3)
-                    )
-
-                sb.toString()
+                val md = MessageDigest.getInstance("MD5")
+                return BigInteger(1, md.digest(string.toByteArray())).toString(16).padStart(32, '0')
             } catch (e: NoSuchAlgorithmException) {
                 string.replace("/", ".")
             }

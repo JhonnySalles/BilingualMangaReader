@@ -19,13 +19,13 @@ class Storage(context: Context) {
     private val mRepository = BookRepository(context)
 
     fun getPrevBook(book: Book): Book? {
-        val books: List<Book>? = mRepository.findByFilePath(book.file!!.parent)
+        val books: List<Book>? = mRepository.findByFileFolder(book.file!!.parent)
         val idx = books!!.indexOf(book)
-        return if (idx != 0) books[idx - 1] else null
+        return if (idx > 0) books[idx - 1] else null
     }
 
     fun getNextBook(book: Book): Book? {
-        val books: List<Book>? = mRepository.findByFilePath(book.file!!.parent)
+        val books: List<Book>? = mRepository.findByFileFolder(book.file!!.parent)
         val idx = books!!.indexOf(book)
         return if (idx != books.size - 1) books[idx + 1] else null
     }
@@ -34,10 +34,14 @@ class Storage(context: Context) {
 
     fun findByName(name: String): Book? = mRepository.findByFileName(name)
 
-    fun listBook() : List<Book>? = mRepository.list()
+    fun listBook(withCover: Boolean) : List<Book>? = mRepository.list(withCover)
 
     fun delete(book: Book) {
         mRepository.delete(book)
+    }
+
+    fun updateBookMark(book: Book) {
+        mRepository.updateBookMark(book)
     }
 
     fun save(book: Book) : Long = mRepository.save(book)

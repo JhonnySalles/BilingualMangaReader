@@ -10,14 +10,14 @@ import java.time.LocalDateTime
     tableName = DataBaseConsts.BOOK.TABLE_NAME,
     indices = [Index(value = [DataBaseConsts.BOOK.COLUMNS.FILE_NAME, DataBaseConsts.BOOK.COLUMNS.TITLE])]
 )
-class Book(id: Long?, title: String, subTitle: String, path: String, name: String, type: String, pages: Int) : Serializable {
+class Book(id: Long?, title: String, subTitle: String, path: String, folder: String, name: String, type: String, pages: Int) : Serializable {
 
     constructor(
         id: Long?, title: String, subTitle: String,
-        path: String, name: String, type: String, pages: Int,
-        bookMark: Int, favorite: Boolean,
+        path: String, folder: String, name: String, type: String,
+        pages: Int, bookMark: Int, favorite: Boolean,
         dateCreate: LocalDateTime?, lastAccess: LocalDateTime?
-    ) : this(id, title, subTitle, path, name, type, pages) {
+    ) : this(id, title, subTitle, path, folder, name, type, pages) {
         this.bookMark = bookMark
         this.favorite = favorite
         this.dateCreate = dateCreate
@@ -44,13 +44,16 @@ class Book(id: Long?, title: String, subTitle: String, path: String, name: Strin
     var path: String = path
 
     @Ignore
-    var file: File? = null
+    var file: File? = File(path)
 
     @ColumnInfo(name = DataBaseConsts.BOOK.COLUMNS.FILE_NAME)
     var name: String = name
 
     @ColumnInfo(name = DataBaseConsts.BOOK.COLUMNS.FILE_TYPE)
     var type: String = type
+
+    @ColumnInfo(name = DataBaseConsts.BOOK.COLUMNS.FILE_FOLDER)
+    var folder: String = folder
 
     @ColumnInfo(name = DataBaseConsts.BOOK.COLUMNS.FAVORITE)
     var favorite: Boolean = false
@@ -69,5 +72,25 @@ class Book(id: Long?, title: String, subTitle: String, path: String, name: Strin
 
     override fun toString(): String {
         return "Book(id=$id, title='$title', subTitle='$subTitle', pages=$pages, bookMark=$bookMark, type='$type', update=$update)"
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Book
+
+        if (id != other.id) return false
+        if (name != other.name) return false
+        if (type != other.type) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id?.hashCode() ?: 0
+        result = 31 * result + name.hashCode()
+        result = 31 * result + type.hashCode()
+        return result
     }
 }

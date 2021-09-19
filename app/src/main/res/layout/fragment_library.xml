@@ -7,16 +7,19 @@
     android:background="@color/primary"
     tools:context=".view.ui.library.LibraryFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_library"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="8dp"
-        android:columnCount="3"
-        android:useDefaultMargins="true">
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/rl_library"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_library"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="8dp"
+            android:columnCount="3"
+            android:useDefaultMargins="true"/>
 
-    </androidx.recyclerview.widget.RecyclerView>
-
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </FrameLayout>

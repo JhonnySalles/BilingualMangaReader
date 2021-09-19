@@ -15,6 +15,7 @@ import br.com.fenix.mangareader.util.helpers.Util
 import java.io.File
 import java.lang.ref.WeakReference
 import java.util.*
+import kotlin.collections.HashMap
 
 class Scanner {
 
@@ -25,6 +26,7 @@ class Scanner {
     private var mIsRestarted = false
 
     private val mRestartHandler: Handler = RestartHandler(this)
+    private val mGetCover = HashMap<Book, Parse>()
 
     private inner class RestartHandler(scanner: Scanner) :
         Handler() {
@@ -92,56 +94,59 @@ class Scanner {
             try {
                 val ctx: Context = MainActivity.getAppContext()
                 val preference: SharedPreferences? = GeneralConsts.getSharedPreferences(ctx)
-                val library = preference?.getString(GeneralConsts.KEYS.LIBRARY.FOLDER, "")
+                val libraryPath = preference?.getString(GeneralConsts.KEYS.LIBRARY.FOLDER, "")
 
-                if (library == "") return
+                if (libraryPath == "") return
 
                 val storage: Storage = Storage(ctx)
-                val storageFiles: MutableMap<File?, Book> = HashMap<File?, Book>()
+                val storageFiles: MutableMap<String, Book> = HashMap()
 
                 // create list of files available in storage
-                for (c in storage.listBook()!!)
-                    storageFiles[c.file] = c
+                for (c in storage.listBook(false)!!)
+                    storageFiles[c.path] = c
 
                 // search and add comics if necessary
-                val directories: Deque<File> = ArrayDeque()
-                directories.add(File(library))
-                while (!directories.isEmpty()) {
-                    val dir = directories.pop()
-                    val files = dir.listFiles()
-                    Arrays.sort(files)
-                    for (file in files) {
+                var file = File(libraryPath)
+                file.walk()
+                    .filterNot { it.isDirectory }.forEach {
                         if (mIsStopped) return
-                        if (file.isDirectory)
-                            directories.add(file)
 
-                        if (storageFiles.containsKey(file)) {
-                            storageFiles.remove(file)
-                            continue
-                        }
-                        val parse: Parse = ParseFactory.create(file) ?: continue
-                        if (parse.numPages() > 0) {
-                            storage.save(
-                                Book(
-                                    0,
-                                    file.name,
-                                    "",
-                                    file.path,
-                                    file.nameWithoutExtension,
-                                    file.extension,
-                                    parse.numPages()
-                                )
-                            )
-                            notifyMediaUpdated()
+                        if (it.name.endsWith(".rar") ||
+                            it.name.endsWith(".zip") ||
+                            it.name.endsWith(".cbr") ||
+                            it.name.endsWith(".cbz")
+                        ) {
+                            if (storageFiles.containsKey(it.path))
+                                storageFiles.remove(it.path)
+                            else {
+                                val parse: Parse? = ParseFactory.create(it)
+                                if (parse != null)
+                                    if (parse.numPages() > 0) {
+                                        storage.save(
+                                            Book(
+                                                null,
+                                                it.name,
+                                                "",
+                                                it.path,
+                                                it.parent,
+                                                it.nameWithoutExtension,
+                                                it.extension,
+                                                parse.numPages()
+                                            )
+                                        )
+                                        notifyMediaUpdated()
+                                    }
+                            }
                         }
                     }
-                }
 
                 // delete missing comics
                 for (missing in storageFiles.values) {
-                    val coverCache: File? =
-                        Util.getCacheFile(ctx, missing.file!!.absolutePath)
-                    coverCache!!.delete()
+                    if (missing.file != null) {
+                        val coverCache: File? =
+                            Util.getCacheFile(ctx, missing.file!!.absolutePath)
+                        coverCache!!.delete()
+                    }
                     storage.delete(missing)
                 }
             } finally {

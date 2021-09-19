@@ -37,9 +37,11 @@ abstract class BookDAO : DataBaseDAO<Book> {
     @Query("SELECT * FROM " + DataBaseConsts.BOOK.TABLE_NAME + " WHERE " + DataBaseConsts.BOOK.COLUMNS.FILE_NAME + " = :name")
     abstract fun get(name: String): Book
 
-    @Query("SELECT * FROM " + DataBaseConsts.BOOK.TABLE_NAME + " WHERE " + DataBaseConsts.BOOK.COLUMNS.FILE_PATH + " = :path ")
-    abstract fun listByPath(path : String?): List<Book>
+    @Query("SELECT * FROM " + DataBaseConsts.BOOK.TABLE_NAME + " WHERE " + DataBaseConsts.BOOK.COLUMNS.FILE_FOLDER + " = :folder ")
+    abstract fun listByFolder(folder : String?): List<Book>
 
+    @Query("UPDATE " + DataBaseConsts.BOOK.TABLE_NAME + " SET " + DataBaseConsts.BOOK.COLUMNS.BOOK_MARK + " = :marker " + " WHERE " + DataBaseConsts.BOOK.COLUMNS.ID + " = :id ")
+    abstract fun updateBookMark(id: Long, marker:Int)
 }
 
 

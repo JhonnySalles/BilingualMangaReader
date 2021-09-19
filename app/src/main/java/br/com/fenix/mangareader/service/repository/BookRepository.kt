@@ -26,17 +26,23 @@ class BookRepository(context: Context) {
             mCoverRepository.save(obj.thumbnail!!)
     }
 
+    fun updateBookMark(obj: Book) {
+        if (obj.id != null)
+            mDataBase.updateBookMark(obj.id!!, obj.bookMark)
+    }
+
     fun delete(obj: Book) {
         mCoverRepository.deleteAll(obj.id!!)
         mDataBase.delete(obj)
     }
 
-    fun list(): List<Book>? {
+    fun list(withCover: Boolean): List<Book>? {
         return try {
             var list = mDataBase.list()
 
-            for (book in list)
-                book.thumbnail = mCoverRepository.findFirstByIdBook(book.id!!)
+            if (withCover)
+                for (book in list)
+                    book.thumbnail = mCoverRepository.findFirstByIdBook(book.id!!)
 
             list
         } catch (e: Exception) {
@@ -63,9 +69,9 @@ class BookRepository(context: Context) {
         }
     }
 
-    fun findByFilePath(path: String?): List<Book>? {
+    fun findByFileFolder(folder: String): List<Book>? {
         return try {
-            mDataBase.listByPath(path)
+            mDataBase.listByFolder(folder)
         } catch (e: Exception) {
             Log.e(GeneralConsts.TAG.DATABASE.LIST, e.message.toString())
             null

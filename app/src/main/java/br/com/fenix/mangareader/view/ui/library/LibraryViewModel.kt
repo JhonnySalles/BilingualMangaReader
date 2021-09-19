@@ -8,6 +8,7 @@ import br.com.fenix.mangareader.model.entity.Book
 import br.com.fenix.mangareader.model.entity.Cover
 import br.com.fenix.mangareader.service.repository.BookRepository
 import br.com.fenix.mangareader.service.repository.CoverRepository
+import br.com.fenix.mangareader.service.repository.Storage
 import java.io.File
 
 class LibraryViewModel(application: Application) : AndroidViewModel(application) {
@@ -19,37 +20,11 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
     private var mListBooks = MutableLiveData<ArrayList<Book>>()
     val save: LiveData<ArrayList<Book>> = mListBooks
 
-    fun readFiles(libraryPath: String) {
-        mListBooks.value = ArrayList()
-        if (libraryPath.isEmpty())
-            return
-
-        var file = File(libraryPath)
-        file.walk()
-            .filterNot { it.isDirectory }.forEach {
-                if (it.name.endsWith(".rar") ||
-                    it.name.endsWith(".zip") ||
-                    it.name.endsWith(".cbr") ||
-                    it.name.endsWith(".cbz")
-                ) {
-                    var book: Book? = mBookRepository.findByFileName(it.name)
-                    if (book == null) {
-                        book = save(
-                            Book(
-                                null,
-                                it.nameWithoutExtension,
-                                "",
-                                it.path,
-                                it.name,
-                                it.extension,
-                                1
-                            )
-                        )
-                        book!!.file = it
-                    }
-                    save.value?.add(book)
-                }
-            }
+    fun clear() {
+        if (mListBooks.value == null)
+            mListBooks.value = ArrayList()
+        else
+            mListBooks.value!!.clear()
     }
 
     fun save(obj: Book): Book {
@@ -70,4 +45,11 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         return obj
     }
 
+    fun list(withCover:Boolean) {
+        val list = mBookRepository.list(withCover)
+        if (list != null)
+            mListBooks.value = ArrayList(list)
+        else
+            mListBooks.value = ArrayList()
+    }
 }

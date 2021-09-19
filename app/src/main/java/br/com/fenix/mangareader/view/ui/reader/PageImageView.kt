@@ -40,7 +40,7 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) : ImageV
     private var mMaxScale = 0F
     private var mOriginalScale = 0F
     private val m = FloatArray(9)
-    private var mMatrix: Matrix? = null
+    private var mMatrix: Matrix = Matrix()
 
     fun setViewMode(viewMode: ReaderMode?) {
         mViewMode = viewMode
@@ -62,8 +62,7 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) : ImageV
         scale()
     }
 
-    open fun init() {
-        mMatrix = Matrix()
+    init {
         scaleType = ScaleType.MATRIX
         imageMatrix = mMatrix
         mScaleGestureDetector = ScaleGestureDetector(getContext(), PrivateScaleDetector())
@@ -88,7 +87,6 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) : ImageV
     }
 
     open fun scale() {
-        val drawable: Drawable = drawable
         if (drawable == null || !mHaveFrame || mSkipScaling) return
         val dwidth = drawable.intrinsicWidth
         val dheight = drawable.intrinsicHeight
@@ -120,10 +118,10 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) : ImageV
         val w = dwidth * heightRatio
         if (w < vwidth) {
             mMinScale = vheight * 0.75f / dheight
-            mMaxScale = Math.max(dwidth, vwidth) * 1.5f / dwidth
+            mMaxScale = max(dwidth, vwidth) * 1.5f / dwidth
         } else {
             mMinScale = vwidth * 0.75f / dwidth
-            mMaxScale = Math.max(dheight, vheight) * 1.5f / dheight
+            mMaxScale = max(dheight, vheight) * 1.5f / dheight
         }
         imageMatrix = mMatrix
         mOriginalScale = getCurrentScale()
