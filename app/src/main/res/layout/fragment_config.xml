@@ -199,6 +199,72 @@
                 android:layout_marginLeft="@dimen/margin"
                 android:layout_marginBottom="@dimen/margin_small"
                 android:textColor="@color/onSecondary"
+                android:text="@string/config_title_reader"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txt_reader_comic_mode"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_small"
+                android:hint="@string/config_system_farmat_date"
+                android:textColorHint="@color/textPrimary"
+                app:boxBackgroundColor="@color/primary"
+                app:boxStrokeColor="@color/onSecondary"
+                app:startIconTint="@color/onSecondary"
+                app:startIconDrawable="@drawable/ic_format_date"
+                app:placeholderTextColor="@color/textPrimary"
+                app:hintTextColor="@color/onSecondary">
+
+                <AutoCompleteTextView
+                    android:id="@+id/menu_autocomplete_reader_comic_mode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:textColor="@color/textPrimary"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txt_reader_page_mode"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_small"
+                android:hint="@string/config_system_language"
+                android:textColorHint="@color/textPrimary"
+                app:boxBackgroundColor="@color/primary"
+                app:boxStrokeColor="@color/onSecondary"
+                app:startIconTint="@color/onSecondary"
+                app:startIconDrawable="@drawable/ic_language"
+                app:placeholderTextColor="@color/textPrimary"
+                app:hintTextColor="@color/onSecondary">
+
+                <AutoCompleteTextView
+                    android:id="@+id/menu_autocomplete_page_mode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:textColor="@color/textPrimary"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/secondary"
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginLeft="@dimen/margin"
+                android:layout_marginRight="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin_small"
+                app:dividerInsetStart="16dp"
+                app:dividerInsetEnd="16dp"/>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:textColor="@color/onSecondary"
                 android:text="@string/config_title_system"/>
 
             <com.google.android.material.textfield.TextInputLayout

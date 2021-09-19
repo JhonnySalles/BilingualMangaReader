@@ -13,8 +13,12 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import androidx.fragment.app.Fragment
+import androidx.room.FtsOptions
 import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.model.enums.Languages
+import br.com.fenix.mangareader.model.enums.Order
+import br.com.fenix.mangareader.model.enums.PageMode
+import br.com.fenix.mangareader.model.enums.ReaderMode
 import br.com.fenix.mangareader.service.repository.Storage
 import br.com.fenix.mangareader.util.constants.GeneralConsts
 import com.google.android.material.textfield.TextInputLayout
@@ -36,12 +40,31 @@ class ConfigFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private lateinit var txtDefaultSubtitleTranslate: TextInputLayout
     private lateinit var autoCompleteDefaultSubtitleTranslate: AutoCompleteTextView
 
+    private lateinit var txtReaderComicMode: TextInputLayout
+    private lateinit var autocompleteReaderComicMode: AutoCompleteTextView
+    private lateinit var txtReaderPageMode: TextInputLayout
+    private lateinit var autocompletePageMode: AutoCompleteTextView
+
     private lateinit var txtSystemFormatDate: TextInputLayout
     private lateinit var autoCompleteSystemFormatDate: AutoCompleteTextView
     private lateinit var txtSystemLanguage: TextInputLayout
     private lateinit var autoCompleteSystemLanguage: AutoCompleteTextView
 
+    private var dateSelect : String = GeneralConsts.CONFIG.DATA_FORMAT[0]
     private val datePattern = GeneralConsts.CONFIG.DATA_FORMAT
+
+    private var pageModeSelect : PageMode = PageMode.Manga
+    private lateinit var pageMode : List<String>
+
+    private var readerModeSelect : ReaderMode = ReaderMode.ASPECT_FILL
+    private lateinit var readerMode : List<String>
+
+    private var orderSelect : Order = Order.Name
+    private lateinit var orders : List<String>
+
+    private var defaultSubtitleLanguageSelect : Languages = Languages.JP
+    private var defaultSubtitleTranslateSelect : Languages = Languages.PT
+    private var defaultSystemLanguageSelect : Languages = Languages.PT
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,6 +83,11 @@ class ConfigFragment : Fragment(), AdapterView.OnItemSelectedListener {
         autoCompleteDefaultSubtitleTranslate =
             view.findViewById(R.id.menu_autocomplete_default_subtitle_translate)
 
+        txtReaderComicMode = view.findViewById(R.id.txt_reader_comic_mode)
+        autocompleteReaderComicMode = view.findViewById(R.id.menu_autocomplete_reader_comic_mode)
+        txtReaderPageMode = view.findViewById(R.id.txt_reader_page_mode)
+        autocompletePageMode = view.findViewById(R.id.menu_autocomplete_page_mode)
+
         txtSystemFormatDate = view.findViewById(R.id.txt_system_format_date)
         autoCompleteSystemFormatDate = view.findViewById(R.id.menu_autocomplete_system_format_date)
         txtSystemLanguage = view.findViewById(R.id.txt_system_language)
@@ -77,23 +105,44 @@ class ConfigFragment : Fragment(), AdapterView.OnItemSelectedListener {
             startActivityForResult(intent, 102)
         }
 
-        val orders = listOf(
+        pageMode = listOf(
+            getString(R.string.menu_view_mode_aspect_fill),
+            getString(R.string.menu_view_mode_aspect_fit),
+            getString(R.string.menu_view_mode_fit_width)
+        )
+
+        orders = listOf(
             getString(R.string.config_option_order_name),
             getString(R.string.config_option_order_date),
             getString(R.string.config_option_order_access)
         )
+
+        readerMode = listOf(
+            getString(R.string.menu_reading_mode_left_to_right),
+            getString(R.string.menu_reading_mode_right_to_left)
+        )
+
         val adapterOrder = ArrayAdapter(requireContext(), R.layout.list_item, orders)
         autoCompleteLibraryOrder.setAdapter(adapterOrder)
+        autoCompleteLibraryOrder.onItemSelectedListener = this
 
         val languages = resources.getStringArray(R.array.languages)
-        val adapter = ArrayAdapter(requireContext(), R.layout.list_item, languages)
-        autoCompleteDefaultSubtitleLanguage.setAdapter(adapter)
-        autoCompleteDefaultSubtitleTranslate.setAdapter(adapter)
-        autoCompleteSystemLanguage.setAdapter(adapter)
+        val adapterLanguage = ArrayAdapter(requireContext(), R.layout.list_item, languages)
+        autoCompleteDefaultSubtitleLanguage.setAdapter(adapterLanguage)
+        autoCompleteDefaultSubtitleTranslate.setAdapter(adapterLanguage)
+        autoCompleteSystemLanguage.setAdapter(adapterLanguage)
 
         autoCompleteDefaultSubtitleLanguage.onItemSelectedListener = this
         autoCompleteDefaultSubtitleTranslate.onItemSelectedListener = this
         autoCompleteSystemLanguage.onItemSelectedListener = this
+
+        val adapterReaderMode = ArrayAdapter(requireContext(), R.layout.list_item, readerMode)
+        autocompleteReaderComicMode.setAdapter(adapterReaderMode)
+        autocompleteReaderComicMode.onItemSelectedListener = this
+
+        val adapterPageMode = ArrayAdapter(requireContext(), R.layout.list_item, pageMode)
+        autocompletePageMode.setAdapter(adapterPageMode)
+        autocompletePageMode.onItemSelectedListener = this
 
         val date0 = SimpleDateFormat(datePattern[0]).format(Date())
         val date1 = SimpleDateFormat(datePattern[1]).format(Date())
@@ -171,7 +220,7 @@ class ConfigFragment : Fragment(), AdapterView.OnItemSelectedListener {
             )
             this.putString(
                 GeneralConsts.KEYS.LIBRARY.ORDER,
-                txtLibraryOrder.editText?.text.toString()
+                orderSelect.toString()
             )
             this.putString(
                 GeneralConsts.KEYS.SUBTITLE.LANGUAGE,
@@ -182,12 +231,20 @@ class ConfigFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 txtDefaultSubtitleTranslate.editText?.text.toString()
             )
             this.putString(
+                GeneralConsts.KEYS.READER.PAGE_MODE,
+                pageModeSelect.toString()
+            )
+            this.putString(
+                GeneralConsts.KEYS.READER.READER_MODE,
+                readerModeSelect.toString()
+            )
+            this.putString(
                 GeneralConsts.KEYS.SYSTEM.LANGUAGE,
                 txtSystemLanguage.editText?.text.toString()
             )
             this.putString(
                 GeneralConsts.KEYS.SYSTEM.FORMAT_DATA,
-                txtSystemFormatDate.editText?.text.toString()
+                dateSelect
             )
 
             this.commit()
@@ -208,10 +265,10 @@ class ConfigFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun loadConfig() {
-        val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
+        val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext()) ?: return
 
         txtLibraryPath.editText?.setText(
-            sharedPreferences?.getString(
+            sharedPreferences.getString(
                 GeneralConsts.KEYS.LIBRARY.FOLDER,
                 ""
             )
@@ -223,46 +280,85 @@ class ConfigFragment : Fragment(), AdapterView.OnItemSelectedListener {
             )
         )
 
-        autoCompleteLibraryOrder.setText(
-            sharedPreferences?.getString(
+        dateSelect =  sharedPreferences.getString(
+            GeneralConsts.KEYS.SYSTEM.FORMAT_DATA,
+            GeneralConsts.CONFIG.DATA_FORMAT[0]
+        )!!
+        pageModeSelect = PageMode.valueOf(
+            sharedPreferences.getString(
                 GeneralConsts.KEYS.LIBRARY.ORDER,
-                ""
-            ), false
+                PageMode.Manga.toString()
+            )!!
         )
-        autoCompleteDefaultSubtitleLanguage.setText(
-            sharedPreferences?.getString(
+        readerModeSelect = ReaderMode.valueOf(
+            sharedPreferences.getString(
+                GeneralConsts.KEYS.LIBRARY.ORDER,
+                ReaderMode.ASPECT_FILL.toString()
+            )!!
+        )
+        orderSelect = Order.valueOf(
+            sharedPreferences.getString(
+                GeneralConsts.KEYS.LIBRARY.ORDER,
+                Order.Name.toString()
+            )!!
+        )
+        defaultSubtitleLanguageSelect = Languages.valueOf(
+            sharedPreferences.getString(
                 GeneralConsts.KEYS.SUBTITLE.LANGUAGE,
-                "Japanese"
-            ), false
+                Languages.JP.toString()
+            )!!
         )
-        autoCompleteDefaultSubtitleTranslate.setText(
-            sharedPreferences?.getString(
+        defaultSubtitleTranslateSelect = Languages.valueOf(
+            sharedPreferences.getString(
                 GeneralConsts.KEYS.SUBTITLE.TRANSLATE,
-                "Portuguese"
-            ), false
+                Languages.PT.toString()
+            )!!
         )
-        autoCompleteSystemLanguage.setText(
-            sharedPreferences?.getString(
+        defaultSystemLanguageSelect = Languages.valueOf(
+            sharedPreferences.getString(
                 GeneralConsts.KEYS.SYSTEM.LANGUAGE,
-                "English"
-            ), false
+                Languages.PT.toString()
+            )!!
         )
-        autoCompleteSystemFormatDate.setText(
-            sharedPreferences?.getString(
-                GeneralConsts.KEYS.SYSTEM.FORMAT_DATA,
-                ""
-            ), false
-        )
+
+        autoCompleteLibraryOrder.setText( orderSelect.toString(), false)
+        autoCompleteDefaultSubtitleLanguage.setText( defaultSubtitleLanguageSelect.toString(), false)
+        autoCompleteDefaultSubtitleTranslate.setText( defaultSubtitleTranslateSelect.toString(), false)
+        autoCompleteSystemLanguage.setText( defaultSystemLanguageSelect.toString(), false)
+
+        autoCompleteSystemFormatDate.setText(dateSelect, false)
+        autocompleteReaderComicMode.setText(readerModeSelect.toString(), false)
+        autocompletePageMode.setText(pageModeSelect.toString(), false)
 
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
         Log.i("teste", "pos: $pos - id: $id")
 
+        when (parent) {
+
+        }
+
+
+        /*dateSelect = GeneralConsts.CONFIG.DATA_FORMAT[0]
+        pageModeSelect = PageMode.Manga
+        readerModeSelect = ReaderMode.ASPECT_FILL
+        orderSelect = Order.Name
+        defaultSubtitleLanguageSelect = Languages.JP
+        defaultSubtitleTranslateSelect = Languages.PT
+        defaultSystemLanguageSelect = Languages.PT*/
+
 
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
 
+        dateSelect = GeneralConsts.CONFIG.DATA_FORMAT[0]
+        pageModeSelect = PageMode.Manga
+        readerModeSelect = ReaderMode.ASPECT_FILL
+        orderSelect = Order.Name
+        defaultSubtitleLanguageSelect = Languages.JP
+        defaultSubtitleTranslateSelect = Languages.PT
+        defaultSystemLanguageSelect = Languages.PT
     }
 }

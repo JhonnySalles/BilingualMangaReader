@@ -20,10 +20,10 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
     val save: LiveData<ArrayList<Book>> = mListBooks
 
     fun readFiles(libraryPath: String) {
+        mListBooks.value = ArrayList()
         if (libraryPath.isEmpty())
             return
 
-        mListBooks.value = ArrayList()
         var file = File(libraryPath)
         file.walk()
             .filterNot { it.isDirectory }.forEach {

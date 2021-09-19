@@ -14,6 +14,7 @@
     <string name="config_title_library">Biblioteca</string>
     <string name="config_title_sub_title">Legenda</string>
     <string name="config_title_system">Sistema</string>
+    <string name="config_title_reader">Leitor</string>
 
     <string name="config_text_library_folder">Caminho da biblioteca</string>
     <string name="config_text_library_order">Ordenação da biblioteca</string>

@@ -26,6 +26,11 @@ class GeneralConsts private constructor() {
             const val TRANSLATE = "SUBTITLE_TRANSLATE"
         }
 
+        object READER {
+            const val READER_MODE = "READER_MODE"
+            const val PAGE_MODE = "READER_PAGE_MODE"
+        }
+
         object SYSTEM {
             const val LANGUAGE = "SYSTEM_LANGUAGE"
             const val FORMAT_DATA = "SYSTEM_FORMAT_DATA"
