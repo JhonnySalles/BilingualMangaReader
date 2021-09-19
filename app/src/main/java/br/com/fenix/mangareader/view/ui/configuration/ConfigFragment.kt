@@ -13,7 +13,6 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import androidx.fragment.app.Fragment
-import androidx.room.FtsOptions
 import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.model.enums.Languages
 import br.com.fenix.mangareader.model.enums.Order
@@ -50,21 +49,20 @@ class ConfigFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private lateinit var txtSystemLanguage: TextInputLayout
     private lateinit var autoCompleteSystemLanguage: AutoCompleteTextView
 
-    private var dateSelect : String = GeneralConsts.CONFIG.DATA_FORMAT[0]
+    private var dateSelect: String = GeneralConsts.CONFIG.DATA_FORMAT[0]
     private val datePattern = GeneralConsts.CONFIG.DATA_FORMAT
+    private var pageModeSelect: PageMode = PageMode.Manga
+    private var readerModeSelect: ReaderMode = ReaderMode.FIT_WIDTH
+    private var orderSelect: Order = Order.Name
 
-    private var pageModeSelect : PageMode = PageMode.Manga
-    private lateinit var pageMode : List<String>
+    private var defaultSubtitleLanguageSelect: Languages = Languages.JP
+    private var defaultSubtitleTranslateSelect: Languages = Languages.PT
+    private var defaultSystemLanguageSelect: Languages = Languages.PT
 
-    private var readerModeSelect : ReaderMode = ReaderMode.ASPECT_FILL
-    private lateinit var readerMode : List<String>
-
-    private var orderSelect : Order = Order.Name
-    private lateinit var orders : List<String>
-
-    private var defaultSubtitleLanguageSelect : Languages = Languages.JP
-    private var defaultSubtitleTranslateSelect : Languages = Languages.PT
-    private var defaultSystemLanguageSelect : Languages = Languages.PT
+    private lateinit var mapOrder: HashMap<String, Order>
+    private lateinit var mapPageMode: HashMap<String, PageMode>
+    private lateinit var mapReaderMode: HashMap<String, ReaderMode>
+    private lateinit var mapLanguage: HashMap<String, Languages>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -105,29 +103,37 @@ class ConfigFragment : Fragment(), AdapterView.OnItemSelectedListener {
             startActivityForResult(intent, 102)
         }
 
-        pageMode = listOf(
-            getString(R.string.menu_view_mode_aspect_fill),
-            getString(R.string.menu_view_mode_aspect_fit),
-            getString(R.string.menu_view_mode_fit_width)
+        val languages = resources.getStringArray(R.array.languages)
+        mapLanguage = hashMapOf(
+            languages[0] to Languages.PT,
+            languages[1] to Languages.EN,
+            languages[2] to Languages.JP
         )
 
-        orders = listOf(
-            getString(R.string.config_option_order_name),
-            getString(R.string.config_option_order_date),
-            getString(R.string.config_option_order_access)
+        mapOrder = hashMapOf(
+            getString(R.string.config_option_order_name) to Order.Name,
+            getString(R.string.config_option_order_date) to Order.Date,
+            getString(R.string.config_option_order_access) to Order.LastAcess
         )
 
-        readerMode = listOf(
-            getString(R.string.menu_reading_mode_left_to_right),
-            getString(R.string.menu_reading_mode_right_to_left)
+        mapPageMode = hashMapOf(
+            getString(R.string.menu_reading_mode_left_to_right) to PageMode.Comics,
+            getString(R.string.menu_reading_mode_right_to_left) to PageMode.Manga
         )
 
-        val adapterOrder = ArrayAdapter(requireContext(), R.layout.list_item, orders)
+        mapReaderMode = hashMapOf(
+            getString(R.string.menu_view_mode_aspect_fill) to ReaderMode.ASPECT_FILL,
+            getString(R.string.menu_view_mode_aspect_fit) to ReaderMode.ASPECT_FIT,
+            getString(R.string.menu_view_mode_fit_width) to ReaderMode.FIT_WIDTH
+        )
+
+        val adapterOrder =
+            ArrayAdapter(requireContext(), R.layout.list_item, mapOrder.keys.toTypedArray())
         autoCompleteLibraryOrder.setAdapter(adapterOrder)
         autoCompleteLibraryOrder.onItemSelectedListener = this
 
-        val languages = resources.getStringArray(R.array.languages)
-        val adapterLanguage = ArrayAdapter(requireContext(), R.layout.list_item, languages)
+        val adapterLanguage =
+            ArrayAdapter(requireContext(), R.layout.list_item, mapLanguage.keys.toTypedArray())
         autoCompleteDefaultSubtitleLanguage.setAdapter(adapterLanguage)
         autoCompleteDefaultSubtitleTranslate.setAdapter(adapterLanguage)
         autoCompleteSystemLanguage.setAdapter(adapterLanguage)
@@ -136,13 +142,20 @@ class ConfigFragment : Fragment(), AdapterView.OnItemSelectedListener {
         autoCompleteDefaultSubtitleTranslate.onItemSelectedListener = this
         autoCompleteSystemLanguage.onItemSelectedListener = this
 
-        val adapterReaderMode = ArrayAdapter(requireContext(), R.layout.list_item, readerMode)
+        val adapterReaderMode =
+            ArrayAdapter(requireContext(), R.layout.list_item, mapReaderMode.keys.toTypedArray())
         autocompleteReaderComicMode.setAdapter(adapterReaderMode)
         autocompleteReaderComicMode.onItemSelectedListener = this
 
-        val adapterPageMode = ArrayAdapter(requireContext(), R.layout.list_item, pageMode)
+        val adapterPageMode =
+            ArrayAdapter(requireContext(), R.layout.list_item, mapPageMode.keys.toTypedArray())
         autocompletePageMode.setAdapter(adapterPageMode)
-        autocompletePageMode.onItemSelectedListener = this
+        autocompletePageMode.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(p0: View?) {
+                Log.i("Log", p0.toString())
+            }
+
+        } )
 
         val date0 = SimpleDateFormat(datePattern[0]).format(Date())
         val date1 = SimpleDateFormat(datePattern[1]).format(Date())
@@ -224,11 +237,11 @@ class ConfigFragment : Fragment(), AdapterView.OnItemSelectedListener {
             )
             this.putString(
                 GeneralConsts.KEYS.SUBTITLE.LANGUAGE,
-                txtDefaultSubtitleLanguage.editText?.text.toString()
+                defaultSubtitleLanguageSelect.toString()
             )
             this.putString(
                 GeneralConsts.KEYS.SUBTITLE.TRANSLATE,
-                txtDefaultSubtitleTranslate.editText?.text.toString()
+                defaultSubtitleTranslateSelect.toString()
             )
             this.putString(
                 GeneralConsts.KEYS.READER.PAGE_MODE,
@@ -240,7 +253,7 @@ class ConfigFragment : Fragment(), AdapterView.OnItemSelectedListener {
             )
             this.putString(
                 GeneralConsts.KEYS.SYSTEM.LANGUAGE,
-                txtSystemLanguage.editText?.text.toString()
+                defaultSystemLanguageSelect.toString()
             )
             this.putString(
                 GeneralConsts.KEYS.SYSTEM.FORMAT_DATA,
@@ -280,20 +293,20 @@ class ConfigFragment : Fragment(), AdapterView.OnItemSelectedListener {
             )
         )
 
-        dateSelect =  sharedPreferences.getString(
+        dateSelect = sharedPreferences.getString(
             GeneralConsts.KEYS.SYSTEM.FORMAT_DATA,
             GeneralConsts.CONFIG.DATA_FORMAT[0]
         )!!
         pageModeSelect = PageMode.valueOf(
             sharedPreferences.getString(
-                GeneralConsts.KEYS.LIBRARY.ORDER,
+                GeneralConsts.KEYS.READER.PAGE_MODE,
                 PageMode.Manga.toString()
             )!!
         )
         readerModeSelect = ReaderMode.valueOf(
             sharedPreferences.getString(
-                GeneralConsts.KEYS.LIBRARY.ORDER,
-                ReaderMode.ASPECT_FILL.toString()
+                GeneralConsts.KEYS.READER.READER_MODE,
+                ReaderMode.FIT_WIDTH.toString()
             )!!
         )
         orderSelect = Order.valueOf(
@@ -321,14 +334,32 @@ class ConfigFragment : Fragment(), AdapterView.OnItemSelectedListener {
             )!!
         )
 
-        autoCompleteLibraryOrder.setText( orderSelect.toString(), false)
-        autoCompleteDefaultSubtitleLanguage.setText( defaultSubtitleLanguageSelect.toString(), false)
-        autoCompleteDefaultSubtitleTranslate.setText( defaultSubtitleTranslateSelect.toString(), false)
-        autoCompleteSystemLanguage.setText( defaultSystemLanguageSelect.toString(), false)
+        autoCompleteLibraryOrder.setText(
+            mapOrder.filterValues { it == orderSelect }.keys.first(),
+            false
+        )
+        autoCompleteDefaultSubtitleLanguage.setText(
+            mapLanguage.filterValues { it == defaultSubtitleLanguageSelect }.keys.first(),
+            false
+        )
+        autoCompleteDefaultSubtitleTranslate.setText(
+            mapLanguage.filterValues { it == defaultSubtitleTranslateSelect }.keys.first(),
+            false
+        )
+        autoCompleteSystemLanguage.setText(
+            mapLanguage.filterValues { it == defaultSystemLanguageSelect }.keys.first(),
+            false
+        )
 
         autoCompleteSystemFormatDate.setText(dateSelect, false)
-        autocompleteReaderComicMode.setText(readerModeSelect.toString(), false)
-        autocompletePageMode.setText(pageModeSelect.toString(), false)
+        autocompleteReaderComicMode.setText(
+            mapReaderMode.filterValues { it == readerModeSelect }.keys.first(),
+            false
+        )
+        autocompletePageMode.setText(
+            mapPageMode.filterValues { it == pageModeSelect }.keys.first(),
+            false
+        )
 
     }
 
@@ -352,10 +383,9 @@ class ConfigFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
-
         dateSelect = GeneralConsts.CONFIG.DATA_FORMAT[0]
         pageModeSelect = PageMode.Manga
-        readerModeSelect = ReaderMode.ASPECT_FILL
+        readerModeSelect = ReaderMode.FIT_WIDTH
         orderSelect = Order.Name
         defaultSubtitleLanguageSelect = Languages.JP
         defaultSubtitleTranslateSelect = Languages.PT

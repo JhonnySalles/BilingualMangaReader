@@ -207,12 +207,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_small"
-                android:hint="@string/config_system_farmat_date"
+                android:hint="@string/menu_view_mode"
                 android:textColorHint="@color/textPrimary"
                 app:boxBackgroundColor="@color/primary"
                 app:boxStrokeColor="@color/onSecondary"
                 app:startIconTint="@color/onSecondary"
-                app:startIconDrawable="@drawable/ic_format_date"
+                app:startIconDrawable="@drawable/ic_book_open"
                 app:placeholderTextColor="@color/textPrimary"
                 app:hintTextColor="@color/onSecondary">
 
@@ -231,12 +231,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_small"
-                android:hint="@string/config_system_language"
+                android:hint="@string/menu_reading_mode"
                 android:textColorHint="@color/textPrimary"
                 app:boxBackgroundColor="@color/primary"
                 app:boxStrokeColor="@color/onSecondary"
                 app:startIconTint="@color/onSecondary"
-                app:startIconDrawable="@drawable/ic_language"
+                app:startIconDrawable="@drawable/ic_reader_mode"
                 app:placeholderTextColor="@color/textPrimary"
                 app:hintTextColor="@color/onSecondary">
 
