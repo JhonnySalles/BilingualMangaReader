@@ -1,6 +1,5 @@
 package br.com.fenix.mangareader.view.ui.reader
 
-import android.content.ContentResolver
 import android.content.Context
 import android.content.DialogInterface
 import android.content.SharedPreferences
@@ -23,9 +22,8 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import br.com.fenix.mangareader.R
-import br.com.fenix.mangareader.managers.BookHandler
+import br.com.fenix.mangareader.view.managers.BookHandler
 import br.com.fenix.mangareader.model.entity.Book
-import br.com.fenix.mangareader.model.enums.LibraryType
 import br.com.fenix.mangareader.model.enums.PageMode
 import br.com.fenix.mangareader.model.enums.ReaderMode
 import br.com.fenix.mangareader.service.parses.Parse

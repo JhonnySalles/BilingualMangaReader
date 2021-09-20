@@ -42,6 +42,9 @@ abstract class BookDAO : DataBaseDAO<Book> {
 
     @Query("UPDATE " + DataBaseConsts.BOOK.TABLE_NAME + " SET " + DataBaseConsts.BOOK.COLUMNS.BOOK_MARK + " = :marker " + " WHERE " + DataBaseConsts.BOOK.COLUMNS.ID + " = :id ")
     abstract fun updateBookMark(id: Long, marker:Int)
+
+    @Query("UPDATE " + DataBaseConsts.BOOK.TABLE_NAME + " SET " + DataBaseConsts.BOOK.COLUMNS.LAST_ACCESS + " = :acess " + " WHERE " + DataBaseConsts.BOOK.COLUMNS.ID + " = :id ")
+    abstract fun updateLastAcess(id: Long, acess:String)
 }
 
 

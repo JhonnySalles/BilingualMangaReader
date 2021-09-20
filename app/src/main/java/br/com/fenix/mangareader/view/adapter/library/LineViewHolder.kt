@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.model.entity.Book
 import br.com.fenix.mangareader.service.listener.BookCardListener
+import br.com.fenix.mangareader.util.constants.GeneralConsts
+import java.time.LocalDateTime
 
 class LineViewHolder(itemView: View, private val listener: BookCardListener) :
     RecyclerView.ViewHolder(itemView) {
@@ -26,8 +28,20 @@ class LineViewHolder(itemView: View, private val listener: BookCardListener) :
             bookImage.setImageBitmap(book.thumbnail!!.image)
 
         bookTitle.text = book.title
-        bookSubTitle.text = book.subTitle
-        bookProgress.setProgress(book.bookMark / book.pages, false)
+
+        if (book.subTitle.isEmpty()) {
+            if (book.lastAccess != null && book.lastAccess != LocalDateTime.MIN)
+                bookSubTitle.text =
+                    "${book.bookMark} / ${book.pages}  -  ${itemView.resources.getString(R.string.library_last_access)}: ${GeneralConsts.formaterDate(
+                        book.lastAccess!!
+                    )}"
+            else
+                bookSubTitle.text = "${book.bookMark} / ${book.pages}"
+        } else
+            bookSubTitle.text = book.subTitle
+
+        bookProgress.max = book.pages
+        bookProgress.setProgress(book.bookMark, false)
     }
 
 }

@@ -31,6 +31,11 @@ class BookRepository(context: Context) {
             mDataBase.updateBookMark(obj.id!!, obj.bookMark)
     }
 
+    fun updateLastAcess(obj: Book) {
+        if (obj.id != null)
+            mDataBase.updateLastAcess(obj.id!!, obj.lastAccess.toString())
+    }
+
     fun delete(obj: Book) {
         mCoverRepository.deleteAll(obj.id!!)
         mDataBase.delete(obj)

@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/onPrimary"
+        android:background="@color/primary"
         android:orientation="vertical">
 
         <!-- Media -->
@@ -35,6 +35,9 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?attr/textAppearanceHeadline6"
                 android:textColor="@color/textPrimary"
+                android:text="teste"
+                android:singleLine="true"
+                android:ellipsize="end"
                 android:textSize="@dimen/book_grid_title_size" />
 
             <TextView
@@ -42,16 +45,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
                 android:textAppearance="?attr/textAppearanceSubtitle2"
                 android:textColor="@color/textPrimary"
+                android:text="teste"
+                android:singleLine="true"
+                android:ellipsize="end"
                 android:textSize="@dimen/book_grid_sub_title" />
 
             <ProgressBar
                 android:id="@+id/book_grid_book_progress"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="5dp"
                 android:indeterminateTint="@color/secondary"
+                android:background="@color/onPrimary"
                 android:max="100"
                 android:min="0" />
 

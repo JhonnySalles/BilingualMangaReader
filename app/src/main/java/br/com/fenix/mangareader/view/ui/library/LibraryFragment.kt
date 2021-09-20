@@ -32,6 +32,7 @@ import org.apache.commons.compress.utils.IOUtils
 import java.io.File
 import java.io.FileInputStream
 import java.lang.Exception
+import java.time.LocalDateTime
 
 
 class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
@@ -183,11 +184,13 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             override fun onClick(book: Book) {
                 val intent = Intent(context, ReaderActivity::class.java)
                 val bundle = Bundle()
+                book.lastAccess = LocalDateTime.now()
                 bundle.putString(GeneralConsts.KEYS.BOOK.NAME, book.title)
                 bundle.putInt(GeneralConsts.KEYS.BOOK.MARK, book.bookMark)
                 bundle.putSerializable(GeneralConsts.KEYS.OBJECT.BOOK, book)
                 intent.putExtras(bundle)
                 context?.startActivity(intent)
+                mViewModel.updateLastAcess(book)
             }
 
             override fun onClickLong(book: Book) {

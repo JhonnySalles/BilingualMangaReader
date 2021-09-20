@@ -54,4 +54,7 @@
     <string name="switch_next_comic">Deseja trocar para o próximo livro?</string>
     <string name="switch_prev_comic">Deseja trocar para o livro anterio?</string>
 
+    <!-- LIBRARY -->
+    <string name="library_last_access">Último acesso</string>
+
 </resources>

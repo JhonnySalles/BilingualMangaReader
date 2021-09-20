@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.model.entity.Book
 import br.com.fenix.mangareader.service.listener.BookCardListener
+import br.com.fenix.mangareader.util.constants.GeneralConsts
 import com.google.android.material.card.MaterialCardView
+import java.time.LocalDateTime
 
 class GridViewHolder(itemView: View, private val listener: BookCardListener) :
     RecyclerView.ViewHolder(itemView) {
@@ -26,8 +28,18 @@ class GridViewHolder(itemView: View, private val listener: BookCardListener) :
             bookImage.setImageBitmap(book.thumbnail!!.image)
 
         bookTitle.text = book.title
-        bookSubTitle.text = book.subTitle
-        bookProgress.setProgress(book.bookMark / book.pages, false)
+
+        if (book.subTitle.isEmpty()) {
+            if (book.lastAccess != null && book.lastAccess != LocalDateTime.MIN)
+                bookSubTitle.text =
+                    "${book.bookMark} / ${book.pages}  -  ${GeneralConsts.formaterDate(book.lastAccess!!)}"
+            else
+                bookSubTitle.text = "${book.bookMark} / ${book.pages}"
+        } else
+            bookSubTitle.text = book.subTitle
+
+        bookProgress.max = book.pages
+        bookProgress.setProgress(book.bookMark, false)
     }
 
 }

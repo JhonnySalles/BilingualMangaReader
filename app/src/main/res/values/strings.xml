@@ -58,6 +58,8 @@
     <string name="switch_next_comic">Would you like to switch to the next comic?</string>
     <string name="switch_prev_comic">Would you like to switch to the previous comic?</string>
 
+    <!-- LIBRARY -->
+    <string name="library_last_access">Last_access</string>
 
     <!-- OTHERS -->
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>

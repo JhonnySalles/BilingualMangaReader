@@ -11,6 +11,7 @@ import java.io.InputStream
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
+import java.time.LocalDateTime
 import java.util.*
 import kotlin.experimental.and
 import kotlin.experimental.or
@@ -147,5 +148,6 @@ class Util {
             val imageBytes = android.util.Base64.decode(image, android.util.Base64.DEFAULT)
             return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
         }
+
     }
 }

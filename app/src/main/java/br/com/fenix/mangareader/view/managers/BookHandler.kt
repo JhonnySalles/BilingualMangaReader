@@ -1,4 +1,4 @@
-package br.com.fenix.mangareader.managers
+package br.com.fenix.mangareader.view.managers
 
 import android.graphics.BitmapFactory
 import android.net.Uri

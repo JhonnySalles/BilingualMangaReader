@@ -52,4 +52,8 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         else
             mListBooks.value = ArrayList()
     }
+
+    fun updateLastAcess(book: Book) {
+        mBookRepository.update(book)
+    }
 }

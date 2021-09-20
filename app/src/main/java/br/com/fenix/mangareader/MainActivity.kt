@@ -12,6 +12,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
+import br.com.fenix.mangareader.util.constants.GeneralConsts
 import br.com.fenix.mangareader.view.ui.configuration.ConfigFragment
 import br.com.fenix.mangareader.view.ui.help.HelpFragment
 import br.com.fenix.mangareader.view.ui.history.HistoryFragment
@@ -58,6 +59,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
         mContext = context
+        GeneralConsts.setContext(mContext)
         return super.onCreateView(name, context, attrs)
     }
 

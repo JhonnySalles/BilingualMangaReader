@@ -2,11 +2,29 @@ package br.com.fenix.mangareader.util.constants
 
 import android.content.Context
 import android.content.SharedPreferences
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class GeneralConsts private constructor() {
     companion object {
+        private lateinit var mContext : Context
+        fun setContext(context: Context) {
+            mContext = context
+        }
+
         fun getSharedPreferences(context: Context): SharedPreferences? {
-            return context.getSharedPreferences(KEYS.PREFERENCE_NAME, Context.MODE_PRIVATE)
+            mContext = context
+            return mContext.getSharedPreferences(KEYS.PREFERENCE_NAME, Context.MODE_PRIVATE)
+        }
+
+        fun getSharedPreferences(): SharedPreferences? {
+            return mContext.getSharedPreferences(KEYS.PREFERENCE_NAME, Context.MODE_PRIVATE)
+        }
+
+        fun formaterDate(dateTime: LocalDateTime) : String {
+            val preferences = getSharedPreferences()
+            val pattern = preferences?.getString(KEYS.SYSTEM.FORMAT_DATA, "yyyy-MM-dd")
+            return dateTime.format(DateTimeFormatter.ofPattern(pattern))
         }
     }
 
