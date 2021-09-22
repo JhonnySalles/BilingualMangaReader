@@ -378,8 +378,6 @@ class ConfigFragment : Fragment(), AdapterView.OnItemSelectedListener {
         defaultSubtitleLanguageSelect = Languages.JP
         defaultSubtitleTranslateSelect = Languages.PT
         defaultSystemLanguageSelect = Languages.PT*/
-
-
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {

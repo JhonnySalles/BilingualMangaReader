@@ -3,7 +3,9 @@ package br.com.fenix.mangareader.service.repository
 import androidx.room.*
 import br.com.fenix.mangareader.model.entity.Book
 import br.com.fenix.mangareader.model.entity.Cover
+import br.com.fenix.mangareader.model.entity.SubTitle
 import br.com.fenix.mangareader.util.constants.DataBaseConsts
+import org.intellij.lang.annotations.Language
 
 interface DataBaseDAO<T> {
 
@@ -64,3 +66,18 @@ abstract class CoverDAO : DataBaseDAO<Cover> {
     abstract fun deleteAll(idBook: Long)
 
 }
+
+@Dao
+abstract class SubTitleDAO : DataBaseDAO<SubTitle> {
+
+    @Query("SELECT * FROM " + DataBaseConsts.SUBTITLES.TABLE_NAME + " WHERE " + DataBaseConsts.SUBTITLES.COLUMNS.FK_ID_BOOK + " = :idBook AND " + DataBaseConsts.SUBTITLES.COLUMNS.ID + " = :id")
+    abstract fun get(idBook: Long, id: Long): SubTitle
+
+    @Query("SELECT * FROM " + DataBaseConsts.SUBTITLES.TABLE_NAME + " WHERE " + DataBaseConsts.SUBTITLES.COLUMNS.FK_ID_BOOK + " = :idBook")
+    abstract fun listByIdBook(idBook: Long): List<SubTitle>
+
+    @Query("DELETE FROM " + DataBaseConsts.SUBTITLES.TABLE_NAME + " WHERE " + DataBaseConsts.SUBTITLES.COLUMNS.FK_ID_BOOK + " = :idBook")
+    abstract fun deleteAll(idBook: Long)
+
+}
+

@@ -70,6 +70,9 @@ class Book(id: Long?, title: String, subTitle: String, path: String, folder: Str
     @Ignore
     var update: Boolean = false
 
+    @Ignore
+    var subTitles : List<SubTitle> = arrayListOf()
+
     override fun toString(): String {
         return "Book(id=$id, title='$title', subTitle='$subTitle', pages=$pages, bookMark=$bookMark, type='$type', update=$update)"
     }

@@ -3,7 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Projeto/MangaReader/app/src/main/res/drawable/ic_reader_mode.xml" value="0.2203125" />
+        <entry key="..\:/Projeto/MangaReader/app/src/main/res/layout/activity_reader.xml" value="0.4083333333333333" />
         <entry key="..\:/Projeto/MangaReader/app/src/main/res/layout/fragment_config.xml" value="0.19293478260869565" />
+        <entry key="..\:/Projeto/MangaReader/app/src/main/res/layout/fragment_reader.xml" value="0.1852355072463768" />
+        <entry key="..\:/Projeto/MangaReader/app/src/main/res/layout/fragment_reader_page.xml" value="0.1852355072463768" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.38333333333333336" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/drawable/ic_baseline_fullscreen.xml" value="0.38333333333333336" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/drawable/ic_baseline_landscape.xml" value="0.38333333333333336" />
@@ -69,7 +73,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_15" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_15_PREVIEW" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

@@ -44,30 +44,30 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="40dp"
-            android:orientation="vertical"
             android:background="@drawable/reader_nav_bg"
             android:gravity="center_horizontal"
-            android:paddingTop="10dp"
+            android:orientation="vertical"
             android:paddingLeft="10dp"
+            android:paddingTop="5dp"
             android:paddingRight="10dp">
 
             <TextView
                 android:id="@+id/nav_reader_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/title_size"/>
+                android:textSize="@dimen/title_size" />
 
             <SeekBar
                 android:id="@+id/nav_reader_progress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:paddingBottom="20dp"
-                android:minHeight="2dp"
                 android:maxHeight="2dp"
+                android:minHeight="2dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:progressDrawable="@drawable/reader_nav_progress"
                 android:thumb="@drawable/reader_nav_thumb"
-                android:thumbOffset="6dp"
-                android:progressDrawable="@drawable/reader_nav_progress"/>
+                android:thumbOffset="6dp" />
         </LinearLayout>
     </RelativeLayout>
 
