@@ -54,13 +54,13 @@ class GeneralConsts private constructor() {
             const val FORMAT_DATA = "SYSTEM_FORMAT_DATA"
         }
 
-        object BOOK {
-            const val NAME = "BOOK_NAME"
-            const val MARK = "BOOK_MARK"
+        object MANGA {
+            const val NAME = "MANGA_NAME"
+            const val MARK = "MANGA_MARK"
         }
 
         object OBJECT {
-            const val BOOK = "BOOK_OBJECT"
+            const val MANGA = "MANGA_OBJECT"
             const val FILE = "FILE_OBJECT"
         }
     }

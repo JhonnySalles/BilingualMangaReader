@@ -7,7 +7,7 @@ import com.squareup.picasso.Picasso
 import com.squareup.picasso.Request
 import com.squareup.picasso.RequestHandler
 
-class BookHandler(mParse: Parse?) : RequestHandler() {
+class MangaHandler(mParse: Parse?) : RequestHandler() {
     private val HANDLER_URI = "localcomic"
     private var mParse: Parse? = mParse
 

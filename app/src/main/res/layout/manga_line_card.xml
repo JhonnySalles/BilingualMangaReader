@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/book_line_card"
+    android:id="@+id/manga_line_card"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/book_line_card_layout_height"
+    android:layout_height="wrap_content"
     android:layout_marginBottom="1dp"
     android:background="@color/onPrimary"
     android:orientation="horizontal">
     <!-- Media -->
     <ImageView
-        android:id="@+id/book_line_image_cover"
-        android:layout_width="@dimen/book_line_card_image"
-        android:layout_height="@dimen/book_line_card_image"
+        android:id="@+id/manga_line_image_cover"
+        android:layout_width="@dimen/manga_line_card_image"
+        android:layout_height="match_parent"
         android:background="@color/primary"
         android:contentDescription=""
         app:srcCompat="@mipmap/book_icon" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingTop="1dp"
         android:paddingLeft="5dp"
@@ -26,24 +26,24 @@
 
         <!-- Title, secondary and supporting text -->
         <TextView
-            android:id="@+id/book_line_text_title"
+            android:id="@+id/manga_line_text_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?attr/textAppearanceHeadline6"
             android:textColor="@color/textPrimary"
-            android:textSize="@dimen/book_line_title_size" />
+            android:textSize="@dimen/manga_line_title_size" />
 
         <TextView
-            android:id="@+id/book_line_sub_title"
+            android:id="@+id/manga_line_sub_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
             android:textAppearance="?attr/textAppearanceSubtitle2"
             android:textColor="@color/textPrimary"
-            android:textSize="@dimen/book_line_sub_title" />
+            android:textSize="@dimen/manga_line_sub_title" />
 
         <ProgressBar
-            android:id="@+id/book_line_book_progress"
+            android:id="@+id/manga_line_progress"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="5dp"

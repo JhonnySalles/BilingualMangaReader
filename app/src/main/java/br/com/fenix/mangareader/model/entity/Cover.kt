@@ -13,8 +13,8 @@ data class Cover(
     @ColumnInfo(name = DataBaseConsts.COVER.COLUMNS.ID)
     var id: Long = 0,
 
-    @ColumnInfo(name = DataBaseConsts.COVER.COLUMNS.FK_ID_BOOK)
-    var id_book: Long = 0,
+    @ColumnInfo(name = DataBaseConsts.COVER.COLUMNS.FK_ID_MANGA)
+    var id_manga: Long = 0,
 
     @ColumnInfo(name = DataBaseConsts.COVER.COLUMNS.NAME)
     var name: String = "",

@@ -21,22 +21,22 @@ class SubTitleRepository(context: Context) {
         mDataBase.delete(obj)
     }
 
-    fun deleteAll(idBook: Long) {
-        mDataBase.deleteAll(idBook)
+    fun deleteAll(idManga: Long) {
+        mDataBase.deleteAll(idManga)
     }
 
-    fun get(idBook: Long, id: Long): SubTitle? {
+    fun get(idManga: Long, id: Long): SubTitle? {
         return try {
-            mDataBase.get(idBook, id)
+            mDataBase.get(idManga, id)
         } catch (e: Exception) {
             Log.e(GeneralConsts.TAG.LOG, e.message.toString())
             null
         }
     }
 
-    fun listByIdBook(idBook: Long): List<SubTitle>? {
+    fun listByIdBook(idManga: Long): List<SubTitle>? {
         return try {
-            mDataBase.listByIdBook(idBook)
+            mDataBase.listByIdManga(idManga)
         } catch (e: Exception) {
             Log.e(GeneralConsts.TAG.LOG, e.message.toString())
             null

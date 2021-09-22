@@ -4,34 +4,32 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import br.com.fenix.mangareader.model.entity.Book
+import br.com.fenix.mangareader.model.entity.Manga
 import br.com.fenix.mangareader.model.entity.Cover
-import br.com.fenix.mangareader.service.repository.BookRepository
+import br.com.fenix.mangareader.service.repository.MangaRepository
 import br.com.fenix.mangareader.service.repository.CoverRepository
-import br.com.fenix.mangareader.service.repository.Storage
-import java.io.File
 
 class LibraryViewModel(application: Application) : AndroidViewModel(application) {
 
     private val mContext = application.applicationContext
-    private val mBookRepository: BookRepository = BookRepository(mContext)
+    private val mMangaRepository: MangaRepository = MangaRepository(mContext)
     private val mCoverRepository: CoverRepository = CoverRepository(mContext)
 
-    private var mListBooks = MutableLiveData<ArrayList<Book>>()
-    val save: LiveData<ArrayList<Book>> = mListBooks
+    private var mListMangas = MutableLiveData<ArrayList<Manga>>()
+    val save: LiveData<ArrayList<Manga>> = mListMangas
 
     fun clear() {
-        if (mListBooks.value == null)
-            mListBooks.value = ArrayList()
+        if (mListMangas.value == null)
+            mListMangas.value = ArrayList()
         else
-            mListBooks.value!!.clear()
+            mListMangas.value!!.clear()
     }
 
-    fun save(obj: Book): Book {
+    fun save(obj: Manga): Manga {
         if (obj.id == 0L)
-            obj.id = mBookRepository.save(obj)
+            obj.id = mMangaRepository.save(obj)
         else
-            mBookRepository.update(obj)
+            mMangaRepository.update(obj)
 
         return obj
     }
@@ -46,14 +44,14 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun list(withCover:Boolean) {
-        val list = mBookRepository.list(withCover)
+        val list = mMangaRepository.list(withCover)
         if (list != null)
-            mListBooks.value = ArrayList(list)
+            mListMangas.value = ArrayList(list)
         else
-            mListBooks.value = ArrayList()
+            mListMangas.value = ArrayList()
     }
 
-    fun updateLastAcess(book: Book) {
-        mBookRepository.update(book)
+    fun updateLastAcess(manga: Manga) {
+        mMangaRepository.update(manga)
     }
 }

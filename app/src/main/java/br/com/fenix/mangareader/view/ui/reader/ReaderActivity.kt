@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import br.com.fenix.mangareader.R
-import br.com.fenix.mangareader.model.entity.Book
+import br.com.fenix.mangareader.model.entity.Manga
 import br.com.fenix.mangareader.model.enums.PageMode
 import br.com.fenix.mangareader.model.enums.ReaderMode
 import br.com.fenix.mangareader.util.constants.GeneralConsts
@@ -24,7 +24,7 @@ class ReaderActivity : AppCompatActivity() {
     private lateinit var mNavReader: LinearLayout
     private lateinit var mTolbar: Toolbar
     private lateinit var mTolbarTitle: TextView
-    private var bookMark: Int = 0
+    private var mBookMark: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,8 +42,8 @@ class ReaderActivity : AppCompatActivity() {
         val bundle = intent.extras
 
         if (bundle != null) {
-            mTolbarTitle.text = bundle.getString(GeneralConsts.KEYS.BOOK.NAME)
-            bookMark = bundle.getInt(GeneralConsts.KEYS.BOOK.MARK)
+            mTolbarTitle.text = bundle.getString(GeneralConsts.KEYS.MANGA.NAME)
+            mBookMark = bundle.getInt(GeneralConsts.KEYS.MANGA.MARK)
         }
 
         if (savedInstanceState == null) {
@@ -52,12 +52,12 @@ class ReaderActivity : AppCompatActivity() {
                 setFragment(fragment)
             } else {
                 val extras = intent.extras
-                val book = (extras!!.getSerializable(GeneralConsts.KEYS.OBJECT.BOOK) as Book?)
+                val manga = (extras!!.getSerializable(GeneralConsts.KEYS.OBJECT.MANGA) as Manga?)
                 var fragment: ReaderFragment?
-                if (book != null) {
-                    mReaderTitle.text = book.bookMark.toString()
-                    mTolbarTitle.text = book.title
-                    fragment = ReaderFragment.create(book)
+                if (manga != null) {
+                    mReaderTitle.text = manga.bookMark.toString()
+                    mTolbarTitle.text = manga.title
+                    fragment = ReaderFragment.create(manga)
                 } else {
                     val file = (extras!!.getSerializable(GeneralConsts.KEYS.OBJECT.FILE) as File?)
                     fragment = if (file != null)

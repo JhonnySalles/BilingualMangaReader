@@ -6,40 +6,40 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.mangareader.R
-import br.com.fenix.mangareader.model.entity.Book
-import br.com.fenix.mangareader.service.listener.BookCardListener
+import br.com.fenix.mangareader.model.entity.Manga
+import br.com.fenix.mangareader.service.listener.MangaCardListener
 import br.com.fenix.mangareader.util.constants.GeneralConsts
 import com.google.android.material.card.MaterialCardView
 import java.time.LocalDateTime
 
-class GridViewHolder(itemView: View, private val listener: BookCardListener) :
+class GridViewHolder(itemView: View, private val listener: MangaCardListener) :
     RecyclerView.ViewHolder(itemView) {
 
-    fun bind(book: Book) {
-        val bookImage = itemView.findViewById<ImageView>(R.id.book_grid_image_cover)
-        val bookTitle = itemView.findViewById<TextView>(R.id.book_grid_text_title)
-        val bookSubTitle = itemView.findViewById<TextView>(R.id.book_grid_sub_title)
-        val bookProgress = itemView.findViewById<ProgressBar>(R.id.book_grid_book_progress)
-        val cardView = itemView.findViewById<MaterialCardView>(R.id.book_grid_card)
+    fun bind(manga: Manga) {
+        val mangaImage = itemView.findViewById<ImageView>(R.id.manga_grid_image_cover)
+        val mangaTitle = itemView.findViewById<TextView>(R.id.manga_grid_text_title)
+        val mangaSubTitle = itemView.findViewById<TextView>(R.id.manga_grid_sub_title)
+        val mangaProgress = itemView.findViewById<ProgressBar>(R.id.manga_grid_progress)
+        val cardView = itemView.findViewById<MaterialCardView>(R.id.manga_grid_card)
 
-        cardView.setOnClickListener { listener.onClick(book) }
+        cardView.setOnClickListener { listener.onClick(manga) }
 
-        if (book.thumbnail != null && book.thumbnail!!.image != null)
-            bookImage.setImageBitmap(book.thumbnail!!.image)
+        if (manga.thumbnail != null && manga.thumbnail!!.image != null)
+            mangaImage.setImageBitmap(manga.thumbnail!!.image)
 
-        bookTitle.text = book.title
+        mangaTitle.text = manga.title
 
-        if (book.subTitle.isEmpty()) {
-            if (book.lastAccess != null && book.lastAccess != LocalDateTime.MIN)
-                bookSubTitle.text =
-                    "${book.bookMark} / ${book.pages}  -  ${GeneralConsts.formaterDate(book.lastAccess!!)}"
+        if (manga.subTitle.isEmpty()) {
+            if (manga.lastAccess != null && manga.lastAccess != LocalDateTime.MIN)
+                mangaSubTitle.text =
+                    "${manga.bookMark} / ${manga.pages}  -  ${GeneralConsts.formaterDate(manga.lastAccess!!)}"
             else
-                bookSubTitle.text = "${book.bookMark} / ${book.pages}"
+                mangaSubTitle.text = "${manga.bookMark} / ${manga.pages}"
         } else
-            bookSubTitle.text = book.subTitle
+            mangaSubTitle.text = manga.subTitle
 
-        bookProgress.max = book.pages
-        bookProgress.setProgress(book.bookMark, false)
+        mangaProgress.max = manga.pages
+        mangaProgress.setProgress(manga.bookMark, false)
     }
 
 }

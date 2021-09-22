@@ -8,16 +8,16 @@
     <dimen name="margin">16dp</dimen>
     <dimen name="margin_small">6dp</dimen>
 
-    <dimen name="book_grid_card_image">150dp</dimen>
-    <dimen name="book_grid_card_layout_width">150dp</dimen>
-    <dimen name="book_grid_card_layout_height">200dp</dimen>
-    <dimen name="book_grid_title_size">13dp</dimen>
-    <dimen name="book_grid_sub_title">10dp</dimen>
+    <dimen name="manga_grid_card_image">150dp</dimen>
+    <dimen name="manga_grid_card_layout_width">150dp</dimen>
+    <dimen name="manga_grid_card_layout_height">200dp</dimen>
+    <dimen name="manga_grid_title_size">13dp</dimen>
+    <dimen name="manga_grid_sub_title">10dp</dimen>
 
-    <dimen name="book_line_card_image">50dp</dimen>
-    <dimen name="book_line_card_layout_height">50dp</dimen>
-    <dimen name="book_line_title_size">15dp</dimen>
-    <dimen name="book_line_sub_title">10dp</dimen>
+    <dimen name="manga_line_card_image">50dp</dimen>
+    <dimen name="manga_line_card_layout_height">50dp</dimen>
+    <dimen name="manga_line_title_size">15dp</dimen>
+    <dimen name="manga_line_sub_title">10dp</dimen>
 
     <dimen name="title_size">20sp</dimen>
     <dimen name="title_small_size">16sp</dimen>

@@ -21,31 +21,31 @@ class CoverRepository(context: Context) {
         mDataBase.delete(obj)
     }
 
-    fun deleteAll(idBook: Long) {
-        mDataBase.deleteAll(idBook)
+    fun deleteAll(idManga: Long) {
+        mDataBase.deleteAll(idManga)
     }
 
-    fun get(idBook: Long, id: Long): Cover? {
+    fun get(idManga: Long, id: Long): Cover? {
         return try {
-            mDataBase.get(idBook, id)
+            mDataBase.get(idManga, id)
         } catch (e: Exception) {
             Log.e(GeneralConsts.TAG.LOG, e.message.toString())
             null
         }
     }
 
-    fun findFirstByIdBook(idBook: Long): Cover? {
+    fun findFirstByIdManga(idManga: Long): Cover? {
         return try {
-            mDataBase.findFirstByIdBook(idBook)
+            mDataBase.findFirstByIdManga(idManga)
         } catch (e: Exception) {
             Log.e(GeneralConsts.TAG.LOG, e.message.toString())
             null
         }
     }
 
-    fun listByIdBook(idBook: Long): List<Cover>? {
+    fun listByIdManga(idManga: Long): List<Cover>? {
         return try {
-            mDataBase.listByIdBook(idBook)
+            mDataBase.listByIdManga(idManga)
         } catch (e: Exception) {
             Log.e(GeneralConsts.TAG.LOG, e.message.toString())
             null

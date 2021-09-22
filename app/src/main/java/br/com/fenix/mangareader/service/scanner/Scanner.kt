@@ -6,7 +6,7 @@ import android.os.Handler
 import android.os.Message
 import android.os.Process
 import br.com.fenix.mangareader.MainActivity
-import br.com.fenix.mangareader.model.entity.Book
+import br.com.fenix.mangareader.model.entity.Manga
 import br.com.fenix.mangareader.service.parses.Parse
 import br.com.fenix.mangareader.service.parses.ParseFactory
 import br.com.fenix.mangareader.service.repository.Storage
@@ -26,7 +26,7 @@ class Scanner {
     private var mIsRestarted = false
 
     private val mRestartHandler: Handler = RestartHandler(this)
-    private val mGetCover = HashMap<Book, Parse>()
+    private val mGetCover = HashMap<Manga, Parse>()
 
     private inner class RestartHandler(scanner: Scanner) :
         Handler() {
@@ -99,7 +99,7 @@ class Scanner {
                 if (libraryPath == "") return
 
                 val storage: Storage = Storage(ctx)
-                val storageFiles: MutableMap<String, Book> = HashMap()
+                val storageFiles: MutableMap<String, Manga> = HashMap()
 
                 // create list of files available in storage
                 for (c in storage.listBook(false)!!)
@@ -123,7 +123,7 @@ class Scanner {
                                 if (parse != null)
                                     if (parse.numPages() > 0) {
                                         storage.save(
-                                            Book(
+                                            Manga(
                                                 null,
                                                 it.name,
                                                 "",

@@ -22,8 +22,8 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import br.com.fenix.mangareader.R
-import br.com.fenix.mangareader.view.managers.BookHandler
-import br.com.fenix.mangareader.model.entity.Book
+import br.com.fenix.mangareader.view.managers.MangaHandler
+import br.com.fenix.mangareader.model.entity.Manga
 import br.com.fenix.mangareader.model.enums.PageMode
 import br.com.fenix.mangareader.model.enums.ReaderMode
 import br.com.fenix.mangareader.service.parses.Parse
@@ -44,9 +44,6 @@ import kotlin.math.max
 import kotlin.math.min
 
 class ReaderFragment() : Fragment(), View.OnTouchListener {
-    val RESULT = 1
-
-    val RESULT_CURRENT_PAGE = "fragment.reader.currentpage"
 
     val STATE_FULLSCREEN = "STATE_FULLSCREEN"
     val STATE_NEW_COMIC = "STATE_NEW_COMIC"
@@ -69,12 +66,12 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
 
     var mParse: Parse? = null
     var mPicasso: Picasso? = null
-    var mComicHandler: BookHandler? = null
+    var mComicHandler: MangaHandler? = null
     val mTargets = SparseArray<Target>()
 
-    private var mBook: Book? = null
-    var mNewBook: Book? = null
-    var mNewBookTitle = 0
+    private var mManga: Manga? = null
+    var mNewManga: Manga? = null
+    var mNewMangaTitle = 0
     private lateinit var mStorage: Storage
     private lateinit var mUriNotFound: Uri
 
@@ -101,10 +98,10 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
             return fragment
         }
 
-        fun create(book: Book): ReaderFragment? {
+        fun create(manga: Manga): ReaderFragment? {
             val fragment = ReaderFragment()
             val args = Bundle()
-            args.putSerializable(GeneralConsts.KEYS.OBJECT.BOOK, book)
+            args.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, manga)
             fragment.arguments = args
             return fragment
         }
@@ -115,28 +112,28 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
         mStorage = Storage(requireContext())
         val bundle: Bundle? = arguments
         if (bundle != null) {
-            mBook = bundle.getSerializable(GeneralConsts.KEYS.OBJECT.BOOK) as Book?
-            var file: File? = if (mBook != null) {
-                mBook?.file
-                if (mBook?.file != null)
-                    mBook?.file
+            mManga = bundle.getSerializable(GeneralConsts.KEYS.OBJECT.MANGA) as Manga?
+            var file: File? = if (mManga != null) {
+                mManga?.file
+                if (mManga?.file != null)
+                    mManga?.file
                 else
-                    File(mBook?.path)
+                    File(mManga?.path)
             } else
                 bundle.getSerializable(GeneralConsts.KEYS.OBJECT.FILE) as File?
 
             if (file != null) {
-                if (mBook == null)
-                    mBook = mStorage.findByName(file.name)
+                if (mManga == null)
+                    mManga = mStorage.findByName(file.name)
 
-                if (mBook != null)
-                    mCurrentPage = mBook!!.bookMark
+                if (mManga != null)
+                    mCurrentPage = mManga!!.bookMark
 
                 mParse = ParseFactory.create(file)
                 if (mParse != null) {
                     mFilename = file.name
                     mCurrentPage = max(1, min(mCurrentPage, mParse!!.numPages()))
-                    mComicHandler = BookHandler(mParse)
+                    mComicHandler = MangaHandler(mParse)
                     mPicasso = Picasso.Builder(requireActivity())
                         .addRequestHandler((mComicHandler as RequestHandler))
                         .build()
@@ -273,15 +270,15 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putBoolean(STATE_FULLSCREEN, isFullscreen())
-        outState.putLong(STATE_NEW_COMIC, (if (mNewBook != null) mNewBook!!.id else -1)!!)
-        outState.putInt(STATE_NEW_COMIC_TITLE, if (mNewBook != null) mNewBookTitle else -1)
+        outState.putLong(STATE_NEW_COMIC, (if (mNewManga != null) mNewManga!!.id else -1)!!)
+        outState.putInt(STATE_NEW_COMIC_TITLE, if (mNewManga != null) mNewMangaTitle else -1)
         super.onSaveInstanceState(outState)
     }
 
     override fun onPause() {
-        if (mBook != null) {
-            mBook?.bookMark = getCurrentPage()
-            mStorage.updateBookMark(mBook!!)
+        if (mManga != null) {
+            mManga?.bookMark = getCurrentPage()
+            mStorage.updateBookMark(mManga!!)
         }
         super.onPause()
     }
@@ -537,34 +534,34 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
     }
 
     open fun hitBeginning() {
-        if (mBook != null) {
-            val c: Book? = mStorage.getPrevBook(mBook!!)
+        if (mManga != null) {
+            val c: Manga? = mStorage.getPrevManga(mManga!!)
             confirmSwitch(c, R.string.switch_prev_comic)
         }
     }
 
     open fun hitEnding() {
-        if (mBook != null) {
-            val c: Book? = mStorage.getNextBook(mBook!!)
+        if (mManga != null) {
+            val c: Manga? = mStorage.getNextManga(mManga!!)
             confirmSwitch(c, R.string.switch_next_comic)
         }
     }
 
-    private fun confirmSwitch(newBook: Book?, titleRes: Int) {
-        if (newBook == null) return
-        mNewBook = newBook
-        mNewBookTitle = titleRes
+    private fun confirmSwitch(newManga: Manga?, titleRes: Int) {
+        if (newManga == null) return
+        mNewManga = newManga
+        mNewMangaTitle = titleRes
         val dialog: AlertDialog =
             AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
                 .setTitle(titleRes)
-                .setMessage(newBook.file!!.name)
+                .setMessage(newManga.file!!.name)
                 .setPositiveButton(R.string.switch_action_positive,
                     DialogInterface.OnClickListener { dialog, which ->
                         //val activity = requireActivity() as ReaderActivity
                         //activity.setFragment(ReaderFragment(mNewBook!!.id))
                     })
                 .setNegativeButton(R.string.switch_action_negative,
-                    DialogInterface.OnClickListener { dialog, which -> mNewBook = null })
+                    DialogInterface.OnClickListener { dialog, which -> mNewManga = null })
                 .create()
         dialog.show()
     }

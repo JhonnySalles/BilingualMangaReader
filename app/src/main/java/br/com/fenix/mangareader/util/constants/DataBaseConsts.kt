@@ -1,8 +1,8 @@
 package br.com.fenix.mangareader.util.constants
 
 class DataBaseConsts private constructor() {
-    object BOOK {
-        const val TABLE_NAME = "Book"
+    object MANGA {
+        const val TABLE_NAME = "Manga"
 
         object COLUMNS {
             const val ID = "id"
@@ -25,7 +25,7 @@ class DataBaseConsts private constructor() {
 
         object COLUMNS {
             const val ID = "id"
-            const val FK_ID_BOOK = "id_book"
+            const val FK_ID_MANGA = "id_manga"
             const val NAME = "name"
             const val SIZE = "size"
             const val TYPE = "type"
@@ -38,7 +38,7 @@ class DataBaseConsts private constructor() {
 
         object COLUMNS {
             const val ID = "id"
-            const val FK_ID_BOOK = "id_book"
+            const val FK_ID_MANGA = "id_manga"
             const val LANGUAGE = "language"
             const val IN_ROOT = "inRoot"
             const val VOLUME = "isVolume"

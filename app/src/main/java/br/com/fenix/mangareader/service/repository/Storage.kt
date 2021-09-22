@@ -5,46 +5,44 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import br.com.fenix.mangareader.model.entity.Book
-import java.util.ArrayList
+import br.com.fenix.mangareader.model.entity.Manga
 
 class Storage(context: Context) {
-    private val mRepository = BookRepository(context)
+    private val mRepository = MangaRepository(context)
 
-    fun getPrevBook(book: Book): Book? {
-        val books: List<Book>? = mRepository.findByFileFolder(book.file!!.parent)
-        val idx = books!!.indexOf(book)
-        return if (idx > 0) books[idx - 1] else null
+    fun getPrevManga(manga: Manga): Manga? {
+        val mangas: List<Manga>? = mRepository.findByFileFolder(manga.file!!.parent)
+        val idx = mangas!!.indexOf(manga)
+        return if (idx > 0) mangas[idx - 1] else null
     }
 
-    fun getNextBook(book: Book): Book? {
-        val books: List<Book>? = mRepository.findByFileFolder(book.file!!.parent)
-        val idx = books!!.indexOf(book)
-        return if (idx != books.size - 1) books[idx + 1] else null
+    fun getNextManga(manga: Manga): Manga? {
+        val mangas: List<Manga>? = mRepository.findByFileFolder(manga.file!!.parent)
+        val idx = mangas!!.indexOf(manga)
+        return if (idx != mangas.size - 1) mangas[idx + 1] else null
     }
 
-    fun get(idBook: Long): Book? = mRepository.get(idBook)
+    fun get(idManga: Long): Manga? = mRepository.get(idManga)
 
-    fun findByName(name: String): Book? = mRepository.findByFileName(name)
+    fun findByName(name: String): Manga? = mRepository.findByFileName(name)
 
-    fun listBook(withCover: Boolean) : List<Book>? = mRepository.list(withCover)
+    fun listBook(withCover: Boolean) : List<Manga>? = mRepository.list(withCover)
 
-    fun delete(book: Book) {
-        mRepository.delete(book)
+    fun delete(manga: Manga) {
+        mRepository.delete(manga)
     }
 
-    fun updateBookMark(book: Book) {
-        mRepository.updateBookMark(book)
+    fun updateBookMark(manga: Manga) {
+        mRepository.updateBookMark(manga)
     }
 
-    fun save(book: Book) : Long = mRepository.save(book)
+    fun save(manga: Manga) : Long = mRepository.save(manga)
 
     // Used to get the cache images
     companion object Storage {

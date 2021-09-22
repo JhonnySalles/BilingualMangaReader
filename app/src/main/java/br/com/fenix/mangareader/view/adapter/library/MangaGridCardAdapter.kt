@@ -6,56 +6,56 @@ import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.mangareader.R
-import br.com.fenix.mangareader.model.entity.Book
-import br.com.fenix.mangareader.service.listener.BookCardListener
+import br.com.fenix.mangareader.model.entity.Manga
+import br.com.fenix.mangareader.service.listener.MangaCardListener
 import java.util.*
 import kotlin.collections.ArrayList
 
-class BookGridCardAdapter : RecyclerView.Adapter<GridViewHolder>(), Filterable {
+class MangaGridCardAdapter : RecyclerView.Adapter<GridViewHolder>(), Filterable {
 
-    private lateinit var mListener: BookCardListener
-    private var mBookList: ArrayList<Book> = arrayListOf()
-    private var mBookListFull: ArrayList<Book> = arrayListOf()
+    private lateinit var mListener: MangaCardListener
+    private var mMangaList: ArrayList<Manga> = arrayListOf()
+    private var mMangaListFull: ArrayList<Manga> = arrayListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GridViewHolder {
         val item =
-            LayoutInflater.from(parent.context).inflate(R.layout.book_grid_card, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.manga_grid_card, parent, false)
         return GridViewHolder(item, mListener)
     }
 
     override fun onBindViewHolder(holder: GridViewHolder, position: Int) {
-        holder.bind(mBookList[position])
+        holder.bind(mMangaList[position])
     }
 
 
     override fun getItemCount(): Int {
-        return mBookList.size
+        return mMangaList.size
     }
 
-    fun attachListener(listener: BookCardListener) {
+    fun attachListener(listener: MangaCardListener) {
         mListener = listener
     }
 
-    fun updateList(list: ArrayList<Book>) {
-        mBookList = list
-        mBookListFull = ArrayList(list)
+    fun updateList(list: ArrayList<Manga>) {
+        mMangaList = list
+        mMangaListFull = ArrayList(list)
         notifyDataSetChanged()
     }
 
     override fun getFilter(): Filter {
-        return bookFilter
+        return mMangaFilter
     }
 
-    private val bookFilter = object : Filter() {
+    private val mMangaFilter = object : Filter() {
         override fun performFiltering(constraint: CharSequence?): FilterResults {
-            val filteredList: MutableList<Book> = ArrayList()
+            val filteredList: MutableList<Manga> = ArrayList()
 
             if (constraint == null || constraint.length === 0) {
-                filteredList.addAll(mBookListFull)
+                filteredList.addAll(mMangaListFull)
             } else {
                 val filterPattern = constraint.toString().lowercase(Locale.getDefault()).trim()
 
-                filteredList.addAll(mBookListFull.filter {
+                filteredList.addAll(mMangaListFull.filter {
                     it.name.lowercase(Locale.getDefault()).contains(filterPattern) ||
                             it.type.lowercase(Locale.getDefault()).contains(filterPattern)
                 })
@@ -68,8 +68,8 @@ class BookGridCardAdapter : RecyclerView.Adapter<GridViewHolder>(), Filterable {
         }
 
         override fun publishResults(constraint: CharSequence?, filterResults: FilterResults?) {
-            mBookList.clear()
-            mBookList.addAll(filterResults!!.values as Collection<Book>)
+            mMangaList.clear()
+            mMangaList.addAll(filterResults!!.values as Collection<Manga>)
             notifyDataSetChanged()
         }
     }

@@ -5,15 +5,16 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import br.com.fenix.mangareader.model.entity.Book
+import br.com.fenix.mangareader.model.entity.Manga
 import br.com.fenix.mangareader.model.entity.Cover
+import br.com.fenix.mangareader.model.entity.SubTitle
 import br.com.fenix.mangareader.util.helpers.Converters
 
-@Database(entities = [Book::class, Cover::class], version = 1)
+@Database(entities = [Manga::class, Cover::class, SubTitle::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class DataBase : RoomDatabase() {
 
-    abstract fun getBookDao(): BookDAO
+    abstract fun getMangaDao(): MangaDAO
     abstract fun getCoverDao(): CoverDAO
     abstract fun getSubTitleDao(): SubTitleDAO
 

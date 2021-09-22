@@ -7,10 +7,10 @@ import java.io.Serializable
 import java.time.LocalDateTime
 
 @Entity(
-    tableName = DataBaseConsts.BOOK.TABLE_NAME,
-    indices = [Index(value = [DataBaseConsts.BOOK.COLUMNS.FILE_NAME, DataBaseConsts.BOOK.COLUMNS.TITLE])]
+    tableName = DataBaseConsts.MANGA.TABLE_NAME,
+    indices = [Index(value = [DataBaseConsts.MANGA.COLUMNS.FILE_NAME, DataBaseConsts.MANGA.COLUMNS.TITLE])]
 )
-class Book(id: Long?, title: String, subTitle: String, path: String, folder: String, name: String, type: String, pages: Int) : Serializable {
+class Manga(id: Long?, title: String, subTitle: String, path: String, folder: String, name: String, type: String, pages: Int) : Serializable {
 
     constructor(
         id: Long?, title: String, subTitle: String,
@@ -25,43 +25,43 @@ class Book(id: Long?, title: String, subTitle: String, path: String, folder: Str
     }
 
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = DataBaseConsts.BOOK.COLUMNS.ID)
+    @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.ID)
     var id: Long? = id
 
-    @ColumnInfo(name = DataBaseConsts.BOOK.COLUMNS.TITLE)
+    @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.TITLE)
     var title: String = title
 
-    @ColumnInfo(name = DataBaseConsts.BOOK.COLUMNS.SUB_TITLE)
+    @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.SUB_TITLE)
     var subTitle: String = subTitle
 
-    @ColumnInfo(name = DataBaseConsts.BOOK.COLUMNS.PAGES)
+    @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.PAGES)
     var pages: Int = pages
 
-    @ColumnInfo(name = DataBaseConsts.BOOK.COLUMNS.BOOK_MARK)
+    @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.BOOK_MARK)
     var bookMark: Int = 0
 
-    @ColumnInfo(name = DataBaseConsts.BOOK.COLUMNS.FILE_PATH)
+    @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.FILE_PATH)
     var path: String = path
 
     @Ignore
     var file: File? = File(path)
 
-    @ColumnInfo(name = DataBaseConsts.BOOK.COLUMNS.FILE_NAME)
+    @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.FILE_NAME)
     var name: String = name
 
-    @ColumnInfo(name = DataBaseConsts.BOOK.COLUMNS.FILE_TYPE)
+    @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.FILE_TYPE)
     var type: String = type
 
-    @ColumnInfo(name = DataBaseConsts.BOOK.COLUMNS.FILE_FOLDER)
+    @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.FILE_FOLDER)
     var folder: String = folder
 
-    @ColumnInfo(name = DataBaseConsts.BOOK.COLUMNS.FAVORITE)
+    @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.FAVORITE)
     var favorite: Boolean = false
 
-    @ColumnInfo(name = DataBaseConsts.BOOK.COLUMNS.DATE_CREATE)
+    @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.DATE_CREATE)
     var dateCreate: LocalDateTime? = LocalDateTime.MIN
 
-    @ColumnInfo(name = DataBaseConsts.BOOK.COLUMNS.LAST_ACCESS)
+    @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS)
     var lastAccess: LocalDateTime? = LocalDateTime.MIN
 
     @Ignore
@@ -81,7 +81,7 @@ class Book(id: Long?, title: String, subTitle: String, path: String, folder: Str
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as Book
+        other as Manga
 
         if (id != other.id) return false
         if (name != other.name) return false

@@ -2,11 +2,9 @@ package br.com.fenix.mangareader.view.ui.library
 
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.text.InputType
 import android.util.Log
 import android.view.*
 import android.view.inputmethod.EditorInfo
@@ -17,20 +15,17 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import br.com.fenix.mangareader.R
-import br.com.fenix.mangareader.model.entity.Book
+import br.com.fenix.mangareader.model.entity.Manga
 import br.com.fenix.mangareader.model.enums.LibraryType
-import br.com.fenix.mangareader.service.listener.BookCardListener
+import br.com.fenix.mangareader.service.listener.MangaCardListener
 import br.com.fenix.mangareader.service.repository.Storage
 import br.com.fenix.mangareader.service.scanner.Scanner
 import br.com.fenix.mangareader.util.constants.GeneralConsts
-import br.com.fenix.mangareader.view.adapter.library.BookGridCardAdapter
-import br.com.fenix.mangareader.view.adapter.library.BookLineCardAdapter
+import br.com.fenix.mangareader.view.adapter.library.MangaGridCardAdapter
+import br.com.fenix.mangareader.view.adapter.library.MangaLineCardAdapter
 import br.com.fenix.mangareader.view.ui.reader.ReaderActivity
 import java.lang.ref.WeakReference
 import android.view.ViewGroup
-import org.apache.commons.compress.utils.IOUtils
-import java.io.File
-import java.io.FileInputStream
 import java.lang.Exception
 import java.time.LocalDateTime
 
@@ -46,7 +41,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var miGridType: MenuItem
     private lateinit var miSearch: MenuItem
     private lateinit var searchView: SearchView
-    private lateinit var mListener: BookCardListener
+    private lateinit var mListener: MangaCardListener
     private var mIsRefreshPlanned = false
 
     private val mUpdateHandler: Handler = UpdateHandler(this)
@@ -80,9 +75,9 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun filter(newText: String?) {
         if (mGridType == LibraryType.GRID)
-            (mRecycleView.adapter as BookGridCardAdapter).filter.filter(newText)
+            (mRecycleView.adapter as MangaGridCardAdapter).filter.filter(newText)
         else
-            (mRecycleView.adapter as BookLineCardAdapter).filter.filter(newText)
+            (mRecycleView.adapter as MangaLineCardAdapter).filter.filter(newText)
     }
 
     override fun onResume() {
@@ -112,9 +107,9 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 mViewModel.list(true)
 
                 if (mGridType == LibraryType.GRID)
-                    (mRecycleView.adapter as BookGridCardAdapter).notifyDataSetChanged()
+                    (mRecycleView.adapter as MangaGridCardAdapter).notifyDataSetChanged()
                 else
-                    (mRecycleView.adapter as BookLineCardAdapter).notifyDataSetChanged()
+                    (mRecycleView.adapter as MangaLineCardAdapter).notifyDataSetChanged()
 
                 setRefresh(false)
             }
@@ -127,9 +122,9 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 mViewModel.list(true)
 
                 if (mGridType == LibraryType.GRID)
-                    (mRecycleView.adapter as BookGridCardAdapter).notifyDataSetChanged()
+                    (mRecycleView.adapter as MangaGridCardAdapter).notifyDataSetChanged()
                 else
-                    (mRecycleView.adapter as BookLineCardAdapter).notifyDataSetChanged()
+                    (mRecycleView.adapter as MangaLineCardAdapter).notifyDataSetChanged()
 
                 mIsRefreshPlanned = false
             }
@@ -180,24 +175,24 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         mRefreshLayout.setOnRefreshListener(this)
         mRefreshLayout.isEnabled = true
 
-        mListener = object : BookCardListener {
-            override fun onClick(book: Book) {
+        mListener = object : MangaCardListener {
+            override fun onClick(manga: Manga) {
                 val intent = Intent(context, ReaderActivity::class.java)
                 val bundle = Bundle()
-                book.lastAccess = LocalDateTime.now()
-                bundle.putString(GeneralConsts.KEYS.BOOK.NAME, book.title)
-                bundle.putInt(GeneralConsts.KEYS.BOOK.MARK, book.bookMark)
-                bundle.putSerializable(GeneralConsts.KEYS.OBJECT.BOOK, book)
+                manga.lastAccess = LocalDateTime.now()
+                bundle.putString(GeneralConsts.KEYS.MANGA.NAME, manga.title)
+                bundle.putInt(GeneralConsts.KEYS.MANGA.MARK, manga.bookMark)
+                bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, manga)
                 intent.putExtras(bundle)
                 context?.startActivity(intent)
-                mViewModel.updateLastAcess(book)
+                mViewModel.updateLastAcess(manga)
             }
 
-            override fun onClickLong(book: Book) {
+            override fun onClickLong(manga: Manga) {
                 TODO("Not yet implemented")
             }
 
-            override fun onAddFavorite(book: Book) {
+            override fun onAddFavorite(manga: Manga) {
                 TODO("Not yet implemented")
             }
 
@@ -230,23 +225,23 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun generateLayout() {
         if (mGridType == LibraryType.GRID) {
-            val gridAdapter = BookGridCardAdapter()
+            val gridAdapter = MangaGridCardAdapter()
             mRecycleView.adapter = gridAdapter
             mRecycleView.layoutManager = GridLayoutManager(requireContext(), 2)
             gridAdapter.attachListener(mListener)
         } else {
-            val lineAdapter = BookLineCardAdapter()
+            val lineAdapter = MangaLineCardAdapter()
             mRecycleView.adapter = lineAdapter
             mRecycleView.layoutManager = GridLayoutManager(requireContext(), 1)
             lineAdapter.attachListener(mListener)
         }
     }
 
-    private fun updateList(list: ArrayList<Book>) {
+    private fun updateList(list: ArrayList<Manga>) {
         if (mGridType == LibraryType.GRID)
-            (mRecycleView.adapter as BookGridCardAdapter).updateList(list)
+            (mRecycleView.adapter as MangaGridCardAdapter).updateList(list)
         else
-            (mRecycleView.adapter as BookLineCardAdapter).updateList(list)
+            (mRecycleView.adapter as MangaLineCardAdapter).updateList(list)
     }
 
     private fun observer() {
