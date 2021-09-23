@@ -49,6 +49,27 @@
     <string name="menu_reading_mode_left_to_right">Comics</string>
     <string name="menu_reading_mode_right_to_left">Manga</string>
 
+    <!-- READER POPUP -->
+    <string name="popup_reading_custom_color_filter">Custom color filter</string>
+    <string name="popup_reading_custom_brightness">Custom brightness</string>
+    <string name="popup_reading_grayscale">Grayscale</string>
+
+    <string name="color_filter_r_value">R</string>
+    <string name="color_filter_g_value">G</string>
+    <string name="color_filter_b_value">B</string>
+    <string name="color_filter_a_value">A</string>
+
+    <!-- READER POPUP SUBTITLE FILE -->
+    <string name="popup_reading_import_subtitle_title">Import file</string>
+    <string name="popup_reading_import_subtitle_file">Subtitle file</string>
+    <string name="popup_reading_import_translate_file">Translate file</string>
+
+    <!-- READER POPUP SUBTITLE -->
+    <string name="popup_reading_subtitle_title">Subtitle</string>
+    <string name="popup_reading_subtitle_before">Before</string>
+    <string name="popup_reading_subtitle_next">Next</string>
+    <string name="popup_reading_subtitle_file">File</string>
+
     <!-- ALERT -->
     <string name="switch_action_positive">Yes</string>
     <string name="switch_action_negative">No</string>

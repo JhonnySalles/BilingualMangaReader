@@ -1,7 +1,11 @@
 package br.com.fenix.mangareader.model.entity
 
+import com.google.gson.annotations.SerializedName
+
 data class Text(
+    @SerializedName("texto")
     val text: String,
+    @SerializedName("sequencia")
     val sequence: Int,
     val x1: Int,
     val y1: Int,

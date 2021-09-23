@@ -55,9 +55,9 @@ class ConfigFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private var readerModeSelect: ReaderMode = ReaderMode.FIT_WIDTH
     private var orderSelect: Order = Order.Name
 
-    private var defaultSubtitleLanguageSelect: Languages = Languages.JP
-    private var defaultSubtitleTranslateSelect: Languages = Languages.PT
-    private var defaultSystemLanguageSelect: Languages = Languages.PT
+    private var defaultSubtitleLanguageSelect: Languages = Languages.JAPANESE
+    private var defaultSubtitleTranslateSelect: Languages = Languages.PORTUGUESE
+    private var defaultSystemLanguageSelect: Languages = Languages.PORTUGUESE
 
     private lateinit var mapOrder: HashMap<String, Order>
     private lateinit var mapPageMode: HashMap<String, PageMode>
@@ -105,9 +105,9 @@ class ConfigFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         val languages = resources.getStringArray(R.array.languages)
         mapLanguage = hashMapOf(
-            languages[0] to Languages.PT,
-            languages[1] to Languages.EN,
-            languages[2] to Languages.JP
+            languages[0] to Languages.PORTUGUESE,
+            languages[1] to Languages.ENGLISH,
+            languages[2] to Languages.JAPANESE
         )
 
         mapOrder = hashMapOf(
@@ -318,19 +318,19 @@ class ConfigFragment : Fragment(), AdapterView.OnItemSelectedListener {
         defaultSubtitleLanguageSelect = Languages.valueOf(
             sharedPreferences.getString(
                 GeneralConsts.KEYS.SUBTITLE.LANGUAGE,
-                Languages.JP.toString()
+                Languages.JAPANESE.toString()
             )!!
         )
         defaultSubtitleTranslateSelect = Languages.valueOf(
             sharedPreferences.getString(
                 GeneralConsts.KEYS.SUBTITLE.TRANSLATE,
-                Languages.PT.toString()
+                Languages.PORTUGUESE.toString()
             )!!
         )
         defaultSystemLanguageSelect = Languages.valueOf(
             sharedPreferences.getString(
                 GeneralConsts.KEYS.SYSTEM.LANGUAGE,
-                Languages.PT.toString()
+                Languages.PORTUGUESE.toString()
             )!!
         )
 
@@ -376,8 +376,8 @@ class ConfigFragment : Fragment(), AdapterView.OnItemSelectedListener {
         readerModeSelect = ReaderMode.ASPECT_FILL
         orderSelect = Order.Name
         defaultSubtitleLanguageSelect = Languages.JP
-        defaultSubtitleTranslateSelect = Languages.PT
-        defaultSystemLanguageSelect = Languages.PT*/
+        defaultSubtitleTranslateSelect = Languages.PORTUGUESE
+        defaultSystemLanguageSelect = Languages.PORTUGUESE*/
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -385,8 +385,8 @@ class ConfigFragment : Fragment(), AdapterView.OnItemSelectedListener {
         pageModeSelect = PageMode.Manga
         readerModeSelect = ReaderMode.FIT_WIDTH
         orderSelect = Order.Name
-        defaultSubtitleLanguageSelect = Languages.JP
-        defaultSubtitleTranslateSelect = Languages.PT
-        defaultSystemLanguageSelect = Languages.PT
+        defaultSubtitleLanguageSelect = Languages.JAPANESE
+        defaultSubtitleTranslateSelect = Languages.PORTUGUESE
+        defaultSystemLanguageSelect = Languages.PORTUGUESE
     }
 }

@@ -1,16 +1,23 @@
 package br.com.fenix.mangareader.model.entity
 
+import com.google.gson.annotations.SerializedName
 import org.intellij.lang.annotations.Language
 
 data class Chapter(
+    @SerializedName("manga")
     val manga: String,
+    @SerializedName("volume")
     val volume: Float,
+    @SerializedName("capitulo")
     val chapter: Float,
+    @SerializedName("lingua")
     val language: Language,
     val scan: String,
+    @SerializedName("paginas")
     val pages: List<Pages>,
     val extra: Boolean,
     val raw: Boolean,
+    @SerializedName("vocabulario")
     val vocabulary: MutableSet<Vocabulary>
 ) {
     override fun equals(other: Any?): Boolean {

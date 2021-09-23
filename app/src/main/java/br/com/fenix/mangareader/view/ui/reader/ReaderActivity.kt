@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.TextView
@@ -15,6 +16,7 @@ import br.com.fenix.mangareader.model.entity.Manga
 import br.com.fenix.mangareader.model.enums.PageMode
 import br.com.fenix.mangareader.model.enums.ReaderMode
 import br.com.fenix.mangareader.util.constants.GeneralConsts
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import java.io.File
 
 class ReaderActivity : AppCompatActivity() {
@@ -24,6 +26,7 @@ class ReaderActivity : AppCompatActivity() {
     private lateinit var mNavReader: LinearLayout
     private lateinit var mTolbar: Toolbar
     private lateinit var mTolbarTitle: TextView
+    private lateinit var mMenuPopup: FrameLayout
     private var mBookMark: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +41,11 @@ class ReaderActivity : AppCompatActivity() {
         mReaderTitle = findViewById(R.id.nav_reader_title)
         mReaderProgress = findViewById(R.id.nav_reader_progress)
         mNavReader = findViewById(R.id.nav_reader)
+        mMenuPopup = findViewById(R.id.menu_popup)
+        BottomSheetBehavior.from(mMenuPopup).apply {
+            peekHeight = 200
+            this.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
 
         val bundle = intent.extras
 

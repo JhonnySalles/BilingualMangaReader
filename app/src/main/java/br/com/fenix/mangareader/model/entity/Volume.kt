@@ -1,12 +1,18 @@
 package br.com.fenix.mangareader.model.entity
 
 import br.com.fenix.mangareader.model.enums.Languages
+import com.google.gson.annotations.SerializedName
 
 data class Volume(
+    @SerializedName("manga")
     var manga: String,
+    @SerializedName("volume")
     val volume: Int,
+    @SerializedName("lingua")
     val language: Languages,
+    @SerializedName("capitulos")
     val chapters: List<Chapter>,
+    @SerializedName("vocabulario")
     val vocabulary: MutableSet<Vocabulary?>
 ) {
     override fun equals(other: Any?): Boolean {
