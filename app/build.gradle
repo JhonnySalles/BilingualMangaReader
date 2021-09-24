@@ -33,6 +33,11 @@ android {
     buildFeatures {
         viewBinding true
     }
+
+    packagingOptions {
+        exclude 'META-INF/CONTRIBUTORS.md'
+        exclude 'META-INF/LICENSE.md'
+    }
 }
 
 dependencies {
@@ -58,4 +63,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
 
+    // https://mvnrepository.com/artifact/com.atilika.kuromoji/kuromoji-ipadic
+    implementation group: 'com.atilika.kuromoji', name: 'kuromoji-ipadic', version: '0.9.0'
 }

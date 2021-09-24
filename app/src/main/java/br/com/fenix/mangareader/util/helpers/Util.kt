@@ -39,6 +39,11 @@ class Util {
             return sizeInBytes / 1024
         }
 
+        fun isJson(filename: String): Boolean {
+            return filename.lowercase(Locale.getDefault())
+                .matches(Regex(".*\\.(json)$"))
+        }
+
         fun isImage(filename: String): Boolean {
             return filename.lowercase(Locale.getDefault())
                 .matches(Regex(".*\\.(jpg|jpeg|bmp|gif|png|webp)$"))

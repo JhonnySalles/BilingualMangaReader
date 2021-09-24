@@ -7,4 +7,5 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Manga Reader"
-include ':app'
+include ':app', ':furiganatextview'
+

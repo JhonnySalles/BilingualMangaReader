@@ -37,6 +37,10 @@ class SevenZipParse : Parse {
         return mEntries!!.size
     }
 
+    override fun getSubtitles(): List<String> {
+        TODO("Not yet implemented")
+    }
+
     override fun getPage(num: Int): InputStream? {
         return ByteArrayInputStream(mEntries!![num].bytes)
     }

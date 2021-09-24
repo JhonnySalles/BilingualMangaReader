@@ -32,6 +32,10 @@ class DirectoryParse : Parse {
         return mFiles.size
     }
 
+    override fun getSubtitles(): List<String> {
+        TODO("Not yet implemented")
+    }
+
     override fun getPage(num: Int): InputStream? {
         return FileInputStream(mFiles[num])
     }

@@ -1,17 +1,18 @@
 package br.com.fenix.mangareader.model.entity
 
+import br.com.fenix.mangareader.model.enums.Languages
 import com.google.gson.annotations.SerializedName
 import org.intellij.lang.annotations.Language
 
 data class Chapter(
     @SerializedName("manga")
-    val manga: String,
+    var manga: String,
     @SerializedName("volume")
-    val volume: Float,
+    var volume: Float,
     @SerializedName("capitulo")
     val chapter: Float,
     @SerializedName("lingua")
-    val language: Language,
+    var language: Languages,
     val scan: String,
     @SerializedName("paginas")
     val pages: List<Pages>,

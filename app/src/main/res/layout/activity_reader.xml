@@ -76,7 +76,7 @@
     <FrameLayout
         android:id="@+id/menu_popup"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="450dp"
         android:layout_alignParentBottom="true"
         android:background="@color/primary"
         android:gravity="center_horizontal"
@@ -85,6 +85,7 @@
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <ImageView
+            android:id="@+id/menu_popup_touch"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
@@ -98,17 +99,17 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:background="@color/primary"
+            app:tabGravity="fill"
+            app:tabMode="fixed"
             app:tabSelectedTextColor="@color/secondary"
             app:tabTextAppearance="@style/PopupTab"
-            app:tabTextColor="@color/onSecondary"
-            app:tabMode="fixed"
-            app:tabGravity="fill">
+            app:tabTextColor="@color/onSecondary">
 
             <com.google.android.material.tabs.TabItem
                 android:id="@+id/tab_item_subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Legenda"/>
+                android:text="Legenda" />
 
 
             <com.google.android.material.tabs.TabItem
@@ -124,12 +125,14 @@
                 android:text="Brilho" />
 
         </com.google.android.material.tabs.TabLayout>
+
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/popup_view_pager"
-            android:layout_marginTop="60dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"            />
+            android:layout_marginTop="60dp"
+            android:paddingTop="5dp"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
     </FrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

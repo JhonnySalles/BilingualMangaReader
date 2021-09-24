@@ -7,7 +7,7 @@ data class Volume(
     @SerializedName("manga")
     var manga: String,
     @SerializedName("volume")
-    val volume: Int,
+    val volume: Float,
     @SerializedName("lingua")
     val language: Languages,
     @SerializedName("capitulos")
@@ -24,16 +24,14 @@ data class Volume(
         if (manga != other.manga) return false
         if (volume != other.volume) return false
         if (language != other.language) return false
-        if (chapters != other.chapters) return false
 
         return true
     }
 
     override fun hashCode(): Int {
         var result = manga.hashCode()
-        result = 31 * result + volume
+        result = 31 * result + volume.hashCode()
         result = 31 * result + language.hashCode()
-        result = 31 * result + chapters.hashCode()
         return result
     }
 }

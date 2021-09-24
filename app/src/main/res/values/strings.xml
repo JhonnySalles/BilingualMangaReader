@@ -52,6 +52,11 @@
     <string name="menu_reading_mode_left_to_right">Comics</string>
     <string name="menu_reading_mode_right_to_left">Manga</string>
 
+    <!-- READER POPUP TITLES -->
+    <string name="popup_reading_title_subtitle">Subtitles</string>
+    <string name="popup_reading_title_brightness">Brightness</string>
+    <string name="popup_reading_title_subtitle_configuration">Import</string>
+
     <!-- READER POPUP COLOR -->
     <string name="popup_reading_custom_color_filter">Custom color filter</string>
     <string name="popup_reading_custom_brightness">Custom brightness</string>

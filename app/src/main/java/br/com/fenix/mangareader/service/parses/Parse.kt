@@ -9,4 +9,5 @@ interface Parse {
     fun getType(): String?
     fun getPage(num: Int): InputStream?
     fun numPages(): Int
+    fun getSubtitles(): List<String>
 }

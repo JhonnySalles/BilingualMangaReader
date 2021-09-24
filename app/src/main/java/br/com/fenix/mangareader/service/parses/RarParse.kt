@@ -13,6 +13,7 @@ class RarParse : Parse {
     private var mArchive: Archive? = null
     private var mCacheDir: File? = null
     private var mSolidFileExtracted = false
+    private var mSubtitles = ArrayList<FileHeader>()
 
     override fun parse(file: File?) {
         mArchive = try {
@@ -26,6 +27,8 @@ class RarParse : Parse {
                 val name = getName(header)
                 if (Util.isImage(name))
                     mHeaders.add(header)
+                else if (Util.isJson(name))
+                    mSubtitles.add(header)
             }
             header = mArchive!!.nextFileHeader()
         }
@@ -38,6 +41,24 @@ class RarParse : Parse {
 
     override fun numPages(): Int {
         return mHeaders.size
+    }
+
+    override fun getSubtitles(): List<String> {
+        val subtitles = arrayListOf<String>()
+        mSubtitles!!.forEach {
+            val sub = mArchive!!.getInputStream(it)
+            val reader = BufferedReader(sub.reader())
+            val content = StringBuilder()
+            reader.use { reader ->
+                var line = reader.readLine()
+                while (line != null) {
+                    content.append(line)
+                    line = reader.readLine()
+                }
+            }
+            subtitles.add(content.toString())
+        }
+        return subtitles
     }
 
     override fun getPage(num: Int): InputStream? {

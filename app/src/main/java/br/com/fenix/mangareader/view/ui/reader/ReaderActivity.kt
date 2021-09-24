@@ -1,56 +1,194 @@
 package br.com.fenix.mangareader.view.ui.reader
 
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
-import android.widget.FrameLayout
-import android.widget.LinearLayout
-import android.widget.SeekBar
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.viewpager.widget.ViewPager
 import br.com.fenix.mangareader.R
+import br.com.fenix.mangareader.model.entity.Chapter
 import br.com.fenix.mangareader.model.entity.Manga
+import br.com.fenix.mangareader.model.entity.Volume
+import br.com.fenix.mangareader.model.enums.Languages
 import br.com.fenix.mangareader.model.enums.PageMode
 import br.com.fenix.mangareader.model.enums.ReaderMode
 import br.com.fenix.mangareader.util.constants.GeneralConsts
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.tabs.TabLayout
+import com.google.gson.Gson
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.io.File
+import java.util.*
 
 class ReaderActivity : AppCompatActivity() {
 
     private lateinit var mReaderTitle: TextView
     private lateinit var mReaderProgress: SeekBar
     private lateinit var mNavReader: LinearLayout
-    private lateinit var mTolbar: Toolbar
-    private lateinit var mTolbarTitle: TextView
+    private lateinit var mToolbar: Toolbar
+    private lateinit var mToolbarTitle: TextView
     private lateinit var mMenuPopup: FrameLayout
+    private lateinit var mPopupTab: TabLayout
+    private lateinit var mPopupView: ViewPager
+    private lateinit var mBottomSheet: BottomSheetBehavior<FrameLayout>
     private var mBookMark: Int = 0
+
+    private lateinit var mPopupReaderColorFilterFragment: PopupReaderColorFilter
+    private lateinit var mPopupSubtitleConfigurationFragment: PopupSubtitleConfiguration
+    private lateinit var mPopupSubtitleReaderFragment: PopupSubtitleReader
+
+    companion object {
+        private var mListChapter: HashMap<Languages, MutableList<Chapter>> = hashMapOf()
+        private var mSelectSubtitle: List<Chapter> = arrayListOf()
+        private var mSelectTranslate: List<Chapter> = arrayListOf()
+
+        // Async routine
+        fun getChapterFromJson(context: Context, listJson: List<String>) =
+            runBlocking { // this: CoroutineScope
+                launch { // launch a new coroutine and continue
+                    mListChapter.clear()
+                    mSelectSubtitle = arrayListOf()
+                    mSelectTranslate = arrayListOf()
+
+                    if (listJson.isNotEmpty()) {
+                        val gson = Gson()
+                        val listChapter: MutableList<Chapter> = arrayListOf()
+
+                        listJson.forEach {
+                            try {
+                                val volume: Volume = gson.fromJson(it, Volume::class.java)
+                                for (chapter in volume.chapters) {
+                                    chapter.manga = volume.manga
+                                    chapter.volume = volume.volume
+                                    chapter.language = volume.language
+                                }
+                                listChapter.addAll(volume.chapters)
+                            } catch (volExcept: Exception) {
+                                try {
+                                    val chapter: Chapter = gson.fromJson(it, Chapter::class.java)
+                                    listChapter.add(chapter)
+                                } catch (chapExcept: Exception) {
+                                }
+                            }
+                        }
+                        setListChapter(context, listChapter)
+                    }
+                }
+            }
+
+        private fun setListChapter(context: Context, chapters: MutableList<Chapter>) {
+            if (chapters.isEmpty())
+                return
+
+            var lastLanguage: Languages = chapters[0].language
+            var list: MutableList<Chapter> = arrayListOf()
+            for (chapter in chapters) {
+                list.add(chapter)
+
+                if (lastLanguage != chapter.language && list.isNotEmpty()) {
+                    mListChapter[lastLanguage] = list
+                    lastLanguage = chapter.language
+                    list = arrayListOf()
+                }
+            }
+
+            if (list.isNotEmpty())
+                mListChapter[lastLanguage] = list
+
+            val sharedPreferences = GeneralConsts.getSharedPreferences(context)
+            var subtitleLang: Languages = Languages.JAPANESE
+            var translateLang: Languages = Languages.PORTUGUESE
+            if (sharedPreferences != null) {
+                try {
+                    subtitleLang = Languages.valueOf(
+                        sharedPreferences.getString(
+                            GeneralConsts.KEYS.SUBTITLE.LANGUAGE,
+                            Languages.JAPANESE.toString()
+                        )!!
+                    )
+                    subtitleLang = Languages.valueOf(
+                        sharedPreferences.getString(
+                            GeneralConsts.KEYS.SUBTITLE.TRANSLATE,
+                            Languages.PORTUGUESE.toString()
+                        )!!
+                    )
+                } catch (e: Exception) {
+                    Log.i(
+                        GeneralConsts.TAG.LOG,
+                        "Erro ao carregar as preferencias de linguagem - " + e.message
+                    )
+                }
+            }
+
+            mSelectSubtitle = mListChapter[subtitleLang]!!
+            mSelectTranslate = mListChapter[translateLang]!!
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reader)
 
-        mTolbar = findViewById(R.id.toolbar_reader)
-        mTolbarTitle = findViewById(R.id.tolbar_title_custom)
-        setSupportActionBar(mTolbar)
+        mToolbar = findViewById(R.id.toolbar_reader)
+        mToolbarTitle = findViewById(R.id.tolbar_title_custom)
+        setSupportActionBar(mToolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(true);
 
         mReaderTitle = findViewById(R.id.nav_reader_title)
         mReaderProgress = findViewById(R.id.nav_reader_progress)
         mNavReader = findViewById(R.id.nav_reader)
         mMenuPopup = findViewById(R.id.menu_popup)
-        BottomSheetBehavior.from(mMenuPopup).apply {
+        var mPopupTouch = findViewById<ImageView>(R.id.menu_popup_touch)
+        mBottomSheet = BottomSheetBehavior.from(mMenuPopup).apply {
             peekHeight = 200
             this.state = BottomSheetBehavior.STATE_COLLAPSED
+            mBottomSheet = this
         }
+
+        mPopupTouch.setOnClickListener {
+            if (mBottomSheet.state == BottomSheetBehavior.STATE_COLLAPSED)
+                mBottomSheet.state = BottomSheetBehavior.STATE_EXPANDED
+            else
+                mBottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+
+        mPopupTab = findViewById(R.id.popup_tab)
+        mPopupView = findViewById(R.id.popup_view_pager)
+
+        mPopupReaderColorFilterFragment = PopupReaderColorFilter()
+        mPopupSubtitleConfigurationFragment = PopupSubtitleConfiguration()
+        mPopupSubtitleReaderFragment = PopupSubtitleReader()
+
+        mPopupTab.setupWithViewPager(mPopupView)
+
+        val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager, 0)
+        viewPagerAdapter.addFragment(
+            mPopupSubtitleReaderFragment,
+            resources.getString(R.string.popup_reading_title_subtitle)
+        )
+        viewPagerAdapter.addFragment(
+            mPopupSubtitleConfigurationFragment,
+            resources.getString(R.string.popup_reading_title_subtitle_configuration)
+        )
+        viewPagerAdapter.addFragment(
+            mPopupReaderColorFilterFragment,
+            resources.getString(R.string.popup_reading_title_brightness)
+        )
+        mPopupView.adapter = viewPagerAdapter
 
         val bundle = intent.extras
 
         if (bundle != null) {
-            mTolbarTitle.text = bundle.getString(GeneralConsts.KEYS.MANGA.NAME)
+            mToolbarTitle.text = bundle.getString(GeneralConsts.KEYS.MANGA.NAME)
             mBookMark = bundle.getInt(GeneralConsts.KEYS.MANGA.MARK)
         }
 
@@ -64,7 +202,7 @@ class ReaderActivity : AppCompatActivity() {
                 var fragment: ReaderFragment?
                 if (manga != null) {
                     mReaderTitle.text = manga.bookMark.toString()
-                    mTolbarTitle.text = manga.title
+                    mToolbarTitle.text = manga.title
                     fragment = ReaderFragment.create(manga)
                 } else {
                     val file = (extras!!.getSerializable(GeneralConsts.KEYS.OBJECT.FILE) as File?)
@@ -73,7 +211,7 @@ class ReaderActivity : AppCompatActivity() {
                     else
                         ReaderFragment.create()
 
-                    mTolbarTitle.text = file?.name
+                    mToolbarTitle.text = file?.name
                 }
                 setFragment(fragment)
             }
@@ -123,5 +261,27 @@ class ReaderActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         finish()
+    }
+
+    inner class ViewPagerAdapter(fm: FragmentManager, behavior: Int) :
+        FragmentPagerAdapter(fm, behavior) {
+        private val fragments: MutableList<Fragment> = ArrayList()
+        private val fragmentTitle: MutableList<String> = ArrayList()
+        fun addFragment(fragment: Fragment, title: String) {
+            fragments.add(fragment)
+            fragmentTitle.add(title)
+        }
+
+        override fun getItem(position: Int): Fragment {
+            return fragments[position]
+        }
+
+        override fun getCount(): Int {
+            return fragments.size
+        }
+
+        override fun getPageTitle(position: Int): CharSequence? {
+            return fragmentTitle[position]
+        }
     }
 }

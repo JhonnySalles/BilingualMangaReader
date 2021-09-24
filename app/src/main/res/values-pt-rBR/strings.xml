@@ -48,6 +48,11 @@
     <string name="menu_reading_mode_left_to_right">Comic</string>
     <string name="menu_reading_mode_right_to_left">Manga</string>
 
+    <!-- READER POPUP TITLES -->
+    <string name="popup_reading_title_subtitle">Legendas</string>
+    <string name="popup_reading_title_brightness">Brilho</string>
+    <string name="popup_reading_title_subtitle_configuration">Importar</string>
+
     <!-- READER POPUP -->
     <string name="popup_reading_custom_color_filter">Filtro de cor personalizado</string>
     <string name="popup_reading_custom_brightness">Brilho personalizado</string>

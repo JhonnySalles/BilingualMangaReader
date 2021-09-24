@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/onPrimary"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".view.ui.reader.PopupSubtitleReader">
 
     <TextView
         android:layout_width="wrap_content"
@@ -24,12 +26,13 @@
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="50sp"
             android:layout_height="match_parent"
+            app:iconTint="@color/textPrimary"
             app:icon="@drawable/ic_navigate_before" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/cb_subtitle_selected"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-            android:layout_width="wrap_content"
+            android:layout_width="280dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_small"
             android:hint="@string/config_text_default_subtitle_translate"
@@ -55,6 +58,7 @@
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="50sp"
             android:layout_height="match_parent"
+            app:iconTint="@color/textPrimary"
             app:icon="@drawable/ic_navigate_next" />
     </LinearLayout>
 
@@ -63,6 +67,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20sp"
+        android:fontFamily="monospace"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="@color/textPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

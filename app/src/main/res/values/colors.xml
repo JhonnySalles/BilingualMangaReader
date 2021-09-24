@@ -30,6 +30,7 @@
 
     <color name="textPrimary">#FFFFFFFF</color>
     <color name="textSecondary">#FF000000</color>
+    <color name="textFuriganaAccent">#8F8F8F</color>
 
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
