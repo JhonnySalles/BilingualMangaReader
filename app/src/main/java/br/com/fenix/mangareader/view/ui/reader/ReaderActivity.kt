@@ -16,17 +16,21 @@ import androidx.viewpager.widget.ViewPager
 import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.model.entity.Chapter
 import br.com.fenix.mangareader.model.entity.Manga
+import br.com.fenix.mangareader.model.entity.Pages
 import br.com.fenix.mangareader.model.entity.Volume
 import br.com.fenix.mangareader.model.enums.Languages
 import br.com.fenix.mangareader.model.enums.PageMode
 import br.com.fenix.mangareader.model.enums.ReaderMode
+import br.com.fenix.mangareader.service.parses.Parse
 import br.com.fenix.mangareader.util.constants.GeneralConsts
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayout
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.apache.commons.codec.digest.DigestUtils
 import java.io.File
+import java.io.InputStream
 import java.util.*
 
 class ReaderActivity : AppCompatActivity() {
@@ -48,16 +52,16 @@ class ReaderActivity : AppCompatActivity() {
 
     companion object {
         private var mListChapter: HashMap<Languages, MutableList<Chapter>> = hashMapOf()
-        private var mSelectSubtitle: List<Chapter> = arrayListOf()
-        private var mSelectTranslate: List<Chapter> = arrayListOf()
+        var mComboList : HashMap<String, List<Pages>> = hashMapOf()
+        var mSubtitleLang: Languages = Languages.JAPANESE
+        var mTranslateLang: Languages = Languages.PORTUGUESE
 
         // Async routine
         fun getChapterFromJson(context: Context, listJson: List<String>) =
             runBlocking { // this: CoroutineScope
                 launch { // launch a new coroutine and continue
+                    mComboList.clear()
                     mListChapter.clear()
-                    mSelectSubtitle = arrayListOf()
-                    mSelectTranslate = arrayListOf()
 
                     if (listJson.isNotEmpty()) {
                         val gson = Gson()
@@ -92,30 +96,29 @@ class ReaderActivity : AppCompatActivity() {
             var lastLanguage: Languages = chapters[0].language
             var list: MutableList<Chapter> = arrayListOf()
             for (chapter in chapters) {
-                list.add(chapter)
-
                 if (lastLanguage != chapter.language && list.isNotEmpty()) {
                     mListChapter[lastLanguage] = list
                     lastLanguage = chapter.language
                     list = arrayListOf()
                 }
+                list.add(chapter)
+
+                mComboList[lastLanguage + " - " + context.resources.getString(R.string.popup_reading_chapter) + " " + chapter.chapter] = chapter.pages
             }
 
             if (list.isNotEmpty())
                 mListChapter[lastLanguage] = list
 
             val sharedPreferences = GeneralConsts.getSharedPreferences(context)
-            var subtitleLang: Languages = Languages.JAPANESE
-            var translateLang: Languages = Languages.PORTUGUESE
             if (sharedPreferences != null) {
                 try {
-                    subtitleLang = Languages.valueOf(
+                    mSubtitleLang = Languages.valueOf(
                         sharedPreferences.getString(
                             GeneralConsts.KEYS.SUBTITLE.LANGUAGE,
                             Languages.JAPANESE.toString()
                         )!!
                     )
-                    subtitleLang = Languages.valueOf(
+                    mTranslateLang = Languages.valueOf(
                         sharedPreferences.getString(
                             GeneralConsts.KEYS.SUBTITLE.TRANSLATE,
                             Languages.PORTUGUESE.toString()
@@ -128,10 +131,24 @@ class ReaderActivity : AppCompatActivity() {
                     )
                 }
             }
-
-            mSelectSubtitle = mListChapter[subtitleLang]!!
-            mSelectTranslate = mListChapter[translateLang]!!
         }
+
+        data class SelectedIndex(var mPageIndex: Int = 0,
+                                 var mChapterIndex: Int = 0)
+
+        fun setPageInReader(page : Int, parse : Parse?) =
+            runBlocking { // this: CoroutineScope
+                launch {
+                    val image : InputStream? = parse?.getPage(page)
+                    val md5 : String? = DigestUtils.md5Hex(image)
+                    val pageName : String? = parse?.getPageName(page)
+                    val pageNamePath : String? = parse?.getPagePath(page)
+
+                    val pages = null
+                    mComboList.keys.forEach { it.forEach { pageName == pageName } }
+
+                }
+            }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

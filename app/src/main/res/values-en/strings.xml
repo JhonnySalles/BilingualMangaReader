@@ -53,6 +53,7 @@
     <string name="popup_reading_title_subtitle">Subtitles</string>
     <string name="popup_reading_title_brightness">Brightness</string>
     <string name="popup_reading_title_subtitle_configuration">Import</string>
+    <string name="popup_reading_chapter">Chapter</string>
 
     <!-- READER POPUP -->
     <string name="popup_reading_custom_color_filter">Custom color filter</string>

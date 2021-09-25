@@ -52,6 +52,18 @@ class ZipParse : Parse {
         return subtitles
     }
 
+    override fun getPageName(num: Int): String? {
+        if (mEntries!!.size < num)
+            return null
+        return mEntries!![num].name
+    }
+
+    override fun getPagePath(num: Int): String? {
+        if (mEntries!!.size < num)
+            return null
+        return mEntries!![num].name
+    }
+
     override fun getPage(num: Int): InputStream? {
         return mZipFile!!.getInputStream(mEntries!![num])
     }

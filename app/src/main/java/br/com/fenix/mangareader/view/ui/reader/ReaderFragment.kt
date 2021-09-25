@@ -362,6 +362,8 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
             .append(page).append("/").append(mParse?.numPages() ?: 1)
             .toString()
         mPageNavTextView!!.text = navPage
+
+        ReaderActivity.setPageInReader(page, mParse)
     }
 
     inner class ComicPagerAdapter : PagerAdapter() {

@@ -36,6 +36,14 @@ class DirectoryParse : Parse {
         TODO("Not yet implemented")
     }
 
+    override fun getPageName(num: Int): String? {
+        TODO("Not yet implemented")
+    }
+
+    override fun getPagePath(num: Int): String? {
+        TODO("Not yet implemented")
+    }
+
     override fun getPage(num: Int): InputStream? {
         return FileInputStream(mFiles[num])
     }
