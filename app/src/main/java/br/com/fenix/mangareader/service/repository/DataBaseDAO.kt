@@ -72,6 +72,9 @@ abstract class SubTitleDAO : DataBaseDAO<SubTitle> {
     @Query("SELECT * FROM " + DataBaseConsts.SUBTITLES.TABLE_NAME + " WHERE " + DataBaseConsts.SUBTITLES.COLUMNS.FK_ID_MANGA + " = :idManga AND " + DataBaseConsts.SUBTITLES.COLUMNS.ID + " = :Id")
     abstract fun get(idManga: Long, Id: Long): SubTitle
 
+    @Query("SELECT * FROM " + DataBaseConsts.SUBTITLES.TABLE_NAME + " WHERE " + DataBaseConsts.SUBTITLES.COLUMNS.FK_ID_MANGA + " = :idManga LIMIT 1")
+    abstract fun findByIdManga(idManga: Long): SubTitle
+
     @Query("SELECT * FROM " + DataBaseConsts.SUBTITLES.TABLE_NAME + " WHERE " + DataBaseConsts.SUBTITLES.COLUMNS.FK_ID_MANGA + " = :idManga")
     abstract fun listByIdManga(idManga: Long): List<SubTitle>
 

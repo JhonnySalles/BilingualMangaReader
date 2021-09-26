@@ -20,12 +20,13 @@ import br.com.fenix.mangareader.model.enums.PageMode
 import br.com.fenix.mangareader.model.enums.ReaderMode
 import br.com.fenix.mangareader.service.repository.Storage
 import br.com.fenix.mangareader.util.constants.GeneralConsts
+import br.com.fenix.mangareader.util.helpers.Util
 import com.google.android.material.textfield.TextInputLayout
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class ConfigFragment : Fragment(), AdapterView.OnItemSelectedListener {
+class ConfigFragment : Fragment(), AdapterView.OnItemClickListener {
 
     private lateinit var txtLibraryPath: TextInputLayout
     private lateinit var autoCompleteLibraryPath: AutoCompleteTextView
@@ -130,7 +131,7 @@ class ConfigFragment : Fragment(), AdapterView.OnItemSelectedListener {
         val adapterOrder =
             ArrayAdapter(requireContext(), R.layout.list_item, mapOrder.keys.toTypedArray())
         autoCompleteLibraryOrder.setAdapter(adapterOrder)
-        autoCompleteLibraryOrder.onItemSelectedListener = this
+        autoCompleteLibraryOrder.onItemClickListener = this
 
         val adapterLanguage =
             ArrayAdapter(requireContext(), R.layout.list_item, mapLanguage.keys.toTypedArray())
@@ -138,14 +139,14 @@ class ConfigFragment : Fragment(), AdapterView.OnItemSelectedListener {
         autoCompleteDefaultSubtitleTranslate.setAdapter(adapterLanguage)
         autoCompleteSystemLanguage.setAdapter(adapterLanguage)
 
-        autoCompleteDefaultSubtitleLanguage.onItemSelectedListener = this
-        autoCompleteDefaultSubtitleTranslate.onItemSelectedListener = this
-        autoCompleteSystemLanguage.onItemSelectedListener = this
+        autoCompleteDefaultSubtitleLanguage.onItemClickListener = this
+        autoCompleteDefaultSubtitleTranslate.onItemClickListener = this
+        autoCompleteSystemLanguage.onItemClickListener = this
 
         val adapterReaderMode =
             ArrayAdapter(requireContext(), R.layout.list_item, mapReaderMode.keys.toTypedArray())
         autocompleteReaderComicMode.setAdapter(adapterReaderMode)
-        autocompleteReaderComicMode.onItemSelectedListener = this
+        autocompleteReaderComicMode.onItemClickListener = this
 
         val adapterPageMode =
             ArrayAdapter(requireContext(), R.layout.list_item, mapPageMode.keys.toTypedArray())
@@ -170,7 +171,7 @@ class ConfigFragment : Fragment(), AdapterView.OnItemSelectedListener {
         )
         val adapterDataFormat = ArrayAdapter(requireContext(), R.layout.list_item, dataFormat)
         autoCompleteSystemFormatDate.setAdapter(adapterDataFormat)
-        autoCompleteSystemFormatDate.onItemSelectedListener = this
+        autoCompleteSystemFormatDate.onItemClickListener = this
 
         loadConfig()
     }
@@ -185,8 +186,7 @@ class ConfigFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         var folder: String = ""
         if (data != null && resultCode == RESULT_OK) {
-            folder = data.data?.path.toString()
-            folder = folder.replace("/tree", "/storage").replace(":", "/")
+            folder = Util.normalizeFilePath(data.data?.path.toString())
 
             if (!Storage.isPermissionGranted(requireContext()))
                 Storage.takePermission(requireContext(), requireActivity())
@@ -363,7 +363,7 @@ class ConfigFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     }
 
-    override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
+    override fun onItemClick(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
         Log.i("teste", "pos: $pos - id: $id")
 
         when (parent) {
@@ -380,7 +380,7 @@ class ConfigFragment : Fragment(), AdapterView.OnItemSelectedListener {
         defaultSystemLanguageSelect = Languages.PORTUGUESE*/
     }
 
-    override fun onNothingSelected(parent: AdapterView<*>?) {
+    fun onNothingSelected(parent: AdapterView<*>?) {
         dateSelect = GeneralConsts.CONFIG.DATA_FORMAT[0]
         pageModeSelect = PageMode.Manga
         readerModeSelect = ReaderMode.FIT_WIDTH
@@ -389,4 +389,5 @@ class ConfigFragment : Fragment(), AdapterView.OnItemSelectedListener {
         defaultSubtitleTranslateSelect = Languages.PORTUGUESE
         defaultSystemLanguageSelect = Languages.PORTUGUESE
     }
+
 }

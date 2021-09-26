@@ -10,13 +10,9 @@ class SubTitleRepository(context: Context) {
     private var mDataBase = DataBase.getDataBase(context).getSubTitleDao()
 
     fun save(obj: SubTitle): Long {
+        deleteAll(obj.id_manga)
         return mDataBase.save(obj)
     }
-
-    fun update(obj: SubTitle) {
-        mDataBase.update(obj)
-    }
-
     fun delete(obj: SubTitle) {
         mDataBase.delete(obj)
     }
@@ -34,9 +30,9 @@ class SubTitleRepository(context: Context) {
         }
     }
 
-    fun listByIdBook(idManga: Long): List<SubTitle>? {
+    fun findByIdManga(idManga: Long): SubTitle? {
         return try {
-            mDataBase.listByIdManga(idManga)
+            mDataBase.findByIdManga(idManga)
         } catch (e: Exception) {
             Log.e(GeneralConsts.TAG.LOG, e.message.toString())
             null

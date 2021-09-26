@@ -40,12 +40,10 @@ class DataBaseConsts private constructor() {
             const val ID = "id"
             const val FK_ID_MANGA = "id_manga"
             const val LANGUAGE = "language"
-            const val IN_ROOT = "inRoot"
-            const val VOLUME = "isVolume"
-            const val CHAPTER = "isChapter"
+            const val CHAPTER_KEY = "chapterKey"
+            const val PAGE_KEY = "pageKey"
+            const val PAGE = "pageCount"
             const val FILE_PATH = "path"
-            const val FILE_NAME = "name"
-            const val FILE_FOLDER = "folder"
             const val DATE_CREATE = "dateCreate"
         }
     }

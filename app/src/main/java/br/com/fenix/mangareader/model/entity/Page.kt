@@ -2,7 +2,7 @@ package br.com.fenix.mangareader.model.entity
 
 import com.google.gson.annotations.SerializedName
 
-data class Pages(
+data class Page(
     @SerializedName("nomePagina")
     var name: String,
     @SerializedName("numero")

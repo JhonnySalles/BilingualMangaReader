@@ -33,7 +33,6 @@ android {
     buildFeatures {
         viewBinding true
     }
-
     packagingOptions {
         exclude 'META-INF/CONTRIBUTORS.md'
         exclude 'META-INF/LICENSE.md'

@@ -1,10 +1,12 @@
 package br.com.fenix.mangareader.util.helpers
 
+import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import br.com.fenix.mangareader.service.repository.Storage
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.InputStream
@@ -152,6 +154,16 @@ class Util {
         fun decodeImageBase64(image: String): Bitmap {
             val imageBytes = android.util.Base64.decode(image, android.util.Base64.DEFAULT)
             return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+        }
+
+        fun normalizeFilePath(path : String) : String {
+            var folder: String = path
+            if (folder.contains("/tree"))
+                folder = folder.replace("/tree", "/storage").replace(":", "/")
+            else if (folder.contains("/document"))
+                folder = folder.replace("/document", "/storage").replace(":", "/")
+
+            return folder
         }
 
     }

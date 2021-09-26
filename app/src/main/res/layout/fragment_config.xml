@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginTop="@dimen/margin"
-            android:layout_marginBottom="@dimen/margin">
+            android:layout_marginBottom="@dimen/margin_bottom">
 
             <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"

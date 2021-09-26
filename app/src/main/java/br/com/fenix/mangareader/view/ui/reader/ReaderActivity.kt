@@ -1,10 +1,8 @@
 package br.com.fenix.mangareader.view.ui.reader
 
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -14,23 +12,19 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import br.com.fenix.mangareader.R
-import br.com.fenix.mangareader.model.entity.Chapter
-import br.com.fenix.mangareader.model.entity.Manga
-import br.com.fenix.mangareader.model.entity.Pages
-import br.com.fenix.mangareader.model.entity.Volume
-import br.com.fenix.mangareader.model.enums.Languages
+import br.com.fenix.mangareader.model.entity.*
 import br.com.fenix.mangareader.model.enums.PageMode
 import br.com.fenix.mangareader.model.enums.ReaderMode
 import br.com.fenix.mangareader.service.parses.Parse
+import br.com.fenix.mangareader.service.repository.SubTitleRepository
 import br.com.fenix.mangareader.util.constants.GeneralConsts
+import br.com.fenix.mangareader.service.controller.SubTitleController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayout
-import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import org.apache.commons.codec.digest.DigestUtils
 import java.io.File
-import java.io.InputStream
+import java.time.LocalDateTime
 import java.util.*
 
 class ReaderActivity : AppCompatActivity() {
@@ -41,114 +35,18 @@ class ReaderActivity : AppCompatActivity() {
     private lateinit var mToolbar: Toolbar
     private lateinit var mToolbarTitle: TextView
     private lateinit var mMenuPopup: FrameLayout
-    private lateinit var mPopupTab: TabLayout
     private lateinit var mPopupView: ViewPager
     private lateinit var mBottomSheet: BottomSheetBehavior<FrameLayout>
-    private var mBookMark: Int = 0
 
     private lateinit var mPopupReaderColorFilterFragment: PopupReaderColorFilter
     private lateinit var mPopupSubtitleConfigurationFragment: PopupSubtitleConfiguration
     private lateinit var mPopupSubtitleReaderFragment: PopupSubtitleReader
 
+    private var mBookMark: Int = 0
+
     companion object {
-        private var mListChapter: HashMap<Languages, MutableList<Chapter>> = hashMapOf()
-        var mComboList : HashMap<String, List<Pages>> = hashMapOf()
-        var mSubtitleLang: Languages = Languages.JAPANESE
-        var mTranslateLang: Languages = Languages.PORTUGUESE
-
-        // Async routine
-        fun getChapterFromJson(context: Context, listJson: List<String>) =
-            runBlocking { // this: CoroutineScope
-                launch { // launch a new coroutine and continue
-                    mComboList.clear()
-                    mListChapter.clear()
-
-                    if (listJson.isNotEmpty()) {
-                        val gson = Gson()
-                        val listChapter: MutableList<Chapter> = arrayListOf()
-
-                        listJson.forEach {
-                            try {
-                                val volume: Volume = gson.fromJson(it, Volume::class.java)
-                                for (chapter in volume.chapters) {
-                                    chapter.manga = volume.manga
-                                    chapter.volume = volume.volume
-                                    chapter.language = volume.language
-                                }
-                                listChapter.addAll(volume.chapters)
-                            } catch (volExcept: Exception) {
-                                try {
-                                    val chapter: Chapter = gson.fromJson(it, Chapter::class.java)
-                                    listChapter.add(chapter)
-                                } catch (chapExcept: Exception) {
-                                }
-                            }
-                        }
-                        setListChapter(context, listChapter)
-                    }
-                }
-            }
-
-        private fun setListChapter(context: Context, chapters: MutableList<Chapter>) {
-            if (chapters.isEmpty())
-                return
-
-            var lastLanguage: Languages = chapters[0].language
-            var list: MutableList<Chapter> = arrayListOf()
-            for (chapter in chapters) {
-                if (lastLanguage != chapter.language && list.isNotEmpty()) {
-                    mListChapter[lastLanguage] = list
-                    lastLanguage = chapter.language
-                    list = arrayListOf()
-                }
-                list.add(chapter)
-
-                mComboList[lastLanguage + " - " + context.resources.getString(R.string.popup_reading_chapter) + " " + chapter.chapter] = chapter.pages
-            }
-
-            if (list.isNotEmpty())
-                mListChapter[lastLanguage] = list
-
-            val sharedPreferences = GeneralConsts.getSharedPreferences(context)
-            if (sharedPreferences != null) {
-                try {
-                    mSubtitleLang = Languages.valueOf(
-                        sharedPreferences.getString(
-                            GeneralConsts.KEYS.SUBTITLE.LANGUAGE,
-                            Languages.JAPANESE.toString()
-                        )!!
-                    )
-                    mTranslateLang = Languages.valueOf(
-                        sharedPreferences.getString(
-                            GeneralConsts.KEYS.SUBTITLE.TRANSLATE,
-                            Languages.PORTUGUESE.toString()
-                        )!!
-                    )
-                } catch (e: Exception) {
-                    Log.i(
-                        GeneralConsts.TAG.LOG,
-                        "Erro ao carregar as preferencias de linguagem - " + e.message
-                    )
-                }
-            }
-        }
-
-        data class SelectedIndex(var mPageIndex: Int = 0,
-                                 var mChapterIndex: Int = 0)
-
-        fun setPageInReader(page : Int, parse : Parse?) =
-            runBlocking { // this: CoroutineScope
-                launch {
-                    val image : InputStream? = parse?.getPage(page)
-                    val md5 : String? = DigestUtils.md5Hex(image)
-                    val pageName : String? = parse?.getPageName(page)
-                    val pageNamePath : String? = parse?.getPagePath(page)
-
-                    val pages = null
-                    mComboList.keys.forEach { it.forEach { pageName == pageName } }
-
-                }
-            }
+        private lateinit var mPopupTab: TabLayout
+        fun selectTabReader() = mPopupTab.selectTab(mPopupTab.getTabAt(0), true)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -237,7 +135,7 @@ class ReaderActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    private fun setFragment(fragment: Fragment?) {
+    fun setFragment(fragment: Fragment?) {
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.root_frame_reader, fragment!!)

@@ -4,68 +4,59 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/margin"
-    android:layout_marginBottom="@dimen/margin"
     android:background="@color/onPrimary"
     android:orientation="vertical"
+    android:paddingTop="@dimen/margin"
+    android:paddingBottom="@dimen/margin"
     tools:context=".view.ui.reader.PopupSubtitleConfiguration">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin"
-        android:layout_marginBottom="@dimen/margin_small"
-        android:text="@string/popup_reading_import_subtitle_title"
-        android:textColor="@color/onSecondary" />
-
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/txt_library_order"
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_small"
-        android:hint="@string/popup_reading_import_subtitle_file"
-        android:textColorHint="@color/textPrimary"
-        app:boxBackgroundColor="@color/primary"
-        app:boxStrokeColor="@color/onSecondary"
-        app:hintTextColor="@color/onSecondary"
-        app:placeholderTextColor="@color/textPrimary"
-        app:startIconDrawable="@drawable/ic_order"
-        app:startIconTint="@color/onSecondary">
-
-        <AutoCompleteTextView
-            android:id="@+id/menu_autocomplete_library_order"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="none"
-            android:textColor="@color/textPrimary" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/txt_library_path"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+        android:id="@+id/txt_external_subtitle_select_path"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_small"
         android:layout_marginStart="@dimen/margin"
-        android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
-        android:hint="@string/popup_reading_import_translate_file"
+        android:layout_marginTop="32dp"
+        android:hint="@string/popup_reading_import_subtitle_file"
+        android:textColorHint="@color/textPrimary"
+        app:boxBackgroundColor="@color/primary"
+        app:boxStrokeColor="@color/onSecondary"
+        app:placeholderTextColor="@color/textPrimary"
+        app:hintTextColor="@color/onSecondary"
+        app:startIconDrawable="@drawable/ic_sd_storage"
+        app:startIconTint="@color/onSecondary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <AutoCompleteTextView
+            android:id="@+id/menu_autocomplete_external_subtitle_select_path"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:textColor="@color/textPrimary"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/cb_subtitle_selected"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_small"
+        android:hint="@string/popup_reading_import_subtitle_selected"
         android:textColorHint="@color/textPrimary"
         app:boxBackgroundColor="@color/primary"
         app:boxStrokeColor="@color/onSecondary"
         app:hintTextColor="@color/onSecondary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:placeholderTextColor="@color/textPrimary"
-        app:startIconDrawable="@drawable/ic_sd_storage"
+        app:startIconDrawable="@drawable/ic_translate"
         app:startIconTint="@color/onSecondary">
 
         <AutoCompleteTextView
-            android:id="@+id/menu_autocomplete_library_path"
+            android:id="@+id/menu_autocomplete_subtitle_selected"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:inputType="none"
             android:textColor="@color/textPrimary" />
     </com.google.android.material.textfield.TextInputLayout>

@@ -53,7 +53,6 @@
     <string name="popup_reading_title_subtitle">Subtitles</string>
     <string name="popup_reading_title_brightness">Brightness</string>
     <string name="popup_reading_title_subtitle_configuration">Import</string>
-    <string name="popup_reading_chapter">Chapter</string>
 
     <!-- READER POPUP -->
     <string name="popup_reading_custom_color_filter">Custom color filter</string>
@@ -67,14 +66,16 @@
 
     <!-- READER POPUP SUBTITLE FILE -->
     <string name="popup_reading_import_subtitle_title">Import file</string>
-    <string name="popup_reading_import_subtitle_file">Subtitle file</string>
-    <string name="popup_reading_import_translate_file">Translate file</string>
+    <string name="popup_reading_import_subtitle_file">Select a subtitle file</string>
+    <string name="popup_reading_import_subtitle_selected">Subtitle selected</string>
 
     <!-- READER POPUP SUBTITLE -->
     <string name="popup_reading_subtitle_title">Subtitle</string>
     <string name="popup_reading_subtitle_before">Before</string>
     <string name="popup_reading_subtitle_next">Next</string>
     <string name="popup_reading_subtitle_file">File</string>
+    <string name="popup_reading_subtitle_chapter">Chapter</string>
+    <string name="popup_reading_subtitle_text">Text</string>
 
     <!-- ALERT -->
     <string name="switch_action_positive">Yes</string>
