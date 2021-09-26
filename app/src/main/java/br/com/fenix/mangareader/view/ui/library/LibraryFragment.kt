@@ -2,6 +2,7 @@ package br.com.fenix.mangareader.view.ui.library
 
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -37,12 +38,15 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private lateinit var mRefreshLayout: SwipeRefreshLayout
     private lateinit var mRecycleView: RecyclerView
-    private var mGridType: LibraryType = LibraryType.GRID
     private lateinit var miGridType: MenuItem
     private lateinit var miSearch: MenuItem
     private lateinit var searchView: SearchView
     private lateinit var mListener: MangaCardListener
     private var mIsRefreshPlanned = false
+
+    companion object {
+        var mGridType: LibraryType = LibraryType.GRID_BIG
+    }
 
     private val mUpdateHandler: Handler = UpdateHandler(this)
 
@@ -74,7 +78,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun filter(newText: String?) {
-        if (mGridType == LibraryType.GRID)
+        if (mGridType != LibraryType.LINE)
             (mRecycleView.adapter as MangaGridCardAdapter).filter.filter(newText)
         else
             (mRecycleView.adapter as MangaLineCardAdapter).filter.filter(newText)
@@ -106,7 +110,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             } else if (msg.what == GeneralConsts.SCANNER.MESSAGE_MEDIA_UPDATE_FINISHED) {
                 mViewModel.list()
 
-                if (mGridType == LibraryType.GRID)
+                if (mGridType != LibraryType.LINE)
                     (mRecycleView.adapter as MangaGridCardAdapter).notifyDataSetChanged()
                 else
                     (mRecycleView.adapter as MangaLineCardAdapter).notifyDataSetChanged()
@@ -121,7 +125,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             val updateRunnable = Runnable {
                 mViewModel.list()
 
-                if (mGridType == LibraryType.GRID)
+                if (mGridType != LibraryType.LINE)
                     (mRecycleView.adapter as MangaGridCardAdapter).notifyDataSetChanged()
                 else
                     (mRecycleView.adapter as MangaLineCardAdapter).notifyDataSetChanged()
@@ -142,10 +146,14 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun onChangeLayout() {
-        mGridType = if (mGridType == LibraryType.LINE)
-            LibraryType.GRID
-        else
-            LibraryType.LINE
+        val isLandscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+        mGridType = when(mGridType) {
+            LibraryType.LINE -> LibraryType.GRID_BIG
+            LibraryType.GRID_BIG -> LibraryType.GRID_MEDIUM
+            LibraryType.GRID_MEDIUM -> if (isLandscape) LibraryType.GRID_SMALL else LibraryType.LINE
+            else  -> LibraryType.LINE
+        }
 
         val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
         with(sharedPreferences?.edit()) {
@@ -224,10 +232,17 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun generateLayout() {
-        if (mGridType == LibraryType.GRID) {
+        if (mGridType != LibraryType.LINE) {
             val gridAdapter = MangaGridCardAdapter()
             mRecycleView.adapter = gridAdapter
-            mRecycleView.layoutManager = GridLayoutManager(requireContext(), 2)
+            val isLandscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+            val spaceCount :Int = when(mGridType) {
+                LibraryType.GRID_BIG -> if (isLandscape) 4 else 2
+                LibraryType.GRID_MEDIUM -> if (isLandscape) 5 else 3
+                LibraryType.GRID_SMALL -> 6
+                else -> 2
+            }
+            mRecycleView.layoutManager = GridLayoutManager(requireContext(), spaceCount)
             gridAdapter.attachListener(mListener)
         } else {
             val lineAdapter = MangaLineCardAdapter()
@@ -238,7 +253,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun updateList(list: ArrayList<Manga>) {
-        if (mGridType == LibraryType.GRID)
+        if (mGridType != LibraryType.LINE)
             (mRecycleView.adapter as MangaGridCardAdapter).updateList(list)
         else
             (mRecycleView.adapter as MangaLineCardAdapter).updateList(list)

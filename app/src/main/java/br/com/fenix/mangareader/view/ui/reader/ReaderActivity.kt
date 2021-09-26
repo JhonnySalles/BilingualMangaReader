@@ -2,7 +2,9 @@ package br.com.fenix.mangareader.view.ui.reader
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.MenuItem
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -163,6 +165,7 @@ class ReaderActivity : AppCompatActivity() {
             R.id.view_mode_aspect_fill -> optionsSave(ReaderMode.ASPECT_FILL)
             R.id.view_mode_aspect_fit -> optionsSave(ReaderMode.ASPECT_FIT)
             R.id.view_mode_fit_width -> optionsSave(ReaderMode.FIT_WIDTH)
+            R.id.menu_popup_open_floating -> menuFloat()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -170,6 +173,26 @@ class ReaderActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         finish()
+    }
+
+    var mMenuFloatOpened = false
+    private fun menuFloat() {
+        /*if (canDrawOverlays) {
+            simpleFloatingWindow.show()
+        } else {
+            startManageDrawOverlaysPermission()
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            startActivity(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION))
+        }
+
+        if (mMenuFloatOpened) {
+
+        } else {
+
+        }*/
+
     }
 
     inner class ViewPagerAdapter(fm: FragmentManager, behavior: Int) :

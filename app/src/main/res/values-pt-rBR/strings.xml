@@ -75,6 +75,8 @@
     <string name="popup_reading_subtitle_file">Arquivo</string>
     <string name="popup_reading_subtitle_chapter">Capítulo</string>
     <string name="popup_reading_subtitle_text">Texto</string>
+    <string name="popup_reading_subtitle_find_subtitle">Encontrado a legenda: capítulo %s e página %s.</string>
+    <string name="popup_reading_subtitle_not_find_subtitle">Não foi possível encontrar a legenda.</string>
 
 
     <!-- ALERT -->

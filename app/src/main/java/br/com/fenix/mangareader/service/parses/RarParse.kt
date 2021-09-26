@@ -32,7 +32,7 @@ class RarParse : Parse {
             }
             header = mArchive!!.nextFileHeader()
         }
-        mHeaders.sortedBy { getName(it) }
+        mHeaders.sortBy { getName(it) }
     }
 
     private fun getName(header: FileHeader): String {

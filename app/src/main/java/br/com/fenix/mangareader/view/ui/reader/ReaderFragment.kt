@@ -55,7 +55,6 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
 
     private var mResourceViewMode: HashMap<Int, ReaderMode>? = null
     var mIsFullscreen = false
-    var mCurrentPage = 0
     var mFilename: String? = null
     var mReaderMode: ReaderMode? = null
     var mIsLeftToRight = false
@@ -78,6 +77,7 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
     }
 
     companion object {
+        var mCurrentPage = 0
         private var mCacheFolder = 0
         private const val mCacheFolder1 = "a"
         private const val mCacheFolder2 = "b"
@@ -124,6 +124,7 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mCurrentPage = 0
         mStorage = Storage(requireContext())
         val bundle: Bundle? = arguments
         if (bundle != null) {

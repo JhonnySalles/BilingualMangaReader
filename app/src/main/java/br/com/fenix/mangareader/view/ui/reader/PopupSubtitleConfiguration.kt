@@ -158,12 +158,13 @@ class PopupSubtitleConfiguration : Fragment() {
         }
 
         fun selectedSubtitle(context: Context, key: String) {
-            INSTANCE.mSubtitleSelectedAutoComplete.setText(key, false)
-            if (key.isNotEmpty() && getSubtitle().containsKey(key))
+            if (key.isNotEmpty() && getSubtitle().containsKey(key)) {
+                INSTANCE.mSubtitleSelectedAutoComplete.setText(key, false)
                 PopupSubtitleReader.setChapter(
                     context,
                     getSubtitle()[key]
                 )
+            }
         }
 
         fun getSubtitle(): HashMap<String, Chapter> =

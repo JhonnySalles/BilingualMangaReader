@@ -76,6 +76,8 @@
     <string name="popup_reading_subtitle_file">File</string>
     <string name="popup_reading_subtitle_chapter">Chapter</string>
     <string name="popup_reading_subtitle_text">Text</string>
+    <string name="popup_reading_subtitle_find_subtitle">Founded subtitle: chapter %s and page %s.</string>
+    <string name="popup_reading_subtitle_not_find_subtitle">Could not find the subtitle in files.</string>
 
     <!-- ALERT -->
     <string name="switch_action_positive">Yes</string>

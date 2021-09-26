@@ -33,4 +33,12 @@
             </group>
         </menu>
     </item>
+
+    <item android:id="@+id/menu_popup_open_floating"
+        android:title="@string/menu_view_mode"
+        android:icon="@drawable/ic_floating_window"
+        android:iconTint="#FFFFFF"
+        android:orderInCategory="102"
+        app:showAsAction="always">
+    </item>
 </menu>

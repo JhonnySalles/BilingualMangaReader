@@ -19,4 +19,5 @@ class ReaderConsts {
         const val STATE_NEW_COMIC = "STATE_NEW_COMIC"
         const val STATE_NEW_COMIC_TITLE = "STATE_NEW_COMIC_TITLE"
     }
+
 }

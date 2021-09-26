@@ -2,6 +2,7 @@ package br.com.fenix.mangareader.service.controller
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.collection.arraySetOf
 import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.model.entity.Chapter
@@ -14,6 +15,7 @@ import br.com.fenix.mangareader.service.repository.SubTitleRepository
 import br.com.fenix.mangareader.util.constants.GeneralConsts
 import br.com.fenix.mangareader.view.ui.reader.PopupSubtitleConfiguration
 import br.com.fenix.mangareader.view.ui.reader.PopupSubtitleReader
+import br.com.fenix.mangareader.view.ui.reader.ReaderFragment
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -116,34 +118,114 @@ class SubTitleController {
 
         }
 
+        fun findSubtitle(context: Context) {
+            val currentPage = ReaderFragment.mCurrentPage
+
+            if (currentPage < 0 || mParse.numPages() < currentPage) {
+                Toast.makeText(
+                    context,
+                    context.resources.getString(R.string.popup_reading_subtitle_not_find_subtitle),
+                    Toast.LENGTH_SHORT
+                ).show()
+                return
+            }
+
+            val image: InputStream? = mParse.getPage(currentPage)
+            val hash: String? = DigestUtils.md5Hex(image)
+            var pageName: String? = mParse.getPageName(currentPage)
+
+            if (pageName == null || pageName.isEmpty()) {
+                Toast.makeText(
+                    context,
+                    context.resources.getString(R.string.popup_reading_subtitle_not_find_subtitle),
+                    Toast.LENGTH_SHORT
+                ).show()
+                return
+            }
+
+            pageName = if (pageName!!.contains('/'))
+                pageName.substringAfterLast("/")
+            else
+                pageName.substringAfterLast('\\')
+
+            var chapterKey = ""
+            var pageNumber = 0
+            val subtitles = PopupSubtitleConfiguration.getSubtitle()
+            val keys = if (PopupSubtitleConfiguration.getSelectedChapter() != null) {
+                val selectedLanguage = PopupSubtitleConfiguration.getSelectedChapter()!!.language
+                subtitles.keys.filter { it.contentEquals(selectedLanguage.name) }
+            } else
+                subtitles.keys
+
+            for (k in keys) {
+                var find = false
+                for (p in subtitles[k]?.pages!!) {
+                    if (p.name.equals(pageName, true) || p.hash == hash) {
+                        chapterKey = k
+                        pageNumber = p.number
+                        find = true
+                        break
+                    }
+                }
+                if (find)
+                    break
+            }
+
+            if (chapterKey.isNotEmpty()) {
+                mSelectedSubTitle?.chapterKey = chapterKey
+                mSelectedSubTitle?.pageKey =
+                    if (PopupSubtitleReader.mListPages.keys.contains(pageNumber)) pageNumber else 0
+                updatePageSelect()
+                PopupSubtitleConfiguration.initialize(context, chapterKey, pageNumber)
+
+                var text: String =
+                    context.resources.getString(R.string.popup_reading_subtitle_find_subtitle)
+                Toast.makeText(
+                    context,
+                    text.format(subtitles[chapterKey]?.chapter.toString(), pageNumber.toString()),
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else
+                Toast.makeText(
+                    context,
+                    context.resources.getString(R.string.popup_reading_subtitle_not_find_subtitle),
+                    Toast.LENGTH_SHORT
+                ).show()
+        }
+
         private fun findSubtitle(
             manga: Manga,
             pageNumber: Int
         ): SubTitle {
             val image: InputStream? = mParse.getPage(pageNumber)
             val hash: String? = DigestUtils.md5Hex(image)
-            val pageName: String? = mParse.getPageName(pageNumber)
+            var pageName: String? = mParse.getPageName(pageNumber)
+
+            pageName = if (pageName!!.contains('/'))
+                pageName.substringAfterLast("/")
+            else
+                pageName.substringAfterLast('\\')
 
             var chapterKey = ""
-            var pageIndex = 0
+            var pageNumber = 0
             val subtitles = PopupSubtitleConfiguration.getSubtitle()
-            val keys =
-                subtitles.keys.filter { it.contentEquals(mSubtitleLang.name) }
-            keys.forEach { key ->
+            val keys = subtitles.keys
+
+            for (k in keys) {
                 var find = false
-                subtitles[key]?.pages?.forEachIndexed { i, page ->
-                    if (page.name.equals(pageName, true) || page.hash == hash) {
+                for (p in subtitles[k]?.pages!!) {
+                    if (p.name.equals(pageName, true) || p.hash == hash) {
+                        chapterKey = k
+                        pageNumber = p.number
                         find = true
-                        chapterKey = key
-                        pageIndex = i
-                        return@forEach
+                        break
                     }
                 }
                 if (find)
-                    return@forEach
+                    break
             }
 
-            return if (pageIndex > 0) {
+            return if (chapterKey.isNotEmpty()) {
                 val chapter = PopupSubtitleConfiguration.getSelectedChapter()
                 SubTitle(
                     manga.id!!,

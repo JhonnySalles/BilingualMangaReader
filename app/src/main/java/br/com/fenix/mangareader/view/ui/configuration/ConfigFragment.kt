@@ -50,7 +50,7 @@ class ConfigFragment : Fragment() {
 
     private var dateSelect: String = GeneralConsts.CONFIG.DATA_FORMAT[0]
     private val datePattern = GeneralConsts.CONFIG.DATA_FORMAT
-    private var pageModeSelect: PageMode = PageMode.Manga
+    private var pageModeSelect: PageMode = PageMode.Comics
     private var readerModeSelect: ReaderMode = ReaderMode.FIT_WIDTH
     private var orderSelect: Order = Order.Name
 
@@ -192,7 +192,7 @@ class ConfigFragment : Fragment() {
                 )
                     mapPageMode[parent.getItemAtPosition(position).toString()]!!
                 else
-                    PageMode.Manga
+                    PageMode.Comics
             }
 
         val date0 = SimpleDateFormat(datePattern[0]).format(Date())
@@ -227,7 +227,7 @@ class ConfigFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        var folder: String = ""
+        var folder = ""
         if (data != null && resultCode == RESULT_OK) {
             folder = Util.normalizeFilePath(data.data?.path.toString())
 
@@ -331,7 +331,7 @@ class ConfigFragment : Fragment() {
         pageModeSelect = PageMode.valueOf(
             sharedPreferences.getString(
                 GeneralConsts.KEYS.READER.PAGE_MODE,
-                PageMode.Manga.toString()
+                PageMode.Comics.toString()
             )!!
         )
         readerModeSelect = ReaderMode.valueOf(

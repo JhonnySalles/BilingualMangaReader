@@ -4,7 +4,8 @@
     android:id="@+id/manga_grid_card"
     android:layout_width="@dimen/manga_grid_card_layout_width"
     android:layout_height="@dimen/manga_grid_card_layout_height"
-    android:layout_margin="8dp">
+    android:layout_margin="8dp"
+    app:rippleColor="@color/secondary">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,6 +17,8 @@
         <ImageView
             android:id="@+id/manga_grid_image_cover"
             android:layout_width="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
             android:layout_height="@dimen/manga_grid_card_image"
             android:background="@color/primaryVariant"
             app:srcCompat="@mipmap/book" />

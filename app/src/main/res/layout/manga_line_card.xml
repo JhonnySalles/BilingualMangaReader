@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="1dp"
-    android:background="@color/onPrimary"
+    android:background="@drawable/custom_ripple"
+    android:clickable="true"
+    android:focusable="true"
     android:orientation="horizontal">
     <!-- Media -->
     <ImageView
@@ -13,7 +15,8 @@
         android:layout_width="@dimen/manga_line_card_image"
         android:layout_height="match_parent"
         android:background="@color/primary"
-        android:contentDescription=""
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
         app:srcCompat="@mipmap/book_icon" />
 
     <LinearLayout

@@ -10,21 +10,25 @@
     android:paddingBottom="@dimen/margin"
     tools:context=".view.ui.reader.PopupSubtitleReader">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/material_button_toggle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/cb_subtitle_page"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_small"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="167dp"
             android:hint="Page"
             android:textColorHint="@color/textPrimary"
             app:boxBackgroundColor="@color/primary"
             app:boxStrokeColor="@color/onSecondary"
             app:hintTextColor="@color/onSecondary"
+            app:layout_constraintEnd_toStartOf="@+id/nav_refresh"
+            app:layout_constraintStart_toStartOf="parent"
             app:placeholderTextColor="@color/textPrimary"
             app:startIconTint="@color/onSecondary">
 
@@ -37,21 +41,62 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
+            android:id="@+id/nav_refresh"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="50sp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="4dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:minHeight="55dp"
+            app:rippleColor="@color/onSecondary"
+            app:backgroundTint="@color/primary"
+            app:icon="@drawable/ic_refresh"
+            app:iconTint="@color/textPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/nav_before_text"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
             android:id="@+id/nav_before_text"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="50sp"
             android:layout_height="match_parent"
+            android:layout_marginEnd="4dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:minHeight="55dp"
+            app:rippleColor="@color/onSecondary"
+            app:backgroundTint="@color/primary"
+            app:icon="@drawable/ic_navigate_before"
             app:iconTint="@color/textPrimary"
-            app:icon="@drawable/ic_navigate_before" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/nav_next_text"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/nav_next_text"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="50sp"
             android:layout_height="match_parent"
+            android:layout_marginEnd="4dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:minHeight="55dp"
+            app:rippleColor="@color/onSecondary"
+            app:backgroundTint="@color/primary"
+            app:icon="@drawable/ic_navigate_next"
             app:iconTint="@color/textPrimary"
-            app:icon="@drawable/ic_navigate_next" />
-    </LinearLayout>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/txt_subtitle_title"

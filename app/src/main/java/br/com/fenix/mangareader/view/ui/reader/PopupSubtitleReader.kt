@@ -11,6 +11,7 @@ import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.model.entity.Chapter
 import br.com.fenix.mangareader.model.entity.Page
 import br.com.fenix.mangareader.model.entity.Text
+import br.com.fenix.mangareader.service.controller.SubTitleController
 import com.google.android.material.textfield.TextInputLayout
 import java.util.*
 
@@ -22,6 +23,7 @@ class PopupSubtitleReader : Fragment() {
     lateinit var mSubtitleContent: TextView
     lateinit var mNavBeforeText: Button
     lateinit var mNavNextText: Button
+    lateinit var mRefresh: Button
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,12 +38,15 @@ class PopupSubtitleReader : Fragment() {
         mSubtitleContent = root.findViewById(R.id.txt_subtitle_content)
         mNavBeforeText = root.findViewById(R.id.nav_before_text)
         mNavNextText = root.findViewById(R.id.nav_next_text)
+        mRefresh = root.findViewById(R.id.nav_refresh)
 
         mLabelChapter = getString(R.string.popup_reading_subtitle_chapter)
         mLabelText = getString(R.string.popup_reading_subtitle_text)
 
         mNavBeforeText.setOnClickListener { getBeforeText() }
         mNavNextText.setOnClickListener { getNextText() }
+
+        mRefresh.setOnClickListener { SubTitleController.findSubtitle(requireContext()) }
 
         mSubtitlePageAutoComplete.onItemClickListener =
             AdapterView.OnItemClickListener { parent, _, position, _ ->
@@ -67,7 +72,7 @@ class PopupSubtitleReader : Fragment() {
 
         private lateinit var mLabelChapter: String
         private lateinit var mLabelText: String
-        private var mListPages: HashMap<Int, Page> = hashMapOf()
+        var mListPages: HashMap<Int, Page> = hashMapOf()
 
         fun initialize(pageKey: Int) {
             if (pageKey == 0)
@@ -113,7 +118,7 @@ class PopupSubtitleReader : Fragment() {
                 INSTANCE.mSubtitleContent.text = textSelected!!.text
             } else {
                 val label =
-                    "$mLabelChapter ${chapterSelected?.chapter.toString()} - $mLabelText 0/${pageSelected?.texts?.size}"
+                    "$mLabelChapter ${chapterSelected?.chapter.toString()} - $mLabelText 0/${if (pageSelected?.texts == null) 0 else pageSelected?.texts?.size}"
                 INSTANCE.mSubtitleTitle.text = label
                 INSTANCE.mSubtitleContent.text = ""
             }
@@ -159,7 +164,7 @@ class PopupSubtitleReader : Fragment() {
                     mListPages.keys.toTypedArray()[index].toString(),
                     false
                 )
-                setPage(mListPages[index])
+                setPage(mListPages[mListPages.keys.toTypedArray()[index]])
                 true
             } else
                 false
@@ -182,7 +187,7 @@ class PopupSubtitleReader : Fragment() {
                     mListPages.keys.toTypedArray()[index].toString(),
                     false
                 )
-                setPage(mListPages[index])
+                setPage(mListPages[mListPages.keys.toTypedArray()[index]])
                 true
             } else
                 false
