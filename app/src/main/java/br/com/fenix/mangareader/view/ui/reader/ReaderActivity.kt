@@ -50,15 +50,15 @@ class ReaderActivity : AppCompatActivity() {
         mToolbar = findViewById(R.id.toolbar_reader)
         mToolbarTitle = findViewById(R.id.tolbar_title_custom)
         setSupportActionBar(mToolbar)
-        supportActionBar!!.setDisplayShowTitleEnabled(true);
+        supportActionBar!!.setDisplayShowTitleEnabled(true)
 
         mReaderTitle = findViewById(R.id.nav_reader_title)
         mReaderProgress = findViewById(R.id.nav_reader_progress)
         mNavReader = findViewById(R.id.nav_reader)
         mMenuPopup = findViewById(R.id.menu_popup)
-        var mPopupTouch = findViewById<ImageView>(R.id.menu_popup_touch)
+        val mPopupTouch = findViewById<ImageView>(R.id.menu_popup_touch)
         mBottomSheet = BottomSheetBehavior.from(mMenuPopup).apply {
-            peekHeight = 100
+            peekHeight = 195
             this.state = BottomSheetBehavior.STATE_COLLAPSED
             mBottomSheet = this
         }
@@ -103,18 +103,18 @@ class ReaderActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             if (Intent.ACTION_VIEW == intent.action) {
-                val fragment: ReaderFragment? = ReaderFragment.create(File(intent.data!!.path))
+                val fragment: ReaderFragment? = ReaderFragment.create(File(intent.data!!.path!!))
                 setFragment(fragment)
             } else {
                 val extras = intent.extras
                 val manga = (extras!!.getSerializable(GeneralConsts.KEYS.OBJECT.MANGA) as Manga?)
-                var fragment: ReaderFragment?
+                val fragment: ReaderFragment?
                 if (manga != null) {
                     mReaderTitle.text = manga.bookMark.toString()
                     mToolbarTitle.text = manga.title
                     fragment = ReaderFragment.create(manga)
                 } else {
-                    val file = (extras!!.getSerializable(GeneralConsts.KEYS.OBJECT.FILE) as File?)
+                    val file = (extras.getSerializable(GeneralConsts.KEYS.OBJECT.FILE) as File?)
                     fragment = if (file != null)
                         ReaderFragment.create(file)
                     else
@@ -145,10 +145,10 @@ class ReaderActivity : AppCompatActivity() {
         when (any) {
             is PageMode -> sharedPreferences?.edit()
                 ?.putString(GeneralConsts.KEYS.READER.PAGE_MODE, any.toString())
-                ?.commit()
+                ?.apply()
             is ReaderMode -> sharedPreferences?.edit()
                 ?.putString(GeneralConsts.KEYS.READER.READER_MODE, any.toString())
-                ?.commit()
+                ?.apply()
         }
     }
 
@@ -159,7 +159,7 @@ class ReaderActivity : AppCompatActivity() {
                 return true
             }
             R.id.reading_left_to_right -> optionsSave(PageMode.Comics)
-            R.id.reading_left_to_right -> optionsSave(PageMode.Manga)
+            R.id.reading_right_to_left -> optionsSave(PageMode.Manga)
             R.id.view_mode_aspect_fill -> optionsSave(ReaderMode.ASPECT_FILL)
             R.id.view_mode_aspect_fit -> optionsSave(ReaderMode.ASPECT_FIT)
             R.id.view_mode_fit_width -> optionsSave(ReaderMode.FIT_WIDTH)
@@ -189,7 +189,7 @@ class ReaderActivity : AppCompatActivity() {
             return fragments.size
         }
 
-        override fun getPageTitle(position: Int): CharSequence? {
+        override fun getPageTitle(position: Int): CharSequence {
             return fragmentTitle[position]
         }
     }

@@ -1,12 +1,10 @@
 package br.com.fenix.mangareader.view.ui.reader
 
 import android.content.Context
-import android.content.DialogInterface
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -25,13 +23,13 @@ import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.model.entity.Manga
 import br.com.fenix.mangareader.model.enums.PageMode
 import br.com.fenix.mangareader.model.enums.ReaderMode
+import br.com.fenix.mangareader.service.controller.SubTitleController
 import br.com.fenix.mangareader.service.parses.Parse
 import br.com.fenix.mangareader.service.parses.ParseFactory
 import br.com.fenix.mangareader.service.parses.RarParse
 import br.com.fenix.mangareader.service.repository.Storage
 import br.com.fenix.mangareader.util.constants.GeneralConsts
 import br.com.fenix.mangareader.util.constants.ReaderConsts
-import br.com.fenix.mangareader.service.controller.SubTitleController
 import br.com.fenix.mangareader.view.managers.MangaHandler
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
@@ -46,10 +44,6 @@ import kotlin.math.min
 
 class ReaderFragment() : Fragment(), View.OnTouchListener {
 
-    val STATE_FULLSCREEN = "STATE_FULLSCREEN"
-    val STATE_NEW_COMIC = "STATE_NEW_COMIC"
-    val STATE_NEW_COMIC_TITLE = "STATE_NEW_COMIC_TITLE"
-
     var mViewPager: PageViewPager? = null
     var mPageNavLayout: LinearLayout? = null
     var mPopupSubtitle: FrameLayout? = null
@@ -59,7 +53,7 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
     var mPreferences: SharedPreferences? = null
     var mGestureDetector: GestureDetector? = null
 
-    private var RESOURCE_VIEW_MODE: HashMap<Int, ReaderMode>? = null
+    private var mResourceViewMode: HashMap<Int, ReaderMode>? = null
     var mIsFullscreen = false
     var mCurrentPage = 0
     var mFilename: String? = null
@@ -75,26 +69,25 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
     var mNewManga: Manga? = null
     var mNewMangaTitle = 0
     private lateinit var mStorage: Storage
-    private lateinit var mUriNotFound: Uri
 
     init {
-        RESOURCE_VIEW_MODE = HashMap<Int, ReaderMode>();
-        RESOURCE_VIEW_MODE!![R.id.view_mode_aspect_fill] = ReaderMode.ASPECT_FILL
-        RESOURCE_VIEW_MODE!![R.id.view_mode_aspect_fit] = ReaderMode.ASPECT_FIT
-        RESOURCE_VIEW_MODE!![R.id.view_mode_fit_width] = ReaderMode.FIT_WIDTH
+        mResourceViewMode = HashMap<Int, ReaderMode>();
+        mResourceViewMode!![R.id.view_mode_aspect_fill] = ReaderMode.ASPECT_FILL
+        mResourceViewMode!![R.id.view_mode_aspect_fit] = ReaderMode.ASPECT_FIT
+        mResourceViewMode!![R.id.view_mode_fit_width] = ReaderMode.FIT_WIDTH
     }
 
     companion object {
         private var mCacheFolder = 0
-        private val mCacheFolder1 = "a"
-        private val mCacheFolder2 = "b"
-        private val mCacheFolder3 = "c"
+        private const val mCacheFolder1 = "a"
+        private const val mCacheFolder2 = "b"
+        private const val mCacheFolder3 = "c"
 
-        fun create(): ReaderFragment? {
+        fun create(): ReaderFragment {
             if (mCacheFolder >= 2)
                 mCacheFolder = 0
             else
-                mCacheFolder +=1
+                mCacheFolder += 1
 
             val fragment = ReaderFragment()
             val args = Bundle()
@@ -102,11 +95,11 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
             return fragment
         }
 
-        fun create(path: File): ReaderFragment? {
+        fun create(path: File): ReaderFragment {
             if (mCacheFolder >= 2)
                 mCacheFolder = 0
             else
-                mCacheFolder +=1
+                mCacheFolder += 1
 
             val fragment = ReaderFragment()
             val args = Bundle()
@@ -115,11 +108,11 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
             return fragment
         }
 
-        fun create(manga: Manga): ReaderFragment? {
+        fun create(manga: Manga): ReaderFragment {
             if (mCacheFolder >= 2)
                 mCacheFolder = 0
             else
-                mCacheFolder +=1
+                mCacheFolder += 1
 
             val fragment = ReaderFragment()
             val args = Bundle()
@@ -127,8 +120,6 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
             fragment.arguments = args
             return fragment
         }
-
-        var mCurrentPage : Int = 0
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -137,12 +128,12 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
         val bundle: Bundle? = arguments
         if (bundle != null) {
             mManga = bundle.getSerializable(GeneralConsts.KEYS.OBJECT.MANGA) as Manga?
-            var file: File? = if (mManga != null) {
+            val file: File? = if (mManga != null) {
                 mManga?.file
                 if (mManga?.file != null)
                     mManga?.file
                 else
-                    File(mManga?.path)
+                    File(mManga?.path!!)
             } else
                 bundle.getSerializable(GeneralConsts.KEYS.OBJECT.FILE) as File?
 
@@ -188,7 +179,7 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
 
             // workaround: extract rar achive
             if (mParse is RarParse) {
-                val child = when(mCacheFolder) {
+                val child = when (mCacheFolder) {
                     0 -> mCacheFolder1
                     1 -> mCacheFolder2
                     else -> mCacheFolder3
@@ -211,7 +202,7 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val view: View = inflater.inflate(R.layout.fragment_reader, container, false)
 
         if (mParse == null) {
@@ -271,13 +262,11 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
             mCurrentPage = -1
         }
         if (savedInstanceState != null) {
-            val fullscreen = savedInstanceState.getBoolean(STATE_FULLSCREEN)
+            val fullscreen = savedInstanceState.getBoolean(ReaderConsts.STATES.STATE_FULLSCREEN)
             setFullscreen(fullscreen)
-            val newComicId = savedInstanceState.getLong(STATE_NEW_COMIC)
-            if (newComicId != null) {
-                val titleRes = savedInstanceState.getInt(STATE_NEW_COMIC_TITLE)
-                confirmSwitch(mStorage.get(newComicId), titleRes)
-            }
+            val newComicId = savedInstanceState.getLong(ReaderConsts.STATES.STATE_NEW_COMIC)
+            val titleRes = savedInstanceState.getInt(ReaderConsts.STATES.STATE_NEW_COMIC_TITLE)
+            confirmSwitch(mStorage.get(newComicId), titleRes)
         } else {
             setFullscreen(true)
         }
@@ -300,9 +289,15 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putBoolean(STATE_FULLSCREEN, isFullscreen())
-        outState.putLong(STATE_NEW_COMIC, (if (mNewManga != null) mNewManga!!.id else -1)!!)
-        outState.putInt(STATE_NEW_COMIC_TITLE, if (mNewManga != null) mNewMangaTitle else -1)
+        outState.putBoolean(ReaderConsts.STATES.STATE_FULLSCREEN, isFullscreen())
+        outState.putLong(
+            ReaderConsts.STATES.STATE_NEW_COMIC,
+            (if (mNewManga != null) mNewManga!!.id else -1)!!
+        )
+        outState.putInt(
+            ReaderConsts.STATES.STATE_NEW_COMIC_TITLE,
+            if (mNewManga != null) mNewMangaTitle else -1
+        )
         super.onSaveInstanceState(outState)
     }
 
@@ -341,7 +336,7 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
         when (item.itemId) {
             R.id.view_mode_aspect_fill, R.id.view_mode_aspect_fit, R.id.view_mode_fit_width -> {
                 item.isChecked = true
-                mReaderMode = RESOURCE_VIEW_MODE!![item.itemId]
+                mReaderMode = mResourceViewMode!![item.itemId]
                 //editor.putInt(Constants.SETTINGS_PAGE_VIEW_MODE, mReaderMode!!.native_int)
                 editor.apply()
                 updatePageViews(mViewPager!!)
@@ -445,10 +440,9 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
 
     }
 
-    inner class MyTarget(layout: View, position: Int) : Target,
+    inner class MyTarget(layout: View, val position: Int) : Target,
         View.OnClickListener {
         private val mLayout: WeakReference<View> = WeakReference(layout);
-        val position: Int = position
 
         private fun setVisibility(imageView: Int, progressBar: Int, reloadButton: Int) {
             val layout = mLayout.get()
@@ -486,7 +480,7 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
     inner class MyTouchListener : SimpleOnGestureListener() {
         override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
             if (!isFullscreen()) {
-                setFullscreen(true, true)
+                setFullscreen(fullscreen = true, animated = true)
                 return true
             }
             val x = e.x
@@ -506,7 +500,7 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
                 } else {
                     if (getCurrentPage() == 1) hitBeginning() else setCurrentPage(getCurrentPage() - 1)
                 }
-            } else setFullscreen(false, true)
+            } else setFullscreen(fullscreen = false, animated = true)
             return true
         }
     }
@@ -527,7 +521,7 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
     }
 
     private fun getActionBar(): ActionBar? {
-        return (requireActivity() as AppCompatActivity).getSupportActionBar()
+        return (requireActivity() as AppCompatActivity).supportActionBar
     }
 
     private fun setFullscreen(fullscreen: Boolean) {
@@ -595,13 +589,15 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
             AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
                 .setTitle(titleRes)
                 .setMessage(newManga.file!!.name)
-                .setPositiveButton(R.string.switch_action_positive,
-                    DialogInterface.OnClickListener { dialog, which ->
-                        val activity = requireActivity() as ReaderActivity
-                        activity.setFragment(create(mNewManga!!))
-                    })
-                .setNegativeButton(R.string.switch_action_negative,
-                    DialogInterface.OnClickListener { dialog, which -> mNewManga = null })
+                .setPositiveButton(
+                    R.string.switch_action_positive
+                ) { _, _ ->
+                    val activity = requireActivity() as ReaderActivity
+                    activity.setFragment(create(mNewManga!!))
+                }
+                .setNegativeButton(
+                    R.string.switch_action_negative
+                ) { _, _ -> mNewManga = null }
                 .create()
         dialog.show()
     }

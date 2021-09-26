@@ -21,9 +21,9 @@ class PageViewPager(context: Context, attributeSet: AttributeSet) : ViewPager(co
     override fun onTouchEvent(ev: MotionEvent?): Boolean {
         if (ev!!.action == MotionEvent.ACTION_UP) {
             val diff = ev.x - mStartX
-            if (diff > 0 && currentItem === 0) {
+            if (diff > 0 && currentItem == 0) {
                 mSwipeOutListener?.onSwipeOutAtStart()
-            } else if (diff < 0 && currentItem === adapter!!.count - 1) {
+            } else if (diff < 0 && currentItem == adapter!!.count - 1) {
                 mSwipeOutListener?.onSwipeOutAtEnd()
             }
         }

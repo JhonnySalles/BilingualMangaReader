@@ -2,6 +2,7 @@ package br.com.fenix.mangareader.service.repository
 
 import android.content.Context
 import android.util.Log
+import br.com.fenix.mangareader.model.entity.Cover
 import br.com.fenix.mangareader.model.entity.Manga
 import br.com.fenix.mangareader.util.constants.GeneralConsts
 
@@ -41,19 +42,17 @@ class MangaRepository(context: Context) {
         mDataBase.delete(obj)
     }
 
-    fun list(withCover: Boolean): List<Manga>? {
+    fun list(): List<Manga>? {
         return try {
-            var list = mDataBase.list()
-
-            if (withCover)
-                for (manga in list)
-                    manga.thumbnail = mCoverRepository.findFirstByIdManga(manga.id!!)
-
-            list
+            mDataBase.list()
         } catch (e: Exception) {
             Log.e(GeneralConsts.TAG.DATABASE.LIST, e.message.toString())
             null
         }
+    }
+
+    fun getThumbnail(idManga: Long): Cover? {
+        return mCoverRepository.findFirstByIdManga(idManga)
     }
 
     fun get(id: Long): Manga? {

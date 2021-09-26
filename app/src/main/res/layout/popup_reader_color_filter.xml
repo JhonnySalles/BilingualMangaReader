@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/onPrimary"
     tools:context=".view.ui.reader.PopupReaderColorFilter">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,6 +20,9 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:text="@string/popup_reading_custom_color_filter"
+            android:textColor="@color/textPrimary"
+            android:checked="false"
+            app:thumbTint="@color/onSecondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -29,6 +33,7 @@
             android:id="@+id/txt_color_filter_red_symbol"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/textPrimary"
             android:paddingStart="16dp"
             android:text="@string/color_filter_r_value"
             app:layout_constraintBottom_toBottomOf="@id/seekbar_color_filter_red"
@@ -43,6 +48,8 @@
             android:layout_marginEnd="8dp"
             android:max="255"
             android:padding="8dp"
+            android:progressTint="@color/white"
+            android:progressBackgroundTint="@color/white"
             app:layout_constraintEnd_toStartOf="@id/txt_color_filter_red_value"
             app:layout_constraintStart_toEndOf="@id/color_filter_symbols_barrier"
             app:layout_constraintTop_toBottomOf="@id/switch_color_filter" />
@@ -53,6 +60,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="16dp"
+            android:textColor="@color/textPrimary"
             app:layout_constraintBottom_toBottomOf="@id/seekbar_color_filter_red"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/seekbar_color_filter_red"
@@ -65,6 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
+            android:textColor="@color/textPrimary"
             android:text="@string/color_filter_g_value"
             app:layout_constraintBottom_toBottomOf="@id/seekbar_color_filter_green"
             app:layout_constraintStart_toStartOf="parent"
@@ -78,6 +87,8 @@
             android:layout_marginEnd="8dp"
             android:max="255"
             android:padding="8dp"
+            android:progressTint="@color/white"
+            android:progressBackgroundTint="@color/white"
             app:layout_constraintEnd_toStartOf="@id/txt_color_filter_green_value"
             app:layout_constraintStart_toEndOf="@id/color_filter_symbols_barrier"
             app:layout_constraintTop_toBottomOf="@id/seekbar_color_filter_red" />
@@ -88,6 +99,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="16dp"
+            android:textColor="@color/textPrimary"
             app:layout_constraintBottom_toBottomOf="@id/seekbar_color_filter_green"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/seekbar_color_filter_green"
@@ -101,6 +113,7 @@
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
             android:text="@string/color_filter_b_value"
+            android:textColor="@color/textPrimary"
             app:layout_constraintBottom_toBottomOf="@id/seekbar_color_filter_blue"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/seekbar_color_filter_blue" />
@@ -113,6 +126,8 @@
             android:layout_marginEnd="8dp"
             android:max="255"
             android:padding="8dp"
+            android:progressTint="@color/white"
+            android:progressBackgroundTint="@color/white"
             app:layout_constraintEnd_toStartOf="@id/txt_color_filter_blue_value"
             app:layout_constraintStart_toEndOf="@id/color_filter_symbols_barrier"
             app:layout_constraintTop_toBottomOf="@id/seekbar_color_filter_green" />
@@ -123,6 +138,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="16dp"
+            android:textColor="@color/textPrimary"
             app:layout_constraintBottom_toBottomOf="@id/seekbar_color_filter_blue"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/seekbar_color_filter_blue"
@@ -136,6 +152,7 @@
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
             android:text="@string/color_filter_a_value"
+            android:textColor="@color/textPrimary"
             app:layout_constraintBottom_toBottomOf="@id/seekbar_color_filter_alpha"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/seekbar_color_filter_alpha" />
@@ -148,6 +165,8 @@
             android:layout_marginEnd="8dp"
             android:max="255"
             android:padding="8dp"
+            android:progressTint="@color/white"
+            android:progressBackgroundTint="@color/white"
             app:layout_constraintEnd_toStartOf="@id/txt_color_filter_alpha_value"
             app:layout_constraintStart_toEndOf="@id/color_filter_symbols_barrier"
             app:layout_constraintTop_toBottomOf="@id/seekbar_color_filter_blue" />
@@ -158,6 +177,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="16dp"
+            android:textColor="@color/textPrimary"
             app:layout_constraintBottom_toBottomOf="@id/seekbar_color_filter_alpha"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/seekbar_color_filter_alpha"
@@ -172,7 +192,8 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:text="@string/popup_reading_grayscale"
-            android:textColor="?android:attr/textColorSecondary"
+            android:textColor="@color/textPrimary"
+            app:thumbTint="@color/onSecondary"
             app:layout_constraintTop_toBottomOf="@id/txt_color_filter_alpha_value" />
 
         <!-- Brightness -->
@@ -185,6 +206,8 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:text="@string/popup_reading_custom_brightness"
+            android:textColor="@color/textPrimary"
+            app:thumbTint="@color/onSecondary"
             app:layout_constraintTop_toBottomOf="@id/grayscale"
             tools:layout_editor_absoluteX="0dp" />
 
@@ -193,7 +216,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
-            android:tint="?attr/colorOnBackground"
+            android:tint="@color/onSecondary"
+            android:textColor="@color/textPrimary"
             app:layout_constraintBottom_toBottomOf="@id/brightness_seekbar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/brightness_seekbar"
@@ -208,6 +232,8 @@
             android:padding="8dp"
             android:min="-75"
             android:max="100"
+            android:progressTint="@color/white"
+            android:progressBackgroundTint="@color/white"
             app:layout_constraintEnd_toStartOf="@id/txt_brightness_seekbar_value"
             app:layout_constraintStart_toEndOf="@id/txt_brightness_seekbar_icon"
             app:layout_constraintTop_toBottomOf="@id/custom_brightness"/>
@@ -217,6 +243,7 @@
             android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
+            android:textColor="@color/textPrimary"
             app:layout_constraintBottom_toBottomOf="@id/brightness_seekbar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/brightness_seekbar"

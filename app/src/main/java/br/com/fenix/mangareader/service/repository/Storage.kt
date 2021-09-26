@@ -32,7 +32,7 @@ class Storage(context: Context) {
 
     fun findByName(name: String): Manga? = mRepository.findByFileName(name)
 
-    fun listBook(withCover: Boolean) : List<Manga>? = mRepository.list(withCover)
+    fun listBook() : List<Manga>? = mRepository.list()
 
     fun delete(manga: Manga) {
         mRepository.delete(manga)

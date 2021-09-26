@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.model.entity.Manga
+import br.com.fenix.mangareader.service.controller.ImageCoverController
 import br.com.fenix.mangareader.service.listener.MangaCardListener
 import br.com.fenix.mangareader.util.constants.GeneralConsts
 import com.google.android.material.card.MaterialCardView
@@ -24,17 +25,17 @@ class GridViewHolder(itemView: View, private val listener: MangaCardListener) :
 
         cardView.setOnClickListener { listener.onClick(manga) }
 
-        if (manga.thumbnail != null && manga.thumbnail!!.image != null)
-            mangaImage.setImageBitmap(manga.thumbnail!!.image)
+        ImageCoverController.instance.setImageCover(mangaImage, manga)
 
         mangaTitle.text = manga.title
 
         if (manga.subTitle.isEmpty()) {
-            if (manga.lastAccess != null && manga.lastAccess != LocalDateTime.MIN)
-                mangaSubTitle.text =
-                    "${manga.bookMark} / ${manga.pages}  -  ${GeneralConsts.formaterDate(manga.lastAccess!!)}"
+            val title = if (manga.lastAccess != null && manga.lastAccess != LocalDateTime.MIN)
+                "${manga.bookMark} / ${manga.pages}  -  ${GeneralConsts.formaterDate(manga.lastAccess!!)}"
             else
-                mangaSubTitle.text = "${manga.bookMark} / ${manga.pages}"
+                "${manga.bookMark} / ${manga.pages}"
+
+            mangaSubTitle.text = title
         } else
             mangaSubTitle.text = manga.subTitle
 

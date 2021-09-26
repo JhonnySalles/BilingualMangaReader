@@ -11,7 +11,7 @@ import br.com.fenix.mangareader.util.constants.DataBaseConsts
 data class Cover(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = DataBaseConsts.COVER.COLUMNS.ID)
-    var id: Long = 0,
+    var id: Long? = 0,
 
     @ColumnInfo(name = DataBaseConsts.COVER.COLUMNS.FK_ID_MANGA)
     var id_manga: Long = 0,

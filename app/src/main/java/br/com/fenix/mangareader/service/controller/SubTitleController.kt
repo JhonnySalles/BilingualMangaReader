@@ -25,8 +25,8 @@ class SubTitleController {
 
     companion object {
         lateinit var mParse: Parse
-        var mManga : Manga? = null
-        var mLanguages : MutableSet<Languages> = arraySetOf()
+        var mManga: Manga? = null
+        var mLanguages: MutableSet<Languages> = arraySetOf()
         var mComboList: HashMap<String, Chapter> = hashMapOf()
         var mSubtitleLang: Languages = Languages.JAPANESE
         var mTranslateLang: Languages = Languages.PORTUGUESE
@@ -119,7 +119,7 @@ class SubTitleController {
         private fun findSubtitle(
             manga: Manga,
             pageNumber: Int
-        ): SubTitle? {
+        ): SubTitle {
             val image: InputStream? = mParse.getPage(pageNumber)
             val hash: String? = DigestUtils.md5Hex(image)
             val pageName: String? = mParse.getPageName(pageNumber)
@@ -155,7 +155,15 @@ class SubTitleController {
                     chapter
                 )
             } else
-                SubTitle(manga.id!!, mSubtitleLang, "", 0, pageNumber, PopupSubtitleConfiguration.getPathSubtitle(), null)
+                SubTitle(
+                    manga.id!!,
+                    mSubtitleLang,
+                    "",
+                    0,
+                    pageNumber,
+                    PopupSubtitleConfiguration.getPathSubtitle(),
+                    null
+                )
         }
 
 
@@ -167,13 +175,16 @@ class SubTitleController {
                     if (mSelectedSubTitle == null) {
                         mSelectedSubTitle = mSubtitleRepository.findByIdManga(manga.id!!)
 
-                         if (mSelectedSubTitle == null)
-                             try {
-                                 mSelectedSubTitle = findSubtitle(manga, pageNumber)
-                             } catch (e: java.lang.Exception) {
-                                 Log.e(GeneralConsts.TAG.LOG, "Erro ao tentar encontrar o subtitle do arquivo. " + e.message)
-                                 return@launch
-                             }
+                        if (mSelectedSubTitle == null)
+                            try {
+                                mSelectedSubTitle = findSubtitle(manga, pageNumber)
+                            } catch (e: java.lang.Exception) {
+                                Log.e(
+                                    GeneralConsts.TAG.LOG,
+                                    "Erro ao tentar encontrar o subtitle do arquivo. " + e.message
+                                )
+                                return@launch
+                            }
 
                     }
 
@@ -183,7 +194,7 @@ class SubTitleController {
                         else
                             PopupSubtitleReader.getBeforeSelectPage()
 
-                        if (!run!!) {
+                        if (!run) {
                             if (mSelectedSubTitle!!.pageCount < pageNumber)
                                 PopupSubtitleConfiguration.getNextSelectSubtitle(context)
                             else

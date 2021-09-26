@@ -5,7 +5,6 @@ import android.graphics.Matrix
 import android.graphics.Point
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.GestureDetector.SimpleOnGestureListener
@@ -16,7 +15,6 @@ import android.view.View.OnTouchListener
 import android.view.ViewConfiguration
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Interpolator
-import android.widget.ImageView
 import android.widget.OverScroller
 import androidx.core.view.ViewCompat
 import br.com.fenix.mangareader.model.enums.ReaderMode
@@ -24,9 +22,10 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
-open class PageImageView(context: Context, attributeSet: AttributeSet?) : ImageView(context, attributeSet) {
+open class PageImageView(context: Context, attributeSet: AttributeSet?) :
+    androidx.appcompat.widget.AppCompatImageView(context, attributeSet) {
 
-    constructor(context : Context) : this(context, null)
+    constructor(context: Context) : this(context, null)
 
     private var mViewMode: ReaderMode? = null
     private var mHaveFrame = false
@@ -101,16 +100,16 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) : ImageV
             } else {
                 scale = vwidth.toFloat() / dwidth.toFloat()
             }
-            mMatrix!!.setScale(scale, scale)
-            mMatrix!!.postTranslate((dx + 0.5f), 0f)
+            mMatrix.setScale(scale, scale)
+            mMatrix.postTranslate((dx + 0.5f), 0f)
         } else if (mViewMode === ReaderMode.ASPECT_FIT) {
             val mTempSrc = RectF(0F, 0F, dwidth.toFloat(), dheight.toFloat())
             val mTempDst = RectF(0F, 0F, vwidth.toFloat(), vheight.toFloat())
-            mMatrix!!.setRectToRect(mTempSrc, mTempDst, Matrix.ScaleToFit.CENTER)
+            mMatrix.setRectToRect(mTempSrc, mTempDst, Matrix.ScaleToFit.CENTER)
         } else if (mViewMode === ReaderMode.FIT_WIDTH) {
             val widthScale = width.toFloat() / drawable.intrinsicWidth
-            mMatrix!!.setScale(widthScale, widthScale)
-            mMatrix!!.postTranslate(0f, 0f)
+            mMatrix.setScale(widthScale, widthScale)
+            mMatrix.postTranslate(0f, 0f)
         }
 
         // calculate min/max scale
@@ -130,7 +129,7 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) : ImageV
 
     inner class PrivateScaleDetector : SimpleOnScaleGestureListener() {
         override fun onScale(detector: ScaleGestureDetector): Boolean {
-            mMatrix!!.getValues(m)
+            mMatrix.getValues(m)
             val scale = m[Matrix.MSCALE_X]
             var scaleFactor = detector.scaleFactor
             val scaleNew = scale * scaleFactor
@@ -142,7 +141,7 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) : ImageV
                 scaleFactor = mMinScale / scale
                 scalable = false
             }
-            mMatrix!!.postScale(
+            mMatrix.postScale(
                 scaleFactor, scaleFactor,
                 detector.focusX, detector.focusY
             )
@@ -163,7 +162,7 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) : ImageV
             distanceX: Float,
             distanceY: Float
         ): Boolean {
-            mMatrix!!.postTranslate(-distanceX, -distanceY)
+            mMatrix.postTranslate(-distanceX, -distanceY)
             imageMatrix = mMatrix
             return true
         }
@@ -214,10 +213,10 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) : ImageV
         if (!mScroller!!.isFinished && mScroller!!.computeScrollOffset()) {
             val curX = mScroller!!.currX
             val curY = mScroller!!.currY
-            mMatrix!!.getValues(m)
+            mMatrix.getValues(m)
             m[Matrix.MTRANS_X] = curX.toFloat()
             m[Matrix.MTRANS_Y] = curY.toFloat()
-            mMatrix!!.setValues(m)
+            mMatrix.setValues(m)
             imageMatrix = mMatrix
             ViewCompat.postInvalidateOnAnimation(this)
         }
@@ -225,14 +224,14 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) : ImageV
     }
 
     open fun getCurrentScale(): Float {
-        mMatrix!!.getValues(m)
+        mMatrix.getValues(m)
         return m[Matrix.MSCALE_X]
     }
 
     open fun computeCurrentImageSize(): Point {
         val size = Point()
         val d: Drawable = drawable
-        mMatrix!!.getValues(m)
+        mMatrix.getValues(m)
         val scale = m[Matrix.MSCALE_X]
         val width = d.intrinsicWidth * scale
         val height = d.intrinsicHeight * scale
@@ -244,7 +243,7 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) : ImageV
 
     open fun computeCurrentOffset(): Point {
         val offset = Point()
-        mMatrix!!.getValues(m)
+        mMatrix.getValues(m)
         val transX = m[Matrix.MTRANS_X]
         val transY = m[Matrix.MTRANS_Y]
         offset[transX.toInt()] = transY.toInt()
@@ -253,9 +252,7 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) : ImageV
 
     override fun setImageMatrix(matrix: Matrix?) {
         super.setImageMatrix(fixMatrix(matrix!!))
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            postInvalidate()
-        }
+        postInvalidate()
     }
 
     open fun fixMatrix(matrix: Matrix): Matrix? {
@@ -308,18 +305,18 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) : ImageV
             var t = (System.currentTimeMillis() - mStartTime).toFloat() / Companion.ZOOM_DURATION
             val interpolateRatio = mInterpolator.getInterpolation(t)
             t = if (t > 1f) 1f else t
-            mMatrix!!.getValues(m)
+            mMatrix.getValues(m)
             val newScale = mStartScale + interpolateRatio * (mScale - mStartScale)
             val newScaleFactor = newScale / m[Matrix.MSCALE_X]
-            mMatrix!!.postScale(newScaleFactor, newScaleFactor, mX, mY)
+            mMatrix.postScale(newScaleFactor, newScaleFactor, mX, mY)
             imageMatrix = mMatrix
             if (t < 1f) {
                 post(this)
             } else {
                 // set exact scale
-                mMatrix!!.getValues(m)
-                mMatrix!!.setScale(mScale, mScale)
-                mMatrix!!.postTranslate(
+                mMatrix.getValues(m)
+                mMatrix.setScale(mScale, mScale)
+                mMatrix.postTranslate(
                     m[Matrix.MTRANS_X],
                     m[Matrix.MTRANS_Y]
                 )
@@ -328,7 +325,7 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) : ImageV
         }
 
         init {
-            mMatrix!!.getValues(m)
+            mMatrix.getValues(m)
             mX = x
             mY = y
             mScale = scale

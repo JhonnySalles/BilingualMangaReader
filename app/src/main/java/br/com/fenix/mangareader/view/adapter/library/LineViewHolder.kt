@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.model.entity.Manga
+import br.com.fenix.mangareader.service.controller.ImageCoverController
 import br.com.fenix.mangareader.service.listener.MangaCardListener
 import br.com.fenix.mangareader.util.constants.GeneralConsts
 import java.time.LocalDateTime
@@ -24,20 +25,21 @@ class LineViewHolder(itemView: View, private val listener: MangaCardListener) :
 
         cardView.setOnClickListener { listener.onClick(manga) }
 
-        if (manga.thumbnail != null && manga.thumbnail!!.image != null)
-            mangaImage.setImageBitmap(manga.thumbnail!!.image)
+        ImageCoverController.instance.setImageCover(mangaImage, manga)
 
         mangaTitle.text = manga.title
 
         if (manga.subTitle.isEmpty()) {
-            if (manga.lastAccess != null && manga.lastAccess != LocalDateTime.MIN)
-                mangaSubTitle.text =
-                    "${manga.bookMark} / ${manga.pages}  -  ${itemView.resources.getString(R.string.library_last_access)}: ${GeneralConsts.formaterDate(
+            val title = if (manga.lastAccess != null && manga.lastAccess != LocalDateTime.MIN)
+                "${manga.bookMark} / ${manga.pages}  -  ${itemView.resources.getString(R.string.library_last_access)}: ${
+                    GeneralConsts.formaterDate(
                         manga.lastAccess!!
-                    )}"
+                    )
+                }"
             else
-                mangaSubTitle.text = "${manga.bookMark} / ${manga.pages}"
-                mangaSubTitle.text = "${manga.bookMark} / ${manga.pages}"
+                "${manga.bookMark} / ${manga.pages}"
+
+            mangaSubTitle.text = title
         } else
             mangaSubTitle.text = manga.subTitle
 

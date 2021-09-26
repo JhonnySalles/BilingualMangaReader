@@ -104,7 +104,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             if (msg.what == GeneralConsts.SCANNER.MESSAGE_MEDIA_UPDATED) {
                 fragment.refreshLibraryDelayed()
             } else if (msg.what == GeneralConsts.SCANNER.MESSAGE_MEDIA_UPDATE_FINISHED) {
-                mViewModel.list(true)
+                mViewModel.list()
 
                 if (mGridType == LibraryType.GRID)
                     (mRecycleView.adapter as MangaGridCardAdapter).notifyDataSetChanged()
@@ -119,7 +119,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private fun refreshLibraryDelayed() {
         if (!mIsRefreshPlanned) {
             val updateRunnable = Runnable {
-                mViewModel.list(true)
+                mViewModel.list()
 
                 if (mGridType == LibraryType.GRID)
                     (mRecycleView.adapter as MangaGridCardAdapter).notifyDataSetChanged()

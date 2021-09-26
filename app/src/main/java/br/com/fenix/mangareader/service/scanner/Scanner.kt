@@ -102,7 +102,7 @@ class Scanner {
                 val storageFiles: MutableMap<String, Manga> = HashMap()
 
                 // create list of files available in storage
-                for (c in storage.listBook(false)!!)
+                for (c in storage.listBook()!!)
                     storageFiles[c.path] = c
 
                 // search and add comics if necessary

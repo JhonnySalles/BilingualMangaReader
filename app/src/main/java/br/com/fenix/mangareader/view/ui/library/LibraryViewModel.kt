@@ -43,8 +43,8 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         return obj
     }
 
-    fun list(withCover:Boolean) {
-        val list = mMangaRepository.list(withCover)
+    fun list() {
+        val list = mMangaRepository.list()
         if (list != null)
             mListMangas.value = ArrayList(list)
         else
