@@ -107,35 +107,6 @@
                 android:text="@string/config_title_sub_title"/>
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-                android:id="@+id/txt_subtitle_path"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_small"
-                android:layout_marginStart="@dimen/margin"
-                android:layout_marginEnd="32dp"
-                android:layout_marginTop="32dp"
-                android:hint="@string/config_text_subtitle_folder"
-                android:textColorHint="@color/textPrimary"
-                app:boxBackgroundColor="@color/primary"
-                app:boxStrokeColor="@color/onSecondary"
-                app:placeholderTextColor="@color/textPrimary"
-                app:hintTextColor="@color/onSecondary"
-                app:startIconDrawable="@drawable/ic_sd_storage"
-                app:startIconTint="@color/onSecondary"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-                <AutoCompleteTextView
-                    android:id="@+id/menu_autocomplete_subtitle_path"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="none"
-                    android:textColor="@color/textPrimary"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/txt_default_subtitle_language"
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"

@@ -26,15 +26,13 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class ConfigFragment : Fragment(), AdapterView.OnItemClickListener {
+class ConfigFragment : Fragment() {
 
     private lateinit var txtLibraryPath: TextInputLayout
     private lateinit var autoCompleteLibraryPath: AutoCompleteTextView
     private lateinit var txtLibraryOrder: TextInputLayout
     private lateinit var autoCompleteLibraryOrder: AutoCompleteTextView
 
-    private lateinit var txtSubtitlePath: TextInputLayout
-    private lateinit var autoCompleteSubtitlePath: AutoCompleteTextView
     private lateinit var txtDefaultSubtitleLanguage: TextInputLayout
     private lateinit var autoCompleteDefaultSubtitleLanguage: AutoCompleteTextView
     private lateinit var txtDefaultSubtitleTranslate: TextInputLayout
@@ -73,8 +71,6 @@ class ConfigFragment : Fragment(), AdapterView.OnItemClickListener {
         txtLibraryOrder = view.findViewById(R.id.txt_library_order)
         autoCompleteLibraryOrder = view.findViewById(R.id.menu_autocomplete_library_order)
 
-        txtSubtitlePath = view.findViewById(R.id.txt_subtitle_path)
-        autoCompleteSubtitlePath = view.findViewById(R.id.menu_autocomplete_subtitle_path)
         txtDefaultSubtitleLanguage = view.findViewById(R.id.txt_default_subtitle_language)
         autoCompleteDefaultSubtitleLanguage =
             view.findViewById(R.id.menu_autocomplete_default_subtitle_language)
@@ -96,12 +92,6 @@ class ConfigFragment : Fragment(), AdapterView.OnItemClickListener {
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
             intent.addCategory(Intent.CATEGORY_DEFAULT)
             startActivityForResult(intent, 101)
-        }
-
-        autoCompleteSubtitlePath.setOnClickListener {
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-            intent.addCategory(Intent.CATEGORY_DEFAULT)
-            startActivityForResult(intent, 102)
         }
 
         val languages = resources.getStringArray(R.array.languages)
@@ -131,32 +121,79 @@ class ConfigFragment : Fragment(), AdapterView.OnItemClickListener {
         val adapterOrder =
             ArrayAdapter(requireContext(), R.layout.list_item, mapOrder.keys.toTypedArray())
         autoCompleteLibraryOrder.setAdapter(adapterOrder)
-        autoCompleteLibraryOrder.onItemClickListener = this
+        autoCompleteLibraryOrder.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, _, position, _ ->
+                orderSelect = if (parent.getItemAtPosition(position).toString().isNotEmpty() &&
+                    mapOrder.containsKey(parent.getItemAtPosition(position).toString())
+                )
+                    mapOrder[parent.getItemAtPosition(position).toString()]!!
+                else
+                    Order.Name
+            }
 
         val adapterLanguage =
             ArrayAdapter(requireContext(), R.layout.list_item, mapLanguage.keys.toTypedArray())
         autoCompleteDefaultSubtitleLanguage.setAdapter(adapterLanguage)
         autoCompleteDefaultSubtitleTranslate.setAdapter(adapterLanguage)
         autoCompleteSystemLanguage.setAdapter(adapterLanguage)
+        autoCompleteDefaultSubtitleLanguage.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, _, position, _ ->
+                defaultSubtitleLanguageSelect =
+                    if (parent.getItemAtPosition(position).toString().isNotEmpty() &&
+                        mapLanguage.containsKey(parent.getItemAtPosition(position).toString())
+                    )
+                        mapLanguage[parent.getItemAtPosition(position).toString()]!!
+                    else
+                        Languages.JAPANESE
+            }
 
-        autoCompleteDefaultSubtitleLanguage.onItemClickListener = this
-        autoCompleteDefaultSubtitleTranslate.onItemClickListener = this
-        autoCompleteSystemLanguage.onItemClickListener = this
+        autoCompleteDefaultSubtitleTranslate.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, _, position, _ ->
+                defaultSubtitleTranslateSelect =
+                    if (parent.getItemAtPosition(position).toString().isNotEmpty() &&
+                        mapLanguage.containsKey(parent.getItemAtPosition(position).toString())
+                    )
+                        mapLanguage[parent.getItemAtPosition(position).toString()]!!
+                    else
+                        Languages.PORTUGUESE
+            }
+
+        autoCompleteSystemLanguage.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, _, position, _ ->
+                defaultSystemLanguageSelect =
+                    if (parent.getItemAtPosition(position).toString().isNotEmpty() &&
+                        mapLanguage.containsKey(parent.getItemAtPosition(position).toString())
+                    )
+                        mapLanguage[parent.getItemAtPosition(position).toString()]!!
+                    else
+                        Languages.PORTUGUESE
+            }
 
         val adapterReaderMode =
             ArrayAdapter(requireContext(), R.layout.list_item, mapReaderMode.keys.toTypedArray())
         autocompleteReaderComicMode.setAdapter(adapterReaderMode)
-        autocompleteReaderComicMode.onItemClickListener = this
+        autocompleteReaderComicMode.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, _, position, _ ->
+                readerModeSelect = if (parent.getItemAtPosition(position).toString().isNotEmpty() &&
+                    mapReaderMode.containsKey(parent.getItemAtPosition(position).toString())
+                )
+                    mapReaderMode[parent.getItemAtPosition(position).toString()]!!
+                else
+                    ReaderMode.FIT_WIDTH
+            }
 
         val adapterPageMode =
             ArrayAdapter(requireContext(), R.layout.list_item, mapPageMode.keys.toTypedArray())
         autocompletePageMode.setAdapter(adapterPageMode)
-        autocompletePageMode.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(p0: View?) {
-                Log.i("Log", p0.toString())
+        autocompletePageMode.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, _, position, _ ->
+                pageModeSelect = if (parent.getItemAtPosition(position).toString().isNotEmpty() &&
+                    mapPageMode.containsKey(parent.getItemAtPosition(position).toString())
+                )
+                    mapPageMode[parent.getItemAtPosition(position).toString()]!!
+                else
+                    PageMode.Manga
             }
-
-        } )
 
         val date0 = SimpleDateFormat(datePattern[0]).format(Date())
         val date1 = SimpleDateFormat(datePattern[1]).format(Date())
@@ -171,7 +208,13 @@ class ConfigFragment : Fragment(), AdapterView.OnItemClickListener {
         )
         val adapterDataFormat = ArrayAdapter(requireContext(), R.layout.list_item, dataFormat)
         autoCompleteSystemFormatDate.setAdapter(adapterDataFormat)
-        autoCompleteSystemFormatDate.onItemClickListener = this
+        autoCompleteSystemFormatDate.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, _, position, _ ->
+                dateSelect = if (position != null && datePattern.size > position && position >= 0)
+                    datePattern[position]
+                else
+                    GeneralConsts.CONFIG.DATA_FORMAT[0]
+            }
 
         loadConfig()
     }
@@ -194,7 +237,6 @@ class ConfigFragment : Fragment(), AdapterView.OnItemClickListener {
 
         when (requestCode) {
             101 -> autoCompleteLibraryPath.setText(folder)
-            102 -> autoCompleteSubtitlePath.setText(folder)
         }
     }
 
@@ -226,10 +268,6 @@ class ConfigFragment : Fragment(), AdapterView.OnItemClickListener {
             this!!.putString(
                 GeneralConsts.KEYS.LIBRARY.FOLDER,
                 txtLibraryPath.editText?.text.toString()
-            )
-            this.putString(
-                GeneralConsts.KEYS.SUBTITLE.FOLDER,
-                txtSubtitlePath.editText?.text.toString()
             )
             this.putString(
                 GeneralConsts.KEYS.LIBRARY.ORDER,
@@ -267,8 +305,7 @@ class ConfigFragment : Fragment(), AdapterView.OnItemClickListener {
             GeneralConsts.TAG.LOG,
             "Save prefer CONFIG:" + "\n[Library] Path " + txtLibraryPath.editText?.text +
                     " - Order " + txtLibraryOrder.editText?.text +
-                    "\n[SubTitle] Path " + txtSubtitlePath.editText?.text +
-                    " - Language " + txtDefaultSubtitleLanguage.editText?.text +
+                    "\n[SubTitle] Language " + txtDefaultSubtitleLanguage.editText?.text +
                     " - Translate " + txtDefaultSubtitleTranslate.editText?.text +
                     "\n[System] Language " + txtSystemLanguage.editText?.text +
                     " - Format Data " + txtSystemFormatDate.editText?.text
@@ -283,12 +320,6 @@ class ConfigFragment : Fragment(), AdapterView.OnItemClickListener {
         txtLibraryPath.editText?.setText(
             sharedPreferences.getString(
                 GeneralConsts.KEYS.LIBRARY.FOLDER,
-                ""
-            )
-        )
-        txtSubtitlePath.editText?.setText(
-            sharedPreferences?.getString(
-                GeneralConsts.KEYS.SUBTITLE.FOLDER,
                 ""
             )
         )
@@ -351,7 +382,13 @@ class ConfigFragment : Fragment(), AdapterView.OnItemClickListener {
             false
         )
 
-        autoCompleteSystemFormatDate.setText(dateSelect, false)
+        autoCompleteSystemFormatDate.setText(
+            "$dateSelect (%s)".format(
+                SimpleDateFormat(dateSelect).format(
+                    Date()
+                )
+            ), false
+        )
         autocompleteReaderComicMode.setText(
             mapReaderMode.filterValues { it == readerModeSelect }.keys.first(),
             false
@@ -362,32 +399,4 @@ class ConfigFragment : Fragment(), AdapterView.OnItemClickListener {
         )
 
     }
-
-    override fun onItemClick(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-        Log.i("teste", "pos: $pos - id: $id")
-
-        when (parent) {
-
-        }
-
-
-        /*dateSelect = GeneralConsts.CONFIG.DATA_FORMAT[0]
-        pageModeSelect = PageMode.Manga
-        readerModeSelect = ReaderMode.ASPECT_FILL
-        orderSelect = Order.Name
-        defaultSubtitleLanguageSelect = Languages.JP
-        defaultSubtitleTranslateSelect = Languages.PORTUGUESE
-        defaultSystemLanguageSelect = Languages.PORTUGUESE*/
-    }
-
-    fun onNothingSelected(parent: AdapterView<*>?) {
-        dateSelect = GeneralConsts.CONFIG.DATA_FORMAT[0]
-        pageModeSelect = PageMode.Manga
-        readerModeSelect = ReaderMode.FIT_WIDTH
-        orderSelect = Order.Name
-        defaultSubtitleLanguageSelect = Languages.JAPANESE
-        defaultSubtitleTranslateSelect = Languages.PORTUGUESE
-        defaultSystemLanguageSelect = Languages.PORTUGUESE
-    }
-
 }

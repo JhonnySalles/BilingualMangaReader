@@ -12,19 +12,13 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import br.com.fenix.mangareader.R
-import br.com.fenix.mangareader.model.entity.*
+import br.com.fenix.mangareader.model.entity.Manga
 import br.com.fenix.mangareader.model.enums.PageMode
 import br.com.fenix.mangareader.model.enums.ReaderMode
-import br.com.fenix.mangareader.service.parses.Parse
-import br.com.fenix.mangareader.service.repository.SubTitleRepository
 import br.com.fenix.mangareader.util.constants.GeneralConsts
-import br.com.fenix.mangareader.service.controller.SubTitleController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayout
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.io.File
-import java.time.LocalDateTime
 import java.util.*
 
 class ReaderActivity : AppCompatActivity() {
@@ -64,7 +58,7 @@ class ReaderActivity : AppCompatActivity() {
         mMenuPopup = findViewById(R.id.menu_popup)
         var mPopupTouch = findViewById<ImageView>(R.id.menu_popup_touch)
         mBottomSheet = BottomSheetBehavior.from(mMenuPopup).apply {
-            peekHeight = 200
+            peekHeight = 100
             this.state = BottomSheetBehavior.STATE_COLLAPSED
             mBottomSheet = this
         }

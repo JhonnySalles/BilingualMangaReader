@@ -96,7 +96,7 @@ class Scanner {
                 val preference: SharedPreferences? = GeneralConsts.getSharedPreferences(ctx)
                 val libraryPath = preference?.getString(GeneralConsts.KEYS.LIBRARY.FOLDER, "")
 
-                if (libraryPath == "") return
+                if (libraryPath == "" || !File(libraryPath).exists()) return
 
                 val storage: Storage = Storage(ctx)
                 val storageFiles: MutableMap<String, Manga> = HashMap()

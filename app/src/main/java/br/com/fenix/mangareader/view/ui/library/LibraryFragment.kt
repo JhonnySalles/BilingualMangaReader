@@ -252,6 +252,9 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     fun setRefresh(enabled: Boolean) {
         try {
+            if (!::searchView.isInitialized)
+                return
+
             if (enabled)
                 searchView.clearFocus()
             enableSearchView(searchView, !enabled)
