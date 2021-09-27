@@ -1,6 +1,8 @@
 package br.com.fenix.mangareader.view.ui.reader
 
+import android.R.attr
 import android.content.Context
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +16,12 @@ import br.com.fenix.mangareader.model.entity.Text
 import br.com.fenix.mangareader.service.controller.SubTitleController
 import com.google.android.material.textfield.TextInputLayout
 import java.util.*
+import android.R.attr.bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import androidx.core.view.drawToBitmap
+
 
 class PopupSubtitleReader : Fragment() {
 
@@ -21,9 +29,11 @@ class PopupSubtitleReader : Fragment() {
     lateinit var mSubtitlePageAutoComplete: AutoCompleteTextView
     lateinit var mSubtitleTitle: TextView
     lateinit var mSubtitleContent: TextView
+    lateinit var mSubtitleFileName: TextView
     lateinit var mNavBeforeText: Button
     lateinit var mNavNextText: Button
     lateinit var mRefresh: Button
+    lateinit var mDraw: Button
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,10 +45,12 @@ class PopupSubtitleReader : Fragment() {
         mSubtitlePageAutoComplete = root.findViewById(R.id.menu_autocomplete_subtitle_Page)
         mSubtitlePage = root.findViewById(R.id.cb_subtitle_page)
         mSubtitleTitle = root.findViewById(R.id.txt_subtitle_title)
+        mSubtitleFileName = root.findViewById(R.id.txt_subtitle_file_page_name)
         mSubtitleContent = root.findViewById(R.id.txt_subtitle_content)
         mNavBeforeText = root.findViewById(R.id.nav_before_text)
         mNavNextText = root.findViewById(R.id.nav_next_text)
         mRefresh = root.findViewById(R.id.nav_refresh)
+        mDraw = root.findViewById(R.id.nav_draw)
 
         mLabelChapter = getString(R.string.popup_reading_subtitle_chapter)
         mLabelText = getString(R.string.popup_reading_subtitle_text)
@@ -47,6 +59,7 @@ class PopupSubtitleReader : Fragment() {
         mNavNextText.setOnClickListener { getNextText() }
 
         mRefresh.setOnClickListener { SubTitleController.findSubtitle(requireContext()) }
+        mDraw.setOnClickListener { drawSelectedText() }
 
         mSubtitlePageAutoComplete.onItemClickListener =
             AdapterView.OnItemClickListener { parent, _, position, _ ->
@@ -80,6 +93,40 @@ class PopupSubtitleReader : Fragment() {
             selectedPage(pageKey)
         }
 
+        private var isDrawing = false
+        fun drawSelectedText() {
+            if (pageSelected == null)
+                return
+
+            val view : PageImageView? = ReaderFragment.getCurrencyImageView()
+            if (view != null && pageSelected!!.texts.isNotEmpty()) {
+                val image :Bitmap = view.drawToBitmap(Bitmap.Config.ARGB_8888)
+                val canvas = Canvas(image)
+                val paint = Paint()
+                paint.color = Color.RED
+                paint.strokeWidth = 1f
+                paint.style = Paint.Style.STROKE
+                for (text in pageSelected!!.texts) {
+                    canvas.drawText(
+                        text.sequence.toString(),
+                        text.x1.toFloat(),
+                        text.y1.toFloat(),
+                        paint
+                    )
+                    canvas.drawRect(
+                        text.x1.toFloat(),
+                        text.y1.toFloat(),
+                        text.x2.toFloat(),
+                        text.y2.toFloat(),
+                        paint
+                    )
+                }
+                view.draw(canvas)
+                isDrawing = true
+            }
+
+        }
+
         fun setChapter(context: Context, chapter: Chapter?) {
             chapterSelected = chapter
             mListPages.clear()
@@ -101,11 +148,15 @@ class PopupSubtitleReader : Fragment() {
         }
 
         private fun setPage(page: Page?) {
+            isDrawing = false
             pageSelected = page
-            if (pageSelected != null && pageSelected!!.texts.isNotEmpty())
+            if (pageSelected != null && pageSelected!!.texts.isNotEmpty()) {
+                INSTANCE.mSubtitleFileName.text = pageSelected!!.name
                 setText(pageSelected!!.texts[0])
-            else
+            } else {
+                INSTANCE.mSubtitleFileName.text = ""
                 setText(null)
+            }
         }
 
         private fun setText(text: Text?) {

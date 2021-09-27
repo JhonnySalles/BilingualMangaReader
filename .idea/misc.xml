@@ -21,7 +21,6 @@
         <entry key="..\:/Projeto/MangaReader/app/src/main/res/layout/popup_subtitle_configuration.xml" value="0.33" />
         <entry key="..\:/Projeto/MangaReader/app/src/main/res/layout/popup_subtitle_reader.xml" value="0.33" />
         <entry key="..\:/Projeto/MangaReader/app/src/main/res/layout/reader_color_filter_settings.xml" value="0.12239583333333333" />
-        <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/drawable-v21/custom_ripple.xml" value="0.24010416666666667" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.38333333333333336" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/drawable/ic_baseline_fullscreen.xml" value="0.38333333333333336" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/drawable/ic_baseline_landscape.xml" value="0.38333333333333336" />
@@ -65,12 +64,10 @@
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/fragment_reader.xml" value="0.20572916666666666" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/fragment_reader_page.xml" value="0.20572916666666666" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/list_item.xml" value="0.20572916666666666" />
-        <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/manga_grid_card.xml" value="0.20969202898550723" />
-        <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/manga_line_card.xml" value="0.20969202898550723" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/nav_header_main.xml" value="0.20208333333333334" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/popup_reader_color_filter.xml" value="0.228125" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/popup_subtitle_configuration.xml" value="0.215625" />
-        <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/popup_subtitle_reader.xml" value="0.45" />
+        <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/popup_subtitle_reader.xml" value="0.215625" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/menu/main_menu.xml" value="0.20208333333333334" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/menu/main_menu_drawer.xml" value="0.20208333333333334" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/menu/menu_reader.xml" value="0.20572916666666666" />

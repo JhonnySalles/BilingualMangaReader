@@ -132,7 +132,7 @@ class SubTitleController {
 
             val image: InputStream? = mParse.getPage(currentPage)
             val hash: String? = DigestUtils.md5Hex(image)
-            var pageName: String? = mParse.getPageName(currentPage)
+            var pageName: String? = mParse.getPagePath(currentPage)
 
             if (pageName == null || pageName.isEmpty()) {
                 Toast.makeText(
@@ -199,7 +199,7 @@ class SubTitleController {
         ): SubTitle {
             val image: InputStream? = mParse.getPage(pageNumber)
             val hash: String? = DigestUtils.md5Hex(image)
-            var pageName: String? = mParse.getPageName(pageNumber)
+            var pageName: String? = mParse.getPagePath(pageNumber)
 
             pageName = if (pageName!!.contains('/'))
                 pageName.substringAfterLast("/")

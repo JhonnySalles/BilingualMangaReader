@@ -61,17 +61,10 @@ class RarParse : Parse {
         return subtitles
     }
 
-    override fun getPageName(num: Int): String? {
-        if (mHeaders.size < num)
-            return null
-        return getName(mHeaders[num])
-    }
-
     override fun getPagePath(num: Int): String? {
         if (mHeaders.size < num)
             return null
-        val name = mHeaders[num].fileName
-        return mHeaders[num].fileNameString
+        return getName(mHeaders[num])
     }
 
     override fun getPage(num: Int): InputStream? {

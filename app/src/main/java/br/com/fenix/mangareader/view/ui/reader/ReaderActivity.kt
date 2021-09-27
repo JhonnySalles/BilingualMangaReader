@@ -42,7 +42,12 @@ class ReaderActivity : AppCompatActivity() {
 
     companion object {
         private lateinit var mPopupTab: TabLayout
+        private lateinit var mToolbarSubTitle: TextView
         fun selectTabReader() = mPopupTab.selectTab(mPopupTab.getTabAt(0), true)
+        fun setSubtitle(text : String) {
+            if (::mToolbarSubTitle.isInitialized)
+                mToolbarSubTitle.text = text
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,6 +56,7 @@ class ReaderActivity : AppCompatActivity() {
 
         mToolbar = findViewById(R.id.toolbar_reader)
         mToolbarTitle = findViewById(R.id.tolbar_title_custom)
+        mToolbarSubTitle = findViewById(R.id.tolbar_subtitle_custom)
         setSupportActionBar(mToolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(true)
 
@@ -105,7 +111,7 @@ class ReaderActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             if (Intent.ACTION_VIEW == intent.action) {
-                val fragment: ReaderFragment? = ReaderFragment.create(File(intent.data!!.path!!))
+                val fragment: ReaderFragment = ReaderFragment.create(File(intent.data!!.path!!))
                 setFragment(fragment)
             } else {
                 val extras = intent.extras

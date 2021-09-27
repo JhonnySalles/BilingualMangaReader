@@ -28,5 +28,9 @@
     <dimen name="manga_line_sub_title">10dp</dimen>
 
     <dimen name="title_size">20sp</dimen>
-    <dimen name="title_small_size">16sp</dimen>
+    <dimen name="title_small_size">14sp</dimen>
+
+    <dimen name="popup_reader_title">15sp</dimen>
+    <dimen name="popup_reader_file_page_name">10sp</dimen>
+    <dimen name="popup_reader_text">20sp</dimen>
 </resources>

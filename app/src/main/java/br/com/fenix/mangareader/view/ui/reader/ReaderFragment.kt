@@ -44,7 +44,6 @@ import kotlin.math.min
 
 class ReaderFragment() : Fragment(), View.OnTouchListener {
 
-    var mViewPager: PageViewPager? = null
     var mPageNavLayout: LinearLayout? = null
     var mPopupSubtitle: FrameLayout? = null
     var mPageSeekBar: SeekBar? = null
@@ -78,16 +77,14 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
 
     companion object {
         var mCurrentPage = 0
-        private var mCacheFolder = 0
-        private const val mCacheFolder1 = "a"
-        private const val mCacheFolder2 = "b"
-        private const val mCacheFolder3 = "c"
+        private var mCacheFolderIndex = 0
+        private val mCacheFolder = arrayOf("a", "b", "c", "d")
 
         fun create(): ReaderFragment {
-            if (mCacheFolder >= 2)
-                mCacheFolder = 0
+            if (mCacheFolderIndex >= 2)
+                mCacheFolderIndex = 0
             else
-                mCacheFolder += 1
+                mCacheFolderIndex += 1
 
             val fragment = ReaderFragment()
             val args = Bundle()
@@ -96,10 +93,10 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
         }
 
         fun create(path: File): ReaderFragment {
-            if (mCacheFolder >= 2)
-                mCacheFolder = 0
+            if (mCacheFolderIndex >= 2)
+                mCacheFolderIndex = 0
             else
-                mCacheFolder += 1
+                mCacheFolderIndex += 1
 
             val fragment = ReaderFragment()
             val args = Bundle()
@@ -109,16 +106,24 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
         }
 
         fun create(manga: Manga): ReaderFragment {
-            if (mCacheFolder >= 2)
-                mCacheFolder = 0
+            if (mCacheFolderIndex >= 2)
+                mCacheFolderIndex = 0
             else
-                mCacheFolder += 1
+                mCacheFolderIndex += 1
 
             val fragment = ReaderFragment()
             val args = Bundle()
             args.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, manga)
             fragment.arguments = args
             return fragment
+        }
+
+        private var mCurrentFragment: FrameLayout? = null
+        var mViewPager: PageViewPager? = null
+        fun getCurrencyImageView(): PageImageView? {
+            if (mCurrentFragment == null)
+                return null
+            return mCurrentFragment!!.findViewById(R.id.page_image_view) as PageImageView
         }
     }
 
@@ -180,11 +185,7 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
 
             // workaround: extract rar achive
             if (mParse is RarParse) {
-                val child = when (mCacheFolder) {
-                    0 -> mCacheFolder1
-                    1 -> mCacheFolder2
-                    else -> mCacheFolder3
-                }
+                val child = mCacheFolder[mCacheFolderIndex]
                 val cacheDir = File(requireActivity().externalCacheDir, child)
                 if (!cacheDir.exists()) {
                     cacheDir.mkdir()
@@ -239,7 +240,7 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
         mPageNavTextView = mPageNavLayout!!.findViewById<View>(R.id.nav_reader_title) as TextView
         mViewPager = view.findViewById<View>(R.id.fragment_reader) as PageViewPager
         mViewPager!!.adapter = mPagerAdapter
-        mViewPager!!.offscreenPageLimit = 3
+        mViewPager!!.offscreenPageLimit = 4
         mViewPager!!.setOnTouchListener(this)
         mViewPager!!.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
             override fun onPageSelected(position: Int) {
@@ -379,6 +380,7 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
 
         if (mManga != null)
             SubTitleController.changeSubtitleInReader(requireContext(), mManga!!, mCurrentPage)
+        ReaderActivity.setSubtitle(mParse?.getPagePath(page)!!)
     }
 
     inner class ComicPagerAdapter : PagerAdapter() {
@@ -390,12 +392,18 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
             return mParse?.numPages() ?: 1
         }
 
+        override fun setPrimaryItem(container: ViewGroup, position: Int, `object`: Any) {
+            if (mCurrentFragment !== `object`)
+                mCurrentFragment = `object` as FrameLayout
+            super.setPrimaryItem(container, position, `object`)
+        }
+
         override fun instantiateItem(container: ViewGroup, position: Int): Any {
             val inflater =
                 requireActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val layout: View = inflater.inflate(R.layout.fragment_reader_page, container, false)
             val pageImageView: PageImageView =
-                layout.findViewById<View>(R.id.pageImageView) as PageImageView
+                layout.findViewById<View>(R.id.page_image_view) as PageImageView
             if (mReaderMode === ReaderMode.ASPECT_FILL) pageImageView.setTranslateToRightEdge(!mIsLeftToRight)
             pageImageView.setViewMode(mReaderMode)
             pageImageView.setOnTouchListener(this@ReaderFragment)
@@ -411,7 +419,7 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
             mPicasso!!.cancelRequest(mTargets[position])
             mTargets.delete(position)
             container.removeView(layout)
-            val iv = layout.findViewById<View>(R.id.pageImageView) as ImageView
+            val iv = layout.findViewById<View>(R.id.page_image_view) as ImageView
             val drawable = iv.drawable
             if (drawable is BitmapDrawable) {
                 val bm = drawable.bitmap
@@ -447,22 +455,22 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
 
         private fun setVisibility(imageView: Int, progressBar: Int, reloadButton: Int) {
             val layout = mLayout.get()
-            layout!!.findViewById<View>(R.id.pageImageView).visibility = imageView
-            layout.findViewById<View>(R.id.pageProgressBar).visibility = progressBar
-            layout.findViewById<View>(R.id.reloadButton).visibility = reloadButton
+            layout!!.findViewById<View>(R.id.page_image_view).visibility = imageView
+            layout.findViewById<View>(R.id.load_progress_bar).visibility = progressBar
+            layout.findViewById<View>(R.id.reload_Button).visibility = reloadButton
         }
 
         override fun onBitmapLoaded(bitmap: Bitmap, from: LoadedFrom) {
             val layout = mLayout.get() ?: return
             setVisibility(View.VISIBLE, View.GONE, View.GONE)
-            val iv = layout.findViewById<View>(R.id.pageImageView) as ImageView
+            val iv = layout.findViewById<View>(R.id.page_image_view) as ImageView
             iv.setImageBitmap(bitmap)
         }
 
         override fun onBitmapFailed(p0: Exception, errorDrawable: Drawable?) {
             val layout = mLayout.get() ?: return
             setVisibility(View.GONE, View.GONE, View.VISIBLE)
-            val ib = layout.findViewById<View>(R.id.reloadButton) as ImageButton
+            val ib = layout.findViewById<View>(R.id.reload_Button) as ImageButton
             ib.setOnClickListener(this)
         }
 
@@ -512,7 +520,7 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
             if (child is ViewGroup) {
                 updatePageViews(child)
             } else if (child is PageImageView) {
-                val view: PageImageView = child as PageImageView
+                val view: PageImageView = child
                 if (mReaderMode === ReaderMode.ASPECT_FILL) view.setTranslateToRightEdge(
                     !mIsLeftToRight
                 )
@@ -564,9 +572,7 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
         }
     }
 
-    fun isFullscreen(): Boolean {
-        return mIsFullscreen
-    }
+    fun isFullscreen(): Boolean = mIsFullscreen
 
     fun hitBeginning() {
         if (mManga != null) {
