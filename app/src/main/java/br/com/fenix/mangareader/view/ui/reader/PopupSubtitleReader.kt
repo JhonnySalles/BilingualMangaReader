@@ -93,19 +93,25 @@ class PopupSubtitleReader : Fragment() {
             selectedPage(pageKey)
         }
 
+        private var imageBackup : Bitmap? = null
         private var isDrawing = false
         fun drawSelectedText() {
-            if (pageSelected == null)
+            if (pageSelected == null || pageSelected!!.texts.isEmpty())
                 return
 
-            val view : PageImageView? = ReaderFragment.getCurrencyImageView()
-            if (view != null && pageSelected!!.texts.isNotEmpty()) {
+            val view : PageImageView = ReaderFragment.getCurrencyImageView() ?: return
+            if (isDrawing) {
+                view.setImageBitmap(imageBackup)
+                isDrawing = false
+            } else {
+                imageBackup = view.drawToBitmap(Bitmap.Config.ARGB_8888)
                 val image :Bitmap = view.drawToBitmap(Bitmap.Config.ARGB_8888)
                 val canvas = Canvas(image)
                 val paint = Paint()
                 paint.color = Color.RED
-                paint.strokeWidth = 1f
+                paint.strokeWidth = 3f
                 paint.style = Paint.Style.STROKE
+                paint.textSize = 50f
                 for (text in pageSelected!!.texts) {
                     canvas.drawText(
                         text.sequence.toString(),
@@ -121,7 +127,7 @@ class PopupSubtitleReader : Fragment() {
                         paint
                     )
                 }
-                view.draw(canvas)
+                view.setImageBitmap(image)
                 isDrawing = true
             }
 
