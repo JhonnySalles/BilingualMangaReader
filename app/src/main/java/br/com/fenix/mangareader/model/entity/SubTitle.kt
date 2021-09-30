@@ -25,7 +25,7 @@ data class SubTitle(
     var chapterKey: String = "",
 
     @ColumnInfo(name = DataBaseConsts.SUBTITLES.COLUMNS.PAGE_KEY)
-    var pageKey: Int = 0,
+    var pageKey: String = "",
 
     @ColumnInfo(name = DataBaseConsts.SUBTITLES.COLUMNS.PAGE)
     var pageCount: Int = 0,
@@ -51,7 +51,7 @@ data class SubTitle(
         id_manga: Long = 0,
         language: Languages,
         chapterKey: String = "",
-        pageKey: Int = 0,
+        pageKey: String = "",
         pageCount: Int = 0,
         path: String = "",
         dateCreate: LocalDateTime? = LocalDateTime.MIN,
@@ -64,7 +64,7 @@ data class SubTitle(
         id_manga: Long = 0,
         language: Languages,
         chapterKey: String = "",
-        pageKey: Int = 0,
+        pageKey: String = "",
         pageCount: Int = 0,
         path: String = "",
         chapter: Chapter?

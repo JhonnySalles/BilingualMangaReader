@@ -19,6 +19,7 @@ class PageViewPager(context: Context, attributeSet: AttributeSet) : ViewPager(co
     }
 
     override fun onTouchEvent(ev: MotionEvent?): Boolean {
+        performClick()
         if (ev!!.action == MotionEvent.ACTION_UP) {
             val diff = ev.x - mStartX
             if (diff > 0 && currentItem == 0) {
@@ -34,5 +35,10 @@ class PageViewPager(context: Context, attributeSet: AttributeSet) : ViewPager(co
         if (ev.action == MotionEvent.ACTION_DOWN)
             mStartX = ev.x
         return super.onInterceptTouchEvent(ev)
+    }
+
+    override fun performClick(): Boolean {
+        super.performClick()
+        return true
     }
 }

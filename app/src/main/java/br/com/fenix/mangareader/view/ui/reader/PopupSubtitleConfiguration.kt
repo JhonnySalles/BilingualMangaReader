@@ -1,7 +1,6 @@
 package br.com.fenix.mangareader.view.ui.reader
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -11,9 +10,9 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import br.com.fenix.mangareader.R
-import br.com.fenix.mangareader.model.entity.Chapter
 import br.com.fenix.mangareader.service.controller.SubTitleController
 import br.com.fenix.mangareader.service.repository.SubTitleRepository
 import br.com.fenix.mangareader.util.constants.GeneralConsts
@@ -21,7 +20,6 @@ import br.com.fenix.mangareader.util.helpers.Util
 import com.google.android.material.textfield.TextInputLayout
 import java.io.File
 import java.io.InputStream
-import java.util.*
 
 class PopupSubtitleConfiguration : Fragment() {
 
@@ -29,6 +27,8 @@ class PopupSubtitleConfiguration : Fragment() {
     private lateinit var mLoadExternalSubtitleAutoComplete: AutoCompleteTextView
     private lateinit var mSubtitleSelected: TextInputLayout
     private lateinit var mSubtitleSelectedAutoComplete: AutoCompleteTextView
+
+    private lateinit var mSubTitleController: SubTitleController
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,14 +41,24 @@ class PopupSubtitleConfiguration : Fragment() {
             root.findViewById(R.id.menu_autocomplete_external_subtitle_select_path)
         mSubtitleSelected = root.findViewById(R.id.cb_subtitle_selected)
         mSubtitleSelectedAutoComplete = root.findViewById(R.id.menu_autocomplete_subtitle_selected)
-        clearSubtitlesSelected(requireContext())
 
-        mSubtitleSelected.setOnClickListener { mSubtitleSelectedAutoComplete.setText("", false) }
+        mSubTitleController = SubTitleController.getInstance(requireContext())
+        mSubTitleController.clearSubtitlesSelected()
+
+        mSubtitleSelected.setOnClickListener {
+            mSubtitleSelectedAutoComplete.setText("", false)
+
+            if (mSubTitleController.chaptersKeys.value == null || mSubTitleController.chaptersKeys.value!!.isEmpty())
+                Toast.makeText(
+                    requireActivity(),
+                    getString(R.string.popup_reading_import_subtitle_is_empty),
+                    Toast.LENGTH_SHORT
+                ).show()
+        }
 
         mSubtitleSelectedAutoComplete.onItemClickListener =
             AdapterView.OnItemClickListener { parent, _, position, _ ->
-                selectedSubtitle(
-                    requireContext(),
+                mSubTitleController.selectedSubtitle(
                     parent.getItemAtPosition(position).toString()
                 )
                 ReaderActivity.selectTabReader()
@@ -56,7 +66,7 @@ class PopupSubtitleConfiguration : Fragment() {
 
         mLoadExternalSubtitleAutoComplete.setOnClickListener {
             mLoadExternalSubtitleAutoComplete.setText("")
-            clearSubtitlesSelected(requireContext())
+            mSubTitleController.clearSubtitlesSelected()
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                 addCategory(Intent.CATEGORY_OPENABLE)
                 type = "application/json"
@@ -64,13 +74,14 @@ class PopupSubtitleConfiguration : Fragment() {
             startActivityForResult(intent, 200)
         }
 
-        if (SubTitleController.mManga != null && SubTitleController.mManga!!.id != null) {
+        if (mSubTitleController.mManga != null && mSubTitleController.mManga!!.id != null) {
             val mSubtitleRepository = SubTitleRepository(requireContext())
-            val lastSubtitle = mSubtitleRepository.findByIdManga(SubTitleController.mManga!!.id!!)
+            val lastSubtitle = mSubtitleRepository.findByIdManga(mSubTitleController.mManga!!.id!!)
             if (lastSubtitle != null)
-                initialize(requireContext(), lastSubtitle.chapterKey, lastSubtitle.pageKey)
+                mSubTitleController.initialize(lastSubtitle.chapterKey, lastSubtitle.pageKey)
         }
 
+        observer()
         return root
     }
 
@@ -85,8 +96,8 @@ class PopupSubtitleConfiguration : Fragment() {
                         val inputStream: InputStream = File(path).inputStream()
                         val inputString = inputStream.bufferedReader().use { it.readText() }
                         mLoadExternalSubtitleAutoComplete.setText(path)
-                        SubTitleController.getChapterFromJson(listOf(inputString))
-                        setSubtitlesSelected(requireContext(), SubTitleController.mComboList)
+                        mSubTitleController.getChapterFromJson(listOf(inputString))
+                        //setSubtitlesSelected(requireContext(), SubTitleController.mComboList)
                     } catch (e: Exception) {
                         Log.e(GeneralConsts.TAG.LOG, "Erro ao abrir o arquivo " + e.message)
                     }
@@ -95,135 +106,24 @@ class PopupSubtitleConfiguration : Fragment() {
         }
     }
 
-    fun isInitialized() = ::mSubtitleSelectedAutoComplete.isInitialized
-
-    init {
-        INSTANCE = this
-    }
-
-    companion object {
-        lateinit var INSTANCE: PopupSubtitleConfiguration
-
-        private var mComboListInternal: HashMap<String, Chapter> = hashMapOf()
-        private var mComboListSelected: HashMap<String, Chapter> = hashMapOf()
-        var isSelected = false
-
-        fun initialize(context: Context, chapterKey: String, pageKey: Int) {
-            if (chapterKey.isEmpty())
-                return
-
-            selectedSubtitle(context, chapterKey)
-            PopupSubtitleReader.initialize(pageKey)
-        }
-
-        fun clearSubtitlesSelected(context: Context) {
-            INSTANCE.mSubtitleSelectedAutoComplete.setText("")
-            isSelected = false
-            INSTANCE.mSubtitleSelectedAutoComplete.setAdapter(
+    private fun observer() {
+        mSubTitleController.chaptersKeys.observe(viewLifecycleOwner, {
+            mSubtitleSelectedAutoComplete.setAdapter(
                 ArrayAdapter(
-                    context,
+                    requireContext(),
                     R.layout.list_item,
-                    mComboListInternal.keys.toTypedArray().sortedArray()
+                    it.sorted()
                 )
             )
-            PopupSubtitleReader.clearSubtitlesSelected()
-        }
+        })
 
-        fun setSubtitlesSelected(context: Context, list: HashMap<String, Chapter>) {
-            mComboListSelected = list
-            isSelected = true
-            INSTANCE.mSubtitleSelectedAutoComplete.setAdapter(
-                ArrayAdapter(
-                    context,
-                    R.layout.list_item,
-                    mComboListSelected.keys.toTypedArray().sortedArray()
-                )
-            )
-            INSTANCE.mSubtitleSelectedAutoComplete.setText(mComboListSelected.keys.first())
-            selectedSubtitle(context, mComboListSelected.keys.first())
-        }
+        mSubTitleController.chapterSelected.observe(viewLifecycleOwner, {
+            var text = ""
+            if (it != null)
+                text = mSubTitleController.getChapterKey(it)
 
-        fun setSubtitles(context: Context, list: HashMap<String, Chapter>) {
-            mComboListInternal = list
-
-
-            if (::INSTANCE.isInitialized && INSTANCE.isInitialized())
-                    INSTANCE.mSubtitleSelectedAutoComplete.setAdapter(
-                        ArrayAdapter(
-                            context,
-                            R.layout.list_item,
-                            mComboListInternal.keys.toTypedArray().sortedArray()
-                        )
-                    )
-        }
-
-        fun selectedSubtitle(context: Context, key: String) {
-            if (key.isNotEmpty() && getSubtitle().containsKey(key)) {
-                INSTANCE.mSubtitleSelectedAutoComplete.setText(key, false)
-                PopupSubtitleReader.setChapter(
-                    context,
-                    getSubtitle()[key]
-                )
-            }
-        }
-
-        fun getSubtitle(): HashMap<String, Chapter> =
-            if (isSelected) mComboListSelected else mComboListInternal
-
-        fun getSelectedChapter(): Chapter? {
-            return if (INSTANCE.mSubtitleSelectedAutoComplete.text.toString().isNotEmpty()) {
-                getSubtitle()[INSTANCE.mSubtitleSelectedAutoComplete.text.toString()]
-            } else
-                null
-        }
-
-        fun getNextSelectSubtitle(context: Context): Boolean {
-            val index: Int = if (INSTANCE.mSubtitleSelectedAutoComplete.text.toString()
-                    .isNotEmpty()
-            ) getSubtitle().keys.indexOf(INSTANCE.mSubtitleSelectedAutoComplete.text.toString())
-                .plus(1) else 0
-
-            return if (getSubtitle().keys.size >= index) {
-                PopupSubtitleReader.setChapter(
-                    context,
-                    getSubtitle()[getSubtitle().keys.toTypedArray()[index]]
-                )
-                INSTANCE.mSubtitleSelectedAutoComplete.setText(
-                    getSubtitle().keys.toTypedArray()[index],
-                    false
-                )
-                SubTitleController.updatePageSelect()
-                true
-            } else
-                false
-        }
-
-        fun getBeforeSelectSubtitle(context: Context): Boolean {
-            val index: Int = if (INSTANCE.mSubtitleSelectedAutoComplete.text.toString()
-                    .isNotEmpty()
-            ) getSubtitle().keys.indexOf(INSTANCE.mSubtitleSelectedAutoComplete.text.toString())
-                .minus(1) else 0
-
-            return if (index >= 0) {
-                PopupSubtitleReader.setChapter(
-                    context,
-                    getSubtitle()[getSubtitle().keys.toTypedArray()[index]]
-                )
-                INSTANCE.mSubtitleSelectedAutoComplete.setText(
-                    getSubtitle().keys.toTypedArray()[index],
-                    false
-                )
-                SubTitleController.updatePageSelect()
-                true
-            } else
-                false
-        }
-
-        fun getPathSubtitle(): String =
-            if (isSelected) INSTANCE.mLoadExternalSubtitle.editText?.text.toString() else ""
-
-        fun getChapterKey(): String =
-            if (!::INSTANCE.isInitialized || !INSTANCE.isInitialized()) "" else INSTANCE.mSubtitleSelectedAutoComplete.text.toString()
+            mSubtitleSelectedAutoComplete.setText(text, false)
+        })
 
     }
 

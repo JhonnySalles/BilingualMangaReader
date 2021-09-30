@@ -67,6 +67,7 @@
     <string name="popup_reading_import_subtitle_title">Importar arquivo</string>
     <string name="popup_reading_import_subtitle_file">Selecione um arquivo de legenda</string>
     <string name="popup_reading_import_subtitle_selected">Legenda selecionada</string>
+    <string name="popup_reading_import_subtitle_is_empty">Nenhuma legenda encontrada</string>
 
     <!-- READER POPUP SUBTITLE -->
     <string name="popup_reading_subtitle_title">Legenda</string>

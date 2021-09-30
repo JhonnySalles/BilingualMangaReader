@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.util.SparseArray
 import android.view.*
@@ -16,6 +17,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
@@ -42,15 +44,15 @@ import java.util.*
 import kotlin.math.max
 import kotlin.math.min
 
-class ReaderFragment() : Fragment(), View.OnTouchListener {
+class ReaderFragment : Fragment(), View.OnTouchListener {
 
-    var mPageNavLayout: LinearLayout? = null
-    var mPopupSubtitle: FrameLayout? = null
-    var mPageSeekBar: SeekBar? = null
-    var mPageNavTextView: TextView? = null
-    var mPagerAdapter: ComicPagerAdapter? = null
-    var mPreferences: SharedPreferences? = null
-    var mGestureDetector: GestureDetector? = null
+    private var mPageNavLayout: LinearLayout? = null
+    private var mPopupSubtitle: FrameLayout? = null
+    private var mPageSeekBar: SeekBar? = null
+    private var mPageNavTextView: TextView? = null
+    private var mPagerAdapter: ComicPagerAdapter? = null
+    private var mPreferences: SharedPreferences? = null
+    private var mGestureDetector: GestureDetector? = null
 
     private var mResourceViewMode: HashMap<Int, ReaderMode>? = null
     var mIsFullscreen = false
@@ -67,9 +69,10 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
     var mNewManga: Manga? = null
     var mNewMangaTitle = 0
     private lateinit var mStorage: Storage
+    private lateinit var mSubtitleController : SubTitleController
 
     init {
-        mResourceViewMode = HashMap<Int, ReaderMode>();
+        mResourceViewMode = HashMap<Int, ReaderMode>()
         mResourceViewMode!![R.id.view_mode_aspect_fill] = ReaderMode.ASPECT_FILL
         mResourceViewMode!![R.id.view_mode_aspect_fit] = ReaderMode.ASPECT_FIT
         mResourceViewMode!![R.id.view_mode_fit_width] = ReaderMode.FIT_WIDTH
@@ -152,7 +155,8 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
 
                 mParse = ParseFactory.create(file)
                 if (mParse != null) {
-                    SubTitleController.getListChapter(requireContext(), mParse!!)
+                    mSubtitleController = SubTitleController.getInstance(requireContext())
+                    mSubtitleController.getListChapter(mParse!!)
                     mFilename = file.name
                     mCurrentPage = max(1, min(mCurrentPage, mParse!!.numPages()))
                     mComicHandler = MangaHandler(mParse)
@@ -183,7 +187,7 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
                 )!!
             ) == PageMode.Comics
 
-            // workaround: extract rar achive
+            // workaround: extract rar archive
             if (mParse is RarParse) {
                 val child = mCacheFolder[mCacheFolderIndex]
                 val cacheDir = File(requireActivity().externalCacheDir, child)
@@ -379,7 +383,7 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
             mCurrentPage = 0
 
         if (mManga != null)
-            SubTitleController.changeSubtitleInReader(requireContext(), mManga!!, mCurrentPage)
+            mSubtitleController.changeSubtitleInReader(mManga!!, mCurrentPage)
         ReaderActivity.setSubtitle(mParse?.getPagePath(page)!!)
     }
 
@@ -451,7 +455,7 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
 
     inner class MyTarget(layout: View, val position: Int) : Target,
         View.OnClickListener {
-        private val mLayout: WeakReference<View> = WeakReference(layout);
+        private val mLayout: WeakReference<View> = WeakReference(layout)
 
         private fun setVisibility(imageView: Int, progressBar: Int, reloadButton: Int) {
             val layout = mLayout.get()
@@ -549,7 +553,7 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
             flag = flag or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
             flag = flag or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
 
-            mViewPager!!.setSystemUiVisibility(flag)
+            mViewPager!!.systemUiVisibility = flag
             mPageNavLayout!!.visibility = View.INVISIBLE
             mPopupSubtitle!!.visibility = View.INVISIBLE
         } else {
@@ -557,18 +561,17 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
             var flag = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                     or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
             flag = flag or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-            mViewPager!!.setSystemUiVisibility(flag)
+            mViewPager!!.systemUiVisibility = flag
             mPageNavLayout!!.visibility = View.VISIBLE
             mPopupSubtitle!!.visibility = View.VISIBLE
 
             // status bar & navigation bar background won't show in some cases
 
-            Handler().postDelayed({
+            Handler(Looper.getMainLooper()).postDelayed({
                 val w: Window = requireActivity().window
-                w.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+                w.clearFlags(ContextCompat.getColor(requireContext(), R.color.translucent_status))
                 w.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             }, 300)
-
         }
     }
 
@@ -612,7 +615,7 @@ class ReaderFragment() : Fragment(), View.OnTouchListener {
     private fun updateSeekBar() {
         val seekRes: Int =
             if (mIsLeftToRight) R.drawable.reader_nav_progress else R.drawable.reader_nav_progress_inverse
-        val d: Drawable = requireActivity().resources.getDrawable(seekRes)
+        val d: Drawable? = ContextCompat.getDrawable(requireActivity(), seekRes)
         val bounds = mPageSeekBar!!.progressDrawable.bounds
         mPageSeekBar!!.progressDrawable = d
         mPageSeekBar!!.progressDrawable.bounds = bounds

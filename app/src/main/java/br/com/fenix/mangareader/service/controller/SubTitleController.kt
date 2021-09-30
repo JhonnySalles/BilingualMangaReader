@@ -1,20 +1,23 @@
 package br.com.fenix.mangareader.service.controller
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.util.Log
 import android.widget.Toast
 import androidx.collection.arraySetOf
+import androidx.core.view.drawToBitmap
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import br.com.fenix.mangareader.R
-import br.com.fenix.mangareader.model.entity.Chapter
-import br.com.fenix.mangareader.model.entity.Manga
-import br.com.fenix.mangareader.model.entity.SubTitle
-import br.com.fenix.mangareader.model.entity.Volume
+import br.com.fenix.mangareader.model.entity.*
 import br.com.fenix.mangareader.model.enums.Languages
 import br.com.fenix.mangareader.service.parses.Parse
 import br.com.fenix.mangareader.service.repository.SubTitleRepository
 import br.com.fenix.mangareader.util.constants.GeneralConsts
-import br.com.fenix.mangareader.view.ui.reader.PopupSubtitleConfiguration
-import br.com.fenix.mangareader.view.ui.reader.PopupSubtitleReader
+import br.com.fenix.mangareader.view.ui.reader.PageImageView
 import br.com.fenix.mangareader.view.ui.reader.ReaderFragment
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
@@ -23,282 +26,506 @@ import org.apache.commons.codec.digest.DigestUtils
 import java.io.InputStream
 import java.util.*
 
-class SubTitleController {
+class SubTitleController private constructor(private val context: Context) {
+
+    private val mSubtitleRepository: SubTitleRepository = SubTitleRepository(context)
+    private lateinit var mParse: Parse
+    var mManga: Manga? = null
+    private var mLanguages: MutableSet<Languages> = arraySetOf()
+    private var mComboListInternal: HashMap<String, Chapter> = hashMapOf()
+    private var mComboListSelected: HashMap<String, Chapter> = hashMapOf()
+    private var mListPages: HashMap<String, Page> = hashMapOf()
+    var pathSubtitle: String = ""
+
+    private var mChaptersKeys: MutableLiveData<List<String>> = MutableLiveData()
+    var chaptersKeys: LiveData<List<String>> = mChaptersKeys
+    private var mPagesKeys: MutableLiveData<List<String>> = MutableLiveData()
+    var pagesKeys: LiveData<List<String>> = mPagesKeys
+
+    private var mChapterSelected: MutableLiveData<Chapter> = MutableLiveData()
+    var chapterSelected: LiveData<Chapter> = mChapterSelected
+    private var mPageSelected: MutableLiveData<Page> = MutableLiveData()
+    var pageSelected: LiveData<Page> = mPageSelected
+    private var mTextSelected: MutableLiveData<Text> = MutableLiveData()
+    var textSelected: LiveData<Text> = mTextSelected
+
+    private var mSelectedSubTitle: MutableLiveData<SubTitle> = MutableLiveData()
+    var selectedSubtitle: LiveData<SubTitle> = mSelectedSubTitle
+
+    private lateinit var mSubtitleLang: Languages
+    private lateinit var mTranslateLang: Languages
+    private var labelChapter: String =
+        context.resources.getString(R.string.popup_reading_subtitle_chapter)
+
+    var isSelected = false
+    private fun getSubtitle(): HashMap<String, Chapter> =
+        if (isSelected) mComboListSelected else mComboListInternal
+
+    init {
+        val sharedPreferences = GeneralConsts.getSharedPreferences(context)
+        if (sharedPreferences != null) {
+            try {
+                mSubtitleLang = Languages.valueOf(
+                    sharedPreferences.getString(
+                        GeneralConsts.KEYS.SUBTITLE.LANGUAGE,
+                        Languages.JAPANESE.toString()
+                    )!!
+                )
+                mTranslateLang = Languages.valueOf(
+                    sharedPreferences.getString(
+                        GeneralConsts.KEYS.SUBTITLE.TRANSLATE,
+                        Languages.PORTUGUESE.toString()
+                    )!!
+                )
+            } catch (e: Exception) {
+                Log.i(
+                    GeneralConsts.TAG.LOG,
+                    "Erro ao carregar as preferencias de linguagem - " + e.message
+                )
+            }
+        }
+    }
 
     companion object {
-        lateinit var mParse: Parse
-        var mManga: Manga? = null
-        var mLanguages: MutableSet<Languages> = arraySetOf()
-        var mComboList: HashMap<String, Chapter> = hashMapOf()
-        var mSubtitleLang: Languages = Languages.JAPANESE
-        var mTranslateLang: Languages = Languages.PORTUGUESE
-        private lateinit var mSubtitleRepository: SubTitleRepository
-        private lateinit var labelChapter: String
+        private lateinit var INSTANCE: SubTitleController
 
-        private fun initialize(context: Context) {
-            labelChapter = context.resources.getString(R.string.popup_reading_subtitle_chapter)
-            mSubtitleRepository = SubTitleRepository(context)
-            val sharedPreferences = GeneralConsts.getSharedPreferences(context)
-            if (sharedPreferences != null) {
+        fun getInstance(context: Context): SubTitleController {
+            if (!::INSTANCE.isInitialized)
+                INSTANCE = SubTitleController(context)
+            return INSTANCE
+        }
+    }
+
+    fun initialize(chapterKey: String, pageKey: String) {
+        if (chapterKey.isEmpty())
+            return
+
+        selectedSubtitle(chapterKey)
+        selectedPage(pageKey)
+    }
+
+    fun getPageKey(page: Page): String = page.number.toString().padStart(3, '0') + " " + page.name
+    fun getChapterKey(chapter: Chapter): String {
+        var number = if((chapter.chapter % 1).compareTo(0) == 0)
+            "%.0f".format(chapter.chapter)
+        else
+            "%.1f".format(chapter.chapter)
+        return chapter.language.name + " - " + labelChapter + " " + number.padStart(2, '0')
+    }
+
+
+    fun getListChapter(parse: Parse) = runBlocking { // this: CoroutineScope
+        launch { // launch a new coroutine and continue
+            mParse = parse
+            val listJson: List<String> = mParse.getSubtitles()
+            isSelected = false
+            getChapterFromJson(listJson)
+        }
+    }
+
+    fun getChapterFromJson(listJson: List<String>) {
+        mLanguages.clear()
+        getSubtitle().clear()
+        if (listJson.isNotEmpty()) {
+            val gson = Gson()
+            val listChapter: MutableList<Chapter> = arrayListOf()
+
+            listJson.forEach {
                 try {
-                    mSubtitleLang = Languages.valueOf(
-                        sharedPreferences.getString(
-                            GeneralConsts.KEYS.SUBTITLE.LANGUAGE,
-                            Languages.JAPANESE.toString()
-                        )!!
-                    )
-                    mTranslateLang = Languages.valueOf(
-                        sharedPreferences.getString(
-                            GeneralConsts.KEYS.SUBTITLE.TRANSLATE,
-                            Languages.PORTUGUESE.toString()
-                        )!!
-                    )
-                } catch (e: Exception) {
-                    Log.i(
-                        GeneralConsts.TAG.LOG,
-                        "Erro ao carregar as preferencias de linguagem - " + e.message
-                    )
-                }
-            }
-        }
-
-        fun getListChapter(context: Context, parse: Parse) = runBlocking { // this: CoroutineScope
-            launch { // launch a new coroutine and continue
-                mParse = parse
-                initialize(context)
-                val listJson: List<String> = mParse.getSubtitles()
-                getChapterFromJson(listJson)
-                PopupSubtitleConfiguration.setSubtitles(context, mComboList)
-            }
-        }
-
-        fun getChapterFromJson(listJson: List<String>) {
-            mLanguages.clear()
-            mComboList.clear()
-            if (listJson.isNotEmpty()) {
-                val gson = Gson()
-                val listChapter: MutableList<Chapter> = arrayListOf()
-
-                listJson.forEach {
+                    val volume: Volume = gson.fromJson(it, Volume::class.java)
+                    for (chapter in volume.chapters) {
+                        chapter.manga = volume.manga
+                        chapter.volume = volume.volume
+                        chapter.language = volume.language
+                    }
+                    listChapter.addAll(volume.chapters)
+                } catch (volExcept: Exception) {
                     try {
-                        val volume: Volume = gson.fromJson(it, Volume::class.java)
-                        for (chapter in volume.chapters) {
-                            chapter.manga = volume.manga
-                            chapter.volume = volume.volume
-                            chapter.language = volume.language
-                        }
-                        listChapter.addAll(volume.chapters)
-                    } catch (volExcept: Exception) {
+                        val chapter: Chapter = gson.fromJson(it, Chapter::class.java)
+                        listChapter.add(chapter)
+                    } catch (chapExcept: Exception) {
+                    }
+                }
+            }
+            setListChapter(listChapter)
+        }
+    }
+
+    private fun setListChapter(chapters: MutableList<Chapter>) {
+        if (chapters.isEmpty())
+            return
+
+        var lastLanguage: Languages = chapters[0].language
+        mLanguages.add(chapters[0].language)
+        for (chapter in chapters) {
+            if (lastLanguage != chapter.language) {
+                mLanguages.add(chapters[0].language)
+                lastLanguage = chapter.language
+            }
+            getSubtitle()[getChapterKey(chapter)] = chapter
+        }
+
+        mChaptersKeys.value = getSubtitle().keys.toTypedArray().sorted()
+    }
+
+    fun findSubtitle() {
+        val currentPage = ReaderFragment.mCurrentPage
+
+        if (currentPage < 0 || mParse.numPages() < currentPage) {
+            Toast.makeText(
+                context,
+                context.resources.getString(R.string.popup_reading_subtitle_not_find_subtitle),
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
+
+        val image: InputStream? = mParse.getPage(currentPage)
+        val hash: String? = DigestUtils.md5Hex(image)
+        var pageName: String? = mParse.getPagePath(currentPage)
+
+        if (pageName == null || pageName.isEmpty()) {
+            Toast.makeText(
+                context,
+                context.resources.getString(R.string.popup_reading_subtitle_not_find_subtitle),
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
+
+        pageName = if (pageName!!.contains('/'))
+            pageName.substringAfterLast("/")
+        else
+            pageName.substringAfterLast('\\')
+
+        var chapterKey = ""
+        var pageKey = ""
+        var pageNumber = 0
+        val subtitles = getSubtitle()
+        val keys = run {
+            val selectedLanguage = chapterSelected.value!!.language
+            subtitles.keys.filter { it.contentEquals(selectedLanguage.name) }
+        }
+
+        for (k in keys) {
+            var find = false
+            for (p in subtitles[k]?.pages!!) {
+                if (p.name.equals(pageName, true) || p.hash == hash) {
+                    chapterKey = k
+                    pageKey = p.number.toString()
+                    pageNumber = p.number
+                    find = true
+                    break
+                }
+            }
+            if (find)
+                break
+        }
+
+        if (chapterKey.isNotEmpty()) {
+            mSelectedSubTitle.value?.chapterKey = chapterKey
+            mSelectedSubTitle.value?.pageKey =
+                if (mListPages.keys.contains(pageKey)) pageKey else ""
+            updatePageSelect()
+            initialize(chapterKey, pageNumber.toString())
+
+            var text: String =
+                context.resources.getString(R.string.popup_reading_subtitle_find_subtitle)
+            Toast.makeText(
+                context,
+                text.format(subtitles[chapterKey]?.chapter.toString(), pageNumber.toString()),
+                Toast.LENGTH_SHORT
+            ).show()
+        } else
+            Toast.makeText(
+                context,
+                context.resources.getString(R.string.popup_reading_subtitle_not_find_subtitle),
+                Toast.LENGTH_SHORT
+            ).show()
+    }
+
+    private fun findSubtitle(
+        manga: Manga,
+        pageNumber: Int
+    ): SubTitle {
+        val image: InputStream? = mParse.getPage(pageNumber)
+        val hash: String? = DigestUtils.md5Hex(image)
+        var pageName: String? = mParse.getPagePath(pageNumber)
+
+        pageName = if (pageName!!.contains('/'))
+            pageName.substringAfterLast("/")
+        else
+            pageName.substringAfterLast('\\')
+
+        var chapterKey = ""
+        var pageNumber = 0
+        val subtitles = getSubtitle()
+        val keys = subtitles.keys
+
+        for (k in keys) {
+            var find = false
+            for (p in subtitles[k]?.pages!!) {
+                if (p.name.equals(pageName, true) || p.hash == hash) {
+                    chapterKey = k
+                    pageNumber = p.number
+                    find = true
+                    break
+                }
+            }
+            if (find)
+                break
+        }
+
+        return if (chapterKey.isNotEmpty()) {
+            SubTitle(
+                manga.id!!,
+                mSubtitleLang,
+                chapterKey,
+                "",
+                pageNumber,
+                pathSubtitle,
+                chapterSelected.value
+            )
+        } else
+            SubTitle(
+                manga.id!!,
+                mSubtitleLang,
+                "",
+                "",
+                pageNumber,
+                pathSubtitle,
+                null
+            )
+    }
+
+    fun changeSubtitleInReader(manga: Manga, pageNumber: Int) =
+        runBlocking { // this: CoroutineScope
+            launch {
+                mManga = manga
+                if (mSelectedSubTitle.value == null || mSelectedSubTitle.value?.id == null) {
+                    mSelectedSubTitle.value = mSubtitleRepository.findByIdManga(manga.id!!)
+
+                    if (mSelectedSubTitle.value == null)
                         try {
-                            val chapter: Chapter = gson.fromJson(it, Chapter::class.java)
-                            listChapter.add(chapter)
-                        } catch (chapExcept: Exception) {
+                            mSelectedSubTitle.value = findSubtitle(manga, pageNumber)
+                        } catch (e: java.lang.Exception) {
+                            Log.e(
+                                GeneralConsts.TAG.LOG,
+                                "Erro ao tentar encontrar o subtitle do arquivo. " + e.message
+                            )
+                            return@launch
                         }
-                    }
-                }
-                setListChapter(listChapter)
-            }
-        }
-
-        private fun setListChapter(chapters: MutableList<Chapter>) {
-            if (chapters.isEmpty())
-                return
-
-            var lastLanguage: Languages = chapters[0].language
-            mLanguages.add(chapters[0].language)
-            for (chapter in chapters) {
-                if (lastLanguage != chapter.language) {
-                    mLanguages.add(chapters[0].language)
-                    lastLanguage = chapter.language
                 }
 
-                mComboList[lastLanguage.name + " - " + labelChapter + " " + chapter.chapter] =
-                    chapter
-            }
+                if (mSelectedSubTitle.value?.pageCount != pageNumber) {
+                    val run = if (mSelectedSubTitle.value?.pageCount!! < pageNumber)
+                        getNextSelectPage()
+                    else
+                        getBeforeSelectPage(false)
 
-        }
-
-        fun findSubtitle(context: Context) {
-            val currentPage = ReaderFragment.mCurrentPage
-
-            if (currentPage < 0 || mParse.numPages() < currentPage) {
-                Toast.makeText(
-                    context,
-                    context.resources.getString(R.string.popup_reading_subtitle_not_find_subtitle),
-                    Toast.LENGTH_SHORT
-                ).show()
-                return
-            }
-
-            val image: InputStream? = mParse.getPage(currentPage)
-            val hash: String? = DigestUtils.md5Hex(image)
-            var pageName: String? = mParse.getPagePath(currentPage)
-
-            if (pageName == null || pageName.isEmpty()) {
-                Toast.makeText(
-                    context,
-                    context.resources.getString(R.string.popup_reading_subtitle_not_find_subtitle),
-                    Toast.LENGTH_SHORT
-                ).show()
-                return
-            }
-
-            pageName = if (pageName!!.contains('/'))
-                pageName.substringAfterLast("/")
-            else
-                pageName.substringAfterLast('\\')
-
-            var chapterKey = ""
-            var pageNumber = 0
-            val subtitles = PopupSubtitleConfiguration.getSubtitle()
-            val keys = if (PopupSubtitleConfiguration.getSelectedChapter() != null) {
-                val selectedLanguage = PopupSubtitleConfiguration.getSelectedChapter()!!.language
-                subtitles.keys.filter { it.contentEquals(selectedLanguage.name) }
-            } else
-                subtitles.keys
-
-            for (k in keys) {
-                var find = false
-                for (p in subtitles[k]?.pages!!) {
-                    if (p.name.equals(pageName, true) || p.hash == hash) {
-                        chapterKey = k
-                        pageNumber = p.number
-                        find = true
-                        break
-                    }
-                }
-                if (find)
-                    break
-            }
-
-            if (chapterKey.isNotEmpty()) {
-                mSelectedSubTitle?.chapterKey = chapterKey
-                mSelectedSubTitle?.pageKey =
-                    if (PopupSubtitleReader.mListPages.keys.contains(pageNumber)) pageNumber else 0
-                updatePageSelect()
-                PopupSubtitleConfiguration.initialize(context, chapterKey, pageNumber)
-
-                var text: String =
-                    context.resources.getString(R.string.popup_reading_subtitle_find_subtitle)
-                Toast.makeText(
-                    context,
-                    text.format(subtitles[chapterKey]?.chapter.toString(), pageNumber.toString()),
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else
-                Toast.makeText(
-                    context,
-                    context.resources.getString(R.string.popup_reading_subtitle_not_find_subtitle),
-                    Toast.LENGTH_SHORT
-                ).show()
-        }
-
-        private fun findSubtitle(
-            manga: Manga,
-            pageNumber: Int
-        ): SubTitle {
-            val image: InputStream? = mParse.getPage(pageNumber)
-            val hash: String? = DigestUtils.md5Hex(image)
-            var pageName: String? = mParse.getPagePath(pageNumber)
-
-            pageName = if (pageName!!.contains('/'))
-                pageName.substringAfterLast("/")
-            else
-                pageName.substringAfterLast('\\')
-
-            var chapterKey = ""
-            var pageNumber = 0
-            val subtitles = PopupSubtitleConfiguration.getSubtitle()
-            val keys = subtitles.keys
-
-            for (k in keys) {
-                var find = false
-                for (p in subtitles[k]?.pages!!) {
-                    if (p.name.equals(pageName, true) || p.hash == hash) {
-                        chapterKey = k
-                        pageNumber = p.number
-                        find = true
-                        break
-                    }
-                }
-                if (find)
-                    break
-            }
-
-            return if (chapterKey.isNotEmpty()) {
-                val chapter = PopupSubtitleConfiguration.getSelectedChapter()
-                SubTitle(
-                    manga.id!!,
-                    mSubtitleLang,
-                    chapterKey,
-                    0,
-                    pageNumber,
-                    PopupSubtitleConfiguration.getPathSubtitle(),
-                    chapter
-                )
-            } else
-                SubTitle(
-                    manga.id!!,
-                    mSubtitleLang,
-                    "",
-                    0,
-                    pageNumber,
-                    PopupSubtitleConfiguration.getPathSubtitle(),
-                    null
-                )
-        }
-
-
-        private var mSelectedSubTitle: SubTitle? = null
-        fun changeSubtitleInReader(context: Context, manga: Manga, pageNumber: Int) =
-            runBlocking { // this: CoroutineScope
-                launch {
-                    mManga = manga
-                    if (mSelectedSubTitle == null) {
-                        mSelectedSubTitle = mSubtitleRepository.findByIdManga(manga.id!!)
-
-                        if (mSelectedSubTitle == null)
-                            try {
-                                mSelectedSubTitle = findSubtitle(manga, pageNumber)
-                            } catch (e: java.lang.Exception) {
-                                Log.e(
-                                    GeneralConsts.TAG.LOG,
-                                    "Erro ao tentar encontrar o subtitle do arquivo. " + e.message
-                                )
-                                return@launch
-                            }
-
-                    }
-
-                    if (mSelectedSubTitle!!.pageCount != pageNumber) {
-                        val run = if (mSelectedSubTitle!!.pageCount < pageNumber)
-                            PopupSubtitleReader.getNextSelectPage()
+                    if (!run) {
+                        if (mSelectedSubTitle.value?.pageCount!! < pageNumber)
+                            getNextSelectSubtitle()
                         else
-                            PopupSubtitleReader.getBeforeSelectPage()
-
-                        if (!run) {
-                            if (mSelectedSubTitle!!.pageCount < pageNumber)
-                                PopupSubtitleConfiguration.getNextSelectSubtitle(context)
-                            else
-                                PopupSubtitleConfiguration.getBeforeSelectSubtitle(context)
-                        }
+                            getBeforeSelectSubtitle()
                     }
-
-                    mSelectedSubTitle!!.chapter = PopupSubtitleReader.chapterSelected
-                    mSelectedSubTitle!!.pageCount = pageNumber
-                    updatePageSelect()
                 }
-            }
 
-        fun updatePageSelect() {
-            val chapter = PopupSubtitleConfiguration.getChapterKey()
-            if (mSelectedSubTitle != null && chapter.isNotEmpty()) {
-                mSelectedSubTitle!!.chapterKey = chapter
-                mSelectedSubTitle!!.pageKey = PopupSubtitleReader.getPageKey()
-                mSubtitleRepository.save(mSelectedSubTitle!!)
+                mSelectedSubTitle.value?.chapter = chapterSelected.value
+                mSelectedSubTitle.value?.pageCount = pageNumber
+                updatePageSelect()
             }
         }
 
+    fun updatePageSelect() {
+        if (mSelectedSubTitle.value != null)
+            mSubtitleRepository.save(mSelectedSubTitle.value!!)
+    }
 
+    ///////////////////// DRAWING //////////////
+    private var imageBackup: Bitmap? = null
+    private var isDrawing = false
+    fun drawSelectedText() {
+        if (pageSelected.value?.texts!!.isEmpty())
+            return
+
+        val view: PageImageView = ReaderFragment.getCurrencyImageView() ?: return
+        if (isDrawing) {
+            view.setImageBitmap(imageBackup)
+            isDrawing = false
+        } else {
+            imageBackup = view.drawToBitmap(Bitmap.Config.ARGB_8888)
+            val image: Bitmap = view.drawToBitmap(Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(image)
+            val paint = Paint()
+            paint.color = Color.RED
+            paint.strokeWidth = 3f
+            paint.textSize = 50f
+            for (text in pageSelected.value!!.texts) {
+                paint.style = Paint.Style.FILL
+                canvas.drawText(
+                    text.sequence.toString(),
+                    text.x1.toFloat(),
+                    text.y1.toFloat(),
+                    paint
+                )
+                paint.style = Paint.Style.STROKE
+                canvas.drawRect(
+                    text.x1.toFloat(),
+                    text.y1.toFloat(),
+                    text.x2.toFloat(),
+                    text.y2.toFloat(),
+                    paint
+                )
+            }
+            view.setImageBitmap(image)
+            isDrawing = true
+        }
+    }
+
+    ///////////////////////// VOLUME ///////////////
+    fun clearSubtitlesSelected() {
+        isSelected = false
+        mChapterSelected.value = null
+        mPageSelected.value = null
+        mTextSelected.value = null
+        mChaptersKeys.value = mComboListInternal.keys.toTypedArray().sorted()
+    }
+
+    fun setSubtitlesSelected(list: HashMap<String, Chapter>) {
+        mComboListSelected = list
+        isSelected = true
+        mChaptersKeys.value = mComboListSelected.keys.toTypedArray().sorted()
+        selectedSubtitle(mComboListSelected.keys.first())
+    }
+
+    fun selectedSubtitle(key: String) {
+        if (key.isNotEmpty() && getSubtitle().containsKey(key))
+            setChapter(getSubtitle()[key])
+    }
+
+    fun getNextSelectSubtitle(): Boolean {
+        val index: Int = if (mSelectedSubTitle.value?.chapterKey!!.isNotEmpty()
+        ) getSubtitle().keys.indexOf(mSelectedSubTitle.value?.chapterKey!!)
+            .plus(1) else 0
+
+        return if (getSubtitle().keys.size >= index) {
+            setChapter(getSubtitle()[getSubtitle().keys.toTypedArray()[index]])
+            updatePageSelect()
+            true
+        } else
+            false
+    }
+
+    fun getBeforeSelectSubtitle(): Boolean {
+        val index: Int = if (mSelectedSubTitle.value?.chapterKey!!.isNotEmpty()
+        ) getSubtitle().keys.indexOf(mSelectedSubTitle.value?.chapterKey!!)
+            .minus(1) else 0
+
+        return if (index >= 0) {
+            setChapter(getSubtitle()[getSubtitle().keys.toTypedArray()[index]])
+            updatePageSelect()
+            true
+        } else
+            false
+    }
+
+    ///////////////////// CHAPTER //////////////
+    fun setChapter(chapter: Chapter?) {
+        mChapterSelected.value = chapter
+        mListPages.clear()
+        if (chapterSelected.value != null) {
+            chapterSelected.value!!.pages.forEach { mListPages[getPageKey(it)] = it }
+            mPagesKeys.value = mListPages.keys.toTypedArray().sorted()
+            setPage(chapterSelected.value!!.pages[0])
+        }
+    }
+
+    private fun setPage(page: Page?) {
+        isDrawing = false
+        mPageSelected.value = page
+        if (pageSelected.value!!.texts.isNotEmpty())
+            setText(pageSelected.value!!.texts[0])
+        else
+            setText(null)
+    }
+
+    private fun setText(text: Text?) {
+        mTextSelected.value = text
+    }
+
+    fun selectedPage(index: String) {
+        if (chapterSelected.value != null) {
+            if (mListPages.containsKey(index))
+                setPage(mListPages[index])
+        }
+    }
+
+    fun getNextSelectPage(): Boolean {
+        if (chapterSelected.value == null)
+            return true
+
+        val index: Int =
+            if (mSelectedSubTitle.value?.pageKey!!.isNotEmpty())
+                mListPages.keys.indexOf(mSelectedSubTitle.value?.pageKey!!)
+                    .plus(1) else 0
+
+        return if (mListPages.size > index) {
+            mSelectedSubTitle.value?.pageKey = mListPages.keys.toTypedArray()[index]
+            setPage(mListPages[mListPages.keys.toTypedArray()[index]])
+            true
+        } else
+            false
+    }
+
+    fun getBeforeSelectPage(lastTest: Boolean): Boolean {
+        if (chapterSelected.value == null)
+            return true
+
+        val indexText =
+            if (lastTest) mListPages.keys.size else mSelectedSubTitle.value?.pageKey!!
+        val index: Int =
+            if (mSelectedSubTitle.value?.pageKey!!.isNotEmpty()) mListPages.keys.indexOf(indexText)
+                .minus(1) else 0
+
+        return if (index >= 0) {
+            setPage(mListPages[mListPages.keys.toTypedArray()[index]])
+            true
+        } else
+            false
+    }
+
+    fun getNextText(): Boolean {
+        if (pageSelected.value == null)
+            return true
+
+        val index: Int =
+            if (textSelected.value != null) pageSelected.value!!.texts.indexOf(
+                textSelected.value
+            )
+                .plus(1) else 0
+
+        return if (pageSelected.value!!.texts.size > index) {
+            setText(pageSelected.value!!.texts[index])
+            true
+        } else {
+            getNextSelectPage()
+            false
+        }
+    }
+
+    fun getBeforeText(): Boolean {
+        val index: Int =
+            if (textSelected.value != null) pageSelected.value!!.texts.indexOf(
+                textSelected.value
+            ).minus(1) else 0
+
+        return if (index >= 0 && pageSelected.value!!.texts?.size!! > 0) {
+            setText(pageSelected.value!!.texts[index])
+            true
+        } else {
+            getBeforeSelectPage(true)
+            false
+        }
     }
 }

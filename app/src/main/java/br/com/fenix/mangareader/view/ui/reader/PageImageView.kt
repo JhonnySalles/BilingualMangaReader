@@ -1,5 +1,6 @@
 package br.com.fenix.mangareader.view.ui.reader
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Matrix
 import android.graphics.Point
@@ -11,7 +12,6 @@ import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener
-import android.view.View.OnTouchListener
 import android.view.ViewConfiguration
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Interpolator
@@ -22,6 +22,7 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
+@SuppressLint("ClickableViewAccessibility")
 open class PageImageView(context: Context, attributeSet: AttributeSet?) :
     androidx.appcompat.widget.AppCompatImageView(context, attributeSet) {
 
@@ -66,12 +67,12 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
         imageMatrix = mMatrix
         mScaleGestureDetector = ScaleGestureDetector(getContext(), PrivateScaleDetector())
         mDragGestureDetector = GestureDetector(getContext(), PrivateDragListener())
-        super.setOnTouchListener(OnTouchListener { v, event ->
+        super.setOnTouchListener { v, event ->
             mScaleGestureDetector!!.onTouchEvent(event)
             mDragGestureDetector!!.onTouchEvent(event)
             if (mOuterTouchListener != null) mOuterTouchListener!!.onTouch(v, event)
             true
-        })
+        }
         mScroller = OverScroller(context)
         mScroller!!.setFriction(ViewConfiguration.getScrollFriction() * 2)
         mViewMode = ReaderMode.ASPECT_FIT
@@ -87,40 +88,44 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
 
     open fun scale() {
         if (drawable == null || !mHaveFrame || mSkipScaling) return
-        val dwidth = drawable.intrinsicWidth
-        val dheight = drawable.intrinsicHeight
-        val vwidth: Int = width
-        val vheight: Int = height
-        if (mViewMode === ReaderMode.ASPECT_FILL) {
-            val scale: Float
-            var dx = 0f
-            if (dwidth * vheight > vwidth * dheight) {
-                scale = vheight.toFloat() / dheight.toFloat()
-                if (mTranslateRightEdge) dx = vwidth - dwidth * scale
-            } else {
-                scale = vwidth.toFloat() / dwidth.toFloat()
+        val dWidth = drawable.intrinsicWidth
+        val dHeight = drawable.intrinsicHeight
+        val vWidth: Int = width
+        val vHeight: Int = height
+        when {
+            mViewMode === ReaderMode.ASPECT_FILL -> {
+                val scale: Float
+                var dx = 0f
+                if (dWidth * vHeight > vWidth * dHeight) {
+                    scale = vHeight.toFloat() / dHeight.toFloat()
+                    if (mTranslateRightEdge) dx = vWidth - dWidth * scale
+                } else {
+                    scale = vWidth.toFloat() / dWidth.toFloat()
+                }
+                mMatrix.setScale(scale, scale)
+                mMatrix.postTranslate((dx + 0.5f), 0f)
             }
-            mMatrix.setScale(scale, scale)
-            mMatrix.postTranslate((dx + 0.5f), 0f)
-        } else if (mViewMode === ReaderMode.ASPECT_FIT) {
-            val mTempSrc = RectF(0F, 0F, dwidth.toFloat(), dheight.toFloat())
-            val mTempDst = RectF(0F, 0F, vwidth.toFloat(), vheight.toFloat())
-            mMatrix.setRectToRect(mTempSrc, mTempDst, Matrix.ScaleToFit.CENTER)
-        } else if (mViewMode === ReaderMode.FIT_WIDTH) {
-            val widthScale = width.toFloat() / drawable.intrinsicWidth
-            mMatrix.setScale(widthScale, widthScale)
-            mMatrix.postTranslate(0f, 0f)
+            mViewMode === ReaderMode.ASPECT_FIT -> {
+                val mTempSrc = RectF(0F, 0F, dWidth.toFloat(), dHeight.toFloat())
+                val mTempDst = RectF(0F, 0F, vWidth.toFloat(), vHeight.toFloat())
+                mMatrix.setRectToRect(mTempSrc, mTempDst, Matrix.ScaleToFit.CENTER)
+            }
+            mViewMode === ReaderMode.FIT_WIDTH -> {
+                val widthScale = width.toFloat() / drawable.intrinsicWidth
+                mMatrix.setScale(widthScale, widthScale)
+                mMatrix.postTranslate(0f, 0f)
+            }
         }
 
         // calculate min/max scale
-        val heightRatio = vheight.toFloat() / dheight
-        val w = dwidth * heightRatio
-        if (w < vwidth) {
-            mMinScale = vheight * 0.75f / dheight
-            mMaxScale = max(dwidth, vwidth) * 1.5f / dwidth
+        val heightRatio = vHeight.toFloat() / dHeight
+        val w = dWidth * heightRatio
+        if (w < vWidth) {
+            mMinScale = vHeight * 0.75f / dHeight
+            mMaxScale = max(dWidth, vWidth) * 1.5f / dWidth
         } else {
-            mMinScale = vwidth * 0.75f / dwidth
-            mMaxScale = max(dheight, vheight) * 1.5f / dheight
+            mMinScale = vWidth * 0.75f / dWidth
+            mMaxScale = max(dHeight, vHeight) * 1.5f / dHeight
         }
         imageMatrix = mMatrix
         mOriginalScale = getCurrentScale()
@@ -237,8 +242,6 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
         val height = d.intrinsicHeight * scale
         size[width.toInt()] = height.toInt()
         return size
-        size[0] = 0
-        return size
     }
 
     open fun computeCurrentOffset(): Point {
@@ -295,12 +298,12 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
 
     inner class ZoomAnimation(x: Float, y: Float, scale: Float) :
         Runnable {
-        var mX: Float
-        var mY: Float
-        var mScale: Float
-        var mInterpolator: Interpolator
-        var mStartScale: Float
-        var mStartTime: Long
+        private var mX: Float
+        private var mY: Float
+        private var mScale: Float
+        private var mInterpolator: Interpolator
+        private var mStartScale: Float
+        private var mStartTime: Long
         override fun run() {
             var t = (System.currentTimeMillis() - mStartTime).toFloat() / Companion.ZOOM_DURATION
             val interpolateRatio = mInterpolator.getInterpolation(t)
@@ -333,5 +336,10 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
             mStartScale = getCurrentScale()
             mStartTime = System.currentTimeMillis()
         }
+    }
+
+    override fun performClick(): Boolean {
+        super.performClick()
+        return true
     }
 }

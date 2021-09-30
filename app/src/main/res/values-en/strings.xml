@@ -68,6 +68,7 @@
     <string name="popup_reading_import_subtitle_title">Import file</string>
     <string name="popup_reading_import_subtitle_file">Select a subtitle file</string>
     <string name="popup_reading_import_subtitle_selected">Subtitle selected</string>
+    <string name="popup_reading_import_subtitle_is_empty">Subtitle empty</string>
 
     <!-- READER POPUP SUBTITLE -->
     <string name="popup_reading_subtitle_title">Subtitle</string>
