@@ -17,6 +17,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.PagerAdapter
@@ -46,6 +47,7 @@ import kotlin.math.min
 
 class ReaderFragment : Fragment(), View.OnTouchListener {
 
+    private lateinit var mToolbar: Toolbar
     private var mPageNavLayout: LinearLayout? = null
     private var mPopupSubtitle: FrameLayout? = null
     private var mPageSeekBar: SeekBar? = null
@@ -217,6 +219,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             return view
         }
 
+        mToolbar = requireActivity().findViewById(R.id.toolbar_reader)
         mPopupSubtitle = requireActivity().findViewById(R.id.menu_popup)
         mPageNavLayout = requireActivity().findViewById(R.id.nav_reader)
         (mPageNavLayout!!.findViewById<View>(R.id.nav_reader_progress) as SeekBar).also {
@@ -265,7 +268,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         })
         if (mCurrentPage != -1) {
             setCurrentPage(mCurrentPage)
-            mCurrentPage = -1
+            //mCurrentPage = -1
         }
         if (savedInstanceState != null) {
             val fullscreen = savedInstanceState.getBoolean(ReaderConsts.STATES.STATE_FULLSCREEN)
@@ -282,7 +285,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_reader, menu)
+        inflater.inflate(R.menu.menu_reader_bottom, menu)
         when (mReaderMode) {
             ReaderMode.ASPECT_FILL -> menu.findItem(R.id.view_mode_aspect_fill).isChecked = true
             ReaderMode.ASPECT_FIT -> menu.findItem(R.id.view_mode_aspect_fit).isChecked = true
@@ -384,7 +387,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
 
         if (mManga != null)
             mSubtitleController.changeSubtitleInReader(mManga!!, mCurrentPage)
-        ReaderActivity.setSubtitle(mParse?.getPagePath(page)!!)
+        ReaderActivity.setSubtitle(mParse?.getPagePath(mCurrentPage)!!)
     }
 
     inner class ComicPagerAdapter : PagerAdapter() {
@@ -556,6 +559,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             mViewPager!!.systemUiVisibility = flag
             mPageNavLayout!!.visibility = View.INVISIBLE
             mPopupSubtitle!!.visibility = View.INVISIBLE
+            mToolbar!!.visibility = View.INVISIBLE
         } else {
             actionBar?.show()
             var flag = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -563,7 +567,8 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             flag = flag or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
             mViewPager!!.systemUiVisibility = flag
             mPageNavLayout!!.visibility = View.VISIBLE
-            mPopupSubtitle!!.visibility = View.VISIBLE
+            mToolbar!!.visibility = View.VISIBLE
+            //mPopupSubtitle!!.visibility = View.VISIBLE
 
             // status bar & navigation bar background won't show in some cases
 

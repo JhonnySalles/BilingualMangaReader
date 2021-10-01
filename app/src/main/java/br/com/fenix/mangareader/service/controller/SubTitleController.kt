@@ -1,14 +1,10 @@
 package br.com.fenix.mangareader.service.controller
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
+import android.graphics.*
 import android.util.Log
 import android.widget.Toast
 import androidx.collection.arraySetOf
-import androidx.core.view.drawToBitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import br.com.fenix.mangareader.R
@@ -106,7 +102,7 @@ class SubTitleController private constructor(private val context: Context) {
 
     fun getPageKey(page: Page): String = page.number.toString().padStart(3, '0') + " " + page.name
     fun getChapterKey(chapter: Chapter): String {
-        var number = if((chapter.chapter % 1).compareTo(0) == 0)
+        var number = if ((chapter.chapter % 1).compareTo(0) == 0)
             "%.0f".format(chapter.chapter)
         else
             "%.1f".format(chapter.chapter)
@@ -123,7 +119,8 @@ class SubTitleController private constructor(private val context: Context) {
         }
     }
 
-    fun getChapterFromJson(listJson: List<String>) {
+    fun getChapterFromJson(listJson: List<String>, isSelected: Boolean = false) {
+        this.isSelected = isSelected
         mLanguages.clear()
         getSubtitle().clear()
         if (listJson.isNotEmpty()) {
@@ -204,7 +201,7 @@ class SubTitleController private constructor(private val context: Context) {
         val subtitles = getSubtitle()
         val keys = run {
             val selectedLanguage = chapterSelected.value!!.language
-            subtitles.keys.filter { it.contentEquals(selectedLanguage.name) }
+            subtitles.keys.filter { it.contains(selectedLanguage.name) }
         }
 
         for (k in keys) {
@@ -337,7 +334,7 @@ class SubTitleController private constructor(private val context: Context) {
             }
         }
 
-    fun updatePageSelect() {
+    private fun updatePageSelect() {
         if (mSelectedSubTitle.value != null)
             mSubtitleRepository.save(mSelectedSubTitle.value!!)
     }
@@ -354,8 +351,12 @@ class SubTitleController private constructor(private val context: Context) {
             view.setImageBitmap(imageBackup)
             isDrawing = false
         } else {
-            imageBackup = view.drawToBitmap(Bitmap.Config.ARGB_8888)
-            val image: Bitmap = view.drawToBitmap(Bitmap.Config.ARGB_8888)
+            val input = mParse.getPage(ReaderFragment.mCurrentPage)
+            imageBackup = BitmapFactory.decodeStream(input)
+            if (imageBackup == null)
+                return
+
+            val image: Bitmap = imageBackup!!.copy(imageBackup!!.config, true)
             val canvas = Canvas(image)
             val paint = Paint()
             paint.color = Color.RED
@@ -392,62 +393,60 @@ class SubTitleController private constructor(private val context: Context) {
         mChaptersKeys.value = mComboListInternal.keys.toTypedArray().sorted()
     }
 
-    fun setSubtitlesSelected(list: HashMap<String, Chapter>) {
-        mComboListSelected = list
-        isSelected = true
-        mChaptersKeys.value = mComboListSelected.keys.toTypedArray().sorted()
-        selectedSubtitle(mComboListSelected.keys.first())
-    }
-
     fun selectedSubtitle(key: String) {
         if (key.isNotEmpty() && getSubtitle().containsKey(key))
             setChapter(getSubtitle()[key])
     }
 
-    fun getNextSelectSubtitle(): Boolean {
-        val index: Int = if (mSelectedSubTitle.value?.chapterKey!!.isNotEmpty()
-        ) getSubtitle().keys.indexOf(mSelectedSubTitle.value?.chapterKey!!)
+    private fun getNextSelectSubtitle(): Boolean {
+        val index: Int = if (mChaptersKeys.value!!.isNotEmpty()
+        ) mChaptersKeys.value!!.indexOf(mSelectedSubTitle.value?.chapterKey!!)
             .plus(1) else 0
 
-        return if (getSubtitle().keys.size >= index) {
-            setChapter(getSubtitle()[getSubtitle().keys.toTypedArray()[index]])
-            updatePageSelect()
+        return if (getSubtitle().keys.size >= index && getSubtitle().containsKey(mChaptersKeys.value!![index])) {
+            setChapter(getSubtitle()[mChaptersKeys.value!![index]])
             true
         } else
             false
     }
 
-    fun getBeforeSelectSubtitle(): Boolean {
-        val index: Int = if (mSelectedSubTitle.value?.chapterKey!!.isNotEmpty()
-        ) getSubtitle().keys.indexOf(mSelectedSubTitle.value?.chapterKey!!)
+    private fun getBeforeSelectSubtitle(): Boolean {
+        val index: Int = if (mChaptersKeys.value!!.isNotEmpty()
+        ) mChaptersKeys.value!!.indexOf(mSelectedSubTitle.value?.chapterKey!!)
             .minus(1) else 0
 
-        return if (index >= 0) {
-            setChapter(getSubtitle()[getSubtitle().keys.toTypedArray()[index]])
-            updatePageSelect()
+        return if (index >= 0 && getSubtitle().containsKey(mChaptersKeys.value!![index])) {
+            setChapter(getSubtitle()[mChaptersKeys.value!![index]])
             true
         } else
             false
     }
 
     ///////////////////// CHAPTER //////////////
-    fun setChapter(chapter: Chapter?) {
+    private fun setChapter(chapter: Chapter?) {
         mChapterSelected.value = chapter
         mListPages.clear()
         if (chapterSelected.value != null) {
             chapterSelected.value!!.pages.forEach { mListPages[getPageKey(it)] = it }
             mPagesKeys.value = mListPages.keys.toTypedArray().sorted()
-            setPage(chapterSelected.value!!.pages[0])
-        }
+            mSelectedSubTitle.value?.chapterKey = getChapterKey(mChapterSelected.value!!)
+            setPage(false, chapterSelected.value!!.pages[0])
+        } else
+            mSelectedSubTitle.value?.chapterKey = ""
     }
 
-    private fun setPage(page: Page?) {
+    private fun setPage(lastText: Boolean, page: Page?) {
         isDrawing = false
         mPageSelected.value = page
-        if (pageSelected.value!!.texts.isNotEmpty())
-            setText(pageSelected.value!!.texts[0])
-        else
+        mSelectedSubTitle.value?.pageKey = if (mPageSelected.value == null) "" else getPageKey(mPageSelected.value!!)
+        if (pageSelected.value!!.texts.isNotEmpty()) {
+            val text = if (lastText) pageSelected.value!!.texts.last()
+            else pageSelected.value!!.texts.first()
+            setText(text)
+        } else
             setText(null)
+
+        updatePageSelect()
     }
 
     private fun setText(text: Text?) {
@@ -457,7 +456,7 @@ class SubTitleController private constructor(private val context: Context) {
     fun selectedPage(index: String) {
         if (chapterSelected.value != null) {
             if (mListPages.containsKey(index))
-                setPage(mListPages[index])
+                setPage(false, mListPages[index])
         }
     }
 
@@ -467,29 +466,27 @@ class SubTitleController private constructor(private val context: Context) {
 
         val index: Int =
             if (mSelectedSubTitle.value?.pageKey!!.isNotEmpty())
-                mListPages.keys.indexOf(mSelectedSubTitle.value?.pageKey!!)
+                mPagesKeys.value!!.indexOf(mSelectedSubTitle.value?.pageKey!!)
                     .plus(1) else 0
 
-        return if (mListPages.size > index) {
-            mSelectedSubTitle.value?.pageKey = mListPages.keys.toTypedArray()[index]
-            setPage(mListPages[mListPages.keys.toTypedArray()[index]])
+        return if (mListPages.size > index && mListPages.containsKey(mPagesKeys.value!![index])) {
+            setPage(false, mListPages[mPagesKeys.value!![index]])
             true
         } else
             false
     }
 
-    fun getBeforeSelectPage(lastTest: Boolean): Boolean {
+    private fun getBeforeSelectPage(lastText: Boolean): Boolean {
         if (chapterSelected.value == null)
             return true
 
-        val indexText =
-            if (lastTest) mListPages.keys.size else mSelectedSubTitle.value?.pageKey!!
         val index: Int =
-            if (mSelectedSubTitle.value?.pageKey!!.isNotEmpty()) mListPages.keys.indexOf(indexText)
-                .minus(1) else 0
+            if (mSelectedSubTitle.value?.pageKey!!.isNotEmpty()) mPagesKeys.value!!.indexOf(
+                mSelectedSubTitle.value?.pageKey!!
+            ).minus(1) else 0
 
-        return if (index >= 0) {
-            setPage(mListPages[mListPages.keys.toTypedArray()[index]])
+        return if (index >= 0 && mListPages.containsKey(mPagesKeys.value!![index])) {
+            setPage(lastText, mListPages[mPagesKeys.value!![index]])
             true
         } else
             false

@@ -48,6 +48,10 @@
     <string name="menu_reading_mode_left_to_right">Comic</string>
     <string name="menu_reading_mode_right_to_left">Manga</string>
 
+    <string name="menu_reading_favorite">Favorito</string>
+    <string name="menu_reading_change_language">Trocar de idioma</string>
+    <string name="menu_reading_settings">Configurações</string>
+
     <!-- READER POPUP TITLES -->
     <string name="popup_reading_title_subtitle">Legendas</string>
     <string name="popup_reading_title_brightness">Brilho</string>

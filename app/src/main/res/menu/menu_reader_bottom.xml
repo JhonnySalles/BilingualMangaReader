@@ -41,4 +41,20 @@
         android:orderInCategory="102"
         app:showAsAction="always">
     </item>
+
+    <item android:id="@+id/menu_popup_cange_language"
+        android:title="@string/menu_reading_change_language"
+        android:icon="@drawable/ic_change_language"
+        android:iconTint="#FFFFFF"
+        android:orderInCategory="103"
+        app:showAsAction="always">
+    </item>
+
+    <item android:id="@+id/menu_popup_settings"
+        android:title="@string/menu_reading_settings"
+        android:icon="@drawable/ic_settings"
+        android:iconTint="#FFFFFF"
+        android:orderInCategory="104"
+        app:showAsAction="always">
+    </item>
 </menu>

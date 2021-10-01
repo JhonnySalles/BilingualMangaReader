@@ -47,7 +47,7 @@ class PopupSubtitleConfiguration : Fragment() {
 
         mSubtitleSelected.setOnClickListener {
             mSubtitleSelectedAutoComplete.setText("", false)
-
+            mSubTitleController.clearSubtitlesSelected()
             if (mSubTitleController.chaptersKeys.value == null || mSubTitleController.chaptersKeys.value!!.isEmpty())
                 Toast.makeText(
                     requireActivity(),
@@ -96,8 +96,7 @@ class PopupSubtitleConfiguration : Fragment() {
                         val inputStream: InputStream = File(path).inputStream()
                         val inputString = inputStream.bufferedReader().use { it.readText() }
                         mLoadExternalSubtitleAutoComplete.setText(path)
-                        mSubTitleController.getChapterFromJson(listOf(inputString))
-                        //setSubtitlesSelected(requireContext(), SubTitleController.mComboList)
+                        mSubTitleController.getChapterFromJson(listOf(inputString), true)
                     } catch (e: Exception) {
                         Log.e(GeneralConsts.TAG.LOG, "Erro ao abrir o arquivo " + e.message)
                     }

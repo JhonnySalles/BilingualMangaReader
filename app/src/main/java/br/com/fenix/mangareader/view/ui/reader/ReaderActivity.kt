@@ -18,6 +18,8 @@ import br.com.fenix.mangareader.model.entity.Manga
 import br.com.fenix.mangareader.model.enums.PageMode
 import br.com.fenix.mangareader.model.enums.ReaderMode
 import br.com.fenix.mangareader.util.constants.GeneralConsts
+import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayout
 import java.io.File
@@ -30,6 +32,7 @@ class ReaderActivity : AppCompatActivity() {
     private lateinit var mNavReader: LinearLayout
     private lateinit var mToolbar: Toolbar
     private lateinit var mToolbarTitle: TextView
+    private lateinit var mMenuBottom: BottomAppBar
     private lateinit var mMenuPopup: FrameLayout
     private lateinit var mPopupView: ViewPager
     private lateinit var mBottomSheet: BottomSheetBehavior<FrameLayout>
@@ -55,9 +58,10 @@ class ReaderActivity : AppCompatActivity() {
         setContentView(R.layout.activity_reader)
 
         mToolbar = findViewById(R.id.toolbar_reader)
+        mMenuBottom = findViewById(R.id.bottom_reader)
         mToolbarTitle = findViewById(R.id.tolbar_title_custom)
         mToolbarSubTitle = findViewById(R.id.tolbar_subtitle_custom)
-        setSupportActionBar(mToolbar)
+        setSupportActionBar(mMenuBottom)
         supportActionBar!!.setDisplayShowTitleEnabled(true)
 
         mReaderTitle = findViewById(R.id.nav_reader_title)
