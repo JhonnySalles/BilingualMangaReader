@@ -2,7 +2,9 @@ package br.com.fenix.mangareader.view.ui.reader
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -18,9 +20,11 @@ import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.model.entity.Manga
 import br.com.fenix.mangareader.model.enums.PageMode
 import br.com.fenix.mangareader.model.enums.ReaderMode
+import br.com.fenix.mangareader.service.controller.SubTitleController
 import br.com.fenix.mangareader.service.kanji.Formater
 import br.com.fenix.mangareader.service.repository.MangaRepository
 import br.com.fenix.mangareader.util.constants.GeneralConsts
+import br.com.fenix.mangareader.view.ui.reader.FloatingSubtitleReader.Companion.canDrawOverlays
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayout
 import java.io.File
@@ -41,6 +45,8 @@ class ReaderActivity : AppCompatActivity() {
     private lateinit var mPopupReaderColorFilterFragment: PopupReaderColorFilter
     private lateinit var mPopupSubtitleConfigurationFragment: PopupSubtitleConfiguration
     private lateinit var mPopupSubtitleReaderFragment: PopupSubtitleReader
+
+    private lateinit var mFloatingSubtitleReader: FloatingSubtitleReader
 
     private lateinit var mRepository: MangaRepository
     private lateinit var mManga: Manga
@@ -72,14 +78,24 @@ class ReaderActivity : AppCompatActivity() {
         mReaderProgress = findViewById(R.id.nav_reader_progress)
         mNavReader = findViewById(R.id.nav_reader)
         mMenuPopup = findViewById(R.id.menu_popup)
-        val mPopupTouch = findViewById<ImageView>(R.id.menu_popup_touch)
+
+        findViewById<ImageView>(R.id.menu_close).setOnClickListener {
+            mMenuPopup.visibility = View.INVISIBLE
+        }
+        findViewById<ImageView>(R.id.menu_floating_touch).setOnClickListener { menuFloat() }
+        findViewById<Button>(R.id.btn_popup_subtitle).setOnClickListener {
+            mBottomSheet.state = BottomSheetBehavior.STATE_EXPANDED
+            mMenuPopup.visibility = View.VISIBLE
+        }
+        findViewById<Button>(R.id.btn_popup_open_floating).setOnClickListener { menuFloat() }
+
         mBottomSheet = BottomSheetBehavior.from(mMenuPopup).apply {
             peekHeight = 195
             this.state = BottomSheetBehavior.STATE_COLLAPSED
             mBottomSheet = this
         }
 
-        mPopupTouch.setOnClickListener {
+        findViewById<ImageView>(R.id.menu_popup_touch).setOnClickListener {
             if (mBottomSheet.state == BottomSheetBehavior.STATE_COLLAPSED)
                 mBottomSheet.state = BottomSheetBehavior.STATE_EXPANDED
             else
@@ -92,6 +108,8 @@ class ReaderActivity : AppCompatActivity() {
         mPopupReaderColorFilterFragment = PopupReaderColorFilter()
         mPopupSubtitleConfigurationFragment = PopupSubtitleConfiguration()
         mPopupSubtitleReaderFragment = PopupSubtitleReader()
+
+        mFloatingSubtitleReader = FloatingSubtitleReader(applicationContext)
 
         mPopupTab.setupWithViewPager(mPopupView)
 
@@ -221,24 +239,52 @@ class ReaderActivity : AppCompatActivity() {
         mRepository.update(mManga)
     }
 
-    var mMenuFloatOpened = false
     private fun menuFloat() {
-        /*if (canDrawOverlays) {
-            simpleFloatingWindow.show()
-        } else {
-            startManageDrawOverlaysPermission()
+        mMenuPopup.visibility = View.INVISIBLE
+
+        if (mFloatingSubtitleReader.isShowing)
+            mFloatingSubtitleReader.dismiss()
+        else {
+            if (canDrawOverlays(applicationContext)) {
+                val mSubTitleController = SubTitleController.getInstance(applicationContext)
+                mSubTitleController.pageSelected.observe(this, {
+                    mFloatingSubtitleReader.updatePage(it)
+                })
+
+                mSubTitleController.textSelected.observe(this, {
+                    mFloatingSubtitleReader.updateText(it)
+                })
+                mFloatingSubtitleReader.show()
+            } else
+                startManageDrawOverlaysPermission()
+
+            //startActivity(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION))
         }
+    }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            startActivity(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION))
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            5 -> {
+                if (canDrawOverlays(applicationContext))
+                    mFloatingSubtitleReader.show()
+                else
+                    Toast.makeText(
+                        application,
+                        getString(R.string.floating_reading_not_permission),
+                        Toast.LENGTH_SHORT
+                    ).show()
+            }
         }
+    }
 
-        if (mMenuFloatOpened) {
-
-        } else {
-
-        }*/
-
+    private fun startManageDrawOverlaysPermission() {
+        Intent(
+            Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+            Uri.parse("package:${applicationContext.packageName}")
+        ).let {
+            startActivityForResult(it, 5)
+        }
     }
 
     inner class ViewPagerAdapter(fm: FragmentManager, behavior: Int) :

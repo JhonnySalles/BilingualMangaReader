@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/floatingSemiTransparent"
+        android:orientation="vertical"
+        android:paddingTop="10dp"
+        android:paddingBottom="@dimen/margin">
+
+        <TextView
+            android:id="@+id/txt_floating_chapter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="155dp"
+            android:fontFamily="monospace"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="@color/secondary"
+            android:textSize="@dimen/popup_reader_title"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txt_floating_page"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="monospace"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="@color/secondary"
+            android:textSize="@dimen/popup_reader_title"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txt_floating_file_page_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="monospace"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="@color/secondary"
+            android:textSize="@dimen/popup_reader_file_page_name"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txt_floating_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="monospace"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="@color/textPrimary"
+            android:textSize="@dimen/popup_reader_text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/imgbtn_close"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:layout_width="@dimen/floating_reader_button_close"
+        android:layout_height="@dimen/floating_reader_button_close"
+        android:layout_gravity="top|left"
+        android:background="@color/onPrimary"
+        android:src="@drawable/ic_close"
+        android:tint="@color/textPrimary" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/nav_floating_next_text"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:layout_width="@dimen/floating_reader_button_width"
+        android:layout_height="@dimen/floating_reader_button_width"
+        android:layout_gravity="top|right"
+        android:layout_marginEnd="5dp"
+        android:background="@color/primary"
+        android:src="@drawable/ic_navigate_next"
+        android:tint="@color/textPrimary" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/nav_floating_before_text"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:layout_width="@dimen/floating_reader_button_width"
+        android:layout_height="@dimen/floating_reader_button_width"
+        android:layout_gravity="top|right"
+        android:layout_marginEnd="45dp"
+        android:background="@color/primary"
+        android:src="@drawable/ic_navigate_before"
+        android:tint="@color/textPrimary" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/nav_floating_draw"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:layout_width="@dimen/floating_reader_button_width"
+        android:layout_height="@dimen/floating_reader_button_width"
+        android:layout_gravity="top|right"
+        android:layout_marginEnd="80dp"
+        android:background="@color/primary"
+        android:src="@drawable/ic_draw_text"
+        android:tint="@color/textPrimary"
+        app:rippleColor="@color/onSecondary" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/nav_floating_refresh"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:layout_width="@dimen/floating_reader_button_width"
+        android:layout_height="@dimen/floating_reader_button_width"
+        android:layout_gravity="top|right"
+        android:layout_marginEnd="115dp"
+        android:background="@color/primary"
+        android:src="@drawable/ic_refresh"
+        android:tint="@color/textPrimary"
+        tools:layout_editor_absoluteY="0dp" />
+
+
+</FrameLayout>

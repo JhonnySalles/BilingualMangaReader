@@ -52,6 +52,8 @@
     <string name="menu_reading_change_language">Trocar de idioma</string>
     <string name="menu_reading_settings">Configurações</string>
 
+    <string name="menu_reading_floating">Popup flutuante</string>
+
     <!-- READER POPUP TITLES -->
     <string name="popup_reading_title_subtitle">Legendas</string>
     <string name="popup_reading_title_brightness">Brilho</string>
@@ -82,6 +84,10 @@
     <string name="popup_reading_subtitle_text">Texto</string>
     <string name="popup_reading_subtitle_find_subtitle">Encontrado a legenda: capítulo %s e página %s.</string>
     <string name="popup_reading_subtitle_not_find_subtitle">Não foi possível encontrar a legenda.</string>
+
+
+    <!-- READER FLOATING -->
+    <string name="floating_reading_not_permission">Permissão não concedida!</string>
 
 
     <!-- ALERT -->

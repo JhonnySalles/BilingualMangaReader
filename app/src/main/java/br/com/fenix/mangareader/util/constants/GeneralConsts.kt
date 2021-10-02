@@ -2,6 +2,8 @@ package br.com.fenix.mangareader.util.constants
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
+import android.provider.Settings
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 

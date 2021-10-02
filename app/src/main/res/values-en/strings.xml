@@ -53,6 +53,8 @@
     <string name="menu_reading_change_language">Change language</string>
     <string name="menu_reading_settings">Settings</string>
 
+    <string name="menu_reading_floating">Floating popup</string>
+
     <!-- READER POPUP TITLES -->
     <string name="popup_reading_title_subtitle">Subtitles</string>
     <string name="popup_reading_title_brightness">Brightness</string>
@@ -83,6 +85,9 @@
     <string name="popup_reading_subtitle_text">Text</string>
     <string name="popup_reading_subtitle_find_subtitle">Founded subtitle: chapter %s and page %s.</string>
     <string name="popup_reading_subtitle_not_find_subtitle">Could not find the subtitle in files.</string>
+
+    <!-- READER FLOATING -->
+    <string name="floating_reading_not_permission">Permission is not granted!</string>
 
     <!-- ALERT -->
     <string name="switch_action_positive">Yes</string>

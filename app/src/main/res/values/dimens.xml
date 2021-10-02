@@ -33,4 +33,11 @@
     <dimen name="popup_reader_title">15sp</dimen>
     <dimen name="popup_reader_file_page_name">10sp</dimen>
     <dimen name="popup_reader_text">20sp</dimen>
+
+    <dimen name="popup_reader_button_width">50dp</dimen>
+    <dimen name="popup_reader_button_min_height">55dp</dimen>
+    <dimen name="popup_reader_button_padding">12dp</dimen>
+
+    <dimen name="floating_reader_button_width">30dp</dimen>
+    <dimen name="floating_reader_button_close">30dp</dimen>
 </resources>

@@ -37,6 +37,7 @@
 
     <color name="transparent">#00000000</color>
     <color name="semiTransparent">#4D000000</color>
+    <color name="floatingSemiTransparent">#7F000000</color>
     <color name="light_blue_600">#FF039BE5</color>
     <color name="light_blue_900">#FF01579B</color>
     <color name="light_blue_A200">#FF40C4FF</color>

@@ -51,6 +51,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
     private lateinit var mToolbar: Toolbar
     private var mPageNavLayout: LinearLayout? = null
     private var mPopupSubtitle: FrameLayout? = null
+    private var mTolbarBottom: LinearLayout? = null
     private var mPageSeekBar: SeekBar? = null
     private var mPageNavTextView: TextView? = null
     private var mPagerAdapter: ComicPagerAdapter? = null
@@ -223,6 +224,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         mToolbar = requireActivity().findViewById(R.id.toolbar_reader)
         mPopupSubtitle = requireActivity().findViewById(R.id.menu_popup)
         mPageNavLayout = requireActivity().findViewById(R.id.nav_reader)
+        mTolbarBottom = requireActivity().findViewById(R.id.toolbar_reader_bottom)
         (mPageNavLayout!!.findViewById<View>(R.id.nav_reader_progress) as SeekBar).also {
             mPageSeekBar = it
         }
@@ -560,6 +562,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             mViewPager!!.systemUiVisibility = flag
             mPageNavLayout!!.visibility = View.INVISIBLE
             mPopupSubtitle!!.visibility = View.INVISIBLE
+            mTolbarBottom!!.visibility = View.INVISIBLE
             mToolbar!!.visibility = View.INVISIBLE
         } else {
             actionBar?.show()
@@ -569,6 +572,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             mViewPager!!.systemUiVisibility = flag
             mPageNavLayout!!.visibility = View.VISIBLE
             mToolbar!!.visibility = View.VISIBLE
+            mTolbarBottom!!.visibility = View.VISIBLE
             //mPopupSubtitle!!.visibility = View.VISIBLE
 
             // status bar & navigation bar background won't show in some cases

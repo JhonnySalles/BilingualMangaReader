@@ -512,12 +512,15 @@ class SubTitleController private constructor(private val context: Context) {
     }
 
     fun getBeforeText(): Boolean {
+        if (pageSelected.value == null)
+            return true
+
         val index: Int =
             if (textSelected.value != null) pageSelected.value!!.texts.indexOf(
                 textSelected.value
             ).minus(1) else 0
 
-        return if (index >= 0 && pageSelected.value!!.texts?.size!! > 0) {
+        return if (index >= 0 && pageSelected.value!!.texts.isNotEmpty()) {
             setText(pageSelected.value!!.texts[index])
             true
         } else {

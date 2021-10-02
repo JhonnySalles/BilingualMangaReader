@@ -15,7 +15,7 @@
         android:iconTint="#FFFFFF"
         android:orderInCategory="100"
         android:title="@string/menu_reading_mode"
-        app:showAsAction="ifRoom">
+        app:showAsAction="never">
         <menu>
             <group android:checkableBehavior="single">
                 <item
@@ -33,7 +33,7 @@
         android:iconTint="#FFFFFF"
         android:orderInCategory="101"
         android:title="@string/menu_view_mode"
-        app:showAsAction="ifRoom">
+        app:showAsAction="never">
         <menu>
             <group android:checkableBehavior="single">
                 <item
@@ -54,8 +54,8 @@
         android:icon="@drawable/ic_floating_window"
         android:iconTint="#FFFFFF"
         android:orderInCategory="102"
-        android:title="@string/menu_view_mode"
-        app:showAsAction="ifRoom"></item>
+        android:title="@string/menu_reading_floating"
+        app:showAsAction="never"></item>
 
     <item
         android:id="@+id/menu_popup_subtitle"
@@ -63,13 +63,5 @@
         android:iconTint="#FFFFFF"
         android:orderInCategory="103"
         android:title="@string/menu_reading_change_language"
-        app:showAsAction="always"></item>
-
-    <item android:id="@+id/menu_popup_settings"
-        android:title="@string/menu_reading_settings"
-        android:icon="@drawable/ic_settings"
-        android:iconTint="#FFFFFF"
-        android:orderInCategory="104"
-        app:showAsAction="ifRoom">
-    </item>
+        app:showAsAction="never"></item>
 </menu>

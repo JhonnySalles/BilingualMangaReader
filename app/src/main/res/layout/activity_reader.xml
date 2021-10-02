@@ -30,7 +30,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentBottom="true"
-                android:background="@drawable/reader_nav_bg"
                 android:gravity="center|left"
                 android:orientation="vertical">
 
@@ -64,7 +63,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="80dp"
-            android:background="@drawable/reader_nav_bg"
+            android:background="@color/primary"
             android:gravity="center_horizontal"
             android:orientation="vertical"
             android:paddingLeft="10dp"
@@ -90,16 +89,56 @@
                 android:thumb="@drawable/reader_nav_thumb"
                 android:thumbOffset="6dp" />
         </LinearLayout>
-    </RelativeLayout>
 
-    <com.google.android.material.bottomappbar.BottomAppBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="40dp"
-        style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
-        />
+        <LinearLayout
+            android:id="@+id/toolbar_reader_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/reader_nav_bg"
+            >
+            <Button
+                android:id="@+id/btn_popup_open_floating"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="@dimen/popup_reader_button_width"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:paddingLeft="@dimen/popup_reader_button_padding"
+                android:paddingRight="@dimen/popup_reader_button_padding"
+                android:minHeight="@dimen/popup_reader_button_min_height"
+                app:rippleColor="@color/onSecondary"
+                app:backgroundTint="@color/primary"
+                app:icon="@drawable/ic_floating_window"
+                app:iconTint="@color/textPrimary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/nav_next_text"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/btn_popup_subtitle"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="@dimen/popup_reader_button_width"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="20dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:paddingLeft="@dimen/popup_reader_button_padding"
+                android:paddingRight="@dimen/popup_reader_button_padding"
+                android:minHeight="@dimen/popup_reader_button_min_height"
+                app:rippleColor="@color/onSecondary"
+                app:backgroundTint="@color/primary"
+                app:icon="@drawable/ic_change_language"
+                app:iconTint="@color/textPrimary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/nav_next_text"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </LinearLayout>
+    </RelativeLayout>
 
     <FrameLayout
         android:id="@+id/menu_popup"
@@ -120,7 +159,25 @@
             android:layout_gravity="center|top"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_line_popup"
-            android:tint="@color/onSecondary" />
+            app:tint="@color/onSecondary" />
+
+        <ImageView
+            android:id="@+id/menu_close"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|top"
+            android:scaleType="center"
+            android:src="@drawable/ic_close"
+            app:tint="@color/onSecondary" />
+
+        <ImageView
+            android:id="@+id/menu_floating_touch"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|top"
+            android:scaleType="center"
+            android:src="@drawable/ic_floating_window"
+            app:tint="@color/onSecondary" />
 
         <ScrollView
             android:layout_width="match_parent"
