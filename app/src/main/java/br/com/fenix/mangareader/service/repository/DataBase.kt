@@ -5,18 +5,23 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import br.com.fenix.mangareader.model.entity.Manga
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import br.com.fenix.mangareader.model.entity.Cover
+import br.com.fenix.mangareader.model.entity.KanjiJLPT
+import br.com.fenix.mangareader.model.entity.Manga
 import br.com.fenix.mangareader.model.entity.SubTitle
+import br.com.fenix.mangareader.util.constants.DataBaseConsts
 import br.com.fenix.mangareader.util.helpers.Converters
 
-@Database(entities = [Manga::class, Cover::class, SubTitle::class], version = 1)
+@Database(entities = [Manga::class, Cover::class, SubTitle::class, KanjiJLPT::class], version = 2)
 @TypeConverters(Converters::class)
 abstract class DataBase : RoomDatabase() {
 
     abstract fun getMangaDao(): MangaDAO
     abstract fun getCoverDao(): CoverDAO
     abstract fun getSubTitleDao(): SubTitleDAO
+    abstract fun getKanjiJLPTDao(): KanjiJLPTDAO
 
     // Singleton - One database initialize only
     companion object {
@@ -27,10 +32,12 @@ abstract class DataBase : RoomDatabase() {
             if (!::INSTANCE.isInitialized)
                 synchronized(DataBase::class.java) { // Used for a two or many cores
                     INSTANCE = Room.databaseBuilder(context, DataBase::class.java, DATABASE_NAME)
+                        .addMigrations(Migrations.MIGRATION_1_2)
                         .allowMainThreadQueries()
                         .build() // MainThread uses another thread in db conection
                 }
             return INSTANCE
         }
+
     }
 }

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/menu_reader_favorite"
+        android:title="@string/menu_reading_favorite"
+        android:icon="@drawable/ic_favorite_unmark"
+        android:iconTint="#FFFFFF"
+        android:orderInCategory="100"
+        app:showAsAction="always">
+    </item>
+
+    <item
+        android:id="@+id/menu_reader_reading"
+        android:icon="@drawable/ic_book_open"
+        android:iconTint="#FFFFFF"
+        android:orderInCategory="100"
+        android:title="@string/menu_reading_mode"
+        app:showAsAction="ifRoom">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/reading_left_to_right"
+                    android:title="@string/menu_reading_mode_left_to_right" />
+                <item
+                    android:id="@+id/reading_right_to_left"
+                    android:title="@string/menu_reading_mode_right_to_left" />
+            </group>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/menu_reader_aspect_ratio"
+        android:icon="@drawable/ic_reader_mode"
+        android:iconTint="#FFFFFF"
+        android:orderInCategory="101"
+        android:title="@string/menu_view_mode"
+        app:showAsAction="ifRoom">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/view_mode_aspect_fill"
+                    android:title="@string/menu_view_mode_aspect_fill" />
+                <item
+                    android:id="@+id/view_mode_aspect_fit"
+                    android:title="@string/menu_view_mode_aspect_fit" />
+                <item
+                    android:id="@+id/view_mode_fit_width"
+                    android:title="@string/menu_view_mode_fit_width" />
+            </group>
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/menu_popup_open_floating"
+        android:icon="@drawable/ic_floating_window"
+        android:iconTint="#FFFFFF"
+        android:orderInCategory="102"
+        android:title="@string/menu_view_mode"
+        app:showAsAction="ifRoom"></item>
+
+    <item
+        android:id="@+id/menu_popup_subtitle"
+        android:icon="@drawable/ic_change_language"
+        android:iconTint="#FFFFFF"
+        android:orderInCategory="103"
+        android:title="@string/menu_reading_change_language"
+        app:showAsAction="always"></item>
+
+    <item android:id="@+id/menu_popup_settings"
+        android:title="@string/menu_reading_settings"
+        android:icon="@drawable/ic_settings"
+        android:iconTint="#FFFFFF"
+        android:orderInCategory="104"
+        app:showAsAction="ifRoom">
+    </item>
+</menu>

@@ -93,14 +93,13 @@
     </RelativeLayout>
 
     <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottom_reader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="40dp"
         style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
-        app:menu="@menu/menu_reader_bottom"/>
+        />
 
     <FrameLayout
         android:id="@+id/menu_popup"

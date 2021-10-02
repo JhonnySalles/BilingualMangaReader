@@ -48,4 +48,14 @@ class DataBaseConsts private constructor() {
         }
     }
 
+    object JLPT {
+        const val TABLE_NAME = "JLPT"
+
+        object COLUMNS {
+            const val ID = "id"
+            const val KANJI = "kanji"
+            const val LEVEL = "level"
+        }
+    }
+
 }

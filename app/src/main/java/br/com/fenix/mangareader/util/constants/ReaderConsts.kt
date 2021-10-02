@@ -1,5 +1,10 @@
 package br.com.fenix.mangareader.util.constants
 
+import android.graphics.Color
+import android.text.style.ForegroundColorSpan
+import br.com.fenix.mangareader.R
+import com.worksap.nlp.sudachi.Tokenizer
+
 class ReaderConsts {
 
     object READER {
@@ -18,6 +23,13 @@ class ReaderConsts {
         const val STATE_FULLSCREEN = "STATE_FULLSCREEN"
         const val STATE_NEW_COMIC = "STATE_NEW_COMIC"
         const val STATE_NEW_COMIC_TITLE = "STATE_NEW_COMIC_TITLE"
+    }
+
+    object TOKENIZER {
+        object SUDACHI {
+            val DICTIONARY_NAME = "sudachi_smalldict.json"
+            val SPLIT_MODE = Tokenizer.SplitMode.A
+        }
     }
 
 }

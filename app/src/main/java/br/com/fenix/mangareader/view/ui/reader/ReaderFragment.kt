@@ -31,6 +31,7 @@ import br.com.fenix.mangareader.service.parses.Parse
 import br.com.fenix.mangareader.service.parses.ParseFactory
 import br.com.fenix.mangareader.service.parses.RarParse
 import br.com.fenix.mangareader.service.repository.Storage
+import br.com.fenix.mangareader.service.tokenizers.SudachiTokenizer
 import br.com.fenix.mangareader.util.constants.GeneralConsts
 import br.com.fenix.mangareader.util.constants.ReaderConsts
 import br.com.fenix.mangareader.view.managers.MangaHandler
@@ -285,7 +286,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_reader_bottom, menu)
+        inflater.inflate(R.menu.menu_reader, menu)
         when (mReaderMode) {
             ReaderMode.ASPECT_FILL -> menu.findItem(R.id.view_mode_aspect_fill).isChecked = true
             ReaderMode.ASPECT_FIT -> menu.findItem(R.id.view_mode_aspect_fit).isChecked = true

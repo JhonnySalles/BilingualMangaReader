@@ -1,8 +1,9 @@
 package br.com.fenix.mangareader.service.repository
 
 import androidx.room.*
-import br.com.fenix.mangareader.model.entity.Manga
 import br.com.fenix.mangareader.model.entity.Cover
+import br.com.fenix.mangareader.model.entity.KanjiJLPT
+import br.com.fenix.mangareader.model.entity.Manga
 import br.com.fenix.mangareader.model.entity.SubTitle
 import br.com.fenix.mangareader.util.constants.DataBaseConsts
 
@@ -83,3 +84,14 @@ abstract class SubTitleDAO : DataBaseDAO<SubTitle> {
 
 }
 
+
+@Dao
+abstract class KanjiJLPTDAO : DataBaseDAO<KanjiJLPT> {
+
+    @Query("SELECT * FROM " + DataBaseConsts.JLPT.TABLE_NAME + " WHERE " + DataBaseConsts.JLPT.COLUMNS.ID + " = :id")
+    abstract fun get(id: Long): KanjiJLPT
+
+    @Query("SELECT * FROM " + DataBaseConsts.JLPT.TABLE_NAME)
+    abstract fun list(): List<KanjiJLPT>
+
+}

@@ -64,5 +64,6 @@ dependencies {
     implementation 'commons-codec:commons-codec:1.12'
 
     // https://mvnrepository.com/artifact/com.atilika.kuromoji/kuromoji-ipadic
+    implementation 'com.worksap.nlp:sudachi:0.5.2'
     implementation group: 'com.atilika.kuromoji', name: 'kuromoji-ipadic', version: '0.9.0'
 }

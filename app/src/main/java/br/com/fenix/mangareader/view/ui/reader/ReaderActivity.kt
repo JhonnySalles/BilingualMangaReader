@@ -2,13 +2,14 @@ package br.com.fenix.mangareader.view.ui.reader
 
 import android.content.Intent
 import android.content.SharedPreferences
-import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
+import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -17,13 +18,14 @@ import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.model.entity.Manga
 import br.com.fenix.mangareader.model.enums.PageMode
 import br.com.fenix.mangareader.model.enums.ReaderMode
+import br.com.fenix.mangareader.service.kanji.Formater
+import br.com.fenix.mangareader.service.repository.MangaRepository
 import br.com.fenix.mangareader.util.constants.GeneralConsts
-import com.google.android.material.bottomappbar.BottomAppBar
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayout
 import java.io.File
 import java.util.*
+
 
 class ReaderActivity : AppCompatActivity() {
 
@@ -32,7 +34,6 @@ class ReaderActivity : AppCompatActivity() {
     private lateinit var mNavReader: LinearLayout
     private lateinit var mToolbar: Toolbar
     private lateinit var mToolbarTitle: TextView
-    private lateinit var mMenuBottom: BottomAppBar
     private lateinit var mMenuPopup: FrameLayout
     private lateinit var mPopupView: ViewPager
     private lateinit var mBottomSheet: BottomSheetBehavior<FrameLayout>
@@ -41,13 +42,15 @@ class ReaderActivity : AppCompatActivity() {
     private lateinit var mPopupSubtitleConfigurationFragment: PopupSubtitleConfiguration
     private lateinit var mPopupSubtitleReaderFragment: PopupSubtitleReader
 
+    private lateinit var mRepository: MangaRepository
+    private lateinit var mManga: Manga
     private var mBookMark: Int = 0
 
     companion object {
         private lateinit var mPopupTab: TabLayout
         private lateinit var mToolbarSubTitle: TextView
         fun selectTabReader() = mPopupTab.selectTab(mPopupTab.getTabAt(0), true)
-        fun setSubtitle(text : String) {
+        fun setSubtitle(text: String) {
             if (::mToolbarSubTitle.isInitialized)
                 mToolbarSubTitle.text = text
         }
@@ -57,11 +60,12 @@ class ReaderActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reader)
 
+        Formater.initialize(applicationContext)
+
         mToolbar = findViewById(R.id.toolbar_reader)
-        mMenuBottom = findViewById(R.id.bottom_reader)
         mToolbarTitle = findViewById(R.id.tolbar_title_custom)
         mToolbarSubTitle = findViewById(R.id.tolbar_subtitle_custom)
-        setSupportActionBar(mMenuBottom)
+        setSupportActionBar(mToolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(true)
 
         mReaderTitle = findViewById(R.id.nav_reader_title)
@@ -106,6 +110,7 @@ class ReaderActivity : AppCompatActivity() {
         )
         mPopupView.adapter = viewPagerAdapter
 
+        mRepository = MangaRepository(applicationContext)
         val bundle = intent.extras
 
         if (bundle != null) {
@@ -122,8 +127,10 @@ class ReaderActivity : AppCompatActivity() {
                 val manga = (extras!!.getSerializable(GeneralConsts.KEYS.OBJECT.MANGA) as Manga?)
                 val fragment: ReaderFragment?
                 if (manga != null) {
+                    mManga = manga
                     mReaderTitle.text = manga.bookMark.toString()
                     mToolbarTitle.text = manga.title
+
                     fragment = ReaderFragment.create(manga)
                 } else {
                     val file = (extras.getSerializable(GeneralConsts.KEYS.OBJECT.FILE) as File?)
@@ -176,6 +183,12 @@ class ReaderActivity : AppCompatActivity() {
             R.id.view_mode_aspect_fit -> optionsSave(ReaderMode.ASPECT_FIT)
             R.id.view_mode_fit_width -> optionsSave(ReaderMode.FIT_WIDTH)
             R.id.menu_popup_open_floating -> menuFloat()
+            R.id.menu_reader_favorite -> changeFavorite(item)
+            R.id.menu_popup_subtitle -> mMenuPopup.visibility =
+                if (mMenuPopup.visibility == View.INVISIBLE) {
+                    mBottomSheet.state = BottomSheetBehavior.STATE_EXPANDED
+                    View.VISIBLE
+                } else View.INVISIBLE
         }
         return super.onOptionsItemSelected(item)
     }
@@ -183,6 +196,29 @@ class ReaderActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         finish()
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        val favoriteItem = menu.findItem(R.id.menu_reader_favorite)
+        val icon = if (::mManga.isInitialized && mManga.favorite)
+            ContextCompat.getDrawable(this, R.drawable.ic_favorite_mark)
+        else
+            ContextCompat.getDrawable(this, R.drawable.ic_favorite_unmark)
+        icon?.setTint(getColor(R.color.onSecondary))
+        favoriteItem.icon = icon
+        return super.onPrepareOptionsMenu(menu)
+    }
+
+    private fun changeFavorite(item: MenuItem) {
+        mManga.favorite = !mManga.favorite
+
+        val icon = if (mManga.favorite)
+            ContextCompat.getDrawable(this, R.drawable.ic_favorite_mark)
+        else
+            ContextCompat.getDrawable(this, R.drawable.ic_favorite_unmark)
+        icon?.setTint(getColor(R.color.onSecondary))
+        item.icon = icon
+        mRepository.update(mManga)
     }
 
     var mMenuFloatOpened = false
