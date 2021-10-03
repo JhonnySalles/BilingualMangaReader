@@ -77,7 +77,6 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textColor="@color/textPrimary"
             android:textSize="@dimen/popup_reader_text"
-            android:textIsSelectable="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

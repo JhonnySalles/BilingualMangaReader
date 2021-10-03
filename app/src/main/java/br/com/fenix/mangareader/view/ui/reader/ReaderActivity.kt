@@ -2,6 +2,7 @@ package br.com.fenix.mangareader.view.ui.reader
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -88,6 +89,12 @@ class ReaderActivity : AppCompatActivity() {
             mMenuPopup.visibility = View.VISIBLE
         }
         findViewById<Button>(R.id.btn_popup_open_floating).setOnClickListener { menuFloat() }
+        findViewById<Button>(R.id.btn_screen_rotate).setOnClickListener {
+            requestedOrientation = if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE )
+                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            else
+                ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        }
 
         mBottomSheet = BottomSheetBehavior.from(mMenuPopup).apply {
             peekHeight = 195

@@ -20,15 +20,15 @@ import java.nio.charset.StandardCharsets
 
 class Formater {
     companion object KANJI {
-        private val pattern = Regex(".*[\u4E00-\u9FAF].*")
+        private val pattern = Regex(".*[\u4E00-\u9FFF].*")
         var tokenizer: Tokenizer? = null
         private var JLPT: Map<String, Int>? = null
-        private var ANOTHER: ForegroundColorSpan? = null
-        private var N1: ForegroundColorSpan? = null
-        private var N2: ForegroundColorSpan? = null
-        private var N3: ForegroundColorSpan? = null
-        private var N4: ForegroundColorSpan? = null
-        private var N5: ForegroundColorSpan? = null
+        private var ANOTHER: Int = 0
+        private var N1: Int = 0
+        private var N2: Int = 0
+        private var N3: Int = 0
+        private var N4: Int = 0
+        private var N5: Int = 0
 
         private fun readAll(input: InputStream?): String? {
             val isReader = InputStreamReader(input, StandardCharsets.UTF_8)
@@ -48,24 +48,12 @@ class Formater {
                     val repository = KanjiRepository(context)
                     JLPT = repository.getHashMap()
 
-                    ANOTHER = ForegroundColorSpan(context.getColor(R.color.JLPT0))
-                    N1 = ForegroundColorSpan(context.getColor(R.color.JLPT1))
-                    N2 = ForegroundColorSpan(context.getColor(R.color.JLPT2))
-                    N3 = ForegroundColorSpan(context.getColor(R.color.JLPT3))
-                    N4 = ForegroundColorSpan(context.getColor(R.color.JLPT4))
-                    N5 = ForegroundColorSpan(context.getColor(R.color.JLPT5))
-
-                    /*val assetManager: AssetManager = context.assets
-                    val dictionary: InputStream =
-                        context.resources.openRawResource(R.raw.sudachi_smalldict)
-                    dictionary.use { input ->
-                        DictionaryFactory().create(
-                            "",
-                            readAll(input)
-                        ).use { dict ->
-                            tokenizer = dict.create()
-                        }
-                    }*/
+                    ANOTHER = context.getColor(R.color.JLPT0)
+                    N1 = context.getColor(R.color.JLPT1)
+                    N2 = context.getColor(R.color.JLPT2)
+                    N3 = context.getColor(R.color.JLPT3)
+                    N4 = context.getColor(R.color.JLPT4)
+                    N5 = context.getColor(R.color.JLPT5)
                 } catch (e: Exception) {
                     Log.e(GeneralConsts.TAG.LOG, "Erro ao abrir arquivo de tokenizer." + e.message)
                 }
@@ -103,7 +91,7 @@ class Formater {
             }
 
             val ss = SpannableString(text)
-            text.forEachIndexed { index, element ->
+            ss.forEachIndexed { index, element ->
                 val kanji = element.toString()
                 if (kanji.matches(pattern)) {
                     val color = when (JLPT?.get(kanji)) {
@@ -114,7 +102,7 @@ class Formater {
                         5 -> N5
                         else -> ANOTHER
                     }
-                    ss.setSpan(color, index, index + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    ss.setSpan(ForegroundColorSpan(color), index, index + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
             }
 

@@ -5,6 +5,7 @@
     <color name="primaryVariant">#484848</color>
     <color name="onPrimary">#000000</color>
     <color name="primarySemitransparent">#ce212121</color>
+    <color name="onPrimarySemitransparent">#DD000000</color>
     <!-- Secondary color -->
     <color name="secondary">#aeea00</color>
     <color name="secondaryVariant">#e4ff54</color>

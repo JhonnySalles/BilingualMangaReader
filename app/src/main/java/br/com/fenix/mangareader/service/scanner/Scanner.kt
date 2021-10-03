@@ -26,7 +26,6 @@ class Scanner {
     private var mIsRestarted = false
 
     private val mRestartHandler: Handler = RestartHandler(this)
-    private val mGetCover = HashMap<Manga, Parse>()
 
     private inner class RestartHandler(scanner: Scanner) :
         Handler() {

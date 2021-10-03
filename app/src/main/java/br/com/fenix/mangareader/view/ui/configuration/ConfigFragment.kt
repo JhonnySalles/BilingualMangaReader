@@ -45,8 +45,6 @@ class ConfigFragment : Fragment() {
 
     private lateinit var txtSystemFormatDate: TextInputLayout
     private lateinit var autoCompleteSystemFormatDate: AutoCompleteTextView
-    private lateinit var txtSystemLanguage: TextInputLayout
-    private lateinit var autoCompleteSystemLanguage: AutoCompleteTextView
 
     private var dateSelect: String = GeneralConsts.CONFIG.DATA_FORMAT[0]
     private val datePattern = GeneralConsts.CONFIG.DATA_FORMAT
@@ -56,7 +54,6 @@ class ConfigFragment : Fragment() {
 
     private var defaultSubtitleLanguageSelect: Languages = Languages.JAPANESE
     private var defaultSubtitleTranslateSelect: Languages = Languages.PORTUGUESE
-    private var defaultSystemLanguageSelect: Languages = Languages.PORTUGUESE
 
     private lateinit var mapOrder: HashMap<String, Order>
     private lateinit var mapPageMode: HashMap<String, PageMode>
@@ -85,8 +82,6 @@ class ConfigFragment : Fragment() {
 
         txtSystemFormatDate = view.findViewById(R.id.txt_system_format_date)
         autoCompleteSystemFormatDate = view.findViewById(R.id.menu_autocomplete_system_format_date)
-        txtSystemLanguage = view.findViewById(R.id.txt_system_language)
-        autoCompleteSystemLanguage = view.findViewById(R.id.menu_autocomplete_system_language)
 
         autoCompleteLibraryPath.setOnClickListener {
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
@@ -135,7 +130,6 @@ class ConfigFragment : Fragment() {
             ArrayAdapter(requireContext(), R.layout.list_item, mapLanguage.keys.toTypedArray())
         autoCompleteDefaultSubtitleLanguage.setAdapter(adapterLanguage)
         autoCompleteDefaultSubtitleTranslate.setAdapter(adapterLanguage)
-        autoCompleteSystemLanguage.setAdapter(adapterLanguage)
         autoCompleteDefaultSubtitleLanguage.onItemClickListener =
             AdapterView.OnItemClickListener { parent, _, position, _ ->
                 defaultSubtitleLanguageSelect =
@@ -150,17 +144,6 @@ class ConfigFragment : Fragment() {
         autoCompleteDefaultSubtitleTranslate.onItemClickListener =
             AdapterView.OnItemClickListener { parent, _, position, _ ->
                 defaultSubtitleTranslateSelect =
-                    if (parent.getItemAtPosition(position).toString().isNotEmpty() &&
-                        mapLanguage.containsKey(parent.getItemAtPosition(position).toString())
-                    )
-                        mapLanguage[parent.getItemAtPosition(position).toString()]!!
-                    else
-                        Languages.PORTUGUESE
-            }
-
-        autoCompleteSystemLanguage.onItemClickListener =
-            AdapterView.OnItemClickListener { parent, _, position, _ ->
-                defaultSystemLanguageSelect =
                     if (parent.getItemAtPosition(position).toString().isNotEmpty() &&
                         mapLanguage.containsKey(parent.getItemAtPosition(position).toString())
                     )
@@ -290,10 +273,6 @@ class ConfigFragment : Fragment() {
                 readerModeSelect.toString()
             )
             this.putString(
-                GeneralConsts.KEYS.SYSTEM.LANGUAGE,
-                defaultSystemLanguageSelect.toString()
-            )
-            this.putString(
                 GeneralConsts.KEYS.SYSTEM.FORMAT_DATA,
                 dateSelect
             )
@@ -307,11 +286,9 @@ class ConfigFragment : Fragment() {
                     " - Order " + txtLibraryOrder.editText?.text +
                     "\n[SubTitle] Language " + txtDefaultSubtitleLanguage.editText?.text +
                     " - Translate " + txtDefaultSubtitleTranslate.editText?.text +
-                    "\n[System] Language " + txtSystemLanguage.editText?.text +
-                    " - Format Data " + txtSystemFormatDate.editText?.text
+                    "\n[System] Format Data " + txtSystemFormatDate.editText?.text
         )
 
-        //Toast.makeText(requireActivity(), getString(R.string.alert_save_sucess), Toast.LENGTH_SHORT).show()
     }
 
     private fun loadConfig() {
@@ -358,12 +335,6 @@ class ConfigFragment : Fragment() {
                 Languages.PORTUGUESE.toString()
             )!!
         )
-        defaultSystemLanguageSelect = Languages.valueOf(
-            sharedPreferences.getString(
-                GeneralConsts.KEYS.SYSTEM.LANGUAGE,
-                Languages.PORTUGUESE.toString()
-            )!!
-        )
 
         autoCompleteLibraryOrder.setText(
             mapOrder.filterValues { it == orderSelect }.keys.first(),
@@ -375,10 +346,6 @@ class ConfigFragment : Fragment() {
         )
         autoCompleteDefaultSubtitleTranslate.setText(
             mapLanguage.filterValues { it == defaultSubtitleTranslateSelect }.keys.first(),
-            false
-        )
-        autoCompleteSystemLanguage.setText(
-            mapLanguage.filterValues { it == defaultSystemLanguageSelect }.keys.first(),
             false
         )
 

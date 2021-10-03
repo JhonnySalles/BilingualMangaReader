@@ -10,7 +10,7 @@
     <dimen name="manga_grid_card_image">150dp</dimen>
     <dimen name="manga_grid_card_layout_width">150dp</dimen>
     <dimen name="manga_grid_card_layout_height">200dp</dimen>
-    <dimen name="manga_grid_title_size">13dp</dimen>
+    <dimen name="manga_grid_title_size">12dp</dimen>
     <dimen name="manga_grid_sub_title">10dp</dimen>
 
     <dimen name="manga_grid_card_layout_width_medium">120dp</dimen>

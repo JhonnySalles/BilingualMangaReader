@@ -261,30 +261,6 @@
                     android:textColor="@color/textPrimary"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/txt_system_language"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_small"
-                android:hint="@string/config_system_language"
-                android:textColorHint="@color/textPrimary"
-                app:boxBackgroundColor="@color/primary"
-                app:boxStrokeColor="@color/onSecondary"
-                app:startIconTint="@color/onSecondary"
-                app:startIconDrawable="@drawable/ic_language"
-                app:placeholderTextColor="@color/textPrimary"
-                app:hintTextColor="@color/onSecondary">
-
-                <AutoCompleteTextView
-                    android:id="@+id/menu_autocomplete_system_language"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="none"
-                    android:textColor="@color/textPrimary"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

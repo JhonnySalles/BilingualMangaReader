@@ -24,6 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
             android:background="@color/primarySemitransparent"
+            app:popupTheme="@style/MyDarkToolbarStyle"
             app:theme="@style/ToolbarTheme">
 
             <LinearLayout
@@ -63,7 +64,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="80dp"
-            android:background="@color/semiTransparent"
+            android:background="@drawable/reader_nav_bg"
             android:gravity="center_horizontal"
             android:orientation="vertical"
             android:paddingLeft="10dp"
@@ -94,11 +95,30 @@
             android:id="@+id/toolbar_reader_bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="right"
-            android:orientation="horizontal"
             android:layout_alignParentBottom="true"
-            android:background="@drawable/reader_nav_bg"
-            >
+            android:background="@color/primarySemitransparent"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_screen_rotate"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="@dimen/popup_reader_button_width"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minHeight="@dimen/popup_reader_button_min_height"
+                android:paddingLeft="@dimen/popup_reader_button_padding"
+                android:paddingRight="@dimen/popup_reader_button_padding"
+                android:background="@color/primarySemitransparent"
+                app:icon="@drawable/ic_screen_rotation"
+                app:iconTint="@color/textPrimary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/nav_next_text"
+                app:layout_constraintTop_toTopOf="parent"
+                app:rippleColor="@color/onSecondary" />
+
             <Button
                 android:id="@+id/btn_popup_open_floating"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
@@ -107,16 +127,16 @@
                 android:layout_marginEnd="5dp"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
+                android:minHeight="@dimen/popup_reader_button_min_height"
                 android:paddingLeft="@dimen/popup_reader_button_padding"
                 android:paddingRight="@dimen/popup_reader_button_padding"
-                android:minHeight="@dimen/popup_reader_button_min_height"
-                app:rippleColor="@color/onSecondary"
-                app:backgroundTint="@color/primary"
+                android:background="@color/primarySemitransparent"
                 app:icon="@drawable/ic_floating_window"
                 app:iconTint="@color/textPrimary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/nav_next_text"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:rippleColor="@color/onSecondary" />
 
             <Button
                 android:id="@+id/btn_popup_subtitle"
@@ -126,16 +146,16 @@
                 android:layout_marginEnd="20dp"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
+                android:minHeight="@dimen/popup_reader_button_min_height"
                 android:paddingLeft="@dimen/popup_reader_button_padding"
                 android:paddingRight="@dimen/popup_reader_button_padding"
-                android:minHeight="@dimen/popup_reader_button_min_height"
-                app:rippleColor="@color/onSecondary"
-                app:backgroundTint="@color/primary"
+                android:background="@color/primarySemitransparent"
                 app:icon="@drawable/ic_change_language"
                 app:iconTint="@color/textPrimary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/nav_next_text"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:rippleColor="@color/onSecondary" />
 
         </LinearLayout>
     </RelativeLayout>

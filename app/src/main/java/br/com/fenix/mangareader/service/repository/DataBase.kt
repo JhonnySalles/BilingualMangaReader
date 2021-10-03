@@ -1,6 +1,7 @@
 package br.com.fenix.mangareader.service.repository
 
 import android.content.Context
+import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -12,9 +13,10 @@ import br.com.fenix.mangareader.model.entity.KanjiJLPT
 import br.com.fenix.mangareader.model.entity.Manga
 import br.com.fenix.mangareader.model.entity.SubTitle
 import br.com.fenix.mangareader.util.constants.DataBaseConsts
+import br.com.fenix.mangareader.util.constants.GeneralConsts
 import br.com.fenix.mangareader.util.helpers.Converters
 
-@Database(entities = [Manga::class, Cover::class, SubTitle::class, KanjiJLPT::class], version = 2)
+@Database(entities = [Manga::class, Cover::class, SubTitle::class, KanjiJLPT::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class DataBase : RoomDatabase() {
 
@@ -32,6 +34,7 @@ abstract class DataBase : RoomDatabase() {
             if (!::INSTANCE.isInitialized)
                 synchronized(DataBase::class.java) { // Used for a two or many cores
                     INSTANCE = Room.databaseBuilder(context, DataBase::class.java, DATABASE_NAME)
+                        .addCallback(rdc)
                         .addMigrations(Migrations.MIGRATION_1_2)
                         .allowMainThreadQueries()
                         .build() // MainThread uses another thread in db conection
@@ -39,5 +42,11 @@ abstract class DataBase : RoomDatabase() {
             return INSTANCE
         }
 
+        private var rdc: Callback = object : Callback() {
+            override fun onCreate(database: SupportSQLiteDatabase) {
+                Log.i(GeneralConsts.TAG.LOG, "Iniciando os dados iniciais do banco.")
+                database.execSQL(Migrations.SQL_INITIAL.KANJI)
+            }
+        }
     }
 }

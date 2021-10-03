@@ -1,5 +1,6 @@
 package br.com.fenix.mangareader.view.ui.library
 
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
@@ -29,6 +30,12 @@ import java.lang.ref.WeakReference
 import android.view.ViewGroup
 import java.lang.Exception
 import java.time.LocalDateTime
+import android.view.View.MeasureSpec
+import kotlin.math.max
+import android.util.DisplayMetrics
+
+
+
 
 
 class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
@@ -205,13 +212,17 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             }
 
         }
-        generateLayout()
         observer()
 
         if (!Storage.isPermissionGranted(requireContext()))
             Storage.takePermission(requireContext(), requireActivity())
 
         return root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        generateLayout()
     }
 
     private fun loadConfig() {
@@ -232,16 +243,25 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun generateLayout() {
+
         if (mGridType != LibraryType.LINE) {
             val gridAdapter = MangaGridCardAdapter()
             mRecycleView.adapter = gridAdapter
+
             val isLandscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-            val spaceCount :Int = when(mGridType) {
-                LibraryType.GRID_BIG -> if (isLandscape) 4 else 2
-                LibraryType.GRID_MEDIUM -> if (isLandscape) 5 else 3
-                LibraryType.GRID_SMALL -> 6
-                else -> 2
+            val columnWidth :Int = when(mGridType) {
+                LibraryType.GRID_BIG -> resources.getDimension(R.dimen.manga_grid_card_layout_width).toInt()
+                LibraryType.GRID_MEDIUM -> if (isLandscape) resources.getDimension(R.dimen.manga_grid_card_layout_width_landscape_medium)
+                    .toInt() else resources.getDimension(R.dimen.manga_grid_card_layout_width_medium).toInt()
+                LibraryType.GRID_SMALL -> if (isLandscape)  resources.getDimension(R.dimen.manga_grid_card_layout_height_small).toInt()
+                else  resources.getDimension(R.dimen.manga_grid_card_layout_width).toInt()
+                else -> resources.getDimension(R.dimen.manga_grid_card_layout_width).toInt()
             }
+
+            val displayMetrics = DisplayMetrics()
+            (context as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)
+
+            val spaceCount :Int = max(1, displayMetrics.widthPixels / columnWidth);
             mRecycleView.layoutManager = GridLayoutManager(requireContext(), spaceCount)
             gridAdapter.attachListener(mListener)
         } else {

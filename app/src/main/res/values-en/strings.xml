@@ -5,8 +5,8 @@
     <!-- MENU -->
     <string name="menu_search">Search</string>
     <string name="menu_help">Help</string>
-    <string name="menu_config">Config</string>
-    <string name="menu_library">Libra</string>
+    <string name="menu_config">Configuration</string>
+    <string name="menu_library">Library</string>
     <string name="menu_history">History</string>
     <string name="menu_grid_type">Grid type</string>
 
