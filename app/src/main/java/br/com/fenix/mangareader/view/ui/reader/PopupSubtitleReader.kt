@@ -8,6 +8,7 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.service.controller.SubTitleController
+import br.com.fenix.mangareader.service.kanji.Formater
 import com.google.android.material.textfield.TextInputLayout
 
 
@@ -102,21 +103,22 @@ class PopupSubtitleReader : Fragment() {
 
         mSubTitleController.textSelected.observe(viewLifecycleOwner, {
             var title = ""
-            var content = ""
+            mSubtitleContent.setText("")
             if (it != null) {
                 val index =
                     mSubTitleController.pageSelected.value?.texts?.indexOf(mSubTitleController.textSelected?.value)
                         ?.plus(1)
                 title =
-                    "${mLabelChapter} ${mSubTitleController.chapterSelected?.value?.chapter.toString()} - ${mLabelText} $index/${mSubTitleController.pageSelected?.value?.texts?.size}"
+                    "${mLabelChapter} ${mSubTitleController.chapterSelected?.value?.chapter.toString()} - ${mLabelText} $index/${mSubTitleController.pageSelected.value?.texts?.size}"
 
-                content = it.text
-            } else if (mSubTitleController.chapterSelected.value != null && mSubTitleController.pageSelected?.value != null)
+                Formater.generateKanjiColor(it.text) { kanji ->
+                    mSubtitleContent.text = kanji
+                }
+            } else if (mSubTitleController.chapterSelected.value != null && mSubTitleController.pageSelected.value != null)
                 title =
-                    "${mLabelChapter} ${mSubTitleController.chapterSelected?.value?.chapter.toString()} - ${mLabelText} 0/${if (mSubTitleController.pageSelected?.value?.texts == null) 0 else mSubTitleController.pageSelected?.value?.texts?.size}"
+                    "${mLabelChapter} ${mSubTitleController.chapterSelected.value?.chapter.toString()} - ${mLabelText} 0/${if (mSubTitleController.pageSelected.value?.texts == null) 0 else mSubTitleController.pageSelected.value?.texts?.size}"
 
             mSubtitleTitle.text = title
-            mSubtitleContent.text = content
         })
     }
 

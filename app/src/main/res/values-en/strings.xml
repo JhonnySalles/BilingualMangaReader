@@ -18,7 +18,6 @@
 
     <string name="config_text_library_folder">Library folder</string>
     <string name="config_text_library_order">Library order</string>
-    <string name="config_text_subtitle_folder">Subtitle folder</string>
     <string name="config_text_default_subtitle_language">Default language</string>
     <string name="config_text_default_subtitle_translate">Default translate</string>
     <string name="config_option_order_name">For name</string>
@@ -28,8 +27,6 @@
     <string name="config_system_farmat_date">Date format</string>
     <string name="config_system_language">System language</string>
 
-    <string name="config_choose_library_folder">Choose library folder</string>
-    <string name="config_choose_subtitle_folder">Choose subtitle folder</string>
     <string name="config_option_date_time_format_0">Defalt (%s)</string>
 
     <!-- LANGUAGE -->
@@ -51,7 +48,6 @@
 
     <string name="menu_reading_favorite">Favorite</string>
     <string name="menu_reading_change_language">Change language</string>
-    <string name="menu_reading_settings">Settings</string>
 
     <string name="menu_reading_floating">Floating popup</string>
 
@@ -71,16 +67,11 @@
     <string name="color_filter_a_value">A</string>
 
     <!-- READER POPUP SUBTITLE FILE -->
-    <string name="popup_reading_import_subtitle_title">Import file</string>
     <string name="popup_reading_import_subtitle_file">Select a subtitle file</string>
     <string name="popup_reading_import_subtitle_selected">Subtitle selected</string>
     <string name="popup_reading_import_subtitle_is_empty">Subtitle empty</string>
 
     <!-- READER POPUP SUBTITLE -->
-    <string name="popup_reading_subtitle_title">Subtitle</string>
-    <string name="popup_reading_subtitle_before">Before</string>
-    <string name="popup_reading_subtitle_next">Next</string>
-    <string name="popup_reading_subtitle_file">File</string>
     <string name="popup_reading_subtitle_chapter">Chapter</string>
     <string name="popup_reading_subtitle_text">Text</string>
     <string name="popup_reading_subtitle_find_subtitle">Founded subtitle: chapter %s and page %s.</string>

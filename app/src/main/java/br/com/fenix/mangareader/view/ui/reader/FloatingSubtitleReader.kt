@@ -11,13 +11,16 @@ import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.model.entity.Page
 import br.com.fenix.mangareader.model.entity.Text
 import br.com.fenix.mangareader.service.controller.SubTitleController
+import br.com.fenix.mangareader.service.kanji.Formater
+import br.com.fenix.mangareader.service.kanji.FuriganaView
 import kotlin.math.abs
 
 class FloatingSubtitleReader constructor(private val context: Context) {
 
     private var windowManager: WindowManager? = null
         get() {
-            if (field == null) field = (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager)
+            if (field == null) field =
+                (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager)
             return field
         }
 
@@ -80,7 +83,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
     private var mLabelText: String
     private var mSubtitleChapter: TextView
     private var mSubtitlePage: TextView
-    private var mSubtitleContent: TextView
+    private var mSubtitleContent: FuriganaView
     private var mSubtitleFileName: TextView
 
     init {
@@ -128,7 +131,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
     }
 
 
-    fun updatePage(page : Page?) {
+    fun updatePage(page: Page?) {
         var text = ""
         if (page != null)
             text = page.name
@@ -136,10 +139,10 @@ class FloatingSubtitleReader constructor(private val context: Context) {
         mSubtitleFileName.text = text
     }
 
-    fun updateText(text : Text?) {
+    fun updateText(text: Text?) {
         var chapter = ""
         var page = ""
-        var content = ""
+        mSubtitleContent.setText("")
         if (text != null) {
             val index =
                 mSubTitleController.pageSelected.value?.texts?.indexOf(mSubTitleController.textSelected.value)
@@ -151,7 +154,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
             page =
                 "${mLabelPage} ${mSubTitleController.getPageKey(mSubTitleController.pageSelected.value!!)} - ${mLabelText} $index/${mSubTitleController.pageSelected.value?.texts?.size}"
 
-            content = text.text
+            Formater.generateFurigana(text.text) { furigana -> mSubtitleContent.setText(furigana) }
         } else if (mSubTitleController.chapterSelected.value != null && mSubTitleController.pageSelected.value != null) {
             chapter =
                 "${mLabelChapter} ${mSubTitleController.chapterSelected.value?.chapter.toString()}"
@@ -161,7 +164,6 @@ class FloatingSubtitleReader constructor(private val context: Context) {
 
         mSubtitleChapter.text = chapter
         mSubtitlePage.text = page
-        mSubtitleContent.text = content
     }
 
     fun show() {

@@ -181,7 +181,7 @@ class SubTitleController private constructor(private val context: Context) {
         val hash: String? = DigestUtils.md5Hex(image)
         var pageName: String? = mParse.getPagePath(currentPage)
 
-        if (pageName == null || pageName.isEmpty()) {
+        if (chapterSelected.value == null || pageName == null || pageName.isEmpty()) {
             Toast.makeText(
                 context,
                 context.resources.getString(R.string.popup_reading_subtitle_not_find_subtitle),
@@ -343,7 +343,7 @@ class SubTitleController private constructor(private val context: Context) {
     private var imageBackup: Bitmap? = null
     private var isDrawing = false
     fun drawSelectedText() {
-        if (pageSelected.value?.texts!!.isEmpty())
+        if (pageSelected.value == null || pageSelected.value?.texts!!.isEmpty())
             return
 
         val view: PageImageView = ReaderFragment.getCurrencyImageView() ?: return

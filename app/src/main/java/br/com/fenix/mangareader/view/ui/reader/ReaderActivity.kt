@@ -166,6 +166,20 @@ class ReaderActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
+    override fun onStop() {
+        if (mFloatingSubtitleReader != null && mFloatingSubtitleReader.isShowing)
+            mFloatingSubtitleReader.dismiss()
+
+        super.onStop()
+    }
+
+    override fun onDestroy() {
+        if (mFloatingSubtitleReader != null && mFloatingSubtitleReader.isShowing)
+            mFloatingSubtitleReader.dismiss()
+
+        super.onDestroy()
+    }
+
     fun setFragment(fragment: Fragment?) {
         supportFragmentManager
             .beginTransaction()

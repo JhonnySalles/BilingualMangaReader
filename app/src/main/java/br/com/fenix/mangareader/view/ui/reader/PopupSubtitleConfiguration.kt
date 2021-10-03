@@ -45,7 +45,7 @@ class PopupSubtitleConfiguration : Fragment() {
         mSubTitleController = SubTitleController.getInstance(requireContext())
         mSubTitleController.clearSubtitlesSelected()
 
-        mSubtitleSelected.setOnClickListener {
+        mSubtitleSelectedAutoComplete.setOnClickListener {
             mSubtitleSelectedAutoComplete.setText("", false)
             mSubTitleController.clearSubtitlesSelected()
             if (mSubTitleController.chaptersKeys.value == null || mSubTitleController.chaptersKeys.value!!.isEmpty())

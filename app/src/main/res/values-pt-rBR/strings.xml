@@ -20,15 +20,12 @@
     <string name="config_text_library_order">Ordenação da biblioteca</string>
     <string name="config_text_default_subtitle_language">Linguagem padrão</string>
     <string name="config_text_default_subtitle_translate">Tradução padrão</string>
-    <string name="config_text_subtitle_folder">Caminho das legendas</string>
     <string name="config_option_order_name">Por nome</string>
     <string name="config_option_order_date">Por data</string>
     <string name="config_option_order_access">Último acesso</string>
 
     <string name="config_system_language">Linguagem do sistema</string>
     <string name="config_system_farmat_date">Formato de data</string>
-    <string name="config_choose_library_folder">Escolha a pasta da biblioteca</string>
-    <string name="config_choose_subtitle_folder">Escolha a pasta das legendas</string>
     <string name="config_option_date_time_format_0">Padrão (%s)</string>
 
     <!-- LANGUAGE -->
@@ -50,7 +47,6 @@
 
     <string name="menu_reading_favorite">Favorito</string>
     <string name="menu_reading_change_language">Trocar de idioma</string>
-    <string name="menu_reading_settings">Configurações</string>
 
     <string name="menu_reading_floating">Popup flutuante</string>
 
@@ -70,16 +66,11 @@
     <string name="color_filter_a_value">A</string>
 
     <!-- READER POPUP SUBTITLE FILE -->
-    <string name="popup_reading_import_subtitle_title">Importar arquivo</string>
     <string name="popup_reading_import_subtitle_file">Selecione um arquivo de legenda</string>
     <string name="popup_reading_import_subtitle_selected">Legenda selecionada</string>
     <string name="popup_reading_import_subtitle_is_empty">Nenhuma legenda encontrada</string>
 
     <!-- READER POPUP SUBTITLE -->
-    <string name="popup_reading_subtitle_title">Legenda</string>
-    <string name="popup_reading_subtitle_before">Anterior</string>
-    <string name="popup_reading_subtitle_next">Próximo</string>
-    <string name="popup_reading_subtitle_file">Arquivo</string>
     <string name="popup_reading_subtitle_chapter">Capítulo</string>
     <string name="popup_reading_subtitle_text">Texto</string>
     <string name="popup_reading_subtitle_find_subtitle">Encontrado a legenda: capítulo %s e página %s.</string>

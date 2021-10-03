@@ -1,31 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="ReaderTheme" parent="AppTheme">
-        <item name="colorPrimaryDark">@color/primarySemitransparent</item>
-        <item name="android:textColor">@color/textPrimary</item>
-        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>
-    </style>
 
     <style name="AppCompatAlertDialogStyle" parent="Theme.AppCompat.Dialog.Alert">
         <item name="colorAccent">@color/secondary</item>
         <item name="android:textColorPrimary">@color/textPrimary</item>
         <item name="android:background">@color/primary_material_dark</item>
         <item name="colorControlHighlight">@color/ripple_material_dark</item>
-    </style>
-
-    <style name="MyDarkToolbarTheme" parent="Widget.AppCompat.ActionBar">
-        <item name="android:textColorPrimary">@color/textPrimary</item>
-        <item name="android:colorBackground">@color/primary</item>
-        <item name="colorControlNormal">@color/textPrimary</item>
-        <item name="colorControlHighlight">@color/primary</item>
-    </style>
-
-    <style name="NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
-        <item name="android:textColor">#F44336</item>
-    </style>
-
-    <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
-        <item name="android:textColor">#03A9F4</item>
     </style>
 
     <style name="PopupTab" parent="TextAppearance.Design.Tab">

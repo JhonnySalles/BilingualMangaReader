@@ -10,6 +10,7 @@
         <entry key="..\:/Projeto/MangaReader/app/src/main/res/layout/book_grid_card.xml" value="0.16259057971014493" />
         <entry key="..\:/Projeto/MangaReader/app/src/main/res/layout/book_line_card.xml" value="0.12239583333333333" />
         <entry key="..\:/Projeto/MangaReader/app/src/main/res/layout/content_main.xml" value="0.12239583333333333" />
+        <entry key="..\:/Projeto/MangaReader/app/src/main/res/layout/floating_subtitle_reader.xml" value="0.1" />
         <entry key="..\:/Projeto/MangaReader/app/src/main/res/layout/fragment_config.xml" value="0.19293478260869565" />
         <entry key="..\:/Projeto/MangaReader/app/src/main/res/layout/fragment_help.xml" value="0.1" />
         <entry key="..\:/Projeto/MangaReader/app/src/main/res/layout/fragment_history.xml" value="0.12239583333333333" />
@@ -21,6 +22,7 @@
         <entry key="..\:/Projeto/MangaReader/app/src/main/res/layout/popup_subtitle_configuration.xml" value="0.33" />
         <entry key="..\:/Projeto/MangaReader/app/src/main/res/layout/popup_subtitle_reader.xml" value="0.33" />
         <entry key="..\:/Projeto/MangaReader/app/src/main/res/layout/reader_color_filter_settings.xml" value="0.12239583333333333" />
+        <entry key="..\:/Projeto/MangaReader/app/src/main/res/menu/menu_reader.xml" value="0.20416666666666666" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.38333333333333336" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/drawable/ic_baseline_fullscreen.xml" value="0.38333333333333336" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/drawable/ic_baseline_landscape.xml" value="0.38333333333333336" />
@@ -90,7 +92,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_15" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_15_PREVIEW" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

@@ -1,18 +1,15 @@
 package br.com.fenix.mangareader.service.kanji
 
 import android.content.Context
-import android.content.res.AssetManager
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.util.Log
-import android.widget.TextView
 import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.service.repository.KanjiRepository
 import br.com.fenix.mangareader.service.tokenizers.SudachiTokenizer
 import br.com.fenix.mangareader.util.constants.GeneralConsts
 import br.com.fenix.mangareader.util.constants.ReaderConsts
-import com.worksap.nlp.sudachi.DictionaryFactory
 import com.worksap.nlp.sudachi.Tokenizer
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -22,10 +19,10 @@ import java.io.InputStreamReader
 import java.nio.charset.StandardCharsets
 
 class Formater {
-    companion object {
+    companion object KANJI {
         private val pattern = Regex(".*[\u4E00-\u9FAF].*")
         var tokenizer: Tokenizer? = null
-        private var JLPT : Map<String, Int>? = null
+        private var JLPT: Map<String, Int>? = null
         private var ANOTHER: ForegroundColorSpan? = null
         private var N1: ForegroundColorSpan? = null
         private var N2: ForegroundColorSpan? = null
@@ -75,21 +72,34 @@ class Formater {
             }
         }
 
-        val example = "サンシャイン６０の<ruby>展望台<rt>てんぼうだい</rt></ruby>が<ruby>新<rt>あたら</rt></ruby>しくなる"
-        fun generateFurigana(context: Context, textView: TextView, text: String) {
-            if (text.isEmpty())
+        fun generateFurigana(text: String, function: (String) -> (Unit)) {
+            if (text.isEmpty()) {
+                function(text)
                 return
+            }
 
+            var furigana = text
             val replaced = mutableSetOf<String>()
-            for (m in tokenizer!!.tokenize(ReaderConsts.TOKENIZER.SUDACHI.SPLIT_MODE, text)) {
-                if (m.surface().matches(pattern) && !replaced.contains(m.surface())) {
-                    text.replace(
+            for (m in tokenizer!!.tokenize(ReaderConsts.TOKENIZER.SUDACHI.SPLIT_MODE, furigana)) {
+                if (!replaced.contains(m.surface()) && m.readingForm().isNotEmpty() && m.surface()
+                        .matches(pattern)
+                ) {
+                    furigana = furigana.replace(
                         m.surface(),
-                        "<ruby>" + m.surface() + "<rt>" + m.readingForm() + "</rt></ruby>",
+                        "{" + m.surface() + ";" + m.readingForm() + "}",
                         true
                     )
                     replaced.add(m.surface())
                 }
+            }
+
+            function(furigana)
+        }
+
+        fun generateKanjiColor(text: String, function: (SpannableString) -> (Unit)) {
+            if (text.isEmpty()) {
+                function(SpannableString(text))
+                return
             }
 
             val ss = SpannableString(text)
@@ -107,7 +117,16 @@ class Formater {
                     ss.setSpan(color, index, index + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
             }
-            textView.text = ss
+
+            function(ss)
+        }
+
+        fun generateFuriganaAndKanjiCollor(text: String, function: (SpannableString) -> (Unit)) {
+            generateFurigana(text) {
+                generateKanjiColor(it) { color ->
+                    function(color)
+                }
+            }
         }
     }
 }
