@@ -7,6 +7,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
 import android.view.inputmethod.EditorInfo
@@ -19,6 +20,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.model.entity.Manga
 import br.com.fenix.mangareader.model.enums.LibraryType
+import br.com.fenix.mangareader.model.enums.Order
 import br.com.fenix.mangareader.service.listener.MangaCardListener
 import br.com.fenix.mangareader.service.repository.Storage
 import br.com.fenix.mangareader.service.scanner.Scanner
@@ -27,21 +29,15 @@ import br.com.fenix.mangareader.view.adapter.library.MangaGridCardAdapter
 import br.com.fenix.mangareader.view.adapter.library.MangaLineCardAdapter
 import br.com.fenix.mangareader.view.ui.reader.ReaderActivity
 import java.lang.ref.WeakReference
-import android.view.ViewGroup
-import java.lang.Exception
 import java.time.LocalDateTime
-import android.view.View.MeasureSpec
 import kotlin.math.max
-import android.util.DisplayMetrics
-
-
-
 
 
 class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private lateinit var mViewModel: LibraryViewModel
     private var mLibraryPath: String = ""
+    private var mOrderBy: Order = Order.Name
 
     private lateinit var mRefreshLayout: SwipeRefreshLayout
     private lateinit var mRecycleView: RecyclerView
@@ -155,11 +151,11 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private fun onChangeLayout() {
         val isLandscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
-        mGridType = when(mGridType) {
+        mGridType = when (mGridType) {
             LibraryType.LINE -> LibraryType.GRID_BIG
             LibraryType.GRID_BIG -> LibraryType.GRID_MEDIUM
             LibraryType.GRID_MEDIUM -> if (isLandscape) LibraryType.GRID_SMALL else LibraryType.LINE
-            else  -> LibraryType.LINE
+            else -> LibraryType.LINE
         }
 
         val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
@@ -229,6 +225,12 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
         mLibraryPath =
             sharedPreferences?.getString(GeneralConsts.KEYS.LIBRARY.FOLDER, "").toString()
+        mOrderBy = Order.valueOf(
+            sharedPreferences?.getString(
+                GeneralConsts.KEYS.LIBRARY.ORDER,
+                Order.Name.toString()
+            ).toString()
+        )
     }
 
     override fun onRequestPermissionsResult(
@@ -248,20 +250,24 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             val gridAdapter = MangaGridCardAdapter()
             mRecycleView.adapter = gridAdapter
 
-            val isLandscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-            val columnWidth :Int = when(mGridType) {
-                LibraryType.GRID_BIG -> resources.getDimension(R.dimen.manga_grid_card_layout_width).toInt()
+            val isLandscape =
+                resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+            val columnWidth: Int = when (mGridType) {
+                LibraryType.GRID_BIG -> resources.getDimension(R.dimen.manga_grid_card_layout_width)
+                    .toInt()
                 LibraryType.GRID_MEDIUM -> if (isLandscape) resources.getDimension(R.dimen.manga_grid_card_layout_width_landscape_medium)
-                    .toInt() else resources.getDimension(R.dimen.manga_grid_card_layout_width_medium).toInt()
-                LibraryType.GRID_SMALL -> if (isLandscape)  resources.getDimension(R.dimen.manga_grid_card_layout_height_small).toInt()
-                else  resources.getDimension(R.dimen.manga_grid_card_layout_width).toInt()
+                    .toInt() else resources.getDimension(R.dimen.manga_grid_card_layout_width_medium)
+                    .toInt()
+                LibraryType.GRID_SMALL -> if (isLandscape) resources.getDimension(R.dimen.manga_grid_card_layout_height_small)
+                    .toInt()
+                else resources.getDimension(R.dimen.manga_grid_card_layout_width).toInt()
                 else -> resources.getDimension(R.dimen.manga_grid_card_layout_width).toInt()
             }
 
             val displayMetrics = DisplayMetrics()
             (context as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)
 
-            val spaceCount :Int = max(1, displayMetrics.widthPixels / columnWidth);
+            val spaceCount: Int = max(1, displayMetrics.widthPixels / columnWidth);
             mRecycleView.layoutManager = GridLayoutManager(requireContext(), spaceCount)
             gridAdapter.attachListener(mListener)
         } else {
@@ -273,6 +279,13 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun updateList(list: ArrayList<Manga>) {
+        when (mOrderBy) {
+            Order.Date -> list.sortBy { it.dateCreate }
+            Order.LastAcess -> list.sortByDescending { it.lastAccess }
+            Order.Favorite -> list.sortBy { it.favorite }
+            else -> list.sortBy { it.name }
+        }
+
         if (mGridType != LibraryType.LINE)
             (mRecycleView.adapter as MangaGridCardAdapter).updateList(list)
         else
@@ -293,7 +306,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             if (enabled)
                 searchView.clearFocus()
             enableSearchView(searchView, !enabled)
-        }catch (e : Exception) {
+        } catch (e: Exception) {
             Log.e(GeneralConsts.TAG.LOG, "Erro ao desabilitar o botão de pesquisa: " + e.message)
         }
         mRefreshLayout.isRefreshing = enabled

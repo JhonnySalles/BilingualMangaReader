@@ -14,8 +14,8 @@
         android:id="@+id/manga_line_image_cover"
         android:layout_width="@dimen/manga_line_card_image"
         android:layout_height="match_parent"
-        android:background="@color/primary"
         android:adjustViewBounds="true"
+        android:background="@color/primary"
         android:scaleType="centerCrop"
         app:srcCompat="@mipmap/book_icon" />
 
@@ -23,18 +23,35 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="1dp"
         android:paddingLeft="5dp"
+        android:paddingTop="1dp"
         android:paddingRight="5dp">
 
-        <!-- Title, secondary and supporting text -->
-        <TextView
-            android:id="@+id/manga_line_text_title"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?attr/textAppearanceHeadline6"
-            android:textColor="@color/textPrimary"
-            android:textSize="@dimen/manga_line_title_size" />
+            android:paddingLeft="5dp"
+            android:paddingTop="1dp"
+            android:paddingRight="5dp">
+            <ImageView
+                android:id="@+id/manga_line_favorite"
+                android:layout_width="@dimen/manga_grid_favorite"
+                android:layout_height="@dimen/manga_grid_favorite"
+                android:adjustViewBounds="true"
+                android:src="@drawable/ic_favorite_mark"
+                android:gravity="center"
+                android:visibility="gone"
+                app:tint="@color/onSecondary" />
+
+            <!-- Title, secondary and supporting text -->
+            <TextView
+                android:id="@+id/manga_line_text_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/manga_line_title_size" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/manga_line_sub_title"
@@ -50,8 +67,8 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="5dp"
-            android:background="@color/primary"
             android:layout_gravity="bottom"
+            android:background="@color/primary"
             android:indeterminateTint="@color/secondary"
             android:max="100"
             android:min="0"

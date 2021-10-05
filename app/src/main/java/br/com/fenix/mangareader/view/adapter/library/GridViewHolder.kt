@@ -26,6 +26,10 @@ class GridViewHolder(itemView: View, private val listener: MangaCardListener) :
         val mangaSubTitle = itemView.findViewById<TextView>(R.id.manga_grid_sub_title)
         val mangaProgress = itemView.findViewById<ProgressBar>(R.id.manga_grid_progress)
         val cardView = itemView.findViewById<MaterialCardView>(R.id.manga_grid_card)
+        val favorite = itemView.findViewById<ImageView>(R.id.manga_grid_favorite)
+
+        if (manga.favorite)
+            favorite.visibility = View.VISIBLE
 
         val isLandscape =
             itemView.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE

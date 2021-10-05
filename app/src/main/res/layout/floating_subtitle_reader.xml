@@ -15,27 +15,11 @@
         android:paddingBottom="@dimen/margin">
 
         <TextView
-            android:id="@+id/txt_floating_chapter"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="195dp"
-            android:fontFamily="monospace"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="@color/textPrimary"
-            android:textSize="@dimen/popup_reader_title"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/txt_floating_page"
+            android:id="@+id/txt_floating_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="25dp"
             android:layout_marginEnd="10dp"
             android:fontFamily="monospace"
             android:textAlignment="center"
@@ -47,27 +31,11 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/txt_floating_file_page_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
-            android:fontFamily="monospace"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-            android:textColor="@color/textPrimary"
-            android:textSize="@dimen/popup_reader_file_page_name"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <br.com.fenix.mangareader.service.kanji.FuriganaView
             android:id="@+id/txt_floating_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"

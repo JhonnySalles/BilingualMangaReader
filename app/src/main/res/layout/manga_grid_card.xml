@@ -69,4 +69,15 @@
 
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/manga_grid_favorite"
+        android:layout_width="@dimen/manga_grid_favorite"
+        android:layout_height="@dimen/manga_grid_favorite"
+        android:adjustViewBounds="true"
+        android:src="@drawable/ic_favorite_mark"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:visibility="gone"
+        app:tint="@color/onPrimary" />
+
 </com.google.android.material.card.MaterialCardView>

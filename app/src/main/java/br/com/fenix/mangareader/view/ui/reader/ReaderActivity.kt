@@ -268,10 +268,6 @@ class ReaderActivity : AppCompatActivity() {
         else {
             if (canDrawOverlays(applicationContext)) {
                 val mSubTitleController = SubTitleController.getInstance(applicationContext)
-                mSubTitleController.pageSelected.observe(this, {
-                    mFloatingSubtitleReader.updatePage(it)
-                })
-
                 mSubTitleController.textSelected.observe(this, {
                     mFloatingSubtitleReader.updateText(it)
                 })

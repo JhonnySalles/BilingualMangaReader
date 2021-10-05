@@ -99,7 +99,8 @@ class ConfigFragment : Fragment() {
         mapOrder = hashMapOf(
             getString(R.string.config_option_order_name) to Order.Name,
             getString(R.string.config_option_order_date) to Order.Date,
-            getString(R.string.config_option_order_access) to Order.LastAcess
+            getString(R.string.config_option_order_access) to Order.LastAcess,
+            getString(R.string.config_option_order_favorite) to Order.Favorite
         )
 
         mapPageMode = hashMapOf(

@@ -23,6 +23,7 @@
     <string name="config_option_order_name">Por nome</string>
     <string name="config_option_order_date">Por data</string>
     <string name="config_option_order_access">Último acesso</string>
+    <string name="config_option_order_favorite">Favoritos primeiro</string>
 
     <string name="config_system_language">Linguagem do sistema</string>
     <string name="config_system_farmat_date">Formato de data</string>

@@ -19,7 +19,6 @@ class PopupSubtitleReader : Fragment() {
     private lateinit var mSubtitlePageAutoComplete: AutoCompleteTextView
     private lateinit var mSubtitleTitle: TextView
     private lateinit var mSubtitleContent: TextView
-    private lateinit var mSubtitleFileName: TextView
     private lateinit var mNavBeforeText: Button
     private lateinit var mNavNextText: Button
     private lateinit var mRefresh: Button
@@ -40,7 +39,6 @@ class PopupSubtitleReader : Fragment() {
         mSubtitlePageAutoComplete = root.findViewById(R.id.menu_autocomplete_subtitle_Page)
         mSubtitlePage = root.findViewById(R.id.cb_subtitle_page)
         mSubtitleTitle = root.findViewById(R.id.txt_subtitle_title)
-        mSubtitleFileName = root.findViewById(R.id.txt_subtitle_file_page_name)
         mSubtitleContent = root.findViewById(R.id.txt_subtitle_content)
         mNavBeforeText = root.findViewById(R.id.nav_before_text)
         mNavNextText = root.findViewById(R.id.nav_next_text)
@@ -95,15 +93,11 @@ class PopupSubtitleReader : Fragment() {
         })
 
         mSubTitleController.pageSelected.observe(viewLifecycleOwner, {
-            var page = ""
             var key = ""
-            if (it != null) {
+            if (it != null)
                 key = mSubTitleController.getPageKey(it)
-                page = it.name
-            }
 
             mSubtitlePageAutoComplete.setText(key, false)
-            mSubtitleFileName.text = page
         })
 
         mSubTitleController.textSelected.observe(viewLifecycleOwner, {

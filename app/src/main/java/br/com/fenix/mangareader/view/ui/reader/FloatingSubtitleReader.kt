@@ -8,7 +8,6 @@ import android.view.*
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageButton
 import br.com.fenix.mangareader.R
-import br.com.fenix.mangareader.model.entity.Page
 import br.com.fenix.mangareader.model.entity.Text
 import br.com.fenix.mangareader.service.controller.SubTitleController
 import br.com.fenix.mangareader.service.kanji.Formater
@@ -81,10 +80,8 @@ class FloatingSubtitleReader constructor(private val context: Context) {
     private var mLabelChapter: String
     private var mLabelPage: String
     private var mLabelText: String
-    private var mSubtitleChapter: TextView
-    private var mSubtitlePage: TextView
+    private var mSubtitleTitle: TextView
     private var mSubtitleContent: FuriganaView
-    private var mSubtitleFileName: TextView
 
     init {
         with(mFloatingView) {
@@ -108,11 +105,8 @@ class FloatingSubtitleReader constructor(private val context: Context) {
             this.findViewById<AppCompatImageButton>(R.id.nav_floating_change_language)
                 .setOnClickListener { mSubTitleController.changeLanguage() }
 
-            mSubtitleChapter = this.findViewById(R.id.txt_floating_chapter)
-            mSubtitlePage = this.findViewById(R.id.txt_floating_page)
-            mSubtitleFileName = this.findViewById(R.id.txt_floating_file_page_name)
+            mSubtitleTitle = this.findViewById(R.id.txt_floating_title)
             mSubtitleContent = this.findViewById(R.id.txt_floating_content)
-
 
             this.findViewById<AppCompatImageButton>(R.id.imgbtn_close)
                 .setOnClickListener { dismiss() }
@@ -136,40 +130,28 @@ class FloatingSubtitleReader constructor(private val context: Context) {
         }
     }
 
-
-    fun updatePage(page: Page?) {
-        var text = ""
-        if (page != null)
-            text = page.name
-
-        mSubtitleFileName.text = text
-    }
-
     fun updateText(text: Text?) {
-        var chapter = ""
-        var page = ""
+        var title = ""
         mSubtitleContent.setText("")
         if (text != null) {
             val index =
                 mSubTitleController.pageSelected.value?.texts?.indexOf(mSubTitleController.textSelected.value)
                     ?.plus(1)
 
-            chapter =
-                "${mLabelChapter} ${mSubTitleController.chapterSelected.value?.chapter.toString()}"
-
-            page =
-                "${mLabelPage} ${mSubTitleController.getPageKey(mSubTitleController.pageSelected.value!!)} - ${mLabelText} $index/${mSubTitleController.pageSelected.value?.texts?.size}"
+            title =
+                "${mLabelChapter} ${mSubTitleController.chapterSelected.value?.chapter.toString()} - " +
+                        "${mLabelPage} ${mSubTitleController.pageSelected.value!!.number} - " +
+                        "${mLabelText} $index/${mSubTitleController.pageSelected.value?.texts?.size}"
 
             Formater.generateFurigana(text.text) { furigana -> mSubtitleContent.setText(furigana) }
         } else if (mSubTitleController.chapterSelected.value != null && mSubTitleController.pageSelected.value != null) {
-            chapter =
-                "${mLabelChapter} ${mSubTitleController.chapterSelected.value?.chapter.toString()}"
-            page =
-                "${mLabelPage} ${mSubTitleController.getPageKey(mSubTitleController.pageSelected.value!!)} - ${mLabelText} 0/${if (mSubTitleController.pageSelected.value?.texts == null) 0 else mSubTitleController.pageSelected.value?.texts?.size}"
+            title =
+                "${mLabelChapter} ${mSubTitleController.chapterSelected.value?.chapter.toString()} - " +
+                        "${mLabelPage} ${mSubTitleController.pageSelected.value!!.number} - "
+            "${mLabelText} 0/${if (mSubTitleController.pageSelected.value?.texts == null) 0 else mSubTitleController.pageSelected.value?.texts?.size}"
         }
 
-        mSubtitleChapter.text = chapter
-        mSubtitlePage.text = page
+        mSubtitleTitle.text = title
     }
 
     fun show() {

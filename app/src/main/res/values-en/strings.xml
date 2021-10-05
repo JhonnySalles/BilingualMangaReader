@@ -23,6 +23,7 @@
     <string name="config_option_order_name">For name</string>
     <string name="config_option_order_date">For date</string>
     <string name="config_option_order_access">Last access</string>
+    <string name="config_option_order_favorite">Favorite first</string>
 
     <string name="config_system_farmat_date">Date format</string>
     <string name="config_system_language">System language</string>
