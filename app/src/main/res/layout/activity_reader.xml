@@ -31,7 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentBottom="true"
-                android:gravity="center|left"
+                android:gravity="center|start"
                 android:orientation="vertical">
 
                 <TextView
@@ -97,7 +97,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="@color/primarySemitransparent"
-            android:gravity="right"
+            android:gravity="end"
             android:orientation="horizontal">
 
             <Button
@@ -106,12 +106,12 @@
                 android:layout_width="@dimen/popup_reader_button_width"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="5dp"
+                android:background="@color/primarySemitransparent"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:minHeight="@dimen/popup_reader_button_min_height"
                 android:paddingLeft="@dimen/popup_reader_button_padding"
                 android:paddingRight="@dimen/popup_reader_button_padding"
-                android:background="@color/primarySemitransparent"
                 app:icon="@drawable/ic_screen_rotation"
                 app:iconTint="@color/textPrimary"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -125,12 +125,12 @@
                 android:layout_width="@dimen/popup_reader_button_width"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="5dp"
+                android:background="@color/primarySemitransparent"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:minHeight="@dimen/popup_reader_button_min_height"
                 android:paddingLeft="@dimen/popup_reader_button_padding"
                 android:paddingRight="@dimen/popup_reader_button_padding"
-                android:background="@color/primarySemitransparent"
                 app:icon="@drawable/ic_floating_window"
                 app:iconTint="@color/textPrimary"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -144,12 +144,12 @@
                 android:layout_width="@dimen/popup_reader_button_width"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="20dp"
+                android:background="@color/primarySemitransparent"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:minHeight="@dimen/popup_reader_button_min_height"
                 android:paddingLeft="@dimen/popup_reader_button_padding"
                 android:paddingRight="@dimen/popup_reader_button_padding"
-                android:background="@color/primarySemitransparent"
                 app:icon="@drawable/ic_change_language"
                 app:iconTint="@color/textPrimary"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -177,6 +177,7 @@
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
+            android:contentDescription="@string/popup_reading_open"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_line_popup"
             app:tint="@color/onSecondary" />
@@ -185,7 +186,8 @@
             android:id="@+id/menu_close"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="right|top"
+            android:layout_gravity="end|top"
+            android:contentDescription="@string/popup_reading_close"
             android:scaleType="center"
             android:src="@drawable/ic_close"
             app:tint="@color/onSecondary" />
@@ -194,7 +196,8 @@
             android:id="@+id/menu_floating_touch"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="left|top"
+            android:layout_gravity="start|top"
+            android:contentDescription="@string/popup_reading_floating_popup"
             android:scaleType="center"
             android:src="@drawable/ic_floating_window"
             app:tint="@color/onSecondary" />
@@ -226,20 +229,21 @@
                         android:id="@+id/tab_item_subtitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Legenda" />
+                        android:text="@string/popup_reading_tab_item_subtitle" />
 
 
                     <com.google.android.material.tabs.TabItem
                         android:id="@+id/tab_item_file_import"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Importar" />
+                        android:text="@string/popup_reading_tab_item_subtitle_import" />
 
                     <com.google.android.material.tabs.TabItem
                         android:id="@+id/tab_item_brightness"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Brilho" />
+                        android:text="@string/popup_reading_tab_item_brightness"
+                        android:visibility="gone" />
 
                 </com.google.android.material.tabs.TabLayout>
 

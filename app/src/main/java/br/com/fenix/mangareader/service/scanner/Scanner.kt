@@ -97,7 +97,7 @@ class Scanner {
 
                 if (libraryPath == "" || !File(libraryPath).exists()) return
 
-                val storage: Storage = Storage(ctx)
+                val storage = Storage(ctx)
                 val storageFiles: MutableMap<String, Manga> = HashMap()
 
                 // create list of files available in storage

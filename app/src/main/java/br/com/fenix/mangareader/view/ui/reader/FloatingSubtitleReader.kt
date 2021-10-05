@@ -102,6 +102,12 @@ class FloatingSubtitleReader constructor(private val context: Context) {
             this.findViewById<AppCompatImageButton>(R.id.nav_floating_draw)
                 .setOnClickListener { mSubTitleController.drawSelectedText() }
 
+            this.findViewById<AppCompatImageButton>(R.id.nav_floating_draw)
+                .setOnClickListener { mSubTitleController.drawSelectedText() }
+
+            this.findViewById<AppCompatImageButton>(R.id.nav_floating_change_language)
+                .setOnClickListener { mSubTitleController.changeLanguage() }
+
             mSubtitleChapter = this.findViewById(R.id.txt_floating_chapter)
             mSubtitlePage = this.findViewById(R.id.txt_floating_page)
             mSubtitleFileName = this.findViewById(R.id.txt_floating_file_page_name)

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.fragment.app.Fragment
 import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.service.controller.SubTitleController
@@ -23,6 +24,7 @@ class PopupSubtitleReader : Fragment() {
     private lateinit var mNavNextText: Button
     private lateinit var mRefresh: Button
     private lateinit var mDraw: Button
+    private lateinit var mChangeLanguage: Button
     private lateinit var mLabelChapter: String
     private lateinit var mLabelText: String
 
@@ -44,6 +46,7 @@ class PopupSubtitleReader : Fragment() {
         mNavNextText = root.findViewById(R.id.nav_next_text)
         mRefresh = root.findViewById(R.id.nav_refresh)
         mDraw = root.findViewById(R.id.nav_draw)
+        mChangeLanguage = root.findViewById(R.id.nav_change_language)
 
         mLabelChapter = getString(R.string.popup_reading_subtitle_chapter)
         mLabelText = getString(R.string.popup_reading_subtitle_text)
@@ -56,13 +59,15 @@ class PopupSubtitleReader : Fragment() {
         mRefresh.setOnClickListener { mSubTitleController.findSubtitle() }
         mDraw.setOnClickListener { mSubTitleController.drawSelectedText() }
 
+        mChangeLanguage.setOnClickListener { mSubTitleController.changeLanguage() }
+
         mSubtitlePageAutoComplete.setOnClickListener {
             mSubtitlePageAutoComplete.setText("", false)
 
             if (mSubTitleController.pagesKeys.value == null || mSubTitleController.pagesKeys.value!!.isEmpty())
                 Toast.makeText(
                     requireActivity(),
-                    getString(R.string.popup_reading_import_subtitle_is_empty),
+                    getString(R.string.popup_reading_import_subtitle_page_is_empty),
                     Toast.LENGTH_SHORT
                 ).show()
         }

@@ -123,15 +123,15 @@ class ReaderActivity : AppCompatActivity() {
         val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager, 0)
         viewPagerAdapter.addFragment(
             mPopupSubtitleReaderFragment,
-            resources.getString(R.string.popup_reading_title_subtitle)
+            resources.getString(R.string.popup_reading_tab_item_subtitle)
         )
         viewPagerAdapter.addFragment(
             mPopupSubtitleConfigurationFragment,
-            resources.getString(R.string.popup_reading_title_subtitle_configuration)
+            resources.getString(R.string.popup_reading_tab_item_subtitle_import)
         )
         viewPagerAdapter.addFragment(
             mPopupReaderColorFilterFragment,
-            resources.getString(R.string.popup_reading_title_brightness)
+            resources.getString(R.string.popup_reading_tab_item_brightness)
         )
         mPopupView.adapter = viewPagerAdapter
 

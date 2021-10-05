@@ -52,9 +52,12 @@
     <string name="menu_reading_floating">Floating popup</string>
 
     <!-- READER POPUP TITLES -->
-    <string name="popup_reading_title_subtitle">Subtitles</string>
-    <string name="popup_reading_title_brightness">Brightness</string>
-    <string name="popup_reading_title_subtitle_configuration">Import</string>
+    <string name="popup_reading_open">Open</string>
+    <string name="popup_reading_close">Close</string>
+    <string name="popup_reading_floating_popup">Floating popup</string>
+    <string name="popup_reading_tab_item_subtitle">Subtitles</string>
+    <string name="popup_reading_tab_item_brightness">Brightness</string>
+    <string name="popup_reading_tab_item_subtitle_import">Import</string>
 
     <!-- READER POPUP -->
     <string name="popup_reading_custom_color_filter">Custom color filter</string>
@@ -70,12 +73,16 @@
     <string name="popup_reading_import_subtitle_file">Select a subtitle file</string>
     <string name="popup_reading_import_subtitle_selected">Subtitle selected</string>
     <string name="popup_reading_import_subtitle_is_empty">Subtitle empty</string>
+    <string name="popup_reading_import_subtitle_page_is_empty">Pages empty in subtitle or subtitle not selected.</string>
 
     <!-- READER POPUP SUBTITLE -->
     <string name="popup_reading_subtitle_chapter">Chapter</string>
     <string name="popup_reading_subtitle_text">Text</string>
+    <string name="popup_reading_subtitle_page">Page</string>
     <string name="popup_reading_subtitle_find_subtitle">Founded subtitle: chapter %s and page %s.</string>
     <string name="popup_reading_subtitle_not_find_subtitle">Could not find the subtitle in files.</string>
+    <string name="popup_reading_subtitle_list_empty">Subtitle list is empty.</string>
+    <string name="popup_reading_subtitle_chapter_not_found">Chapter in another language not found.</string>
 
     <!-- READER FLOATING -->
     <string name="floating_reading_not_permission">Permission is not granted!</string>

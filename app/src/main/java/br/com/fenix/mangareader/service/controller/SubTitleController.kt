@@ -190,7 +190,7 @@ class SubTitleController private constructor(private val context: Context) {
             return
         }
 
-        pageName = if (pageName!!.contains('/'))
+        pageName = if (pageName.contains('/'))
             pageName.substringAfterLast("/")
         else
             pageName.substringAfterLast('\\')
@@ -295,6 +295,93 @@ class SubTitleController private constructor(private val context: Context) {
             )
     }
 
+    fun changeLanguage() = runBlocking { // this: CoroutineScope
+        launch {
+            if (chaptersKeys.value == null || chaptersKeys.value!!.isEmpty()) {
+                Toast.makeText(
+                    context,
+                    context.resources.getString(R.string.popup_reading_subtitle_list_empty),
+                    Toast.LENGTH_SHORT
+                ).show()
+                return@launch
+            }
+
+            var language = mSubtitleLang
+            var chapterSelect = ""
+            var pageSelect = ""
+            if (selectedSubtitle.value != null && selectedSubtitle.value!!.chapterKey.isNotEmpty()) {
+                language = if (selectedSubtitle.value!!.language.compareTo(mTranslateLang) == 0)
+                    mSubtitleLang
+                else
+                    mTranslateLang
+
+                chapterSelect = selectedSubtitle.value!!.chapterKey
+                if (chapterSelect.isNotEmpty())
+                    chapterSelect = chapterSelect.substringAfterLast("-").trim()
+
+                pageSelect = selectedSubtitle.value!!.pageKey
+
+                if (pageSelect.isNotEmpty())
+                    pageSelect = pageSelect.substringBefore(" ").trim()
+            }
+
+            var key = ""
+            var first = ""
+            for (chapter in mChaptersKeys.value!!) {
+                if (chapter.contains(language.name)) {
+                    if (chapterSelect.isNotEmpty()) {
+                        if (chapter.contains(chapterSelect)) {
+                            key = chapter
+                            break
+                        } else if (first.isEmpty())
+                            first = chapter
+                    } else {
+                        key = chapter
+                        break
+                    }
+                }
+            }
+
+            if (key.isEmpty() && first.isEmpty()) {
+                Toast.makeText(
+                    context,
+                    context.resources.getString(R.string.popup_reading_subtitle_chapter_not_found) + " (" +
+                            language.name + ")",
+                    Toast.LENGTH_SHORT
+                ).show()
+                return@launch
+            }
+
+            if (key.isEmpty())
+                selectedSubtitle(first)
+            else
+                selectedSubtitle(key)
+
+            if (mSelectedSubTitle.value != null)
+                mSelectedSubTitle.value?.language = language
+
+            if (mPagesKeys.value == null || pageSelect.isEmpty())
+                return@launch
+
+            key = ""
+            first = ""
+            for (page in mPagesKeys.value!!) {
+                if (first.isEmpty())
+                    first = page
+
+                if (page.substringBefore(" ").contains(pageSelect)) {
+                    key = page
+                    break
+                }
+            }
+
+            if (key.isEmpty())
+                selectedPage(first)
+            else
+                selectedPage(key)
+        }
+    }
+
     fun changeSubtitleInReader(manga: Manga, pageNumber: Int) =
         runBlocking { // this: CoroutineScope
             launch {
@@ -328,7 +415,6 @@ class SubTitleController private constructor(private val context: Context) {
                     }
                 }
 
-                mSelectedSubTitle.value?.chapter = chapterSelected.value
                 mSelectedSubTitle.value?.pageCount = pageNumber
                 updatePageSelect()
             }
@@ -391,6 +477,7 @@ class SubTitleController private constructor(private val context: Context) {
         mPageSelected.value = null
         mTextSelected.value = null
         mChaptersKeys.value = mComboListInternal.keys.toTypedArray().sorted()
+        mSelectedSubTitle.value?.language = Languages.JAPANESE
     }
 
     fun selectedSubtitle(key: String) {
@@ -426,10 +513,13 @@ class SubTitleController private constructor(private val context: Context) {
     private fun setChapter(chapter: Chapter?) {
         mChapterSelected.value = chapter
         mListPages.clear()
+        mSelectedSubTitle.value?.chapter = chapter
+        mSelectedSubTitle.value?.language = Languages.JAPANESE
         if (chapterSelected.value != null) {
             chapterSelected.value!!.pages.forEach { mListPages[getPageKey(it)] = it }
             mPagesKeys.value = mListPages.keys.toTypedArray().sorted()
             mSelectedSubTitle.value?.chapterKey = getChapterKey(mChapterSelected.value!!)
+            mSelectedSubTitle.value!!.language = chapterSelected.value!!.language
             setPage(false, chapterSelected.value!!.pages[0])
         } else
             mSelectedSubTitle.value?.chapterKey = ""
@@ -438,7 +528,8 @@ class SubTitleController private constructor(private val context: Context) {
     private fun setPage(lastText: Boolean, page: Page?) {
         isDrawing = false
         mPageSelected.value = page
-        mSelectedSubTitle.value?.pageKey = if (mPageSelected.value == null) "" else getPageKey(mPageSelected.value!!)
+        mSelectedSubTitle.value?.pageKey =
+            if (mPageSelected.value == null) "" else getPageKey(mPageSelected.value!!)
         if (pageSelected.value!!.texts.isNotEmpty()) {
             val text = if (lastText) pageSelected.value!!.texts.last()
             else pageSelected.value!!.texts.first()
