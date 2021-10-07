@@ -78,6 +78,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 return false
             }
         })
+        onChangeIconLayout()
     }
 
     private fun filter(newText: String?) {
@@ -111,14 +112,12 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             if (msg.what == GeneralConsts.SCANNER.MESSAGE_MEDIA_UPDATED) {
                 fragment.refreshLibraryDelayed()
             } else if (msg.what == GeneralConsts.SCANNER.MESSAGE_MEDIA_UPDATE_FINISHED) {
-                mViewModel.list()
+                mViewModel.list {setRefresh(false)}
 
                 if (mGridType != LibraryType.LINE)
                     (mRecycleView.adapter as MangaGridCardAdapter).notifyDataSetChanged()
                 else
                     (mRecycleView.adapter as MangaLineCardAdapter).notifyDataSetChanged()
-
-                setRefresh(false)
             }
         }
     }
@@ -126,7 +125,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private fun refreshLibraryDelayed() {
         if (!mIsRefreshPlanned) {
             val updateRunnable = Runnable {
-                mViewModel.list()
+                mViewModel.list{}
 
                 if (mGridType != LibraryType.LINE)
                     (mRecycleView.adapter as MangaGridCardAdapter).notifyDataSetChanged()
@@ -163,8 +162,20 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             this!!.putString(GeneralConsts.KEYS.LIBRARY.LIBRARY_TYPE, mGridType.toString())
             this.commit()
         }
+
+        onChangeIconLayout()
         generateLayout()
         updateList(mViewModel.save.value!!)
+    }
+
+    private fun onChangeIconLayout() {
+        val icon : Int = when (mGridType) {
+            LibraryType.GRID_SMALL -> R.drawable.ic_type_grid_small
+            LibraryType.GRID_BIG -> R.drawable.ic_type_grid_big
+            LibraryType.GRID_MEDIUM -> R.drawable.ic_type_grid_medium
+            else -> R.drawable.ic_type_list
+        }
+        miGridType.setIcon(icon)
     }
 
     override fun onCreateView(
@@ -213,12 +224,8 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         if (!Storage.isPermissionGranted(requireContext()))
             Storage.takePermission(requireContext(), requireActivity())
 
-        return root
-    }
-
-    override fun onStart() {
-        super.onStart()
         generateLayout()
+        return root
     }
 
     private fun loadConfig() {
@@ -245,14 +252,13 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun generateLayout() {
-
         if (mGridType != LibraryType.LINE) {
             val gridAdapter = MangaGridCardAdapter()
             mRecycleView.adapter = gridAdapter
 
             val isLandscape =
                 resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-            val columnWidth: Int = when (mGridType) {
+            var columnWidth: Int = when (mGridType) {
                 LibraryType.GRID_BIG -> resources.getDimension(R.dimen.manga_grid_card_layout_width)
                     .toInt()
                 LibraryType.GRID_MEDIUM -> if (isLandscape) resources.getDimension(R.dimen.manga_grid_card_layout_width_landscape_medium)
@@ -300,8 +306,10 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     fun setRefresh(enabled: Boolean) {
         try {
-            if (!::searchView.isInitialized)
+            if (!::searchView.isInitialized || !::mRecycleView.isInitialized)
                 return
+
+            mRecycleView.isEnabled = !enabled
 
             if (enabled)
                 searchView.clearFocus()

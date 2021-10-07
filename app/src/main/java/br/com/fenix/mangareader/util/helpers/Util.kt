@@ -117,11 +117,7 @@ class Util {
             val memoryClass = activityManager.largeMemoryClass
             return 1024 * 1024 * memoryClass / percentage
         }
-
-        fun getCacheFile(context: Context, identifier: String): File? {
-            return File(context.externalCacheDir, this.MD5(identifier))
-        }
-
+        
         fun toByteArray(`is`: InputStream): ByteArray? {
             val output = ByteArrayOutputStream()
             return try {

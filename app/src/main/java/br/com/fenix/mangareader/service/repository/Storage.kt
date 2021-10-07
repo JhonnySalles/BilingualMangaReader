@@ -11,10 +11,12 @@ import android.os.Environment
 import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import br.com.fenix.mangareader.model.entity.Cover
 import br.com.fenix.mangareader.model.entity.Manga
 
 class Storage(context: Context) {
     private val mRepository = MangaRepository(context)
+    private val mRepositoryCover = CoverRepository(context)
 
     fun getPrevManga(manga: Manga): Manga? {
         val mangas: List<Manga>? = mRepository.findByFileFolder(manga.file!!.parent)
@@ -35,6 +37,7 @@ class Storage(context: Context) {
     fun listBook() : List<Manga>? = mRepository.list()
 
     fun delete(manga: Manga) {
+        mRepositoryCover.deleteAll(manga.id!!)
         mRepository.delete(manga)
     }
 

@@ -1,5 +1,7 @@
 package br.com.fenix.mangareader.view.adapter.library
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -16,6 +18,14 @@ import java.time.LocalDateTime
 class LineViewHolder(itemView: View, private val listener: MangaCardListener) :
     RecyclerView.ViewHolder(itemView) {
 
+    companion object {
+        lateinit var mImageCover : Bitmap
+    }
+
+    init {
+        mImageCover = BitmapFactory.decodeResource(itemView.resources, R.mipmap.book_icon)
+    }
+
     fun bind(manga: Manga) {
         val mangaImage = itemView.findViewById<ImageView>(R.id.manga_line_image_cover)
         val mangaTitle = itemView.findViewById<TextView>(R.id.manga_line_text_title)
@@ -29,7 +39,10 @@ class LineViewHolder(itemView: View, private val listener: MangaCardListener) :
 
         cardView.setOnClickListener { listener.onClick(manga) }
 
-        ImageCoverController.instance.setImageCover(mangaImage, manga)
+        if (manga.thumbnail != null && manga.thumbnail!!.image != null)
+            mangaImage.setImageBitmap(manga.thumbnail!!.image)
+        else
+            mangaImage.setImageBitmap(mImageCover)
 
         mangaTitle.text = manga.title
 

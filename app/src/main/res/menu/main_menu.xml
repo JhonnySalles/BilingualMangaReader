@@ -13,7 +13,7 @@
 
     <item
         android:id="@+id/grid_type"
-        android:icon="@drawable/ic_grid_type"
+        android:icon="@drawable/ic_type_grid_big"
         android:iconTint="#FFFFFF"
         android:orderInCategory="101"
         android:title="@string/menu_grid_type"

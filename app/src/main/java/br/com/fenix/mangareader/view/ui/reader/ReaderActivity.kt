@@ -67,7 +67,7 @@ class ReaderActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reader)
 
-        Formater.initialize(applicationContext)
+        Formater.initializeAsync(applicationContext)
 
         mToolbar = findViewById(R.id.toolbar_reader)
         mToolbarTitle = findViewById(R.id.tolbar_title_custom)

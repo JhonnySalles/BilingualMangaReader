@@ -11,6 +11,8 @@ import br.com.fenix.mangareader.service.tokenizers.SudachiTokenizer
 import br.com.fenix.mangareader.util.constants.GeneralConsts
 import br.com.fenix.mangareader.util.constants.ReaderConsts
 import com.worksap.nlp.sudachi.Tokenizer
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.io.BufferedReader
@@ -41,8 +43,8 @@ class Formater {
             return sb.toString()
         }
 
-        fun initialize(context: Context) = runBlocking { // this: CoroutineScope
-            launch { // launch a new coroutine and continue
+        fun initializeAsync(context: Context) = runBlocking { // this: CoroutineScope
+            GlobalScope.async { // launch a new coroutine and continue
                 try {
                     tokenizer = SudachiTokenizer(context).tokenizer
                     val repository = KanjiRepository(context)

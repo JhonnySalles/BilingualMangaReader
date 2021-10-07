@@ -140,14 +140,8 @@ class Scanner {
                     }
 
                 // delete missing comics
-                for (missing in storageFiles.values) {
-                    if (missing.file != null) {
-                        val coverCache: File? =
-                            Util.getCacheFile(ctx, missing.file!!.absolutePath)
-                        coverCache!!.delete()
-                    }
+                for (missing in storageFiles.values)
                     storage.delete(missing)
-                }
             } finally {
                 mIsStopped = false
                 if (mIsRestarted) {

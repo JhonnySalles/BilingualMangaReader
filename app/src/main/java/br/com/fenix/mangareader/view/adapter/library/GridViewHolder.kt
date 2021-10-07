@@ -1,6 +1,8 @@
 package br.com.fenix.mangareader.view.adapter.library
 
 import android.content.res.Configuration
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -19,6 +21,14 @@ import java.time.LocalDateTime
 
 class GridViewHolder(itemView: View, private val listener: MangaCardListener) :
     RecyclerView.ViewHolder(itemView) {
+
+    companion object {
+        lateinit var mImageCover : Bitmap
+    }
+
+    init {
+        mImageCover = BitmapFactory.decodeResource(itemView.resources, R.mipmap.book)
+    }
 
     fun bind(manga: Manga) {
         val mangaImage = itemView.findViewById<ImageView>(R.id.manga_grid_image_cover)
@@ -54,10 +64,12 @@ class GridViewHolder(itemView: View, private val listener: MangaCardListener) :
             }
         }
 
-
         cardView.setOnClickListener { listener.onClick(manga) }
 
-        ImageCoverController.instance.setImageCover(mangaImage, manga)
+        if (manga.thumbnail != null && manga.thumbnail!!.image != null)
+            mangaImage.setImageBitmap(manga.thumbnail!!.image)
+        else
+            mangaImage.setImageBitmap(mImageCover)
 
         mangaTitle.text = manga.title
 

@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import br.com.fenix.mangareader.model.entity.Manga
 import br.com.fenix.mangareader.model.entity.Cover
+import br.com.fenix.mangareader.service.controller.ImageCoverController
 import br.com.fenix.mangareader.service.repository.MangaRepository
 import br.com.fenix.mangareader.service.repository.CoverRepository
 
@@ -43,11 +44,15 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         return obj
     }
 
-    fun list() {
+    fun list(refreshComplete : () -> (Unit)) {
         val list = mMangaRepository.list()
-        if (list != null)
+        if (list != null) {
             mListMangas.value = ArrayList(list)
-        else
+            ImageCoverController.instance.setImageCoverAsync(mContext, list) { withCovers ->
+                mListMangas.value = ArrayList(withCovers)
+                refreshComplete()
+            }
+        } else
             mListMangas.value = ArrayList()
     }
 
