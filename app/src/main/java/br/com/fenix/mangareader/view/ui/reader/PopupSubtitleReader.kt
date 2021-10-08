@@ -1,6 +1,7 @@
 package br.com.fenix.mangareader.view.ui.reader
 
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,6 +46,8 @@ class PopupSubtitleReader : Fragment() {
         mRefresh = root.findViewById(R.id.nav_refresh)
         mDraw = root.findViewById(R.id.nav_draw)
         mChangeLanguage = root.findViewById(R.id.nav_change_language)
+
+        mSubtitleContent.movementMethod = LinkMovementMethod.getInstance()
 
         mLabelChapter = getString(R.string.popup_reading_subtitle_chapter)
         mLabelText = getString(R.string.popup_reading_subtitle_text)
@@ -102,7 +105,7 @@ class PopupSubtitleReader : Fragment() {
 
         mSubTitleController.textSelected.observe(viewLifecycleOwner, {
             var title = ""
-            mSubtitleContent.setText("")
+            mSubtitleContent.text = ""
             if (it != null) {
                 val index =
                     mSubTitleController.pageSelected.value?.texts?.indexOf(mSubTitleController.textSelected?.value)
@@ -110,7 +113,7 @@ class PopupSubtitleReader : Fragment() {
                 title =
                     "${mLabelChapter} ${mSubTitleController.chapterSelected?.value?.chapter.toString()} - ${mLabelText} $index/${mSubTitleController.pageSelected.value?.texts?.size}"
 
-                Formater.generateKanjiColor(it.text) { kanji ->
+                Formater.generateKanjiColor(requireContext(), it.text) { kanji ->
                     mSubtitleContent.text = kanji
                 }
             } else if (mSubTitleController.chapterSelected.value != null && mSubTitleController.pageSelected.value != null)

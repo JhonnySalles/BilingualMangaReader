@@ -3,22 +3,26 @@ package br.com.fenix.mangareader.service.kanji
 import android.content.Context
 import android.text.SpannableString
 import android.text.Spanned
-import android.text.style.ForegroundColorSpan
+import android.text.TextPaint
+import android.text.style.ClickableSpan
 import android.util.Log
+import android.view.View
 import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.service.repository.KanjiRepository
 import br.com.fenix.mangareader.service.tokenizers.SudachiTokenizer
 import br.com.fenix.mangareader.util.constants.GeneralConsts
 import br.com.fenix.mangareader.util.constants.ReaderConsts
+import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog
+import com.github.javiersantos.materialstyleddialogs.enums.Style
 import com.worksap.nlp.sudachi.Tokenizer
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.nio.charset.StandardCharsets
+
 
 class Formater {
     companion object KANJI {
@@ -62,6 +66,15 @@ class Formater {
             }
         }
 
+        private fun getPopupKanji(context: Context, kanji: String) {
+            MaterialStyledDialog.Builder(context)
+                .setTitle(kanji)
+                .setDescription("What can we improve? Your feedback is always welcome.")
+                .setStyle(Style.HEADER_WITH_TITLE)
+                .setHeaderColor(R.color.onSecondary)
+                .show()
+        }
+
         fun generateFurigana(text: String, function: (String) -> (Unit)) {
             if (text.isEmpty()) {
                 function(text)
@@ -86,7 +99,11 @@ class Formater {
             function(furigana)
         }
 
-        fun generateKanjiColor(text: String, function: (SpannableString) -> (Unit)) {
+        fun generateKanjiColor(
+            context: Context,
+            text: String,
+            function: (SpannableString) -> (Unit)
+        ) {
             if (text.isEmpty()) {
                 function(SpannableString(text))
                 return
@@ -104,16 +121,32 @@ class Formater {
                         5 -> N5
                         else -> ANOTHER
                     }
-                    ss.setSpan(ForegroundColorSpan(color), index, index + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+                    val cs = object : ClickableSpan() {
+                        override fun onClick(p0: View) {
+                            getPopupKanji(context, kanji)
+                        }
+
+                        override fun updateDrawState(ds: TextPaint) {
+                            super.updateDrawState(ds)
+                            ds.isUnderlineText = false
+                            ds.color = color
+                        }
+                    }
+                    ss.setSpan(cs, index, index + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
             }
 
             function(ss)
         }
 
-        fun generateFuriganaAndKanjiCollor(text: String, function: (SpannableString) -> (Unit)) {
+        fun generateFuriganaAndKanjiCollor(
+            context: Context,
+            text: String,
+            function: (SpannableString) -> (Unit)
+        ) {
             generateFurigana(text) {
-                generateKanjiColor(it) { color ->
+                generateKanjiColor(context, it) { color ->
                     function(color)
                 }
             }

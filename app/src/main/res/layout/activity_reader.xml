@@ -251,7 +251,7 @@
                     android:id="@+id/popup_view_pager"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingTop="5dp"
+                    android:paddingTop="2dp"
                     app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
             </LinearLayout>
         </ScrollView>

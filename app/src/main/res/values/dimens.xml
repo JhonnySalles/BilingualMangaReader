@@ -37,6 +37,6 @@
     <dimen name="popup_reader_button_min_height">55dp</dimen>
     <dimen name="popup_reader_button_padding">12dp</dimen>
 
-    <dimen name="floating_reader_button_width">30dp</dimen>
-    <dimen name="floating_reader_button_close">30dp</dimen>
+    <dimen name="floating_reader_button_width">25dp</dimen>
+    <dimen name="floating_reader_button_close">25dp</dimen>
 </resources>
