@@ -23,7 +23,6 @@
         android:textColorHint="@color/textPrimary"
         app:boxBackgroundColor="@color/primary"
         app:boxStrokeColor="@color/onSecondary"
-        app:placeholderTextColor="@color/textPrimary"
         app:hintTextColor="@color/onSecondary"
         app:startIconDrawable="@drawable/ic_sd_storage"
         app:startIconTint="@color/onSecondary"
@@ -49,7 +48,6 @@
         app:boxBackgroundColor="@color/primary"
         app:boxStrokeColor="@color/onSecondary"
         app:hintTextColor="@color/onSecondary"
-        app:placeholderTextColor="@color/textPrimary"
         app:startIconDrawable="@drawable/ic_translate"
         app:startIconTint="@color/onSecondary">
 
@@ -58,7 +56,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="none"
-            android:textColor="@color/textPrimary" />
+            android:textColor="@color/textPrimary"/>
     </com.google.android.material.textfield.TextInputLayout>
 
 </LinearLayout>

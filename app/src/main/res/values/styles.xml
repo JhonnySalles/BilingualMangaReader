@@ -11,4 +11,8 @@
         <item name="android:textColor">@color/textPrimary</item>
     </style>
 
+    <style name="backgroundComboOutline"  parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="colorSurface">@color/primary</item>
+    </style>
+
 </resources>

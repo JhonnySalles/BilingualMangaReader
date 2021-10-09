@@ -1,10 +1,7 @@
 package br.com.fenix.mangareader.service.repository
 
 import androidx.room.*
-import br.com.fenix.mangareader.model.entity.Cover
-import br.com.fenix.mangareader.model.entity.KanjiJLPT
-import br.com.fenix.mangareader.model.entity.Manga
-import br.com.fenix.mangareader.model.entity.SubTitle
+import br.com.fenix.mangareader.model.entity.*
 import br.com.fenix.mangareader.util.constants.DataBaseConsts
 
 interface DataBaseDAO<T> {
@@ -95,3 +92,18 @@ abstract class KanjiJLPTDAO : DataBaseDAO<KanjiJLPT> {
     abstract fun list(): List<KanjiJLPT>
 
 }
+
+@Dao
+abstract class KanjaxDAO : DataBaseDAO<Kanjax> {
+
+    @Query("SELECT * FROM " + DataBaseConsts.KANJAX.TABLE_NAME + " WHERE " + DataBaseConsts.KANJAX.COLUMNS.ID + " = :id")
+    abstract fun get(id: Long): Kanjax
+
+    @Query("SELECT * FROM " + DataBaseConsts.KANJAX.TABLE_NAME + " WHERE " + DataBaseConsts.KANJAX.COLUMNS.KANJI + " = :kanji")
+    abstract fun get(kanji: String): Kanjax
+
+    @Query("SELECT * FROM " + DataBaseConsts.KANJAX.TABLE_NAME)
+    abstract fun list(): List<Kanjax>
+
+}
+

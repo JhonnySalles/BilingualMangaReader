@@ -58,4 +58,32 @@ class DataBaseConsts private constructor() {
         }
     }
 
+    object KANJAX {
+        const val TABLE_NAME = "KANJAX"
+
+        object COLUMNS {
+            const val ID = "id"
+            const val KANJI = "kanji"
+            const val KEYWORD = "keyword"
+            const val MEANING = "meaning"
+            const val KOOHII = "koohii"
+            const val KOOHII2 = "kohii2"
+            const val ONYOMI = "onyomi"
+            const val KUNYOMI = "kunyomi"
+            const val ONWORDS = "onwords"
+            const val KUNWORDS = "kunwords"
+            const val JLPT = "jlpt"
+            const val GRADE = "grade"
+            const val FREQUENCE = "frequence"
+            const val STROKES = "strokes"
+            const val VARIANTS = "variants"
+            const val RADICAL = "radical"
+            const val PARTS = "parts"
+            const val UTF8 = "utf8"
+            const val SJIS = "sjis"
+            const val KEYWORDS_PT = "keywords_pt"
+            const val MEANING_PT = "meaning_pt"
+        }
+    }
+
 }

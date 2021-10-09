@@ -5,9 +5,11 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextPaint
 import android.text.style.ClickableSpan
+import android.text.style.RelativeSizeSpan
 import android.util.Log
 import android.view.View
 import br.com.fenix.mangareader.R
+import br.com.fenix.mangareader.service.repository.KanjaxRepository
 import br.com.fenix.mangareader.service.repository.KanjiRepository
 import br.com.fenix.mangareader.service.tokenizers.SudachiTokenizer
 import br.com.fenix.mangareader.util.constants.GeneralConsts
@@ -18,14 +20,11 @@ import com.worksap.nlp.sudachi.Tokenizer
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
-import java.io.BufferedReader
-import java.io.InputStream
-import java.io.InputStreamReader
-import java.nio.charset.StandardCharsets
 
 
 class Formater {
     companion object KANJI {
+        private var mRepository: KanjaxRepository? = null
         private val pattern = Regex(".*[\u4E00-\u9FFF].*")
         var tokenizer: Tokenizer? = null
         private var JLPT: Map<String, Int>? = null
@@ -36,20 +35,10 @@ class Formater {
         private var N4: Int = 0
         private var N5: Int = 0
 
-        private fun readAll(input: InputStream?): String? {
-            val isReader = InputStreamReader(input, StandardCharsets.UTF_8)
-            val reader = BufferedReader(isReader)
-            val sb = StringBuilder()
-            while (true) {
-                val line: String = reader.readLine() ?: break
-                sb.append(line)
-            }
-            return sb.toString()
-        }
-
         fun initializeAsync(context: Context) = runBlocking { // this: CoroutineScope
             GlobalScope.async { // launch a new coroutine and continue
                 try {
+                    mRepository = KanjaxRepository(context)
                     tokenizer = SudachiTokenizer(context).tokenizer
                     val repository = KanjiRepository(context)
                     JLPT = repository.getHashMap()
@@ -67,9 +56,35 @@ class Formater {
         }
 
         private fun getPopupKanji(context: Context, kanji: String) {
+            val kanjax = mRepository?.get(kanji)
+            val title = SpannableString(kanji)
+            title.setSpan(RelativeSizeSpan(3f), 0, kanji.length, 0)
+
+            var middle = ""
+            var bottom = ""
+            var description = SpannableString(middle + bottom)
+            if (kanjax != null) {
+                middle = kanjax.keyword + "  -  " + kanjax.keywordPt + "\n\n" +
+                        kanjax.meaning + "\n" + kanjax.meaningPt + "\n\n"
+
+                middle += "onYomi: " + kanjax.onYomi + "\nKunYomi: " + kanjax.kunYomi + "\n\n"
+
+                bottom =
+                    "jlpt: " + kanjax.jlpt + " grade: " + kanjax.grade + " frequence: " + kanjax.frequence + "\n"
+
+                description = SpannableString(middle + bottom)
+                description.setSpan(RelativeSizeSpan(1.2f), 0, middle.length, 0)
+                description.setSpan(
+                    RelativeSizeSpan(0.8f),
+                    middle.length,
+                    middle.length + bottom.length,
+                    0
+                )
+            }
+
             MaterialStyledDialog.Builder(context)
-                .setTitle(kanji)
-                .setDescription("What can we improve? Your feedback is always welcome.")
+                .setTitle(title)
+                .setDescription(description)
                 .setStyle(Style.HEADER_WITH_TITLE)
                 .setHeaderColor(R.color.onSecondary)
                 .show()
