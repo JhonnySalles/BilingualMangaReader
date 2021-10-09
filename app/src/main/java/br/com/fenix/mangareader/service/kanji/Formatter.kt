@@ -22,11 +22,11 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 
 
-class Formater {
+class Formatter {
     companion object KANJI {
         private var mRepository: KanjaxRepository? = null
-        private val pattern = Regex(".*[\u4E00-\u9FFF].*")
-        var tokenizer: Tokenizer? = null
+        private val mPattern = Regex(".*[\u4E00-\u9FFF].*")
+        var mTokenizer: Tokenizer? = null
         private var JLPT: Map<String, Int>? = null
         private var ANOTHER: Int = 0
         private var N1: Int = 0
@@ -35,25 +35,26 @@ class Formater {
         private var N4: Int = 0
         private var N5: Int = 0
 
-        fun initializeAsync(context: Context) = runBlocking { // this: CoroutineScope
-            GlobalScope.async { // launch a new coroutine and continue
-                try {
-                    mRepository = KanjaxRepository(context)
-                    tokenizer = SudachiTokenizer(context).tokenizer
-                    val repository = KanjiRepository(context)
-                    JLPT = repository.getHashMap()
+        fun initializeAsync(context: Context) =
+            runBlocking { // this: CoroutineScope
+                GlobalScope.async { // launch a new coroutine and continue
+                    try {
+                        mRepository = KanjaxRepository(context)
+                        mTokenizer = SudachiTokenizer(context).tokenizer
+                        val repository = KanjiRepository(context)
+                        JLPT = repository.getHashMap()
 
-                    ANOTHER = context.getColor(R.color.JLPT0)
-                    N1 = context.getColor(R.color.JLPT1)
-                    N2 = context.getColor(R.color.JLPT2)
-                    N3 = context.getColor(R.color.JLPT3)
-                    N4 = context.getColor(R.color.JLPT4)
-                    N5 = context.getColor(R.color.JLPT5)
-                } catch (e: Exception) {
-                    Log.e(GeneralConsts.TAG.LOG, "Erro ao abrir arquivo de tokenizer." + e.message)
+                        ANOTHER = context.getColor(R.color.JLPT0)
+                        N1 = context.getColor(R.color.JLPT1)
+                        N2 = context.getColor(R.color.JLPT2)
+                        N3 = context.getColor(R.color.JLPT3)
+                        N4 = context.getColor(R.color.JLPT4)
+                        N5 = context.getColor(R.color.JLPT5)
+                    } catch (e: Exception) {
+                        Log.e(GeneralConsts.TAG.LOG, "Erro ao abrir arquivo de tokenizer." + e.message)
+                    }
                 }
             }
-        }
 
         private fun getPopupKanji(context: Context, kanji: String) {
             val kanjax = mRepository?.get(kanji)
@@ -98,16 +99,15 @@ class Formater {
 
             var furigana = text
             val replaced = mutableSetOf<String>()
-            for (m in tokenizer!!.tokenize(ReaderConsts.TOKENIZER.SUDACHI.SPLIT_MODE, furigana)) {
-                if (!replaced.contains(m.surface()) && m.readingForm().isNotEmpty() && m.surface()
-                        .matches(pattern)
+            for (t in mTokenizer!!.tokenize(ReaderConsts.TOKENIZER.SUDACHI.SPLIT_MODE, furigana)) {
+                if (!replaced.contains(t.surface()) && t.readingForm().isNotEmpty() && t.surface().matches(mPattern)
                 ) {
                     furigana = furigana.replace(
-                        m.surface(),
-                        "{" + m.surface() + ";" + m.readingForm() + "}",
+                        t.surface(),
+                        "{" + t.surface() + ";" + t.readingForm() + "}",
                         true
                     )
-                    replaced.add(m.surface())
+                    replaced.add(t.surface())
                 }
             }
 
@@ -127,7 +127,7 @@ class Formater {
             val ss = SpannableString(text)
             ss.forEachIndexed { index, element ->
                 val kanji = element.toString()
-                if (kanji.matches(pattern)) {
+                if (kanji.matches(mPattern)) {
                     val color = when (JLPT?.get(kanji)) {
                         1 -> N1
                         2 -> N2

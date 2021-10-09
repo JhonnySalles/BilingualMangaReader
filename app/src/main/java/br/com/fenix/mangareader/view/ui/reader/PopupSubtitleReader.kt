@@ -6,11 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.appcompat.widget.AppCompatImageButton
 import androidx.fragment.app.Fragment
 import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.service.controller.SubTitleController
-import br.com.fenix.mangareader.service.kanji.Formater
+import br.com.fenix.mangareader.service.kanji.Formatter
 import com.google.android.material.textfield.TextInputLayout
 
 
@@ -113,7 +112,7 @@ class PopupSubtitleReader : Fragment() {
                 title =
                     "${mLabelChapter} ${mSubTitleController.chapterSelected?.value?.chapter.toString()} - ${mLabelText} $index/${mSubTitleController.pageSelected.value?.texts?.size}"
 
-                Formater.generateKanjiColor(requireContext(), it.text) { kanji ->
+                Formatter.generateKanjiColor(requireContext(), it.text) { kanji ->
                     mSubtitleContent.text = kanji
                 }
             } else if (mSubTitleController.chapterSelected.value != null && mSubTitleController.pageSelected.value != null)

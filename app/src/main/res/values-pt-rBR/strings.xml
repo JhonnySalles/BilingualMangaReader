@@ -63,6 +63,7 @@
     <string name="popup_reading_custom_color_filter">Filtro de cor personalizado</string>
     <string name="popup_reading_custom_brightness">Brilho personalizado</string>
     <string name="popup_reading_grayscale">Escala de cinza</string>
+    <string name="popup_reading_invert_color">Inverter cor</string>
 
     <string name="color_filter_r_value">R</string>
     <string name="color_filter_g_value">G</string>

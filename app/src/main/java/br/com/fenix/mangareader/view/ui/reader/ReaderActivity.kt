@@ -10,6 +10,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -22,7 +23,7 @@ import br.com.fenix.mangareader.model.entity.Manga
 import br.com.fenix.mangareader.model.enums.PageMode
 import br.com.fenix.mangareader.model.enums.ReaderMode
 import br.com.fenix.mangareader.service.controller.SubTitleController
-import br.com.fenix.mangareader.service.kanji.Formater
+import br.com.fenix.mangareader.service.kanji.Formatter
 import br.com.fenix.mangareader.service.repository.MangaRepository
 import br.com.fenix.mangareader.util.constants.GeneralConsts
 import br.com.fenix.mangareader.view.ui.reader.FloatingSubtitleReader.Companion.canDrawOverlays
@@ -34,6 +35,7 @@ import java.util.*
 
 class ReaderActivity : AppCompatActivity() {
 
+    private val mViewModel: ReaderViewModel by viewModels()
     private lateinit var mReaderTitle: TextView
     private lateinit var mReaderProgress: SeekBar
     private lateinit var mNavReader: LinearLayout
@@ -43,7 +45,7 @@ class ReaderActivity : AppCompatActivity() {
     private lateinit var mPopupView: ViewPager
     private lateinit var mBottomSheet: BottomSheetBehavior<FrameLayout>
 
-    private lateinit var mPopupReaderColorFilterFragment: PopupReaderColorFilter
+    private lateinit var mPopupReaderColorFilterFragment: PopupReaderColorFilterFragment
     private lateinit var mPopupSubtitleConfigurationFragment: PopupSubtitleConfiguration
     private lateinit var mPopupSubtitleReaderFragment: PopupSubtitleReader
 
@@ -67,7 +69,7 @@ class ReaderActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reader)
 
-        Formater.initializeAsync(applicationContext)
+        Formatter.initializeAsync(applicationContext)
 
         mToolbar = findViewById(R.id.toolbar_reader)
         mToolbarTitle = findViewById(R.id.tolbar_title_custom)
@@ -112,7 +114,7 @@ class ReaderActivity : AppCompatActivity() {
         mPopupTab = findViewById(R.id.popup_tab)
         mPopupView = findViewById(R.id.popup_view_pager)
 
-        mPopupReaderColorFilterFragment = PopupReaderColorFilter()
+        mPopupReaderColorFilterFragment = PopupReaderColorFilterFragment()
         mPopupSubtitleConfigurationFragment = PopupSubtitleConfiguration()
         mPopupSubtitleReaderFragment = PopupSubtitleReader()
 

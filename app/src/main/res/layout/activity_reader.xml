@@ -242,8 +242,7 @@
                         android:id="@+id/tab_item_brightness"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/popup_reading_tab_item_brightness"
-                        android:visibility="gone" />
+                        android:text="@string/popup_reading_tab_item_brightness" />
 
                 </com.google.android.material.tabs.TabLayout>
 

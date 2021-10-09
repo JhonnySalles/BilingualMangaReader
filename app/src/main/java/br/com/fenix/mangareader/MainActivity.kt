@@ -12,7 +12,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
-import br.com.fenix.mangareader.service.kanji.Formater
 import br.com.fenix.mangareader.util.constants.GeneralConsts
 import br.com.fenix.mangareader.view.ui.configuration.ConfigFragment
 import br.com.fenix.mangareader.view.ui.help.HelpFragment

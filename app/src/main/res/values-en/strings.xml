@@ -64,6 +64,7 @@
     <string name="popup_reading_custom_color_filter">Custom color filter</string>
     <string name="popup_reading_custom_brightness">Custom brightness</string>
     <string name="popup_reading_grayscale">Grayscale</string>
+    <string name="popup_reading_invert_color">Invert color</string>
 
     <string name="color_filter_r_value">R</string>
     <string name="color_filter_g_value">G</string>

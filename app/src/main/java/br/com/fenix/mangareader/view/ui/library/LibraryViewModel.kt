@@ -16,14 +16,11 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
     private val mMangaRepository: MangaRepository = MangaRepository(mContext)
     private val mCoverRepository: CoverRepository = CoverRepository(mContext)
 
-    private var mListMangas = MutableLiveData<ArrayList<Manga>>()
+    private var mListMangas = MutableLiveData<ArrayList<Manga>>(ArrayList())
     val save: LiveData<ArrayList<Manga>> = mListMangas
 
     fun clear() {
-        if (mListMangas.value == null)
-            mListMangas.value = ArrayList()
-        else
-            mListMangas.value!!.clear()
+        mListMangas.value!!.clear()
     }
 
     fun save(obj: Manga): Manga {

@@ -7,7 +7,7 @@
     android:background="@color/onPrimary"
     android:orientation="vertical"
     android:paddingTop="@dimen/margin"
-    android:paddingBottom="@dimen/margin"
+    android:paddingBottom="@dimen/margin_bottom"
     tools:context=".view.ui.reader.PopupSubtitleConfiguration">
 
     <com.google.android.material.textfield.TextInputLayout

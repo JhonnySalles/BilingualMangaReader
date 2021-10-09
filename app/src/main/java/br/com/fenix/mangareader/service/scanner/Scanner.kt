@@ -7,6 +7,7 @@ import android.os.Message
 import android.os.Process
 import br.com.fenix.mangareader.MainActivity
 import br.com.fenix.mangareader.model.entity.Manga
+import br.com.fenix.mangareader.service.controller.ImageCoverController
 import br.com.fenix.mangareader.service.parses.Parse
 import br.com.fenix.mangareader.service.parses.ParseFactory
 import br.com.fenix.mangareader.service.repository.Storage
@@ -121,8 +122,7 @@ class Scanner {
                                 val parse: Parse? = ParseFactory.create(it)
                                 if (parse != null)
                                     if (parse.numPages() > 0) {
-                                        storage.save(
-                                            Manga(
+                                        val manga = Manga(
                                                 null,
                                                 it.name,
                                                 "",
@@ -132,7 +132,11 @@ class Scanner {
                                                 it.extension,
                                                 parse.numPages()
                                             )
-                                        )
+                                        val cover = ImageCoverController.instance.getCoverFromFile(it, parse)
+                                        if (cover != null)
+                                            manga.thumbnail = cover
+
+                                        storage.save(manga)
                                         notifyMediaUpdated()
                                     }
                             }

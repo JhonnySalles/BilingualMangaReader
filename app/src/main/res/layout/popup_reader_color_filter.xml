@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/onPrimary"
-    tools:context=".view.ui.reader.PopupReaderColorFilter">
+    android:paddingBottom="@dimen/margin_bottom"
+    tools:context=".view.ui.reader.PopupReaderColorFilterFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -186,7 +187,7 @@
         <!-- Grayscale -->
 
         <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/grayscale"
+            android:id="@+id/switch_grayscale"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
@@ -196,58 +197,20 @@
             app:thumbTint="@color/onSecondary"
             app:layout_constraintTop_toBottomOf="@id/txt_color_filter_alpha_value" />
 
-        <!-- Brightness -->
+        <!-- Invert Color -->
 
         <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/custom_brightness"
+            android:id="@+id/switch_invert_color"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:text="@string/popup_reading_custom_brightness"
+            android:text="@string/popup_reading_invert_color"
             android:textColor="@color/textPrimary"
             app:thumbTint="@color/onSecondary"
-            app:layout_constraintTop_toBottomOf="@id/grayscale"
-            tools:layout_editor_absoluteX="0dp" />
+            app:layout_constraintTop_toBottomOf="@id/switch_grayscale" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/txt_brightness_seekbar_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:tint="@color/onSecondary"
-            android:textColor="@color/textPrimary"
-            app:layout_constraintBottom_toBottomOf="@id/brightness_seekbar"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/brightness_seekbar"
-            app:srcCompat="@drawable/ic_brightness_low" />
-
-        <SeekBar
-            android:id="@+id/brightness_seekbar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:padding="8dp"
-            android:min="-75"
-            android:max="100"
-            android:progressTint="@color/white"
-            android:progressBackgroundTint="@color/white"
-            app:layout_constraintEnd_toStartOf="@id/txt_brightness_seekbar_value"
-            app:layout_constraintStart_toEndOf="@id/txt_brightness_seekbar_icon"
-            app:layout_constraintTop_toBottomOf="@id/custom_brightness"/>
-
-        <TextView
-            android:id="@+id/txt_brightness_seekbar_value"
-            android:layout_width="30dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:textColor="@color/textPrimary"
-            app:layout_constraintBottom_toBottomOf="@id/brightness_seekbar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/brightness_seekbar"
-            tools:text="50" />
+        <!-- Brightness -->
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/color_filter_symbols_barrier"

@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.model.entity.Manga
 import br.com.fenix.mangareader.model.enums.LibraryType
-import br.com.fenix.mangareader.service.controller.ImageCoverController
 import br.com.fenix.mangareader.service.listener.MangaCardListener
 import br.com.fenix.mangareader.util.constants.GeneralConsts
 import br.com.fenix.mangareader.view.ui.library.LibraryFragment
@@ -75,7 +74,7 @@ class GridViewHolder(itemView: View, private val listener: MangaCardListener) :
 
         if (manga.subTitle.isEmpty()) {
             val title = if (manga.lastAccess != null && manga.lastAccess != LocalDateTime.MIN)
-                "${manga.bookMark} / ${manga.pages}  -  ${GeneralConsts.formaterDate(manga.lastAccess!!)}"
+                "${manga.bookMark} / ${manga.pages}  -  ${GeneralConsts.formatterDate(manga.lastAccess!!)}"
             else
                 "${manga.bookMark} / ${manga.pages}"
 

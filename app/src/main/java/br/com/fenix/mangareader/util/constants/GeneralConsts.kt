@@ -23,7 +23,7 @@ class GeneralConsts private constructor() {
             return mContext.getSharedPreferences(KEYS.PREFERENCE_NAME, Context.MODE_PRIVATE)
         }
 
-        fun formaterDate(dateTime: LocalDateTime) : String {
+        fun formatterDate(dateTime: LocalDateTime) : String {
             val preferences = getSharedPreferences()
             val pattern = preferences?.getString(KEYS.SYSTEM.FORMAT_DATA, "yyyy-MM-dd")
             return dateTime.format(DateTimeFormatter.ofPattern(pattern))
@@ -64,6 +64,16 @@ class GeneralConsts private constructor() {
         object OBJECT {
             const val MANGA = "MANGA_OBJECT"
             const val FILE = "FILE_OBJECT"
+        }
+
+        object COLOR_FILTER {
+            const val CUSTOM_FILTER = "CUSTOM_FILTER"
+            const val GRAY_SCALE = "GRAY_SCALE"
+            const val INVERT_COLOR = "INVERT_COLOR"
+            const val COLOR_RED = "COLOR_RED"
+            const val COLOR_BLUE = "COLOR_BLUE"
+            const val COLOR_GREEN = "COLOR_GREEN"
+            const val COLOR_ALPHA = "COLOR_ALPHA"
         }
     }
 

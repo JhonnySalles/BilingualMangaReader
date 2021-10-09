@@ -10,7 +10,7 @@ import androidx.appcompat.widget.AppCompatImageButton
 import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.model.entity.Text
 import br.com.fenix.mangareader.service.controller.SubTitleController
-import br.com.fenix.mangareader.service.kanji.Formater
+import br.com.fenix.mangareader.service.kanji.Formatter
 import br.com.fenix.mangareader.service.kanji.FuriganaView
 import kotlin.math.abs
 
@@ -143,7 +143,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
                         "${mLabelPage} ${mSubTitleController.pageSelected.value!!.number} - " +
                         "${mLabelText} $index/${mSubTitleController.pageSelected.value?.texts?.size}"
 
-            Formater.generateFurigana(text.text) { furigana -> mSubtitleContent.setText(furigana) }
+            Formatter.generateFurigana(text.text) { furigana -> mSubtitleContent.setText(furigana) }
         } else if (mSubTitleController.chapterSelected.value != null && mSubTitleController.pageSelected.value != null) {
             title =
                 "${mLabelChapter} ${mSubTitleController.chapterSelected.value?.chapter.toString()} - " +

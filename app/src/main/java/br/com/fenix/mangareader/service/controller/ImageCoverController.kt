@@ -12,6 +12,7 @@ import br.com.fenix.mangareader.service.repository.CoverRepository
 import br.com.fenix.mangareader.util.constants.ReaderConsts
 import br.com.fenix.mangareader.util.helpers.Util
 import kotlinx.coroutines.*
+import java.io.File
 import java.io.InputStream
 
 
@@ -42,10 +43,43 @@ class ImageCoverController private constructor() {
         return null
     }
 
+    fun getCoverFromFile(file : File, parse : Parse) : Cover? {
+        return getCoverFromFile(generateHash(file), parse)
+    }
+
+    private fun generateHash(file : File) : String = Util.MD5(file.path + file.name)
+
+    private fun getCoverFromFile(hash : String, parse :  Parse) : Cover? {
+        var stream: InputStream? = mParse!!.getPage(0)
+
+        val options = BitmapFactory.Options()
+        options.inJustDecodeBounds = true
+        BitmapFactory.decodeStream(stream, null, options)
+        options.inSampleSize = Util.calculateInSampleSize(
+            options,
+            ReaderConsts.COVER.COVER_THUMBNAIL_WIDTH,
+            ReaderConsts.COVER.COVER_THUMBNAIL_HEIGHT
+        )
+
+        options.inJustDecodeBounds = false
+        stream?.close()
+        stream = mParse!!.getPage(0)
+        val result = BitmapFactory.decodeStream(stream, null, options)
+
+        return if (result != null) {
+            saveBitmapToCache(hash, result)
+            Cover(
+                null, 0, hash, ReaderConsts.COVER.COVER_THUMBNAIL_WIDTH,
+                parse.getType()!!, result
+            )
+        } else
+            null
+    }
+
     private lateinit var mRepository: CoverRepository
     private var mParse: Parse? = null
-    private fun getImage(manga: Manga) {
-        val hash = Util.MD5(manga.file!!.path + manga.file!!.name)
+    private fun getMangaCover(manga: Manga) {
+        val hash = generateHash(manga.file!!)
         var image = retrieveBitmapFromCache(hash)
         if (image != null) {
             manga.thumbnail = Cover(
@@ -60,29 +94,10 @@ class ImageCoverController private constructor() {
             }
 
             if (image == null) {
-                mParse = ParseFactory.create(manga.file!!)
-                var stream: InputStream? = mParse!!.getPage(0)
-
-                val options = BitmapFactory.Options()
-                options.inJustDecodeBounds = true
-                BitmapFactory.decodeStream(stream, null, options)
-                options.inSampleSize = Util.calculateInSampleSize(
-                    options,
-                    ReaderConsts.COVER.COVER_THUMBNAIL_WIDTH,
-                    ReaderConsts.COVER.COVER_THUMBNAIL_HEIGHT
-                )
-
-                options.inJustDecodeBounds = false
-                stream?.close()
-                stream = mParse!!.getPage(0)
-                val result = BitmapFactory.decodeStream(stream, null, options)
-
-                if (result != null) {
-                    saveBitmapToCache(hash, result)
-                    manga.thumbnail = Cover(
-                        null, manga.id!!, hash, ReaderConsts.COVER.COVER_THUMBNAIL_WIDTH,
-                        manga.type, result
-                    )
+                val cover = getCoverFromFile(hash, mParse!!)
+                if (cover != null) {
+                    cover.id_manga = manga.id!!
+                    manga.thumbnail = cover
                     mRepository.save(manga.thumbnail!!)
                 }
             }
@@ -92,7 +107,7 @@ class ImageCoverController private constructor() {
     private fun processList(list: List<Manga>,): List<Manga> {
         for (manga in list)
             if (manga.thumbnail == null || manga.thumbnail!!.image == null)
-                getImage(manga)
+                getMangaCover(manga)
         return list
     }
 

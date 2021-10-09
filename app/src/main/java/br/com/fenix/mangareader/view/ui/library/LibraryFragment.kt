@@ -92,12 +92,8 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         super.onResume()
 
         Scanner.getInstance().addUpdateHandler(mUpdateHandler)
-        if (Scanner.getInstance().isRunning())
+        if (!Scanner.getInstance().isRunning())
             setRefresh(true)
-        else {
-            mViewModel.clear()
-            Scanner.getInstance().scanLibrary()
-        }
     }
 
     override fun onPause() {
@@ -225,6 +221,8 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             Storage.takePermission(requireContext(), requireActivity())
 
         generateLayout()
+        Scanner.getInstance().addUpdateHandler(mUpdateHandler)
+        Scanner.getInstance().scanLibrary()
         return root
     }
 

@@ -10,7 +10,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.model.entity.Manga
-import br.com.fenix.mangareader.service.controller.ImageCoverController
 import br.com.fenix.mangareader.service.listener.MangaCardListener
 import br.com.fenix.mangareader.util.constants.GeneralConsts
 import java.time.LocalDateTime
@@ -49,7 +48,7 @@ class LineViewHolder(itemView: View, private val listener: MangaCardListener) :
         if (manga.subTitle.isEmpty()) {
             val title = if (manga.lastAccess != null && manga.lastAccess != LocalDateTime.MIN)
                 "${manga.bookMark} / ${manga.pages}  -  ${itemView.resources.getString(R.string.library_last_access)}: ${
-                    GeneralConsts.formaterDate(
+                    GeneralConsts.formatterDate(
                         manga.lastAccess!!
                     )
                 }"
