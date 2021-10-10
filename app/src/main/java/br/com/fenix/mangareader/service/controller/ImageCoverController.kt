@@ -50,7 +50,14 @@ class ImageCoverController private constructor() {
     private fun generateHash(file : File) : String = Util.MD5(file.path + file.name)
 
     private fun getCoverFromFile(hash : String, parse :  Parse) : Cover? {
-        var stream: InputStream? = mParse!!.getPage(0)
+        var index = 0
+        for(i in 0 .. parse.numPages()) {
+            if (Util.isImage(parse.getPagePath(i)!!)) {
+                index = i
+                break
+            }
+        }
+        var stream: InputStream? = parse.getPage(index)
 
         val options = BitmapFactory.Options()
         options.inJustDecodeBounds = true
@@ -63,7 +70,7 @@ class ImageCoverController private constructor() {
 
         options.inJustDecodeBounds = false
         stream?.close()
-        stream = mParse!!.getPage(0)
+        stream = parse.getPage(index)
         val result = BitmapFactory.decodeStream(stream, null, options)
 
         return if (result != null) {
@@ -77,8 +84,8 @@ class ImageCoverController private constructor() {
     }
 
     private lateinit var mRepository: CoverRepository
-    private var mParse: Parse? = null
     private fun getMangaCover(manga: Manga) {
+        val parse = ParseFactory.create(manga.file!!) ?: return
         val hash = generateHash(manga.file!!)
         var image = retrieveBitmapFromCache(hash)
         if (image != null) {
@@ -94,7 +101,7 @@ class ImageCoverController private constructor() {
             }
 
             if (image == null) {
-                val cover = getCoverFromFile(hash, mParse!!)
+                val cover = getCoverFromFile(hash, parse)
                 if (cover != null) {
                     cover.id_manga = manga.id!!
                     manga.thumbnail = cover

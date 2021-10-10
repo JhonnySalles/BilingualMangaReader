@@ -41,9 +41,41 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         return obj
     }
 
-    fun list(refreshComplete : () -> (Unit)) {
+    fun remove(manga: Manga) {
+        if (mListMangas.value != null)
+            mListMangas.value!!.remove(manga)
+    }
+
+    fun update() {
+        if (mListMangas.value != null) {
+            for (manga in mListMangas.value!!) {
+                val item = mMangaRepository.get(manga.id!!)
+                manga.bookMark = item?.bookMark!!
+                manga.lastAccess = item.lastAccess
+            }
+        }
+    }
+
+    fun list() {
+        val list = mMangaRepository.list()
+        if (list != null)
+            mListMangas.value = ArrayList(list)
+        else
+            mListMangas.value = ArrayList()
+    }
+
+    val limit: Int = 20
+    fun list(refreshComplete: () -> (Unit)) {
         val list = mMangaRepository.list()
         if (list != null) {
+            var qtd = 0
+            for (manga in list) {
+                manga.thumbnail = mMangaRepository.getThumbnail(manga.id!!)
+                qtd++
+                if (qtd > limit)
+                    break
+            }
+
             mListMangas.value = ArrayList(list)
             ImageCoverController.instance.setImageCoverAsync(mContext, list) { withCovers ->
                 mListMangas.value = ArrayList(withCovers)

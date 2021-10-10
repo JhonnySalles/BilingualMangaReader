@@ -35,13 +35,20 @@ class LineViewHolder(itemView: View, private val listener: MangaCardListener) :
 
         if (manga.favorite)
             favorite.visibility = View.VISIBLE
+        else
+            favorite.visibility = View.INVISIBLE
 
         cardView.setOnClickListener { listener.onClick(manga) }
+        cardView.setOnLongClickListener {
+            listener.onClickLong(manga, it)
+            true
+        }
 
         if (manga.thumbnail != null && manga.thumbnail!!.image != null)
             mangaImage.setImageBitmap(manga.thumbnail!!.image)
         else
             mangaImage.setImageBitmap(mImageCover)
+
 
         mangaTitle.text = manga.title
 

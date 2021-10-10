@@ -22,7 +22,7 @@ class GridViewHolder(itemView: View, private val listener: MangaCardListener) :
     RecyclerView.ViewHolder(itemView) {
 
     companion object {
-        lateinit var mImageCover : Bitmap
+        lateinit var mImageCover: Bitmap
     }
 
     init {
@@ -39,6 +39,8 @@ class GridViewHolder(itemView: View, private val listener: MangaCardListener) :
 
         if (manga.favorite)
             favorite.visibility = View.VISIBLE
+        else
+            favorite.visibility = View.INVISIBLE
 
         val isLandscape =
             itemView.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
@@ -64,6 +66,10 @@ class GridViewHolder(itemView: View, private val listener: MangaCardListener) :
         }
 
         cardView.setOnClickListener { listener.onClick(manga) }
+        cardView.setOnLongClickListener {
+            listener.onClickLong(manga, it)
+            true
+        }
 
         if (manga.thumbnail != null && manga.thumbnail!!.image != null)
             mangaImage.setImageBitmap(manga.thumbnail!!.image)

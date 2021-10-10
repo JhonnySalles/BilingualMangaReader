@@ -15,4 +15,8 @@
         <item name="colorSurface">@color/primary</item>
     </style>
 
+    <style name="PopupMenu" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:background">@color/onPrimary</item>
+        <item name="android:textColor">@color/textPrimary</item>
+    </style>
 </resources>

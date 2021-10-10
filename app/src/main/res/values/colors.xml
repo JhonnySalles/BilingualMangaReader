@@ -23,6 +23,7 @@
     <color name="nightOnSecondary">#29434e</color>
 
     <!-- Night background color -->
+    <color name="menuPrimary">#111111</color>
 
     <color name="textPrimary">#FFFFFFFF</color>
 

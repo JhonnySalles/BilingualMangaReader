@@ -94,6 +94,7 @@ class GeneralConsts private constructor() {
     object SCANNER {
         const val MESSAGE_MEDIA_UPDATE_FINISHED = 0
         const val MESSAGE_MEDIA_UPDATED = 1
+        const val MESSAGE_COVER_UPDATED = 2
     }
 
 }

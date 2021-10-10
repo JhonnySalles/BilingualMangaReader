@@ -2,6 +2,9 @@
 <resources>
     <string name="app_name">Bilingual Manga Reader</string>
 
+    <string name="action_positive">Yes</string>
+    <string name="action_negative">No</string>
+
     <!-- MENU -->
     <string name="menu_search">Search</string>
     <string name="menu_help">Help</string>
@@ -97,5 +100,11 @@
 
     <!-- LIBRARY -->
     <string name="library_last_access">Last access</string>
+
+    <string name="library_menu_favorite_add">Add favorite</string>
+    <string name="library_menu_favorite_remove">Remove favorite</string>
+    <string name="library_menu_delete">Delete</string>
+    <string name="library_menu_delete_description">Do you really want to delete the file?</string>
+    <string name="library_menu_clear">Clear history</string>
 
 </resources>

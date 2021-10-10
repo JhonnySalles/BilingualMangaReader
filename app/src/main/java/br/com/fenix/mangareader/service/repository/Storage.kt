@@ -11,6 +11,7 @@ import android.os.Environment
 import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import br.com.fenix.mangareader.model.entity.Cover
 import br.com.fenix.mangareader.model.entity.Manga
 
 class Storage(context: Context) {
@@ -55,6 +56,8 @@ class Storage(context: Context) {
         }
         return id
     }
+
+    fun save(cover: Cover): Long = mRepositoryCover.save(cover)
 
     // Used to get the cache images
     companion object Storage {

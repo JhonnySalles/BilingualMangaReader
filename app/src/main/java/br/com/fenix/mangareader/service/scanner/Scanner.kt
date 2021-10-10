@@ -12,7 +12,6 @@ import br.com.fenix.mangareader.service.parses.Parse
 import br.com.fenix.mangareader.service.parses.ParseFactory
 import br.com.fenix.mangareader.service.repository.Storage
 import br.com.fenix.mangareader.util.constants.GeneralConsts
-import br.com.fenix.mangareader.util.helpers.Util
 import java.io.File
 import java.lang.ref.WeakReference
 import java.util.*
@@ -84,9 +83,32 @@ class Scanner {
             h.sendEmptyMessage(GeneralConsts.SCANNER.MESSAGE_MEDIA_UPDATED)
     }
 
+    private fun notifyCoverUpdated() {
+        for (h in mUpdateHandler!!)
+            h.sendEmptyMessage(GeneralConsts.SCANNER.MESSAGE_COVER_UPDATED)
+    }
+
     private fun notifyLibraryUpdateFinished() {
         for (h in mUpdateHandler!!)
             h.sendEmptyMessage(GeneralConsts.SCANNER.MESSAGE_MEDIA_UPDATE_FINISHED)
+    }
+
+    private fun generateCovers(list: MutableList<Manga>) {
+        val storage = Storage(MainActivity.getAppContext())
+        var index = 0
+        for (manga in list) {
+            index++
+            if (index > 20) {
+                index = 0
+                notifyCoverUpdated()
+            }
+
+            val parse = ParseFactory.create(manga.file!!) ?: continue
+            val cover = ImageCoverController.instance.getCoverFromFile(manga.file!!, parse) ?: continue
+            cover.id_manga = manga.id!!
+            manga.thumbnail = cover
+            storage.save(cover)
+        }
     }
 
     private inner class LibraryUpdateRunnable : Runnable {
@@ -100,6 +122,7 @@ class Scanner {
 
                 val storage = Storage(ctx)
                 val storageFiles: MutableMap<String, Manga> = HashMap()
+                val generateCovers: MutableList<Manga> = arrayListOf()
 
                 // create list of files available in storage
                 for (c in storage.listBook()!!)
@@ -123,20 +146,18 @@ class Scanner {
                                 if (parse != null)
                                     if (parse.numPages() > 0) {
                                         val manga = Manga(
-                                                null,
-                                                it.name,
-                                                "",
-                                                it.path,
-                                                it.parent,
-                                                it.nameWithoutExtension,
-                                                it.extension,
-                                                parse.numPages()
-                                            )
-                                        val cover = ImageCoverController.instance.getCoverFromFile(it, parse)
-                                        if (cover != null)
-                                            manga.thumbnail = cover
+                                            null,
+                                            it.name,
+                                            "",
+                                            it.path,
+                                            it.parent,
+                                            it.nameWithoutExtension,
+                                            it.extension,
+                                            parse.numPages()
+                                        )
 
-                                        storage.save(manga)
+                                        manga.id = storage.save(manga)
+                                        generateCovers.add(manga)
                                         notifyMediaUpdated()
                                     }
                             }
@@ -146,6 +167,9 @@ class Scanner {
                 // delete missing comics
                 for (missing in storageFiles.values)
                     storage.delete(missing)
+
+                if (generateCovers.size > 0)
+                    generateCovers(generateCovers)
             } finally {
                 mIsStopped = false
                 if (mIsRestarted) {
