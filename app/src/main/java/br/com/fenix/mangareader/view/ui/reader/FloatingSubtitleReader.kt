@@ -116,7 +116,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
             mSubtitleTitle = this.findViewById(R.id.txt_floating_title)
             mSubtitleContent = this.findViewById(R.id.txt_floating_content)
             mListPageVocabulary = this.findViewById(R.id.list_floating_page_vocabulary)
-            mListPageVocabulary.adapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, mVocabularyItem)
+            mListPageVocabulary.adapter = ArrayAdapter(context, R.layout.list_item_vocabulary, mVocabularyItem)
 
             mSubtitleContent.setOnLongClickListener {
                 if (mSubtitleContent.text.isNotEmpty()) {

@@ -53,8 +53,7 @@ class PopupSubtitleReader : Fragment() {
         mDraw = root.findViewById(R.id.nav_draw)
         mChangeLanguage = root.findViewById(R.id.nav_change_language)
 
-        mListPageVocabulary.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, mVocabularyItem)
-
+        mListPageVocabulary.adapter = ArrayAdapter(requireContext(), R.layout.list_item_vocabulary, mVocabularyItem)
         mSubtitleContent.movementMethod = LinkMovementMethod.getInstance()
 
         mLabelChapter = getString(R.string.popup_reading_subtitle_chapter)
