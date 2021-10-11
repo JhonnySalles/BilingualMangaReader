@@ -7,6 +7,7 @@ import android.graphics.PixelFormat
 import android.os.Build
 import android.provider.Settings
 import android.view.*
+import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
@@ -115,6 +116,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
             mSubtitleTitle = this.findViewById(R.id.txt_floating_title)
             mSubtitleContent = this.findViewById(R.id.txt_floating_content)
             mListPageVocabulary = this.findViewById(R.id.list_floating_page_vocabulary)
+            mListPageVocabulary.adapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, mVocabularyItem)
 
             mSubtitleContent.setOnLongClickListener {
                 if (mSubtitleContent.text.isNotEmpty()) {
