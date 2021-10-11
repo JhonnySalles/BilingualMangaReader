@@ -17,7 +17,8 @@
         android:requestLegacyExternalStorage="true">
         <activity
             android:name="br.com.fenix.mangareader.view.ui.reader.ReaderActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
