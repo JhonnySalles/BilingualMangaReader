@@ -3,11 +3,11 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
     <dimen name="nav_header_height">200dp</dimen>
-    <dimen name="margin">16dp</dimen>
+    <dimen name="margin">10dp</dimen>
     <dimen name="margin_small">6dp</dimen>
     <dimen name="margin_bottom">40dp</dimen>
 
-    <dimen name="manga_grid_card_image">150dp</dimen>
+    <dimen name="manga_grid_card_image">200dp</dimen>
     <dimen name="manga_grid_card_layout_width">150dp</dimen>
     <dimen name="manga_grid_card_layout_height">200dp</dimen>
     <dimen name="manga_grid_title_size">12dp</dimen>

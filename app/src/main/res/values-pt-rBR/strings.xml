@@ -4,6 +4,7 @@
 
     <string name="action_positive">Sim</string>
     <string name="action_negative">Não</string>
+    <string name="action_copy">Texto copiado: </string>
 
     <!-- MENU -->
     <string name="menu_search">Procurar</string>
@@ -50,6 +51,8 @@
     <string name="menu_reading_mode_right_to_left">Manga</string>
 
     <string name="menu_reading_favorite">Favorito</string>
+    <string name="menu_reading_order">Ordem da lista</string>
+    <string name="menu_reading_order_change">Ordernado:</string>
     <string name="menu_reading_change_language">Trocar de idioma</string>
 
     <string name="menu_reading_floating">Popup flutuante</string>

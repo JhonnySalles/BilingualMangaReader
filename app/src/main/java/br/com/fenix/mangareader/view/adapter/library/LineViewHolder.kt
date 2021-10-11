@@ -36,7 +36,7 @@ class LineViewHolder(itemView: View, private val listener: MangaCardListener) :
         if (manga.favorite)
             favorite.visibility = View.VISIBLE
         else
-            favorite.visibility = View.INVISIBLE
+            favorite.visibility = View.GONE
 
         cardView.setOnClickListener { listener.onClick(manga) }
         cardView.setOnLongClickListener {

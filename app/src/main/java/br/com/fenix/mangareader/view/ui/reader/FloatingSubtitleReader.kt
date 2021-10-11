@@ -1,13 +1,18 @@
 package br.com.fenix.mangareader.view.ui.reader
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.PixelFormat
 import android.os.Build
 import android.provider.Settings
 import android.view.*
+import android.widget.ListView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageButton
 import br.com.fenix.mangareader.R
+import br.com.fenix.mangareader.model.entity.Page
 import br.com.fenix.mangareader.model.entity.Text
 import br.com.fenix.mangareader.service.controller.SubTitleController
 import br.com.fenix.mangareader.service.kanji.Formatter
@@ -82,6 +87,8 @@ class FloatingSubtitleReader constructor(private val context: Context) {
     private var mLabelText: String
     private var mSubtitleTitle: TextView
     private var mSubtitleContent: FuriganaView
+    private var mListPageVocabulary: ListView
+    private var mVocabularyItem = ArrayList<String>()
 
     init {
         with(mFloatingView) {
@@ -107,6 +114,22 @@ class FloatingSubtitleReader constructor(private val context: Context) {
 
             mSubtitleTitle = this.findViewById(R.id.txt_floating_title)
             mSubtitleContent = this.findViewById(R.id.txt_floating_content)
+            mListPageVocabulary = this.findViewById(R.id.list_floating_page_vocabulary)
+
+            mSubtitleContent.setOnLongClickListener {
+                if (mSubtitleContent.text.isNotEmpty()) {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.action_copy) + " ${mSubtitleContent.text}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    val clip = ClipData.newPlainText("Copied Text", mSubtitleContent.text)
+                    clipboard.setPrimaryClip(clip)
+                }
+                true
+            }
 
             this.findViewById<AppCompatImageButton>(R.id.imgbtn_close)
                 .setOnClickListener { dismiss() }
@@ -127,6 +150,18 @@ class FloatingSubtitleReader constructor(private val context: Context) {
             gravity = Gravity.CENTER
             width = WindowManager.LayoutParams.WRAP_CONTENT
             height = WindowManager.LayoutParams.WRAP_CONTENT
+        }
+    }
+
+    fun updatePage(page: Page?) {
+        if (page != null) {
+            mVocabularyItem.clear()
+            if (page.vocabulary != null && page.vocabulary.isNotEmpty()) {
+                val vocabulary = page.vocabulary.map { vocab -> vocab.word + " - " + vocab.meaning + if (!vocab.revised) "¹" else "" }
+                mVocabularyItem.addAll(vocabulary)
+                mListPageVocabulary.visibility = View.VISIBLE
+            } else
+                mListPageVocabulary.visibility = View.GONE
         }
     }
 
@@ -170,6 +205,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
     }
 
     companion object {
-        fun canDrawOverlays(context: Context): Boolean = Settings.canDrawOverlays(context)
+        fun canDrawOverlays(context: Context): Boolean =
+            Settings.canDrawOverlays(context)
     }
 }

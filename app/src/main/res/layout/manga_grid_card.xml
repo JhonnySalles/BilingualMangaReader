@@ -7,7 +7,7 @@
     android:layout_margin="8dp"
     app:rippleColor="@color/secondary">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/primary"
@@ -17,31 +17,41 @@
         <ImageView
             android:id="@+id/manga_grid_image_cover"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            android:layout_height="@dimen/manga_grid_card_image"
             android:background="@color/primaryVariant"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@mipmap/book" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_gravity="bottom"
+            android:background="@color/primarySemitransparent"
+            android:orientation="vertical"
             android:paddingLeft="5dp"
             android:paddingTop="5dp"
-            android:paddingRight="5dp">
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
 
             <!-- Title, secondary and supporting text -->
             <TextView
                 android:id="@+id/manga_grid_text_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
                 android:textAppearance="?attr/textAppearanceHeadline6"
                 android:textColor="@color/textPrimary"
-                android:textSize="@dimen/manga_grid_title_size"
-                android:singleLine="true"
-                android:ellipsize="end"/>
+                android:textSize="@dimen/manga_grid_title_size" />
 
             <TextView
                 android:id="@+id/manga_grid_sub_title"
@@ -49,10 +59,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:layout_marginBottom="2dp"
+                android:ellipsize="end"
+                android:singleLine="true"
                 android:textAppearance="?attr/textAppearanceSubtitle2"
                 android:textColor="@color/textPrimary"
-                android:singleLine="true"
-                android:ellipsize="end"
                 android:textSize="@dimen/manga_grid_sub_title" />
 
             <ProgressBar
@@ -60,24 +70,29 @@
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="5dp"
-                android:indeterminateTint="@color/secondary"
                 android:background="@color/onPrimary"
+                android:indeterminateTint="@color/secondary"
                 android:max="100"
-                android:min="0" />
+                android:min="0"
+                android:progressBackgroundTint="@color/onPrimary"
+                android:progressTint="@color/secondary" />
 
         </LinearLayout>
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
         android:id="@+id/manga_grid_favorite"
         android:layout_width="@dimen/manga_grid_favorite"
         android:layout_height="@dimen/manga_grid_favorite"
-        android:adjustViewBounds="true"
-        android:src="@drawable/ic_favorite_mark"
-        android:layout_marginTop="5dp"
         android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:adjustViewBounds="true"
+        android:background="@drawable/ic_favorite_mark_border"
+        android:backgroundTint="@color/onPrimary"
+        android:padding="2dp"
+        android:src="@drawable/ic_favorite_mark"
         android:visibility="gone"
-        app:tint="@color/onPrimary" />
+        app:tint="@color/secondary" />
 
 </com.google.android.material.card.MaterialCardView>

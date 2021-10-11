@@ -1,6 +1,5 @@
 package br.com.fenix.mangareader.view.ui.library
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -13,6 +12,7 @@ import android.util.Log
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
@@ -24,6 +24,7 @@ import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.model.entity.Manga
 import br.com.fenix.mangareader.model.enums.LibraryType
 import br.com.fenix.mangareader.model.enums.Order
+import br.com.fenix.mangareader.service.controller.ImageCoverController
 import br.com.fenix.mangareader.service.listener.MangaCardListener
 import br.com.fenix.mangareader.service.repository.MangaRepository
 import br.com.fenix.mangareader.service.repository.Storage
@@ -32,9 +33,9 @@ import br.com.fenix.mangareader.util.constants.GeneralConsts
 import br.com.fenix.mangareader.view.adapter.library.MangaGridCardAdapter
 import br.com.fenix.mangareader.view.adapter.library.MangaLineCardAdapter
 import br.com.fenix.mangareader.view.ui.reader.ReaderActivity
-import br.com.fenix.mangareader.view.ui.reader.ReaderFragment
 import java.lang.ref.WeakReference
 import java.time.LocalDateTime
+import java.util.HashMap
 import kotlin.math.max
 
 
@@ -43,10 +44,12 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var mViewModel: LibraryViewModel
     private var mLibraryPath: String = ""
     private var mOrderBy: Order = Order.Name
+    private lateinit var mMapOrder: HashMap<Order, String>
 
     private lateinit var mRefreshLayout: SwipeRefreshLayout
     private lateinit var mRecycleView: RecyclerView
     private lateinit var miGridType: MenuItem
+    private lateinit var miGridOrder: MenuItem
     private lateinit var miSearch: MenuItem
     private lateinit var searchView: SearchView
     private lateinit var mListener: MangaCardListener
@@ -70,6 +73,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         super.onCreateOptionsMenu(menu, inflater)
 
         miGridType = menu.findItem(R.id.grid_type)
+        miGridOrder = menu.findItem(R.id.list_order)
         miSearch = menu.findItem(R.id.search)
         searchView = miSearch.actionView as SearchView
         searchView.imeOptions = EditorInfo.IME_ACTION_DONE
@@ -98,6 +102,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         super.onResume()
 
         Scanner.getInstance().addUpdateHandler(mUpdateHandler)
+        ImageCoverController.instance.addUpdateHandler(mUpdateHandler)
         if (Scanner.getInstance().isRunning())
             setRefresh(true)
 
@@ -107,6 +112,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onPause() {
         Scanner.getInstance().removeUpdateHandler(mUpdateHandler)
+        ImageCoverController.instance.removeUpdateHandler(mUpdateHandler)
         super.onPause()
     }
 
@@ -125,7 +131,6 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     }
                 }
                 GeneralConsts.SCANNER.MESSAGE_COVER_UPDATED -> {
-                    mViewModel.update()
                     notifyDataSet()
                 }
             }
@@ -139,7 +144,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private fun refreshLibraryDelayed() {
         if (!mIsRefreshPlanned) {
             val updateRunnable = Runnable {
-                mViewModel.list()
+                mViewModel.updateList()
                 notifyDataSet()
                 mIsRefreshPlanned = false
             }
@@ -151,8 +156,47 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
             R.id.grid_type -> onChangeLayout()
+            R.id.list_order -> onChangeSort()
         }
         return super.onOptionsItemSelected(menuItem)
+    }
+
+    private fun onChangeSort() {
+        if (mRefreshLayout.isRefreshing)
+            return
+
+        mOrderBy = when (mOrderBy) {
+            Order.Name -> Order.Date
+            Order.Date -> Order.Favorite
+            Order.Favorite -> Order.LastAcess
+            else -> Order.Name
+        }
+
+        Toast.makeText(
+            requireContext(),
+            getString(R.string.menu_reading_order_change) + " ${mMapOrder[mOrderBy]}",
+            Toast.LENGTH_SHORT
+        ).show()
+
+        val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
+        with(sharedPreferences?.edit()) {
+            this!!.putString(GeneralConsts.KEYS.LIBRARY.ORDER, mOrderBy.toString())
+            this.commit()
+        }
+
+        if (mViewModel.save.value != null) {
+            sortList(mViewModel.save.value!!)
+            notifyDataSet()
+        }
+    }
+
+    private fun sortList(list: ArrayList<Manga>) {
+        when (mOrderBy) {
+            Order.Date -> list.sortBy { it.dateCreate }
+            Order.LastAcess -> list.sortByDescending { it.lastAccess }
+            Order.Favorite -> list.sortBy { it.favorite }
+            else -> list.sortBy { it.name }
+        }
     }
 
     private fun onChangeLayout() {
@@ -197,6 +241,13 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         mGridType = LibraryType.valueOf(
             sharedPreferences?.getString(GeneralConsts.KEYS.LIBRARY.LIBRARY_TYPE, "LINE")
                 .toString()
+        )
+
+        mMapOrder = hashMapOf(
+            Order.Name to getString(R.string.config_option_order_name),
+            Order.Date to getString(R.string.config_option_order_date),
+            Order.LastAcess to getString(R.string.config_option_order_access),
+            Order.Favorite to getString(R.string.config_option_order_favorite)
         )
 
         mRepository = MangaRepository(requireContext())
@@ -342,13 +393,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun updateList(list: ArrayList<Manga>) {
-        when (mOrderBy) {
-            Order.Date -> list.sortBy { it.dateCreate }
-            Order.LastAcess -> list.sortByDescending { it.lastAccess }
-            Order.Favorite -> list.sortBy { it.favorite }
-            else -> list.sortBy { it.name }
-        }
-
+        sortList(list)
         if (mGridType != LibraryType.LINE)
             (mRecycleView.adapter as MangaGridCardAdapter).updateList(list)
         else
@@ -391,7 +436,6 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     override fun onRefresh() {
         if (!Scanner.getInstance().isRunning()) {
             setRefresh(true)
-            mViewModel.clear()
             Scanner.getInstance().scanLibrary()
         }
     }

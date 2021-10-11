@@ -58,7 +58,9 @@ class ReaderActivity : AppCompatActivity() {
     companion object {
         private lateinit var mPopupTab: TabLayout
         private lateinit var mToolbarSubTitle: TextView
-        fun selectTabReader() = mPopupTab.selectTab(mPopupTab.getTabAt(0), true)
+        fun selectTabReader() =
+            mPopupTab.selectTab(mPopupTab.getTabAt(0), true)
+
         fun setSubtitle(text: String) {
             if (::mToolbarSubTitle.isInitialized)
                 mToolbarSubTitle.text = text
@@ -92,7 +94,7 @@ class ReaderActivity : AppCompatActivity() {
         }
         findViewById<Button>(R.id.btn_popup_open_floating).setOnClickListener { menuFloat() }
         findViewById<Button>(R.id.btn_screen_rotate).setOnClickListener {
-            requestedOrientation = if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE )
+            requestedOrientation = if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             else
                 ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
@@ -103,6 +105,7 @@ class ReaderActivity : AppCompatActivity() {
             this.state = BottomSheetBehavior.STATE_COLLAPSED
             mBottomSheet = this
         }
+        mBottomSheet.isDraggable = false
 
         findViewById<ImageView>(R.id.menu_popup_touch).setOnClickListener {
             if (mBottomSheet.state == BottomSheetBehavior.STATE_COLLAPSED)
@@ -262,6 +265,16 @@ class ReaderActivity : AppCompatActivity() {
         mRepository.update(mManga)
     }
 
+    private fun prepareMenuFloat() {
+        val mSubTitleController = SubTitleController.getInstance(applicationContext)
+        mSubTitleController.pageSelected.observe(this, {
+            mFloatingSubtitleReader.updatePage(it)
+        })
+        mSubTitleController.textSelected.observe(this, {
+            mFloatingSubtitleReader.updateText(it)
+        })
+    }
+
     private fun menuFloat() {
         mMenuPopup.visibility = View.INVISIBLE
 
@@ -269,10 +282,7 @@ class ReaderActivity : AppCompatActivity() {
             mFloatingSubtitleReader.dismiss()
         else {
             if (canDrawOverlays(applicationContext)) {
-                val mSubTitleController = SubTitleController.getInstance(applicationContext)
-                mSubTitleController.textSelected.observe(this, {
-                    mFloatingSubtitleReader.updateText(it)
-                })
+                prepareMenuFloat()
                 mFloatingSubtitleReader.show()
             } else
                 startManageDrawOverlaysPermission()
@@ -285,9 +295,10 @@ class ReaderActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             5 -> {
-                if (canDrawOverlays(applicationContext))
+                if (canDrawOverlays(applicationContext)) {
+                    prepareMenuFloat()
                     mFloatingSubtitleReader.show()
-                else
+                } else
                     Toast.makeText(
                         application,
                         getString(R.string.floating_reading_not_permission),

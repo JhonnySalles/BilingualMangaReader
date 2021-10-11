@@ -40,7 +40,7 @@ class GridViewHolder(itemView: View, private val listener: MangaCardListener) :
         if (manga.favorite)
             favorite.visibility = View.VISIBLE
         else
-            favorite.visibility = View.INVISIBLE
+            favorite.visibility = View.GONE
 
         val isLandscape =
             itemView.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE

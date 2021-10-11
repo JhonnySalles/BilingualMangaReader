@@ -11,11 +11,19 @@
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="always" />
 
+    <item android:id="@+id/list_order"
+        android:title="@string/menu_reading_order"
+        android:icon="@drawable/ic_order_by_last_acess"
+        android:iconTint="#FFFFFF"
+        android:orderInCategory="101"
+        app:showAsAction="always">
+    </item>
+
     <item
         android:id="@+id/grid_type"
         android:icon="@drawable/ic_type_grid_big"
         android:iconTint="#FFFFFF"
-        android:orderInCategory="101"
+        android:orderInCategory="110"
         android:title="@string/menu_grid_type"
         android:visible="true"
         app:showAsAction="always" />

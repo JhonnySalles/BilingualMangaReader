@@ -7,6 +7,8 @@ data class Vocabulary(
     val word: String,
     @SerializedName("significado")
     val meaning: String,
+    @SerializedName("leitura")
+    val reading: String,
     @SerializedName("revisado")
-    val revised: String
+    val revised: Boolean
 )

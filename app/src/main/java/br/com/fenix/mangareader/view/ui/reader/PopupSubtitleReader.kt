@@ -1,5 +1,8 @@
 package br.com.fenix.mangareader.view.ui.reader
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
@@ -11,6 +14,7 @@ import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.service.controller.SubTitleController
 import br.com.fenix.mangareader.service.kanji.Formatter
 import com.google.android.material.textfield.TextInputLayout
+import android.widget.ArrayAdapter
 
 
 class PopupSubtitleReader : Fragment() {
@@ -19,6 +23,7 @@ class PopupSubtitleReader : Fragment() {
     private lateinit var mSubtitlePageAutoComplete: AutoCompleteTextView
     private lateinit var mSubtitleTitle: TextView
     private lateinit var mSubtitleContent: TextView
+    private lateinit var mListPageVocabulary: ListView
     private lateinit var mNavBeforeText: Button
     private lateinit var mNavNextText: Button
     private lateinit var mRefresh: Button
@@ -26,6 +31,7 @@ class PopupSubtitleReader : Fragment() {
     private lateinit var mChangeLanguage: Button
     private lateinit var mLabelChapter: String
     private lateinit var mLabelText: String
+    private var mVocabularyItem = ArrayList<String>()
 
     private lateinit var mSubTitleController: SubTitleController
 
@@ -40,16 +46,34 @@ class PopupSubtitleReader : Fragment() {
         mSubtitlePage = root.findViewById(R.id.cb_subtitle_page)
         mSubtitleTitle = root.findViewById(R.id.txt_subtitle_title)
         mSubtitleContent = root.findViewById(R.id.txt_subtitle_content)
+        mListPageVocabulary = root.findViewById(R.id.list_subtitle_page_vocabulary)
         mNavBeforeText = root.findViewById(R.id.nav_before_text)
         mNavNextText = root.findViewById(R.id.nav_next_text)
         mRefresh = root.findViewById(R.id.nav_refresh)
         mDraw = root.findViewById(R.id.nav_draw)
         mChangeLanguage = root.findViewById(R.id.nav_change_language)
 
+        mListPageVocabulary.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, mVocabularyItem)
+
         mSubtitleContent.movementMethod = LinkMovementMethod.getInstance()
 
         mLabelChapter = getString(R.string.popup_reading_subtitle_chapter)
         mLabelText = getString(R.string.popup_reading_subtitle_text)
+
+        mSubtitleContent.setOnLongClickListener {
+            if (mSubtitleContent.text.isNotEmpty()) {
+                Toast.makeText(
+                    requireActivity(),
+                    getString(R.string.action_copy) + " ${mSubtitleContent.text}",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clip = ClipData.newPlainText("Copied Text", mSubtitleContent.text)
+                clipboard.setPrimaryClip(clip)
+            }
+            true
+        }
 
         mSubTitleController = SubTitleController.getInstance(requireContext())
 
@@ -96,8 +120,17 @@ class PopupSubtitleReader : Fragment() {
 
         mSubTitleController.pageSelected.observe(viewLifecycleOwner, {
             var key = ""
-            if (it != null)
+            if (it != null) {
                 key = mSubTitleController.getPageKey(it)
+
+                mVocabularyItem.clear()
+                if (it.vocabulary != null && it.vocabulary.isNotEmpty()) {
+                    val vocabulary = it.vocabulary.map { vocab -> vocab.word + " - " + vocab.meaning + if (!vocab.revised) "¹" else "" }
+                    mVocabularyItem.addAll(vocabulary)
+                    mListPageVocabulary.visibility = View.VISIBLE
+                } else
+                    mListPageVocabulary.visibility = View.GONE
+            }
 
             mSubtitlePageAutoComplete.setText(key, false)
         })

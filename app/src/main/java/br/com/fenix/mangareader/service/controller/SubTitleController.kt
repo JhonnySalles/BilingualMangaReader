@@ -209,7 +209,7 @@ class SubTitleController private constructor(private val context: Context) {
             for (p in subtitles[k]?.pages!!) {
                 if (p.name.equals(pageName, true) || p.hash == hash) {
                     chapterKey = k
-                    pageKey = p.number.toString()
+                    pageKey = getPageKey(p)
                     pageNumber = p.number
                     find = true
                     break
@@ -224,7 +224,7 @@ class SubTitleController private constructor(private val context: Context) {
             mSelectedSubTitle.value?.pageKey =
                 if (mListPages.keys.contains(pageKey)) pageKey else ""
             updatePageSelect()
-            initialize(chapterKey, pageNumber.toString())
+            initialize(chapterKey, pageKey)
 
             var text: String =
                 context.resources.getString(R.string.popup_reading_subtitle_find_subtitle)

@@ -32,13 +32,15 @@
             android:layout_height="wrap_content"
             android:paddingTop="1dp"
             android:paddingRight="5dp">
+
             <ImageView
                 android:id="@+id/manga_line_favorite"
                 android:layout_width="@dimen/manga_grid_favorite"
                 android:layout_height="@dimen/manga_grid_favorite"
                 android:adjustViewBounds="true"
-                android:src="@drawable/ic_favorite_mark"
+                android:layout_marginRight="5dp"
                 android:gravity="center"
+                android:src="@drawable/ic_favorite_mark"
                 android:visibility="gone"
                 app:tint="@color/onSecondary" />
 
@@ -71,6 +73,8 @@
             android:indeterminateTint="@color/secondary"
             android:max="100"
             android:min="0"
-            android:progress="50" />
+            android:progress="50"
+            android:progressBackgroundTint="@color/primary"
+            android:progressTint="@color/secondary" />
     </LinearLayout>
 </LinearLayout>

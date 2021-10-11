@@ -19,10 +19,6 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
     private var mListMangas = MutableLiveData<ArrayList<Manga>>(ArrayList())
     val save: LiveData<ArrayList<Manga>> = mListMangas
 
-    fun clear() {
-        mListMangas.value!!.clear()
-    }
-
     fun save(obj: Manga): Manga {
         if (obj.id == 0L)
             obj.id = mMangaRepository.save(obj)
@@ -56,6 +52,25 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
+    fun update(list: List<Manga>) {
+        if (list.isNotEmpty()) {
+            for (manga in mListMangas.value!!) {
+                if (!mListMangas.value!!.contains(manga))
+                    mListMangas.value!!.add(manga)
+            }
+        }
+    }
+
+    fun updateList() {
+        val list = mMangaRepository.list() ?: return
+        if (list.isNotEmpty()) {
+            for (manga in list) {
+                if (!mListMangas.value!!.contains(manga))
+                    mListMangas.value!!.add(manga)
+            }
+        }
+    }
+
     fun list() {
         val list = mMangaRepository.list()
         if (list != null)
@@ -67,7 +82,11 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
     fun list(refreshComplete: () -> (Unit)) {
         val list = mMangaRepository.list()
         if (list != null) {
-            mListMangas.value = ArrayList(list)
+            if (mListMangas.value == null || mListMangas.value!!.isEmpty())
+                mListMangas.value = ArrayList(list)
+            else
+                update(list)
+
             ImageCoverController.instance.setImageCoverAsync(mContext, mListMangas.value!!) {
                 refreshComplete()
             }

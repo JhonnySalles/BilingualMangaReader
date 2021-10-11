@@ -3,6 +3,7 @@
 
     <string name="action_positive">Yes</string>
     <string name="action_negative">No</string>
+    <string name="action_copy">Copied text: </string>
 
     <!-- MENU -->
     <string name="menu_search">Search</string>
@@ -53,6 +54,8 @@
     <string name="menu_reading_mode_right_to_left">Manga</string>
 
     <string name="menu_reading_favorite">Favorite</string>
+    <string name="menu_reading_order">List order</string>
+    <string name="menu_reading_order_change">Sort:</string>
     <string name="menu_reading_change_language">Change language</string>
 
     <string name="menu_reading_floating">Floating popup</string>

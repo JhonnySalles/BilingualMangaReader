@@ -202,7 +202,7 @@
             android:src="@drawable/ic_floating_window"
             app:tint="@color/onSecondary" />
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="20dp"
@@ -249,11 +249,11 @@
                 <androidx.viewpager.widget.ViewPager
                     android:id="@+id/popup_view_pager"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:paddingTop="2dp"
                     app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
             </LinearLayout>
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
     </FrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
