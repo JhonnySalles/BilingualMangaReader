@@ -64,21 +64,11 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
             mListMangas.value = ArrayList()
     }
 
-    val limit: Int = 20
     fun list(refreshComplete: () -> (Unit)) {
         val list = mMangaRepository.list()
         if (list != null) {
-            var qtd = 0
-            for (manga in list) {
-                manga.thumbnail = mMangaRepository.getThumbnail(manga.id!!)
-                qtd++
-                if (qtd > limit)
-                    break
-            }
-
             mListMangas.value = ArrayList(list)
-            ImageCoverController.instance.setImageCoverAsync(mContext, list) { withCovers ->
-                mListMangas.value = ArrayList(withCovers)
+            ImageCoverController.instance.setImageCoverAsync(mContext, mListMangas.value!!) {
                 refreshComplete()
             }
         } else

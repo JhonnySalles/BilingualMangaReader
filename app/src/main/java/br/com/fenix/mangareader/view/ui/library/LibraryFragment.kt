@@ -119,11 +119,13 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     fragment.refreshLibraryDelayed()
                 }
                 GeneralConsts.SCANNER.MESSAGE_MEDIA_UPDATE_FINISHED -> {
-                    mViewModel.list { setRefresh(false) }
-                    notifyDataSet()
+                    mViewModel.list {
+                        setRefresh(false)
+                        notifyDataSet()
+                    }
                 }
                 GeneralConsts.SCANNER.MESSAGE_COVER_UPDATED -> {
-                    mViewModel.list { }
+                    mViewModel.update()
                     notifyDataSet()
                 }
             }
@@ -259,7 +261,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                                     }
                                     .setNegativeButton(
                                         R.string.action_negative
-                                    ) { _, _ ->  }
+                                    ) { _, _ -> }
                                     .create()
                             dialog.show()
                         }

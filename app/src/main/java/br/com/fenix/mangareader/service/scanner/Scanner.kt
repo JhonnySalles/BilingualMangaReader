@@ -10,9 +10,12 @@ import br.com.fenix.mangareader.model.entity.Manga
 import br.com.fenix.mangareader.service.controller.ImageCoverController
 import br.com.fenix.mangareader.service.parses.Parse
 import br.com.fenix.mangareader.service.parses.ParseFactory
+import br.com.fenix.mangareader.service.repository.CoverRepository
 import br.com.fenix.mangareader.service.repository.Storage
 import br.com.fenix.mangareader.util.constants.GeneralConsts
+import kotlinx.coroutines.*
 import java.io.File
+import java.lang.Runnable
 import java.lang.ref.WeakReference
 import java.util.*
 import kotlin.collections.HashMap
@@ -95,19 +98,23 @@ class Scanner {
 
     private fun generateCovers(list: MutableList<Manga>) {
         val storage = Storage(MainActivity.getAppContext())
-        var index = 0
-        for (manga in list) {
-            index++
-            if (index > 20) {
-                index = 0
-                notifyCoverUpdated()
-            }
+        CoroutineScope(Dispatchers.IO).launch {
+            async {
+                var index = 0
+                for (manga in list) {
+                    index++
+                    if (index > 20) {
+                        index = 0
+                        notifyCoverUpdated()
+                    }
 
-            val parse = ParseFactory.create(manga.file!!) ?: continue
-            val cover = ImageCoverController.instance.getCoverFromFile(manga.file!!, parse) ?: continue
-            cover.id_manga = manga.id!!
-            manga.thumbnail = cover
-            storage.save(cover)
+                    val parse = ParseFactory.create(manga.file!!) ?: continue
+                    val cover = ImageCoverController.instance.getCoverFromFile(manga.file!!, parse) ?: continue
+                    cover.id_manga = manga.id!!
+                    manga.thumbnail = cover
+                    storage.save(cover)
+                }
+            }
         }
     }
 
