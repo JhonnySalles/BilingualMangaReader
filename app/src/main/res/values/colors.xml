@@ -29,6 +29,7 @@
 
     <color name="white">#FFFFFFFF</color>
 
+    <color name="transparent">#00000000</color>
     <color name="semiTransparent">#DD000000</color>
     <color name="floatingSemiTransparent">#BF000000</color>
 

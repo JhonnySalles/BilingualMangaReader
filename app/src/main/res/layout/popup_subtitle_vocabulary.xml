@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/margin_small"
+    android:paddingTop="@dimen/margin_small"
+    android:paddingRight="@dimen/margin_small"
+    android:paddingBottom="@dimen/margin_small"
+    tools:context=".view.ui.reader.PopupSubtitleVocabulary">
+
+    <ListView
+        android:id="@+id/list_subtitle_page_vocabulary"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:minHeight="100dp"
+        android:visibility="gone"
+        app:layout_constraintLeft_toRightOf="@+id/txt_subtitle_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</LinearLayout>

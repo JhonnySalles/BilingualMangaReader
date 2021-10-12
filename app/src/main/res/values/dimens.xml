@@ -39,4 +39,7 @@
 
     <dimen name="floating_reader_button_width">25dp</dimen>
     <dimen name="floating_reader_button_close">25dp</dimen>
+    <dimen name="floating_reader_button_selector">100dp</dimen>
+    <dimen name="floating_reader_max_height">200dp</dimen>
+    <dimen name="floating_reader_max_width">300dp</dimen>
 </resources>

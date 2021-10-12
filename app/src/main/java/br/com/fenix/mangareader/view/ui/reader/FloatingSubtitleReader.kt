@@ -7,10 +7,7 @@ import android.graphics.PixelFormat
 import android.os.Build
 import android.provider.Settings
 import android.view.*
-import android.widget.ArrayAdapter
-import android.widget.ListView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.widget.AppCompatImageButton
 import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.model.entity.Page
@@ -83,6 +80,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
     }
 
     private var mSubTitleController: SubTitleController
+    private var mScrollContent: ScrollView
     private var mLabelChapter: String
     private var mLabelPage: String
     private var mLabelText: String
@@ -94,6 +92,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
     init {
         with(mFloatingView) {
             mSubTitleController = SubTitleController.getInstance(context)
+            mScrollContent = this.findViewById(R.id.scrv_floating)
             mLabelChapter = context.getString(R.string.popup_reading_subtitle_chapter)
             mLabelPage = context.getString(R.string.popup_reading_subtitle_page)
             mLabelText = context.getString(R.string.popup_reading_subtitle_text)
@@ -113,10 +112,14 @@ class FloatingSubtitleReader constructor(private val context: Context) {
             this.findViewById<AppCompatImageButton>(R.id.nav_floating_change_language)
                 .setOnClickListener { mSubTitleController.changeLanguage() }
 
+            this.findViewById<AppCompatImageButton>(R.id.nav_floating_go_to_top).setOnClickListener {
+                mScrollContent.scrollTo(0, 0)
+            }
+
             mSubtitleTitle = this.findViewById(R.id.txt_floating_title)
             mSubtitleContent = this.findViewById(R.id.txt_floating_content)
             mListPageVocabulary = this.findViewById(R.id.list_floating_page_vocabulary)
-            mListPageVocabulary.adapter = ArrayAdapter(context, R.layout.list_item_vocabulary, mVocabularyItem)
+            mListPageVocabulary.adapter = ArrayAdapter(context, R.layout.list_item_vocabulary_small, mVocabularyItem)
 
             mSubtitleContent.setOnLongClickListener {
                 if (mSubtitleContent.text.isNotEmpty()) {
@@ -157,13 +160,15 @@ class FloatingSubtitleReader constructor(private val context: Context) {
 
     fun updatePage(page: Page?) {
         if (page != null) {
-            mVocabularyItem.clear()
             if (page.vocabulary != null && page.vocabulary.isNotEmpty()) {
                 val vocabulary = page.vocabulary.map { vocab -> vocab.word + " - " + vocab.meaning + if (!vocab.revised) "¹" else "" }
                 mVocabularyItem.addAll(vocabulary)
                 mListPageVocabulary.visibility = View.VISIBLE
-            } else
+            } else {
+                mVocabularyItem.clear()
                 mListPageVocabulary.visibility = View.GONE
+            }
+            (mListPageVocabulary.adapter as ArrayAdapter<*>).notifyDataSetChanged()
         }
     }
 
@@ -176,16 +181,16 @@ class FloatingSubtitleReader constructor(private val context: Context) {
                     ?.plus(1)
 
             title =
-                "${mLabelChapter} ${mSubTitleController.chapterSelected.value?.chapter.toString()} - " +
-                        "${mLabelPage} ${mSubTitleController.pageSelected.value!!.number} - " +
-                        "${mLabelText} $index/${mSubTitleController.pageSelected.value?.texts?.size}"
+                "$mLabelChapter ${mSubTitleController.chapterSelected.value?.chapter.toString()} - " +
+                        "$mLabelPage ${mSubTitleController.pageSelected.value!!.number} - " +
+                        "$mLabelText $index/${mSubTitleController.pageSelected.value?.texts?.size}"
 
             Formatter.generateFurigana(text.text) { furigana -> mSubtitleContent.setText(furigana) }
         } else if (mSubTitleController.chapterSelected.value != null && mSubTitleController.pageSelected.value != null) {
             title =
-                "${mLabelChapter} ${mSubTitleController.chapterSelected.value?.chapter.toString()} - " +
-                        "${mLabelPage} ${mSubTitleController.pageSelected.value!!.number} - "
-            "${mLabelText} 0/${if (mSubTitleController.pageSelected.value?.texts == null) 0 else mSubTitleController.pageSelected.value?.texts?.size}"
+                "$mLabelChapter ${mSubTitleController.chapterSelected.value?.chapter.toString()} - " +
+                        "$mLabelPage ${mSubTitleController.pageSelected.value!!.number} - "
+            "$mLabelText 0/${if (mSubTitleController.pageSelected.value?.texts == null) 0 else mSubTitleController.pageSelected.value?.texts?.size}"
         }
 
         mSubtitleTitle.text = title

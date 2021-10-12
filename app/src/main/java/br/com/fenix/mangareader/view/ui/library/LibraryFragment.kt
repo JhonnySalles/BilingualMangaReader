@@ -88,6 +88,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 return false
             }
         })
+        enableSearchView(searchView, !mRefreshLayout.isRefreshing)
         onChangeIconLayout()
     }
 
@@ -104,7 +105,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         Scanner.getInstance().addUpdateHandler(mUpdateHandler)
         ImageCoverController.instance.addUpdateHandler(mUpdateHandler)
         if (Scanner.getInstance().isRunning())
-            setRefresh(true)
+            setIsRefreshing(true)
 
         mViewModel.update()
         notifyDataSet()
@@ -126,7 +127,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 }
                 GeneralConsts.SCANNER.MESSAGE_MEDIA_UPDATE_FINISHED -> {
                     mViewModel.list {
-                        setRefresh(false)
+                        setIsRefreshing(false)
                         notifyDataSet()
                     }
                 }
@@ -330,7 +331,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             Storage.takePermission(requireContext(), requireActivity())
 
         generateLayout()
-        mRefreshLayout.isRefreshing = true
+        setIsRefreshing(true)
         Scanner.getInstance().addUpdateHandler(mUpdateHandler)
         Scanner.getInstance().scanLibrary()
         return root
@@ -406,13 +407,12 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         })
     }
 
-    fun setRefresh(enabled: Boolean) {
+    fun setIsRefreshing(enabled: Boolean) {
         try {
+            mRefreshLayout.isRefreshing = enabled
+
             if (!::searchView.isInitialized || !::mRecycleView.isInitialized)
                 return
-
-            mRefreshLayout.isRefreshing = enabled
-            mRecycleView.isEnabled = !enabled
 
             if (enabled)
                 searchView.clearFocus()
@@ -420,7 +420,6 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         } catch (e: Exception) {
             Log.e(GeneralConsts.TAG.LOG, "Erro ao desabilitar o botão de pesquisa: " + e.message)
         }
-        mRefreshLayout.isRefreshing = enabled
     }
 
     private fun enableSearchView(view: View, enabled: Boolean) {
@@ -435,7 +434,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onRefresh() {
         if (!Scanner.getInstance().isRunning()) {
-            setRefresh(true)
+            setIsRefreshing(true)
             Scanner.getInstance().scanLibrary()
         }
     }

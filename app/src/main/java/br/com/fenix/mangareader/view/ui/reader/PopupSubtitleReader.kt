@@ -23,7 +23,6 @@ class PopupSubtitleReader : Fragment() {
     private lateinit var mSubtitlePageAutoComplete: AutoCompleteTextView
     private lateinit var mSubtitleTitle: TextView
     private lateinit var mSubtitleContent: TextView
-    private lateinit var mListPageVocabulary: ListView
     private lateinit var mNavBeforeText: Button
     private lateinit var mNavNextText: Button
     private lateinit var mRefresh: Button
@@ -31,7 +30,6 @@ class PopupSubtitleReader : Fragment() {
     private lateinit var mChangeLanguage: Button
     private lateinit var mLabelChapter: String
     private lateinit var mLabelText: String
-    private var mVocabularyItem = ArrayList<String>()
 
     private lateinit var mSubTitleController: SubTitleController
 
@@ -46,14 +44,12 @@ class PopupSubtitleReader : Fragment() {
         mSubtitlePage = root.findViewById(R.id.cb_subtitle_page)
         mSubtitleTitle = root.findViewById(R.id.txt_subtitle_title)
         mSubtitleContent = root.findViewById(R.id.txt_subtitle_content)
-        mListPageVocabulary = root.findViewById(R.id.list_subtitle_page_vocabulary)
         mNavBeforeText = root.findViewById(R.id.nav_before_text)
         mNavNextText = root.findViewById(R.id.nav_next_text)
         mRefresh = root.findViewById(R.id.nav_refresh)
         mDraw = root.findViewById(R.id.nav_draw)
         mChangeLanguage = root.findViewById(R.id.nav_change_language)
 
-        mListPageVocabulary.adapter = ArrayAdapter(requireContext(), R.layout.list_item_vocabulary, mVocabularyItem)
         mSubtitleContent.movementMethod = LinkMovementMethod.getInstance()
 
         mLabelChapter = getString(R.string.popup_reading_subtitle_chapter)
@@ -119,17 +115,8 @@ class PopupSubtitleReader : Fragment() {
 
         mSubTitleController.pageSelected.observe(viewLifecycleOwner, {
             var key = ""
-            if (it != null) {
+            if (it != null)
                 key = mSubTitleController.getPageKey(it)
-
-                mVocabularyItem.clear()
-                if (it.vocabulary != null && it.vocabulary.isNotEmpty()) {
-                    val vocabulary = it.vocabulary.map { vocab -> vocab.word + " - " + vocab.meaning + if (!vocab.revised) "¹" else "" }
-                    mVocabularyItem.addAll(vocabulary)
-                    mListPageVocabulary.visibility = View.VISIBLE
-                } else
-                    mListPageVocabulary.visibility = View.GONE
-            }
 
             mSubtitlePageAutoComplete.setText(key, false)
         })

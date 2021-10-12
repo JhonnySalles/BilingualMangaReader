@@ -64,6 +64,7 @@
     <string name="popup_reading_tab_item_subtitle">Legendas</string>
     <string name="popup_reading_tab_item_brightness">Brilho</string>
     <string name="popup_reading_tab_item_subtitle_import">Importar</string>
+    <string name="popup_reading_tab_item_subtitle_vocabulary">Vocabulário</string>
 
     <!-- READER POPUP -->
     <string name="popup_reading_custom_color_filter">Filtro de cor personalizado</string>

@@ -120,7 +120,7 @@
                 app:rippleColor="@color/onSecondary" />
 
             <Button
-                android:id="@+id/btn_popup_open_floating"
+                android:id="@+id/btn_popup_subtitle"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="@dimen/popup_reader_button_width"
                 android:layout_height="match_parent"
@@ -131,7 +131,7 @@
                 android:minHeight="@dimen/popup_reader_button_min_height"
                 android:paddingLeft="@dimen/popup_reader_button_padding"
                 android:paddingRight="@dimen/popup_reader_button_padding"
-                app:icon="@drawable/ic_floating_window"
+                app:icon="@drawable/ic_change_language"
                 app:iconTint="@color/textPrimary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/nav_next_text"
@@ -139,7 +139,7 @@
                 app:rippleColor="@color/onSecondary" />
 
             <Button
-                android:id="@+id/btn_popup_subtitle"
+                android:id="@+id/btn_popup_open_floating"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="@dimen/popup_reader_button_width"
                 android:layout_height="match_parent"
@@ -150,7 +150,7 @@
                 android:minHeight="@dimen/popup_reader_button_min_height"
                 android:paddingLeft="@dimen/popup_reader_button_padding"
                 android:paddingRight="@dimen/popup_reader_button_padding"
-                app:icon="@drawable/ic_change_language"
+                app:icon="@drawable/ic_floating_window"
                 app:iconTint="@color/textPrimary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/nav_next_text"
@@ -166,6 +166,7 @@
         android:layout_height="350dp"
         android:layout_alignParentBottom="true"
         android:background="@color/primary"
+        android:fitsSystemWindows="true"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:paddingTop="5dp"
@@ -202,58 +203,60 @@
             android:src="@drawable/ic_floating_window"
             app:tint="@color/onSecondary" />
 
-        <androidx.core.widget.NestedScrollView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
-            android:fillViewport="true">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/popup_tab"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:orientation="vertical">
+                android:background="@color/primary"
+                app:tabGravity="fill"
+                app:tabMode="fixed"
+                app:tabPaddingBottom="0dp"
+                app:tabPaddingEnd="0dp"
+                app:tabPaddingStart="0dp"
+                app:tabPaddingTop="0dp"
+                app:tabSelectedTextColor="@color/secondary"
+                app:tabTextAppearance="@style/PopupTab"
+                app:tabTextColor="@color/onSecondary">
 
-                <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/popup_tab"
-                    android:layout_width="match_parent"
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab_item_subtitle"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/primary"
-                    app:tabGravity="fill"
-                    app:tabMode="fixed"
-                    app:tabSelectedTextColor="@color/secondary"
-                    app:tabTextAppearance="@style/PopupTab"
-                    app:tabTextColor="@color/onSecondary">
+                    android:text="@string/popup_reading_tab_item_subtitle" />
 
-                    <com.google.android.material.tabs.TabItem
-                        android:id="@+id/tab_item_subtitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/popup_reading_tab_item_subtitle" />
-
-
-                    <com.google.android.material.tabs.TabItem
-                        android:id="@+id/tab_item_file_import"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/popup_reading_tab_item_subtitle_import" />
-
-                    <com.google.android.material.tabs.TabItem
-                        android:id="@+id/tab_item_brightness"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/popup_reading_tab_item_brightness" />
-
-                </com.google.android.material.tabs.TabLayout>
-
-                <androidx.viewpager.widget.ViewPager
-                    android:id="@+id/popup_view_pager"
-                    android:layout_width="match_parent"
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab_item_vocabulary"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="2dp"
-                    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
-            </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
+                    android:text="@string/popup_reading_tab_item_subtitle_vocabulary" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab_item_file_import"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/popup_reading_tab_item_subtitle_import" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab_item_brightness"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/popup_reading_tab_item_brightness" />
+
+            </com.google.android.material.tabs.TabLayout>
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/popup_view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="2dp"
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+        </LinearLayout>
     </FrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

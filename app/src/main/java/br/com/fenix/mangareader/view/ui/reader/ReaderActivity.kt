@@ -25,6 +25,7 @@ import br.com.fenix.mangareader.model.enums.ReaderMode
 import br.com.fenix.mangareader.service.controller.SubTitleController
 import br.com.fenix.mangareader.service.kanji.Formatter
 import br.com.fenix.mangareader.service.repository.MangaRepository
+import br.com.fenix.mangareader.service.repository.SubTitleRepository
 import br.com.fenix.mangareader.util.constants.GeneralConsts
 import br.com.fenix.mangareader.view.ui.reader.FloatingSubtitleReader.Companion.canDrawOverlays
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -48,6 +49,7 @@ class ReaderActivity : AppCompatActivity() {
     private lateinit var mPopupReaderColorFilterFragment: PopupReaderColorFilterFragment
     private lateinit var mPopupSubtitleConfigurationFragment: PopupSubtitleConfiguration
     private lateinit var mPopupSubtitleReaderFragment: PopupSubtitleReader
+    private lateinit var mPopupSubtitleVocabularyFragment: PopupSubtitleVocabulary
 
     private lateinit var mFloatingSubtitleReader: FloatingSubtitleReader
 
@@ -120,6 +122,8 @@ class ReaderActivity : AppCompatActivity() {
         mPopupReaderColorFilterFragment = PopupReaderColorFilterFragment()
         mPopupSubtitleConfigurationFragment = PopupSubtitleConfiguration()
         mPopupSubtitleReaderFragment = PopupSubtitleReader()
+        mPopupSubtitleVocabularyFragment = PopupSubtitleVocabulary()
+        mPopupSubtitleVocabularyFragment.setBackground(R.color.onPrimary)
 
         mFloatingSubtitleReader = FloatingSubtitleReader(applicationContext)
 
@@ -129,6 +133,10 @@ class ReaderActivity : AppCompatActivity() {
         viewPagerAdapter.addFragment(
             mPopupSubtitleReaderFragment,
             resources.getString(R.string.popup_reading_tab_item_subtitle)
+        )
+        viewPagerAdapter.addFragment(
+            mPopupSubtitleVocabularyFragment,
+            resources.getString(R.string.popup_reading_tab_item_subtitle_vocabulary)
         )
         viewPagerAdapter.addFragment(
             mPopupSubtitleConfigurationFragment,
@@ -178,9 +186,20 @@ class ReaderActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
+    var mLastFloatingShowing = false
+    override fun onResume() {
+        if (mLastFloatingShowing)
+            mFloatingSubtitleReader.show()
+
+        super.onResume()
+    }
+
     override fun onStop() {
-        if (mFloatingSubtitleReader != null && mFloatingSubtitleReader.isShowing)
-            mFloatingSubtitleReader.dismiss()
+        if (mFloatingSubtitleReader != null) {
+            mLastFloatingShowing = mFloatingSubtitleReader.isShowing
+            if (mFloatingSubtitleReader.isShowing)
+                mFloatingSubtitleReader.dismiss()
+        }
 
         super.onStop()
     }
@@ -267,12 +286,20 @@ class ReaderActivity : AppCompatActivity() {
 
     private fun prepareMenuFloat() {
         val mSubTitleController = SubTitleController.getInstance(applicationContext)
+
         mSubTitleController.pageSelected.observe(this, {
             mFloatingSubtitleReader.updatePage(it)
         })
         mSubTitleController.textSelected.observe(this, {
             mFloatingSubtitleReader.updateText(it)
         })
+
+        if (mSubTitleController.mManga != null && mSubTitleController.mManga!!.id != null && mSubTitleController.textSelected.value == null) {
+            val mSubtitleRepository = SubTitleRepository(applicationContext)
+            val lastSubtitle = mSubtitleRepository.findByIdManga(mSubTitleController.mManga!!.id!!)
+            if (lastSubtitle != null)
+                mSubTitleController.initialize(lastSubtitle.chapterKey, lastSubtitle.pageKey)
+        }
     }
 
     private fun menuFloat() {

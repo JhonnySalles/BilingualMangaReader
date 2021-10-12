@@ -22,4 +22,9 @@
         <item name="android:textAllCaps">true</item>
     </style>
 
+    <style name="FloatingTab" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
 </resources>

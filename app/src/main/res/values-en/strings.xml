@@ -65,6 +65,7 @@
     <string name="popup_reading_tab_item_subtitle">Subtitles</string>
     <string name="popup_reading_tab_item_brightness">Brightness</string>
     <string name="popup_reading_tab_item_subtitle_import">Import</string>
+    <string name="popup_reading_tab_item_subtitle_vocabulary">Vocabulary</string>
 
     <!-- READER POPUP -->
     <string name="popup_reading_custom_color_filter">Custom color filter</string>

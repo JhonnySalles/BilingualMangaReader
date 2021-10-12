@@ -3,66 +3,57 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:background="@color/floatingSemiTransparent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingTop="10dp"
-        android:paddingBottom="@dimen/margin">
-
-        <TextView
-            android:id="@+id/txt_floating_title"
+    <ScrollView
+        android:id="@+id/scrv_floating"
+        android:layout_width="@dimen/floating_reader_max_width"
+        android:layout_height="@dimen/floating_reader_max_height"
+        android:layout_marginTop="30dp">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginEnd="10dp"
-            android:fontFamily="monospace"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="@color/textPrimary"
-            android:textSize="@dimen/popup_reader_title"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/txt_floating_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="monospace"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/onSecondary"
+                android:textSize="@dimen/popup_reader_title" />
 
-        <br.com.fenix.mangareader.service.kanji.FuriganaView
-            android:id="@+id/txt_floating_content"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="2dp"
-            android:layout_marginBottom="10dp"
-            android:fontFamily="monospace"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:textColor="@color/textPrimary"
-            android:textSize="@dimen/popup_reader_text"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/list_floating_page_vocabulary"
-            app:layout_constraintTop_toBottomOf="@+id/txt_floating_title"
-            custom:furiganaSize="12sp" />
+            <br.com.fenix.mangareader.service.kanji.FuriganaView
+                android:id="@+id/txt_floating_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="monospace"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/popup_reader_text"
+                custom:furiganaSize="12sp" />
 
-        <ListView
-            android:id="@+id/list_floating_page_vocabulary"
-            android:layout_width="0dp"
-            android:layout_height="130dp"
-            android:layout_marginStart="2dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/txt_floating_content"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_floating_title" />
+            <ListView
+                android:id="@+id/list_floating_page_vocabulary"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="20dp"
+                android:nestedScrollingEnabled="true"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </ScrollView>
 
 
     <androidx.appcompat.widget.AppCompatImageButton
@@ -75,6 +66,18 @@
         android:background="@color/onPrimary"
         android:src="@drawable/ic_close"
         android:tint="@color/textPrimary" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/nav_floating_go_to_top"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:layout_width="@dimen/floating_reader_button_width"
+        android:layout_height="@dimen/floating_reader_button_width"
+        android:layout_gravity="top|right"
+        android:layout_marginEnd="180dp"
+        android:background="@color/primary"
+        android:src="@drawable/ic_go_to_top"
+        android:tint="@color/textPrimary"
+        tools:layout_editor_absoluteY="0dp" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/nav_floating_change_language"
