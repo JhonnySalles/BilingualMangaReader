@@ -177,6 +177,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
         if (page != null) {
             if (page.vocabulary != null && page.vocabulary.isNotEmpty()) {
                 val vocabulary = page.vocabulary.map { vocab -> vocab.word + " - " + vocab.meaning + if (!vocab.revised) "¹" else "" }
+                mVocabularyItem.clear()
                 mVocabularyItem.addAll(vocabulary)
                 mListPageVocabulary.visibility = View.VISIBLE
             } else {
