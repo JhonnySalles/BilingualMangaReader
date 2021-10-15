@@ -9,9 +9,10 @@
 
     <ScrollView
         android:id="@+id/scrv_floating"
-        android:layout_width="@dimen/floating_reader_max_width"
-        android:layout_height="@dimen/floating_reader_max_height"
-        android:layout_marginTop="30dp">
+        android:layout_width="@dimen/floating_reader_scroll_max_width"
+        android:layout_height="@dimen/floating_reader_scroll_max_height"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="30dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -20,7 +21,6 @@
                 android:id="@+id/txt_floating_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
                 android:fontFamily="monospace"
@@ -33,7 +33,6 @@
                 android:id="@+id/txt_floating_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
                 android:fontFamily="monospace"
@@ -47,7 +46,6 @@
                 android:id="@+id/list_floating_page_vocabulary"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="20dp"
                 android:nestedScrollingEnabled="true"/>
@@ -57,23 +55,34 @@
 
 
     <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/imgbtn_close"
+        android:id="@+id/nav_close"
         style="@style/Base.Widget.AppCompat.Button.Borderless"
         android:layout_width="@dimen/floating_reader_button_close"
         android:layout_height="@dimen/floating_reader_button_close"
-        android:layout_gravity="top|left"
-        android:layout_marginEnd="180dp"
+        android:layout_gravity="top|right"
         android:background="@color/onPrimary"
         android:src="@drawable/ic_close"
         android:tint="@color/textPrimary" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/nav_expanded"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:layout_width="@dimen/floating_reader_button_width"
+        android:layout_height="@dimen/floating_reader_button_width"
+        android:layout_gravity="top|left"
+        android:layout_marginTop="0dp"
+        android:background="@color/primary"
+        android:src="@drawable/ic_expanded"
+        android:tint="@color/textPrimary"
+        tools:layout_editor_absoluteY="0dp" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/nav_floating_go_to_top"
         style="@style/Base.Widget.AppCompat.Button.Borderless"
         android:layout_width="@dimen/floating_reader_button_width"
         android:layout_height="@dimen/floating_reader_button_width"
-        android:layout_gravity="top|right"
-        android:layout_marginEnd="180dp"
+        android:layout_gravity="top|left"
+        android:layout_marginTop="60dp"
         android:background="@color/primary"
         android:src="@drawable/ic_go_to_top"
         android:tint="@color/textPrimary"
@@ -84,8 +93,8 @@
         style="@style/Base.Widget.AppCompat.Button.Borderless"
         android:layout_width="@dimen/floating_reader_button_width"
         android:layout_height="@dimen/floating_reader_button_width"
-        android:layout_gravity="top|right"
-        android:layout_marginEnd="145dp"
+        android:layout_gravity="top|left"
+        android:layout_marginTop="90dp"
         android:background="@color/primary"
         android:src="@drawable/ic_translate"
         android:tint="@color/textPrimary"
@@ -96,8 +105,8 @@
         style="@style/Base.Widget.AppCompat.Button.Borderless"
         android:layout_width="@dimen/floating_reader_button_width"
         android:layout_height="@dimen/floating_reader_button_width"
-        android:layout_gravity="top|right"
-        android:layout_marginEnd="110dp"
+        android:layout_gravity="top|left"
+        android:layout_marginTop="120dp"
         android:background="@color/primary"
         android:src="@drawable/ic_refresh"
         android:tint="@color/textPrimary"
@@ -108,8 +117,8 @@
         style="@style/Base.Widget.AppCompat.Button.Borderless"
         android:layout_width="@dimen/floating_reader_button_width"
         android:layout_height="@dimen/floating_reader_button_width"
-        android:layout_gravity="top|right"
-        android:layout_marginEnd="75dp"
+        android:layout_gravity="top|left"
+        android:layout_marginTop="150dp"
         android:background="@color/primary"
         android:src="@drawable/ic_draw_text"
         android:tint="@color/textPrimary"
@@ -120,8 +129,8 @@
         style="@style/Base.Widget.AppCompat.Button.Borderless"
         android:layout_width="@dimen/floating_reader_button_width"
         android:layout_height="@dimen/floating_reader_button_width"
-        android:layout_gravity="top|right"
-        android:layout_marginEnd="40dp"
+        android:layout_gravity="top|left"
+        android:layout_marginStart="60dp"
         android:background="@color/primary"
         android:src="@drawable/ic_navigate_before"
         android:tint="@color/textPrimary" />
@@ -132,8 +141,8 @@
         style="@style/Base.Widget.AppCompat.Button.Borderless"
         android:layout_width="@dimen/floating_reader_button_width"
         android:layout_height="@dimen/floating_reader_button_width"
-        android:layout_gravity="top|right"
-        android:layout_marginEnd="5dp"
+        android:layout_gravity="top|left"
+        android:layout_marginStart="90dp"
         android:background="@color/primary"
         android:src="@drawable/ic_navigate_next"
         android:tint="@color/textPrimary" />

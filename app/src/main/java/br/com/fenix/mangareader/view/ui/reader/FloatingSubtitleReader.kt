@@ -90,6 +90,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
     private var mSubtitleContent: FuriganaView
     private var mListPageVocabulary: ListView
     private var mVocabularyItem = ArrayList<String>()
+    private var mOriginalHeight : Int = 0
 
     init {
         with(mFloatingView) {
@@ -99,6 +100,8 @@ class FloatingSubtitleReader constructor(private val context: Context) {
             mLabelPage = context.getString(R.string.popup_reading_subtitle_page)
             mLabelText = context.getString(R.string.popup_reading_subtitle_text)
 
+            this.findViewById<AppCompatImageButton>(R.id.nav_close)
+                .setOnClickListener { dismiss() }
             this.findViewById<AppCompatImageButton>(R.id.nav_floating_before_text)
                 .setOnClickListener { mSubTitleController.getBeforeText() }
             this.findViewById<AppCompatImageButton>(R.id.nav_floating_next_text)
@@ -107,16 +110,35 @@ class FloatingSubtitleReader constructor(private val context: Context) {
                 .setOnClickListener { mSubTitleController.findSubtitle() }
             this.findViewById<AppCompatImageButton>(R.id.nav_floating_draw)
                 .setOnClickListener { mSubTitleController.drawSelectedText() }
-
-            this.findViewById<AppCompatImageButton>(R.id.nav_floating_draw)
-                .setOnClickListener { mSubTitleController.drawSelectedText() }
-
             this.findViewById<AppCompatImageButton>(R.id.nav_floating_change_language)
                 .setOnClickListener { mSubTitleController.changeLanguage() }
 
             this.findViewById<AppCompatImageButton>(R.id.nav_floating_go_to_top).setOnClickListener {
                 mScrollContent.scrollTo(0, 0)
             }
+
+            this.findViewById<AppCompatImageButton>(R.id.nav_expanded)
+                .setOnClickListener {
+                    if ( mOriginalHeight == 0)
+                        mOriginalHeight = mFloatingView.height
+
+                    val width = mOriginalHeight
+                    val floating = mFloatingView.height
+
+                    if (mFloatingView.height == mOriginalHeight) {
+                        val params = mFloatingView.layoutParams as WindowManager.LayoutParams
+                        params.height = context.resources.getDimension(R.dimen.floating_reader_button_close).toInt()
+                        mFloatingView.layoutParams = params
+                    } else {
+                        val params = mFloatingView.layoutParams as WindowManager.LayoutParams
+                        params.height = mOriginalHeight
+                        mFloatingView.layoutParams = params
+                    }
+
+                    windowManager?.apply {
+                        updateViewLayout(mFloatingView, mFloatingView.layoutParams)
+                    }
+                }
 
             mSubtitleTitle = this.findViewById(R.id.txt_floating_title)
             mSubtitleContent = this.findViewById(R.id.txt_floating_content)
@@ -137,7 +159,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
                 if (text.isNotEmpty()) {
                     Toast.makeText(
                         context,
-                        context.getString(R.string.action_copy) + " ${text}",
+                        context.getString(R.string.action_copy) + " $text",
                         Toast.LENGTH_SHORT
                     ).show()
 
@@ -148,12 +170,8 @@ class FloatingSubtitleReader constructor(private val context: Context) {
                 true
             }
 
-            mSubtitleContent
-            this.findViewById<AppCompatImageButton>(R.id.imgbtn_close)
-                .setOnClickListener { dismiss() }
         }
 
-        mSubtitleContent.setOnTouchListener(onTouchListener)
         mSubtitleTitle.setOnTouchListener(onTouchListener)
         mFloatingView.setOnTouchListener(onTouchListener)
 
