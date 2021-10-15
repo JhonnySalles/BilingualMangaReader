@@ -170,7 +170,6 @@
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:paddingTop="5dp"
-        android:visibility="gone"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <ImageView
@@ -253,7 +252,7 @@
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/popup_view_pager"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:paddingTop="2dp"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
         </LinearLayout>

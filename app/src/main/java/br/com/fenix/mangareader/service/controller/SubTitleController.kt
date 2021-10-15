@@ -13,12 +13,9 @@ import br.com.fenix.mangareader.model.enums.Languages
 import br.com.fenix.mangareader.service.parses.Parse
 import br.com.fenix.mangareader.service.repository.SubTitleRepository
 import br.com.fenix.mangareader.util.constants.GeneralConsts
-import br.com.fenix.mangareader.util.constants.ReaderConsts
 import br.com.fenix.mangareader.view.ui.reader.PageImageView
 import br.com.fenix.mangareader.view.ui.reader.ReaderFragment
 import com.google.gson.Gson
-import com.squareup.picasso.MemoryPolicy
-import com.squareup.picasso.Picasso
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.codec.digest.DigestUtils
@@ -103,7 +100,9 @@ class SubTitleController private constructor(private val context: Context) {
         selectedPage(pageKey)
     }
 
-    fun getPageKey(page: Page): String = page.number.toString().padStart(3, '0') + " " + page.name
+    fun getPageKey(page: Page): String =
+        page.number.toString().padStart(3, '0') + " " + page.name
+
     fun getChapterKey(chapter: Chapter): String {
         var number = if ((chapter.chapter % 1).compareTo(0) == 0)
             "%.0f".format(chapter.chapter)
@@ -113,14 +112,15 @@ class SubTitleController private constructor(private val context: Context) {
     }
 
 
-    fun getListChapter(parse: Parse) = runBlocking { // this: CoroutineScope
-        launch { // launch a new coroutine and continue
-            mParse = parse
-            val listJson: List<String> = mParse.getSubtitles()
-            isSelected = false
-            getChapterFromJson(listJson)
+    fun getListChapter(parse: Parse) =
+        runBlocking { // this: CoroutineScope
+            launch { // launch a new coroutine and continue
+                mParse = parse
+                val listJson: List<String> = mParse.getSubtitles()
+                isSelected = false
+                getChapterFromJson(listJson)
+            }
         }
-    }
 
     fun getChapterFromJson(listJson: List<String>, isSelected: Boolean = false) {
         this.isSelected = isSelected
@@ -298,92 +298,93 @@ class SubTitleController private constructor(private val context: Context) {
             )
     }
 
-    fun changeLanguage() = runBlocking { // this: CoroutineScope
-        launch {
-            if (chaptersKeys.value == null || chaptersKeys.value!!.isEmpty()) {
-                Toast.makeText(
-                    context,
-                    context.resources.getString(R.string.popup_reading_subtitle_list_empty),
-                    Toast.LENGTH_SHORT
-                ).show()
-                return@launch
-            }
+    fun changeLanguage() =
+        runBlocking { // this: CoroutineScope
+            launch {
+                if (chaptersKeys.value == null || chaptersKeys.value!!.isEmpty()) {
+                    Toast.makeText(
+                        context,
+                        context.resources.getString(R.string.popup_reading_subtitle_list_empty),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@launch
+                }
 
-            var language = mSubtitleLang
-            var chapterSelect = ""
-            var pageSelect = ""
-            if (selectedSubtitle.value != null && selectedSubtitle.value!!.chapterKey.isNotEmpty()) {
-                language = if (selectedSubtitle.value!!.language.compareTo(mTranslateLang) == 0)
-                    mSubtitleLang
-                else
-                    mTranslateLang
+                var language = mSubtitleLang
+                var chapterSelect = ""
+                var pageSelect = ""
+                if (selectedSubtitle.value != null && selectedSubtitle.value!!.chapterKey.isNotEmpty()) {
+                    language = if (selectedSubtitle.value!!.language.compareTo(mTranslateLang) == 0)
+                        mSubtitleLang
+                    else
+                        mTranslateLang
 
-                chapterSelect = selectedSubtitle.value!!.chapterKey
-                if (chapterSelect.isNotEmpty())
-                    chapterSelect = chapterSelect.substringAfterLast("-").trim()
+                    chapterSelect = selectedSubtitle.value!!.chapterKey
+                    if (chapterSelect.isNotEmpty())
+                        chapterSelect = chapterSelect.substringAfterLast("-").trim()
 
-                pageSelect = selectedSubtitle.value!!.pageKey
+                    pageSelect = selectedSubtitle.value!!.pageKey
 
-                if (pageSelect.isNotEmpty())
-                    pageSelect = pageSelect.substringBefore(" ").trim()
-            }
+                    if (pageSelect.isNotEmpty())
+                        pageSelect = pageSelect.substringBefore(" ").trim()
+                }
 
-            var key = ""
-            var first = ""
-            for (chapter in mChaptersKeys.value!!) {
-                if (chapter.contains(language.name)) {
-                    if (chapterSelect.isNotEmpty()) {
-                        if (chapter.contains(chapterSelect)) {
+                var key = ""
+                var first = ""
+                for (chapter in mChaptersKeys.value!!) {
+                    if (chapter.contains(language.name)) {
+                        if (chapterSelect.isNotEmpty()) {
+                            if (chapter.contains(chapterSelect)) {
+                                key = chapter
+                                break
+                            } else if (first.isEmpty())
+                                first = chapter
+                        } else {
                             key = chapter
                             break
-                        } else if (first.isEmpty())
-                            first = chapter
-                    } else {
-                        key = chapter
+                        }
+                    }
+                }
+
+                if (key.isEmpty() && first.isEmpty()) {
+                    Toast.makeText(
+                        context,
+                        context.resources.getString(R.string.popup_reading_subtitle_chapter_not_found) + " (" +
+                                language.name + ")",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@launch
+                }
+
+                if (key.isEmpty())
+                    selectedSubtitle(first)
+                else
+                    selectedSubtitle(key)
+
+                if (mSelectedSubTitle.value != null)
+                    mSelectedSubTitle.value?.language = language
+
+                if (mPagesKeys.value == null || pageSelect.isEmpty())
+                    return@launch
+
+                key = ""
+                first = ""
+                for (page in mPagesKeys.value!!) {
+                    if (first.isEmpty())
+                        first = page
+
+                    if (page.substringBefore(" ").contains(pageSelect)) {
+                        key = page
                         break
                     }
                 }
+
+                if (key.isEmpty())
+                    selectedPage(first)
+                else
+                    selectedPage(key)
             }
-
-            if (key.isEmpty() && first.isEmpty()) {
-                Toast.makeText(
-                    context,
-                    context.resources.getString(R.string.popup_reading_subtitle_chapter_not_found) + " (" +
-                            language.name + ")",
-                    Toast.LENGTH_SHORT
-                ).show()
-                return@launch
-            }
-
-            if (key.isEmpty())
-                selectedSubtitle(first)
-            else
-                selectedSubtitle(key)
-
-            if (mSelectedSubTitle.value != null)
-                mSelectedSubTitle.value?.language = language
-
-            if (mPagesKeys.value == null || pageSelect.isEmpty())
-                return@launch
-
-            key = ""
-            first = ""
-            for (page in mPagesKeys.value!!) {
-                if (first.isEmpty())
-                    first = page
-
-                if (page.substringBefore(" ").contains(pageSelect)) {
-                    key = page
-                    break
-                }
-            }
-
-            if (key.isEmpty())
-                selectedPage(first)
-            else
-                selectedPage(key)
         }
-    }
 
     fun changeSubtitleInReader(manga: Manga, pageNumber: Int) =
         runBlocking { // this: CoroutineScope
@@ -471,6 +472,23 @@ class SubTitleController private constructor(private val context: Context) {
             view.setImageBitmap(image)
             isDrawing = true
         }
+    }
+
+    ///////////////////////// LANGUAGE ///////////////
+    fun clearLanguage() {
+        val sharedPreferences = GeneralConsts.getSharedPreferences(context)
+        if (sharedPreferences != null) {
+            mTranslateLang = Languages.valueOf(
+                sharedPreferences.getString(
+                    GeneralConsts.KEYS.SUBTITLE.TRANSLATE,
+                    Languages.PORTUGUESE.toString()
+                )!!
+            )
+        }
+    }
+
+    fun selectedLanguage(language: Languages) {
+        mTranslateLang = language
     }
 
     ///////////////////////// VOLUME ///////////////

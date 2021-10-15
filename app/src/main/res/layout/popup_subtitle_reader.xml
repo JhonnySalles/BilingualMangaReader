@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@color/onPrimary"
     android:orientation="vertical"
     android:paddingLeft="@dimen/margin_small"
     android:paddingTop="@dimen/margin_small"
     android:paddingRight="@dimen/margin_small"
-    android:paddingBottom="@dimen/margin_bottom"
+    android:paddingBottom="@dimen/margin"
     tools:context=".view.ui.reader.PopupSubtitleReader">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -171,7 +171,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="1dp"
         android:autoLink="all"
         android:fontFamily="monospace"
         android:textAlignment="center"

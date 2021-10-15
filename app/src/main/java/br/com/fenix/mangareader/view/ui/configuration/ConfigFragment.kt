@@ -130,7 +130,6 @@ class ConfigFragment : Fragment() {
         val adapterLanguage =
             ArrayAdapter(requireContext(), R.layout.list_item, mMapLanguage.keys.toTypedArray())
         mDefaultSubtitleLanguageAutoComplete.setAdapter(adapterLanguage)
-        mSubtitleTranslateAutoComplete.setAdapter(adapterLanguage)
         mDefaultSubtitleLanguageAutoComplete.onItemClickListener =
             AdapterView.OnItemClickListener { parent, _, position, _ ->
                 mDefaultSubtitleLanguageSelect =
@@ -142,6 +141,7 @@ class ConfigFragment : Fragment() {
                         Languages.JAPANESE
             }
 
+        mSubtitleTranslateAutoComplete.setAdapter(adapterLanguage)
         mSubtitleTranslateAutoComplete.onItemClickListener =
             AdapterView.OnItemClickListener { parent, _, position, _ ->
                 mDefaultSubtitleTranslateSelect =

@@ -13,6 +13,7 @@ import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import br.com.fenix.mangareader.R
+import br.com.fenix.mangareader.model.enums.Languages
 import br.com.fenix.mangareader.service.controller.SubTitleController
 import br.com.fenix.mangareader.service.repository.SubTitleRepository
 import br.com.fenix.mangareader.util.constants.GeneralConsts
@@ -20,6 +21,7 @@ import br.com.fenix.mangareader.util.helpers.Util
 import com.google.android.material.textfield.TextInputLayout
 import java.io.File
 import java.io.InputStream
+import java.util.*
 
 class PopupSubtitleConfiguration : Fragment() {
 
@@ -27,8 +29,11 @@ class PopupSubtitleConfiguration : Fragment() {
     private lateinit var mLoadExternalSubtitleAutoComplete: AutoCompleteTextView
     private lateinit var mSubtitleSelected: TextInputLayout
     private lateinit var mSubtitleSelectedAutoComplete: AutoCompleteTextView
+    private lateinit var mSubtitleLanguage: TextInputLayout
+    private lateinit var mSubtitleLanguageAutoComplete: AutoCompleteTextView
 
     private lateinit var mSubTitleController: SubTitleController
+    private lateinit var mMapLanguage: HashMap<String, Languages>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,6 +46,9 @@ class PopupSubtitleConfiguration : Fragment() {
             root.findViewById(R.id.menu_autocomplete_external_subtitle_select_path)
         mSubtitleSelected = root.findViewById(R.id.cb_subtitle_selected)
         mSubtitleSelectedAutoComplete = root.findViewById(R.id.menu_autocomplete_subtitle_selected)
+
+        mSubtitleLanguage = root.findViewById(R.id.cb_subtitle_language)
+        mSubtitleLanguageAutoComplete = root.findViewById(R.id.menu_autocomplete_subtitle_language)
 
         mSubTitleController = SubTitleController.getInstance(requireContext())
         mSubTitleController.clearSubtitlesSelected()
@@ -62,6 +70,28 @@ class PopupSubtitleConfiguration : Fragment() {
                     parent.getItemAtPosition(position).toString()
                 )
                 ReaderActivity.selectTabReader()
+            }
+
+
+        val languages = resources.getStringArray(R.array.languages)
+        mMapLanguage = hashMapOf(
+            languages[0] to Languages.PORTUGUESE,
+            languages[1] to Languages.ENGLISH,
+            languages[2] to Languages.JAPANESE
+        )
+
+        mSubtitleLanguageAutoComplete.setAdapter(ArrayAdapter(requireContext(), R.layout.list_item, mMapLanguage.keys.toTypedArray()))
+        mSubtitleLanguageAutoComplete.setOnClickListener {
+            mSubtitleLanguageAutoComplete.setText("", false)
+            mSubTitleController.clearLanguage()
+        }
+
+        mSubtitleLanguageAutoComplete.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, _, position, _ ->
+                if (parent.getItemAtPosition(position).toString().isNotEmpty() &&
+                    mMapLanguage.containsKey(parent.getItemAtPosition(position).toString())
+                )
+                    mSubTitleController.selectedLanguage(mMapLanguage[parent.getItemAtPosition(position).toString()]!!)
             }
 
         mLoadExternalSubtitleAutoComplete.setOnClickListener {
