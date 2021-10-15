@@ -15,6 +15,8 @@ import br.com.fenix.mangareader.model.entity.Text
 import br.com.fenix.mangareader.service.controller.SubTitleController
 import br.com.fenix.mangareader.service.kanji.Formatter
 import br.com.fenix.mangareader.service.kanji.FuriganaView
+import com.pedromassango.doubleclick.DoubleClick
+import com.pedromassango.doubleclick.DoubleClickListener
 import kotlin.math.abs
 
 class FloatingSubtitleReader constructor(private val context: Context) {
@@ -121,25 +123,38 @@ class FloatingSubtitleReader constructor(private val context: Context) {
             mListPageVocabulary = this.findViewById(R.id.list_floating_page_vocabulary)
             mListPageVocabulary.adapter = ArrayAdapter(context, R.layout.list_item_vocabulary_small, mVocabularyItem)
 
+            mSubtitleContent.setOnClickListener(
+                DoubleClick(object : DoubleClickListener {
+                    override fun onSingleClick(view: View?) {}
+                    override fun onDoubleClick(view: View?) {
+                        mSubTitleController.getNextText()
+                    }
+                }, 500)
+            )
+
             mSubtitleContent.setOnLongClickListener {
-                if (mSubtitleContent.text.isNotEmpty()) {
+                val text = mSubTitleController.textSelected.value?.text ?: ""
+                if (text.isNotEmpty()) {
                     Toast.makeText(
                         context,
-                        context.getString(R.string.action_copy) + " ${mSubtitleContent.text}",
+                        context.getString(R.string.action_copy) + " ${text}",
                         Toast.LENGTH_SHORT
                     ).show()
 
                     val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    val clip = ClipData.newPlainText("Copied Text", mSubtitleContent.text)
+                    val clip = ClipData.newPlainText("Copied Text", text)
                     clipboard.setPrimaryClip(clip)
                 }
                 true
             }
 
+            mSubtitleContent
             this.findViewById<AppCompatImageButton>(R.id.imgbtn_close)
                 .setOnClickListener { dismiss() }
         }
 
+        mSubtitleContent.setOnTouchListener(onTouchListener)
+        mSubtitleTitle.setOnTouchListener(onTouchListener)
         mFloatingView.setOnTouchListener(onTouchListener)
 
         layoutParams = WindowManager.LayoutParams().apply {

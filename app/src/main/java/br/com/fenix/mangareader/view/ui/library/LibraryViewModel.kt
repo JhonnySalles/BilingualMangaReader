@@ -86,10 +86,10 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
                 mListMangas.value = ArrayList(list)
             else
                 update(list)
-
-            ImageCoverController.instance.setImageCoverAsync(mContext, mListMangas.value!!) {
+            refreshComplete()
+            /*ImageCoverController.instance.setImageCoverAsync(mContext, mListMangas.value!!) {
                 refreshComplete()
-            }
+            }*/
         } else
             mListMangas.value = ArrayList()
     }

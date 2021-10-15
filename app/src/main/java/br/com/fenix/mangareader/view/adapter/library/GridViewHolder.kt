@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.model.entity.Manga
 import br.com.fenix.mangareader.model.enums.LibraryType
+import br.com.fenix.mangareader.service.controller.ImageCoverController
 import br.com.fenix.mangareader.service.listener.MangaCardListener
 import br.com.fenix.mangareader.util.constants.GeneralConsts
 import br.com.fenix.mangareader.view.ui.library.LibraryFragment
@@ -73,8 +74,10 @@ class GridViewHolder(itemView: View, private val listener: MangaCardListener) :
 
         if (manga.thumbnail != null && manga.thumbnail!!.image != null)
             mangaImage.setImageBitmap(manga.thumbnail!!.image)
-        else
+        else {
             mangaImage.setImageBitmap(mImageCover)
+            ImageCoverController.instance.setImageCoverAsync(itemView.context, manga)
+        }
 
         mangaTitle.text = manga.title
 

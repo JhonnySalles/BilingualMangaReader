@@ -13,9 +13,12 @@ import br.com.fenix.mangareader.model.enums.Languages
 import br.com.fenix.mangareader.service.parses.Parse
 import br.com.fenix.mangareader.service.repository.SubTitleRepository
 import br.com.fenix.mangareader.util.constants.GeneralConsts
+import br.com.fenix.mangareader.util.constants.ReaderConsts
 import br.com.fenix.mangareader.view.ui.reader.PageImageView
 import br.com.fenix.mangareader.view.ui.reader.ReaderFragment
 import com.google.gson.Gson
+import com.squareup.picasso.MemoryPolicy
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.codec.digest.DigestUtils
