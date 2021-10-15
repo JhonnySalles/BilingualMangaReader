@@ -114,6 +114,7 @@ class Scanner {
                     manga.thumbnail = cover
                     storage.save(cover)
                 }
+                notifyCoverUpdated()
             }
         }
     }

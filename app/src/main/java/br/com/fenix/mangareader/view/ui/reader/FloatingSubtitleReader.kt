@@ -6,6 +6,7 @@ import android.content.Context
 import android.graphics.PixelFormat
 import android.os.Build
 import android.provider.Settings
+import android.text.method.LinkMovementMethod
 import android.view.*
 import android.widget.*
 import androidx.appcompat.widget.AppCompatImageButton
@@ -14,7 +15,6 @@ import br.com.fenix.mangareader.model.entity.Page
 import br.com.fenix.mangareader.model.entity.Text
 import br.com.fenix.mangareader.service.controller.SubTitleController
 import br.com.fenix.mangareader.service.kanji.Formatter
-import br.com.fenix.mangareader.service.kanji.FuriganaView
 import com.pedromassango.doubleclick.DoubleClick
 import com.pedromassango.doubleclick.DoubleClickListener
 import kotlin.math.abs
@@ -87,10 +87,10 @@ class FloatingSubtitleReader constructor(private val context: Context) {
     private var mLabelPage: String
     private var mLabelText: String
     private var mSubtitleTitle: TextView
-    private var mSubtitleContent: FuriganaView
+    private var mSubtitleContent: TextView
     private var mListPageVocabulary: ListView
     private var mVocabularyItem = ArrayList<String>()
-    private var mOriginalHeight : Int = 0
+    private var mOriginalHeight: Int = 0
 
     init {
         with(mFloatingView) {
@@ -119,11 +119,8 @@ class FloatingSubtitleReader constructor(private val context: Context) {
 
             this.findViewById<AppCompatImageButton>(R.id.nav_expanded)
                 .setOnClickListener {
-                    if ( mOriginalHeight == 0)
+                    if (mOriginalHeight == 0)
                         mOriginalHeight = mFloatingView.height
-
-                    val width = mOriginalHeight
-                    val floating = mFloatingView.height
 
                     if (mFloatingView.height == mOriginalHeight) {
                         val params = mFloatingView.layoutParams as WindowManager.LayoutParams
@@ -170,6 +167,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
                 true
             }
 
+            mSubtitleContent.movementMethod = LinkMovementMethod.getInstance()
         }
 
         mSubtitleTitle.setOnTouchListener(onTouchListener)
@@ -206,9 +204,14 @@ class FloatingSubtitleReader constructor(private val context: Context) {
         }
     }
 
+    private fun findVocabulary(vocabulary: String) {
+        if (mVocabularyItem.isNotEmpty() && mVocabularyItem.indexOf(vocabulary) >= 0)
+            mListPageVocabulary.smoothScrollToPosition(mVocabularyItem.indexOf(vocabulary))
+    }
+
     fun updateText(text: Text?) {
         var title = ""
-        mSubtitleContent.setText("")
+        mSubtitleContent.text = ""
         if (text != null) {
             val index =
                 mSubTitleController.pageSelected.value?.texts?.indexOf(mSubTitleController.textSelected.value)
@@ -219,7 +222,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
                         "$mLabelPage ${mSubTitleController.pageSelected.value!!.number} - " +
                         "$mLabelText $index/${mSubTitleController.pageSelected.value?.texts?.size}"
 
-            Formatter.generateFurigana(text.text) { furigana -> mSubtitleContent.setText(furigana) }
+            Formatter.generateFurigana(text.text, furigana = { mSubtitleContent.text = it }, vocabularyClick = { findVocabulary(it) })
         } else if (mSubTitleController.chapterSelected.value != null && mSubTitleController.pageSelected.value != null) {
             title =
                 "$mLabelChapter ${mSubTitleController.chapterSelected.value?.chapter.toString()} - " +

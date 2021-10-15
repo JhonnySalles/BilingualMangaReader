@@ -2,6 +2,7 @@ package br.com.fenix.mangareader.service.kanji
 
 import android.content.Context
 import android.text.SpannableString
+import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.TextPaint
 import android.text.style.ClickableSpan
@@ -14,6 +15,7 @@ import br.com.fenix.mangareader.service.repository.KanjiRepository
 import br.com.fenix.mangareader.service.tokenizers.SudachiTokenizer
 import br.com.fenix.mangareader.util.constants.GeneralConsts
 import br.com.fenix.mangareader.util.constants.ReaderConsts
+import br.com.fenix.mangareader.util.helpers.JapaneseCharacter
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog
 import com.github.javiersantos.materialstyleddialogs.enums.Style
 import com.worksap.nlp.sudachi.Tokenizer
@@ -34,6 +36,7 @@ class Formatter {
         private var N3: Int = 0
         private var N4: Int = 0
         private var N5: Int = 0
+        private var VOCABULARY: Int = 0
 
         fun initializeAsync(context: Context) =
             runBlocking { // this: CoroutineScope
@@ -50,6 +53,7 @@ class Formatter {
                         N3 = context.getColor(R.color.JLPT3)
                         N4 = context.getColor(R.color.JLPT4)
                         N5 = context.getColor(R.color.JLPT5)
+                        VOCABULARY = context.getColor(R.color.VOCABULARY)
                     } catch (e: Exception) {
                         Log.e(GeneralConsts.TAG.LOG, "Erro ao abrir arquivo de tokenizer." + e.message)
                     }
@@ -91,27 +95,66 @@ class Formatter {
                 .show()
         }
 
-        fun generateFurigana(text: String, function: (String) -> (Unit)) {
+        fun generateFurigana(text: String, furigana: (CharSequence) -> (Unit), vocabularyClick: (String) -> (Unit)) {
             if (text.isEmpty()) {
-                function(text)
+                furigana(text)
                 return
             }
 
-            var furigana = text
+            val textBuilder = SpannableStringBuilder()
+            textBuilder.append(text);
             val replaced = mutableSetOf<String>()
-            for (t in mTokenizer!!.tokenize(ReaderConsts.TOKENIZER.SUDACHI.SPLIT_MODE, furigana)) {
+            for (t in mTokenizer!!.tokenize(ReaderConsts.TOKENIZER.SUDACHI.SPLIT_MODE, text)) {
                 if (!replaced.contains(t.surface()) && t.readingForm().isNotEmpty() && t.surface().matches(mPattern)
                 ) {
-                    furigana = furigana.replace(
-                        t.surface(),
-                        "{" + t.surface() + ";" + t.readingForm() + "}",
-                        true
+                    var furigana = ""
+                    for (c in t.readingForm())
+                        furigana += JapaneseCharacter.toHiragana(c)
+
+                    val furiganaBuilder = SpannableStringBuilder()
+                    furiganaBuilder.append(furigana)
+                    furiganaBuilder.setSpan(
+                        RelativeSizeSpan(0.75f),
+                        0, furiganaBuilder.length,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                     )
+
+                    var index: Int = textBuilder.indexOf(t.surface())
+                    while (index >= 0) {
+                        textBuilder.setSpan(
+                            SuperRubySpan(
+                                furiganaBuilder,
+                                SuperReplacementSpan.Alignment.CENTER,
+                                SuperReplacementSpan.Alignment.CENTER
+                            ),
+                            index, index + t.surface().length,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+
+                        val cs = object : ClickableSpan() {
+                            override fun onClick(p0: View) {
+                                vocabularyClick(t.surface())
+                            }
+
+                            override fun updateDrawState(ds: TextPaint) {
+                                super.updateDrawState(ds)
+                                ds.isUnderlineText = false
+                                ds.color = VOCABULARY
+                            }
+                        }
+
+                        textBuilder.setSpan(
+                            cs,
+                            index, index + t.surface().length,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+                        index = textBuilder.indexOf(t.surface(), index + 1)
+                    }
                     replaced.add(t.surface())
                 }
             }
 
-            function(furigana)
+            furigana(textBuilder)
         }
 
         fun generateKanjiColor(
@@ -158,13 +201,9 @@ class Formatter {
         fun generateFuriganaAndKanjiCollor(
             context: Context,
             text: String,
-            function: (SpannableString) -> (Unit)
+            function: (CharSequence) -> (Unit)
         ) {
-            generateFurigana(text) {
-                generateKanjiColor(context, it) { color ->
-                    function(color)
-                }
-            }
+            //generateFurigana(text, function, null)
         }
     }
 }

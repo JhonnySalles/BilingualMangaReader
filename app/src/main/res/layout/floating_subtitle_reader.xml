@@ -29,18 +29,18 @@
                 android:textColor="@color/onSecondary"
                 android:textSize="@dimen/popup_reader_title" />
 
-            <br.com.fenix.mangareader.service.kanji.FuriganaView
+            <TextView
                 android:id="@+id/txt_floating_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
+                android:autoLink="all"
                 android:fontFamily="monospace"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                 android:textColor="@color/textPrimary"
-                android:textSize="@dimen/popup_reader_text"
-                custom:furiganaSize="12sp" />
+                android:textSize="@dimen/popup_reader_text" />
 
             <ListView
                 android:id="@+id/list_floating_page_vocabulary"
