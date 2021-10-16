@@ -1,8 +1,5 @@
 package br.com.fenix.mangareader.util.constants
 
-import android.graphics.Color
-import android.text.style.ForegroundColorSpan
-import br.com.fenix.mangareader.R
 import com.worksap.nlp.sudachi.Tokenizer
 
 class ReaderConsts {
@@ -28,7 +25,7 @@ class ReaderConsts {
     object TOKENIZER {
         object SUDACHI {
             val DICTIONARY_NAME = "sudachi_smalldict.json"
-            val SPLIT_MODE = Tokenizer.SplitMode.A
+            val SPLIT_MODE = Tokenizer.SplitMode.C
         }
     }
 

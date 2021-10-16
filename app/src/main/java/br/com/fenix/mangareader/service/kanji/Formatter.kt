@@ -103,54 +103,47 @@ class Formatter {
 
             val textBuilder = SpannableStringBuilder()
             textBuilder.append(text);
-            val replaced = mutableSetOf<String>()
             for (t in mTokenizer!!.tokenize(ReaderConsts.TOKENIZER.SUDACHI.SPLIT_MODE, text)) {
-                if (!replaced.contains(t.surface()) && t.readingForm().isNotEmpty() && t.surface().matches(mPattern)
+                if (t.readingForm().isNotEmpty() && t.surface().matches(mPattern)
                 ) {
                     var furigana = ""
                     for (c in t.readingForm())
                         furigana += JapaneseCharacter.toHiragana(c)
 
-                    val furiganaBuilder = SpannableStringBuilder()
-                    furiganaBuilder.append(furigana)
+                    val furiganaBuilder = SpannableStringBuilder(furigana)
                     furiganaBuilder.setSpan(
                         RelativeSizeSpan(0.75f),
                         0, furiganaBuilder.length,
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                     )
 
-                    var index: Int = textBuilder.indexOf(t.surface())
-                    while (index >= 0) {
-                        textBuilder.setSpan(
-                            SuperRubySpan(
-                                furiganaBuilder,
-                                SuperReplacementSpan.Alignment.CENTER,
-                                SuperReplacementSpan.Alignment.CENTER
-                            ),
-                            index, index + t.surface().length,
-                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                        )
+                    textBuilder.setSpan(
+                        SuperRubySpan(
+                            furiganaBuilder,
+                            SuperReplacementSpan.Alignment.CENTER,
+                            SuperReplacementSpan.Alignment.CENTER
+                        ),
+                        t.begin(), t.end(),
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
 
-                        val cs = object : ClickableSpan() {
-                            override fun onClick(p0: View) {
-                                vocabularyClick(t.surface())
-                            }
-
-                            override fun updateDrawState(ds: TextPaint) {
-                                super.updateDrawState(ds)
-                                ds.isUnderlineText = false
-                                ds.color = VOCABULARY
-                            }
+                    val cs = object : ClickableSpan() {
+                        override fun onClick(p0: View) {
+                            vocabularyClick(t.dictionaryForm())
                         }
 
-                        textBuilder.setSpan(
-                            cs,
-                            index, index + t.surface().length,
-                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                        )
-                        index = textBuilder.indexOf(t.surface(), index + 1)
+                        override fun updateDrawState(ds: TextPaint) {
+                            super.updateDrawState(ds)
+                            ds.isUnderlineText = false
+                            ds.color = VOCABULARY
+                        }
                     }
-                    replaced.add(t.surface())
+
+                    textBuilder.setSpan(
+                        cs,
+                        t.begin(), t.end(),
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
                 }
             }
 

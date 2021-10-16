@@ -48,7 +48,8 @@
                 android:layout_height="200dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="20dp"
-                android:nestedScrollingEnabled="true"/>
+                android:nestedScrollingEnabled="true"
+                android:listSelector="@color/itemSelectedSemiTransparent" />
 
         </LinearLayout>
     </ScrollView>
@@ -71,7 +72,7 @@
         android:layout_height="@dimen/floating_reader_button_width"
         android:layout_gravity="top|left"
         android:layout_marginTop="0dp"
-        android:background="@color/primary"
+        android:background="@color/floatingButton"
         android:src="@drawable/ic_expanded"
         android:tint="@color/textPrimary"
         tools:layout_editor_absoluteY="0dp" />
@@ -83,7 +84,7 @@
         android:layout_height="@dimen/floating_reader_button_width"
         android:layout_gravity="top|left"
         android:layout_marginTop="60dp"
-        android:background="@color/primary"
+        android:background="@color/floatingButton"
         android:src="@drawable/ic_go_to_top"
         android:tint="@color/textPrimary"
         tools:layout_editor_absoluteY="0dp" />
@@ -95,7 +96,7 @@
         android:layout_height="@dimen/floating_reader_button_width"
         android:layout_gravity="top|left"
         android:layout_marginTop="90dp"
-        android:background="@color/primary"
+        android:background="@color/floatingButton"
         android:src="@drawable/ic_translate"
         android:tint="@color/textPrimary"
         tools:layout_editor_absoluteY="0dp" />
@@ -107,7 +108,7 @@
         android:layout_height="@dimen/floating_reader_button_width"
         android:layout_gravity="top|left"
         android:layout_marginTop="120dp"
-        android:background="@color/primary"
+        android:background="@color/floatingButton"
         android:src="@drawable/ic_refresh"
         android:tint="@color/textPrimary"
         tools:layout_editor_absoluteY="0dp" />
@@ -119,7 +120,7 @@
         android:layout_height="@dimen/floating_reader_button_width"
         android:layout_gravity="top|left"
         android:layout_marginTop="150dp"
-        android:background="@color/primary"
+        android:background="@color/floatingButton"
         android:src="@drawable/ic_draw_text"
         android:tint="@color/textPrimary"
         app:rippleColor="@color/onSecondary" />
@@ -131,7 +132,7 @@
         android:layout_height="@dimen/floating_reader_button_width"
         android:layout_gravity="top|left"
         android:layout_marginStart="60dp"
-        android:background="@color/primary"
+        android:background="@color/floatingButton"
         android:src="@drawable/ic_navigate_before"
         android:tint="@color/textPrimary" />
 
@@ -143,7 +144,7 @@
         android:layout_height="@dimen/floating_reader_button_width"
         android:layout_gravity="top|left"
         android:layout_marginStart="90dp"
-        android:background="@color/primary"
+        android:background="@color/floatingButton"
         android:src="@drawable/ic_navigate_next"
         android:tint="@color/textPrimary" />
 

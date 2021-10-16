@@ -89,6 +89,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
     private var mSubtitleTitle: TextView
     private var mSubtitleContent: TextView
     private var mListPageVocabulary: ListView
+    private var mVocabulary: Map<String, String> = mapOf()
     private var mVocabularyItem = ArrayList<String>()
     private var mOriginalHeight: Int = 0
 
@@ -114,7 +115,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
                 .setOnClickListener { mSubTitleController.changeLanguage() }
 
             this.findViewById<AppCompatImageButton>(R.id.nav_floating_go_to_top).setOnClickListener {
-                mScrollContent.scrollTo(0, 0)
+                mScrollContent.smoothScrollTo(0, 0)
             }
 
             this.findViewById<AppCompatImageButton>(R.id.nav_expanded)
@@ -141,6 +142,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
             mSubtitleContent = this.findViewById(R.id.txt_floating_content)
             mListPageVocabulary = this.findViewById(R.id.list_floating_page_vocabulary)
             mListPageVocabulary.adapter = ArrayAdapter(context, R.layout.list_item_vocabulary_small, mVocabularyItem)
+            mListPageVocabulary.choiceMode = ListView.CHOICE_MODE_SINGLE
 
             mSubtitleContent.setOnClickListener(
                 DoubleClick(object : DoubleClickListener {
@@ -192,9 +194,10 @@ class FloatingSubtitleReader constructor(private val context: Context) {
     fun updatePage(page: Page?) {
         if (page != null) {
             if (page.vocabulary != null && page.vocabulary.isNotEmpty()) {
-                val vocabulary = page.vocabulary.map { vocab -> vocab.word + " - " + vocab.meaning + if (!vocab.revised) "¹" else "" }
+                mVocabulary = page.vocabulary.map { vocab -> vocab.word to vocab.word + " - " + vocab.meaning + if (!vocab.revised) "¹" else "" }
+                    .toMap()
                 mVocabularyItem.clear()
-                mVocabularyItem.addAll(vocabulary)
+                mVocabularyItem.addAll(page.vocabulary.map { vocab -> vocab.word + " - " + vocab.meaning + if (!vocab.revised) "¹" else "" })
                 mListPageVocabulary.visibility = View.VISIBLE
             } else {
                 mVocabularyItem.clear()
@@ -205,8 +208,14 @@ class FloatingSubtitleReader constructor(private val context: Context) {
     }
 
     private fun findVocabulary(vocabulary: String) {
-        if (mVocabularyItem.isNotEmpty() && mVocabularyItem.indexOf(vocabulary) >= 0)
-            mListPageVocabulary.smoothScrollToPosition(mVocabularyItem.indexOf(vocabulary))
+        mListPageVocabulary.clearChoices()
+        if (mVocabularyItem.isNotEmpty() && mVocabulary.containsKey(vocabulary)) {
+            mScrollContent.smoothScrollTo(0, mListPageVocabulary.top)
+            val index = mVocabularyItem.indexOf(mVocabulary[vocabulary])
+            mListPageVocabulary.smoothScrollToPosition(index)
+            mListPageVocabulary.requestFocusFromTouch()
+            mListPageVocabulary.setSelection(index)
+        }
     }
 
     fun updateText(text: Text?) {
