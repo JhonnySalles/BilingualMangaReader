@@ -1,10 +1,10 @@
 package br.com.fenix.mangareader.view.ui.reader
 
+import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.PixelFormat
-import android.os.Build
 import android.provider.Settings
 import android.text.method.LinkMovementMethod
 import android.view.*
@@ -19,6 +19,7 @@ import com.pedromassango.doubleclick.DoubleClick
 import com.pedromassango.doubleclick.DoubleClickListener
 import kotlin.math.abs
 
+@SuppressLint("ClickableViewAccessibility")
 class FloatingSubtitleReader constructor(private val context: Context) {
 
     private var windowManager: WindowManager? = null
@@ -96,7 +97,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
     init {
         with(mFloatingView) {
             mSubTitleController = SubTitleController.getInstance(context)
-            mScrollContent = this.findViewById(R.id.scrv_floating)
+            mScrollContent = this.findViewById(R.id.scr_floating)
             mLabelChapter = context.getString(R.string.popup_reading_subtitle_chapter)
             mLabelPage = context.getString(R.string.popup_reading_subtitle_page)
             mLabelText = context.getString(R.string.popup_reading_subtitle_text)
@@ -178,13 +179,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
         layoutParams = WindowManager.LayoutParams().apply {
             format = PixelFormat.TRANSLUCENT
             flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-            @Suppress("DEPRECATION")
-            type = when {
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ->
-                    WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-                else -> WindowManager.LayoutParams.TYPE_TOAST
-            }
-
+            type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
             gravity = Gravity.CENTER
             width = WindowManager.LayoutParams.WRAP_CONTENT
             height = WindowManager.LayoutParams.WRAP_CONTENT

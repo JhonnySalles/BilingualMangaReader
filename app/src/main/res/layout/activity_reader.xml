@@ -35,7 +35,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tolbar_title_custom"
+                    android:id="@+id/toolbar_title_custom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
@@ -45,7 +45,7 @@
                     android:textSize="@dimen/title_size" />
 
                 <TextView
-                    android:id="@+id/tolbar_subtitle_custom"
+                    android:id="@+id/toolbar_subtitle_custom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ellipsize="start"

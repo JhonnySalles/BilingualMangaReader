@@ -36,7 +36,7 @@ class RarParse : Parse {
     }
 
     private fun getName(header: FileHeader): String {
-        return if (header.isUnicode) header.fileNameW else header.fileNameString
+        return header.fileName
     }
 
     override fun numPages(): Int {
@@ -45,15 +45,15 @@ class RarParse : Parse {
 
     override fun getSubtitles(): List<String> {
         val subtitles = arrayListOf<String>()
-        mSubtitles!!.forEach {
+        mSubtitles.forEach {
             val sub = mArchive!!.getInputStream(it)
             val reader = BufferedReader(sub.reader())
             val content = StringBuilder()
-            reader.use { reader ->
-                var line = reader.readLine()
+            reader.use { rd ->
+                var line = rd.readLine()
                 while (line != null) {
                     content.append(line)
-                    line = reader.readLine()
+                    line = rd.readLine()
                 }
             }
             subtitles.add(content.toString())
@@ -67,7 +67,7 @@ class RarParse : Parse {
         return getName(mHeaders[num])
     }
 
-    override fun getPage(num: Int): InputStream? {
+    override fun getPage(num: Int): InputStream {
         if (mArchive!!.mainHeader.isSolid) {
             synchronized(this) {
                 if (!mSolidFileExtracted) {
@@ -83,7 +83,7 @@ class RarParse : Parse {
         return getPageStream(mHeaders[num])
     }
 
-    private fun getPageStream(header: FileHeader): InputStream? {
+    private fun getPageStream(header: FileHeader): InputStream {
         return try {
             if (mCacheDir != null) {
                 val name = getName(header)
@@ -122,7 +122,7 @@ class RarParse : Parse {
         mArchive!!.close()
     }
 
-    override fun getType(): String? {
+    override fun getType(): String {
         return "rar"
     }
 

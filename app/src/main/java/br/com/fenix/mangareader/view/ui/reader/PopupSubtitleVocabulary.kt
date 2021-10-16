@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.LinearLayout
 import android.widget.ListView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -19,7 +18,7 @@ class PopupSubtitleVocabulary : Fragment() {
     private var mVocabularyItem = ArrayList<String>()
 
     private lateinit var mSubTitleController: SubTitleController
-    private var mBackgroundColor : Int = 0
+    private var mBackgroundColor: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,7 +50,7 @@ class PopupSubtitleVocabulary : Fragment() {
         return root
     }
 
-    fun setBackground(color:Int) {
+    fun setBackground(color: Int) {
         mBackgroundColor = color
     }
 

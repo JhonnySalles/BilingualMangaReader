@@ -7,7 +7,7 @@
     tools:context=".view.ui.help.HelpFragment">
 
     <TextView
-        android:id="@+id/txtTitulo"
+        android:id="@+id/txt_title"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="10sp"

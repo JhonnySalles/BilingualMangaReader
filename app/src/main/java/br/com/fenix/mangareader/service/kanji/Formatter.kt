@@ -55,7 +55,7 @@ class Formatter {
                         N5 = context.getColor(R.color.JLPT5)
                         VOCABULARY = context.getColor(R.color.VOCABULARY)
                     } catch (e: Exception) {
-                        Log.e(GeneralConsts.TAG.LOG, "Erro ao abrir arquivo de tokenizer." + e.message)
+                        Log.e(GeneralConsts.TAG.LOG, "Error in open tokenizer file." + e.message)
                     }
                 }
             }
@@ -75,7 +75,7 @@ class Formatter {
                 middle += "onYomi: " + kanjax.onYomi + "\nKunYomi: " + kanjax.kunYomi + "\n\n"
 
                 bottom =
-                    "jlpt: " + kanjax.jlpt + " grade: " + kanjax.grade + " frequence: " + kanjax.frequence + "\n"
+                    "jlpt: " + kanjax.jlpt + " grade: " + kanjax.grade + " frequency: " + kanjax.frequence + "\n"
 
                 description = SpannableString(middle + bottom)
                 description.setSpan(RelativeSizeSpan(1.2f), 0, middle.length, 0)
@@ -102,7 +102,7 @@ class Formatter {
             }
 
             val textBuilder = SpannableStringBuilder()
-            textBuilder.append(text);
+            textBuilder.append(text)
             for (t in mTokenizer!!.tokenize(ReaderConsts.TOKENIZER.SUDACHI.SPLIT_MODE, text)) {
                 if (t.readingForm().isNotEmpty() && t.surface().matches(mPattern)
                 ) {
@@ -189,14 +189,6 @@ class Formatter {
             }
 
             function(ss)
-        }
-
-        fun generateFuriganaAndKanjiCollor(
-            context: Context,
-            text: String,
-            function: (CharSequence) -> (Unit)
-        ) {
-            //generateFurigana(text, function, null)
         }
     }
 }

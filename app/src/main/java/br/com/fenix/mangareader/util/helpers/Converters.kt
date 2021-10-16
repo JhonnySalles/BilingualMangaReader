@@ -2,7 +2,6 @@ package br.com.fenix.mangareader.util.helpers
 
 import android.graphics.Bitmap
 import androidx.room.TypeConverter
-import br.com.fenix.mangareader.model.enums.Languages
 import java.time.LocalDateTime
 
 class Converters {

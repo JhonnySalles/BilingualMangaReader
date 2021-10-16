@@ -59,26 +59,24 @@ class SubTitleController private constructor(private val context: Context) {
 
     init {
         val sharedPreferences = GeneralConsts.getSharedPreferences(context)
-        if (sharedPreferences != null) {
-            try {
-                mSubtitleLang = Languages.valueOf(
-                    sharedPreferences.getString(
-                        GeneralConsts.KEYS.SUBTITLE.LANGUAGE,
-                        Languages.JAPANESE.toString()
-                    )!!
-                )
-                mTranslateLang = Languages.valueOf(
-                    sharedPreferences.getString(
-                        GeneralConsts.KEYS.SUBTITLE.TRANSLATE,
-                        Languages.PORTUGUESE.toString()
-                    )!!
-                )
-            } catch (e: Exception) {
-                Log.i(
-                    GeneralConsts.TAG.LOG,
-                    "Erro ao carregar as preferencias de linguagem - " + e.message
-                )
-            }
+        try {
+            mSubtitleLang = Languages.valueOf(
+                sharedPreferences.getString(
+                    GeneralConsts.KEYS.SUBTITLE.LANGUAGE,
+                    Languages.JAPANESE.toString()
+                )!!
+            )
+            mTranslateLang = Languages.valueOf(
+                sharedPreferences.getString(
+                    GeneralConsts.KEYS.SUBTITLE.TRANSLATE,
+                    Languages.PORTUGUESE.toString()
+                )!!
+            )
+        } catch (e: Exception) {
+            Log.i(
+                GeneralConsts.TAG.LOG,
+                "Error, preferences languages not loaded - " + e.message
+            )
         }
     }
 
@@ -104,7 +102,7 @@ class SubTitleController private constructor(private val context: Context) {
         page.number.toString().padStart(3, '0') + " " + page.name
 
     fun getChapterKey(chapter: Chapter): String {
-        var number = if ((chapter.chapter % 1).compareTo(0) == 0)
+        val number = if ((chapter.chapter % 1).compareTo(0) == 0)
             "%.0f".format(chapter.chapter)
         else
             "%.1f".format(chapter.chapter)
@@ -229,7 +227,7 @@ class SubTitleController private constructor(private val context: Context) {
             updatePageSelect()
             initialize(chapterKey, pageKey)
 
-            var text: String =
+            val text: String =
                 context.resources.getString(R.string.popup_reading_subtitle_find_subtitle)
             Toast.makeText(
                 context,
@@ -258,7 +256,7 @@ class SubTitleController private constructor(private val context: Context) {
             pageName.substringAfterLast('\\')
 
         var chapterKey = ""
-        var pageNumber = 0
+        var number = 0
         val subtitles = getSubtitle()
         val keys = subtitles.keys
 
@@ -267,7 +265,7 @@ class SubTitleController private constructor(private val context: Context) {
             for (p in subtitles[k]?.pages!!) {
                 if (p.name.equals(pageName, true) || p.hash == hash) {
                     chapterKey = k
-                    pageNumber = p.number
+                    number = p.number
                     find = true
                     break
                 }
@@ -282,7 +280,7 @@ class SubTitleController private constructor(private val context: Context) {
                 mSubtitleLang,
                 chapterKey,
                 "",
-                pageNumber,
+                number,
                 pathSubtitle,
                 chapterSelected.value
             )
@@ -292,7 +290,7 @@ class SubTitleController private constructor(private val context: Context) {
                 mSubtitleLang,
                 "",
                 "",
-                pageNumber,
+                number,
                 pathSubtitle,
                 null
             )
@@ -399,7 +397,7 @@ class SubTitleController private constructor(private val context: Context) {
                         } catch (e: java.lang.Exception) {
                             Log.e(
                                 GeneralConsts.TAG.LOG,
-                                "Erro ao tentar encontrar o subtitle do arquivo. " + e.message
+                                "Error, subtitle not founded in file. " + e.message
                             )
                             return@launch
                         }
@@ -477,14 +475,12 @@ class SubTitleController private constructor(private val context: Context) {
     ///////////////////////// LANGUAGE ///////////////
     fun clearLanguage() {
         val sharedPreferences = GeneralConsts.getSharedPreferences(context)
-        if (sharedPreferences != null) {
-            mTranslateLang = Languages.valueOf(
-                sharedPreferences.getString(
-                    GeneralConsts.KEYS.SUBTITLE.TRANSLATE,
-                    Languages.PORTUGUESE.toString()
-                )!!
-            )
-        }
+        mTranslateLang = Languages.valueOf(
+            sharedPreferences.getString(
+                GeneralConsts.KEYS.SUBTITLE.TRANSLATE,
+                Languages.PORTUGUESE.toString()
+            )!!
+        )
     }
 
     fun selectedLanguage(language: Languages) {

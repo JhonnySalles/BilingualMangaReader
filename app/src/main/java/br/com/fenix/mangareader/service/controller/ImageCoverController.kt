@@ -3,7 +3,9 @@ package br.com.fenix.mangareader.service.controller
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Bundle
 import android.os.Handler
+import android.os.Message
 import android.util.Log
 import androidx.collection.LruCache
 import br.com.fenix.mangareader.model.entity.Cover
@@ -59,20 +61,28 @@ class ImageCoverController private constructor() {
         mUpdateHandler!!.remove(handler)
     }
 
-    private fun notifyCoverUpdated() {
+    private fun notifyCoverUpdateFinished(position: Int?) {
         for (h in mUpdateHandler!!)
-            h.sendEmptyMessage(GeneralConsts.SCANNER.MESSAGE_COVER_UPDATED)
+            if (position != null) {
+                val msg = Message()
+                msg.what = GeneralConsts.SCANNER.MESSAGE_COVER_UPDATE_FINISHED
+                msg.data = Bundle()
+                msg.data.putInt("position",position)
+                h.sendMessage(msg)
+            } else
+                h.sendEmptyMessage(GeneralConsts.SCANNER.MESSAGE_COVER_UPDATE_FINISHED)
     }
 
-    fun getCoverFromFile(file : File, parse : Parse) : Cover? {
+    fun getCoverFromFile(file: File, parse: Parse): Cover? {
         return getCoverFromFile(generateHash(file), parse)
     }
 
-    private fun generateHash(file : File) : String = Util.MD5(file.path + file.name)
+    private fun generateHash(file: File): String =
+        Util.MD5(file.path + file.name)
 
-    private fun getCoverFromFile(hash : String, parse :  Parse) : Cover? {
+    private fun getCoverFromFile(hash: String, parse: Parse): Cover? {
         var index = 0
-        for(i in 0 .. parse.numPages()) {
+        for (i in 0..parse.numPages()) {
             if (Util.isImage(parse.getPagePath(i)!!)) {
                 index = i
                 break
@@ -106,7 +116,6 @@ class ImageCoverController private constructor() {
 
     private lateinit var mRepository: CoverRepository
     private fun getMangaCover(manga: Manga) {
-        val parse = ParseFactory.create(manga.file!!) ?: return
         val hash = generateHash(manga.file!!)
         var image = retrieveBitmapFromCache(hash)
         if (image != null) {
@@ -120,8 +129,8 @@ class ImageCoverController private constructor() {
                 if (manga.thumbnail?.image != null)
                     image = manga.thumbnail?.image
             }
-
             if (image == null) {
+                val parse = ParseFactory.create(manga.file!!) ?: return
                 val cover = getCoverFromFile(hash, parse)
                 if (cover != null) {
                     cover.id_manga = manga.id!!
@@ -132,9 +141,11 @@ class ImageCoverController private constructor() {
         }
     }
 
+    var mErrors: Int = 0
     fun setImageCoverAsync(
         context: Context,
-        manga: Manga
+        manga: Manga,
+        position : Int? = null
     ) {
         if (!::mRepository.isInitialized)
             mRepository = CoverRepository(context)
@@ -144,53 +155,15 @@ class ImageCoverController private constructor() {
                 val deferred = async { getMangaCover(manga) }
                 deferred.await()
                 withContext(Dispatchers.Main) {
-                    notifyCoverUpdated()
+                    notifyCoverUpdateFinished(position)
                 }
                 mErrors = 0
             }
-        } catch (e : Exception) {
-            Log.e(GeneralConsts.TAG.LOG, "Erro ao processar lista " + e.message)
-        }
-    }
-
-    private fun processList(list: List<Manga>, limit: Int): List<Manga> {
-        var index = 0
-        for (manga in list)
-            if (manga.thumbnail == null || manga.thumbnail!!.image == null) {
-                getMangaCover(manga)
-                index++
-                if (index > limit)
-                    break
-            }
-
-        notifyCoverUpdated()
-        return list
-    }
-
-    var mErrors : Int = 0
-    fun setImageCoverAsync(
-        context: Context,
-        list: List<Manga>,
-        updateList: (List<Manga>) -> (Unit),
-        limit: Int = 20,
-    ) {
-        if (!::mRepository.isInitialized)
-            mRepository = CoverRepository(context)
-
-        try {
-            CoroutineScope(Dispatchers.IO).launch {
-                val deferred = async { processList(list, limit) }
-                val withCovers = deferred.await()
-                withContext(Dispatchers.Main) {
-                    updateList(withCovers)
-                }
-                mErrors = 0
-            }
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             Log.e(GeneralConsts.TAG.LOG, "Erro ao processar lista " + e.message)
             mErrors++
             if (mErrors < 3)
-                setImageCoverAsync(context, list, updateList, limit)
+                setImageCoverAsync(context, manga, position)
         }
     }
 

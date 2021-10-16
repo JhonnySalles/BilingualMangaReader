@@ -68,7 +68,7 @@ class GridViewHolder(itemView: View, private val listener: MangaCardListener) :
 
         cardView.setOnClickListener { listener.onClick(manga) }
         cardView.setOnLongClickListener {
-            listener.onClickLong(manga, it)
+            listener.onClickLong(manga, it, layoutPosition)
             true
         }
 
@@ -76,7 +76,7 @@ class GridViewHolder(itemView: View, private val listener: MangaCardListener) :
             mangaImage.setImageBitmap(manga.thumbnail!!.image)
         else {
             mangaImage.setImageBitmap(mImageCover)
-            ImageCoverController.instance.setImageCoverAsync(itemView.context, manga)
+            ImageCoverController.instance.setImageCoverAsync(itemView.context, manga, layoutPosition)
         }
 
         mangaTitle.text = manga.title

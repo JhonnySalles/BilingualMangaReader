@@ -6,8 +6,8 @@ import android.view.MotionEvent
 import androidx.viewpager.widget.ViewPager
 
 class PageViewPager(context: Context, attributeSet: AttributeSet) : ViewPager(context, attributeSet) {
-    var mStartX = 0f
-    var mSwipeOutListener: OnSwipeOutListener? = null
+    private var mStartX = 0f
+    private var mSwipeOutListener: OnSwipeOutListener? = null
 
     interface OnSwipeOutListener {
         fun onSwipeOutAtStart()

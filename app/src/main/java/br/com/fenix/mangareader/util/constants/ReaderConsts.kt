@@ -7,7 +7,6 @@ class ReaderConsts {
     object READER {
         const val MAX_PAGE_HEIGHT = 1600
         const val MAX_PAGE_WIDTH = 2000
-
         const val MAX_RECENT_COUNT = 5
     }
 

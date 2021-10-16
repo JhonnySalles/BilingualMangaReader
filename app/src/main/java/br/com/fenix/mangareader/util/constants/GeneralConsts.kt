@@ -2,30 +2,28 @@ package br.com.fenix.mangareader.util.constants
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.os.Build
-import android.provider.Settings
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class GeneralConsts private constructor() {
     companion object {
-        private lateinit var mContext : Context
+        private lateinit var mContext: Context
         fun setContext(context: Context) {
             mContext = context
         }
 
-        fun getSharedPreferences(context: Context): SharedPreferences? {
+        fun getSharedPreferences(context: Context): SharedPreferences {
             mContext = context
             return mContext.getSharedPreferences(KEYS.PREFERENCE_NAME, Context.MODE_PRIVATE)
         }
 
-        fun getSharedPreferences(): SharedPreferences? {
+        fun getSharedPreferences(): SharedPreferences {
             return mContext.getSharedPreferences(KEYS.PREFERENCE_NAME, Context.MODE_PRIVATE)
         }
 
-        fun formatterDate(dateTime: LocalDateTime) : String {
+        fun formatterDate(dateTime: LocalDateTime): String {
             val preferences = getSharedPreferences()
-            val pattern = preferences?.getString(KEYS.SYSTEM.FORMAT_DATA, "yyyy-MM-dd")
+            val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, "yyyy-MM-dd")
             return dateTime.format(DateTimeFormatter.ofPattern(pattern))
         }
     }
@@ -79,6 +77,7 @@ class GeneralConsts private constructor() {
 
     object TAG {
         const val LOG = "MangaReader"
+
         object DATABASE {
             const val INSERT = "$LOG - [DATABASE] INSERT"
             const val SELECT = "$LOG - [DATABASE] SELECT"
@@ -92,9 +91,9 @@ class GeneralConsts private constructor() {
     }
 
     object SCANNER {
-        const val MESSAGE_MEDIA_UPDATE_FINISHED = 0
-        const val MESSAGE_MEDIA_UPDATED = 1
-        const val MESSAGE_COVER_UPDATED = 2
+        const val MESSAGE_MANGA_UPDATE_FINISHED = 0
+        const val MESSAGE_MANGA_UPDATED = 1
+        const val MESSAGE_COVER_UPDATE_FINISHED = 2
     }
 
 }

@@ -1,22 +1,16 @@
 package br.com.fenix.mangareader.util.helpers
 
-import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import br.com.fenix.mangareader.service.repository.Storage
 import java.io.ByteArrayOutputStream
-import java.io.File
 import java.io.InputStream
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
-import java.time.LocalDateTime
 import java.util.*
-import kotlin.experimental.and
-import kotlin.experimental.or
 
 class Util {
     companion object Storage {
@@ -36,8 +30,7 @@ class Util {
         }
 
         fun calculateBitmapSize(bitmap: Bitmap): Int {
-            val sizeInBytes: Int
-            sizeInBytes = bitmap.byteCount
+            val sizeInBytes: Int = bitmap.byteCount
             return sizeInBytes / 1024
         }
 
@@ -117,7 +110,7 @@ class Util {
             val memoryClass = activityManager.largeMemoryClass
             return 1024 * 1024 * memoryClass / percentage
         }
-        
+
         fun toByteArray(`is`: InputStream): ByteArray? {
             val output = ByteArrayOutputStream()
             return try {
@@ -132,17 +125,17 @@ class Util {
             }
         }
 
-        fun imateToByteArray(image: Bitmap): ByteArray? {
+        fun imageToByteArray(image: Bitmap): ByteArray? {
             val output = ByteArrayOutputStream()
-            return output.use { output ->
-                image.compress(Bitmap.CompressFormat.JPEG, 100, output)
-                output.toByteArray()
+            return output.use { otp ->
+                image.compress(Bitmap.CompressFormat.JPEG, 100, otp)
+                otp.toByteArray()
             }
         }
 
         fun encodeImageBase64(image: Bitmap): String {
             return android.util.Base64.encodeToString(
-                imateToByteArray(image),
+                imageToByteArray(image),
                 android.util.Base64.DEFAULT
             )
         }
@@ -152,7 +145,7 @@ class Util {
             return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
         }
 
-        fun normalizeFilePath(path : String) : String {
+        fun normalizeFilePath(path: String): String {
             var folder: String = path
             if (folder.contains("/tree"))
                 folder = folder.replace("/tree", "/storage").replace(":", "/")

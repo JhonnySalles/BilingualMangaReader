@@ -28,7 +28,7 @@
     <string name="config_option_order_access">Last access</string>
     <string name="config_option_order_favorite">Favorite first</string>
 
-    <string name="config_system_farmat_date">Date format</string>
+    <string name="config_system_format_date">Date format</string>
     <string name="config_system_language">System language</string>
 
     <string name="config_option_date_time_format_0">Defalt (%s)</string>
@@ -44,6 +44,8 @@
     </string-array>
 
     <!-- READER -->
+    <string name="reader_reload">Reload</string>
+    <string name="reader_not_found">Not found</string>
     <string name="menu_view_mode">View Mode</string>
     <string name="menu_view_mode_aspect_fill">Aspect Fill</string>
     <string name="menu_view_mode_aspect_fit">Aspect Fit</string>

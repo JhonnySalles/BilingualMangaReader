@@ -2,7 +2,6 @@ package br.com.fenix.mangareader.view.ui.configuration
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -99,7 +98,7 @@ class ConfigFragment : Fragment() {
         mMapOrder = hashMapOf(
             getString(R.string.config_option_order_name) to Order.Name,
             getString(R.string.config_option_order_date) to Order.Date,
-            getString(R.string.config_option_order_access) to Order.LastAcess,
+            getString(R.string.config_option_order_access) to Order.LastAccess,
             getString(R.string.config_option_order_favorite) to Order.Favorite
         )
 
@@ -193,8 +192,8 @@ class ConfigFragment : Fragment() {
         val adapterDataFormat = ArrayAdapter(requireContext(), R.layout.list_item, dataFormat)
         mSystemFormatDateAutoComplete.setAdapter(adapterDataFormat)
         mSystemFormatDateAutoComplete.onItemClickListener =
-            AdapterView.OnItemClickListener { parent, _, position, _ ->
-                mDateSelect = if (position != null && mDatePattern.size > position && position >= 0)
+            AdapterView.OnItemClickListener { _, _, position, _ ->
+                mDateSelect = if (mDatePattern.size > position && position >= 0)
                     mDatePattern[position]
                 else
                     GeneralConsts.CONFIG.DATA_FORMAT[0]
@@ -231,8 +230,8 @@ class ConfigFragment : Fragment() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (grantResults.isNotEmpty()) {
-            val readExternalStorege: Boolean = grantResults[0] == PackageManager.PERMISSION_GRANTED
-            if (!readExternalStorege)
+            val readExternalStorage: Boolean = grantResults[0] == PackageManager.PERMISSION_GRANTED
+            if (!readExternalStorage)
                 Storage.takePermission(requireContext(), requireActivity())
         }
     }
@@ -246,9 +245,9 @@ class ConfigFragment : Fragment() {
     }
 
     private fun saveConfig() {
-        val sharedPreferences: SharedPreferences? =
+        val sharedPreferences =
             GeneralConsts.getSharedPreferences(requireContext())
-        with(sharedPreferences?.edit()) {
+        with(sharedPreferences.edit()) {
             this!!.putString(
                 GeneralConsts.KEYS.LIBRARY.FOLDER,
                 mLibraryPath.editText?.text.toString()
@@ -293,7 +292,7 @@ class ConfigFragment : Fragment() {
     }
 
     private fun loadConfig() {
-        val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext()) ?: return
+        val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
 
         mLibraryPath.editText?.setText(
             sharedPreferences.getString(

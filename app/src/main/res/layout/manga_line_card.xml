@@ -31,14 +31,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="1dp"
-            android:paddingRight="5dp">
+            android:paddingStart="5dp"
+            android:paddingEnd="1dp">
 
             <ImageView
                 android:id="@+id/manga_line_favorite"
                 android:layout_width="@dimen/manga_grid_favorite"
                 android:layout_height="@dimen/manga_grid_favorite"
                 android:adjustViewBounds="true"
-                android:layout_marginRight="5dp"
+                android:layout_marginStart="5dp"
                 android:gravity="center"
                 android:src="@drawable/ic_favorite_mark"
                 android:visibility="gone"

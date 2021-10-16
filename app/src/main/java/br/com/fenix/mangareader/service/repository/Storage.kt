@@ -19,13 +19,13 @@ class Storage(context: Context) {
     private val mRepositoryCover = CoverRepository(context)
 
     fun getPrevManga(manga: Manga): Manga? {
-        val mangas: List<Manga>? = mRepository.findByFileFolder(manga.file!!.parent)
+        val mangas: List<Manga>? = mRepository.findByFileFolder(manga.file.parent ?: "")
         val idx = mangas!!.indexOf(manga)
         return if (idx > 0) mangas[idx - 1] else null
     }
 
     fun getNextManga(manga: Manga): Manga? {
-        val mangas: List<Manga>? = mRepository.findByFileFolder(manga.file!!.parent)
+        val mangas: List<Manga>? = mRepository.findByFileFolder(manga.file.parent ?: "")
         val idx = mangas!!.indexOf(manga)
         return if (idx != mangas.size - 1) mangas[idx + 1] else null
     }
@@ -57,7 +57,8 @@ class Storage(context: Context) {
         return id
     }
 
-    fun save(cover: Cover): Long = mRepositoryCover.save(cover)
+    fun save(cover: Cover): Long =
+        mRepositoryCover.save(cover)
 
     // Used to get the cache images
     companion object Storage {
@@ -66,36 +67,34 @@ class Storage(context: Context) {
         )
 
         fun isPermissionGranted(context: Context): Boolean {
-            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.R)
-            // Valide permission on android 10 or above
-                return Environment.isExternalStorageManager()
+            return if (Build.VERSION.SDK_INT == Build.VERSION_CODES.R)
+            // Valid permission on android 10 or above
+                Environment.isExternalStorageManager()
             else {
                 val readExternalStoragePermission: Int = ContextCompat.checkSelfPermission(
                     context,
                     Manifest.permission.READ_EXTERNAL_STORAGE
                 )
-                return readExternalStoragePermission == PackageManager.PERMISSION_GRANTED
+                readExternalStoragePermission == PackageManager.PERMISSION_GRANTED
             }
         }
 
         fun takePermission(context: Context, activity: Activity) =
-            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.R) {
-                try {
-                    val intent: Intent =
-                        Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
-                    intent.addCategory("android.intent.category.DEFAULT")
-                    intent.data = Uri.parse(
-                        String.format(
-                            "package:%s",
-                            context.packageName
-                        )
+            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.R) try {
+                val intent =
+                    Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+                intent.addCategory("android.intent.category.DEFAULT")
+                intent.data = Uri.parse(
+                    String.format(
+                        "package:%s",
+                        context.packageName
                     )
-                    activity.startActivity(intent)
-                } catch (ex: Exception) {
-                    val intent: Intent = Intent()
-                    intent.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
-                    activity.startActivity(intent)
-                }
+                )
+                activity.startActivity(intent)
+            } catch (ex: Exception) {
+                val intent = Intent()
+                intent.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
+                activity.startActivity(intent)
             } else {
                 ActivityCompat.requestPermissions(
                     activity,

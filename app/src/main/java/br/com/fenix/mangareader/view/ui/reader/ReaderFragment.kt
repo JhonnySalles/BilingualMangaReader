@@ -49,30 +49,30 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
     private val mViewModel: ReaderViewModel by activityViewModels()
 
     private lateinit var mToolbar: Toolbar
-    private var mPageNavLayout: LinearLayout? = null
-    private var mPopupSubtitle: FrameLayout? = null
-    private var mToolbarBottom: LinearLayout? = null
-    private var mPageSeekBar: SeekBar? = null
-    private var mPageNavTextView: TextView? = null
-    private var mPagerAdapter: ComicPagerAdapter? = null
-    private var mPreferences: SharedPreferences? = null
-    private var mGestureDetector: GestureDetector? = null
-    private var mViewPager: PageViewPager? = null
+    private lateinit var mPageNavLayout: LinearLayout
+    private lateinit var mPopupSubtitle: FrameLayout
+    private lateinit var mToolbarBottom: LinearLayout
+    private lateinit var mPageSeekBar: SeekBar
+    private lateinit var mPageNavTextView: TextView
+    private lateinit var mPagerAdapter: ComicPagerAdapter
+    private lateinit var mPreferences: SharedPreferences
+    private lateinit var mGestureDetector: GestureDetector
+    private lateinit var mViewPager: PageViewPager
 
     private var mResourceViewMode: HashMap<Int, ReaderMode>? = null
-    var mIsFullscreen = false
+    private var mIsFullscreen = false
     private var mFileName: String? = null
     var mReaderMode: ReaderMode? = null
     var mIsLeftToRight = false
 
     var mParse: Parse? = null
-    var mPicasso: Picasso? = null
-    var mComicHandler: MangaHandler? = null
-    val mTargets = SparseArray<Target>()
+    lateinit var mPicasso: Picasso
+    private lateinit var mComicHandler: MangaHandler
+    var mTargets = SparseArray<Target>()
 
     private var mManga: Manga? = null
-    var mNewManga: Manga? = null
-    var mNewMangaTitle = 0
+    private var mNewManga: Manga? = null
+    private var mNewMangaTitle = 0
     private lateinit var mStorage: Storage
     private lateinit var mSubtitleController: SubTitleController
 
@@ -130,15 +130,18 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         fun getCurrencyImageView(): PageImageView? {
             if (mCurrentFragment == null)
                 return null
-            return mCurrentFragment!!.findViewById(R.id.page_image_view) as PageImageView
+            return mCurrentFragment?.findViewById(R.id.page_image_view) as PageImageView
         }
     }
 
     private fun onRefresh() {
-        if (mViewPager != null && mTargets.size() > 0) {
-            loadImage(mTargets[mViewPager!!.currentItem] as MyTarget)
+        if (!::mViewPager.isInitialized)
+            return
+
+        if (mTargets.size() > 0) {
+            loadImage(mTargets[mViewPager.currentItem] as MyTarget)
             for (i in 0 until mTargets.size()) {
-                if (mViewPager!!.currentItem != i)
+                if (mViewPager.currentItem != i)
                     loadImage(mTargets[mTargets.keyAt(i)] as MyTarget)
             }
         }
@@ -178,16 +181,16 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                         .addRequestHandler((mComicHandler as RequestHandler))
                         .build()
                 } else
-                    Log.e(GeneralConsts.TAG.LOG, "Erro ao abrir o arquivo.")
+                    Log.e(GeneralConsts.TAG.LOG, "Error in open file.")
             } else
-                Log.e(GeneralConsts.TAG.LOG, "Arquivo não encontrado.")
+                Log.e(GeneralConsts.TAG.LOG, "File not founded.")
 
             mPagerAdapter = ComicPagerAdapter()
             mGestureDetector = GestureDetector(requireActivity(), MyTouchListener())
 
             mPreferences = GeneralConsts.getSharedPreferences(requireContext())
             mReaderMode = ReaderMode.valueOf(
-                mPreferences!!.getString(
+                mPreferences.getString(
                     GeneralConsts.KEYS.READER.READER_MODE,
                     ReaderMode.FIT_WIDTH.toString()
                 )
@@ -195,7 +198,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             )
 
             mIsLeftToRight = PageMode.valueOf(
-                mPreferences!!.getString(
+                mPreferences.getString(
                     GeneralConsts.KEYS.READER.PAGE_MODE,
                     PageMode.Comics.toString()
                 )!!
@@ -235,42 +238,42 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         mPopupSubtitle = requireActivity().findViewById(R.id.menu_popup)
         mPageNavLayout = requireActivity().findViewById(R.id.nav_reader)
         mToolbarBottom = requireActivity().findViewById(R.id.toolbar_reader_bottom)
-        (mPageNavLayout!!.findViewById<View>(R.id.nav_reader_progress) as SeekBar).also {
+        (mPageNavLayout.findViewById<View>(R.id.nav_reader_progress) as SeekBar).also {
             mPageSeekBar = it
         }
-        mPageSeekBar!!.max = (mParse?.numPages() ?: 2) - 1
+        mPageSeekBar.max = (mParse?.numPages() ?: 2) - 1
 
-        mPageSeekBar!!.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+        mPageSeekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
                     if (mIsLeftToRight) setCurrentPage(progress + 1) else setCurrentPage(
-                        mPageSeekBar!!.max - progress + 1
+                        mPageSeekBar.max - progress + 1
                     )
                 }
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {
-                mPicasso!!.pauseTag(this@ReaderFragment.requireActivity())
+                mPicasso.pauseTag(this@ReaderFragment.requireActivity())
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
-                mPicasso!!.resumeTag(this@ReaderFragment.requireActivity())
+                mPicasso.resumeTag(this@ReaderFragment.requireActivity())
             }
         })
-        mPageNavTextView = mPageNavLayout!!.findViewById<View>(R.id.nav_reader_title) as TextView
+        mPageNavTextView = mPageNavLayout.findViewById<View>(R.id.nav_reader_title) as TextView
         mViewPager = view.findViewById<View>(R.id.fragment_reader) as PageViewPager
-        mViewPager!!.adapter = mPagerAdapter
-        mViewPager!!.offscreenPageLimit = 4
-        mViewPager!!.setOnTouchListener(this)
-        mViewPager!!.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
+        mViewPager.adapter = mPagerAdapter
+        mViewPager.offscreenPageLimit = 4
+        mViewPager.setOnTouchListener(this)
+        mViewPager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
             override fun onPageSelected(position: Int) {
                 if (mIsLeftToRight)
                     setCurrentPage(position + 1)
                 else
-                    setCurrentPage(mViewPager!!.adapter!!.count - position)
+                    setCurrentPage(mViewPager.adapter!!.count - position)
             }
         })
-        mViewPager!!.setOnSwipeOutListener(object : PageViewPager.OnSwipeOutListener {
+        mViewPager.setOnSwipeOutListener(object : PageViewPager.OnSwipeOutListener {
             override fun onSwipeOutAtStart() {
                 if (mIsLeftToRight) hitBeginning() else hitEnding()
             }
@@ -336,35 +339,35 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
 
     override fun onDestroy() {
         try {
-            mParse!!.destroy()
+            mParse?.destroy()
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        mPicasso?.shutdown()
+        mPicasso.shutdown()
         super.onDestroy()
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-        return mGestureDetector!!.onTouchEvent(event)
+        return mGestureDetector.onTouchEvent(event)
     }
 
     fun getCurrentPage(): Int {
         return when {
-            mIsLeftToRight -> mViewPager?.currentItem?.plus(1) ?: 1
-            mViewPager != null && mViewPager!!.adapter != null -> (mViewPager!!.adapter!!.count - mViewPager!!.currentItem)
+            mIsLeftToRight -> if (::mViewPager.isInitialized) mViewPager.currentItem.plus(1) else 1
+            ::mViewPager.isInitialized && mViewPager.adapter != null -> (mViewPager.adapter!!.count - mViewPager.currentItem)
             else -> 1
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val editor = mPreferences!!.edit()
+        val editor = mPreferences.edit()
         when (item.itemId) {
             R.id.view_mode_aspect_fill, R.id.view_mode_aspect_fit, R.id.view_mode_fit_width -> {
                 item.isChecked = true
                 mReaderMode = mResourceViewMode!![item.itemId]
                 //editor.putInt(Constants.SETTINGS_PAGE_VIEW_MODE, mReaderMode!!.native_int)
                 editor.apply()
-                updatePageViews(mViewPager!!)
+                updatePageViews(mViewPager)
             }
             R.id.reading_left_to_right, R.id.reading_right_to_left -> {
                 item.isChecked = true
@@ -373,7 +376,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 //editor.putBoolean(Constants.SETTINGS_READING_LEFT_TO_RIGHT, mIsLeftToRight)
                 editor.apply()
                 setCurrentPage(page, false)
-                mViewPager!!.adapter!!.notifyDataSetChanged()
+                mViewPager.adapter?.notifyDataSetChanged()
                 updateSeekBar()
             }
         }
@@ -386,16 +389,16 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
 
     private fun setCurrentPage(page: Int, animated: Boolean) {
         if (mIsLeftToRight) {
-            mViewPager!!.currentItem = page - 1
-            mPageSeekBar!!.progress = page - 1
+            mViewPager.currentItem = page - 1
+            mPageSeekBar.progress = page - 1
         } else {
-            mViewPager!!.setCurrentItem(mViewPager!!.adapter!!.count - page, animated)
-            mPageSeekBar!!.progress = mViewPager!!.adapter!!.count - page
+            mViewPager.setCurrentItem(mViewPager.adapter!!.count - page, animated)
+            mPageSeekBar.progress = mViewPager.adapter!!.count - page
         }
         val navPage: String = StringBuilder()
             .append(page).append("/").append(mParse?.numPages() ?: 1)
             .toString()
-        mPageNavTextView!!.text = navPage
+        mPageNavTextView.text = navPage
         mCurrentPage = page - 1
 
         if (mCurrentPage < 0)
@@ -439,7 +442,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
 
         override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
             val layout = `object` as View
-            mPicasso!!.cancelRequest(mTargets[position])
+            mPicasso.cancelRequest(mTargets[position])
             mTargets.delete(position)
             container.removeView(layout)
             val iv = layout.findViewById<View>(R.id.page_image_view) as ImageView
@@ -455,10 +458,10 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         val pos: Int = if (mIsLeftToRight)
             t.position
         else
-            mViewPager!!.adapter!!.count - t.position - 1
+            mViewPager.adapter!!.count - t.position - 1
 
         try {
-            mPicasso!!.load(mComicHandler?.getPageUri(pos))
+            mPicasso.load(mComicHandler.getPageUri(pos))
                 .memoryPolicy(MemoryPolicy.NO_STORE)
                 .tag(requireActivity())
                 .resize(ReaderConsts.READER.MAX_PAGE_WIDTH, ReaderConsts.READER.MAX_PAGE_HEIGHT)
@@ -467,7 +470,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 .transform(mViewModel.filters.value!!)
                 .into(t)
         } catch (e: Exception) {
-            Log.e(GeneralConsts.TAG.LOG, "Erro ao carregar a imagem: " + e.message)
+            Log.e(GeneralConsts.TAG.LOG, "Error in open image: " + e.message)
             Log.e(GeneralConsts.TAG.LOG, e.stackTraceToString())
         }
 
@@ -478,8 +481,8 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         private val mLayout: WeakReference<View> = WeakReference(layout)
 
         private fun setVisibility(imageView: Int, progressBar: Int, reloadButton: Int) {
-            val layout = mLayout.get()
-            layout!!.findViewById<View>(R.id.page_image_view).visibility = imageView
+            val layout = mLayout.get() ?: return
+            layout.findViewById<View>(R.id.page_image_view).visibility = imageView
             layout.findViewById<View>(R.id.load_progress_bar).visibility = progressBar
             layout.findViewById<View>(R.id.reload_Button).visibility = reloadButton
         }
@@ -503,7 +506,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         }
 
         override fun onClick(v: View) {
-            val layout = mLayout.get() ?: return
+            mLayout.get() ?: return
             setVisibility(View.GONE, View.VISIBLE, View.GONE)
             loadImage(this)
         }
@@ -519,16 +522,16 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             val x = e.x
 
             // tap left edge
-            if (x < mViewPager!!.width.toFloat() / 3) {
+            if (x < mViewPager.width.toFloat() / 3) {
                 if (mIsLeftToRight) {
                     if (getCurrentPage() == 1) hitBeginning() else setCurrentPage(getCurrentPage() - 1)
                 } else {
-                    if (getCurrentPage() == mViewPager!!.adapter!!.count
+                    if (getCurrentPage() == mViewPager.adapter!!.count
                     ) hitEnding() else setCurrentPage(getCurrentPage() + 1)
                 }
-            } else if (x > mViewPager!!.width.toFloat() / 3 * 2) {
+            } else if (x > mViewPager.width.toFloat() / 3 * 2) {
                 if (mIsLeftToRight) {
-                    if (getCurrentPage() == mViewPager!!.adapter!!.count
+                    if (getCurrentPage() == mViewPager.adapter!!.count
                     ) hitEnding() else setCurrentPage(getCurrentPage() + 1)
                 } else {
                     if (getCurrentPage() == 1) hitBeginning() else setCurrentPage(getCurrentPage() - 1)
@@ -573,23 +576,20 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             flag = flag or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
             flag = flag or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
 
-            mViewPager!!.systemUiVisibility = flag
-            mPageNavLayout!!.visibility = View.INVISIBLE
-            mPopupSubtitle!!.visibility = View.INVISIBLE
-            mToolbarBottom!!.visibility = View.INVISIBLE
-            mToolbar!!.visibility = View.INVISIBLE
+            mViewPager.systemUiVisibility = flag
+            mPageNavLayout.visibility = View.INVISIBLE
+            mPopupSubtitle.visibility = View.INVISIBLE
+            mToolbarBottom.visibility = View.INVISIBLE
+            mToolbar.visibility = View.INVISIBLE
         } else {
             actionBar?.show()
             var flag = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                     or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
             flag = flag or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-            mViewPager!!.systemUiVisibility = flag
-            mPageNavLayout!!.visibility = View.VISIBLE
-            mToolbar!!.visibility = View.VISIBLE
-            mToolbarBottom!!.visibility = View.VISIBLE
-            //mPopupSubtitle!!.visibility = View.VISIBLE
-
-            // status bar & navigation bar background won't show in some cases
+            mViewPager.systemUiVisibility = flag
+            mPageNavLayout.visibility = View.VISIBLE
+            mToolbar.visibility = View.VISIBLE
+            mToolbarBottom.visibility = View.VISIBLE
 
             Handler(Looper.getMainLooper()).postDelayed({
                 val w: Window = requireActivity().window
@@ -623,7 +623,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         val dialog: AlertDialog =
             AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
                 .setTitle(titleRes)
-                .setMessage(newManga.file!!.name)
+                .setMessage(newManga.file.name)
                 .setPositiveButton(
                     R.string.switch_action_positive
                 ) { _, _ ->
@@ -641,8 +641,8 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         val seekRes: Int =
             if (mIsLeftToRight) R.drawable.reader_nav_progress else R.drawable.reader_nav_progress_inverse
         val d: Drawable? = ContextCompat.getDrawable(requireActivity(), seekRes)
-        val bounds = mPageSeekBar!!.progressDrawable.bounds
-        mPageSeekBar!!.progressDrawable = d
-        mPageSeekBar!!.progressDrawable.bounds = bounds
+        val bounds = mPageSeekBar.progressDrawable.bounds
+        mPageSeekBar.progressDrawable = d
+        mPageSeekBar.progressDrawable.bounds = bounds
     }
 }

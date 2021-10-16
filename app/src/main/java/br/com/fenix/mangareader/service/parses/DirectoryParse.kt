@@ -12,11 +12,13 @@ class DirectoryParse : Parse {
     private val mFiles = ArrayList<File>()
 
     override fun parse(file: File?) {
-        if (!file!!.isDirectory) {
+        if (file == null)
+            throw IOException("Not file informed.")
+
+        if (!file.isDirectory)
             throw IOException("Not a directory: " + file.absolutePath)
-        }
-        val files = file.listFiles()
-        if (files != null) {
+
+        if (file.listFiles() != null) {
             for (f in file.listFiles()) {
                 if (f.isDirectory)
                     throw IOException("Probably not a comic directory")
@@ -40,11 +42,11 @@ class DirectoryParse : Parse {
         TODO("Not yet implemented")
     }
 
-    override fun getPage(num: Int): InputStream? {
+    override fun getPage(num: Int): InputStream {
         return FileInputStream(mFiles[num])
     }
 
-    override fun getType(): String? {
+    override fun getType(): String {
         return "dir"
     }
 

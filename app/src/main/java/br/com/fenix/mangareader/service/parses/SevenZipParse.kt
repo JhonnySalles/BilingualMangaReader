@@ -45,11 +45,11 @@ class SevenZipParse : Parse {
         TODO("Not yet implemented")
     }
 
-    override fun getPage(num: Int): InputStream? {
+    override fun getPage(num: Int): InputStream {
         return ByteArrayInputStream(mEntries!![num].bytes)
     }
 
-    override fun getType(): String? {
+    override fun getType(): String {
         return "tar"
     }
 

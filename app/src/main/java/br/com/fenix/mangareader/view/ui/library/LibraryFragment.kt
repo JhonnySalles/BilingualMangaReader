@@ -35,7 +35,7 @@ import br.com.fenix.mangareader.view.adapter.library.MangaLineCardAdapter
 import br.com.fenix.mangareader.view.ui.reader.ReaderActivity
 import java.lang.ref.WeakReference
 import java.time.LocalDateTime
-import java.util.HashMap
+import java.util.*
 import kotlin.math.max
 
 
@@ -83,7 +83,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                mRefreshLayout.isEnabled = newText == null || newText?.isEmpty()
+                mRefreshLayout.isEnabled = newText == null || newText.isEmpty()
                 filter(newText)
                 return false
             }
@@ -122,24 +122,28 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         override fun handleMessage(msg: Message) {
             val fragment = mOwner.get() ?: return
             when (msg.what) {
-                GeneralConsts.SCANNER.MESSAGE_MEDIA_UPDATED -> {
+                GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATED -> {
                     fragment.refreshLibraryDelayed()
                 }
-                GeneralConsts.SCANNER.MESSAGE_MEDIA_UPDATE_FINISHED -> {
+                GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATE_FINISHED -> {
                     mViewModel.list {
                         setIsRefreshing(false)
                         notifyDataSet()
                     }
                 }
-                GeneralConsts.SCANNER.MESSAGE_COVER_UPDATED -> {
-                    notifyDataSet()
+                GeneralConsts.SCANNER.MESSAGE_COVER_UPDATE_FINISHED -> {
+                    val idItem = msg.data.getInt("position")
+                    notifyDataSet(idItem)
                 }
             }
         }
     }
 
-    private fun notifyDataSet() {
-        mRecycleView.adapter!!.notifyDataSetChanged()
+    private fun notifyDataSet(idItem: Int? = null) {
+        if (idItem != null)
+            mRecycleView.adapter?.notifyItemChanged(idItem)
+        else
+            mRecycleView.adapter?.notifyDataSetChanged()
     }
 
     private fun refreshLibraryDelayed() {
@@ -169,7 +173,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         mOrderBy = when (mOrderBy) {
             Order.Name -> Order.Date
             Order.Date -> Order.Favorite
-            Order.Favorite -> Order.LastAcess
+            Order.Favorite -> Order.LastAccess
             else -> Order.Name
         }
 
@@ -180,7 +184,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         ).show()
 
         val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
-        with(sharedPreferences?.edit()) {
+        with(sharedPreferences.edit()) {
             this!!.putString(GeneralConsts.KEYS.LIBRARY.ORDER, mOrderBy.toString())
             this.commit()
         }
@@ -194,7 +198,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private fun sortList(list: ArrayList<Manga>) {
         when (mOrderBy) {
             Order.Date -> list.sortBy { it.dateCreate }
-            Order.LastAcess -> list.sortByDescending { it.lastAccess }
+            Order.LastAccess -> list.sortByDescending { it.lastAccess }
             Order.Favorite -> list.sortBy { it.favorite }
             else -> list.sortBy { it.name }
         }
@@ -211,7 +215,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         }
 
         val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
-        with(sharedPreferences?.edit()) {
+        with(sharedPreferences.edit()) {
             this!!.putString(GeneralConsts.KEYS.LIBRARY.LIBRARY_TYPE, mGridType.toString())
             this.commit()
         }
@@ -240,14 +244,14 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         val root = inflater.inflate(R.layout.fragment_library, container, false)
         val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
         mGridType = LibraryType.valueOf(
-            sharedPreferences?.getString(GeneralConsts.KEYS.LIBRARY.LIBRARY_TYPE, "LINE")
+            sharedPreferences.getString(GeneralConsts.KEYS.LIBRARY.LIBRARY_TYPE, "LINE")
                 .toString()
         )
 
         mMapOrder = hashMapOf(
             Order.Name to getString(R.string.config_option_order_name),
             Order.Date to getString(R.string.config_option_order_date),
-            Order.LastAcess to getString(R.string.config_option_order_access),
+            Order.LastAccess to getString(R.string.config_option_order_access),
             Order.Favorite to getString(R.string.config_option_order_favorite)
         )
 
@@ -269,10 +273,10 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, manga)
                 intent.putExtras(bundle)
                 context?.startActivity(intent)
-                mViewModel.updateLastAcess(manga)
+                mViewModel.updateLastAccess(manga)
             }
 
-            override fun onClickLong(manga: Manga, view: View) {
+            override fun onClickLong(manga: Manga, view: View, position: Int) {
                 if (mRefreshLayout.isRefreshing)
                     return
 
@@ -290,26 +294,26 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                         R.id.menu_book_favorite -> {
                             manga.favorite = !manga.favorite
                             mRepository.update(manga)
-                            mRecycleView.adapter?.notifyDataSetChanged()
+                            notifyDataSet(position)
                         }
                         R.id.menu_book_clear -> {
                             manga.lastAccess = LocalDateTime.MIN
                             manga.bookMark = 0
                             mRepository.update(manga)
-                            mRecycleView.adapter?.notifyDataSetChanged()
+                            notifyDataSet(position)
                         }
                         R.id.menu_book_delete -> {
                             val dialog: AlertDialog =
                                 AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
                                     .setTitle(getString(R.string.library_menu_delete))
-                                    .setMessage(getString(R.string.library_menu_delete_description) + "\n" + manga.file?.name)
+                                    .setMessage(getString(R.string.library_menu_delete_description) + "\n" + manga.file.name)
                                     .setPositiveButton(
                                         R.string.action_positive
                                     ) { _, _ ->
-                                        manga.file?.delete()
+                                        manga.file.delete()
                                         mRepository.delete(manga)
                                         mViewModel.remove(manga)
-                                        mRecycleView.adapter?.notifyDataSetChanged()
+                                        notifyDataSet(position)
                                     }
                                     .setNegativeButton(
                                         R.string.action_negative
@@ -340,9 +344,9 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private fun loadConfig() {
         val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
         mLibraryPath =
-            sharedPreferences?.getString(GeneralConsts.KEYS.LIBRARY.FOLDER, "").toString()
+            sharedPreferences.getString(GeneralConsts.KEYS.LIBRARY.FOLDER, "").toString()
         mOrderBy = Order.valueOf(
-            sharedPreferences?.getString(
+            sharedPreferences.getString(
                 GeneralConsts.KEYS.LIBRARY.ORDER,
                 Order.Name.toString()
             ).toString()
@@ -367,7 +371,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
             val isLandscape =
                 resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-            var columnWidth: Int = when (mGridType) {
+            val columnWidth: Int = when (mGridType) {
                 LibraryType.GRID_BIG -> resources.getDimension(R.dimen.manga_grid_card_layout_width)
                     .toInt()
                 LibraryType.GRID_MEDIUM -> if (isLandscape) resources.getDimension(R.dimen.manga_grid_card_layout_width_landscape_medium)
@@ -382,7 +386,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             val displayMetrics = DisplayMetrics()
             (context as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)
 
-            val spaceCount: Int = max(1, displayMetrics.widthPixels / columnWidth);
+            val spaceCount: Int = max(1, displayMetrics.widthPixels / columnWidth)
             mRecycleView.layoutManager = GridLayoutManager(requireContext(), spaceCount)
             gridAdapter.attachListener(mListener)
         } else {
@@ -418,7 +422,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 searchView.clearFocus()
             enableSearchView(searchView, !enabled)
         } catch (e: Exception) {
-            Log.e(GeneralConsts.TAG.LOG, "Erro ao desabilitar o botão de pesquisa: " + e.message)
+            Log.e(GeneralConsts.TAG.LOG, "Disable search button error: " + e.message)
         }
     }
 

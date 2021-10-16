@@ -12,7 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:visibility="gone"
-        app:srcCompat="@mipmap/book_not_found" />
+        app:srcCompat="@mipmap/book_not_found"
+        android:contentDescription="@string/reader_not_found" />
 
     <br.com.fenix.mangareader.view.ui.reader.PageViewPager
         android:id="@+id/fragment_reader"

@@ -23,7 +23,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="Page"
+            android:hint="@string/popup_reading_subtitle_page"
             android:textColorHint="@color/textPrimary"
             app:boxBackgroundColor="@color/primary"
             app:boxStrokeColor="@color/onSecondary"
@@ -41,7 +41,8 @@
                 android:ellipsize="start"
                 android:inputType="none"
                 android:maxLines="1"
-                android:textColor="@color/textPrimary" />
+                android:textColor="@color/textPrimary"
+                tools:ignore="LabelFor" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

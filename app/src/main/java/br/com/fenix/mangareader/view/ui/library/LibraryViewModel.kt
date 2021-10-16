@@ -4,11 +4,11 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import br.com.fenix.mangareader.model.entity.Manga
 import br.com.fenix.mangareader.model.entity.Cover
+import br.com.fenix.mangareader.model.entity.Manga
 import br.com.fenix.mangareader.service.controller.ImageCoverController
-import br.com.fenix.mangareader.service.repository.MangaRepository
 import br.com.fenix.mangareader.service.repository.CoverRepository
+import br.com.fenix.mangareader.service.repository.MangaRepository
 
 class LibraryViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -54,12 +54,22 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
 
     fun update(list: List<Manga>) {
         if (list.isNotEmpty()) {
-            for (manga in mListMangas.value!!) {
+            for (manga in list) {
                 if (!mListMangas.value!!.contains(manga))
                     mListMangas.value!!.add(manga)
             }
         }
     }
+
+    private fun updateCover() {
+        if (mListMangas.value == null || mListMangas.value!!.isEmpty())
+            return
+
+        for (manga in mListMangas.value!!)
+            if (manga.thumbnail == null || manga.thumbnail!!.image == null)
+                ImageCoverController.instance.setImageCoverAsync(mContext, manga)
+    }
+
 
     fun updateList() {
         val list = mMangaRepository.list() ?: return
@@ -69,6 +79,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
                     mListMangas.value!!.add(manga)
             }
         }
+        updateCover()
     }
 
     fun list() {
@@ -86,15 +97,12 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
                 mListMangas.value = ArrayList(list)
             else
                 update(list)
-            /*ImageCoverController.instance.setImageCoverAsync(mContext, mListMangas.value!!) {
-                refreshComplete()
-            }*/
         } else
             mListMangas.value = ArrayList()
         refreshComplete()
     }
 
-    fun updateLastAcess(manga: Manga) {
+    fun updateLastAccess(manga: Manga) {
         mMangaRepository.update(manga)
     }
 }

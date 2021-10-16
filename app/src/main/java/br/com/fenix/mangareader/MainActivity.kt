@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toolBar = findViewById(R.id.main_toolbar)
         setSupportActionBar(toolBar)
 
-        // drawer_Layout é o layout padrão do aplicativo
+        // drawer_Layout is a default layout from app
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         val toggle = ActionBarDrawerToggle(
             this,
@@ -46,13 +46,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         drawer.addDrawerListener(toggle)
         toggle.syncState()
 
-        // nav_view contém o layout do menu
+        // nav_view have a menu layout
         navigationView = findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this)
 
         fragmentManager = supportFragmentManager
 
-        // content_fragment usado para receber os layouts dos fragmentos
+        // content_fragment use for receive fragments layout
         fragmentManager.beginTransaction().replace(R.id.content_root, LibraryFragment())
             .commit()
     }
@@ -85,7 +85,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     companion object {
-        private lateinit var mContext : Context
-        fun getAppContext() = mContext
+        private lateinit var mContext: Context
+        fun getAppContext() =
+            mContext
     }
 }

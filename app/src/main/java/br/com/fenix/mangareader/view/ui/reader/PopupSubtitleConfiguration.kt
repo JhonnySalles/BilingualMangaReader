@@ -128,7 +128,7 @@ class PopupSubtitleConfiguration : Fragment() {
                         mLoadExternalSubtitleAutoComplete.setText(path)
                         mSubTitleController.getChapterFromJson(listOf(inputString), true)
                     } catch (e: Exception) {
-                        Log.e(GeneralConsts.TAG.LOG, "Erro ao abrir o arquivo " + e.message)
+                        Log.e(GeneralConsts.TAG.LOG, "Error when open file: " + e.message)
                     }
                 }
             }

@@ -14,7 +14,6 @@ import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.service.controller.SubTitleController
 import br.com.fenix.mangareader.service.kanji.Formatter
 import com.google.android.material.textfield.TextInputLayout
-import android.widget.ArrayAdapter
 
 
 class PopupSubtitleReader : Fragment() {
@@ -126,17 +125,17 @@ class PopupSubtitleReader : Fragment() {
             mSubtitleContent.text = ""
             if (it != null) {
                 val index =
-                    mSubTitleController.pageSelected.value?.texts?.indexOf(mSubTitleController.textSelected?.value)
+                    mSubTitleController.pageSelected.value?.texts?.indexOf(mSubTitleController.textSelected.value)
                         ?.plus(1)
                 title =
-                    "${mLabelChapter} ${mSubTitleController.chapterSelected?.value?.chapter.toString()} - ${mLabelText} $index/${mSubTitleController.pageSelected.value?.texts?.size}"
+                    "$mLabelChapter ${mSubTitleController.chapterSelected.value?.chapter.toString()} - $mLabelText $index/${mSubTitleController.pageSelected.value?.texts?.size}"
 
                 Formatter.generateKanjiColor(requireContext(), it.text) { kanji ->
                     mSubtitleContent.text = kanji
                 }
             } else if (mSubTitleController.chapterSelected.value != null && mSubTitleController.pageSelected.value != null)
                 title =
-                    "${mLabelChapter} ${mSubTitleController.chapterSelected.value?.chapter.toString()} - ${mLabelText} 0/${if (mSubTitleController.pageSelected.value?.texts == null) 0 else mSubTitleController.pageSelected.value?.texts?.size}"
+                    "$mLabelChapter ${mSubTitleController.chapterSelected.value?.chapter.toString()} - $mLabelText 0/${if (mSubTitleController.pageSelected.value?.texts == null) 0 else mSubTitleController.pageSelected.value?.texts?.size}"
 
             mSubtitleTitle.text = title
         })

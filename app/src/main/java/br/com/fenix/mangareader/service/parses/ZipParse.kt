@@ -40,11 +40,11 @@ class ZipParse : Parse {
 
             val reader = BufferedReader(sub.reader())
             val content = StringBuilder()
-            reader.use { reader ->
-                var line = reader.readLine()
+            reader.use { rd ->
+                var line = rd.readLine()
                 while (line != null) {
                     content.append(line)
-                    line = reader.readLine()
+                    line = rd.readLine()
                 }
             }
             subtitles.add(content.toString())
@@ -58,11 +58,11 @@ class ZipParse : Parse {
         return mEntries!![num].name
     }
 
-    override fun getPage(num: Int): InputStream? {
+    override fun getPage(num: Int): InputStream {
         return mZipFile!!.getInputStream(mEntries!![num])
     }
 
-    override fun getType(): String? {
+    override fun getType(): String {
         return "zip"
     }
 

@@ -30,7 +30,7 @@
     <string name="config_option_order_favorite">Favoritos primeiro</string>
 
     <string name="config_system_language">Linguagem do sistema</string>
-    <string name="config_system_farmat_date">Formato de data</string>
+    <string name="config_system_format_date">Formato de data</string>
     <string name="config_option_date_time_format_0">Padrão (%s)</string>
 
     <!-- LANGUAGE -->
@@ -41,6 +41,8 @@
     </string-array>
 
     <!-- READER -->
+    <string name="reader_reload">Recarregar</string>
+    <string name="reader_not_found">Não encontrado</string>
     <string name="menu_view_mode">Modo de preenchimento</string>
     <string name="menu_view_mode_aspect_fill">Aspect Fill</string>
     <string name="menu_view_mode_aspect_fit">Aspect Fit</string>

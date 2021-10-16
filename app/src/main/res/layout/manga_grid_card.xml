@@ -48,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:maxLines="2"
+                android:maxLines="5"
                 android:textAppearance="?attr/textAppearanceHeadline6"
                 android:textColor="@color/textPrimary"
                 android:textSize="@dimen/manga_grid_title_size" />
@@ -85,7 +85,7 @@
         android:id="@+id/manga_grid_favorite"
         android:layout_width="@dimen/manga_grid_favorite"
         android:layout_height="@dimen/manga_grid_favorite"
-        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         android:adjustViewBounds="true"
         android:background="@drawable/ic_favorite_mark_border"

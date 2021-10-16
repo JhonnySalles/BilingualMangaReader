@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.model.entity.Manga
+import br.com.fenix.mangareader.service.controller.ImageCoverController
 import br.com.fenix.mangareader.service.listener.MangaCardListener
 import br.com.fenix.mangareader.util.constants.GeneralConsts
 import java.time.LocalDateTime
@@ -40,14 +41,17 @@ class LineViewHolder(itemView: View, private val listener: MangaCardListener) :
 
         cardView.setOnClickListener { listener.onClick(manga) }
         cardView.setOnLongClickListener {
-            listener.onClickLong(manga, it)
+            listener.onClickLong(manga, it, layoutPosition)
             true
         }
 
         if (manga.thumbnail != null && manga.thumbnail!!.image != null)
             mangaImage.setImageBitmap(manga.thumbnail!!.image)
-        else
+        else {
             mangaImage.setImageBitmap(mImageCover)
+            ImageCoverController.instance.setImageCoverAsync(itemView.context, manga, layoutPosition)
+        }
+
 
 
         mangaTitle.text = manga.title

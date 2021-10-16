@@ -76,8 +76,8 @@ class ReaderActivity : AppCompatActivity() {
         Formatter.initializeAsync(applicationContext)
 
         mToolbar = findViewById(R.id.toolbar_reader)
-        mToolbarTitle = findViewById(R.id.tolbar_title_custom)
-        mToolbarSubTitle = findViewById(R.id.tolbar_subtitle_custom)
+        mToolbarTitle = findViewById(R.id.toolbar_title_custom)
+        mToolbarSubTitle = findViewById(R.id.toolbar_subtitle_custom)
         setSupportActionBar(mToolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(true)
 
@@ -186,7 +186,7 @@ class ReaderActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    var mLastFloatingShowing = false
+    private var mLastFloatingShowing = false
     override fun onResume() {
         if (mLastFloatingShowing)
             mFloatingSubtitleReader.show()
@@ -195,7 +195,7 @@ class ReaderActivity : AppCompatActivity() {
     }
 
     override fun onStop() {
-        if (mFloatingSubtitleReader != null) {
+        if (::mFloatingSubtitleReader.isInitialized) {
             mLastFloatingShowing = mFloatingSubtitleReader.isShowing
             if (mFloatingSubtitleReader.isShowing)
                 mFloatingSubtitleReader.dismiss()
@@ -205,7 +205,7 @@ class ReaderActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        if (mFloatingSubtitleReader != null && mFloatingSubtitleReader.isShowing)
+        if (::mFloatingSubtitleReader.isInitialized && mFloatingSubtitleReader.isShowing)
             mFloatingSubtitleReader.dismiss()
 
         super.onDestroy()
@@ -222,15 +222,15 @@ class ReaderActivity : AppCompatActivity() {
         if (any == null)
             return
 
-        val sharedPreferences: SharedPreferences? =
+        val sharedPreferences: SharedPreferences =
             GeneralConsts.getSharedPreferences(applicationContext)
         when (any) {
-            is PageMode -> sharedPreferences?.edit()
-                ?.putString(GeneralConsts.KEYS.READER.PAGE_MODE, any.toString())
-                ?.apply()
-            is ReaderMode -> sharedPreferences?.edit()
-                ?.putString(GeneralConsts.KEYS.READER.READER_MODE, any.toString())
-                ?.apply()
+            is PageMode -> sharedPreferences.edit()
+                .putString(GeneralConsts.KEYS.READER.PAGE_MODE, any.toString())
+                .apply()
+            is ReaderMode -> sharedPreferences.edit()
+                .putString(GeneralConsts.KEYS.READER.READER_MODE, any.toString())
+                .apply()
         }
     }
 

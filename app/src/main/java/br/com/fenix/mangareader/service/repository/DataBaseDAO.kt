@@ -37,13 +37,13 @@ abstract class MangaDAO : DataBaseDAO<Manga> {
     abstract fun get(name: String): Manga
 
     @Query("SELECT * FROM " + DataBaseConsts.MANGA.TABLE_NAME + " WHERE " + DataBaseConsts.MANGA.COLUMNS.FILE_FOLDER + " = :folder ")
-    abstract fun listByFolder(folder : String?): List<Manga>
+    abstract fun listByFolder(folder: String?): List<Manga>
 
     @Query("UPDATE " + DataBaseConsts.MANGA.TABLE_NAME + " SET " + DataBaseConsts.MANGA.COLUMNS.BOOK_MARK + " = :marker " + " WHERE " + DataBaseConsts.MANGA.COLUMNS.ID + " = :id ")
-    abstract fun updateBookMark(id: Long, marker:Int)
+    abstract fun updateBookMark(id: Long, marker: Int)
 
-    @Query("UPDATE " + DataBaseConsts.MANGA.TABLE_NAME + " SET " + DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS + " = :acess " + " WHERE " + DataBaseConsts.MANGA.COLUMNS.ID + " = :id ")
-    abstract fun updateLastAcess(id: Long, acess:String)
+    @Query("UPDATE " + DataBaseConsts.MANGA.TABLE_NAME + " SET " + DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS + " = :access " + " WHERE " + DataBaseConsts.MANGA.COLUMNS.ID + " = :id ")
+    abstract fun updateLastAccess(id: Long, access: String)
 }
 
 

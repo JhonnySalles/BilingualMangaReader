@@ -66,7 +66,7 @@ class ReaderViewModel(application: Application) : AndroidViewModel(application) 
             generateFilters()
     }
 
-    fun loadPreferences() {
+    private fun loadPreferences() {
         mCustomFilter.value = mPreferences!!.getBoolean(
             GeneralConsts.KEYS.COLOR_FILTER.CUSTOM_FILTER,
             false
@@ -105,7 +105,7 @@ class ReaderViewModel(application: Application) : AndroidViewModel(application) 
         generateFilters()
     }
 
-    fun savePreferences() {
+    private fun savePreferences() {
         with(mPreferences?.edit()) {
             this!!.putBoolean(
                 GeneralConsts.KEYS.COLOR_FILTER.CUSTOM_FILTER,
