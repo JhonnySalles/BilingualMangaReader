@@ -92,7 +92,8 @@ class ConfigFragment : Fragment() {
         mMapLanguage = hashMapOf(
             languages[0] to Languages.PORTUGUESE,
             languages[1] to Languages.ENGLISH,
-            languages[2] to Languages.JAPANESE
+            languages[2] to Languages.JAPANESE,
+            languages[3] to Languages.PORTUGUESE_GOOGLE
         )
 
         mMapOrder = hashMapOf(
