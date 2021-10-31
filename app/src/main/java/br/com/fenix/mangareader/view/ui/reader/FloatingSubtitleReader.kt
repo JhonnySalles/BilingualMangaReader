@@ -105,15 +105,9 @@ class FloatingSubtitleReader constructor(private val context: Context) {
             this.findViewById<AppCompatImageButton>(R.id.nav_close)
                 .setOnClickListener { dismiss() }
             this.findViewById<AppCompatImageButton>(R.id.nav_floating_before_text)
-                .setOnClickListener {
-                    mSubTitleController.getBeforeText()
-                    mScrollContent.smoothScrollTo(0, 0)
-                }
+                .setOnClickListener { mSubTitleController.getBeforeText() }
             this.findViewById<AppCompatImageButton>(R.id.nav_floating_next_text)
-                .setOnClickListener {
-                    mSubTitleController.getNextText()
-                    mScrollContent.smoothScrollTo(0, 0)
-                }
+                .setOnClickListener { mSubTitleController.getNextText() }
             this.findViewById<AppCompatImageButton>(R.id.nav_floating_refresh)
                 .setOnClickListener { mSubTitleController.findSubtitle() }
             this.findViewById<AppCompatImageButton>(R.id.nav_floating_draw)
@@ -222,6 +216,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
     fun updateText(text: Text?) {
         var title = ""
         mSubtitleContent.text = ""
+        mScrollContent.smoothScrollTo(0, 0)
         if (text != null) {
             val index =
                 mSubTitleController.pageSelected.value?.texts?.indexOf(mSubTitleController.textSelected.value)
