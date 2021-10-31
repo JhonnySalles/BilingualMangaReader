@@ -69,11 +69,12 @@
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/floating_subtitle_reader.xml" value="0.21927083333333333" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/fragment_config.xml" value="0.165" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/fragment_fullscreen.xml" value="0.20572916666666666" />
-        <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/fragment_help.xml" value="0.20572916666666666" />
+        <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/fragment_help.xml" value="0.25" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/fragment_history.xml" value="0.20572916666666666" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/fragment_library.xml" value="0.20572916666666666" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/fragment_reader.xml" value="0.20572916666666666" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/fragment_reader_page.xml" value="0.20572916666666666" />
+        <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/history_card.xml" value="0.2109375" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/list_item.xml" value="0.20572916666666666" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/list_item_vocabulary.xml" value="0.2109375" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/list_item_vocabulary_small.xml" value="0.2109375" />
@@ -88,6 +89,7 @@
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/menu/main_menu_drawer.xml" value="0.20208333333333334" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/menu/menu_book.xml" value="0.2453125" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/menu/menu_reader.xml" value="0.20572916666666666" />
+        <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2546875" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.24583333333333332" />
         <entry key="..\:/Users/Jhonn/AndroidStudioProjects/MangaReader/app/src/main/res/drawable/ic_baseline_phonelink_setup_24.xml" value="0.20208333333333334" />
         <entry key="..\:/Users/Jhonn/AndroidStudioProjects/MangaReader/app/src/main/res/drawable/ic_launcher_background.xml" value="0.22708333333333333" />

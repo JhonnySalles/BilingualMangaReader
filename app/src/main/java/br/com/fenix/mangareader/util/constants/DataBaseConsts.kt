@@ -1,5 +1,7 @@
 package br.com.fenix.mangareader.util.constants
 
+import java.time.LocalDateTime
+
 class DataBaseConsts private constructor() {
     object MANGA {
         const val TABLE_NAME = "Manga"

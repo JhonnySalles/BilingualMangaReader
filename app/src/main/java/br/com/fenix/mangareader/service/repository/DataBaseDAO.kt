@@ -3,6 +3,7 @@ package br.com.fenix.mangareader.service.repository
 import androidx.room.*
 import br.com.fenix.mangareader.model.entity.*
 import br.com.fenix.mangareader.util.constants.DataBaseConsts
+import java.time.LocalDateTime
 
 interface DataBaseDAO<T> {
 
@@ -26,9 +27,11 @@ interface DataBaseDAO<T> {
 
 @Dao
 abstract class MangaDAO : DataBaseDAO<Manga> {
-
     @Query("SELECT * FROM " + DataBaseConsts.MANGA.TABLE_NAME)
     abstract fun list(): List<Manga>
+
+    @Query("SELECT * FROM " + DataBaseConsts.MANGA.TABLE_NAME + " WHERE " + DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS + " > :dateInitial ORDER BY " + DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS + " DESC")
+    abstract fun listHistory(dateInitial: LocalDateTime? = LocalDateTime.MIN): List<Manga>
 
     @Query("SELECT * FROM " + DataBaseConsts.MANGA.TABLE_NAME + " WHERE " + DataBaseConsts.MANGA.COLUMNS.ID + " = :id")
     abstract fun get(id: Long): Manga
@@ -44,6 +47,12 @@ abstract class MangaDAO : DataBaseDAO<Manga> {
 
     @Query("UPDATE " + DataBaseConsts.MANGA.TABLE_NAME + " SET " + DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS + " = :access " + " WHERE " + DataBaseConsts.MANGA.COLUMNS.ID + " = :id ")
     abstract fun updateLastAccess(id: Long, access: String)
+
+    @Query("UPDATE " + DataBaseConsts.MANGA.TABLE_NAME + " SET " + DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS + " = :dateInitial, " + DataBaseConsts.MANGA.COLUMNS.BOOK_MARK + " = 0, " + DataBaseConsts.MANGA.COLUMNS.FAVORITE + " = false" + " WHERE " + DataBaseConsts.MANGA.COLUMNS.ID + " = :id ")
+    abstract fun clearHistory(dateInitial: LocalDateTime? = LocalDateTime.MIN)
+
+    @Query("UPDATE " + DataBaseConsts.MANGA.TABLE_NAME + " SET " + DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS + " = :dateInitial, " + DataBaseConsts.MANGA.COLUMNS.BOOK_MARK + " = 0, " + DataBaseConsts.MANGA.COLUMNS.FAVORITE + " = false")
+    abstract fun clearHistory(id: Long, dateInitial: LocalDateTime? = LocalDateTime.MIN)
 }
 
 

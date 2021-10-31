@@ -1,6 +1,7 @@
 package br.com.fenix.mangareader.service.kanji
 
 import android.content.Context
+import android.os.Build
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
@@ -12,13 +13,10 @@ import android.view.View
 import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.service.repository.KanjaxRepository
 import br.com.fenix.mangareader.service.repository.KanjiRepository
-import br.com.fenix.mangareader.service.tokenizers.SudachiTokenizer
 import br.com.fenix.mangareader.util.constants.GeneralConsts
-import br.com.fenix.mangareader.util.constants.ReaderConsts
 import br.com.fenix.mangareader.util.helpers.JapaneseCharacter
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog
 import com.github.javiersantos.materialstyleddialogs.enums.Style
-import com.worksap.nlp.sudachi.Tokenizer
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
@@ -28,7 +26,8 @@ class Formatter {
     companion object KANJI {
         private var mRepository: KanjaxRepository? = null
         private val mPattern = Regex(".*[\u4E00-\u9FFF].*")
-        var mTokenizer: Tokenizer? = null
+        var mSudachiTokenizer: com.worksap.nlp.sudachi.Tokenizer? = null
+        var mKuromojiTokenizer: com.atilika.kuromoji.ipadic.Tokenizer? = null
         private var JLPT: Map<String, Int>? = null
         private var ANOTHER: Int = 0
         private var N1: Int = 0
@@ -43,7 +42,11 @@ class Formatter {
                 GlobalScope.async { // launch a new coroutine and continue
                     try {
                         mRepository = KanjaxRepository(context)
-                        mTokenizer = SudachiTokenizer(context).tokenizer
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                            mSudachiTokenizer = br.com.fenix.mangareader.service.tokenizers.SudachiTokenizer(context).tokenizer
+                        else
+                            mKuromojiTokenizer = com.atilika.kuromoji.ipadic.Tokenizer()
+
                         val repository = KanjiRepository(context)
                         JLPT = repository.getHashMap()
 
@@ -95,31 +98,75 @@ class Formatter {
                 .show()
         }
 
-        fun generateFurigana(text: String, furigana: (CharSequence) -> (Unit), vocabularyClick: (String) -> (Unit)) {
-            if (text.isEmpty()) {
-                furigana(text)
-                return
-            }
+        private fun generateFurigana(furigana: String): SpannableStringBuilder {
+            val furiganaBuilder = SpannableStringBuilder(furigana)
+            furiganaBuilder.setSpan(
+                RelativeSizeSpan(0.75f),
+                0, furiganaBuilder.length,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
 
+            return furiganaBuilder
+        }
+
+        private fun generateClick(text: String, click: (String) -> (Unit)): ClickableSpan {
+            return object : ClickableSpan() {
+                override fun onClick(p0: View) {
+                    click(text)
+                }
+
+                override fun updateDrawState(ds: TextPaint) {
+                    super.updateDrawState(ds)
+                    ds.isUnderlineText = false
+                    ds.color = VOCABULARY
+                }
+            }
+        }
+
+        private fun kuromojiTokenizer(text: String, vocabularyClick: (String) -> (Unit)): SpannableStringBuilder {
             val textBuilder = SpannableStringBuilder()
             textBuilder.append(text)
-            for (t in mTokenizer!!.tokenize(ReaderConsts.TOKENIZER.SUDACHI.SPLIT_MODE, text)) {
+            for (t in mKuromojiTokenizer!!.tokenize(text)) {
+                if (t.surface.isNotEmpty() && t.surface.matches(mPattern)
+                ) {
+                    var furigana = ""
+                    for (c in t.reading)
+                        furigana += JapaneseCharacter.toHiragana(c)
+
+                    textBuilder.setSpan(
+                        SuperRubySpan(
+                            generateFurigana(furigana),
+                            SuperReplacementSpan.Alignment.CENTER,
+                            SuperReplacementSpan.Alignment.CENTER
+                        ),
+                        t.position, t.position + t.surface.length,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+
+                    textBuilder.setSpan(
+                        generateClick(t.baseForm, vocabularyClick),
+                        t.position, t.position + t.surface.length,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                }
+            }
+
+            return textBuilder
+        }
+
+        private fun sudachiTokenizer(text: String, vocabularyClick: (String) -> (Unit)): SpannableStringBuilder {
+            val textBuilder = SpannableStringBuilder()
+            textBuilder.append(text)
+            for (t in mSudachiTokenizer!!.tokenize(com.worksap.nlp.sudachi.Tokenizer.SplitMode.C, text)) {
                 if (t.readingForm().isNotEmpty() && t.surface().matches(mPattern)
                 ) {
                     var furigana = ""
                     for (c in t.readingForm())
                         furigana += JapaneseCharacter.toHiragana(c)
 
-                    val furiganaBuilder = SpannableStringBuilder(furigana)
-                    furiganaBuilder.setSpan(
-                        RelativeSizeSpan(0.75f),
-                        0, furiganaBuilder.length,
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                    )
-
                     textBuilder.setSpan(
                         SuperRubySpan(
-                            furiganaBuilder,
+                            generateFurigana(furigana),
                             SuperReplacementSpan.Alignment.CENTER,
                             SuperReplacementSpan.Alignment.CENTER
                         ),
@@ -127,25 +174,27 @@ class Formatter {
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                     )
 
-                    val cs = object : ClickableSpan() {
-                        override fun onClick(p0: View) {
-                            vocabularyClick(t.dictionaryForm())
-                        }
-
-                        override fun updateDrawState(ds: TextPaint) {
-                            super.updateDrawState(ds)
-                            ds.isUnderlineText = false
-                            ds.color = VOCABULARY
-                        }
-                    }
-
                     textBuilder.setSpan(
-                        cs,
+                        generateClick(t.dictionaryForm(), vocabularyClick),
                         t.begin(), t.end(),
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                     )
                 }
             }
+
+            return textBuilder
+        }
+
+        fun generateFurigana(text: String, furigana: (CharSequence) -> (Unit), vocabularyClick: (String) -> (Unit)) {
+            if (text.isEmpty()) {
+                furigana(text)
+                return
+            }
+
+            val textBuilder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                sudachiTokenizer(text, vocabularyClick)
+            else
+                kuromojiTokenizer(text, vocabularyClick)
 
             furigana(textBuilder)
         }

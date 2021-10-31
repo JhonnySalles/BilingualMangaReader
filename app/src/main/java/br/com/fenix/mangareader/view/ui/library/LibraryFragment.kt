@@ -26,7 +26,6 @@ import br.com.fenix.mangareader.model.enums.LibraryType
 import br.com.fenix.mangareader.model.enums.Order
 import br.com.fenix.mangareader.service.controller.ImageCoverController
 import br.com.fenix.mangareader.service.listener.MangaCardListener
-import br.com.fenix.mangareader.service.repository.MangaRepository
 import br.com.fenix.mangareader.service.repository.Storage
 import br.com.fenix.mangareader.service.scanner.Scanner
 import br.com.fenix.mangareader.util.constants.GeneralConsts
@@ -54,7 +53,6 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var searchView: SearchView
     private lateinit var mListener: MangaCardListener
     private var mIsRefreshPlanned = false
-    private lateinit var mRepository: MangaRepository
 
     companion object {
         var mGridType: LibraryType = LibraryType.GRID_BIG
@@ -255,8 +253,6 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             Order.Favorite to getString(R.string.config_option_order_favorite)
         )
 
-        mRepository = MangaRepository(requireContext())
-
         mRecycleView = root.findViewById(R.id.rv_library)
         mRefreshLayout = root.findViewById(R.id.rl_library)
         //mRefreshLayout.setColorSchemeColors(R.color.primary)
@@ -293,13 +289,13 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     when (item.itemId) {
                         R.id.menu_book_favorite -> {
                             manga.favorite = !manga.favorite
-                            mRepository.update(manga)
+                            mViewModel.save(manga)
                             notifyDataSet(position)
                         }
                         R.id.menu_book_clear -> {
                             manga.lastAccess = LocalDateTime.MIN
                             manga.bookMark = 0
-                            mRepository.update(manga)
+                            mViewModel.save(manga)
                             notifyDataSet(position)
                         }
                         R.id.menu_book_delete -> {
@@ -311,8 +307,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                                         R.string.action_positive
                                     ) { _, _ ->
                                         manga.file.delete()
-                                        mRepository.delete(manga)
-                                        mViewModel.remove(manga)
+                                        mViewModel.delete(manga)
                                         notifyDataSet(position)
                                     }
                                     .setNegativeButton(

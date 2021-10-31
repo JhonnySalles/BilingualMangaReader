@@ -1,6 +1,6 @@
 package br.com.fenix.mangareader.util.constants
 
-import com.worksap.nlp.sudachi.Tokenizer
+import android.os.Build
 
 class ReaderConsts {
 
@@ -24,7 +24,6 @@ class ReaderConsts {
     object TOKENIZER {
         object SUDACHI {
             val DICTIONARY_NAME = "sudachi_smalldict.json"
-            val SPLIT_MODE = Tokenizer.SplitMode.C
         }
     }
 

@@ -51,6 +51,27 @@ class MangaRepository(context: Context) {
         }
     }
 
+    fun listHistory(): List<Manga>? {
+        return try {
+            mDataBase.listHistory()
+        } catch (e: Exception) {
+            Log.e(GeneralConsts.TAG.DATABASE.LIST, e.message.toString())
+            null
+        }
+    }
+
+    fun clearHistory(obj : Manga?) {
+        try {
+            if (obj != null)
+                if (obj.id != null)
+                    mDataBase.clearHistory(obj.id!!)
+            else
+                mDataBase.clearHistory()
+        } catch (e: Exception) {
+            Log.e(GeneralConsts.TAG.DATABASE.LIST, e.message.toString())
+        }
+    }
+
     fun getThumbnail(idManga: Long): Cover? {
         return mCoverRepository.findFirstByIdManga(idManga)
     }

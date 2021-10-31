@@ -37,6 +37,11 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         return obj
     }
 
+    fun delete(obj: Manga) {
+        mMangaRepository.delete(obj)
+        remove(obj)
+    }
+
     fun remove(manga: Manga) {
         if (mListMangas.value != null)
             mListMangas.value!!.remove(manga)
