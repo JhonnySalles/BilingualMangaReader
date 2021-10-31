@@ -105,9 +105,15 @@ class FloatingSubtitleReader constructor(private val context: Context) {
             this.findViewById<AppCompatImageButton>(R.id.nav_close)
                 .setOnClickListener { dismiss() }
             this.findViewById<AppCompatImageButton>(R.id.nav_floating_before_text)
-                .setOnClickListener { mSubTitleController.getBeforeText() }
+                .setOnClickListener {
+                    mSubTitleController.getBeforeText()
+                    mScrollContent.smoothScrollTo(0, 0)
+                }
             this.findViewById<AppCompatImageButton>(R.id.nav_floating_next_text)
-                .setOnClickListener { mSubTitleController.getNextText() }
+                .setOnClickListener {
+                    mSubTitleController.getNextText()
+                    mScrollContent.smoothScrollTo(0, 0)
+                }
             this.findViewById<AppCompatImageButton>(R.id.nav_floating_refresh)
                 .setOnClickListener { mSubTitleController.findSubtitle() }
             this.findViewById<AppCompatImageButton>(R.id.nav_floating_draw)
