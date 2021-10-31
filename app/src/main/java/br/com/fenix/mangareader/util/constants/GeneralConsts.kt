@@ -26,6 +26,12 @@ class GeneralConsts private constructor() {
             val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, "yyyy-MM-dd")
             return dateTime.format(DateTimeFormatter.ofPattern(pattern))
         }
+
+        fun formatterDateTime(dateTime: LocalDateTime): String {
+            val preferences = getSharedPreferences()
+            val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, "yyyy-MM-dd") + " hh:mm:ss"
+            return dateTime.format(DateTimeFormatter.ofPattern(pattern))
+        }
     }
 
     object KEYS {

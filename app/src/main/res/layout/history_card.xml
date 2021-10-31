@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/manga_line_card"
+    android:id="@+id/history_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="1dp"
@@ -11,7 +11,7 @@
     android:orientation="horizontal">
     <!-- Media -->
     <ImageView
-        android:id="@+id/manga_line_image_cover"
+        android:id="@+id/history_image_cover"
         android:layout_width="@dimen/history_card_image"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
@@ -24,13 +24,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingLeft="5dp"
-        android:paddingTop="1dp"
+        android:paddingTop="5dp"
         android:paddingRight="5dp">
 
 
         <!-- Title, secondary and supporting text -->
         <TextView
-            android:id="@+id/manga_line_text_title"
+            android:id="@+id/history_text_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?attr/textAppearanceHeadline6"
@@ -38,7 +38,7 @@
             android:textSize="@dimen/manga_line_title_size" />
 
         <TextView
-            android:id="@+id/manga_line_sub_title"
+            android:id="@+id/history_sub_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"

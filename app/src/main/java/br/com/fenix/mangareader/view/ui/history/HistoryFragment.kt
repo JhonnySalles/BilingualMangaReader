@@ -1,29 +1,44 @@
 package br.com.fenix.mangareader.view.ui.history
 
+import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
+import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.model.entity.Manga
-import br.com.fenix.mangareader.model.enums.LibraryType
+import br.com.fenix.mangareader.service.controller.ImageCoverController
 import br.com.fenix.mangareader.service.listener.MangaCardListener
-import br.com.fenix.mangareader.service.repository.MangaRepository
-import br.com.fenix.mangareader.view.adapter.library.MangaGridCardAdapter
-import br.com.fenix.mangareader.view.adapter.library.MangaLineCardAdapter
+import br.com.fenix.mangareader.service.scanner.Scanner
+import br.com.fenix.mangareader.util.constants.GeneralConsts
+import br.com.fenix.mangareader.view.adapter.library.HistoryCardAdapter
 import br.com.fenix.mangareader.view.ui.library.LibraryFragment
-import br.com.fenix.mangareader.view.ui.library.LibraryViewModel
-import java.util.ArrayList
+import br.com.fenix.mangareader.view.ui.reader.ReaderActivity
+import java.lang.ref.WeakReference
+import java.time.LocalDateTime
+import java.util.*
 
 class HistoryFragment : Fragment() {
 
     private lateinit var mViewModel: HistoryViewModel
     private lateinit var mRecycleView: RecyclerView
     private lateinit var mListener: MangaCardListener
+
+    private val mUpdateHandler: Handler = UpdateHandler(this)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,30 +48,61 @@ class HistoryFragment : Fragment() {
         mViewModel = ViewModelProvider(this).get(HistoryViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_history, container, false)
         mRecycleView = root.findViewById(R.id.rv_history)
+        mListener = object : MangaCardListener {
+            override fun onClick(manga: Manga) {
 
+            }
+
+            override fun onClickLong(manga: Manga, view: View, position: Int) {
+
+            }
+        }
+        observer()
         return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val lineAdapter = MangaLineCardAdapter()
-        mRecycleView.adapter = lineAdapter
+        val historyAdapter = HistoryCardAdapter()
+        mRecycleView.adapter = historyAdapter
         mRecycleView.layoutManager = GridLayoutManager(requireContext(), 1)
-        lineAdapter.attachListener(mListener)
+        historyAdapter.attachListener(mListener)
     }
 
-    private fun filter(newText: String?) {
-        if (LibraryFragment.mGridType != LibraryType.LINE)
-            (mRecycleView.adapter as MangaGridCardAdapter).filter.filter(newText)
+    override fun onResume() {
+        super.onResume()
+        ImageCoverController.instance.addUpdateHandler(mUpdateHandler)
+        mViewModel.list {
+            notifyDataSet()
+        }
+    }
+
+    override fun onPause() {
+        ImageCoverController.instance.removeUpdateHandler(mUpdateHandler)
+        super.onPause()
+    }
+
+    private inner class UpdateHandler(fragment: HistoryFragment) : Handler() {
+        private val mOwner: WeakReference<HistoryFragment> = WeakReference(fragment)
+        override fun handleMessage(msg: Message) {
+            when (msg.what) {
+                GeneralConsts.SCANNER.MESSAGE_COVER_UPDATE_FINISHED -> {
+                    val idItem = msg.data.getInt("position")
+                    notifyDataSet(idItem)
+                }
+            }
+        }
+    }
+
+    private fun notifyDataSet(idItem: Int? = null) {
+        if (idItem != null)
+            mRecycleView.adapter?.notifyItemChanged(idItem)
         else
-            (mRecycleView.adapter as MangaLineCardAdapter).filter.filter(newText)
+            mRecycleView.adapter?.notifyDataSetChanged()
     }
 
     private fun updateList(list: ArrayList<Manga>) {
-        if (LibraryFragment.mGridType != LibraryType.LINE)
-            (mRecycleView.adapter as MangaGridCardAdapter).updateList(list)
-        else
-            (mRecycleView.adapter as MangaLineCardAdapter).updateList(list)
+       (mRecycleView.adapter as HistoryCardAdapter).updateList(list)
     }
 
     private fun observer() {
@@ -64,6 +110,5 @@ class HistoryFragment : Fragment() {
             updateList(it)
         })
     }
-
 
 }

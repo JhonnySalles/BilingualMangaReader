@@ -31,7 +31,7 @@ abstract class MangaDAO : DataBaseDAO<Manga> {
     abstract fun list(): List<Manga>
 
     @Query("SELECT * FROM " + DataBaseConsts.MANGA.TABLE_NAME + " WHERE " + DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS + " > :dateInitial ORDER BY " + DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS + " DESC")
-    abstract fun listHistory(dateInitial: LocalDateTime? = LocalDateTime.MIN): List<Manga>
+    abstract fun listHistory(dateInitial: LocalDateTime = LocalDateTime.MIN): List<Manga>
 
     @Query("SELECT * FROM " + DataBaseConsts.MANGA.TABLE_NAME + " WHERE " + DataBaseConsts.MANGA.COLUMNS.ID + " = :id")
     abstract fun get(id: Long): Manga
@@ -40,7 +40,7 @@ abstract class MangaDAO : DataBaseDAO<Manga> {
     abstract fun get(name: String): Manga
 
     @Query("SELECT * FROM " + DataBaseConsts.MANGA.TABLE_NAME + " WHERE " + DataBaseConsts.MANGA.COLUMNS.FILE_FOLDER + " = :folder ")
-    abstract fun listByFolder(folder: String?): List<Manga>
+    abstract fun listByFolder(folder: String): List<Manga>
 
     @Query("UPDATE " + DataBaseConsts.MANGA.TABLE_NAME + " SET " + DataBaseConsts.MANGA.COLUMNS.BOOK_MARK + " = :marker " + " WHERE " + DataBaseConsts.MANGA.COLUMNS.ID + " = :id ")
     abstract fun updateBookMark(id: Long, marker: Int)
@@ -49,10 +49,10 @@ abstract class MangaDAO : DataBaseDAO<Manga> {
     abstract fun updateLastAccess(id: Long, access: String)
 
     @Query("UPDATE " + DataBaseConsts.MANGA.TABLE_NAME + " SET " + DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS + " = :dateInitial, " + DataBaseConsts.MANGA.COLUMNS.BOOK_MARK + " = 0, " + DataBaseConsts.MANGA.COLUMNS.FAVORITE + " = false" + " WHERE " + DataBaseConsts.MANGA.COLUMNS.ID + " = :id ")
-    abstract fun clearHistory(dateInitial: LocalDateTime? = LocalDateTime.MIN)
+    abstract fun clearHistory(id: Long, dateInitial: LocalDateTime = LocalDateTime.MIN)
 
     @Query("UPDATE " + DataBaseConsts.MANGA.TABLE_NAME + " SET " + DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS + " = :dateInitial, " + DataBaseConsts.MANGA.COLUMNS.BOOK_MARK + " = 0, " + DataBaseConsts.MANGA.COLUMNS.FAVORITE + " = false")
-    abstract fun clearHistory(id: Long, dateInitial: LocalDateTime? = LocalDateTime.MIN)
+    abstract fun clearHistory(dateInitial: LocalDateTime = LocalDateTime.MIN)
 }
 
 

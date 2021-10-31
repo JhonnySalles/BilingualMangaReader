@@ -45,5 +45,5 @@
     <dimen name="floating_reader_scroll_max_height">200dp</dimen>
     <dimen name="floating_reader_scroll_max_width">300dp</dimen>
 
-    <dimen name="history_card_image">80dp</dimen>
+    <dimen name="history_card_image">70dp</dimen>
 </resources>
