@@ -72,7 +72,7 @@
         android:layout_gravity="top|start"
         android:layout_marginTop="0dp"
         android:background="@color/floatingButton"
-        android:src="@drawable/ic_expanded"
+        android:src="@drawable/ic_retracted"
         android:tint="@color/textPrimary"
         tools:layout_editor_absoluteY="0dp" />
 

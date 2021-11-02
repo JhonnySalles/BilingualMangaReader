@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Projeto/MangaReader/app/src/main/res/drawable/ic_minimize.xml" value="0.2203125" />
         <entry key="..\:/Projeto/MangaReader/app/src/main/res/drawable/ic_reader_mode.xml" value="0.2203125" />
         <entry key="..\:/Projeto/MangaReader/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Projeto/MangaReader/app/src/main/res/layout/activity_reader.xml" value="0.25" />

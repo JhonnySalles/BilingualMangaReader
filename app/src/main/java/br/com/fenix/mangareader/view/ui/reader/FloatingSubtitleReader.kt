@@ -5,10 +5,12 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.PixelFormat
+import android.graphics.drawable.Drawable
 import android.provider.Settings
 import android.text.method.LinkMovementMethod
 import android.view.*
 import android.widget.*
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatImageButton
 import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.model.entity.Page
@@ -94,6 +96,10 @@ class FloatingSubtitleReader constructor(private val context: Context) {
     private var mVocabularyItem = ArrayList<String>()
     private var mOriginalHeight: Int = 0
 
+    private var mBtnExpanded : AppCompatImageButton
+    private var mIconExpanded : Drawable?
+    private var mIconRetracted : Drawable?
+
     init {
         with(mFloatingView) {
             mSubTitleController = SubTitleController.getInstance(context)
@@ -119,8 +125,11 @@ class FloatingSubtitleReader constructor(private val context: Context) {
                 mScrollContent.smoothScrollTo(0, 0)
             }
 
-            this.findViewById<AppCompatImageButton>(R.id.nav_expanded)
-                .setOnClickListener {
+            mIconExpanded = AppCompatResources.getDrawable(context, R.drawable.ic_expanded)
+            mIconRetracted = AppCompatResources.getDrawable(context, R.drawable.ic_retracted)
+
+            mBtnExpanded = this.findViewById(R.id.nav_expanded)
+            mBtnExpanded.setOnClickListener {
                     if (mOriginalHeight == 0)
                         mOriginalHeight = mFloatingView.height
 
@@ -128,10 +137,12 @@ class FloatingSubtitleReader constructor(private val context: Context) {
                         val params = mFloatingView.layoutParams as WindowManager.LayoutParams
                         params.height = context.resources.getDimension(R.dimen.floating_reader_button_close).toInt()
                         mFloatingView.layoutParams = params
+                        mBtnExpanded.setImageDrawable(mIconExpanded)
                     } else {
                         val params = mFloatingView.layoutParams as WindowManager.LayoutParams
                         params.height = mOriginalHeight
                         mFloatingView.layoutParams = params
+                        mBtnExpanded.setImageDrawable(mIconRetracted)
                     }
 
                     windowManager?.apply {
