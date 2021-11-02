@@ -1,4 +1,4 @@
-package br.com.fenix.mangareader.view.adapter.library
+package br.com.fenix.mangareader.view.adapter.history
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory

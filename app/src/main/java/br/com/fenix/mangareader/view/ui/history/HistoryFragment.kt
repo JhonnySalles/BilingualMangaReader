@@ -1,15 +1,11 @@
 package br.com.fenix.mangareader.view.ui.history
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -18,13 +14,9 @@ import br.com.fenix.mangareader.R
 import br.com.fenix.mangareader.model.entity.Manga
 import br.com.fenix.mangareader.service.controller.ImageCoverController
 import br.com.fenix.mangareader.service.listener.MangaCardListener
-import br.com.fenix.mangareader.service.scanner.Scanner
 import br.com.fenix.mangareader.util.constants.GeneralConsts
-import br.com.fenix.mangareader.view.adapter.library.HistoryCardAdapter
-import br.com.fenix.mangareader.view.ui.library.LibraryFragment
-import br.com.fenix.mangareader.view.ui.reader.ReaderActivity
+import br.com.fenix.mangareader.view.adapter.history.HistoryCardAdapter
 import java.lang.ref.WeakReference
-import java.time.LocalDateTime
 import java.util.*
 
 class HistoryFragment : Fragment() {

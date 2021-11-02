@@ -16,12 +16,14 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
         id: Long?, title: String, subTitle: String,
         path: String, folder: String, name: String, type: String,
         pages: Int, bookMark: Int, favorite: Boolean,
-        dateCreate: LocalDateTime?, lastAccess: LocalDateTime?
+        dateCreate: LocalDateTime?, lastAccess: LocalDateTime?,
+        sort: LocalDateTime? = null
     ) : this(id, title, subTitle, path, folder, name, type, pages) {
         this.bookMark = bookMark
         this.favorite = favorite
         this.dateCreate = dateCreate
         this.lastAccess = lastAccess
+        this.sort = sort
     }
 
     @PrimaryKey(autoGenerate = true)
@@ -72,6 +74,9 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
 
     @Ignore
     var subTitles : List<SubTitle> = arrayListOf()
+
+    @Ignore
+    var sort: LocalDateTime? = null
 
     override fun toString(): String {
         return "Book(id=$id, title='$title', subTitle='$subTitle', pages=$pages, bookMark=$bookMark, type='$type', update=$update)"

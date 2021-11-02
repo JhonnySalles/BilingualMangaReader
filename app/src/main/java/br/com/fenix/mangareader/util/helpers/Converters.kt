@@ -2,7 +2,9 @@ package br.com.fenix.mangareader.util.helpers
 
 import android.graphics.Bitmap
 import androidx.room.TypeConverter
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
+import java.util.*
 
 class Converters {
 

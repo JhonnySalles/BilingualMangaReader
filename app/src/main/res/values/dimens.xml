@@ -46,4 +46,8 @@
     <dimen name="floating_reader_scroll_max_width">300dp</dimen>
 
     <dimen name="history_card_image">70dp</dimen>
+    <dimen name="history_title_size">18sp</dimen>
+    <dimen name="history_sub_title">15sp</dimen>
+
+    <dimen name="history_divider_title">20sp</dimen>
 </resources>

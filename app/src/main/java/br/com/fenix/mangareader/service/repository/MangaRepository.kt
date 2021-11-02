@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import br.com.fenix.mangareader.model.entity.Cover
 import br.com.fenix.mangareader.model.entity.Manga
+import br.com.fenix.mangareader.util.constants.DataBaseConsts
 import br.com.fenix.mangareader.util.constants.GeneralConsts
 
 class MangaRepository(context: Context) {
