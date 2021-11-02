@@ -125,13 +125,13 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             fragment.arguments = args
             return fragment
         }
+    }
 
-        private var mCurrentFragment: FrameLayout? = null
-        fun getCurrencyImageView(): PageImageView? {
-            if (mCurrentFragment == null)
-                return null
-            return mCurrentFragment?.findViewById(R.id.page_image_view) as PageImageView
-        }
+    private var mCurrentFragment: FrameLayout? = null
+    fun getCurrencyImageView(): PageImageView? {
+        if (mCurrentFragment == null)
+            return null
+        return mCurrentFragment?.findViewById(R.id.page_image_view) as PageImageView
     }
 
     private fun onRefresh() {
@@ -174,6 +174,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 if (mParse != null) {
                     mSubtitleController = SubTitleController.getInstance(requireContext())
                     mSubtitleController.getListChapter(mParse!!)
+                    mSubtitleController.mReaderFragment = this
                     mFileName = file.name
                     mCurrentPage = max(1, min(mCurrentPage, mParse!!.numPages()))
                     mComicHandler = MangaHandler(mParse)
@@ -338,6 +339,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
     }
 
     override fun onDestroy() {
+        mSubtitleController.mReaderFragment = null
         try {
             mParse?.destroy()
         } catch (e: Exception) {
@@ -452,6 +454,23 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 bm?.recycle()
             }
         }
+    }
+
+    fun loadImage(t: Target, position: Int) {
+        try {
+            mPicasso.load(mComicHandler.getPageUri(position))
+                .memoryPolicy(MemoryPolicy.NO_STORE)
+                .tag(requireActivity())
+                .resize(ReaderConsts.READER.MAX_PAGE_WIDTH, ReaderConsts.READER.MAX_PAGE_HEIGHT)
+                .centerInside()
+                .onlyScaleDown()
+                .transform(mViewModel.filters.value!!)
+                .into(t)
+        } catch (e: Exception) {
+            Log.e(GeneralConsts.TAG.LOG, "Error in open image: " + e.message)
+            Log.e(GeneralConsts.TAG.LOG, e.stackTraceToString())
+        }
+
     }
 
     fun loadImage(t: MyTarget) {

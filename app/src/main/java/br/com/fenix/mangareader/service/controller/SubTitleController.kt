@@ -2,7 +2,11 @@ package br.com.fenix.mangareader.service.controller
 
 import android.content.Context
 import android.graphics.*
+import android.graphics.drawable.Drawable
 import android.util.Log
+import android.view.View
+import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.collection.arraySetOf
 import androidx.lifecycle.LiveData
@@ -16,14 +20,18 @@ import br.com.fenix.mangareader.util.constants.GeneralConsts
 import br.com.fenix.mangareader.view.ui.reader.PageImageView
 import br.com.fenix.mangareader.view.ui.reader.ReaderFragment
 import com.google.gson.Gson
+import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.codec.digest.DigestUtils
 import java.io.InputStream
+import java.lang.ref.WeakReference
 import java.util.*
 
 class SubTitleController private constructor(private val context: Context) {
 
+    var mReaderFragment : ReaderFragment? = null
     private val mSubtitleRepository: SubTitleRepository = SubTitleRepository(context)
     private lateinit var mParse: Parse
     var mManga: Manga? = null
@@ -431,16 +439,26 @@ class SubTitleController private constructor(private val context: Context) {
     private var imageBackup: Bitmap? = null
     private var isDrawing = false
     fun drawSelectedText() {
-        if (pageSelected.value == null || pageSelected.value?.texts!!.isEmpty())
+        if (mReaderFragment == null || pageSelected.value == null || pageSelected.value?.texts!!.isEmpty())
             return
 
-        val view: PageImageView = ReaderFragment.getCurrencyImageView() ?: return
+        val view: PageImageView = mReaderFragment!!.getCurrencyImageView() ?: return
         if (isDrawing) {
             view.setImageBitmap(imageBackup)
             isDrawing = false
         } else {
-            val input = mParse.getPage(ReaderFragment.mCurrentPage)
-            imageBackup = BitmapFactory.decodeStream(input)
+            val target = MyTarget(view)
+            mReaderFragment!!.loadImage(target, ReaderFragment.mCurrentPage)
+        }
+    }
+
+    inner class MyTarget(layout: View) : Target {
+        private val mLayout: WeakReference<View> = WeakReference(layout)
+
+        override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
+            val layout = mLayout.get() ?: return
+            val iv = layout.findViewById<View>(R.id.page_image_view) as ImageView
+            imageBackup = bitmap
             if (imageBackup == null)
                 return
 
@@ -467,9 +485,18 @@ class SubTitleController private constructor(private val context: Context) {
                     paint
                 )
             }
-            view.setImageBitmap(image)
+            iv.setImageBitmap(image)
             isDrawing = true
         }
+
+        override fun onBitmapFailed(e: Exception, errorDrawable: Drawable?) {
+            Log.e(GeneralConsts.TAG.LOG, "${e.message}")
+        }
+
+        override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+
+        }
+
     }
 
     ///////////////////////// LANGUAGE ///////////////
