@@ -24,6 +24,7 @@ import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.apache.commons.codec.binary.Hex
 import org.apache.commons.codec.digest.DigestUtils
 import java.io.InputStream
 import java.lang.ref.WeakReference
@@ -255,7 +256,7 @@ class SubTitleController private constructor(private val context: Context) {
         pageNumber: Int
     ): SubTitle {
         val image: InputStream? = mParse.getPage(pageNumber)
-        val hash: String? = DigestUtils.md5Hex(image)
+        val hash: String? = String(Hex.encodeHex(DigestUtils.md5(image)))
         var pageName: String? = mParse.getPagePath(pageNumber)
 
         pageName = if (pageName!!.contains('/'))

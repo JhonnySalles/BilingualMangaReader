@@ -2,8 +2,8 @@ package br.com.fenix.mangareader.util.helpers
 
 import android.graphics.Bitmap
 import androidx.room.TypeConverter
+import br.com.fenix.mangareader.util.constants.GeneralConsts
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
 import java.util.*
 
 class Converters {
@@ -19,13 +19,17 @@ class Converters {
     }
 
     @TypeConverter
-    fun fromLocalDateTime(dateTime: String): LocalDateTime {
-        return LocalDateTime.parse(dateTime)
+    fun fromDate(dateTime: String?): Date? {
+        if (dateTime == null)
+            return null
+        return SimpleDateFormat(GeneralConsts.DEFAULT.DATE_TIME_PATTERN, Locale.getDefault()).parse(dateTime)
     }
 
     @TypeConverter
-    fun localDateTimeToString(dateTime: LocalDateTime): String {
-        return dateTime.toString()
+    fun localDateToString(dateTime: Date?): String? {
+        if (dateTime == null)
+            return null
+        return SimpleDateFormat(GeneralConsts.DEFAULT.DATE_TIME_PATTERN, Locale.getDefault()).format(dateTime);
     }
 
 }

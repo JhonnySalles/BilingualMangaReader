@@ -190,7 +190,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
         layoutParams = WindowManager.LayoutParams().apply {
             format = PixelFormat.TRANSLUCENT
             flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-            type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+            type = WindowManager.LayoutParams.TYPE_PHONE
             gravity = Gravity.CENTER
             width = WindowManager.LayoutParams.WRAP_CONTENT
             height = WindowManager.LayoutParams.WRAP_CONTENT

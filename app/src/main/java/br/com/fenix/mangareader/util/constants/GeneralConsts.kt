@@ -2,8 +2,8 @@ package br.com.fenix.mangareader.util.constants
 
 import android.content.Context
 import android.content.SharedPreferences
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import java.text.SimpleDateFormat
+import java.util.*
 
 class GeneralConsts private constructor() {
     companion object {
@@ -21,16 +21,16 @@ class GeneralConsts private constructor() {
             return mContext.getSharedPreferences(KEYS.PREFERENCE_NAME, Context.MODE_PRIVATE)
         }
 
-        fun formatterDate(dateTime: LocalDateTime): String {
+        fun formatterDate(dateTime: Date): String {
             val preferences = getSharedPreferences()
             val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, "yyyy-MM-dd")
-            return dateTime.format(DateTimeFormatter.ofPattern(pattern))
+            return SimpleDateFormat(pattern, Locale.getDefault()).format(dateTime)
         }
 
-        fun formatterDateTime(dateTime: LocalDateTime): String {
+        fun formatterDateTime(dateTime: Date): String {
             val preferences = getSharedPreferences()
             val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, "yyyy-MM-dd") + " hh:mm:ss"
-            return dateTime.format(DateTimeFormatter.ofPattern(pattern))
+            return SimpleDateFormat(pattern, Locale.getDefault()).format(dateTime)
         }
     }
 
@@ -100,6 +100,10 @@ class GeneralConsts private constructor() {
         const val MESSAGE_MANGA_UPDATE_FINISHED = 0
         const val MESSAGE_MANGA_UPDATED = 1
         const val MESSAGE_COVER_UPDATE_FINISHED = 2
+    }
+
+    object DEFAULT {
+        const val DATE_TIME_PATTERN = "yyyy-MM-dd hh:mm:ss"
     }
 
 }

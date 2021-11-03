@@ -33,7 +33,6 @@ import br.com.fenix.mangareader.view.adapter.library.MangaGridCardAdapter
 import br.com.fenix.mangareader.view.adapter.library.MangaLineCardAdapter
 import br.com.fenix.mangareader.view.ui.reader.ReaderActivity
 import java.lang.ref.WeakReference
-import java.time.LocalDateTime
 import java.util.*
 import kotlin.math.max
 
@@ -263,7 +262,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             override fun onClick(manga: Manga) {
                 val intent = Intent(context, ReaderActivity::class.java)
                 val bundle = Bundle()
-                manga.lastAccess = LocalDateTime.now()
+                manga.lastAccess = Calendar.getInstance().time
                 bundle.putString(GeneralConsts.KEYS.MANGA.NAME, manga.title)
                 bundle.putInt(GeneralConsts.KEYS.MANGA.MARK, manga.bookMark)
                 bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, manga)
@@ -293,7 +292,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                             notifyDataSet(position)
                         }
                         R.id.menu_book_clear -> {
-                            manga.lastAccess = LocalDateTime.MIN
+                            manga.lastAccess = Calendar.getInstance().time
                             manga.bookMark = 0
                             mViewModel.save(manga)
                             notifyDataSet(position)

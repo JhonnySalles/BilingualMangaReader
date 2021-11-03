@@ -313,8 +313,6 @@ class ReaderActivity : AppCompatActivity() {
                 mFloatingSubtitleReader.show()
             } else
                 startManageDrawOverlaysPermission()
-
-            //startActivity(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION))
         }
     }
 
