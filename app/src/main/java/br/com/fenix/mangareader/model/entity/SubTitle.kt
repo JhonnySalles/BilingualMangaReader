@@ -34,7 +34,7 @@ data class SubTitle(
     var path: String = "",
 
     @ColumnInfo(name = DataBaseConsts.SUBTITLES.COLUMNS.DATE_CREATE)
-    var dateCreate: LocalDateTime? = LocalDateTime.MIN,
+    var dateCreate: LocalDateTime? = LocalDateTime.now(),
 
     @Ignore
     var file: File = File(path),
@@ -54,7 +54,7 @@ data class SubTitle(
         pageKey: String = "",
         pageCount: Int = 0,
         path: String = "",
-        dateCreate: LocalDateTime? = LocalDateTime.MIN,
+        dateCreate: LocalDateTime? = LocalDateTime.now(),
     ) : this(
         id, id_manga, language, chapterKey, pageKey, pageCount, path, dateCreate,
         File(path)

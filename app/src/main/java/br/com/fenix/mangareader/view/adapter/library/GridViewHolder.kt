@@ -82,7 +82,7 @@ class GridViewHolder(itemView: View, private val listener: MangaCardListener) :
         mangaTitle.text = manga.title
 
         if (manga.subTitle.isEmpty()) {
-            val title = if (manga.lastAccess != null && manga.lastAccess != LocalDateTime.MIN)
+            val title = if (manga.lastAccess != null)
                 "${manga.bookMark} / ${manga.pages}  -  ${GeneralConsts.formatterDate(manga.lastAccess!!)}"
             else
                 "${manga.bookMark} / ${manga.pages}"

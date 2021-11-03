@@ -57,7 +57,7 @@ class LineViewHolder(itemView: View, private val listener: MangaCardListener) :
         mangaTitle.text = manga.title
 
         if (manga.subTitle.isEmpty()) {
-            val title = if (manga.lastAccess != null && manga.lastAccess != LocalDateTime.MIN)
+            val title = if (manga.lastAccess != null)
                 "${manga.bookMark} / ${manga.pages}  -  ${itemView.resources.getString(R.string.library_last_access)}: ${
                     GeneralConsts.formatterDate(
                         manga.lastAccess!!
