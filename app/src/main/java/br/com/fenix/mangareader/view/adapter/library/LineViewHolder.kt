@@ -13,13 +13,12 @@ import br.com.fenix.mangareader.model.entity.Manga
 import br.com.fenix.mangareader.service.controller.ImageCoverController
 import br.com.fenix.mangareader.service.listener.MangaCardListener
 import br.com.fenix.mangareader.util.constants.GeneralConsts
-import java.util.*
 
 class LineViewHolder(itemView: View, private val listener: MangaCardListener) :
     RecyclerView.ViewHolder(itemView) {
 
     companion object {
-        lateinit var mImageCover : Bitmap
+        lateinit var mImageCover: Bitmap
     }
 
     init {
@@ -57,7 +56,7 @@ class LineViewHolder(itemView: View, private val listener: MangaCardListener) :
         mangaTitle.text = manga.title
 
         if (manga.subTitle.isEmpty()) {
-            val title = if (manga.lastAccess != null && manga.lastAccess!!.time != Date().time)
+            val title = if (manga.lastAccess != null)
                 "${manga.bookMark} / ${manga.pages}  -  ${itemView.resources.getString(R.string.library_last_access)}: ${
                     GeneralConsts.formatterDate(
                         manga.lastAccess!!
