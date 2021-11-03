@@ -47,4 +47,8 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
+    fun updateLastAccess(manga: Manga) {
+        mMangaRepository.update(manga)
+    }
+
 }

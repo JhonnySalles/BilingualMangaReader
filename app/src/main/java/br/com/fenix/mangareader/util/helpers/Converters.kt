@@ -19,12 +19,17 @@ class Converters {
     }
 
     @TypeConverter
-    fun fromLocalDateTime(dateTime: String): LocalDateTime {
+    fun fromLocalDateTime(dateTime: String?): LocalDateTime? {
+        if (dateTime == null)
+            return null
         return LocalDateTime.parse(dateTime)
     }
 
     @TypeConverter
-    fun localDateTimeToString(dateTime: LocalDateTime): String {
+    fun localDateTimeToString(dateTime: LocalDateTime?): String? {
+        if (dateTime == null)
+            return null
+
         return dateTime.toString()
     }
 
