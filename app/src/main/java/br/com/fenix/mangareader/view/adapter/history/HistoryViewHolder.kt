@@ -29,7 +29,6 @@ class HistoryViewHolder(itemView: View, private val listener: MangaCardListener)
         val mangaTitle = itemView.findViewById<TextView>(R.id.history_text_title)
         val mangaSubTitle = itemView.findViewById<TextView>(R.id.history_sub_title)
         val cardView = itemView.findViewById<LinearLayout>(R.id.history_card)
-
         cardView.setOnClickListener { listener.onClick(manga) }
 
         if (manga.thumbnail != null && manga.thumbnail!!.image != null)
