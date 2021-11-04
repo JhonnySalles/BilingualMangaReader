@@ -51,7 +51,6 @@ class PopupSubtitleConfiguration : Fragment() {
         mSubtitleLanguageAutoComplete = root.findViewById(R.id.menu_autocomplete_subtitle_language)
 
         mSubTitleController = SubTitleController.getInstance(requireContext())
-        mSubTitleController.clearSubtitlesSelected()
 
         mSubtitleSelectedAutoComplete.setOnClickListener {
             mSubtitleSelectedAutoComplete.setText("", false)
@@ -97,7 +96,7 @@ class PopupSubtitleConfiguration : Fragment() {
 
         mLoadExternalSubtitleAutoComplete.setOnClickListener {
             mLoadExternalSubtitleAutoComplete.setText("")
-            mSubTitleController.clearSubtitlesSelected()
+            mSubTitleController.clearExternalSubtitlesSelected()
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                 addCategory(Intent.CATEGORY_OPENABLE)
                 type = "application/json"
