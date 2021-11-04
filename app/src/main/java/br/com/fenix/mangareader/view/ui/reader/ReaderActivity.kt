@@ -100,6 +100,8 @@ class ReaderActivity : AppCompatActivity() {
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             else
                 ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+
+            mBottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
         mBottomSheet = BottomSheetBehavior.from(mMenuPopup).apply {

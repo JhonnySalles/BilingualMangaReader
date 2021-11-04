@@ -515,12 +515,16 @@ class SubTitleController private constructor(private val context: Context) {
     }
 
     ///////////////////////// VOLUME ///////////////
-    fun clearSubtitlesSelected() {
+    fun clearExternalSubtitlesSelected() {
         isSelected = false
+        mChaptersKeys.value = mComboListInternal.keys.toTypedArray().sorted()
+        clearSubtitlesSelected()
+    }
+
+    fun clearSubtitlesSelected() {
         mChapterSelected.value = null
         mPageSelected.value = null
         mTextSelected.value = null
-        mChaptersKeys.value = mComboListInternal.keys.toTypedArray().sorted()
         mSelectedSubTitle.value?.language = Languages.JAPANESE
     }
 
