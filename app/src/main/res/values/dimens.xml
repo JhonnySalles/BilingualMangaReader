@@ -18,7 +18,7 @@
     <dimen name="manga_grid_card_layout_width_landscape_medium">130dp</dimen>
     <dimen name="manga_grid_card_layout_width_small">100dp</dimen>
     <dimen name="manga_grid_card_layout_height_small">150dp</dimen>
-    <dimen name="manga_grid_card_image_small">100dp</dimen>
+    <dimen name="manga_grid_card_image_small">150dp</dimen>
 
 
     <dimen name="manga_line_card_image">50dp</dimen>
