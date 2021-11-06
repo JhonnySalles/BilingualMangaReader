@@ -32,7 +32,7 @@ import java.util.*
 
 class SubTitleController private constructor(private val context: Context) {
 
-    var mReaderFragment : ReaderFragment? = null
+    var mReaderFragment: ReaderFragment? = null
     private val mSubtitleRepository: SubTitleRepository = SubTitleRepository(context)
     private lateinit var mParse: Parse
     var mManga: Manga? = null
@@ -187,8 +187,9 @@ class SubTitleController private constructor(private val context: Context) {
             return
         }
 
-        val image: InputStream? = mParse.getPage(currentPage)
-        val hash: String? = DigestUtils.md5Hex(image)
+        val image: InputStream = mParse.getPage(currentPage)
+        val hash = String(Hex.encodeHex(DigestUtils.md5(image)))
+
         var pageName: String? = mParse.getPagePath(currentPage)
 
         if (chapterSelected.value == null || pageName == null || pageName.isEmpty()) {
