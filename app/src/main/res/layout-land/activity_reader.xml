@@ -162,26 +162,15 @@
 
     <FrameLayout
         android:id="@+id/menu_popup"
-        android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/primary"
         android:fitsSystemWindows="true"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:paddingTop="5dp"
-        android:visibility="gone"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
-
-        <ImageView
-            android:id="@+id/menu_popup_touch"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|top"
-            android:contentDescription="@string/popup_reading_open"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_line_popup"
-            app:tint="@color/onSecondary" />
+        android:paddingTop="20dp"
+        android:layout_gravity="end">
 
         <ImageView
             android:id="@+id/menu_close"
