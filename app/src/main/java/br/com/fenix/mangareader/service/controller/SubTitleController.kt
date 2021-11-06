@@ -187,7 +187,7 @@ class SubTitleController private constructor(private val context: Context) {
         }
 
         val image: InputStream = mParse.getPage(currentPage)
-        val hash = String(Hex.encodeHex(DigestUtils.md5(image)))
+        val hash = DigestUtils.md2Hex(image)
 
         var pageName: String? = mParse.getPagePath(currentPage)
 
