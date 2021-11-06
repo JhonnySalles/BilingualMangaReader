@@ -42,9 +42,18 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         remove(obj)
     }
 
+    fun get(position: Int): Manga? {
+        return if (mListMangas.value != null) mListMangas.value!!.removeAt(position) else  null
+    }
+
     fun remove(manga: Manga) {
         if (mListMangas.value != null)
             mListMangas.value!!.remove(manga)
+    }
+
+    fun remove(position: Int) {
+        if (mListMangas.value != null)
+            mListMangas.value!!.removeAt(position)
     }
 
     fun update() {
