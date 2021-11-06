@@ -95,10 +95,11 @@ class FloatingSubtitleReader constructor(private val context: Context) {
     private var mVocabulary: Map<String, String> = mapOf()
     private var mVocabularyItem = ArrayList<String>()
     private var mOriginalHeight: Int = 0
+    private var mGestureDetector: GestureDetector
 
-    private var mBtnExpanded : AppCompatImageButton
-    private var mIconExpanded : Drawable?
-    private var mIconRetracted : Drawable?
+    private var mBtnExpanded: AppCompatImageButton
+    private var mIconExpanded: Drawable?
+    private var mIconRetracted: Drawable?
 
     init {
         with(mFloatingView) {
@@ -130,25 +131,25 @@ class FloatingSubtitleReader constructor(private val context: Context) {
 
             mBtnExpanded = this.findViewById(R.id.nav_expanded)
             mBtnExpanded.setOnClickListener {
-                    if (mOriginalHeight == 0)
-                        mOriginalHeight = mFloatingView.height
+                if (mOriginalHeight == 0)
+                    mOriginalHeight = mFloatingView.height
 
-                    if (mFloatingView.height == mOriginalHeight) {
-                        val params = mFloatingView.layoutParams as WindowManager.LayoutParams
-                        params.height = context.resources.getDimension(R.dimen.floating_reader_button_close).toInt()
-                        mFloatingView.layoutParams = params
-                        mBtnExpanded.setImageDrawable(mIconExpanded)
-                    } else {
-                        val params = mFloatingView.layoutParams as WindowManager.LayoutParams
-                        params.height = mOriginalHeight
-                        mFloatingView.layoutParams = params
-                        mBtnExpanded.setImageDrawable(mIconRetracted)
-                    }
-
-                    windowManager?.apply {
-                        updateViewLayout(mFloatingView, mFloatingView.layoutParams)
-                    }
+                if (mFloatingView.height == mOriginalHeight) {
+                    val params = mFloatingView.layoutParams as WindowManager.LayoutParams
+                    params.height = context.resources.getDimension(R.dimen.floating_reader_button_close).toInt()
+                    mFloatingView.layoutParams = params
+                    mBtnExpanded.setImageDrawable(mIconExpanded)
+                } else {
+                    val params = mFloatingView.layoutParams as WindowManager.LayoutParams
+                    params.height = mOriginalHeight
+                    mFloatingView.layoutParams = params
+                    mBtnExpanded.setImageDrawable(mIconRetracted)
                 }
+
+                windowManager?.apply {
+                    updateViewLayout(mFloatingView, mFloatingView.layoutParams)
+                }
+            }
 
             mSubtitleTitle = this.findViewById(R.id.txt_floating_title)
             mSubtitleContent = this.findViewById(R.id.txt_floating_content)
@@ -184,6 +185,12 @@ class FloatingSubtitleReader constructor(private val context: Context) {
             mSubtitleContent.movementMethod = LinkMovementMethod.getInstance()
         }
 
+        mGestureDetector = GestureDetector(context, ChangeTextTouchListener())
+        mSubtitleContent.setOnTouchListener { _, motionEvent ->
+            mGestureDetector.onTouchEvent(motionEvent)
+        }
+        mListPageVocabulary.setOnTouchListener { _, motionEvent -> mGestureDetector.onTouchEvent(motionEvent) }
+
         mSubtitleTitle.setOnTouchListener(onTouchListener)
         mFloatingView.setOnTouchListener(onTouchListener)
 
@@ -191,9 +198,23 @@ class FloatingSubtitleReader constructor(private val context: Context) {
             format = PixelFormat.TRANSLUCENT
             flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
             type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-            gravity = Gravity.CENTER
+            gravity = Gravity.TOP
             width = WindowManager.LayoutParams.WRAP_CONTENT
             height = WindowManager.LayoutParams.WRAP_CONTENT
+        }
+    }
+
+    inner class ChangeTextTouchListener : GestureDetector.SimpleOnGestureListener() {
+        override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
+            if (e2 != null && e1 != null) {
+                if (abs(e1.x - e2.x) > 200)
+                    if (abs(e2.x) > abs(e1.x))
+                        mSubTitleController.getBeforeText()
+                    else if (abs(e2.x) < abs(e1.x))
+                        mSubTitleController.getNextText()
+            }
+
+            return super.onFling(e1, e2, velocityX, velocityY)
         }
     }
 
