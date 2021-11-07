@@ -5,10 +5,12 @@
     <string name="action_positive">Sim</string>
     <string name="action_negative">Não</string>
     <string name="action_copy">Texto copiado: </string>
+    <string name="action_app_not_installed">O App necessário não está instalado</string>
 
     <!-- MENU -->
     <string name="menu_search">Procurar</string>
     <string name="menu_help">Ajuda</string>
+    <string name="menu_about">Sobre</string>
     <string name="menu_config">Configuração</string>
     <string name="menu_library">Biblioteca</string>
     <string name="menu_history">Histórico</string>
@@ -121,5 +123,18 @@
     <!-- HELP -->
     <string name="help_app_name">Bilingual Manga Reader</string>
     <string name="help_app_version">Versão do aplicativo</string>
+
+    <!-- ABOUT -->
+    <string name="about_app_name">Bilingual Manga Reader</string>
+    <string name="about_app_version">Versão do aplicativo</string>
+    <string name="about_app_rate_us">Avaliar agora</string>
+    <string name="about_app_shared">Compartilhar</string>
+    <string name="about_app_shared_and_rate_us">Avalie e recomende este aplicativo</string>
+    <string name="about_app_shared_and_rate_us_description">Por favor dê cinco estrelas para este aplicativo se você gostar dele, mande-nos sua opinião, ela será de grande ajuda. E caso desejar, compartilhe esse aplicativo com seus amigos.</string>
+    <string name="about_app_author">Autor</string>
+    <string name="about_app_contact">Contato</string>
+    <string name="about_app_contact_description">Entre em contato conosco e nos envie sugestões ou elogios sobre sua esperiência com o aplicativo.</string>
+    <string name="about_app_suggestion">Sugestão</string>
+    <string name="about_app_mail">E-Mail</string>
 
 </resources>
