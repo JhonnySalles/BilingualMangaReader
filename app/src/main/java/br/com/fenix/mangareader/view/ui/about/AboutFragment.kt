@@ -4,6 +4,8 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.Html
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,7 +63,7 @@ class AboutFragment : Fragment() {
             val message = ""
 
             val intent = Intent(Intent.ACTION_SEND)
-            intent.type = "text/plain"
+            intent.data = Uri.parse("mailto:$address")
             intent.putExtra(Intent.EXTRA_EMAIL, address)
             intent.putExtra(Intent.EXTRA_SUBJECT, subject)
             intent.putExtra(Intent.EXTRA_TEXT, message)
@@ -81,7 +83,7 @@ class AboutFragment : Fragment() {
             val message = ""
 
             val intent = Intent(Intent.ACTION_SEND)
-            intent.type = "text/plain"
+            intent.data = Uri.parse("mailto:$address")
             intent.putExtra(Intent.EXTRA_EMAIL, address)
             intent.putExtra(Intent.EXTRA_SUBJECT, subject)
             intent.putExtra(Intent.EXTRA_TEXT, message)
@@ -100,5 +102,10 @@ class AboutFragment : Fragment() {
             val intent = Intent(Intent.ACTION_VIEW, uri)
             startActivity(intent)
         }
+
+        val library = resources.getStringArray(R.array.about_app_library_content)
+        val txtLibrary = view.findViewById<TextView>(R.id.about_app_library)
+        txtLibrary.movementMethod = LinkMovementMethod.getInstance()
+        txtLibrary.text = library.joinToString("\r\n")
     }
 }
