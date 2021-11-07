@@ -116,6 +116,9 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         mViewModel.update()
         notifyDataSet()
+
+        if (mViewModel.isEmpty())
+            onRefresh()
     }
 
     override fun onPause() {

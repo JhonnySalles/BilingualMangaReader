@@ -120,4 +120,6 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
     fun updateLastAccess(manga: Manga) {
         mMangaRepository.update(manga)
     }
+
+    fun isEmpty() : Boolean = mListMangas.value == null || mListMangas.value!!.isEmpty()
 }
