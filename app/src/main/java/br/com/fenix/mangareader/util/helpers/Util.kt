@@ -149,7 +149,7 @@ class Util {
             var folder: String = path
 
             if (folder.contains("primary"))
-                folder = folder.replace("primary", "emulated/0" )
+                folder = folder.replaceFirst("primary", "emulated/0" )
 
             if (folder.contains("/tree"))
                 folder = folder.replace("/tree", "/storage").replace(":", "/")

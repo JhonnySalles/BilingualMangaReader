@@ -50,11 +50,11 @@ class HelpFragment : Fragment() {
         mLanguageSupportContent = view.findViewById(R.id.help_language_support_content)
         mLanguageSupportTitle = view.findViewById(R.id.help_language_support_title)
 
-        mLibraryContent.setOnClickListener { mScrollView.smoothScrollTo(mLibraryTitle.top, 0) }
-        mReaderContent.setOnClickListener { mScrollView.smoothScrollTo(mReaderTitle.top, 0) }
-        mSubtitleContent.setOnClickListener { mScrollView.smoothScrollTo(mSubtitleTitle.top, 0) }
-        mVocabularyContent.setOnClickListener { mScrollView.smoothScrollTo(mVocabularyTitle.top, 0) }
-        mKanjiContent.setOnClickListener { mScrollView.smoothScrollTo(mKanjiTitle.top, 0) }
-        mLanguageSupportContent.setOnClickListener { mScrollView.smoothScrollTo(mLanguageSupportTitle.top, 0) }
+        mLibraryContent.setOnClickListener { mScrollView.smoothScrollTo(0, mLibraryTitle.top) }
+        mReaderContent.setOnClickListener { mScrollView.smoothScrollTo(0, mReaderTitle.top) }
+        mSubtitleContent.setOnClickListener { mScrollView.smoothScrollTo(0, mSubtitleTitle.top) }
+        mVocabularyContent.setOnClickListener { mScrollView.smoothScrollTo(0, mVocabularyTitle.top) }
+        mKanjiContent.setOnClickListener { mScrollView.smoothScrollTo(0, mKanjiTitle.top) }
+        mLanguageSupportContent.setOnClickListener { mScrollView.smoothScrollTo(0, mLanguageSupportTitle.top) }
     }
 }
