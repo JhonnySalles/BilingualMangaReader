@@ -121,8 +121,47 @@
     <string name="history_today">Today</string>
 
     <!-- HELP -->
-    <string name="help_app_name">Bilingual Manga Reader</string>
-    <string name="help_app_version">Application version</string>
+    <string name="help_content">Content</string>
+    <string name="help_library_content">• Library</string>
+    <string name="help_library_title">Library</string>
+    <string name="help_reader_content">• Reader</string>
+    <string name="help_reader_title">Reader</string>
+    <string name="help_subtitle_content">• Subtitle</string>
+    <string name="help_subtitle_title">Subtitle</string>
+    <string name="help_vocabulary_content">• Vocabulary</string>
+    <string name="help_vocabulary_title">Vocabulary</string>
+    <string name="help_kanjis_content">• Kanjis</string>
+    <string name="help_kanjis_title">Kanjis</string>
+    <string name="help_languages_support_content">• Support idioms</string>
+    <string name="help_languages_support_title">Support idioms</string>
+
+    <string name="help_library_description_1">After configuring the library\'s main folder, the application will analyze the files in the informed folder, identifying the mangas/comics that have the extension such as cbr/rar, cbz/zip and tar.</string>
+    <string name="help_library_description_2">These files will then be displayed in list format and can be deleted or added to favorites.</string>
+    <string name="help_library_description_3">For better performance, a copy of the first page will be kept, which will be displayed as the cover, it will be necessary due to the limitation of rar/cbr files in using much of the computational resource available only for the display of a single page.</string>
+
+    <string name="help_reader_description_1">The reader has the ability to scroll between pages and move to a specific page. A bookmark of the page opened in the last reading will be stored in memory, which in turn will be loaded on opening.</string>
+    <string name="help_reader_description_2">It also has resources to read json files embedded in the file or external, which contain texts extracted from the pages.</string>
+
+    <string name="help_subtitle_description_1">The app is able to load properly formatted json files with texts that were previously extracted from the pages, along with the texts the file can also contain a list of vocabularies in which it can be recognized and located in the display.</string>
+    <string name="help_subtitle_description_2">For more information, please check the project page on github.</string>
+
+    <string name="help_vocabulary_description">The application uses the powerful feature provided by sudachi for word recognition within text. This makes it possible to locate the meaning of each word within a vocabulary list.</string>
+    <string name="help_kanji_description">The application has kanji recognition in which it queries an internal database which contains 3000 kanji with their main readings and meaning.</string>
+    <string name="help_languages_support_description">The application supports json files of english, portuguese and japanese languages.</string>
+
+    <!-- ABOUT -->
+    <string name="about_app_name">Bilingual Manga Reader</string>
+    <string name="about_app_version">Application version</string>
+    <string name="about_app_rate_us">Rate now</string>
+    <string name="about_app_shared">Shared</string>
+    <string name="about_app_shared_and_rate_us">Evalue and recommend this app</string>
+    <string name="about_app_shared_and_rate_us_description">Please give this app five stars if you like it, send us your opinion, it will be of great help. And if you wish, share this app with your friends.</string>
+    <string name="about_app_author">Author</string>
+    <string name="about_app_contact">Contact</string>
+    <string name="about_app_contact_description">Contact us and send you suggestions or praises about your experience with the app.</string>
+    <string name="about_app_suggestion">Suggestion</string>
+    <string name="about_app_mail">E-Mail</string>
+    <string name="about_app_library">Library\'s</string>
 
     <!-- ABOUT -->
     <string name="about_app_name">Bilingual Manga Reader</string>
