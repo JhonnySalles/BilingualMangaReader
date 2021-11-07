@@ -163,18 +163,4 @@
     <string name="about_app_mail">E-Mail</string>
     <string name="about_app_library">Library\'s</string>
 
-    <!-- ABOUT -->
-    <string name="about_app_name">Bilingual Manga Reader</string>
-    <string name="about_app_version">Application version</string>
-    <string name="about_app_rate_us">Rate now</string>
-    <string name="about_app_shared">Shared</string>
-    <string name="about_app_shared_and_rate_us">Evalue and recommend this app</string>
-    <string name="about_app_shared_and_rate_us_description">Please give this app five stars if you like it, send us your opinion, it will be of great help. And if you wish, share this app with your friends.</string>
-    <string name="about_app_author">Author</string>
-    <string name="about_app_contact">Contact</string>
-    <string name="about_app_contact_description">Contact us and send you suggestions or praises about your experience with the app.</string>
-    <string name="about_app_suggestion">Suggestion</string>
-    <string name="about_app_mail">E-Mail</string>
-
-
 </resources>
