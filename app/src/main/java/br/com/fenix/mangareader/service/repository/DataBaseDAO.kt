@@ -3,7 +3,7 @@ package br.com.fenix.mangareader.service.repository
 import androidx.room.*
 import br.com.fenix.mangareader.model.entity.*
 import br.com.fenix.mangareader.util.constants.DataBaseConsts
-import java.time.LocalDateTime
+import java.util.*
 
 interface DataBaseDAO<T> {
 
@@ -37,19 +37,19 @@ abstract class MangaDAO : DataBaseDAO<Manga> {
                 "        ${DataBaseConsts.MANGA.COLUMNS.BOOK_MARK}, ${DataBaseConsts.MANGA.COLUMNS.FAVORITE}, ${DataBaseConsts.MANGA.COLUMNS.DATE_CREATE}, ${DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS}, " +
                 "        ${DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS} AS sort " +
                 " FROM " + DataBaseConsts.MANGA.TABLE_NAME +
-                " WHERE " + DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS + " > :dateInitial " +
+                " WHERE " + DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS + " is not null " +
                 "UNION" +
                 " SELECT null AS ${DataBaseConsts.MANGA.COLUMNS.ID}, '' AS ${DataBaseConsts.MANGA.COLUMNS.TITLE}, " +
                 "        '' AS ${DataBaseConsts.MANGA.COLUMNS.SUB_TITLE}, '' AS ${DataBaseConsts.MANGA.COLUMNS.FILE_PATH}, '' AS ${DataBaseConsts.MANGA.COLUMNS.FILE_FOLDER}, " +
                 "        '' AS ${DataBaseConsts.MANGA.COLUMNS.FILE_NAME}, '' AS ${DataBaseConsts.MANGA.COLUMNS.FILE_TYPE}, 0 AS ${DataBaseConsts.MANGA.COLUMNS.PAGES}, " +
-                "        0 AS ${DataBaseConsts.MANGA.COLUMNS.BOOK_MARK}, 0 AS ${DataBaseConsts.MANGA.COLUMNS.FAVORITE}, '-999999999-01-01T00:00' AS ${DataBaseConsts.MANGA.COLUMNS.DATE_CREATE}, " +
+                "        0 AS ${DataBaseConsts.MANGA.COLUMNS.BOOK_MARK}, 0 AS ${DataBaseConsts.MANGA.COLUMNS.FAVORITE}, null AS ${DataBaseConsts.MANGA.COLUMNS.DATE_CREATE}, " +
                 "        Substr(${DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS}, 0, 12) || '00:00:00.000' AS ${DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS}, Substr(${DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS}, 0, 12) || '25:60:60.000' AS sort " +
                 " FROM  " + DataBaseConsts.MANGA.TABLE_NAME +
-                " WHERE " + DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS + " > :dateInitial " +
+                " WHERE " + DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS + " is not null " +
                 " GROUP  BY Substr(${DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS}, 0, 11)) " +
                 "ORDER  BY sort DESC "
     )
-    abstract fun listHistory(dateInitial: LocalDateTime = LocalDateTime.MIN): List<Manga>
+    abstract fun listHistory(): List<Manga>
 
     @Query("SELECT * FROM " + DataBaseConsts.MANGA.TABLE_NAME + " WHERE " + DataBaseConsts.MANGA.COLUMNS.ID + " = :id")
     abstract fun get(id: Long): Manga
@@ -66,11 +66,11 @@ abstract class MangaDAO : DataBaseDAO<Manga> {
     @Query("UPDATE " + DataBaseConsts.MANGA.TABLE_NAME + " SET " + DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS + " = :access " + " WHERE " + DataBaseConsts.MANGA.COLUMNS.ID + " = :id ")
     abstract fun updateLastAccess(id: Long, access: String)
 
-    @Query("UPDATE " + DataBaseConsts.MANGA.TABLE_NAME + " SET " + DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS + " = :dateInitial, " + DataBaseConsts.MANGA.COLUMNS.BOOK_MARK + " = 0, " + DataBaseConsts.MANGA.COLUMNS.FAVORITE + " = false" + " WHERE " + DataBaseConsts.MANGA.COLUMNS.ID + " = :id ")
-    abstract fun clearHistory(id: Long, dateInitial: LocalDateTime = LocalDateTime.MIN)
+    @Query("UPDATE " + DataBaseConsts.MANGA.TABLE_NAME + " SET " + DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS + " = null, " + DataBaseConsts.MANGA.COLUMNS.BOOK_MARK + " = 0, " + DataBaseConsts.MANGA.COLUMNS.FAVORITE + " = false" + " WHERE " + DataBaseConsts.MANGA.COLUMNS.ID + " = :id ")
+    abstract fun clearHistory(id: Long)
 
-    @Query("UPDATE " + DataBaseConsts.MANGA.TABLE_NAME + " SET " + DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS + " = :dateInitial, " + DataBaseConsts.MANGA.COLUMNS.BOOK_MARK + " = 0, " + DataBaseConsts.MANGA.COLUMNS.FAVORITE + " = false")
-    abstract fun clearHistory(dateInitial: LocalDateTime = LocalDateTime.MIN)
+    @Query("UPDATE " + DataBaseConsts.MANGA.TABLE_NAME + " SET " + DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS + " = null, " + DataBaseConsts.MANGA.COLUMNS.BOOK_MARK + " = 0, " + DataBaseConsts.MANGA.COLUMNS.FAVORITE + " = false")
+    abstract fun clearHistory()
 }
 
 

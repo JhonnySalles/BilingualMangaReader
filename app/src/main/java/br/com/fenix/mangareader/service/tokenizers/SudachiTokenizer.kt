@@ -2,14 +2,11 @@ package br.com.fenix.mangareader.service.tokenizers
 
 import android.content.Context
 import br.com.fenix.mangareader.util.helpers.FileUtil
-import com.worksap.nlp.sudachi.DictionaryFactory
-import com.worksap.nlp.sudachi.Morpheme
-import com.worksap.nlp.sudachi.Tokenizer
 
 
 class SudachiTokenizer(context: Context) {
 
-    private val SUDACHI_DATA_PATH = context.filesDir.absolutePath + "/sudachi"
+    /*private val SUDACHI_DATA_PATH = context.filesDir.absolutePath + "/sudachi"
     private val settings = """
         {
             "systemDict" : "${SUDACHI_DATA_PATH}/system_small.dic",
@@ -51,5 +48,5 @@ class SudachiTokenizer(context: Context) {
 
     fun tokenizeString(str: String): Iterable<List<Morpheme>> {
         return tokenizer!!.tokenizeSentences(str)
-    }
+    }*/
 }

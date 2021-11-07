@@ -2,6 +2,7 @@ package br.com.fenix.mangareader.service.scanner
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Handler
 import android.os.Message
 import android.os.Process
@@ -97,8 +98,8 @@ class Scanner {
             try {
                 val ctx: Context = MainActivity.getAppContext()
                 val preference: SharedPreferences = GeneralConsts.getSharedPreferences(ctx)
-                val libraryPath = preference.getString(GeneralConsts.KEYS.LIBRARY.FOLDER, "")
-
+                var libraryPath = preference.getString(GeneralConsts.KEYS.LIBRARY.FOLDER, "")
+                val teste = File(libraryPath)
                 if (libraryPath == "" || !File(libraryPath).exists()) return
 
                 val storage = Storage(ctx)

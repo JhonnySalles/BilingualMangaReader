@@ -173,6 +173,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 mParse = ParseFactory.create(file)
                 if (mParse != null) {
                     mSubtitleController = SubTitleController.getInstance(requireContext())
+                    mSubtitleController.clearExternalSubtitlesSelected()
                     mSubtitleController.getListChapter(mParse!!)
                     mSubtitleController.mReaderFragment = this
                     mFileName = file.name

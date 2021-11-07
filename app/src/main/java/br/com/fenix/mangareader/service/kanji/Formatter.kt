@@ -26,7 +26,7 @@ class Formatter {
     companion object KANJI {
         private var mRepository: KanjaxRepository? = null
         private val mPattern = Regex(".*[\u4E00-\u9FFF].*")
-        var mSudachiTokenizer: com.worksap.nlp.sudachi.Tokenizer? = null
+        //var mSudachiTokenizer: com.worksap.nlp.sudachi.Tokenizer? = null
         var mKuromojiTokenizer: com.atilika.kuromoji.ipadic.Tokenizer? = null
         private var JLPT: Map<String, Int>? = null
         private var ANOTHER: Int = 0
@@ -42,9 +42,9 @@ class Formatter {
                 GlobalScope.async { // launch a new coroutine and continue
                     try {
                         mRepository = KanjaxRepository(context)
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                             mSudachiTokenizer = br.com.fenix.mangareader.service.tokenizers.SudachiTokenizer(context).tokenizer
-                        else
+                        else*/
                             mKuromojiTokenizer = com.atilika.kuromoji.ipadic.Tokenizer()
 
                         val repository = KanjiRepository(context)
@@ -154,7 +154,7 @@ class Formatter {
             return textBuilder
         }
 
-        private fun sudachiTokenizer(text: String, vocabularyClick: (String) -> (Unit)): SpannableStringBuilder {
+        /*private fun sudachiTokenizer(text: String, vocabularyClick: (String) -> (Unit)): SpannableStringBuilder {
             val textBuilder = SpannableStringBuilder()
             textBuilder.append(text)
             for (t in mSudachiTokenizer!!.tokenize(com.worksap.nlp.sudachi.Tokenizer.SplitMode.C, text)) {
@@ -183,7 +183,7 @@ class Formatter {
             }
 
             return textBuilder
-        }
+        }*/
 
         fun generateFurigana(text: String, furigana: (CharSequence) -> (Unit), vocabularyClick: (String) -> (Unit)) {
             if (text.isEmpty()) {
@@ -191,10 +191,10 @@ class Formatter {
                 return
             }
 
-            val textBuilder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+             /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                 sudachiTokenizer(text, vocabularyClick)
-            else
-                kuromojiTokenizer(text, vocabularyClick)
+            else*/
+            val textBuilder = kuromojiTokenizer(text, vocabularyClick)
 
             furigana(textBuilder)
         }

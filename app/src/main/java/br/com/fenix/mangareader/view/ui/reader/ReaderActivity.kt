@@ -56,6 +56,7 @@ class ReaderActivity : AppCompatActivity() {
     private lateinit var mRepository: MangaRepository
     private lateinit var mManga: Manga
     private var mBookMark: Int = 0
+    private var isTabletOrLandscape : Boolean = false
 
     companion object {
         private lateinit var mPopupTab: TabLayout
@@ -86,12 +87,31 @@ class ReaderActivity : AppCompatActivity() {
         mNavReader = findViewById(R.id.nav_reader)
         mMenuPopup = findViewById(R.id.menu_popup)
 
+        if (findViewById<ImageView>(R.id.menu_popup_touch) == null)
+            isTabletOrLandscape = true
+        else {
+            mBottomSheet = BottomSheetBehavior.from(mMenuPopup).apply {
+                peekHeight = 195
+                this.state = BottomSheetBehavior.STATE_COLLAPSED
+                mBottomSheet = this
+            }
+            mBottomSheet.isDraggable = false
+
+            findViewById<ImageView>(R.id.menu_popup_touch).setOnClickListener {
+                if (mBottomSheet.state == BottomSheetBehavior.STATE_COLLAPSED)
+                    mBottomSheet.state = BottomSheetBehavior.STATE_EXPANDED
+                else
+                    mBottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
+            }
+        }
+
         findViewById<ImageView>(R.id.menu_close).setOnClickListener {
-            mMenuPopup.visibility = View.INVISIBLE
+            mMenuPopup.visibility = View.GONE
         }
         findViewById<ImageView>(R.id.menu_floating_touch).setOnClickListener { menuFloat() }
         findViewById<Button>(R.id.btn_popup_subtitle).setOnClickListener {
-            mBottomSheet.state = BottomSheetBehavior.STATE_EXPANDED
+            if (!isTabletOrLandscape)
+                mBottomSheet.state = BottomSheetBehavior.STATE_EXPANDED
             mMenuPopup.visibility = View.VISIBLE
         }
         findViewById<Button>(R.id.btn_popup_open_floating).setOnClickListener { menuFloat() }
@@ -100,20 +120,6 @@ class ReaderActivity : AppCompatActivity() {
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             else
                 ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-        }
-
-        mBottomSheet = BottomSheetBehavior.from(mMenuPopup).apply {
-            peekHeight = 195
-            this.state = BottomSheetBehavior.STATE_COLLAPSED
-            mBottomSheet = this
-        }
-        mBottomSheet.isDraggable = false
-
-        findViewById<ImageView>(R.id.menu_popup_touch).setOnClickListener {
-            if (mBottomSheet.state == BottomSheetBehavior.STATE_COLLAPSED)
-                mBottomSheet.state = BottomSheetBehavior.STATE_EXPANDED
-            else
-                mBottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
         mPopupTab = findViewById(R.id.popup_tab)
@@ -313,8 +319,6 @@ class ReaderActivity : AppCompatActivity() {
                 mFloatingSubtitleReader.show()
             } else
                 startManageDrawOverlaysPermission()
-
-            //startActivity(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION))
         }
     }
 

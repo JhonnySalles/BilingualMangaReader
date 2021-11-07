@@ -1,5 +1,6 @@
 package br.com.fenix.mangareader.view.ui.history
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -16,6 +17,7 @@ import br.com.fenix.mangareader.service.controller.ImageCoverController
 import br.com.fenix.mangareader.service.listener.MangaCardListener
 import br.com.fenix.mangareader.util.constants.GeneralConsts
 import br.com.fenix.mangareader.view.adapter.history.HistoryCardAdapter
+import br.com.fenix.mangareader.view.ui.reader.ReaderActivity
 import java.lang.ref.WeakReference
 import java.util.*
 
@@ -42,7 +44,15 @@ class HistoryFragment : Fragment() {
         mRecycleView = root.findViewById(R.id.rv_history)
         mListener = object : MangaCardListener {
             override fun onClick(manga: Manga) {
-
+                val intent = Intent(context, ReaderActivity::class.java)
+                val bundle = Bundle()
+                manga.lastAccess = Calendar.getInstance().time
+                bundle.putString(GeneralConsts.KEYS.MANGA.NAME, manga.title)
+                bundle.putInt(GeneralConsts.KEYS.MANGA.MARK, manga.bookMark)
+                bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, manga)
+                intent.putExtras(bundle)
+                context?.startActivity(intent)
+                mViewModel.updateLastAccess(manga)
             }
 
             override fun onClickLong(manga: Manga, view: View, position: Int) {

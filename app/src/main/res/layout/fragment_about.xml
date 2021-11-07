@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/onPrimary"
+    android:fitsSystemWindows="true"
+    tools:context=".view.ui.about.AboutFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="center|top"
+            android:contentDescription="@string/about_app_name"
+            android:src="@mipmap/app_icon" />
+
+        <!-- Title, secondary and supporting text -->
+        <TextView
+            android:id="@+id/about_app_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="5dp"
+            android:text="@string/about_app_name"
+            android:textColor="@color/textPrimary"
+            android:textSize="@dimen/about_app_name" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin_bottom"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/about_app_version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:text="@string/about_app_version"
+                    android:textColor="@color/textPrimary"
+                    android:textSize="@dimen/about_content_size" />
+
+                <TextView
+                    android:id="@+id/about_app_version_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:textColor="@color/onSecondary"
+                    android:textSize="@dimen/about_content_size" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin"
+                    android:background="@color/secondary"
+                    app:dividerInsetEnd="16dp"
+                    app:dividerInsetStart="16dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:text="@string/about_app_author"
+                    android:textColor="@color/onSecondary"
+                    android:textSize="@dimen/about_title_size" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:text="@string/about_app_author_name"
+                    android:textColor="@color/textPrimary"
+                    android:textSize="@dimen/about_content_size" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin"
+                    android:background="@color/secondary"
+                    app:dividerInsetEnd="16dp"
+                    app:dividerInsetStart="16dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:text="@string/about_app_shared_and_rate_us"
+                    android:textColor="@color/onSecondary"
+                    android:textSize="@dimen/about_title_size" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:text="@string/about_app_shared_and_rate_us_description"
+                    android:textColor="@color/textPrimary"
+                    android:textSize="@dimen/about_content_size" />
+
+                <GridLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingBottom="5dp"
+                    android:stretchMode="columnWidth">
+
+                    <Button
+                        android:id="@+id/about_btn_rate_us"
+                        style="@style/Widget.MaterialComponents.Button.Icon"
+                        android:layout_width="@dimen/about_button_width_big"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="@string/about_app_rate_us"
+                        android:textColor="@color/textPrimary"
+                        android:textSize="@dimen/about_button_text_size"
+                        app:backgroundTint="@color/onSecondary"
+                        app:icon="@drawable/ic_rate_us"
+                        app:iconGravity="start"
+                        app:iconTint="@color/textPrimary" />
+
+                    <Button
+                        android:id="@+id/about_btn_shared"
+                        style="@style/Widget.MaterialComponents.Button.Icon"
+                        android:layout_width="@dimen/about_button_width_big"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="@string/about_app_shared"
+                        android:textColor="@color/textPrimary"
+                        android:textSize="@dimen/about_button_text_size"
+                        app:backgroundTint="@color/onSecondary"
+                        app:icon="@drawable/ic_shared"
+                        app:iconTint="@color/textPrimary" />
+                </GridLayout>
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin"
+                    android:background="@color/secondary"
+                    app:dividerInsetEnd="16dp"
+                    app:dividerInsetStart="16dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:text="@string/about_app_contact"
+                    android:textColor="@color/onSecondary"
+                    android:textSize="@dimen/about_title_size" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:text="@string/about_app_contact_description"
+                    android:textColor="@color/textPrimary"
+                    android:textSize="@dimen/about_content_size" />
+
+
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:columnCount="2"
+                    android:orientation="horizontal"
+                    android:paddingBottom="5dp"
+                    android:stretchMode="columnWidth">
+
+                    <Button
+                        android:id="@+id/about_btn_suggestion"
+                        style="@style/Widget.MaterialComponents.Button.Icon"
+                        android:layout_width="@dimen/about_button_width"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="@string/about_app_suggestion"
+                        android:textColor="@color/textPrimary"
+                        android:textSize="@dimen/about_button_text_size"
+                        app:backgroundTint="@color/onSecondary"
+                        app:icon="@drawable/ic_suggestion"
+                        app:iconGravity="start"
+                        app:iconTint="@color/textPrimary" />
+
+                    <Button
+                        android:id="@+id/about_btn_email"
+                        style="@style/Widget.MaterialComponents.Button.Icon"
+                        android:layout_width="@dimen/about_button_width"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="@string/about_app_mail"
+                        android:textColor="@color/textPrimary"
+                        android:textSize="@dimen/about_button_text_size"
+                        app:backgroundTint="@color/onSecondary"
+                        app:icon="@drawable/ic_mail"
+                        app:iconTint="@color/textPrimary" />
+
+                    <Button
+                        android:id="@+id/about_btn_github"
+                        style="@style/Widget.MaterialComponents.Button.Icon"
+                        android:layout_width="@dimen/about_button_width"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:text="@string/about_app_github"
+                        android:textAllCaps="false"
+                        android:textColor="@color/textPrimary"
+                        android:textSize="@dimen/about_button_text_size"
+                        app:backgroundTint="@color/onSecondary"
+                        app:icon="@drawable/ic_web_page"
+                        app:iconTint="@color/textPrimary" />
+                </GridLayout>
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin"
+                    android:background="@color/secondary"
+                    app:dividerInsetEnd="16dp"
+                    app:dividerInsetStart="16dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:text="@string/about_app_library"
+                    android:textColor="@color/onSecondary"
+                    android:textSize="@dimen/about_title_size" />
+
+                <TextView
+                    android:id="@+id/about_app_library"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autoLink="all"
+                    android:linksClickable="true"
+                    android:paddingTop="5dp"
+                    android:textColor="@color/textPrimary" />
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+</FrameLayout>

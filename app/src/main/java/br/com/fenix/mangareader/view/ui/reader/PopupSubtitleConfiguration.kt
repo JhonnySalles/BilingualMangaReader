@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.MimeTypeMap
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
@@ -51,7 +52,6 @@ class PopupSubtitleConfiguration : Fragment() {
         mSubtitleLanguageAutoComplete = root.findViewById(R.id.menu_autocomplete_subtitle_language)
 
         mSubTitleController = SubTitleController.getInstance(requireContext())
-        mSubTitleController.clearSubtitlesSelected()
 
         mSubtitleSelectedAutoComplete.setOnClickListener {
             mSubtitleSelectedAutoComplete.setText("", false)
@@ -97,10 +97,11 @@ class PopupSubtitleConfiguration : Fragment() {
 
         mLoadExternalSubtitleAutoComplete.setOnClickListener {
             mLoadExternalSubtitleAutoComplete.setText("")
-            mSubTitleController.clearSubtitlesSelected()
+            mSubTitleController.clearExternalSubtitlesSelected()
+            val jsonType = MimeTypeMap.getSingleton().getMimeTypeFromExtension("json") ?: "application/octet-stream"
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                 addCategory(Intent.CATEGORY_OPENABLE)
-                type = "application/json"
+                type = jsonType
             }
             startActivityForResult(intent, 200)
         }
@@ -124,6 +125,7 @@ class PopupSubtitleConfiguration : Fragment() {
                 resultData?.data?.also { uri ->
                     try {
                         val path = Util.normalizeFilePath(uri.path.toString())
+                        if (!path.endsWith(".json")) return
                         val inputStream: InputStream = File(path).inputStream()
                         val inputString = inputStream.bufferedReader().use { it.readText() }
                         mLoadExternalSubtitleAutoComplete.setText(path)

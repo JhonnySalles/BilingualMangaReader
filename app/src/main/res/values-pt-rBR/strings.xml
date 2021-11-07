@@ -5,10 +5,12 @@
     <string name="action_positive">Sim</string>
     <string name="action_negative">Não</string>
     <string name="action_copy">Texto copiado: </string>
+    <string name="action_app_not_installed">O App necessário não está instalado</string>
 
     <!-- MENU -->
     <string name="menu_search">Procurar</string>
     <string name="menu_help">Ajuda</string>
+    <string name="menu_about">Sobre</string>
     <string name="menu_config">Configuração</string>
     <string name="menu_library">Biblioteca</string>
     <string name="menu_history">Histórico</string>
@@ -119,7 +121,47 @@
     <string name="history_today">Hoje</string>
 
     <!-- HELP -->
-    <string name="help_app_name">Bilingual Manga Reader</string>
-    <string name="help_app_version">Versão do aplicativo</string>
+    <string name="help_content">Conteúdo</string>
+    <string name="help_library_content">• Biblioteca</string>
+    <string name="help_library_title">Biblioteca</string>
+    <string name="help_reader_content">• Leitor</string>
+    <string name="help_reader_title">Leitor</string>
+    <string name="help_subtitle_content">• Legendas</string>
+    <string name="help_subtitle_title">Legendas</string>
+    <string name="help_vocabulary_content">• Vocabulário</string>
+    <string name="help_vocabulary_title">Vocabulário</string>
+    <string name="help_kanjis_content">• Kanjis</string>
+    <string name="help_kanjis_title">Kanjis</string>
+    <string name="help_languages_support_content">• Idiomas suportados</string>
+    <string name="help_languages_support_title">Idiomas suportados</string>
+
+    <string name="help_library_description_1">Após realizar a configuração da pasta principal da bibioteca, o aplicativo irá fazer uma analise nos arquivos na pasta informada, identificando os mangas/comics que tenham a extensão como cbr/rar, cbz/zip e tar.</string>
+    <string name="help_library_description_2">Estes arquivos serão então exibidos em formato de lista e poderá ser excluido ou adicionado aos favoritos.</string>
+    <string name="help_library_description_3">Para melhor desempenho, será mantido uma cópia da primeira página, no qual será exibida como capa, será necessário devido a limitação de arquivos rar/cbr em utilizar muito do recurso computacional disponível apenas para a exibição de uma única página.</string>
+
+    <string name="help_reader_description_1">O leitor possui recursos de rolagem entre as páginas e movimentação para uma página específica. Será armazenado em memória uma marcação da página aberta na ultima leitura, que por sua vez será carregado na abertura.</string>
+    <string name="help_reader_description_2">Também possui recursos para realizar a leitura de arquivos json embutidos no arquivo ou externo, no qual contém textos extraidos das páginas.</string>
+
+    <string name="help_subtitle_description_1">O aplicativo é capaz de carregar arquivos de json devidamente formatado com textos que foram previamente extraidos das páginas, junto com os textos o arquivo pode também conter uma lista de vocabulários no qual poderá ser reconhecido e localizado na exibição.</string>
+    <string name="help_subtitle_description_2">Para maiores informações, favor verificar a página do projeto no github.</string>
+
+    <string name="help_vocabulary_description">O aplicativo utiliza o poderoso recurso disponibilizado pelo sudachi para reconhecimento de palavras dentro do texto. Com isso é possível localizar dentro de uma lista de vocabulário o significado de cada palavra.</string>
+    <string name="help_kanji_description">O aplicativo possui reconhecimento de kanjis no qual consulta em um banco de dados interno no qual contém 3000 kanjis com suas principais leituras e significado.</string>
+    <string name="help_languages_support_description">O aplicativo suporta arquivos json de linguagens inglês, português e japonês.</string>
+
+
+    <!-- ABOUT -->
+    <string name="about_app_name">Bilingual Manga Reader</string>
+    <string name="about_app_version">Versão do aplicativo</string>
+    <string name="about_app_rate_us">Avaliar agora</string>
+    <string name="about_app_shared">Compartilhar</string>
+    <string name="about_app_shared_and_rate_us">Avalie e recomende este aplicativo</string>
+    <string name="about_app_shared_and_rate_us_description">Por favor dê cinco estrelas para este aplicativo se você gostar dele, mande-nos sua opinião, ela será de grande ajuda. E caso desejar, compartilhe esse aplicativo com seus amigos.</string>
+    <string name="about_app_author">Autor</string>
+    <string name="about_app_contact">Contato</string>
+    <string name="about_app_contact_description">Entre em contato conosco e nos envie sugestões ou elogios sobre sua esperiência com o aplicativo.</string>
+    <string name="about_app_suggestion">Sugestão</string>
+    <string name="about_app_mail">E-Mail</string>
+    <string name="about_app_library">Bibliotecas</string>
 
 </resources>

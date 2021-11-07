@@ -213,7 +213,9 @@ class ConfigFragment : Fragment() {
 
         var folder = ""
         if (data != null && resultCode == RESULT_OK) {
-            folder = Util.normalizeFilePath(data.data?.path.toString())
+            data.data?.also { uri ->
+                folder = Util.normalizeFilePath(uri.path.toString())
+            }
 
             if (!Storage.isPermissionGranted(requireContext()))
                 Storage.takePermission(requireContext(), requireActivity())
