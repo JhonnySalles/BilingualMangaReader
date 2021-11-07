@@ -14,6 +14,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
 import br.com.fenix.mangareader.util.constants.GeneralConsts
 import br.com.fenix.mangareader.view.ui.configuration.ConfigFragment
+import br.com.fenix.mangareader.view.ui.help.AboutFragment
 import br.com.fenix.mangareader.view.ui.help.HelpFragment
 import br.com.fenix.mangareader.view.ui.history.HistoryFragment
 import br.com.fenix.mangareader.view.ui.library.LibraryFragment
@@ -74,6 +75,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .replace(R.id.content_root, ConfigFragment()).commit()
             R.id.menu_help -> fragmentManager.beginTransaction()
                 .replace(R.id.content_root, HelpFragment())
+                .commit()
+            R.id.menu_about -> fragmentManager.beginTransaction()
+                .replace(R.id.content_root, AboutFragment())
                 .commit()
             R.id.menu_history -> fragmentManager.beginTransaction()
                 .replace(R.id.content_root, HistoryFragment())

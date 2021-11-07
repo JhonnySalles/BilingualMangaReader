@@ -30,5 +30,12 @@
             android:iconTint="@color/white"
             android:orderInCategory="100"
             android:title="@string/menu_help" />
+
+        <item
+            android:id="@+id/menu_about"
+            android:icon="@drawable/ic_about"
+            android:iconTint="@color/white"
+            android:orderInCategory="100"
+            android:title="@string/menu_about" />
     </group>
 </menu>
