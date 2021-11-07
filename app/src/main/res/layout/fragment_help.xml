@@ -1,53 +1,259 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/onPrimary"
+    android:fitsSystemWindows="true"
     tools:context=".view.ui.help.HelpFragment">
 
-    <LinearLayout
+    <ScrollView
+        android:id="@+id/help_scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="10dp">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/menu_popup_touch"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="center|top"
-            android:contentDescription="@string/help_app_name"
-            android:src="@mipmap/app_icon" />
-
-        <!-- Title, secondary and supporting text -->
-        <TextView
-            android:id="@+id/help_app_name"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingTop="5dp"
-            android:text="@string/help_app_name"
-            android:textColor="@color/textPrimary"
-            android:textSize="@dimen/manga_grid_title_size" />
+            android:layout_marginTop="@dimen/margin"
+            android:layout_marginBottom="@dimen/margin_bottom"
+            android:orientation="vertical"
+            android:padding="10dp">
 
-        <TextView
-            android:id="@+id/help_app_version"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="15dp"
-            android:text="@string/help_app_version"
-            android:textColor="@color/textPrimary"
-            android:textSize="@dimen/manga_grid_title_size" />
+            <TextView
+                android:id="@+id/help_content_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:text="@string/help_content"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/help_title_size" />
 
-        <TextView
-            android:id="@+id/help_app_version_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="5dp"
-            android:textColor="@color/onSecondary"
-            android:textSize="@dimen/manga_grid_title_size" />
+            <TextView
+                android:id="@+id/help_library_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_library_content"
+                android:textColor="@color/onSecondary"
+                android:textSize="@dimen/help_content_size" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/help_reader_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_reader_content"
+                android:textColor="@color/onSecondary"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                android:id="@+id/help_subtitle_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_subtitle_content"
+                android:textColor="@color/onSecondary"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                android:id="@+id/help_vocabulary_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_vocabulary_content"
+                android:textColor="@color/onSecondary"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                android:id="@+id/help_kanjis_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_kanjis_content"
+                android:textColor="@color/onSecondary"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                android:id="@+id/help_language_support_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_languages_support_content"
+                android:textColor="@color/onSecondary"
+                android:textSize="@dimen/help_content_size" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin"
+                android:background="@color/onSecondary"
+                app:dividerInsetEnd="16dp"
+                app:dividerInsetStart="16dp" />
+
+            <TextView
+                android:id="@+id/help_library_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="@string/help_library_title"
+                android:textColor="@color/onSecondary"
+                android:textSize="@dimen/help_title_size" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_library_description_1"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_library_description_2"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_library_description_3"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/help_content_size" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin"
+                android:background="@color/secondary"
+                app:dividerInsetEnd="16dp"
+                app:dividerInsetStart="16dp" />
+
+            <TextView
+                android:id="@+id/help_reader_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="@string/help_reader_title"
+                android:textColor="@color/onSecondary"
+                android:textSize="@dimen/help_title_size" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_reader_description_1"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_reader_description_2"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/help_content_size" />
+
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin"
+                android:background="@color/secondary"
+                app:dividerInsetEnd="16dp"
+                app:dividerInsetStart="16dp" />
+
+            <TextView
+                android:id="@+id/help_subtitle_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="@string/help_subtitle_title"
+                android:textColor="@color/onSecondary"
+                android:textSize="@dimen/help_title_size" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_subtitle_description_1"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_subtitle_description_2"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/help_content_size" />
+
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin"
+                android:background="@color/secondary"
+                app:dividerInsetEnd="16dp"
+                app:dividerInsetStart="16dp" />
+
+            <TextView
+                android:id="@+id/help_vocabulary_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="@string/help_vocabulary_title"
+                android:textColor="@color/onSecondary"
+                android:textSize="@dimen/help_title_size" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_vocabulary_description"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/help_content_size" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin"
+                android:background="@color/secondary"
+                app:dividerInsetEnd="16dp"
+                app:dividerInsetStart="16dp" />
+
+            <TextView
+                android:id="@+id/help_kanjis_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="@string/help_kanjis_title"
+                android:textColor="@color/onSecondary"
+                android:textSize="@dimen/help_title_size" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_kanji_description"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/help_content_size" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin"
+                android:background="@color/secondary"
+                app:dividerInsetEnd="16dp"
+                app:dividerInsetStart="16dp" />
+
+            <TextView
+                android:id="@+id/help_language_support_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="@string/help_languages_support_title"
+                android:textColor="@color/onSecondary"
+                android:textSize="@dimen/help_title_size" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_languages_support_description"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/help_content_size" />
+
+        </LinearLayout>
+    </ScrollView>
 
 </FrameLayout>

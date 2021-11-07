@@ -5,19 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/onPrimary"
+    android:fitsSystemWindows="true"
     tools:context=".view.ui.about.AboutFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="10dp">
+        android:orientation="vertical">
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_gravity="center|top"
-            android:contentDescription="@string/help_app_name"
+            android:contentDescription="@string/about_app_name"
             android:src="@mipmap/app_icon" />
 
         <!-- Title, secondary and supporting text -->
@@ -29,7 +29,7 @@
             android:paddingTop="5dp"
             android:text="@string/about_app_name"
             android:textColor="@color/textPrimary"
-            android:textSize="@dimen/manga_grid_title_size" />
+            android:textSize="@dimen/about_app_name" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -40,7 +40,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin"
                 android:layout_marginBottom="@dimen/margin_bottom"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="10dp">
 
                 <TextView
                     android:id="@+id/about_app_version"
@@ -49,7 +50,7 @@
                     android:paddingTop="15dp"
                     android:text="@string/about_app_version"
                     android:textColor="@color/textPrimary"
-                    android:textSize="@dimen/manga_grid_title_size" />
+                    android:textSize="@dimen/about_content_size" />
 
                 <TextView
                     android:id="@+id/about_app_version_number"
@@ -58,7 +59,7 @@
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
                     android:textColor="@color/onSecondary"
-                    android:textSize="@dimen/manga_grid_title_size" />
+                    android:textSize="@dimen/about_content_size" />
 
                 <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
@@ -74,7 +75,7 @@
                     android:paddingTop="5dp"
                     android:text="@string/about_app_author"
                     android:textColor="@color/onSecondary"
-                    android:textSize="@dimen/manga_grid_title_size" />
+                    android:textSize="@dimen/about_title_size" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -82,7 +83,7 @@
                     android:paddingTop="5dp"
                     android:text="@string/about_app_author_name"
                     android:textColor="@color/textPrimary"
-                    android:textSize="@dimen/manga_grid_title_size" />
+                    android:textSize="@dimen/about_content_size" />
 
                 <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
@@ -98,7 +99,7 @@
                     android:paddingTop="5dp"
                     android:text="@string/about_app_shared_and_rate_us"
                     android:textColor="@color/onSecondary"
-                    android:textSize="@dimen/manga_grid_title_size" />
+                    android:textSize="@dimen/about_title_size" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -106,7 +107,7 @@
                     android:paddingTop="5dp"
                     android:text="@string/about_app_shared_and_rate_us_description"
                     android:textColor="@color/textPrimary"
-                    android:textSize="@dimen/manga_grid_title_size" />
+                    android:textSize="@dimen/about_content_size" />
 
                 <GridLayout
                     android:layout_width="fill_parent"
@@ -158,7 +159,7 @@
                     android:paddingTop="5dp"
                     android:text="@string/about_app_contact"
                     android:textColor="@color/onSecondary"
-                    android:textSize="@dimen/manga_grid_title_size" />
+                    android:textSize="@dimen/about_title_size" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -166,7 +167,7 @@
                     android:paddingTop="5dp"
                     android:text="@string/about_app_contact_description"
                     android:textColor="@color/textPrimary"
-                    android:textSize="@dimen/manga_grid_title_size" />
+                    android:textSize="@dimen/about_content_size" />
 
 
                 <GridLayout
@@ -219,6 +220,31 @@
                         app:icon="@drawable/ic_web_page"
                         app:iconTint="@color/textPrimary" />
                 </GridLayout>
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin"
+                    android:background="@color/secondary"
+                    app:dividerInsetEnd="16dp"
+                    app:dividerInsetStart="16dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:text="@string/about_app_library"
+                    android:textColor="@color/onSecondary"
+                    android:textSize="@dimen/about_title_size" />
+
+                <TextView
+                    android:id="@+id/about_app_library"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autoLink="all"
+                    android:linksClickable="true"
+                    android:paddingTop="5dp"
+                    android:textColor="@color/textPrimary" />
 
             </LinearLayout>
         </ScrollView>
