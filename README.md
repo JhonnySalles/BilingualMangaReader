@@ -44,6 +44,7 @@ Também irá salvar algumas preferências e o progresso e tem suporte a furigana
 ## Json processado
 
 Caso tenha alguma dúvida sobre como processar o json favor entrar em contato. Em breve estarei disponibilizando as legendas que já processadas.
+
 [Legendas do manga de exemplo.](https://drive.google.com/drive/folders/1RGVVoyrLfT6qZO9mYChkmWPc1Gm0s3YJ?usp=sharing)
 
 ### Estrutura da classe do arquivo de legenda
