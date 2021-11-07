@@ -10,7 +10,8 @@
 <p align="center">
  <a href="#Sobre">Sobre</a> •
  <a href="#Bibliotecas-utilizadas">Bibliotecas utilizadas</a> • 
- <a href="#Estrutura-da-classe do arquivo de legenda">Estrutura do arquivo de legenda</a> • 
+ <a href="#Json-processado">Json processado</a> • 
+ <a href="#Estrutura-da-classe-do-arquivo-de-legenda">Estrutura do arquivo de legenda</a> • 
  <a href="#Histórico-de-Release">Histórico de Release</a> • 
  <a href="#Features">Features</a> • 
  <a href="#Contribuindo">Contribuindo</a> • 
@@ -40,9 +41,14 @@ Também irá salvar algumas preferências e o progresso e tem suporte a furigana
 </ul>
 
 
+## Json processado
+
+Caso tenha alguma dúvida sobre como processar o json favor entrar em contato. Em breve estarei disponibilizando as legendas que já processadas.
+
+
 ### Estrutura da classe do arquivo de legenda
 
-O aplicativo é também compatível com legendas extraidas e pré processadas com o programa [MangaExtractor](https://github.com/JhonnySalles/MangaExtractor), onde após exportar para json as legendas com o formato abaixo, é possível carrega-los tanto imbutido no arquivo de manga (rar/zip), como também importado um arquivo de json solto.
+O aplicativo é também compatível com legendas extraidas e pré processadas com o programa [MangaExtractor](https://github.com/JhonnySalles/MangaExtractor), onde após exportar para json as legendas com o formato abaixo, é possível carrega-los tanto embutido no arquivo de manga (rar/zip/tar), como também importado um arquivo de json solto localizado em alguma pasta no celular.
 
     List<Class> capitulos          # Lista de classes de capitulos
     ├── id
@@ -89,6 +95,7 @@ O aplicativo é também compatível com legendas extraidas e pré processadas co
 
 - [X] Abertura de arquivos cbr/rar
 - [X] Abertura de arquivos cbz/zip
+- [X] Abertura de arquivos Tar
 - [X] Leitor com o minimo de recursos para visualização do manga
 - [X] Listar arquivos na pasta de biblioteca
 - [X] Guardar informações sobre progresso
@@ -98,22 +105,25 @@ O aplicativo é também compatível com legendas extraidas e pré processadas co
 - [X] Impressão na imagem das coordenadas de texto extraido para melhor localizar a legenda
 - [X] Reconhecimento de furigana do texto em japonês
 - [X] Reconhecimento do nivel jlpt do kanji
-- [ ] Abertura de arquivos Tar
-- [ ] Reconhecimento de pastas como um manga a ser aberto
-- [ ] Ajustes no brilho e cores da imagem
+- [X] Ajustes no brilho e cores da imagem
+- [X] Melhorias e ajuste da interface
+- [X] Implementação de lista de histórico
+- [X] Utilização de vocabulário
+- [X] Significado do kanji
+- [X] Favoritar o kanji para estudo posterior
+- [X] Interface para modo tablet
+- [X] Localizar no vocabulário na ao toque na palavra
+- [X] Troca das legendas entre idiomas selecionados (devido a diferenças de paginas entre versões pode não localizar de forma satisfatória)
 - [ ] Luz azul para leitura norturna
-- [ ] Melhorias e ajuste da interface
-- [ ] Implementação de lista de favoritos
-- [ ] Implementação de lista de histórico
-- [ ] Utilização de vocabulário
-- [ ] Significado do kanji
-- [ ] Favoritar o kanji para estudo posterior
 - [ ] Favoritar vocabulário para estudo posterior
+- [ ] Adição de dicionarios japonês
+- [ ] Exportar vocabularios ao Anki
+- [ ] Localizar a legenda pela cordenada do texto
 
 
 ## Contribuindo
 
-1. Fork (<https://github.com/JhonnySalles/MangaExtractor/fork>)
+1. Fork (<https://github.com/JhonnySalles/BilingualMangaReader/fork>)
 2. Crie sua branch de recurso (`git checkout -b feature/fooBar`)
 3. Faça o commit com suas alterações (`git commit -am 'Add some fooBar'`)
 4. Realize o push de sua branch (`git push origin feature/fooBar`)
@@ -140,19 +150,28 @@ O aplicativo é também compatível com legendas extraidas e pré processadas co
 
 ![Biblioteca](https://i.imgur.com/roLmu9C.png)
 
-![Leitor](https://i.imgur.com/KpbuMy7.png)
+![Leitor](https://i.imgur.com/r4hhAzj.jpg)
 
-> Carregamento das legendas
+![Leitor](https://i.imgur.com/Awwcjyc.jpg)
 
-![Legenda em português](https://i.imgur.com/9ru1amK.png)
 
-![Texto flutuante](https://i.imgur.com/nTHFhCo.png)
+> Recursos
 
-![Imagem ampliada](https://i.imgur.com/TRaMZaS.png)
+![Popup flutuante](https://i.imgur.com/dIuQO9N.jpg)
 
-![Lista de legendas](https://i.imgur.com/tQkadpu.png)
+![Localização do texto reconhecido com ocr](https://i.imgur.com/fMavbfI.jpg)
 
-![Legenda em japonês com as coordenadas impressas](https://i.imgur.com/hCbKhuP.png)
+![Informações da legenda](https://i.imgur.com/t7LR4PV.jpg)
 
-![Coordenadas dos textos](https://i.imgur.com/c6nqt87.png)
+![Informações do kanji](https://i.imgur.com/j0Wzpsv.jpg)
 
+![Informações do kanji](https://i.imgur.com/js2wlIb.jpg)
+
+![Vocabulário](https://i.imgur.com/xG1jfYr.jpg)
+
+
+> Estrutura do arquivo recomendada
+
+![Estrutura de pasta](https://i.imgur.com/EZdlHGV.png)
+
+> Recomendo embutir a legenda no arquivo e separar as pastas por capitulo para facilitar a localização da legenda correta quando não for possível o aplicativo encontrar a pagina correspondente.
