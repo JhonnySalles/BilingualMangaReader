@@ -61,10 +61,10 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
     var favorite: Boolean = false
 
     @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.DATE_CREATE)
-    var dateCreate: LocalDateTime? = LocalDateTime.MIN
+    var dateCreate: LocalDateTime? = LocalDateTime.now()
 
     @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS)
-    var lastAccess: LocalDateTime? = LocalDateTime.MIN
+    var lastAccess: LocalDateTime? = null
 
     @Ignore
     var thumbnail: Cover? = null

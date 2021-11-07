@@ -1,5 +1,6 @@
 package br.com.fenix.mangareader.view.ui.library
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -18,6 +19,7 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import br.com.fenix.mangareader.R
@@ -36,6 +38,13 @@ import java.lang.ref.WeakReference
 import java.time.LocalDateTime
 import java.util.*
 import kotlin.math.max
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import android.R.attr.name
+import androidx.documentfile.provider.DocumentFile
+
+import android.R.attr.name
+import androidx.core.app.ActivityCompat
+import java.io.File
 
 
 class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
@@ -259,6 +268,8 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         mRefreshLayout.setOnRefreshListener(this)
         mRefreshLayout.isEnabled = true
 
+        ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(mRecycleView)
+
         mListener = object : MangaCardListener {
             override fun onClick(manga: Manga) {
                 val intent = Intent(context, ReaderActivity::class.java)
@@ -306,9 +317,8 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                                     .setPositiveButton(
                                         R.string.action_positive
                                     ) { _, _ ->
-                                        manga.file.delete()
-                                        mViewModel.delete(manga)
-                                        notifyDataSet(position)
+                                        deleteFile(manga)
+                                        notifyDataSet()
                                     }
                                     .setNegativeButton(
                                         R.string.action_negative
@@ -328,6 +338,10 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         if (!Storage.isPermissionGranted(requireContext()))
             Storage.takePermission(requireContext(), requireActivity())
+
+        ActivityCompat.requestPermissions(requireActivity(),
+            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE),
+            PackageManager.PERMISSION_GRANTED)
 
         generateLayout()
         setIsRefreshing(true)
@@ -372,7 +386,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 LibraryType.GRID_MEDIUM -> if (isLandscape) resources.getDimension(R.dimen.manga_grid_card_layout_width_landscape_medium)
                     .toInt() else resources.getDimension(R.dimen.manga_grid_card_layout_width_medium)
                     .toInt()
-                LibraryType.GRID_SMALL -> if (isLandscape) resources.getDimension(R.dimen.manga_grid_card_layout_height_small)
+                LibraryType.GRID_SMALL -> if (isLandscape) resources.getDimension(R.dimen.manga_grid_card_layout_width_small)
                     .toInt()
                 else resources.getDimension(R.dimen.manga_grid_card_layout_width).toInt()
                 else -> resources.getDimension(R.dimen.manga_grid_card_layout_width).toInt()
@@ -435,6 +449,30 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         if (!Scanner.getInstance().isRunning()) {
             setIsRefreshing(true)
             Scanner.getInstance().scanLibrary()
+        }
+    }
+
+    private var itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+        override fun onMove(
+            recyclerView: RecyclerView,
+            viewHolder: ViewHolder, target: ViewHolder
+        ): Boolean {
+            return false
+        }
+
+        override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
+            deleteFile(mViewModel.get(viewHolder.adapterPosition))
+            notifyDataSet()
+        }
+    }
+
+    private fun deleteFile(manga : Manga?) {
+        if (manga?.file != null ) {
+            mViewModel.delete(manga)
+            if (manga.file.exists()) {
+                val isDeleted = manga.file.delete()
+                Log.i(GeneralConsts.TAG.LOG, "File deleted ${manga.name}: $isDeleted")
+            }
         }
     }
 

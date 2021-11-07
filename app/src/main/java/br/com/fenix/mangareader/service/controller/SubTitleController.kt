@@ -24,6 +24,7 @@ import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.apache.commons.codec.binary.Hex
 import org.apache.commons.codec.digest.DigestUtils
 import java.io.InputStream
 import java.lang.ref.WeakReference
@@ -31,7 +32,7 @@ import java.util.*
 
 class SubTitleController private constructor(private val context: Context) {
 
-    var mReaderFragment : ReaderFragment? = null
+    var mReaderFragment: ReaderFragment? = null
     private val mSubtitleRepository: SubTitleRepository = SubTitleRepository(context)
     private lateinit var mParse: Parse
     var mManga: Manga? = null
@@ -186,8 +187,9 @@ class SubTitleController private constructor(private val context: Context) {
             return
         }
 
-        val image: InputStream? = mParse.getPage(currentPage)
-        val hash: String? = DigestUtils.md5Hex(image)
+        val image: InputStream = mParse.getPage(currentPage)
+        val hash = String(Hex.encodeHex(DigestUtils.md5(image)))
+
         var pageName: String? = mParse.getPagePath(currentPage)
 
         if (chapterSelected.value == null || pageName == null || pageName.isEmpty()) {
@@ -412,10 +414,12 @@ class SubTitleController private constructor(private val context: Context) {
                 }
 
                 if (mSelectedSubTitle.value?.pageCount != pageNumber) {
+                    var differ = pageNumber - mSelectedSubTitle.value?.pageCount!!
+                    if (differ == 0) differ = 1
                     val run = if (mSelectedSubTitle.value?.pageCount!! < pageNumber)
-                        getNextSelectPage()
+                        getNextSelectPage(differ)
                     else
-                        getBeforeSelectPage(false)
+                        getBeforeSelectPage(false, differ * -1)
 
                     if (!run) {
                         if (mSelectedSubTitle.value?.pageCount!! < pageNumber)
@@ -515,12 +519,16 @@ class SubTitleController private constructor(private val context: Context) {
     }
 
     ///////////////////////// VOLUME ///////////////
-    fun clearSubtitlesSelected() {
+    fun clearExternalSubtitlesSelected() {
         isSelected = false
+        mChaptersKeys.value = mComboListInternal.keys.toTypedArray().sorted()
+        clearSubtitlesSelected()
+    }
+
+    fun clearSubtitlesSelected() {
         mChapterSelected.value = null
         mPageSelected.value = null
         mTextSelected.value = null
-        mChaptersKeys.value = mComboListInternal.keys.toTypedArray().sorted()
         mSelectedSubTitle.value?.language = Languages.JAPANESE
     }
 
@@ -595,14 +603,14 @@ class SubTitleController private constructor(private val context: Context) {
         }
     }
 
-    fun getNextSelectPage(): Boolean {
+    fun getNextSelectPage(differ: Int = 1): Boolean {
         if (chapterSelected.value == null)
             return true
 
         val index: Int =
             if (mSelectedSubTitle.value?.pageKey!!.isNotEmpty())
                 mPagesKeys.value!!.indexOf(mSelectedSubTitle.value?.pageKey!!)
-                    .plus(1) else 0
+                    .plus(differ) else 0
 
         return if (mListPages.size > index && mListPages.containsKey(mPagesKeys.value!![index])) {
             setPage(false, mListPages[mPagesKeys.value!![index]])
@@ -611,14 +619,14 @@ class SubTitleController private constructor(private val context: Context) {
             false
     }
 
-    private fun getBeforeSelectPage(lastText: Boolean): Boolean {
+    private fun getBeforeSelectPage(lastText: Boolean, differ: Int = 1): Boolean {
         if (chapterSelected.value == null)
             return true
 
         val index: Int =
             if (mSelectedSubTitle.value?.pageKey!!.isNotEmpty()) mPagesKeys.value!!.indexOf(
                 mSelectedSubTitle.value?.pageKey!!
-            ).minus(1) else 0
+            ).minus(differ) else 0
 
         return if (index >= 0 && mListPages.containsKey(mPagesKeys.value!![index])) {
             setPage(lastText, mListPages[mPagesKeys.value!![index]])

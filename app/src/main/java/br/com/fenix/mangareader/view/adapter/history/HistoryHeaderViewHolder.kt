@@ -1,7 +1,5 @@
 package br.com.fenix.mangareader.view.adapter.history
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView

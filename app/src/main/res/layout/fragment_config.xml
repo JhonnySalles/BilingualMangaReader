@@ -70,6 +70,7 @@
                 android:layout_marginTop="32dp"
                 android:hint="@string/config_text_library_folder"
                 android:textColorHint="@color/textPrimary"
+                app:endIconMode="clear_text"
                 app:boxBackgroundColor="@color/primary"
                 app:boxStrokeColor="@color/onSecondary"
                 app:placeholderTextColor="@color/textPrimary"
