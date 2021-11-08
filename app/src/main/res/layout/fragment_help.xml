@@ -117,6 +117,16 @@
                 android:textColor="@color/textPrimary"
                 android:textSize="@dimen/help_content_size" />
 
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:background="@color/primaryVariant"
+                android:scaleType="centerCrop"
+                android:layout_gravity="center"
+                app:srcCompat="@mipmap/tutorial_library"
+                />
+
             <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -179,6 +189,16 @@
                 android:text="@string/help_subtitle_description_2"
                 android:textColor="@color/textPrimary"
                 android:textSize="@dimen/help_content_size" />
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:background="@color/primaryVariant"
+                android:scaleType="centerCrop"
+                android:layout_gravity="center"
+                app:srcCompat="@mipmap/import_screen"
+                />
 
 
             <com.google.android.material.divider.MaterialDivider
