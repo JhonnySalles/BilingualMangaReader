@@ -62,5 +62,6 @@
 
     <dimen name="help_title_size">18sp</dimen>
     <dimen name="help_content_size">12sp</dimen>
+    <dimen name="help_image_width">200dp</dimen>
 
 </resources>

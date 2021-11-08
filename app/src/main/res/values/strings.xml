@@ -145,7 +145,7 @@
     <string name="help_reader_description_2">It also has resources to read json files embedded in the file or external, which contain texts extracted from the pages.</string>
 
     <string name="help_subtitle_description_1">The app is able to load properly formatted json files with texts that were previously extracted from the pages, along with the texts the file can also contain a list of vocabularies in which it can be recognized and located in the display.</string>
-    <string name="help_subtitle_description_2">For more information, please check the project page on github.</string>
+    <string name="help_subtitle_description_2">The main screen of subtitles will be the import, where it will show the chapters that contain the file and a json file with the subtitles can also be imported.</string>
 
     <string name="help_vocabulary_description">The application uses the powerful feature provided by sudachi for word recognition within text. This makes it possible to locate the meaning of each word within a vocabulary list.</string>
     <string name="help_kanji_description">The application has kanji recognition in which it queries an internal database which contains 3000 kanji with their main readings and meaning.</string>

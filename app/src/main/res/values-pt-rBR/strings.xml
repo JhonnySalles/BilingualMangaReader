@@ -139,11 +139,11 @@
     <string name="help_library_description_2">Estes arquivos serão então exibidos em formato de lista e poderá ser excluido ou adicionado aos favoritos.</string>
     <string name="help_library_description_3">Para melhor desempenho, será mantido uma cópia da primeira página, no qual será exibida como capa, será necessário devido a limitação de arquivos rar/cbr em utilizar muito do recurso computacional disponível apenas para a exibição de uma única página.</string>
 
-    <string name="help_reader_description_1">O leitor possui recursos de rolagem entre as páginas e movimentação para uma página específica. Será armazenado em memória uma marcação da página aberta na ultima leitura, que por sua vez será carregado na abertura.</string>
+    <string name="help_reader_description_1">O leitor possui recursos de rolagem entre as páginas e movimentação para uma página específica. Será armazenado em memória uma marcação da página aberta na última leitura, que por sua vez será carregado na abertura.</string>
     <string name="help_reader_description_2">Também possui recursos para realizar a leitura de arquivos json embutidos no arquivo ou externo, no qual contém textos extraidos das páginas.</string>
 
     <string name="help_subtitle_description_1">O aplicativo é capaz de carregar arquivos de json devidamente formatado com textos que foram previamente extraidos das páginas, junto com os textos o arquivo pode também conter uma lista de vocabulários no qual poderá ser reconhecido e localizado na exibição.</string>
-    <string name="help_subtitle_description_2">Para maiores informações, favor verificar a página do projeto no github.</string>
+    <string name="help_subtitle_description_2">A tela principal das legendas será a importação, onde irá mostrar os capítulos que contem o arquivo e também poderá ser importado um arquivo de json com as legendas.</string>
 
     <string name="help_vocabulary_description">O aplicativo utiliza o poderoso recurso disponibilizado pelo sudachi para reconhecimento de palavras dentro do texto. Com isso é possível localizar dentro de uma lista de vocabulário o significado de cada palavra.</string>
     <string name="help_kanji_description">O aplicativo possui reconhecimento de kanjis no qual consulta em um banco de dados interno no qual contém 3000 kanjis com suas principais leituras e significado.</string>
