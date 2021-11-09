@@ -60,6 +60,10 @@
     <dimen name="about_button_width_big">180dp</dimen>
     <dimen name="about_button_width_tablet">220dp</dimen>
 
+    <dimen name="help_scroll_up_width">40dp</dimen>
+    <dimen name="help_scroll_up_image_width">30dp</dimen>
+    <dimen name="help_button_example_width">40dp</dimen>
+    <dimen name="help_subtitle_size">16sp</dimen>
     <dimen name="help_title_size">18sp</dimen>
     <dimen name="help_content_size">12sp</dimen>
     <dimen name="help_image_width">200dp</dimen>

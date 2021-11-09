@@ -56,6 +56,30 @@
                 android:textSize="@dimen/help_content_size" />
 
             <TextView
+                android:id="@+id/help_subtitle_import_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_subtitle_import_content"
+                android:textColor="@color/onSecondary"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                android:id="@+id/help_subtitle_data_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_subtitle_data_content"
+                android:textColor="@color/onSecondary"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                android:id="@+id/help_subtitle_vocabulary_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_subtitle_vocabulary_content"
+                android:textColor="@color/onSecondary"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
                 android:id="@+id/help_vocabulary_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -120,12 +144,12 @@
             <ImageView
                 android:layout_width="@dimen/help_image_width"
                 android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
                 android:adjustViewBounds="true"
                 android:background="@color/primaryVariant"
                 android:scaleType="centerCrop"
-                android:layout_gravity="center"
-                app:srcCompat="@mipmap/tutorial_library"
-                />
+                app:srcCompat="@mipmap/tutorial_library" />
 
             <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"
@@ -155,6 +179,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_reader_description_2"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/help_content_size" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_reader_description_3"
                 android:textColor="@color/textPrimary"
                 android:textSize="@dimen/help_content_size" />
 
@@ -190,16 +222,281 @@
                 android:textColor="@color/textPrimary"
                 android:textSize="@dimen/help_content_size" />
 
+            <TextView
+                android:id="@+id/help_subtitle_import_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="@string/help_subtitle_import_title"
+                android:textColor="@color/onSecondary"
+                android:textSize="@dimen/help_subtitle_size" />
+
             <ImageView
                 android:layout_width="@dimen/help_image_width"
                 android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
                 android:adjustViewBounds="true"
                 android:background="@color/primaryVariant"
                 android:scaleType="centerCrop"
-                android:layout_gravity="center"
-                app:srcCompat="@mipmap/import_screen"
-                />
+                app:srcCompat="@mipmap/tutorial_import" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_subtitle_description_external_subtitle"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/help_content_size" />
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:background="@color/primaryVariant"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_choice_json" />
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:background="@color/primaryVariant"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_choice_json_selected" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_subtitle_description_chapters"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/help_content_size" />
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:background="@color/primaryVariant"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_choice_json_option" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_subtitle_description_translate"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                android:id="@+id/help_subtitle_data_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="@string/help_subtitle_data_title"
+                android:textColor="@color/onSecondary"
+                android:textSize="@dimen/help_subtitle_size" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_subtitle_data"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/help_content_size" />
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:background="@color/primaryVariant"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_subtitle" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_subtitle_data_page"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_subtitle_data_button"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/help_content_size" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="@dimen/margin"
+                android:gravity="center|start"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/help_button_example_width"
+                    android:layout_height="@dimen/help_button_example_width"
+                    android:layout_margin="@dimen/margin"
+                    android:adjustViewBounds="true"
+                    android:background="@color/primaryVariant"
+                    android:scaleType="center"
+                    app:backgroundTint="@color/primary"
+                    app:srcCompat="@drawable/ic_translate"
+                    app:tint="@color/textPrimary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/help_subtitle_data_button_translate"
+                    android:textColor="@color/textPrimary"
+                    android:textSize="@dimen/help_content_size" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="@dimen/margin"
+                android:gravity="center|start"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/help_button_example_width"
+                    android:layout_height="@dimen/help_button_example_width"
+                    android:layout_margin="@dimen/margin"
+                    android:adjustViewBounds="true"
+                    android:background="@color/primaryVariant"
+                    android:scaleType="center"
+                    app:backgroundTint="@color/primary"
+                    app:srcCompat="@drawable/ic_draw_text"
+                    app:tint="@color/textPrimary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/help_subtitle_data_button_draw"
+                    android:textColor="@color/textPrimary"
+                    android:textSize="@dimen/help_content_size" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:background="@color/primaryVariant"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_draw" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:gravity="center|start"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/help_button_example_width"
+                    android:layout_height="@dimen/help_button_example_width"
+                    android:layout_margin="@dimen/margin"
+                    android:adjustViewBounds="true"
+                    android:background="@color/primaryVariant"
+                    android:scaleType="center"
+                    app:backgroundTint="@color/primary"
+                    app:srcCompat="@drawable/ic_refresh"
+                    app:tint="@color/textPrimary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/help_subtitle_data_button_find"
+                    android:textColor="@color/textPrimary"
+                    android:textSize="@dimen/help_content_size" />
+            </LinearLayout>
+
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:background="@color/primaryVariant"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_search" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:gravity="center|start"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/help_button_example_width"
+                    android:layout_height="@dimen/help_button_example_width"
+                    android:layout_margin="@dimen/margin"
+                    android:adjustViewBounds="true"
+                    android:background="@color/primaryVariant"
+                    android:scaleType="center"
+                    app:backgroundTint="@color/primary"
+                    app:srcCompat="@drawable/ic_navigate_before"
+                    app:tint="@color/textPrimary" />
+
+                <ImageView
+                    android:layout_width="@dimen/help_button_example_width"
+                    android:layout_height="@dimen/help_button_example_width"
+                    android:layout_marginRight="@dimen/margin"
+                    android:adjustViewBounds="true"
+                    android:background="@color/primaryVariant"
+                    android:scaleType="center"
+                    app:backgroundTint="@color/primary"
+                    app:srcCompat="@drawable/ic_navigate_next"
+                    app:tint="@color/textPrimary" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/help_subtitle_data_button_next_before"
+                    android:textColor="@color/textPrimary"
+                    android:textSize="@dimen/help_content_size" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/help_subtitle_vocabulary_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="@string/help_subtitle_vocabulary_title"
+                android:textColor="@color/onSecondary"
+                android:textSize="@dimen/help_subtitle_size" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_subtitle_data"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/help_content_size" />
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:background="@color/primaryVariant"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_vocabulary" />
 
             <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"
@@ -275,5 +572,17 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/help_scroll_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center"
+        app:fabCustomSize="@dimen/help_scroll_up_width"
+        app:maxImageSize="@dimen/help_scroll_up_image_width"
+        android:background="@color/primary"
+        android:backgroundTint="@color/primary"
+        android:src="@drawable/ic_up_arrow"
+        android:layout_margin="50dp" />
 
 </FrameLayout>

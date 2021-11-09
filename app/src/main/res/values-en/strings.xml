@@ -86,6 +86,7 @@
     <!-- READER POPUP SUBTITLE FILE -->
     <string name="popup_reading_import_subtitle_file">Select a subtitle file</string>
     <string name="popup_reading_import_subtitle_selected">Subtitle selected</string>
+    <string name="popup_reading_import_subtitle_translate">Translated language</string>
     <string name="popup_reading_import_subtitle_is_empty">Subtitle empty</string>
     <string name="popup_reading_import_subtitle_page_is_empty">Pages empty in subtitle or subtitle not selected.</string>
 
@@ -128,6 +129,13 @@
     <string name="help_reader_title">Reader</string>
     <string name="help_subtitle_content">• Subtitle</string>
     <string name="help_subtitle_title">Subtitle</string>
+    <string name="help_subtitle_import_content">- Import</string>
+    <string name="help_subtitle_import_title">Import</string>
+    <string name="help_subtitle_data_content">- Subtitle data</string>
+    <string name="help_subtitle_data_title">Subtitle data</string>
+    <string name="help_subtitle_vocabulary_content">- Page\'s vocabulary</string>
+    <string name="help_subtitle_vocabulary_title">Page\'s vocabulary</string>
+
     <string name="help_vocabulary_content">• Vocabulary</string>
     <string name="help_vocabulary_title">Vocabulary</string>
     <string name="help_kanjis_content">• Kanjis</string>
@@ -141,9 +149,22 @@
 
     <string name="help_reader_description_1">The reader has the ability to scroll between pages and move to a specific page. A bookmark of the page opened in the last reading will be stored in memory, which in turn will be loaded on opening.</string>
     <string name="help_reader_description_2">It also has resources to read json files embedded in the file or external, which contain texts extracted from the pages.</string>
+    <string name="help_reader_description_3">For ease of use it will be displayed below the filename it will be the name of the page that is currently displayed, it will be very useful to identify which caption to select when the automatic selection does not work.</string>
 
     <string name="help_subtitle_description_1">The app is able to load properly formatted json files with texts that were previously extracted from the pages, along with the texts the file can also contain a list of vocabularies in which it can be recognized and located in the display.</string>
     <string name="help_subtitle_description_2">The main screen of subtitles will be the import, where it will show the chapters that contain the file and a json file with the subtitles can also be imported.</string>
+
+    <string name="help_subtitle_description_external_subtitle">The first field will be used to load an external subtitle file, which will overwrite the subtitle that was embedded in the file.</string>
+    <string name="help_subtitle_description_chapters">The second field will contain a listing of the chapters found both in the file and in the external json that was chosen, when selecting a certain chapter the application will fill in the data in the caption tab.</string>
+    <string name="help_subtitle_description_translate">The third field will be responsible for the language that will be switched, it will overwrite the language defined in the settings screen, it will be used so that it can be easily switched between another language that may be listed.</string>
+    <string name="help_subtitle_data">After selecting the caption, you will be automatically directed to the caption tab, this tab will manage the content of the selected caption and will display the text.</string>
+    <string name="help_subtitle_data_page">The first field on the tab will contain the selected page within the caption and can be changed at any time. For ease of use, the field contains, in addition to the sequential number of pages in the chapter, the name of the original page from which the caption was processed.</string>
+    <string name="help_subtitle_data_button">Cada botão nessa tela irá realizar a mesma função do menu de popup.</string>
+    <string name="help_subtitle_data_button_translate">It performs the exchange between subtitles of different languages in which they were informed in the configuration screen. In an example you can switch between Japanese and English subtitles with just one click and the application will automatically find the corresponding chapter and page in the target language.</string>
+    <string name="help_subtitle_data_button_draw">It draws the coordinates from which the texts that are in the subtitle file were extracted, it will also add the sequential number of the text to better identify which order it is. More information in the section below about the floating popup.</string>
+    <string name="help_subtitle_data_button_find">Search the selected page within the subtitle file, each subtitle file will contain the name and a hash of the page which will be used in the search to find the selected page. The search will find both the chapter and the corresponding page.</string>
+    <string name="help_subtitle_data_button_next_before">Forwards or backwards the selected text.</string>
+    <string name="help_subtitle_vocabulary">The subtitle file can contain a list of vocabularies and will be displayed in this tab, the list corresponds to each page processed, where it will always be updated when changing the page.</string>
 
     <string name="help_vocabulary_description">The application uses the powerful feature provided by sudachi for word recognition within text. This makes it possible to locate the meaning of each word within a vocabulary list.</string>
     <string name="help_kanji_description">The application has kanji recognition in which it queries an internal database which contains 3000 kanji with their main readings and meaning.</string>

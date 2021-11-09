@@ -71,7 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_small"
-            android:hint="@string/popup_reading_import_subtitle_selected"
+            android:hint="@string/popup_reading_import_subtitle_translate"
             android:textColorHint="@color/textPrimary"
             app:boxBackgroundColor="@color/primary"
             app:boxStrokeColor="@color/onSecondary"

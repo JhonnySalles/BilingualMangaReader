@@ -3,6 +3,8 @@ package br.com.fenix.mangareader.view.ui.reader
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -52,6 +54,15 @@ class PopupSubtitleConfiguration : Fragment() {
 
         mSubTitleController = SubTitleController.getInstance(requireContext())
 
+        mSubtitleSelectedAutoComplete.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                mSubTitleController.clearSubtitlesSelected()
+            }
+        }
+
         mSubtitleSelectedAutoComplete.setOnClickListener {
             mSubtitleSelectedAutoComplete.setText("", false)
             mSubTitleController.clearSubtitlesSelected()
@@ -94,9 +105,20 @@ class PopupSubtitleConfiguration : Fragment() {
                     mSubTitleController.selectedLanguage(mMapLanguage[parent.getItemAtPosition(position).toString()]!!)
             }
 
+        mLoadExternalSubtitle.editText?.addTextChangedListener(object: TextWatcher {
+            override fun beforeTextChanged(s:CharSequence, start:Int, count:Int, after:Int) {
+            }
+            override fun onTextChanged(s:CharSequence, start:Int, before:Int, count:Int) {
+            }
+            override fun afterTextChanged(s: Editable) {
+                if (s.isEmpty())
+                    mSubTitleController.clearSubtitlesSelected()
+            }
+        })
+
+
         mLoadExternalSubtitleAutoComplete.setOnClickListener {
             mLoadExternalSubtitleAutoComplete.setText("")
-            mSubTitleController.clearExternalSubtitlesSelected()
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                 addCategory(Intent.CATEGORY_OPENABLE)
                 type = "application/json"
