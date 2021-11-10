@@ -91,7 +91,15 @@
                 android:id="@+id/help_kanjis_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/help_kanjis_content"
+                android:text="@string/help_kanji_content"
+                android:textColor="@color/onSecondary"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                android:id="@+id/help_floating_popup_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_floating_popup_content"
                 android:textColor="@color/onSecondary"
                 android:textSize="@dimen/help_content_size" />
 
@@ -535,7 +543,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:text="@string/help_kanjis_title"
+                android:text="@string/help_kanji_title"
                 android:textColor="@color/onSecondary"
                 android:textSize="@dimen/help_title_size" />
 
@@ -543,6 +551,98 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_kanji_description"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_kanji_use"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/help_content_size" />
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:background="@color/primaryVariant"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_kanji" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin"
+                android:background="@color/secondary"
+                app:dividerInsetEnd="16dp"
+                app:dividerInsetStart="16dp" />
+
+            <TextView
+                android:id="@+id/help_floating_popup_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="@string/help_floating_popup_title"
+                android:textColor="@color/onSecondary"
+                android:textSize="@dimen/help_title_size" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_floating_popup_description"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/help_content_size" />
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:background="@color/primaryVariant"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_popup" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_floating_popup_resource"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/help_content_size" />
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:background="@color/primaryVariant"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_popup_draw" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_floating_popup_control"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/help_content_size" />
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:background="@color/primaryVariant"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_popup_small" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_floating_popup_gesture"
                 android:textColor="@color/textPrimary"
                 android:textSize="@dimen/help_content_size" />
 
@@ -578,11 +678,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|center"
-        app:fabCustomSize="@dimen/help_scroll_up_width"
-        app:maxImageSize="@dimen/help_scroll_up_image_width"
+        android:layout_margin="50dp"
         android:background="@color/primary"
         android:backgroundTint="@color/primary"
         android:src="@drawable/ic_up_arrow"
-        android:layout_margin="50dp" />
+        app:fabCustomSize="@dimen/help_scroll_up_width"
+        app:maxImageSize="@dimen/help_scroll_up_image_width" />
 
 </FrameLayout>

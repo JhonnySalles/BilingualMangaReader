@@ -135,11 +135,12 @@
     <string name="help_subtitle_data_title">Dados da Legendas</string>
     <string name="help_subtitle_vocabulary_content">- Vocabulário da página</string>
     <string name="help_subtitle_vocabulary_title">Vocabulário da página</string>
-
     <string name="help_vocabulary_content">• Vocabulário</string>
     <string name="help_vocabulary_title">Vocabulário</string>
-    <string name="help_kanjis_content">• Kanjis</string>
-    <string name="help_kanjis_title">Kanjis</string>
+    <string name="help_kanji_content">• Kanjis</string>
+    <string name="help_kanji_title">Kanjis</string>
+    <string name="help_floating_popup_content">• Popup flutuante</string>
+    <string name="help_floating_popup_title">Popup flutuante</string>
     <string name="help_languages_support_content">• Idiomas suportados</string>
     <string name="help_languages_support_title">Idiomas suportados</string>
 
@@ -156,11 +157,8 @@
     <string name="help_subtitle_description_external_subtitle">O primeiro campo será utilizado para realizar carregar um arquivo de legenda externo, no qual irá sobrepor a legenda que estava embutida no arquivo.</string>
     <string name="help_subtitle_description_chapters">O segundo campo irá conter uma listagem dos capítulos encontrado tanto no arquivo como no json externo que foi escolhido, ao selecionar um determinado capítulo o aplicativo irá preencher os dados na aba de legenda.</string>
     <string name="help_subtitle_description_translate">O terceiro campo será responsável pela linguagem que irá ser alternado, ela irá sobrepor a linguagem definida na tela de configurações, será utilizada para que possa estar fácilmente alternando entre outra linguagem que possa estar listada.</string>
-
-
     <string name="help_subtitle_data">Após selecionar a legenda, será direcionado automáticamente para a aba de legenda, está aba irá gerenciar o conteúdo da legenda selecionada e realizará a exibição do texto.</string>
     <string name="help_subtitle_data_page">O primeiro campo da aba conterá a página selecionada dentro da legenda e pode ser trocada a qualquer momento. Para facilitar o uso, o campo contém além do número sequencial das paginas do capítulo, o nome da página original de onde a legenda foi processada.</string>
-
     <string name="help_subtitle_data_button">Cada botão nessa tela irá realizar a mesma função do menu de popup.</string>
     <string name="help_subtitle_data_button_translate">Realiza a troca entre as legendas de diferentes linguegens no qual foram informadas na tela de configuração. Em um exemplo pode-se trocar entre a legenda em japonês e inglês com apenas um clique e o aplicativo irá automáticamente encontrar o capítulo e página correspondente na linguagem de destino.</string>
     <string name="help_subtitle_data_button_draw">Realiza o desenho das coordenadas de onde foram extraidos os textos que estão no arquivo de legenda, também irá adicionar o número sequencial do texto para melhor identificar qual ordem está. Maiores informações na seção abaixo sobre o popup flutuante.</string>
@@ -169,7 +167,15 @@
     <string name="help_subtitle_vocabulary">O arquivo de legenda pode conter uma lista de vocabulários e será exibida nessa aba, a lista corresponde a cada página processada, onde será sempre atualizado ao trocar a página.</string>
 
     <string name="help_vocabulary_description">O aplicativo utiliza o poderoso recurso disponibilizado pelo sudachi para reconhecimento de palavras dentro do texto. Com isso é possível localizar dentro de uma lista de vocabulário o significado de cada palavra.</string>
-    <string name="help_kanji_description">O aplicativo possui reconhecimento de kanjis no qual consulta em um banco de dados interno no qual contém 3000 kanjis com suas principais leituras e significado.</string>
+
+    <string name="help_kanji_description">O aplicativo possui reconhecimento de kanjis no qual consulta em um banco de dados interno que contém 3000 kanjis com suas principais leituras e significado.</string>
+    <string name="help_kanji_use">Para utiliza-lo, na aba de legenda basta clicar em cima do kanji que será apresentado um poup com informações.</string>
+
+    <string name="help_floating_popup_description">O popup flutuante é um recurso para melhor visualização dos textos obtidos, ele irá criar uma tela diretamente no sistema operacional o que pode facilitar sua visualização até mesmo em tela dividida, pois pode estar em qualquer lugar da tela.</string>
+    <string name="help_floating_popup_resource">Ele terá todos os recursos principais que o menu de configuração da legenda, informações sobre a página, botões de controle e o vocabulário diretamente em seu conteudo. Com um simples clique em cima de uma palavra do texto o aplicativo irá buscar no vocabulário a palavra e mostrará ao usuário.</string>
+    <string name="help_floating_popup_control">Além dos botões de controle essa tela terá também um botão para minimizar o tamanho do popup, fecha-lo e mover todo o scrool até o topo.</string>
+    <string name="help_floating_popup_gesture">Com um toque no canto direito ou superior é possível mover o popup, ele também aceita gestos, onde dentro do conteúdo da tela ao arrastar para esquerda irá para o próximo texto e ao arrastar para direita irá retornar, um clique longo em cima do texto fará a cópia dele e o clique duplo irá para o próximo.</string>
+
     <string name="help_languages_support_description">O aplicativo suporta arquivos json de linguagens inglês, português e japonês.</string>
 
 

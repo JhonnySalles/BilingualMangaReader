@@ -13,7 +13,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 class HelpFragment : Fragment() {
 
     private lateinit var mScrollView: ScrollView
-    private lateinit var mScrollUp : FloatingActionButton
+    private lateinit var mScrollUp: FloatingActionButton
     private lateinit var mLibraryContent: TextView
     private lateinit var mLibraryTitle: TextView
     private lateinit var mReaderContent: TextView
@@ -30,6 +30,8 @@ class HelpFragment : Fragment() {
     private lateinit var mVocabularyTitle: TextView
     private lateinit var mKanjiContent: TextView
     private lateinit var mKanjiTitle: TextView
+    private lateinit var mFloatingPopupContent: TextView
+    private lateinit var mFloatingPopupTitle: TextView
     private lateinit var mLanguageSupportContent: TextView
     private lateinit var mLanguageSupportTitle: TextView
 
@@ -46,10 +48,10 @@ class HelpFragment : Fragment() {
         mScrollView = view.findViewById(R.id.help_scroll_view)
         mScrollUp = view.findViewById(R.id.help_scroll_up)
 
-        mScrollUp.setOnClickListener { mScrollView.smoothScrollTo(0,0) }
+        mScrollUp.setOnClickListener { mScrollView.smoothScrollTo(0, 0) }
         mScrollUp.visibility = View.GONE
         mScrollView.setOnScrollChangeListener { _, _, y, _, _ ->
-            if(y > 0)
+            if (y > 0)
                 mScrollUp.show()
             else
                 mScrollUp.hide()
@@ -71,6 +73,8 @@ class HelpFragment : Fragment() {
         mVocabularyTitle = view.findViewById(R.id.help_vocabulary_title)
         mKanjiContent = view.findViewById(R.id.help_kanjis_content)
         mKanjiTitle = view.findViewById(R.id.help_kanjis_title)
+        mFloatingPopupContent = view.findViewById(R.id.help_floating_popup_content)
+        mFloatingPopupTitle = view.findViewById(R.id.help_floating_popup_title)
         mLanguageSupportContent = view.findViewById(R.id.help_language_support_content)
         mLanguageSupportTitle = view.findViewById(R.id.help_language_support_title)
 
@@ -82,6 +86,7 @@ class HelpFragment : Fragment() {
         mSubtitleVocabularyContent.setOnClickListener { mScrollView.smoothScrollTo(0, mSubtitleVocabularyTitle.top) }
         mVocabularyContent.setOnClickListener { mScrollView.smoothScrollTo(0, mVocabularyTitle.top) }
         mKanjiContent.setOnClickListener { mScrollView.smoothScrollTo(0, mKanjiTitle.top) }
+        mFloatingPopupContent.setOnClickListener { mScrollView.smoothScrollTo(0, mFloatingPopupTitle.top) }
         mLanguageSupportContent.setOnClickListener { mScrollView.smoothScrollTo(0, mLanguageSupportTitle.top) }
     }
 }

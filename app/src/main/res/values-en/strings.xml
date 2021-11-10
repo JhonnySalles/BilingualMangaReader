@@ -135,11 +135,12 @@
     <string name="help_subtitle_data_title">Subtitle data</string>
     <string name="help_subtitle_vocabulary_content">- Page\'s vocabulary</string>
     <string name="help_subtitle_vocabulary_title">Page\'s vocabulary</string>
-
     <string name="help_vocabulary_content">• Vocabulary</string>
     <string name="help_vocabulary_title">Vocabulary</string>
-    <string name="help_kanjis_content">• Kanjis</string>
-    <string name="help_kanjis_title">Kanjis</string>
+    <string name="help_kanji_content">• Kanji</string>
+    <string name="help_kanji_title">Kanji</string>
+    <string name="help_floating_popup_content">• Floating popup</string>
+    <string name="help_floating_popup_title">Floating popup</string>
     <string name="help_languages_support_content">• Support idioms</string>
     <string name="help_languages_support_title">Support idioms</string>
 
@@ -153,7 +154,6 @@
 
     <string name="help_subtitle_description_1">The app is able to load properly formatted json files with texts that were previously extracted from the pages, along with the texts the file can also contain a list of vocabularies in which it can be recognized and located in the display.</string>
     <string name="help_subtitle_description_2">The main screen of subtitles will be the import, where it will show the chapters that contain the file and a json file with the subtitles can also be imported.</string>
-
     <string name="help_subtitle_description_external_subtitle">The first field will be used to load an external subtitle file, which will overwrite the subtitle that was embedded in the file.</string>
     <string name="help_subtitle_description_chapters">The second field will contain a listing of the chapters found both in the file and in the external json that was chosen, when selecting a certain chapter the application will fill in the data in the caption tab.</string>
     <string name="help_subtitle_description_translate">The third field will be responsible for the language that will be switched, it will overwrite the language defined in the settings screen, it will be used so that it can be easily switched between another language that may be listed.</string>
@@ -167,7 +167,15 @@
     <string name="help_subtitle_vocabulary">The subtitle file can contain a list of vocabularies and will be displayed in this tab, the list corresponds to each page processed, where it will always be updated when changing the page.</string>
 
     <string name="help_vocabulary_description">The application uses the powerful feature provided by sudachi for word recognition within text. This makes it possible to locate the meaning of each word within a vocabulary list.</string>
-    <string name="help_kanji_description">The application has kanji recognition in which it queries an internal database which contains 3000 kanji with their main readings and meaning.</string>
+
+    <string name="help_kanji_description">The application has kanji recognition in which it queries an internal database that contains 3000 kanji with their main readings and meaning.</string>
+    <string name="help_kanji_use">To use it, in the legend tab, just click on the kanji and a poup with information will be displayed.</string>
+
+    <string name="help_floating_popup_description">The floating popup is a resource for better visualization of the obtained texts, it will create a screen directly in the operating system which can facilitate its visualization even in split screen, as it can be anywhere on the screen.</string>
+    <string name="help_floating_popup_resource">It will have all the main features that the subtitle setup menu, page information, control buttons and vocabulary directly into its content. With a simple click on a word in the text, the application will search the vocabulary for the word and show it to the user.</string>
+    <string name="help_floating_popup_control">In addition to the control buttons this screen will also have a button to minimize the size of the popup, close it and move the entire scrool to the top.</string>
+    <string name="help_floating_popup_gesture">With a touch on the right or upper corner it is possible to move the popup, it also accepts gestures, where inside the screen content dragging to the left will go to the next text and dragging to the right will return, a long click on the text will do copy it and double click it will go to the next one.</string>
+
     <string name="help_languages_support_description">The application supports json files of english, portuguese and japanese languages.</string>
 
     <!-- ABOUT -->
