@@ -112,10 +112,9 @@ class PopupSubtitleConfiguration : Fragment() {
             }
             override fun afterTextChanged(s: Editable) {
                 if (s.isEmpty())
-                    mSubTitleController.clearSubtitlesSelected()
+                    mSubTitleController.clearExternalSubtitlesSelected()
             }
         })
-
 
         mLoadExternalSubtitleAutoComplete.setOnClickListener {
             mLoadExternalSubtitleAutoComplete.setText("")

@@ -679,8 +679,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="top|center"
         android:layout_margin="50dp"
-        android:background="@color/primary"
-        android:backgroundTint="@color/primary"
+        android:backgroundTint="@color/white"
+        app:tint="@color/onSecondary"
         android:src="@drawable/ic_up_arrow"
         app:fabCustomSize="@dimen/help_scroll_up_width"
         app:maxImageSize="@dimen/help_scroll_up_image_width" />

@@ -50,8 +50,8 @@ class HelpFragment : Fragment() {
 
         mScrollUp.setOnClickListener { mScrollView.smoothScrollTo(0, 0) }
         mScrollUp.visibility = View.GONE
-        mScrollView.setOnScrollChangeListener { _, _, y, _, _ ->
-            if (y > 0)
+        mScrollView.setOnScrollChangeListener { _, _, yNew, _, yOld ->
+            if (yNew in 1 until yOld)
                 mScrollUp.show()
             else
                 mScrollUp.hide()
