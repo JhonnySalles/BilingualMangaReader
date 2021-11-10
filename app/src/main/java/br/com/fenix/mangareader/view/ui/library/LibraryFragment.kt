@@ -266,7 +266,11 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         mRecycleView = root.findViewById(R.id.rv_library)
         mRefreshLayout = root.findViewById(R.id.rl_library)
-        //mRefreshLayout.setColorSchemeColors(R.color.primary)
+        mRefreshLayout.setColorSchemeResources(
+            R.color.onSecondary,
+            R.color.onSecondary,
+            R.color.white)
+
         mRefreshLayout.setOnRefreshListener(this)
         mRefreshLayout.isEnabled = true
 
