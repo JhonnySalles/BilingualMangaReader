@@ -101,6 +101,13 @@
     <string name="popup_reading_subtitle_list_empty">Subtitle list is empty.</string>
     <string name="popup_reading_subtitle_chapter_not_found">Chapter in another language not found.</string>
 
+    <string name="popup_reading_button_translate">Switch between selected languages</string>
+    <string name="popup_reading_button_draw">Draw subtitle positions on the screen</string>
+    <string name="popup_reading_button_find">Automatic subtitle search</string>
+    <string name="popup_reading_button_before">Previous text</string>
+    <string name="popup_reading_button_next">Next text</string>
+
+
     <!-- READER FLOATING -->
     <string name="floating_reading_not_permission">Permission is not granted!</string>
 
@@ -161,7 +168,7 @@
     <string name="help_subtitle_description_translate">The third field will be responsible for the language that will be switched, it will overwrite the language defined in the settings screen, it will be used so that it can be easily switched between another language that may be listed.</string>
     <string name="help_subtitle_data">After selecting the caption, you will be automatically directed to the caption tab, this tab will manage the content of the selected caption and will display the text.</string>
     <string name="help_subtitle_data_page">The first field on the tab will contain the selected page within the caption and can be changed at any time. For ease of use, the field contains, in addition to the sequential number of pages in the chapter, the name of the original page from which the caption was processed.</string>
-    <string name="help_subtitle_data_button">Cada botão nessa tela irá realizar a mesma função do menu de popup.</string>
+    <string name="help_subtitle_data_button">Each button on this screen will perform the same function as the popup menu, when held down for a while the button will present a brief description of what it does.</string>
     <string name="help_subtitle_data_button_translate">It performs the exchange between subtitles of different languages in which they were informed in the configuration screen. In an example you can switch between Japanese and English subtitles with just one click and the application will automatically find the corresponding chapter and page in the target language.</string>
     <string name="help_subtitle_data_button_draw">It draws the coordinates from which the texts that are in the subtitle file were extracted, it will also add the sequential number of the text to better identify which order it is. More information in the section below about the floating popup.</string>
     <string name="help_subtitle_data_button_find">Search the selected page within the subtitle file, each subtitle file will contain the name and a hash of the page which will be used in the search to find the selected page. The search will find both the chapter and the corresponding page.</string>
@@ -171,11 +178,11 @@
     <string name="help_vocabulary_description">The application uses the powerful feature provided by sudachi for word recognition within text. This makes it possible to locate the meaning of each word within a vocabulary list.</string>
 
     <string name="help_kanji_description">The application has kanji recognition in which it queries an internal database that contains 3000 kanji with their main readings and meaning.</string>
-    <string name="help_kanji_use">To use it, in the legend tab, just click on the kanji and a poup with information will be displayed.</string>
+    <string name="help_kanji_use">To use it, in the legend tab, just click on the kanji and a popup with information will be displayed.</string>
 
     <string name="help_floating_popup_description">The floating popup is a resource for better visualization of the obtained texts, it will create a screen directly in the operating system which can facilitate its visualization even in split screen, as it can be anywhere on the screen.</string>
     <string name="help_floating_popup_resource">It will have all the main features that the subtitle setup menu, page information, control buttons and vocabulary directly into its content. With a simple click on a word in the text, the application will search the vocabulary for the word and show it to the user.</string>
-    <string name="help_floating_popup_control">In addition to the control buttons this screen will also have a button to minimize the size of the popup, close it and move the entire scrool to the top.</string>
+    <string name="help_floating_popup_control">In addition to the control buttons this screen will also have a button to minimize the size of the popup, close it and move the entire scroll to the top.</string>
     <string name="help_floating_popup_gesture">With a touch on the right or upper corner it is possible to move the popup, it also accepts gestures, where inside the screen content dragging to the left will go to the next text and dragging to the right will return, a long click on the text will do copy it and double click it will go to the next one.</string>
 
     <string name="help_languages_support_description">The application supports json files of english, portuguese and japanese languages.</string>
