@@ -62,8 +62,8 @@ class AboutFragment : Fragment() {
             val subject = requireContext().getString(R.string.about_app_suggestion)
             val message = ""
 
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.data = Uri.parse("mailto:$address")
+            val intent = Intent(Intent.ACTION_SENDTO)
+            intent.data = Uri.parse("mailto:")
             intent.putExtra(Intent.EXTRA_EMAIL, address)
             intent.putExtra(Intent.EXTRA_SUBJECT, subject)
             intent.putExtra(Intent.EXTRA_TEXT, message)
@@ -82,8 +82,8 @@ class AboutFragment : Fragment() {
             val subject = ""
             val message = ""
 
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.data = Uri.parse("mailto:$address")
+            val intent = Intent(Intent.ACTION_SENDTO)
+            intent.data = Uri.parse("mailto:")
             intent.putExtra(Intent.EXTRA_EMAIL, address)
             intent.putExtra(Intent.EXTRA_SUBJECT, subject)
             intent.putExtra(Intent.EXTRA_TEXT, message)
