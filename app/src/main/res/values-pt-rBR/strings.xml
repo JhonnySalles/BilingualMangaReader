@@ -71,7 +71,7 @@
     <string name="popup_reading_tab_item_subtitle_import">Importar</string>
     <string name="popup_reading_tab_item_subtitle_vocabulary">Vocabulário</string>
 
-    <!-- READER POPUP -->
+    <!-- READER POPUP COLOR -->
     <string name="popup_reading_custom_color_filter">Filtro de cor personalizado</string>
     <string name="popup_reading_custom_brightness">Brilho personalizado</string>
     <string name="popup_reading_grayscale">Escala de cinza</string>
@@ -85,6 +85,7 @@
     <!-- READER POPUP SUBTITLE FILE -->
     <string name="popup_reading_import_subtitle_file">Selecione um arquivo de legenda</string>
     <string name="popup_reading_import_subtitle_selected">Legenda selecionada</string>
+    <string name="popup_reading_import_subtitle_translate">Linguagem da tradução</string>
     <string name="popup_reading_import_subtitle_is_empty">Nenhuma legenda encontrada</string>
     <string name="popup_reading_import_subtitle_page_is_empty">As paginas estão vazias na legenda ou ela não foi selecionada.</string>
 
@@ -96,6 +97,12 @@
     <string name="popup_reading_subtitle_not_find_subtitle">Não foi possível encontrar a legenda.</string>
     <string name="popup_reading_subtitle_list_empty">Lista de legenda vazias.</string>
     <string name="popup_reading_subtitle_chapter_not_found">Não encontrado o capítulo em outra linguagem.</string>
+
+    <string name="popup_reading_button_translate">Alternar entre linguagens selecionadas</string>
+    <string name="popup_reading_button_draw">Desenhar as posições da legenda na tela</string>
+    <string name="popup_reading_button_find">Procura automática de legenda</string>
+    <string name="popup_reading_button_before">Texto anterior</string>
+    <string name="popup_reading_button_next">Próximo texto</string>
 
     <!-- READER FLOATING -->
     <string name="floating_reading_not_permission">Permissão não concedida!</string>
@@ -128,10 +135,18 @@
     <string name="help_reader_title">Leitor</string>
     <string name="help_subtitle_content">• Legendas</string>
     <string name="help_subtitle_title">Legendas</string>
+    <string name="help_subtitle_import_content">- Importação</string>
+    <string name="help_subtitle_import_title">Importação</string>
+    <string name="help_subtitle_data_content">- Dados da legenda</string>
+    <string name="help_subtitle_data_title">Dados da Legendas</string>
+    <string name="help_subtitle_vocabulary_content">- Vocabulário da página</string>
+    <string name="help_subtitle_vocabulary_title">Vocabulário da página</string>
     <string name="help_vocabulary_content">• Vocabulário</string>
     <string name="help_vocabulary_title">Vocabulário</string>
-    <string name="help_kanjis_content">• Kanjis</string>
-    <string name="help_kanjis_title">Kanjis</string>
+    <string name="help_kanji_content">• Kanjis</string>
+    <string name="help_kanji_title">Kanjis</string>
+    <string name="help_floating_popup_content">• Popup flutuante</string>
+    <string name="help_floating_popup_title">Popup flutuante</string>
     <string name="help_languages_support_content">• Idiomas suportados</string>
     <string name="help_languages_support_title">Idiomas suportados</string>
 
@@ -139,14 +154,34 @@
     <string name="help_library_description_2">Estes arquivos serão então exibidos em formato de lista e poderá ser excluido ou adicionado aos favoritos.</string>
     <string name="help_library_description_3">Para melhor desempenho, será mantido uma cópia da primeira página, no qual será exibida como capa, será necessário devido a limitação de arquivos rar/cbr em utilizar muito do recurso computacional disponível apenas para a exibição de uma única página.</string>
 
-    <string name="help_reader_description_1">O leitor possui recursos de rolagem entre as páginas e movimentação para uma página específica. Será armazenado em memória uma marcação da página aberta na ultima leitura, que por sua vez será carregado na abertura.</string>
+    <string name="help_reader_description_1">O leitor possui recursos de rolagem entre as páginas e movimentação para uma página específica. Será armazenado em memória uma marcação da página aberta na última leitura, que por sua vez será carregado na abertura.</string>
     <string name="help_reader_description_2">Também possui recursos para realizar a leitura de arquivos json embutidos no arquivo ou externo, no qual contém textos extraidos das páginas.</string>
+    <string name="help_reader_description_3">Para facilitar a utilização será exibido abaixo do nome do arquivo estará o nome da página que está sendo exibida no momento, será muito útil para identificar qual legenda selecionar quando a seleção automática não funcionar.</string>
 
     <string name="help_subtitle_description_1">O aplicativo é capaz de carregar arquivos de json devidamente formatado com textos que foram previamente extraidos das páginas, junto com os textos o arquivo pode também conter uma lista de vocabulários no qual poderá ser reconhecido e localizado na exibição.</string>
-    <string name="help_subtitle_description_2">Para maiores informações, favor verificar a página do projeto no github.</string>
+    <string name="help_subtitle_description_2">A tela principal das legendas será a aba de importação, onde irá mostrar os capítulos que contem o arquivo e também poderá ser importado um arquivo de json com as legendas.</string>
+    <string name="help_subtitle_description_external_subtitle">O primeiro campo será utilizado para realizar carregar um arquivo de legenda externo, no qual irá sobrepor a legenda que estava embutida no arquivo.</string>
+    <string name="help_subtitle_description_chapters">O segundo campo irá conter uma listagem dos capítulos encontrado tanto no arquivo como no json externo que foi escolhido, ao selecionar um determinado capítulo o aplicativo irá preencher os dados na aba de legenda.</string>
+    <string name="help_subtitle_description_translate">O terceiro campo será responsável pela linguagem que irá ser alternado, ela irá sobrepor a linguagem definida na tela de configurações, será utilizada para que possa estar fácilmente alternando entre outra linguagem que possa estar listada.</string>
+    <string name="help_subtitle_data">Após selecionar a legenda, será direcionado automáticamente para a aba de legenda, está aba irá gerenciar o conteúdo da legenda selecionada e realizará a exibição do texto.</string>
+    <string name="help_subtitle_data_page">O primeiro campo da aba conterá a página selecionada dentro da legenda e pode ser trocada a qualquer momento. Para facilitar o uso, o campo contém além do número sequencial das paginas do capítulo, o nome da página original de onde a legenda foi processada.</string>
+    <string name="help_subtitle_data_button">Cada botão nessa tela irá realizar a mesma função do menu de popup, ao ficar pressionado por um tempo o botão irá apresentar uma breve descrição do que faz.</string>
+    <string name="help_subtitle_data_button_translate">Realiza a troca entre as legendas de diferentes linguegens no qual foram informadas na tela de configuração. Em um exemplo pode-se trocar entre a legenda em japonês e inglês com apenas um clique e o aplicativo irá automáticamente encontrar o capítulo e página correspondente na linguagem de destino.</string>
+    <string name="help_subtitle_data_button_draw">Realiza o desenho das coordenadas de onde foram extraidos os textos que estão no arquivo de legenda, também irá adicionar o número sequencial do texto para melhor identificar qual ordem está. Maiores informações na seção abaixo sobre o popup flutuante.</string>
+    <string name="help_subtitle_data_button_find">Realiza a busca da página selecionada dentro do arquivo de legenda, cada arquivo de legenda irá conter o nome e um hash da página no qual será utilizado na busca para encontrar a página selecionada. A busca irá encontrar tanto o capítulo quanto a página correspondente.</string>
+    <string name="help_subtitle_data_button_next_before">Avança ou retrocede o texto selecionado.</string>
+    <string name="help_subtitle_vocabulary">O arquivo de legenda pode conter uma lista de vocabulários e será exibida nessa aba, a lista corresponde a cada página processada, onde será sempre atualizado ao trocar a página.</string>
 
     <string name="help_vocabulary_description">O aplicativo utiliza o poderoso recurso disponibilizado pelo sudachi para reconhecimento de palavras dentro do texto. Com isso é possível localizar dentro de uma lista de vocabulário o significado de cada palavra.</string>
-    <string name="help_kanji_description">O aplicativo possui reconhecimento de kanjis no qual consulta em um banco de dados interno no qual contém 3000 kanjis com suas principais leituras e significado.</string>
+
+    <string name="help_kanji_description">O aplicativo possui reconhecimento de kanjis no qual consulta em um banco de dados interno que contém 3000 kanjis com suas principais leituras e significado.</string>
+    <string name="help_kanji_use">Para utiliza-lo, na aba de legenda basta clicar em cima do kanji que será apresentado um popup com informações.</string>
+
+    <string name="help_floating_popup_description">O popup flutuante é um recurso para melhor visualização dos textos obtidos, ele irá criar uma tela diretamente no sistema operacional o que pode facilitar sua visualização até mesmo em tela dividida, pois pode estar em qualquer lugar da tela.</string>
+    <string name="help_floating_popup_resource">Ele terá todos os recursos principais que o menu de configuração da legenda, informações sobre a página, botões de controle e o vocabulário diretamente em seu conteudo. Com um simples clique em cima de uma palavra do texto o aplicativo irá buscar no vocabulário a palavra e mostrará ao usuário.</string>
+    <string name="help_floating_popup_control">Além dos botões de controle essa tela terá também um botão para minimizar o tamanho do popup, fecha-lo e mover todo a barra de rolagem até o topo.</string>
+    <string name="help_floating_popup_gesture">Com um toque no canto direito ou superior é possível mover o popup, ele também aceita gestos, onde dentro do conteúdo da tela ao arrastar para esquerda irá para o próximo texto e ao arrastar para direita irá retornar, um clique longo em cima do texto fará a cópia dele e o clique duplo irá para o próximo.</string>
+
     <string name="help_languages_support_description">O aplicativo suporta arquivos json de linguagens inglês, português e japonês.</string>
 
 

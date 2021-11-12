@@ -54,7 +54,7 @@ class ReaderActivity : AppCompatActivity() {
     private lateinit var mFloatingSubtitleReader: FloatingSubtitleReader
 
     private lateinit var mRepository: MangaRepository
-    private lateinit var mManga: Manga
+    private var mManga: Manga? = null
     private var mBookMark: Int = 0
     private var isTabletOrLandscape : Boolean = false
 
@@ -169,27 +169,33 @@ class ReaderActivity : AppCompatActivity() {
             } else {
                 val extras = intent.extras
                 val manga = (extras!!.getSerializable(GeneralConsts.KEYS.OBJECT.MANGA) as Manga?)
-                val fragment: ReaderFragment?
-                if (manga != null) {
+                val fragment: ReaderFragment = if (manga != null) {
                     mManga = manga
                     mReaderTitle.text = manga.bookMark.toString()
                     mToolbarTitle.text = manga.title
 
-                    fragment = ReaderFragment.create(manga)
-                } else {
-                    val file = (extras.getSerializable(GeneralConsts.KEYS.OBJECT.FILE) as File?)
-                    fragment = if (file != null)
-                        ReaderFragment.create(file)
-                    else
-                        ReaderFragment.create()
-
-                    mToolbarTitle.text = file?.name
-                }
+                    ReaderFragment.create(manga)
+                } else
+                    ReaderFragment.create()
                 setFragment(fragment)
             }
         }
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    override fun onSaveInstanceState(savedInstanceState : Bundle) {
+        if (mManga != null)
+            savedInstanceState.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, mManga)
+
+        super.onSaveInstanceState(savedInstanceState)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState : Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        val manga = (savedInstanceState.getSerializable(GeneralConsts.KEYS.OBJECT.MANGA) as Manga?)
+        if (manga != null)
+            mManga = manga
     }
 
     private var mLastFloatingShowing = false
@@ -269,7 +275,7 @@ class ReaderActivity : AppCompatActivity() {
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         val favoriteItem = menu.findItem(R.id.menu_reader_favorite)
-        val icon = if (::mManga.isInitialized && mManga.favorite)
+        val icon = if (mManga != null && mManga!!.favorite)
             ContextCompat.getDrawable(this, R.drawable.ic_favorite_mark)
         else
             ContextCompat.getDrawable(this, R.drawable.ic_favorite_unmark)
@@ -279,15 +285,18 @@ class ReaderActivity : AppCompatActivity() {
     }
 
     private fun changeFavorite(item: MenuItem) {
-        mManga.favorite = !mManga.favorite
+        if (mManga == null)
+            return
 
-        val icon = if (mManga.favorite)
+        mManga?.favorite = !mManga!!.favorite
+
+        val icon = if (mManga!!.favorite)
             ContextCompat.getDrawable(this, R.drawable.ic_favorite_mark)
         else
             ContextCompat.getDrawable(this, R.drawable.ic_favorite_unmark)
         icon?.setTint(getColor(R.color.onSecondary))
         item.icon = icon
-        mRepository.update(mManga)
+        mRepository.update(mManga!!)
     }
 
     private fun prepareMenuFloat() {
