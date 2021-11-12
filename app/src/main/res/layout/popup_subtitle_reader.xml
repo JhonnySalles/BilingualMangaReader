@@ -58,6 +58,7 @@
             android:minHeight="@dimen/popup_reader_button_min_height"
             android:paddingLeft="@dimen/popup_reader_button_padding"
             android:paddingRight="@dimen/popup_reader_button_padding"
+            android:tooltipText="@string/popup_reading_button_translate"
             app:backgroundTint="@color/primary"
             app:icon="@drawable/ic_translate"
             app:iconTint="@color/textPrimary"
@@ -80,6 +81,7 @@
             android:minHeight="@dimen/popup_reader_button_min_height"
             android:paddingLeft="@dimen/popup_reader_button_padding"
             android:paddingRight="@dimen/popup_reader_button_padding"
+            android:tooltipText="@string/popup_reading_button_draw"
             app:backgroundTint="@color/primary"
             app:icon="@drawable/ic_draw_text"
             app:iconTint="@color/textPrimary"
@@ -101,6 +103,7 @@
             android:minHeight="@dimen/popup_reader_button_min_height"
             android:paddingLeft="@dimen/popup_reader_button_padding"
             android:paddingRight="@dimen/popup_reader_button_padding"
+            android:tooltipText="@string/popup_reading_button_find"
             app:backgroundTint="@color/primary"
             app:icon="@drawable/ic_refresh"
             app:iconTint="@color/textPrimary"
@@ -121,6 +124,7 @@
             android:minHeight="@dimen/popup_reader_button_min_height"
             android:paddingLeft="@dimen/popup_reader_button_padding"
             android:paddingRight="@dimen/popup_reader_button_padding"
+            android:tooltipText="@string/popup_reading_button_before"
             app:backgroundTint="@color/primary"
             app:icon="@drawable/ic_navigate_before"
             app:iconTint="@color/textPrimary"
@@ -142,6 +146,7 @@
             android:minHeight="@dimen/popup_reader_button_min_height"
             android:paddingLeft="@dimen/popup_reader_button_padding"
             android:paddingRight="@dimen/popup_reader_button_padding"
+            android:tooltipText="@string/popup_reading_button_next"
             app:backgroundTint="@color/primary"
             app:icon="@drawable/ic_navigate_next"
             app:iconTint="@color/textPrimary"
@@ -164,7 +169,7 @@
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textColor="@color/secondary"
-        android:textSize="@dimen/popup_reader_title"/>
+        android:textSize="@dimen/popup_reader_title" />
 
     <TextView
         android:id="@+id/txt_subtitle_content"
@@ -178,6 +183,6 @@
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textColor="@color/textPrimary"
-        android:textSize="@dimen/popup_reader_text"/>
+        android:textSize="@dimen/popup_reader_text" />
 
 </LinearLayout>
