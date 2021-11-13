@@ -8,7 +8,7 @@ android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "br.com.fenix.mangareader"
+        applicationId "br.com.fenix.bilingualmangareader"
         minSdk 24
         targetSdk 24
         maxSdk 25

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="br.com.fenix.mangareader">
+    package="br.com.fenix.bilingualmangareader">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28"/>
@@ -19,11 +19,11 @@
         android:theme="@style/Theme.MangaReader"
         android:requestLegacyExternalStorage="true">
         <activity
-            android:name="br.com.fenix.mangareader.view.ui.reader.ReaderActivity"
+            android:name="br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".MainActivity"
+            android:name="br.com.fenix.bilingualmangareader.MainActivity"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
