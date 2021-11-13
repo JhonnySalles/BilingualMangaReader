@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:background="@color/primary">
 
-    <br.com.fenix.mangareader.view.ui.reader.PageImageView
+    <br.com.fenix.bilingualmangareader.view.ui.reader.PageImageView
         android:id="@+id/page_image_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

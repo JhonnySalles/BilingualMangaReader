@@ -7,6 +7,6 @@ dependencyResolutionManagement {
         maven { url "https://jitpack.io" }
     }
 }
-rootProject.name = "Manga Reader"
+rootProject.name = "BilingualMangaReader"
 include ':app'
 
