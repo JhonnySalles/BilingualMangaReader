@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "br.com.fenix.mangareader",
+  "applicationId": "br.com.fenix.bilingualmangareader",
   "variantName": "release",
   "elements": [
     {
