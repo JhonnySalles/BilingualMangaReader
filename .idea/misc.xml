@@ -86,7 +86,7 @@
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/manga_grid_card.xml" value="0.45" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/manga_line_card.xml" value="0.1408514492753623" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/nav_header_main.xml" value="0.20208333333333334" />
-        <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/popup_reader_color_filter.xml" value="0.228125" />
+        <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/popup_reader_color_filter.xml" value="0.375" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/popup_subtitle_configuration.xml" value="0.215625" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/popup_subtitle_reader.xml" value="0.25" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/popup_subtitle_vocabulary.xml" value="0.20729166666666668" />
@@ -112,7 +112,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_15" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_15_PREVIEW" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

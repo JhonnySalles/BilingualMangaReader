@@ -11,6 +11,7 @@ import com.squareup.picasso.Transformation
 import jp.wasabeef.picasso.transformations.ColorFilterTransformation
 import jp.wasabeef.picasso.transformations.GrayscaleTransformation
 import jp.wasabeef.picasso.transformations.gpu.InvertFilterTransformation
+import jp.wasabeef.picasso.transformations.gpu.SepiaFilterTransformation
 
 class ReaderViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -36,33 +37,59 @@ class ReaderViewModel(application: Application) : AndroidViewModel(application) 
     val grayScale: LiveData<Boolean> = mGrayScale
     private var mInvertColor: MutableLiveData<Boolean> = MutableLiveData(false)
     val invertColor: LiveData<Boolean> = mInvertColor
+    private var mBlueLight: MutableLiveData<Boolean> = MutableLiveData(false)
+    val blueLight: LiveData<Boolean> = mBlueLight
+    private var mBlueLightAlpha: MutableLiveData<Int> = MutableLiveData(100)
+    val blueLightAlpha: LiveData<Int> = mBlueLightAlpha
+    private var mSepia: MutableLiveData<Boolean> = MutableLiveData(false)
+    val sepia: LiveData<Boolean> = mSepia
+
+    private var mBlueLightColor = Color.argb(mBlueLightAlpha.value!!, 255, 50, 0)
 
     init {
         loadPreferences()
     }
 
-    fun changeCustomFilter(value : Boolean) {
+    fun changeCustomFilter(value: Boolean) {
         mCustomFilter.value = value
         generateFilters()
     }
 
-    fun changeGrayScale(value : Boolean) {
+    fun changeGrayScale(value: Boolean) {
         mGrayScale.value = value
         generateFilters()
     }
 
-    fun changeInvertColor(value : Boolean) {
+    fun changeInvertColor(value: Boolean) {
         mInvertColor.value = value
         generateFilters()
     }
 
-    fun changeColorsFilter(red : Int, green : Int, blue : Int, alpha : Int) {
+    fun changeBlueLight(value: Boolean) {
+        mBlueLight.value = value
+        generateFilters()
+    }
+
+    fun changeSepia(value: Boolean) {
+        mSepia.value = value
+        generateFilters()
+    }
+
+    fun changeColorsFilter(red: Int, green: Int, blue: Int, alpha: Int) {
         mColorRed.value = red
         mColorGreen.value = green
         mColorBlue.value = blue
         mColorAlpha.value = alpha
 
         if (mCustomFilter.value!!)
+            generateFilters()
+    }
+
+    fun changeBlueLightAlpha(value: Int) {
+        mBlueLightAlpha.value = value
+        mBlueLightColor = Color.argb(mBlueLightAlpha.value!!, 255, 50, 0)
+
+        if (mBlueLight.value!!)
             generateFilters()
     }
 
@@ -102,6 +129,21 @@ class ReaderViewModel(application: Application) : AndroidViewModel(application) 
             false
         )
 
+        mSepia.value = mPreferences!!.getBoolean(
+            GeneralConsts.KEYS.COLOR_FILTER.SEPIA,
+            false
+        )
+
+        mBlueLight.value = mPreferences!!.getBoolean(
+            GeneralConsts.KEYS.COLOR_FILTER.BLUE_LIGHT,
+            false
+        )
+
+        mBlueLightAlpha.value = mPreferences!!.getInt(
+            GeneralConsts.KEYS.COLOR_FILTER.BLUE_LIGHT_ALPHA,
+            100
+        )
+
         generateFilters()
     }
 
@@ -135,24 +177,42 @@ class ReaderViewModel(application: Application) : AndroidViewModel(application) 
                 GeneralConsts.KEYS.COLOR_FILTER.INVERT_COLOR,
                 mInvertColor.value!!
             )
+            this.putBoolean(
+                GeneralConsts.KEYS.COLOR_FILTER.SEPIA,
+                mSepia.value!!
+            )
+            this.putBoolean(
+                GeneralConsts.KEYS.COLOR_FILTER.BLUE_LIGHT,
+                mBlueLight.value!!
+            )
+            this.putInt(
+                GeneralConsts.KEYS.COLOR_FILTER.BLUE_LIGHT_ALPHA,
+                mBlueLightAlpha.value!!
+            )
             this.commit()
         }
     }
 
     private fun generateFilters() {
         savePreferences()
-        val filters : MutableList<Transformation>  = arrayListOf()
+        val filters: MutableList<Transformation> = arrayListOf()
 
         if (mCustomFilter.value!!) {
             val color = Color.argb(mColorAlpha.value!!, mColorRed.value!!, mColorGreen.value!!, mColorBlue.value!!)
             filters.add(ColorFilterTransformation(color))
         }
 
+        if (mBlueLight.value!!)
+            filters.add(ColorFilterTransformation(mBlueLightColor))
+
         if (mGrayScale.value!!)
             filters.add(GrayscaleTransformation())
 
         if (mInvertColor.value!!)
             filters.add(InvertFilterTransformation(mContext))
+
+        if (mSepia.value!!)
+            filters.add(SepiaFilterTransformation(mContext))
 
         mFilters.value = filters
     }

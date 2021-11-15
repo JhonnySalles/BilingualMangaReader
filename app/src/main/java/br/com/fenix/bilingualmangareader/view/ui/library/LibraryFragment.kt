@@ -392,7 +392,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     .toInt()
                 else resources.getDimension(R.dimen.manga_grid_card_layout_width).toInt()
                 else -> resources.getDimension(R.dimen.manga_grid_card_layout_width).toInt()
-            }
+            } + 1
 
             val displayMetrics = DisplayMetrics()
             (context as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)

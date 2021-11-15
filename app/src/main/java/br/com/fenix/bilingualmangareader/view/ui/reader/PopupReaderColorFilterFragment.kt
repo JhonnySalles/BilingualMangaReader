@@ -22,11 +22,15 @@ class PopupReaderColorFilterFragment : Fragment() {
     private lateinit var mColorAlpha: SeekBar
     private lateinit var mGrayScale: SwitchMaterial
     private lateinit var mInvertColor: SwitchMaterial
+    private lateinit var mBlueLight: SwitchMaterial
+    private lateinit var mBlueLightAlpha: SeekBar
+    private lateinit var mSepia: SwitchMaterial
 
     private lateinit var mFilterRed: TextView
     private lateinit var mFilterBlue: TextView
     private lateinit var mFilterGreen: TextView
     private lateinit var mFilterAlpha: TextView
+    private lateinit var mFilterBlueLightAlpha: TextView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -37,35 +41,33 @@ class PopupReaderColorFilterFragment : Fragment() {
         mColorAlpha = view.findViewById(R.id.seekbar_color_filter_alpha)
         mGrayScale = view.findViewById(R.id.switch_grayscale)
         mInvertColor = view.findViewById(R.id.switch_invert_color)
+        mBlueLight = view.findViewById(R.id.switch_blue_light)
+        mBlueLightAlpha = view.findViewById(R.id.seekbar_blue_light_alpha)
+        mSepia = view.findViewById(R.id.switch_sepia_color)
 
         mFilterRed = view.findViewById(R.id.txt_color_filter_red_value)
         mFilterBlue = view.findViewById(R.id.txt_color_filter_blue_value)
         mFilterGreen = view.findViewById(R.id.txt_color_filter_green_value)
         mFilterAlpha = view.findViewById(R.id.txt_color_filter_alpha_value)
+        mFilterBlueLightAlpha = view.findViewById(R.id.txt_color_blue_light_value)
 
         mCustomFilter.isChecked = mViewModel.customFilter.value!!
         mGrayScale.isChecked = mViewModel.grayScale.value!!
         mInvertColor.isChecked = mViewModel.invertColor.value!!
-
-        mColorRed.progress = mViewModel.colorRed.value!!
-        mColorGreen.progress = mViewModel.colorGreen.value!!
-        mColorBlue.progress = mViewModel.colorBlue.value!!
-        mColorAlpha.progress = mViewModel.colorAlpha.value!!
+        mBlueLight.isChecked = mViewModel.blueLight.value!!
+        mSepia.isChecked = mViewModel.sepia.value!!
 
         mCustomFilter.setOnClickListener { mViewModel.changeCustomFilter(mCustomFilter.isChecked) }
         mGrayScale.setOnClickListener { mViewModel.changeGrayScale(mGrayScale.isChecked) }
         mInvertColor.setOnClickListener { mViewModel.changeInvertColor(mInvertColor.isChecked) }
+        mBlueLight.setOnClickListener { mViewModel.changeBlueLight(mBlueLight.isChecked) }
+        mSepia.setOnClickListener { mViewModel.changeSepia(mSepia.isChecked) }
 
         mColorRed.progress = mViewModel.colorRed.value!!
         mColorGreen.progress = mViewModel.colorGreen.value!!
         mColorBlue.progress = mViewModel.colorBlue.value!!
         mColorAlpha.progress = mViewModel.colorAlpha.value!!
-
-
-        mColorRed = view.findViewById(R.id.seekbar_color_filter_red)
-        mColorGreen = view.findViewById(R.id.seekbar_color_filter_green)
-        mColorBlue = view.findViewById(R.id.seekbar_color_filter_blue)
-        mColorAlpha = view.findViewById(R.id.seekbar_color_filter_alpha)
+        mBlueLightAlpha.progress = mViewModel.blueLightAlpha.value!!
 
         mColorRed.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
@@ -131,6 +133,17 @@ class PopupReaderColorFilterFragment : Fragment() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
 
+        mBlueLightAlpha.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                if (fromUser)
+                    mViewModel.changeBlueLightAlpha(progress)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
     }
 
     override fun onCreateView(
@@ -144,6 +157,10 @@ class PopupReaderColorFilterFragment : Fragment() {
         mViewModel.colorGreen.observe(viewLifecycleOwner, { mFilterGreen.text = it.toString() })
         mViewModel.colorBlue.observe(viewLifecycleOwner, { mFilterBlue.text = it.toString() })
         mViewModel.colorAlpha.observe(viewLifecycleOwner, { mFilterAlpha.text = it.toString() })
+        mViewModel.blueLightAlpha.observe(viewLifecycleOwner, {
+            val value = if (it > 0) (it * 100 / 200) else 0
+            mFilterBlueLightAlpha.text = "$value %"
+        })
 
         return root
     }

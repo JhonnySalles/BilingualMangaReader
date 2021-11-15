@@ -18,15 +18,15 @@
             android:id="@+id/switch_color_filter"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:checked="false"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:text="@string/popup_reading_custom_color_filter"
             android:textColor="@color/textPrimary"
-            android:checked="false"
-            app:thumbTint="@color/onSecondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:thumbTint="@color/onSecondary" />
 
         <!-- Red filter -->
 
@@ -34,9 +34,9 @@
             android:id="@+id/txt_color_filter_red_symbol"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/textPrimary"
             android:paddingStart="@dimen/popup_reader_color_filter_padding"
             android:text="@string/color_filter_r_value"
+            android:textColor="@color/textPrimary"
             app:layout_constraintBottom_toBottomOf="@id/seekbar_color_filter_red"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/seekbar_color_filter_red" />
@@ -49,8 +49,8 @@
             android:layout_marginEnd="8dp"
             android:max="255"
             android:padding="8dp"
-            android:progressTint="@color/white"
             android:progressBackgroundTint="@color/white"
+            android:progressTint="@color/white"
             app:layout_constraintEnd_toStartOf="@id/txt_color_filter_red_value"
             app:layout_constraintStart_toEndOf="@id/color_filter_symbols_barrier"
             app:layout_constraintTop_toBottomOf="@id/switch_color_filter" />
@@ -74,8 +74,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/popup_reader_color_filter_padding"
-            android:textColor="@color/textPrimary"
             android:text="@string/color_filter_g_value"
+            android:textColor="@color/textPrimary"
             app:layout_constraintBottom_toBottomOf="@id/seekbar_color_filter_green"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/seekbar_color_filter_green" />
@@ -88,8 +88,8 @@
             android:layout_marginEnd="8dp"
             android:max="255"
             android:padding="8dp"
-            android:progressTint="@color/white"
             android:progressBackgroundTint="@color/white"
+            android:progressTint="@color/white"
             app:layout_constraintEnd_toStartOf="@id/txt_color_filter_green_value"
             app:layout_constraintStart_toEndOf="@id/color_filter_symbols_barrier"
             app:layout_constraintTop_toBottomOf="@id/seekbar_color_filter_red" />
@@ -127,8 +127,8 @@
             android:layout_marginEnd="8dp"
             android:max="255"
             android:padding="8dp"
-            android:progressTint="@color/white"
             android:progressBackgroundTint="@color/white"
+            android:progressTint="@color/white"
             app:layout_constraintEnd_toStartOf="@id/txt_color_filter_blue_value"
             app:layout_constraintStart_toEndOf="@id/color_filter_symbols_barrier"
             app:layout_constraintTop_toBottomOf="@id/seekbar_color_filter_green" />
@@ -146,7 +146,6 @@
             tools:text="255" />
 
         <!-- Alpha filter -->
-
         <TextView
             android:id="@+id/txt_color_filter_alpha_symbol"
             android:layout_width="wrap_content"
@@ -166,8 +165,8 @@
             android:layout_marginEnd="8dp"
             android:max="255"
             android:padding="8dp"
-            android:progressTint="@color/white"
             android:progressBackgroundTint="@color/white"
+            android:progressTint="@color/white"
             app:layout_constraintEnd_toStartOf="@id/txt_color_filter_alpha_value"
             app:layout_constraintStart_toEndOf="@id/color_filter_symbols_barrier"
             app:layout_constraintTop_toBottomOf="@id/seekbar_color_filter_blue" />
@@ -184,8 +183,64 @@
             app:layout_constraintTop_toTopOf="@id/seekbar_color_filter_alpha"
             tools:text="255" />
 
-        <!-- Grayscale -->
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/color_filter_symbols_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="end"
+            app:constraint_referenced_ids="txt_color_filter_alpha_symbol,txt_color_filter_blue_symbol,txt_color_filter_red_symbol,txt_color_filter_green_symbol" />
 
+        <!-- Blue Light -->
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switch_blue_light"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/popup_reading_blue_light"
+            android:textColor="@color/textPrimary"
+            app:layout_constraintTop_toBottomOf="@id/seekbar_color_filter_alpha"
+            app:thumbTint="@color/onSecondary" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/txt_blue_light_alpha_symbol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/popup_reader_blue_light_padding"
+            android:textAppearance="?attr/textAppearanceTitleSmall"
+            android:tint="@color/textPrimary"
+            app:layout_constraintBottom_toBottomOf="@id/seekbar_blue_light_alpha"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/seekbar_blue_light_alpha"
+            app:srcCompat="@drawable/ic_blue_light" />
+
+        <SeekBar
+            android:id="@+id/seekbar_blue_light_alpha"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:max="200"
+            android:padding="8dp"
+            android:progressBackgroundTint="@color/white"
+            android:progressTint="@color/white"
+            app:layout_constraintEnd_toStartOf="@id/txt_color_filter_alpha_value"
+            app:layout_constraintStart_toEndOf="@id/color_filter_symbols_barrier"
+            app:layout_constraintTop_toBottomOf="@id/switch_blue_light" />
+
+        <TextView
+            android:id="@+id/txt_color_blue_light_value"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="16dp"
+            android:textColor="@color/textPrimary"
+            app:layout_constraintBottom_toBottomOf="@id/seekbar_blue_light_alpha"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/seekbar_blue_light_alpha"
+            tools:text="50 %" />
+
+        <!-- Grayscale -->
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/switch_grayscale"
             android:layout_width="match_parent"
@@ -194,8 +249,8 @@
             android:paddingEnd="16dp"
             android:text="@string/popup_reading_grayscale"
             android:textColor="@color/textPrimary"
-            app:thumbTint="@color/onSecondary"
-            app:layout_constraintTop_toBottomOf="@id/txt_color_filter_alpha_value" />
+            app:layout_constraintTop_toBottomOf="@id/seekbar_blue_light_alpha"
+            app:thumbTint="@color/onSecondary" />
 
         <!-- Invert Color -->
 
@@ -207,17 +262,20 @@
             android:paddingEnd="16dp"
             android:text="@string/popup_reading_invert_color"
             android:textColor="@color/textPrimary"
-            app:thumbTint="@color/onSecondary"
-            app:layout_constraintTop_toBottomOf="@id/switch_grayscale" />
+            app:layout_constraintTop_toBottomOf="@id/switch_grayscale"
+            app:thumbTint="@color/onSecondary" />
 
-        <!-- Brightness -->
-
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/color_filter_symbols_barrier"
-            android:layout_width="wrap_content"
+        <!-- Sepia -->
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switch_sepia_color"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:barrierDirection="end"
-            app:constraint_referenced_ids="txt_color_filter_alpha_symbol,txt_color_filter_blue_symbol,txt_color_filter_red_symbol,txt_color_filter_green_symbol" />
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/popup_reading_sepia"
+            android:textColor="@color/textPrimary"
+            app:layout_constraintTop_toBottomOf="@id/switch_invert_color"
+            app:thumbTint="@color/onSecondary" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
