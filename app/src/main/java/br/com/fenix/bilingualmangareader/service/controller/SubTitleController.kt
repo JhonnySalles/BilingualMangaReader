@@ -441,6 +441,7 @@ class SubTitleController private constructor(private val context: Context) {
     ///////////////////// DRAWING //////////////
     private var imageBackup: Bitmap? = null
     private var isDrawing = false
+    private var target : MyTarget? = null
     fun drawSelectedText() {
         if (mReaderFragment == null || pageSelected.value == null || pageSelected.value?.texts!!.isEmpty())
             return
@@ -450,8 +451,8 @@ class SubTitleController private constructor(private val context: Context) {
             view.setImageBitmap(imageBackup)
             isDrawing = false
         } else {
-            val target = MyTarget(view)
-            mReaderFragment!!.loadImage(target, ReaderFragment.mCurrentPage)
+            target = MyTarget(view)
+            mReaderFragment!!.loadImage(target!!, ReaderFragment.mCurrentPage)
         }
     }
 
@@ -497,7 +498,6 @@ class SubTitleController private constructor(private val context: Context) {
         }
 
         override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-
         }
 
     }
