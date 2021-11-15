@@ -78,6 +78,9 @@ class GeneralConsts private constructor() {
             const val COLOR_BLUE = "COLOR_BLUE"
             const val COLOR_GREEN = "COLOR_GREEN"
             const val COLOR_ALPHA = "COLOR_ALPHA"
+            const val SEPIA = "SEPIA"
+            const val BLUE_LIGHT = "BLUE_LIGHT"
+            const val BLUE_LIGHT_ALPHA = "BLUE_LIGHT_ALPHA"
         }
     }
 

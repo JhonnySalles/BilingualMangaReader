@@ -236,9 +236,23 @@ class FloatingSubtitleReader constructor(private val context: Context) {
 
     private fun findVocabulary(vocabulary: String) {
         mListPageVocabulary.clearChoices()
-        if (mVocabularyItem.isNotEmpty() && mVocabulary.containsKey(vocabulary)) {
+        if (mVocabularyItem.isNotEmpty()) {
+            var index = -1
+
+            if (mVocabulary.containsKey(vocabulary))
+                index = mVocabularyItem.indexOf(mVocabulary[vocabulary])
+            else {
+                for (word in mVocabulary.keys)
+                    if (vocabulary in word) {
+                        index = mVocabularyItem.indexOf(mVocabulary[word])
+                        break
+                    }
+
+                if (index < 0)
+                    return
+            }
+
             mScrollContent.smoothScrollTo(0, mListPageVocabulary.top)
-            val index = mVocabularyItem.indexOf(mVocabulary[vocabulary])
             mListPageVocabulary.smoothScrollToPosition(index)
             mListPageVocabulary.requestFocusFromTouch()
             mListPageVocabulary.setSelection(index)
