@@ -10,6 +10,7 @@ import android.provider.Settings
 import android.text.method.LinkMovementMethod
 import android.view.*
 import android.widget.*
+import android.widget.AdapterView.OnItemLongClickListener
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatImageButton
 import br.com.fenix.bilingualmangareader.R
@@ -20,6 +21,7 @@ import br.com.fenix.bilingualmangareader.service.kanji.Formatter
 import com.pedromassango.doubleclick.DoubleClick
 import com.pedromassango.doubleclick.DoubleClickListener
 import kotlin.math.abs
+
 
 @SuppressLint("ClickableViewAccessibility")
 class FloatingSubtitleReader constructor(private val context: Context) {
@@ -156,6 +158,22 @@ class FloatingSubtitleReader constructor(private val context: Context) {
             mListPageVocabulary = this.findViewById(R.id.list_floating_page_vocabulary)
             mListPageVocabulary.adapter = ArrayAdapter(context, R.layout.list_item_vocabulary_small, mVocabularyItem)
             mListPageVocabulary.choiceMode = ListView.CHOICE_MODE_SINGLE
+            mListPageVocabulary.isLongClickable = true
+            mListPageVocabulary.onItemLongClickListener = OnItemLongClickListener { _, _, index, _ ->
+                if (index >= 0 && mVocabularyItem.size > index) {
+                    val text = mVocabularyItem[index]
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.action_copy) + " $text",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    val clip = ClipData.newPlainText("Copied Text", text)
+                    clipboard.setPrimaryClip(clip)
+                }
+                true
+            }
 
             mSubtitleContent.setOnClickListener(
                 DoubleClick(object : DoubleClickListener {
