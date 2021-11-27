@@ -670,4 +670,16 @@ class SubTitleController private constructor(private val context: Context) {
             false
         }
     }
+
+    fun selectTextByCoordinate(x : Float, y:Float) {
+        if (pageSelected.value == null)
+            return
+
+        pageSelected.value!!.texts.forEach {
+            if (it.x1 <= x && it.x2 >=x && it.y1 <= y && it.y2 >= y) {
+                setText(it)
+                return@forEach
+            }
+        }
+    }
 }

@@ -228,6 +228,17 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
         super.computeScroll()
     }
 
+    fun getPointerCoordinate(e: MotionEvent): FloatArray {
+        val index = e.actionIndex
+        val coords = floatArrayOf(e.getX(index), e.getY(index))
+        val matrix = Matrix()
+        imageMatrix.invert(matrix)
+        m[Matrix.MTRANS_X] = mScroller!!.currX.toFloat()
+        m[Matrix.MTRANS_Y] = mScroller!!.currY.toFloat()
+        matrix.mapPoints(coords)
+        return coords
+    }
+
     open fun getCurrentScale(): Float {
         mMatrix.getValues(m)
         return m[Matrix.MSCALE_X]
