@@ -204,8 +204,8 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private fun sortList(list: ArrayList<Manga>) {
         when (mOrderBy) {
             Order.Date -> list.sortBy { it.dateCreate }
-            Order.LastAccess -> list.sortByDescending { it.lastAccess }
-            Order.Favorite -> list.sortBy { it.favorite }
+            Order.LastAccess -> list.sortWith(compareByDescending<Manga> { it.lastAccess }.thenBy { it.name })
+            Order.Favorite -> list.sortWith(compareByDescending<Manga> { it.favorite }.thenBy { it.name })
             else -> list.sortBy { it.name }
         }
     }
