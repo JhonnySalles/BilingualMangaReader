@@ -2,7 +2,7 @@
 > Leitor de mangas offline, no qual possui compatibilidade com textos extraido e processado através do programa [MangaExtractor](https://github.com/JhonnySalles/MangaExtractor)
 
 <h4 align="center"> 
-	🚧  PDV 🚀 Em construção...  🚧
+	🚧  BilingualMangaReader 🚀 Em construção...  🚧
 </h4>
 
 [![Build Status][travis-image]][travis-url]
