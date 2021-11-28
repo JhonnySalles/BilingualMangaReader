@@ -115,11 +115,11 @@ O aplicativo é também compatível com legendas extraidas e pré processadas co
 - [X] Interface para modo tablet
 - [X] Localizar no vocabulário na ao toque na palavra
 - [X] Troca das legendas entre idiomas selecionados (devido a diferenças de paginas entre versões pode não localizar de forma satisfatória)
-- [ ] Luz azul para leitura norturna
+- [X] Luz azul para leitura norturna
 - [ ] Favoritar vocabulário para estudo posterior
 - [ ] Adição de dicionarios japonês
 - [ ] Exportar vocabularios ao Anki
-- [ ] Localizar a legenda pela cordenada do texto
+- [X] Localizar a legenda pela cordenada do texto
 
 
 ## Contribuindo
