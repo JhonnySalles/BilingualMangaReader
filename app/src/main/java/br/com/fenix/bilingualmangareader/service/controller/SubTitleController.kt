@@ -53,6 +53,9 @@ class SubTitleController private constructor(private val context: Context) {
     private var mTextSelected: MutableLiveData<Text> = MutableLiveData()
     var textSelected: LiveData<Text> = mTextSelected
 
+    private var mForceExpandFloatingPopup: MutableLiveData<Boolean> = MutableLiveData(true)
+    var forceExpandFloatingPopup: LiveData<Boolean> = mForceExpandFloatingPopup
+
     private var mSelectedSubTitle: MutableLiveData<SubTitle> = MutableLiveData()
     var selectedSubtitle: LiveData<SubTitle> = mSelectedSubTitle
 
@@ -60,6 +63,8 @@ class SubTitleController private constructor(private val context: Context) {
     private lateinit var mTranslateLang: Languages
     private var labelChapter: String =
         context.resources.getString(R.string.popup_reading_subtitle_chapter)
+    private var labelExtra: String =
+        context.resources.getString(R.string.popup_reading_subtitle_extra)
 
     var isSelected = false
     private fun getSubtitle(): HashMap<String, Chapter> =
@@ -114,7 +119,8 @@ class SubTitleController private constructor(private val context: Context) {
             "%.0f".format(chapter.chapter)
         else
             "%.1f".format(chapter.chapter)
-        return chapter.language.name + " - " + labelChapter + " " + number.padStart(2, '0')
+        val label = if (chapter.extra) labelExtra else labelChapter
+        return chapter.language.name + " - " + label + " " + number.padStart(2, '0')
     }
 
 
@@ -678,6 +684,7 @@ class SubTitleController private constructor(private val context: Context) {
         pageSelected.value!!.texts.forEach {
             if (it.x1 <= x && it.x2 >=x && it.y1 <= y && it.y2 >= y) {
                 setText(it)
+                mForceExpandFloatingPopup.value = !mForceExpandFloatingPopup.value!!
                 return@forEach
             }
         }

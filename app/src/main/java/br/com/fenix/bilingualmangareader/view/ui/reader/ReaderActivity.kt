@@ -309,6 +309,11 @@ class ReaderActivity : AppCompatActivity() {
             mFloatingSubtitleReader.updateText(it)
         })
 
+        mSubTitleController.forceExpandFloatingPopup.observe(this, {
+            if (mFloatingSubtitleReader.isShowing)
+                mFloatingSubtitleReader.expanded(true)
+        })
+
         if (mSubTitleController.mManga != null && mSubTitleController.mManga!!.id != null && mSubTitleController.textSelected.value == null) {
             val mSubtitleRepository = SubTitleRepository(applicationContext)
             val lastSubtitle = mSubtitleRepository.findByIdManga(mSubTitleController.mManga!!.id!!)
