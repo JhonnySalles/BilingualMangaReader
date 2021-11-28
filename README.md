@@ -88,8 +88,24 @@ O aplicativo é também compatível com legendas extraidas e pré processadas co
 
 ## Histórico de Release
 
-* 0.0.1
-    * Em progresso.
+* 0.1.0
+    * Uso em desenvolvimento.
+* 0.2.0
+    * Leitor de manga com suporte a rar/zip/cbr/cbz.
+    * Recursos principais de um leitor de manga.
+    * Adicionar favorito.
+    * Exclusão do arquivo.
+    * Ajuste de brilho e cor da imagem.
+    * Reconhecimento de fugirana nos textos em japonês.
+    * Carregar legendas externas e interna ao arquivo.
+    * Detalhes sobre o kanji e nivel jlpt.
+    * Primeira versão estável publicada. 
+* 0.2.1
+    * Localização do texto com clique longo no balão de fala.
+    * Adicionado tela de ajuda com detalhes do funcionamento.
+    * Adicionado controle de luz azul e sépia.
+* 0.2.2
+    * Em progresso. 
 
 
 ### Features
