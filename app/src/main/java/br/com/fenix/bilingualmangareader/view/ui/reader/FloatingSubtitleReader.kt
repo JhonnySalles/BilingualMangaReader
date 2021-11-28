@@ -132,26 +132,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
             mIconRetracted = AppCompatResources.getDrawable(context, R.drawable.ic_retracted)
 
             mBtnExpanded = this.findViewById(R.id.nav_expanded)
-            mBtnExpanded.setOnClickListener {
-                if (mOriginalHeight == 0)
-                    mOriginalHeight = mFloatingView.height
-
-                if (mFloatingView.height == mOriginalHeight) {
-                    val params = mFloatingView.layoutParams as WindowManager.LayoutParams
-                    params.height = context.resources.getDimension(R.dimen.floating_reader_button_close).toInt()
-                    mFloatingView.layoutParams = params
-                    mBtnExpanded.setImageDrawable(mIconExpanded)
-                } else {
-                    val params = mFloatingView.layoutParams as WindowManager.LayoutParams
-                    params.height = mOriginalHeight
-                    mFloatingView.layoutParams = params
-                    mBtnExpanded.setImageDrawable(mIconRetracted)
-                }
-
-                windowManager?.apply {
-                    updateViewLayout(mFloatingView, mFloatingView.layoutParams)
-                }
-            }
+            mBtnExpanded.setOnClickListener { expanded() }
 
             mSubtitleTitle = this.findViewById(R.id.txt_floating_title)
             mSubtitleContent = this.findViewById(R.id.txt_floating_content)
@@ -274,6 +255,27 @@ class FloatingSubtitleReader constructor(private val context: Context) {
             mListPageVocabulary.smoothScrollToPosition(index)
             mListPageVocabulary.requestFocusFromTouch()
             mListPageVocabulary.setSelection(index)
+        }
+    }
+
+    fun expanded(expand : Boolean = false) {
+        if (mOriginalHeight == 0)
+            mOriginalHeight = mFloatingView.height
+
+        if (expand || mFloatingView.height != mOriginalHeight) {
+            val params = mFloatingView.layoutParams as WindowManager.LayoutParams
+            params.height = mOriginalHeight
+            mFloatingView.layoutParams = params
+            mBtnExpanded.setImageDrawable(mIconRetracted)
+        } else {
+            val params = mFloatingView.layoutParams as WindowManager.LayoutParams
+            params.height = context.resources.getDimension(R.dimen.floating_reader_button_close).toInt()
+            mFloatingView.layoutParams = params
+            mBtnExpanded.setImageDrawable(mIconExpanded)
+        }
+
+        windowManager?.apply {
+            updateViewLayout(mFloatingView, mFloatingView.layoutParams)
         }
     }
 
