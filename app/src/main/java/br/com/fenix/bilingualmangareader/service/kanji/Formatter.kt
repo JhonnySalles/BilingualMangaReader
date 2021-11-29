@@ -94,6 +94,7 @@ class Formatter {
                 .setDescription(description)
                 .setStyle(Style.HEADER_WITH_TITLE)
                 .setHeaderColor(R.color.onSecondary)
+                .setScrollable(true)
                 .show()
         }
 
