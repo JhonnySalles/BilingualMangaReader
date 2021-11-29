@@ -76,6 +76,8 @@ class ReaderActivity : AppCompatActivity() {
 
         Formatter.initializeAsync(applicationContext)
 
+        SubTitleController.getInstance(applicationContext).clearExternalSubtitlesSelected()
+
         mToolbar = findViewById(R.id.toolbar_reader)
         mToolbarTitle = findViewById(R.id.toolbar_title_custom)
         mToolbarSubTitle = findViewById(R.id.toolbar_subtitle_custom)
