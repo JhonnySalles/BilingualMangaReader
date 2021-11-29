@@ -55,6 +55,8 @@ class PopupSubtitleConfiguration : Fragment() {
 
         mSubTitleController = SubTitleController.getInstance(requireContext())
 
+        observer()
+
         mSubtitleSelectedAutoComplete.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
             }
@@ -106,17 +108,6 @@ class PopupSubtitleConfiguration : Fragment() {
                     mSubTitleController.selectedLanguage(mMapLanguage[parent.getItemAtPosition(position).toString()]!!)
             }
 
-        mLoadExternalSubtitle.editText?.addTextChangedListener(object: TextWatcher {
-            override fun beforeTextChanged(s:CharSequence, start:Int, count:Int, after:Int) {
-            }
-            override fun onTextChanged(s:CharSequence, start:Int, before:Int, count:Int) {
-            }
-            override fun afterTextChanged(s: Editable) {
-                if (s.isEmpty())
-                    mSubTitleController.clearExternalSubtitlesSelected()
-            }
-        })
-
         mLoadExternalSubtitleAutoComplete.setOnClickListener {
             mLoadExternalSubtitleAutoComplete.setText("")
             val jsonType = MimeTypeMap.getSingleton().getMimeTypeFromExtension("json") ?: "application/octet-stream"
@@ -130,12 +121,33 @@ class PopupSubtitleConfiguration : Fragment() {
         if (mSubTitleController.mManga != null && mSubTitleController.mManga!!.id != null) {
             val mSubtitleRepository = SubTitleRepository(requireContext())
             val lastSubtitle = mSubtitleRepository.findByIdManga(mSubTitleController.mManga!!.id!!)
-            if (lastSubtitle != null)
+            if (lastSubtitle != null) {
                 mSubTitleController.initialize(lastSubtitle.chapterKey, lastSubtitle.pageKey)
+            }
         }
 
-        observer()
         return root
+    }
+
+    private val externalTextWatcher : TextWatcher = object: TextWatcher {
+        override fun beforeTextChanged(s:CharSequence, start:Int, count:Int, after:Int) {
+        }
+        override fun onTextChanged(s:CharSequence, start:Int, before:Int, count:Int) {
+        }
+        override fun afterTextChanged(s: Editable) {
+            if (s.isEmpty())
+                mSubTitleController.clearExternalSubtitlesSelected()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mLoadExternalSubtitle.editText?.addTextChangedListener(externalTextWatcher)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mLoadExternalSubtitle.editText?.removeTextChangedListener(externalTextWatcher)
     }
 
     override fun onActivityResult(
