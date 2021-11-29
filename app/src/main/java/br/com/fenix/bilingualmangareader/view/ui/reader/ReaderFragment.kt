@@ -2,6 +2,7 @@ package br.com.fenix.bilingualmangareader.view.ui.reader
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
@@ -554,17 +555,19 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 setFullscreen(fullscreen = true, animated = true)
                 return true
             }
+            val isLandscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
             val x = e.x
+            val divider = if (isLandscape) 5 else 3
 
             // tap left edge
-            if (x < mViewPager.width.toFloat() / 3) {
+            if (x < mViewPager.width.toFloat() / divider) {
                 if (mIsLeftToRight) {
                     if (getCurrentPage() == 1) hitBeginning() else setCurrentPage(getCurrentPage() - 1)
                 } else {
                     if (getCurrentPage() == mViewPager.adapter!!.count
                     ) hitEnding() else setCurrentPage(getCurrentPage() + 1)
                 }
-            } else if (x > mViewPager.width.toFloat() / 3 * 2) {
+            } else if (x > mViewPager.width.toFloat() / divider * (divider - 1)) {
                 if (mIsLeftToRight) {
                     if (getCurrentPage() == mViewPager.adapter!!.count
                     ) hitEnding() else setCurrentPage(getCurrentPage() + 1)
