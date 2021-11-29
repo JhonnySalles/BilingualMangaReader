@@ -236,7 +236,8 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
         m[Matrix.MTRANS_X] = mScroller!!.currX.toFloat()
         m[Matrix.MTRANS_Y] = mScroller!!.currY.toFloat()
         matrix.mapPoints(coords)
-        return coords
+        val imageSize = computeCurrentImageSize()
+        return floatArrayOf(coords[0], coords[1], imageSize.x.toFloat())
     }
 
     open fun getCurrentScale(): Float {

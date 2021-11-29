@@ -28,6 +28,10 @@ import org.apache.commons.codec.digest.DigestUtils
 import java.io.InputStream
 import java.lang.ref.WeakReference
 import java.util.*
+import android.graphics.BitmapFactory
+import br.com.fenix.bilingualmangareader.util.constants.ReaderConsts
+import java.io.BufferedInputStream
+
 
 class SubTitleController private constructor(private val context: Context) {
 
@@ -447,7 +451,7 @@ class SubTitleController private constructor(private val context: Context) {
     ///////////////////// DRAWING //////////////
     private var imageBackup: Bitmap? = null
     private var isDrawing = false
-    private var target : MyTarget? = null
+    private var target: MyTarget? = null
     fun drawSelectedText() {
         if (mReaderFragment == null || pageSelected.value == null || pageSelected.value?.texts!!.isEmpty())
             return
@@ -583,6 +587,7 @@ class SubTitleController private constructor(private val context: Context) {
     }
 
     private fun setPage(lastText: Boolean, page: Page?) {
+        mRatio = null
         isDrawing = false
         mPageSelected.value = page
         mSelectedSubTitle.value?.pageKey =
@@ -677,12 +682,27 @@ class SubTitleController private constructor(private val context: Context) {
         }
     }
 
-    fun selectTextByCoordinate(x : Float, y:Float) {
+    private var mRatio: Float? = null
+    fun selectTextByCoordinate(coord:  FloatArray) {
         if (pageSelected.value == null)
             return
 
+        val point = if (!isDrawing) {
+            if (mRatio == null) {
+                val input = BufferedInputStream(mParse.getPage(ReaderFragment.mCurrentPage))
+                val image = BitmapFactory.decodeStream(input)
+                //Position 2 has a new image size
+                mRatio = if (image != null && image.width > ReaderConsts.READER.MAX_PAGE_WIDTH)
+                    coord[2] / image.width
+                else
+                    1f
+            }
+            Point((coord[0] / mRatio!!).toInt(), (coord[1] / mRatio!!).toInt())
+        } else
+            Point(coord[0].toInt(), coord[1].toInt())
+
         pageSelected.value!!.texts.forEach {
-            if (it.x1 <= x && it.x2 >=x && it.y1 <= y && it.y2 >= y) {
+            if (it.x1 <= point.x && it.x2 >= point.x && it.y1 <= point.y && it.y2 >= point.y) {
                 setText(it)
                 mForceExpandFloatingPopup.value = !mForceExpandFloatingPopup.value!!
                 return@forEach
