@@ -48,8 +48,6 @@ import kotlin.math.min
 import android.view.MotionEvent
 
 
-
-
 class ReaderFragment : Fragment(), View.OnTouchListener {
 
     private val mViewModel: ReaderViewModel by activityViewModels()
@@ -463,15 +461,18 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         }
     }
 
-    fun loadImage(t: Target, position: Int) {
+    fun loadImage(t: Target, position: Int, resize : Boolean = true) {
         try {
-            mPicasso.load(mComicHandler.getPageUri(position))
+            val request = mPicasso.load(mComicHandler.getPageUri(position))
                 .memoryPolicy(MemoryPolicy.NO_STORE)
                 .tag(requireActivity())
-                .resize(ReaderConsts.READER.MAX_PAGE_WIDTH, ReaderConsts.READER.MAX_PAGE_HEIGHT)
-                .centerInside()
-                .onlyScaleDown()
-                .transform(mViewModel.filters.value!!)
+
+            if (resize)
+                request.resize(ReaderConsts.READER.MAX_PAGE_WIDTH, ReaderConsts.READER.MAX_PAGE_HEIGHT)
+                    .centerInside()
+                    .onlyScaleDown()
+
+            request.transform(mViewModel.filters.value!!)
                 .into(t)
         } catch (e: Exception) {
             Log.e(GeneralConsts.TAG.LOG, "Error in open image: " + e.message)

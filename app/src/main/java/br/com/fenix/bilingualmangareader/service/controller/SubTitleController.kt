@@ -462,7 +462,7 @@ class SubTitleController private constructor(private val context: Context) {
             isDrawing = false
         } else {
             target = MyTarget(view)
-            mReaderFragment!!.loadImage(target!!, ReaderFragment.mCurrentPage)
+            mReaderFragment!!.loadImage(target!!, ReaderFragment.mCurrentPage, false)
         }
     }
 
