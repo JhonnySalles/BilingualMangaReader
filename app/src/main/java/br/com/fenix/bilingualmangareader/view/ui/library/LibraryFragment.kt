@@ -464,8 +464,24 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         }
 
         override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
-            deleteFile(mViewModel.get(viewHolder.adapterPosition))
-            notifyDataSet()
+            val manga = mViewModel.get(viewHolder.adapterPosition) ?: return
+            var excluded = false
+            val dialog: AlertDialog =
+                AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
+                    .setTitle(getString(R.string.library_menu_delete))
+                    .setMessage(getString(R.string.library_menu_delete_description) + "\n" + manga.file.name)
+                    .setPositiveButton(
+                        R.string.action_delete
+                    ) { _, _ ->
+                        deleteFile(manga)
+                        notifyDataSet()
+                        excluded = true
+                    }.setOnDismissListener {
+                        if (!excluded)
+                            onRefresh()
+                    }
+                    .create()
+            dialog.show()
         }
     }
 
