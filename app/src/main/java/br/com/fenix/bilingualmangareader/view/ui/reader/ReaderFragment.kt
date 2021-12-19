@@ -151,6 +151,11 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         }
     }
 
+    override fun onResume() {
+        setFullscreen(fullscreen = true, animated = true)
+        super.onResume()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mCurrentPage = 0
