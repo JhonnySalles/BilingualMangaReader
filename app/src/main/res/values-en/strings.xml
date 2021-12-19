@@ -4,6 +4,7 @@
 
     <string name="action_positive">Yes</string>
     <string name="action_negative">No</string>
+    <string name="action_delete">Delete</string>
     <string name="action_copy">Copied text: </string>
     <string name="action_app_not_installed">Required App is not installed</string>
 

@@ -4,6 +4,7 @@
 
     <string name="action_positive">Sim</string>
     <string name="action_negative">Não</string>
+    <string name="action_delete">Apagar</string>
     <string name="action_copy">Texto copiado: </string>
     <string name="action_app_not_installed">O App necessário não está instalado</string>
 

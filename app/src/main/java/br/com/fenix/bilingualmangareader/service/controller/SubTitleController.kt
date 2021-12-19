@@ -587,7 +587,7 @@ class SubTitleController private constructor(private val context: Context) {
     }
 
     private fun setPage(lastText: Boolean, page: Page?) {
-        mRatio = null
+        mOriginalSize = null
         isDrawing = false
         mPageSelected.value = page
         mSelectedSubTitle.value?.pageKey =
@@ -682,26 +682,30 @@ class SubTitleController private constructor(private val context: Context) {
         }
     }
 
-    private var mRatio: Float? = null
+    private var mOriginalSize: FloatArray? = null
     fun selectTextByCoordinate(coord:  FloatArray) {
         if (pageSelected.value == null)
             return
 
-        val point = if (!isDrawing) {
-            if (mRatio == null) {
+        val point = if (!isDrawing && imageBackup == null) {
+            if (mOriginalSize == null) {
                 val input = BufferedInputStream(mParse.getPage(ReaderFragment.mCurrentPage))
                 val image = BitmapFactory.decodeStream(input)
                 //Position 2 has a new image size
-                mRatio = if (image != null && image.width > ReaderConsts.READER.MAX_PAGE_WIDTH)
-                    coord[2] / image.width
+                mOriginalSize = if (image != null && image.width > ReaderConsts.READER.MAX_PAGE_WIDTH)
+                    floatArrayOf(image.width.toFloat(), image.height.toFloat())
                 else
-                    1f
+                    floatArrayOf(coord[2], coord[3])
+
+                //Log.e(GeneralConsts.TAG.LOG, "${coord[0]} ${coord[1]} / ${coord[2]} ${coord[3]} - ${mOriginalSize!![0]} - ${mOriginalSize!![1]} - ${image.width}  ${image.height} - ${ReaderConsts.READER.MAX_PAGE_WIDTH}")
             }
-            Point((coord[0] / mRatio!!).toInt(), (coord[1] / mRatio!!).toInt())
+
+            Point((coord[0] / coord[2] * mOriginalSize!![0] ).toInt(), (coord[1] / coord[3] * mOriginalSize!![1]).toInt())
         } else
             Point(coord[0].toInt(), coord[1].toInt())
 
         pageSelected.value!!.texts.forEach {
+            //Log.e(GeneralConsts.TAG.LOG, "${point.x}  ${point.y} - ${it.x1}  ${it.x2} / ${it.y1}  ${it.y2}")
             if (it.x1 <= point.x && it.x2 >= point.x && it.y1 <= point.y && it.y2 >= point.y) {
                 setText(it)
                 mForceExpandFloatingPopup.value = !mForceExpandFloatingPopup.value!!
