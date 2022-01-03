@@ -2,7 +2,9 @@ package br.com.fenix.bilingualmangareader.view.ui.reader
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.graphics.Bitmap
+import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -43,6 +45,8 @@ import java.lang.ref.WeakReference
 import java.util.*
 import kotlin.math.max
 import kotlin.math.min
+import android.view.MotionEvent
+
 
 class ReaderFragment : Fragment(), View.OnTouchListener {
 
@@ -145,6 +149,11 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                     loadImage(mTargets[mTargets.keyAt(i)] as MyTarget)
             }
         }
+    }
+
+    override fun onResume() {
+        setFullscreen(fullscreen = true, animated = true)
+        super.onResume()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -457,15 +466,18 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         }
     }
 
-    fun loadImage(t: Target, position: Int) {
+    fun loadImage(t: Target, position: Int, resize : Boolean = true) {
         try {
-            mPicasso.load(mComicHandler.getPageUri(position))
+            val request = mPicasso.load(mComicHandler.getPageUri(position))
                 .memoryPolicy(MemoryPolicy.NO_STORE)
                 .tag(requireActivity())
-                .resize(ReaderConsts.READER.MAX_PAGE_WIDTH, ReaderConsts.READER.MAX_PAGE_HEIGHT)
-                .centerInside()
-                .onlyScaleDown()
-                .transform(mViewModel.filters.value!!)
+
+            if (resize)
+                request.resize(ReaderConsts.READER.MAX_PAGE_WIDTH, ReaderConsts.READER.MAX_PAGE_HEIGHT)
+                    .centerInside()
+                    .onlyScaleDown()
+
+            request.transform(mViewModel.filters.value!!)
                 .into(t)
         } catch (e: Exception) {
             Log.e(GeneralConsts.TAG.LOG, "Error in open image: " + e.message)
@@ -534,66 +546,33 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
     }
 
     inner class MyTouchListener : SimpleOnGestureListener() {
-        /*fun getBitmapPositionInsideImageView(imageView: ImageView?): IntArray? {
-            val ret = IntArray(4)
-            if (imageView == null || imageView.drawable == null) return ret
-
-            // Get image dimensions
-            // Get image matrix values and place them in an array
-            val f = FloatArray(9)
-            imageView.imageMatrix.getValues(f)
-
-            // Extract the scale values using the constants (if aspect ratio maintained, scaleX == scaleY)
-            val scaleX = f[Matrix.MSCALE_X]
-            val scaleY = f[Matrix.MSCALE_Y]
-
-            // Get the drawable (could also get the bitmap behind the drawable and getWidth/getHeight)
-            val d = imageView.drawable
-            val origW = d.intrinsicWidth
-            val origH = d.intrinsicHeight
-
-            // Calculate the actual dimensions
-            val actW = Math.round(origW * scaleX)
-            val actH = Math.round(origH * scaleY)
-            ret[2] = actW
-            ret[3] = actH
-
-            // Get image position
-            // We assume that the image is centered into ImageView
-            val imgViewW = imageView.width
-            val imgViewH = imageView.height
-            val top = (imgViewH - actH) / 2
-            val left = (imgViewW - actW) / 2
-            ret[0] = left
-            ret[1] = top
-            return ret
-        }
 
         override fun onLongPress(e: MotionEvent?) {
             super.onLongPress(e)
+            if (e == null) return
             val view: PageImageView = getCurrencyImageView() ?: return
-            val transX = getBitmapPositionInsideImageView(view)
-
-            if (e != null && transX != null)
-                Log.i("Posição click", "x:${e.x} - y:${e.y} | img x:${transX[0]} - y:${transX[1]}" )
-        }*/
+            val coord = view.getPointerCoordinate(e)
+            mSubtitleController.selectTextByCoordinate(coord)
+        }
 
         override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
             if (!isFullscreen()) {
                 setFullscreen(fullscreen = true, animated = true)
                 return true
             }
+            val isLandscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
             val x = e.x
+            val divider = if (isLandscape) 5 else 3
 
             // tap left edge
-            if (x < mViewPager.width.toFloat() / 3) {
+            if (x < mViewPager.width.toFloat() / divider) {
                 if (mIsLeftToRight) {
                     if (getCurrentPage() == 1) hitBeginning() else setCurrentPage(getCurrentPage() - 1)
                 } else {
                     if (getCurrentPage() == mViewPager.adapter!!.count
                     ) hitEnding() else setCurrentPage(getCurrentPage() + 1)
                 }
-            } else if (x > mViewPager.width.toFloat() / 3 * 2) {
+            } else if (x > mViewPager.width.toFloat() / divider * (divider - 1)) {
                 if (mIsLeftToRight) {
                     if (getCurrentPage() == mViewPager.adapter!!.count
                     ) hitEnding() else setCurrentPage(getCurrentPage() + 1)

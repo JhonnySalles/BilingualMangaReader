@@ -28,6 +28,10 @@ import org.apache.commons.codec.digest.DigestUtils
 import java.io.InputStream
 import java.lang.ref.WeakReference
 import java.util.*
+import android.graphics.BitmapFactory
+import br.com.fenix.bilingualmangareader.util.constants.ReaderConsts
+import java.io.BufferedInputStream
+
 
 class SubTitleController private constructor(private val context: Context) {
 
@@ -53,6 +57,9 @@ class SubTitleController private constructor(private val context: Context) {
     private var mTextSelected: MutableLiveData<Text> = MutableLiveData()
     var textSelected: LiveData<Text> = mTextSelected
 
+    private var mForceExpandFloatingPopup: MutableLiveData<Boolean> = MutableLiveData(true)
+    var forceExpandFloatingPopup: LiveData<Boolean> = mForceExpandFloatingPopup
+
     private var mSelectedSubTitle: MutableLiveData<SubTitle> = MutableLiveData()
     var selectedSubtitle: LiveData<SubTitle> = mSelectedSubTitle
 
@@ -60,6 +67,8 @@ class SubTitleController private constructor(private val context: Context) {
     private lateinit var mTranslateLang: Languages
     private var labelChapter: String =
         context.resources.getString(R.string.popup_reading_subtitle_chapter)
+    private var labelExtra: String =
+        context.resources.getString(R.string.popup_reading_subtitle_extra)
 
     var isSelected = false
     private fun getSubtitle(): HashMap<String, Chapter> =
@@ -114,7 +123,8 @@ class SubTitleController private constructor(private val context: Context) {
             "%.0f".format(chapter.chapter)
         else
             "%.1f".format(chapter.chapter)
-        return chapter.language.name + " - " + labelChapter + " " + number.padStart(2, '0')
+        val label = if (chapter.extra) labelExtra else labelChapter
+        return chapter.language.name + " - " + label + " " + number.padStart(2, '0')
     }
 
 
@@ -441,6 +451,7 @@ class SubTitleController private constructor(private val context: Context) {
     ///////////////////// DRAWING //////////////
     private var imageBackup: Bitmap? = null
     private var isDrawing = false
+    private var target: MyTarget? = null
     fun drawSelectedText() {
         if (mReaderFragment == null || pageSelected.value == null || pageSelected.value?.texts!!.isEmpty())
             return
@@ -450,8 +461,8 @@ class SubTitleController private constructor(private val context: Context) {
             view.setImageBitmap(imageBackup)
             isDrawing = false
         } else {
-            val target = MyTarget(view)
-            mReaderFragment!!.loadImage(target, ReaderFragment.mCurrentPage)
+            target = MyTarget(view)
+            mReaderFragment!!.loadImage(target!!, ReaderFragment.mCurrentPage, false)
         }
     }
 
@@ -497,7 +508,6 @@ class SubTitleController private constructor(private val context: Context) {
         }
 
         override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-
         }
 
     }
@@ -577,6 +587,7 @@ class SubTitleController private constructor(private val context: Context) {
     }
 
     private fun setPage(lastText: Boolean, page: Page?) {
+        mOriginalSize = null
         isDrawing = false
         mPageSelected.value = page
         mSelectedSubTitle.value?.pageKey =
@@ -668,6 +679,38 @@ class SubTitleController private constructor(private val context: Context) {
         } else {
             getBeforeSelectPage(true)
             false
+        }
+    }
+
+    private var mOriginalSize: FloatArray? = null
+    fun selectTextByCoordinate(coord:  FloatArray) {
+        if (pageSelected.value == null)
+            return
+
+        val point = if (!isDrawing && imageBackup == null) {
+            if (mOriginalSize == null) {
+                val input = BufferedInputStream(mParse.getPage(ReaderFragment.mCurrentPage))
+                val image = BitmapFactory.decodeStream(input)
+                //Position 2 has a new image size
+                mOriginalSize = if (image != null && image.width > ReaderConsts.READER.MAX_PAGE_WIDTH)
+                    floatArrayOf(image.width.toFloat(), image.height.toFloat())
+                else
+                    floatArrayOf(coord[2], coord[3])
+
+                //Log.e(GeneralConsts.TAG.LOG, "${coord[0]} ${coord[1]} / ${coord[2]} ${coord[3]} - ${mOriginalSize!![0]} - ${mOriginalSize!![1]} - ${image.width}  ${image.height} - ${ReaderConsts.READER.MAX_PAGE_WIDTH}")
+            }
+
+            Point((coord[0] / coord[2] * mOriginalSize!![0] ).toInt(), (coord[1] / coord[3] * mOriginalSize!![1]).toInt())
+        } else
+            Point(coord[0].toInt(), coord[1].toInt())
+
+        pageSelected.value!!.texts.forEach {
+            //Log.e(GeneralConsts.TAG.LOG, "${point.x}  ${point.y} - ${it.x1}  ${it.x2} / ${it.y1}  ${it.y2}")
+            if (it.x1 <= point.x && it.x2 >= point.x && it.y1 <= point.y && it.y2 >= point.y) {
+                setText(it)
+                mForceExpandFloatingPopup.value = !mForceExpandFloatingPopup.value!!
+                return@forEach
+            }
         }
     }
 }

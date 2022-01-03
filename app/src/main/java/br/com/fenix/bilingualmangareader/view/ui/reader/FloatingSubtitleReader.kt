@@ -10,6 +10,7 @@ import android.provider.Settings
 import android.text.method.LinkMovementMethod
 import android.view.*
 import android.widget.*
+import android.widget.AdapterView.OnItemLongClickListener
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatImageButton
 import br.com.fenix.bilingualmangareader.R
@@ -20,6 +21,7 @@ import br.com.fenix.bilingualmangareader.service.kanji.Formatter
 import com.pedromassango.doubleclick.DoubleClick
 import com.pedromassango.doubleclick.DoubleClickListener
 import kotlin.math.abs
+
 
 @SuppressLint("ClickableViewAccessibility")
 class FloatingSubtitleReader constructor(private val context: Context) {
@@ -130,32 +132,29 @@ class FloatingSubtitleReader constructor(private val context: Context) {
             mIconRetracted = AppCompatResources.getDrawable(context, R.drawable.ic_retracted)
 
             mBtnExpanded = this.findViewById(R.id.nav_expanded)
-            mBtnExpanded.setOnClickListener {
-                if (mOriginalHeight == 0)
-                    mOriginalHeight = mFloatingView.height
-
-                if (mFloatingView.height == mOriginalHeight) {
-                    val params = mFloatingView.layoutParams as WindowManager.LayoutParams
-                    params.height = context.resources.getDimension(R.dimen.floating_reader_button_close).toInt()
-                    mFloatingView.layoutParams = params
-                    mBtnExpanded.setImageDrawable(mIconExpanded)
-                } else {
-                    val params = mFloatingView.layoutParams as WindowManager.LayoutParams
-                    params.height = mOriginalHeight
-                    mFloatingView.layoutParams = params
-                    mBtnExpanded.setImageDrawable(mIconRetracted)
-                }
-
-                windowManager?.apply {
-                    updateViewLayout(mFloatingView, mFloatingView.layoutParams)
-                }
-            }
+            mBtnExpanded.setOnClickListener { expanded() }
 
             mSubtitleTitle = this.findViewById(R.id.txt_floating_title)
             mSubtitleContent = this.findViewById(R.id.txt_floating_content)
             mListPageVocabulary = this.findViewById(R.id.list_floating_page_vocabulary)
             mListPageVocabulary.adapter = ArrayAdapter(context, R.layout.list_item_vocabulary_small, mVocabularyItem)
             mListPageVocabulary.choiceMode = ListView.CHOICE_MODE_SINGLE
+            mListPageVocabulary.isLongClickable = true
+            mListPageVocabulary.onItemLongClickListener = OnItemLongClickListener { _, _, index, _ ->
+                if (index >= 0 && mVocabularyItem.size > index) {
+                    val text = mVocabularyItem[index]
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.action_copy) + " $text",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    val clip = ClipData.newPlainText("Copied Text", text)
+                    clipboard.setPrimaryClip(clip)
+                }
+                true
+            }
 
             mSubtitleContent.setOnClickListener(
                 DoubleClick(object : DoubleClickListener {
@@ -236,12 +235,47 @@ class FloatingSubtitleReader constructor(private val context: Context) {
 
     private fun findVocabulary(vocabulary: String) {
         mListPageVocabulary.clearChoices()
-        if (mVocabularyItem.isNotEmpty() && mVocabulary.containsKey(vocabulary)) {
+        if (mVocabularyItem.isNotEmpty()) {
+            var index = -1
+
+            if (mVocabulary.containsKey(vocabulary))
+                index = mVocabularyItem.indexOf(mVocabulary[vocabulary])
+            else {
+                for (word in mVocabulary.keys)
+                    if (vocabulary in word) {
+                        index = mVocabularyItem.indexOf(mVocabulary[word])
+                        break
+                    }
+
+                if (index < 0)
+                    return
+            }
+
             mScrollContent.smoothScrollTo(0, mListPageVocabulary.top)
-            val index = mVocabularyItem.indexOf(mVocabulary[vocabulary])
             mListPageVocabulary.smoothScrollToPosition(index)
             mListPageVocabulary.requestFocusFromTouch()
             mListPageVocabulary.setSelection(index)
+        }
+    }
+
+    fun expanded(expand : Boolean = false) {
+        if (mOriginalHeight == 0)
+            mOriginalHeight = mFloatingView.height
+
+        if (expand || mFloatingView.height != mOriginalHeight) {
+            val params = mFloatingView.layoutParams as WindowManager.LayoutParams
+            params.height = mOriginalHeight
+            mFloatingView.layoutParams = params
+            mBtnExpanded.setImageDrawable(mIconRetracted)
+        } else {
+            val params = mFloatingView.layoutParams as WindowManager.LayoutParams
+            params.height = context.resources.getDimension(R.dimen.floating_reader_button_close).toInt()
+            mFloatingView.layoutParams = params
+            mBtnExpanded.setImageDrawable(mIconExpanded)
+        }
+
+        windowManager?.apply {
+            updateViewLayout(mFloatingView, mFloatingView.layoutParams)
         }
     }
 

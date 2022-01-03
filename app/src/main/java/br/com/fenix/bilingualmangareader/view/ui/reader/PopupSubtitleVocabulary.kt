@@ -1,11 +1,16 @@
 package br.com.fenix.bilingualmangareader.view.ui.reader
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView.OnItemLongClickListener
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import br.com.fenix.bilingualmangareader.R
@@ -34,6 +39,23 @@ class PopupSubtitleVocabulary : Fragment() {
 
         mListPageVocabulary = root.findViewById(R.id.list_subtitle_page_vocabulary)
         mListPageVocabulary.adapter = ArrayAdapter(requireContext(), R.layout.list_item_vocabulary, mVocabularyItem)
+        mListPageVocabulary.isLongClickable = true
+        mListPageVocabulary.onItemLongClickListener = OnItemLongClickListener { _, _, index, _ ->
+            if (index >= 0 && mVocabularyItem.size > index) {
+                val text = mVocabularyItem[index]
+                Toast.makeText(
+                    requireContext(),
+                    requireContext().getString(R.string.action_copy) + " $text",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clip = ClipData.newPlainText("Copied Text", text)
+                clipboard.setPrimaryClip(clip)
+            }
+            true
+        }
+
         mSubTitleController = SubTitleController.getInstance(requireContext())
 
         mSubTitleController.pageSelected.observe(viewLifecycleOwner, {

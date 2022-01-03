@@ -4,6 +4,7 @@
 
     <string name="action_positive">Sim</string>
     <string name="action_negative">Não</string>
+    <string name="action_delete">Apagar</string>
     <string name="action_copy">Texto copiado: </string>
     <string name="action_app_not_installed">O App necessário não está instalado</string>
 
@@ -47,9 +48,9 @@
     <string name="reader_reload">Recarregar</string>
     <string name="reader_not_found">Não encontrado</string>
     <string name="menu_view_mode">Modo de preenchimento</string>
-    <string name="menu_view_mode_aspect_fill">Aspect Fill</string>
+    <string name="menu_view_mode_aspect_fill">Aspecto Fill</string>
     <string name="menu_view_mode_aspect_fit">Aspect Fit</string>
-    <string name="menu_view_mode_fit_width">Fit Width</string>
+    <string name="menu_view_mode_fit_width">Ajustar à largura</string>
 
     <string name="menu_reading_mode">Modo de leitura</string>
     <string name="menu_reading_mode_left_to_right">Comic</string>
@@ -76,6 +77,8 @@
     <string name="popup_reading_custom_brightness">Brilho personalizado</string>
     <string name="popup_reading_grayscale">Escala de cinza</string>
     <string name="popup_reading_invert_color">Inverter cor</string>
+    <string name="popup_reading_blue_light">Blue light</string>
+    <string name="popup_reading_sepia">Sépia</string>
 
     <string name="color_filter_r_value">R</string>
     <string name="color_filter_g_value">G</string>
@@ -93,6 +96,7 @@
     <string name="popup_reading_subtitle_chapter">Capítulo</string>
     <string name="popup_reading_subtitle_text">Texto</string>
     <string name="popup_reading_subtitle_page">Página</string>
+    <string name="popup_reading_subtitle_extra">Extra</string>
     <string name="popup_reading_subtitle_find_subtitle">Encontrado a legenda: capítulo %s e página %s.</string>
     <string name="popup_reading_subtitle_not_find_subtitle">Não foi possível encontrar a legenda.</string>
     <string name="popup_reading_subtitle_list_empty">Lista de legenda vazias.</string>
@@ -106,7 +110,6 @@
 
     <!-- READER FLOATING -->
     <string name="floating_reading_not_permission">Permissão não concedida!</string>
-
 
     <!-- ALERT -->
     <string name="switch_action_positive">Sim</string>

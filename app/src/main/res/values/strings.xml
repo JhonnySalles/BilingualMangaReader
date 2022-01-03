@@ -3,6 +3,7 @@
 
     <string name="action_positive">Yes</string>
     <string name="action_negative">No</string>
+    <string name="action_delete">Delete</string>
     <string name="action_copy">Copied text: </string>
     <string name="action_app_not_installed">Required App is not installed</string>
 
@@ -79,6 +80,8 @@
     <string name="popup_reading_custom_brightness">Custom brightness</string>
     <string name="popup_reading_grayscale">Grayscale</string>
     <string name="popup_reading_invert_color">Invert color</string>
+    <string name="popup_reading_blue_light">Blue light</string>
+    <string name="popup_reading_sepia">Sepia</string>
 
     <string name="color_filter_r_value">R</string>
     <string name="color_filter_g_value">G</string>
@@ -96,6 +99,7 @@
     <string name="popup_reading_subtitle_chapter">Chapter</string>
     <string name="popup_reading_subtitle_page">Page</string>
     <string name="popup_reading_subtitle_text">Text</string>
+    <string name="popup_reading_subtitle_extra">Extra</string>
     <string name="popup_reading_subtitle_find_subtitle">Founded subtitle: chapter %s and page %s.</string>
     <string name="popup_reading_subtitle_not_find_subtitle">Could not find the subtitle in files.</string>
     <string name="popup_reading_subtitle_list_empty">Subtitle list is empty.</string>

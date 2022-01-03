@@ -76,6 +76,8 @@ class ReaderActivity : AppCompatActivity() {
 
         Formatter.initializeAsync(applicationContext)
 
+        SubTitleController.getInstance(applicationContext).clearExternalSubtitlesSelected()
+
         mToolbar = findViewById(R.id.toolbar_reader)
         mToolbarTitle = findViewById(R.id.toolbar_title_custom)
         mToolbarSubTitle = findViewById(R.id.toolbar_subtitle_custom)
@@ -307,6 +309,11 @@ class ReaderActivity : AppCompatActivity() {
         })
         mSubTitleController.textSelected.observe(this, {
             mFloatingSubtitleReader.updateText(it)
+        })
+
+        mSubTitleController.forceExpandFloatingPopup.observe(this, {
+            if (mFloatingSubtitleReader.isShowing)
+                mFloatingSubtitleReader.expanded(true)
         })
 
         if (mSubTitleController.mManga != null && mSubTitleController.mManga!!.id != null && mSubTitleController.textSelected.value == null) {

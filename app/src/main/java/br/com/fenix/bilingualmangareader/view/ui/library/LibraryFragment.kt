@@ -203,8 +203,8 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private fun sortList(list: ArrayList<Manga>) {
         when (mOrderBy) {
             Order.Date -> list.sortBy { it.dateCreate }
-            Order.LastAccess -> list.sortByDescending { it.lastAccess }
-            Order.Favorite -> list.sortBy { it.favorite }
+            Order.LastAccess -> list.sortWith(compareByDescending<Manga> { it.lastAccess }.thenBy { it.name })
+            Order.Favorite -> list.sortWith(compareByDescending<Manga> { it.favorite }.thenBy { it.name })
             else -> list.sortBy { it.name }
         }
     }
@@ -392,7 +392,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     .toInt()
                 else resources.getDimension(R.dimen.manga_grid_card_layout_width).toInt()
                 else -> resources.getDimension(R.dimen.manga_grid_card_layout_width).toInt()
-            }
+            } + 1
 
             val displayMetrics = DisplayMetrics()
             (context as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)
@@ -463,8 +463,24 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         }
 
         override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
-            deleteFile(mViewModel.get(viewHolder.adapterPosition))
-            notifyDataSet()
+            val manga = mViewModel.get(viewHolder.adapterPosition) ?: return
+            var excluded = false
+            val dialog: AlertDialog =
+                AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
+                    .setTitle(getString(R.string.library_menu_delete))
+                    .setMessage(getString(R.string.library_menu_delete_description) + "\n" + manga.file.name)
+                    .setPositiveButton(
+                        R.string.action_delete
+                    ) { _, _ ->
+                        deleteFile(manga)
+                        notifyDataSet()
+                        excluded = true
+                    }.setOnDismissListener {
+                        if (!excluded)
+                            onRefresh()
+                    }
+                    .create()
+            dialog.show()
         }
     }
 
