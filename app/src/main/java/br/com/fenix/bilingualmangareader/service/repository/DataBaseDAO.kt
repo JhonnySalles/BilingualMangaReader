@@ -62,9 +62,6 @@ abstract class MangaDAO : DataBaseDAO<Manga> {
     @Query("UPDATE " + DataBaseConsts.MANGA.TABLE_NAME + " SET " + DataBaseConsts.MANGA.COLUMNS.BOOK_MARK + " = :marker " + " WHERE " + DataBaseConsts.MANGA.COLUMNS.ID + " = :id ")
     abstract fun updateBookMark(id: Long, marker: Int)
 
-    @Query("UPDATE " + DataBaseConsts.MANGA.TABLE_NAME + " SET " + DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS + " = :access " + " WHERE " + DataBaseConsts.MANGA.COLUMNS.ID + " = :id ")
-    abstract fun updateLastAccess(id: Long, access: String)
-
     @Query("UPDATE " + DataBaseConsts.MANGA.TABLE_NAME + " SET " + DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS + " = null, " + DataBaseConsts.MANGA.COLUMNS.BOOK_MARK + " = 0, " + DataBaseConsts.MANGA.COLUMNS.FAVORITE + " = false" + " WHERE " + DataBaseConsts.MANGA.COLUMNS.ID + " = :id ")
     abstract fun clearHistory(id: Long)
 
