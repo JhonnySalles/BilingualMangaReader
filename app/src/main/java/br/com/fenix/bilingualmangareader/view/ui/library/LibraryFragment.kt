@@ -276,13 +276,11 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             override fun onClick(manga: Manga) {
                 val intent = Intent(context, ReaderActivity::class.java)
                 val bundle = Bundle()
-                manga.lastAccess = Calendar.getInstance().time
                 bundle.putString(GeneralConsts.KEYS.MANGA.NAME, manga.title)
                 bundle.putInt(GeneralConsts.KEYS.MANGA.MARK, manga.bookMark)
                 bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, manga)
                 intent.putExtras(bundle)
                 context?.startActivity(intent)
-                mViewModel.updateLastAccess(manga)
             }
 
             override fun onClickLong(manga: Manga, view: View, position: Int) {
