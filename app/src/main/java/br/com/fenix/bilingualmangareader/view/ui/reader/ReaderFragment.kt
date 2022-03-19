@@ -176,8 +176,10 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 if (mManga == null)
                     mManga = mStorage.findByName(file.name)
 
-                if (mManga != null)
+                if (mManga != null) {
                     mCurrentPage = mManga!!.bookMark
+                    mStorage.updateLastAccess(mManga!!)
+                }
 
                 mParse = ParseFactory.create(file)
                 if (mParse != null) {

@@ -29,7 +29,7 @@ class GeneralConsts private constructor() {
 
         fun formatterDateTime(dateTime: LocalDateTime): String {
             val preferences = getSharedPreferences()
-            val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, "yyyy-MM-dd") + " hh:mm:ss"
+            val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, "yyyy-MM-dd") + " hh:mm:ss a"
             return dateTime.format(DateTimeFormatter.ofPattern(pattern))
         }
     }
