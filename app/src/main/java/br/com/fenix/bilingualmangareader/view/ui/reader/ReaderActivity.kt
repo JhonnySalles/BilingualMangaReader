@@ -27,11 +27,12 @@ import br.com.fenix.bilingualmangareader.service.kanji.Formatter
 import br.com.fenix.bilingualmangareader.service.repository.MangaRepository
 import br.com.fenix.bilingualmangareader.service.repository.SubTitleRepository
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import br.com.fenix.bilingualmangareader.view.ui.pages_link.PagesLinkActivity
 import br.com.fenix.bilingualmangareader.view.ui.reader.FloatingSubtitleReader.Companion.canDrawOverlays
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayout
 import java.io.File
-import java.util.*
+import java.time.LocalDateTime
 
 
 class ReaderActivity : AppCompatActivity() {
@@ -42,9 +43,13 @@ class ReaderActivity : AppCompatActivity() {
     private lateinit var mNavReader: LinearLayout
     private lateinit var mToolbar: Toolbar
     private lateinit var mToolbarTitle: TextView
-    private lateinit var mMenuPopup: FrameLayout
-    private lateinit var mPopupView: ViewPager
-    private lateinit var mBottomSheet: BottomSheetBehavior<FrameLayout>
+    private lateinit var mMenuPopupTranslate: FrameLayout
+    private lateinit var mPopupTranslateView: ViewPager
+    private lateinit var mMenuPopupColor: FrameLayout
+    private lateinit var mPopupColorView: ViewPager
+    private lateinit var mPopupColorTab: TabLayout
+    private lateinit var mBottomSheetTranslate: BottomSheetBehavior<FrameLayout>
+    private lateinit var mBottomSheetColor: BottomSheetBehavior<FrameLayout>
 
     private lateinit var mPopupReaderColorFilterFragment: PopupReaderColorFilterFragment
     private lateinit var mPopupSubtitleConfigurationFragment: PopupSubtitleConfiguration
@@ -59,10 +64,10 @@ class ReaderActivity : AppCompatActivity() {
     private var isTabletOrLandscape : Boolean = false
 
     companion object {
-        private lateinit var mPopupTab: TabLayout
+        private lateinit var mPopupTranslateTab: TabLayout
         private lateinit var mToolbarSubTitle: TextView
         fun selectTabReader() =
-            mPopupTab.selectTab(mPopupTab.getTabAt(0), true)
+            mPopupTranslateTab.selectTab(mPopupTranslateTab.getTabAt(0), true)
 
         fun setSubtitle(text: String) {
             if (::mToolbarSubTitle.isInitialized)
@@ -87,34 +92,48 @@ class ReaderActivity : AppCompatActivity() {
         mReaderTitle = findViewById(R.id.nav_reader_title)
         mReaderProgress = findViewById(R.id.nav_reader_progress)
         mNavReader = findViewById(R.id.nav_reader)
-        mMenuPopup = findViewById(R.id.menu_popup)
+        mMenuPopupTranslate = findViewById(R.id.menu_popup_translate)
+        mMenuPopupColor = findViewById(R.id.menu_popup_color)
 
-        if (findViewById<ImageView>(R.id.menu_popup_touch) == null)
+        if (findViewById<ImageView>(R.id.menu_translate_touch) == null)
             isTabletOrLandscape = true
         else {
-            mBottomSheet = BottomSheetBehavior.from(mMenuPopup).apply {
+            mBottomSheetTranslate = BottomSheetBehavior.from(mMenuPopupTranslate).apply {
                 peekHeight = 195
                 this.state = BottomSheetBehavior.STATE_COLLAPSED
-                mBottomSheet = this
+                mBottomSheetTranslate = this
             }
-            mBottomSheet.isDraggable = false
+            mBottomSheetTranslate.isDraggable = false
 
-            findViewById<ImageView>(R.id.menu_popup_touch).setOnClickListener {
-                if (mBottomSheet.state == BottomSheetBehavior.STATE_COLLAPSED)
-                    mBottomSheet.state = BottomSheetBehavior.STATE_EXPANDED
+            findViewById<ImageView>(R.id.menu_translate_touch).setOnClickListener {
+                if (mBottomSheetTranslate.state == BottomSheetBehavior.STATE_COLLAPSED)
+                    mBottomSheetTranslate.state = BottomSheetBehavior.STATE_EXPANDED
                 else
-                    mBottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
+                    mBottomSheetTranslate.state = BottomSheetBehavior.STATE_COLLAPSED
             }
         }
 
-        findViewById<ImageView>(R.id.menu_close).setOnClickListener {
-            mMenuPopup.visibility = View.GONE
+        findViewById<ImageView>(R.id.menu_translate_close).setOnClickListener {
+            mMenuPopupTranslate.visibility = View.GONE
         }
-        findViewById<ImageView>(R.id.menu_floating_touch).setOnClickListener { menuFloat() }
+        findViewById<ImageView>(R.id.menu_color_close).setOnClickListener {
+            mMenuPopupColor.visibility = View.GONE
+        }
+        findViewById<ImageView>(R.id.menu_translate_floating_touch).setOnClickListener { menuFloat() }
+        findViewById<Button>(R.id.btn_menu_file_link).setOnClickListener {
+            startActivity(Intent(applicationContext, PagesLinkActivity::class.java))
+        }
         findViewById<Button>(R.id.btn_popup_subtitle).setOnClickListener {
+            mMenuPopupColor.visibility = View.GONE
             if (!isTabletOrLandscape)
-                mBottomSheet.state = BottomSheetBehavior.STATE_EXPANDED
-            mMenuPopup.visibility = View.VISIBLE
+                mBottomSheetTranslate.state = BottomSheetBehavior.STATE_EXPANDED
+            mMenuPopupTranslate.visibility = View.VISIBLE
+        }
+        findViewById<Button>(R.id.btn_popup_color).setOnClickListener {
+            mMenuPopupTranslate.visibility = View.GONE
+            if (!isTabletOrLandscape)
+                mBottomSheetColor.state = BottomSheetBehavior.STATE_EXPANDED
+            mMenuPopupColor.visibility = View.VISIBLE
         }
         findViewById<Button>(R.id.btn_popup_open_floating).setOnClickListener { menuFloat() }
         findViewById<Button>(R.id.btn_screen_rotate).setOnClickListener {
@@ -124,8 +143,8 @@ class ReaderActivity : AppCompatActivity() {
                 ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
 
-        mPopupTab = findViewById(R.id.popup_tab)
-        mPopupView = findViewById(R.id.popup_view_pager)
+        mPopupTranslateTab = findViewById(R.id.popup_translate_tab)
+        mPopupTranslateView = findViewById(R.id.popup_translate_view_pager)
 
         mPopupReaderColorFilterFragment = PopupReaderColorFilterFragment()
         mPopupSubtitleConfigurationFragment = PopupSubtitleConfiguration()
@@ -135,30 +154,55 @@ class ReaderActivity : AppCompatActivity() {
 
         mFloatingSubtitleReader = FloatingSubtitleReader(applicationContext)
 
-        mPopupTab.setupWithViewPager(mPopupView)
+        mPopupTranslateTab.setupWithViewPager(mPopupTranslateView)
 
-        val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager, 0)
-        viewPagerAdapter.addFragment(
+        val viewTranslatePagerAdapter = ViewPagerAdapter(supportFragmentManager, 0)
+        viewTranslatePagerAdapter.addFragment(
             mPopupSubtitleReaderFragment,
             resources.getString(R.string.popup_reading_tab_item_subtitle)
         )
-        viewPagerAdapter.addFragment(
+        viewTranslatePagerAdapter.addFragment(
             mPopupSubtitleVocabularyFragment,
             resources.getString(R.string.popup_reading_tab_item_subtitle_vocabulary)
         )
-        viewPagerAdapter.addFragment(
+        viewTranslatePagerAdapter.addFragment(
             mPopupSubtitleConfigurationFragment,
             resources.getString(R.string.popup_reading_tab_item_subtitle_import)
         )
-        viewPagerAdapter.addFragment(
+
+        mPopupTranslateView.adapter = viewTranslatePagerAdapter
+
+        mPopupColorTab = findViewById(R.id.popup_color_tab)
+        mPopupColorView = findViewById(R.id.popup_color_view_pager)
+
+        if (findViewById<ImageView>(R.id.menu_color_touch) != null) {
+            mBottomSheetColor = BottomSheetBehavior.from(mMenuPopupColor).apply {
+                peekHeight = 195
+                this.state = BottomSheetBehavior.STATE_COLLAPSED
+                mBottomSheetColor = this
+            }
+            mBottomSheetColor.isDraggable = false
+
+            findViewById<ImageView>(R.id.menu_color_touch).setOnClickListener {
+                if (mBottomSheetColor.state == BottomSheetBehavior.STATE_COLLAPSED)
+                    mBottomSheetColor.state = BottomSheetBehavior.STATE_EXPANDED
+                else
+                    mBottomSheetColor.state = BottomSheetBehavior.STATE_COLLAPSED
+            }
+        }
+
+        mPopupColorTab.setupWithViewPager(mPopupColorView)
+
+        val viewColorPagerAdapter = ViewPagerAdapter(supportFragmentManager, 0)
+        viewColorPagerAdapter.addFragment(
             mPopupReaderColorFilterFragment,
             resources.getString(R.string.popup_reading_tab_item_brightness)
         )
-        mPopupView.adapter = viewPagerAdapter
+        mPopupColorView.adapter = viewColorPagerAdapter
 
         mRepository = MangaRepository(applicationContext)
-        val bundle = intent.extras
 
+        val bundle = intent.extras
         if (bundle != null) {
             mToolbarTitle.text = bundle.getString(GeneralConsts.KEYS.MANGA.NAME)
             mBookMark = bundle.getInt(GeneralConsts.KEYS.MANGA.MARK)
@@ -261,9 +305,16 @@ class ReaderActivity : AppCompatActivity() {
             R.id.view_mode_fit_width -> optionsSave(ReaderMode.FIT_WIDTH)
             R.id.menu_popup_open_floating -> menuFloat()
             R.id.menu_reader_favorite -> changeFavorite(item)
-            R.id.menu_popup_subtitle -> mMenuPopup.visibility =
-                if (mMenuPopup.visibility == View.INVISIBLE) {
-                    mBottomSheet.state = BottomSheetBehavior.STATE_EXPANDED
+            R.id.menu_popup_subtitle -> mMenuPopupTranslate.visibility =
+                if (mMenuPopupTranslate.visibility == View.INVISIBLE) {
+                    mMenuPopupColor.visibility = View.GONE
+                    mBottomSheetTranslate.state = BottomSheetBehavior.STATE_EXPANDED
+                    View.VISIBLE
+                } else View.INVISIBLE
+            R.id.menu_popup_color -> mMenuPopupColor.visibility =
+                if (mMenuPopupTranslate.visibility == View.INVISIBLE) {
+                    mMenuPopupTranslate.visibility = View.GONE
+                    mBottomSheetColor.state = BottomSheetBehavior.STATE_EXPANDED
                     View.VISIBLE
                 } else View.INVISIBLE
         }
@@ -304,17 +355,17 @@ class ReaderActivity : AppCompatActivity() {
     private fun prepareMenuFloat() {
         val mSubTitleController = SubTitleController.getInstance(applicationContext)
 
-        mSubTitleController.pageSelected.observe(this, {
+        mSubTitleController.pageSelected.observe(this) {
             mFloatingSubtitleReader.updatePage(it)
-        })
-        mSubTitleController.textSelected.observe(this, {
+        }
+        mSubTitleController.textSelected.observe(this) {
             mFloatingSubtitleReader.updateText(it)
-        })
+        }
 
-        mSubTitleController.forceExpandFloatingPopup.observe(this, {
+        mSubTitleController.forceExpandFloatingPopup.observe(this) {
             if (mFloatingSubtitleReader.isShowing)
                 mFloatingSubtitleReader.expanded(true)
-        })
+        }
 
         if (mSubTitleController.mManga != null && mSubTitleController.mManga!!.id != null && mSubTitleController.textSelected.value == null) {
             val mSubtitleRepository = SubTitleRepository(applicationContext)
@@ -325,7 +376,8 @@ class ReaderActivity : AppCompatActivity() {
     }
 
     private fun menuFloat() {
-        mMenuPopup.visibility = View.INVISIBLE
+        mMenuPopupTranslate.visibility = View.INVISIBLE
+        mMenuPopupColor.visibility = View.INVISIBLE
 
         if (mFloatingSubtitleReader.isShowing)
             mFloatingSubtitleReader.dismiss()

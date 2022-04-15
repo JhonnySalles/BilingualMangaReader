@@ -50,6 +50,7 @@
     <!-- READER -->
     <string name="reader_reload">Reload</string>
     <string name="reader_not_found">Not found</string>
+    <string name="file_not_found">File not found</string>
     <string name="menu_view_mode">View Mode</string>
     <string name="menu_view_mode_aspect_fill">Aspect Fill</string>
     <string name="menu_view_mode_aspect_fit">Aspect Fit</string>
@@ -62,8 +63,9 @@
     <string name="menu_reading_favorite">Favorite</string>
     <string name="menu_reading_order">List order</string>
     <string name="menu_reading_order_change">Sort:</string>
-    <string name="menu_reading_change_language">Change language</string>
-
+    <string name="menu_reading_subtitle">Subtitle</string>
+    <string name="menu_reading_color">Page color</string>
+    <string name="menu_reading_file_link">File in another language</string>
     <string name="menu_reading_floating">Floating popup</string>
 
     <!-- READER POPUP TITLES -->
@@ -116,6 +118,8 @@
     <string name="floating_reading_not_permission">Permission is not granted!</string>
 
     <!-- ALERT -->
+    <string name="manga_excluded">Manga not found or excluded</string>
+    <string name="action_neutral">Ok</string>
     <string name="switch_action_positive">Yes</string>
     <string name="switch_action_negative">No</string>
     <string name="switch_next_comic">Would you like to switch to the next comic?</string>
@@ -123,7 +127,6 @@
 
     <!-- LIBRARY -->
     <string name="library_last_access">Last_access</string>
-
     <string name="library_menu_favorite_add">Add favorite</string>
     <string name="library_menu_favorite_remove">Remove favorite</string>
     <string name="library_menu_delete">Delete</string>
@@ -133,6 +136,10 @@
     <!-- HISTORY -->
     <string name="history_last_acess">Last access</string>
     <string name="history_today">Today</string>
+
+    <!-- PAGE LINK -->
+    <string name="page_link_file">File in another language</string>
+    <string name="page_link_save">Save</string>
 
     <!-- HELP -->
     <string name="help_content">Content</string>

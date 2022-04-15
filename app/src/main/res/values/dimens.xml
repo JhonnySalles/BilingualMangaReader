@@ -20,11 +20,14 @@
     <dimen name="manga_grid_card_layout_height_small">150dp</dimen>
     <dimen name="manga_grid_card_image_small">150dp</dimen>
 
-
     <dimen name="manga_line_card_image">50dp</dimen>
     <dimen name="manga_line_title_size">15sp</dimen>
     <dimen name="manga_line_sub_title">10sp</dimen>
     <dimen name="manga_line_favorite">10dp</dimen>
+
+    <dimen name="manga_page_link_layout_width">200dp</dimen>
+    <dimen name="manga_page_link_layout_height">250dp</dimen>
+    <dimen name="manga_page_link_number_size">12sp</dimen>
 
     <dimen name="title_size">20sp</dimen>
     <dimen name="title_small_size">14sp</dimen>

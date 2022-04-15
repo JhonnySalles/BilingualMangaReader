@@ -47,6 +47,7 @@
     <!-- READER -->
     <string name="reader_reload">Recarregar</string>
     <string name="reader_not_found">Não encontrado</string>
+    <string name="file_not_found">Arquivo não encontrado</string>
     <string name="menu_view_mode">Modo de preenchimento</string>
     <string name="menu_view_mode_aspect_fill">Aspecto Fill</string>
     <string name="menu_view_mode_aspect_fit">Aspect Fit</string>
@@ -59,8 +60,9 @@
     <string name="menu_reading_favorite">Favorito</string>
     <string name="menu_reading_order">Ordem da lista</string>
     <string name="menu_reading_order_change">Ordernado:</string>
-    <string name="menu_reading_change_language">Trocar de idioma</string>
-
+    <string name="menu_reading_subtitle">Legenda</string>
+    <string name="menu_reading_color">Cor da página</string>
+    <string name="menu_reading_file_link">Arquivo em outro idioma</string>
     <string name="menu_reading_floating">Popup flutuante</string>
 
     <!-- READER POPUP TITLES -->
@@ -112,6 +114,8 @@
     <string name="floating_reading_not_permission">Permissão não concedida!</string>
 
     <!-- ALERT -->
+    <string name="manga_excluded">Manga não localizado ou excluído</string>
+    <string name="action_neutral">Ok</string>
     <string name="switch_action_positive">Sim</string>
     <string name="switch_action_negative">Não</string>
     <string name="switch_next_comic">Deseja trocar para o próximo livro?</string>
@@ -119,7 +123,6 @@
 
     <!-- LIBRARY -->
     <string name="library_last_access">Último acesso</string>
-
     <string name="library_menu_favorite_add">Adicionar favorito</string>
     <string name="library_menu_favorite_remove">Remover favorito</string>
     <string name="library_menu_delete">Deletar</string>
@@ -129,6 +132,10 @@
     <!-- HISTORY -->
     <string name="history_last_acess">Último acesso</string>
     <string name="history_today">Hoje</string>
+
+    <!-- PAGE LINK -->
+    <string name="page_link_file">Arquivo em outro idioma</string>
+    <string name="page_link_save">Salvar</string>
 
     <!-- HELP -->
     <string name="help_content">Conteúdo</string>
