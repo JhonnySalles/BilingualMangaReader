@@ -134,6 +134,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATE_FINISHED -> {
                     mViewModel.list {
                         setIsRefreshing(false)
+                        sortList(mViewModel.save.value!!)
                         notifyDataSet()
                     }
                 }
@@ -416,9 +417,9 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun observer() {
-        mViewModel.save.observe(viewLifecycleOwner, {
+        mViewModel.save.observe(viewLifecycleOwner) {
             updateList(it)
-        })
+        }
     }
 
     fun setIsRefreshing(enabled: Boolean) {

@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Bitmap
-import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -37,15 +36,15 @@ import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.constants.ReaderConsts
 import br.com.fenix.bilingualmangareader.view.managers.MangaHandler
-import com.squareup.picasso.*
+import com.squareup.picasso.MemoryPolicy
+import com.squareup.picasso.Picasso
 import com.squareup.picasso.Picasso.LoadedFrom
+import com.squareup.picasso.RequestHandler
 import com.squareup.picasso.Target
 import java.io.File
 import java.lang.ref.WeakReference
-import java.util.*
 import kotlin.math.max
 import kotlin.math.min
-import android.view.MotionEvent
 
 
 class ReaderFragment : Fragment(), View.OnTouchListener {
@@ -198,8 +197,8 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             } else {
                 Log.e(GeneralConsts.TAG.LOG, "File not founded.")
                 AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
-                    .setTitle(R.string.manga_excluded)
-                    .setMessage(R.string.file_not_found)
+                    .setTitle(getString(R.string.manga_excluded))
+                    .setMessage(getString(R.string.file_not_found))
                     .setNeutralButton(
                         R.string.action_neutral
                     ) { _, _ -> }
@@ -306,7 +305,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         })
         if (mCurrentPage != -1)
             setCurrentPage(mCurrentPage)
-            //mCurrentPage = -1
+        //mCurrentPage = -1
 
         if (savedInstanceState != null) {
             val fullscreen = savedInstanceState.getBoolean(ReaderConsts.STATES.STATE_FULLSCREEN)
@@ -477,7 +476,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         }
     }
 
-    fun loadImage(t: Target, position: Int, resize : Boolean = true) {
+    fun loadImage(t: Target, position: Int, resize: Boolean = true) {
         try {
             val request = mPicasso.load(mComicHandler.getPageUri(position))
                 .memoryPolicy(MemoryPolicy.NO_STORE)
@@ -683,6 +682,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                     R.string.switch_action_positive
                 ) { _, _ ->
                     val activity = requireActivity() as ReaderActivity
+                    activity.setTitles(mNewManga!!.title, mNewManga!!.bookMark.toString())
                     activity.setFragment(create(mNewManga!!))
                 }
                 .setNegativeButton(
