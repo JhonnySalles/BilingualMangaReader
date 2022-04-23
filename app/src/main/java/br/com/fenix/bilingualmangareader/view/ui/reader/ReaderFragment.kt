@@ -6,6 +6,7 @@ import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -15,11 +16,15 @@ import android.view.*
 import android.view.GestureDetector.SimpleOnGestureListener
 import android.widget.*
 import android.widget.SeekBar.OnSeekBarChangeListener
+import android.view.Window
+import android.view.WindowManager
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager.widget.PagerAdapter
@@ -618,39 +623,65 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         setFullscreen(fullscreen, false)
     }
 
+    private val windowInsetsController by lazy { WindowInsetsControllerCompat(requireActivity().window, mViewPager) }
+
     fun setFullscreen(fullscreen: Boolean, animated: Boolean) {
         mIsFullscreen = fullscreen
-        val actionBar: ActionBar? = getActionBar()
+        val w: Window = requireActivity().window
         if (fullscreen) {
-            actionBar?.hide()
-            var flag = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_FULLSCREEN)
-            flag = flag or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-            flag = flag or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-            flag = flag or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                windowInsetsController.let {
+                    it.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                    w.navigationBarColor = ContextCompat.getColor(requireContext(), R.color.transparent)
+                    w.statusBarColor = ContextCompat.getColor(requireContext(), R.color.transparent)
+                    it.hide(WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.statusBars()  or WindowInsetsCompat.Type.navigationBars())
+                }
+            } else {
+                getActionBar()?.hide()
+                var flag = (View.SYSTEM_UI_FLAG_FULLSCREEN // Hide top iu
+                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // Hide navigator
+                        or View.SYSTEM_UI_FLAG_IMMERSIVE // Force navigator hide
+                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY // Force top iu hide
+                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN // Force full screen
+                        or View.SYSTEM_UI_FLAG_LAYOUT_STABLE // Stable transition on fullscreen and immersive
+                        )
 
-            mViewPager.systemUiVisibility = flag
+                mViewPager.systemUiVisibility = flag
+
+                Handler(Looper.getMainLooper()).postDelayed({
+                    w.clearFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                    w.addFlags(ContextCompat.getColor(requireContext(), R.color.transparent))
+                }, 300)
+            }
+
             mPageNavLayout.visibility = View.INVISIBLE
             mPopupSubtitle.visibility = View.INVISIBLE
             mPopupColor.visibility = View.INVISIBLE
             mToolbarBottom.visibility = View.INVISIBLE
             mToolbar.visibility = View.INVISIBLE
         } else {
-            actionBar?.show()
-            var flag = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
-            flag = flag or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-            mViewPager.systemUiVisibility = flag
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                windowInsetsController.let {
+                    w.navigationBarColor = ContextCompat.getColor(requireContext(), R.color.translucent_status)
+                    w.statusBarColor = ContextCompat.getColor(requireContext(), R.color.translucent_status)
+                    it.show(WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.statusBars()  or WindowInsetsCompat.Type.navigationBars())
+                }
+
+            } else {
+                getActionBar()?.show()
+                var flag = (View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+                mViewPager.systemUiVisibility = flag
+
+                Handler(Looper.getMainLooper()).postDelayed({
+                    w.clearFlags(ContextCompat.getColor(requireContext(), R.color.transparent))
+                    w.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                }, 300)
+            }
             mPageNavLayout.visibility = View.VISIBLE
             mToolbar.visibility = View.VISIBLE
             mToolbarBottom.visibility = View.VISIBLE
-
-            Handler(Looper.getMainLooper()).postDelayed({
-                val w: Window = requireActivity().window
-                w.clearFlags(ContextCompat.getColor(requireContext(), R.color.translucent_status))
-                w.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            }, 300)
         }
     }
 
