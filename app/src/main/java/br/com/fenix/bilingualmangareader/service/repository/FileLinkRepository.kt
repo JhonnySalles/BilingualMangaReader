@@ -21,6 +21,15 @@ class FileLinkRepository(context: Context) {
         return id
     }
 
+    fun update(obj: FileLink) {
+        mDataBase.save(obj)
+        if (obj.pagesLink != null) {
+            mDataBasePage.deleteAll(obj.id!!)
+            for (page in obj.pagesLink!!)
+                mDataBasePage.save(page)
+        }
+    }
+
     fun delete(obj: FileLink) {
         if (obj.id != null) {
             mDataBasePage.deleteAll(obj.id!!)
@@ -46,6 +55,5 @@ class FileLinkRepository(context: Context) {
     private fun findPagesLink(idFileLink: Long): List<PageLink>? {
         return mDataBasePage.get(idFileLink)
     }
-
 
 }
