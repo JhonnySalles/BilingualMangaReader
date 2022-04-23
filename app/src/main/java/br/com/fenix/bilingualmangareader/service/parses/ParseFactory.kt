@@ -1,5 +1,7 @@
 package br.com.fenix.bilingualmangareader.service.parses
 
+import android.util.Log
+import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import java.io.File
 import java.io.IOException
@@ -34,7 +36,8 @@ class ParseFactory {
 
             try {
                 parser.parse(file)
-            } catch (e: IOException) {
+            } catch (e: Exception) {
+                Log.e(GeneralConsts.TAG.LOG, "Error when parse: " + e.message)
                 return null
             }
             return if (parser is DirectoryParse && parser.numPages() < 4) null else parser

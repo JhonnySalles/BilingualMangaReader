@@ -56,7 +56,7 @@ class HistoryViewHolder(itemView: View, private val listener: MangaCardListener)
             mangaSubTitle.text = manga.subTitle
 
         if (manga.excluded)
-            cardView.setBackgroundColor(Color.RED)
+            cardView.setBackgroundColor(Color.parseColor("#8b0000"))
         else
             cardView.setBackgroundColor(Color.TRANSPARENT)
 

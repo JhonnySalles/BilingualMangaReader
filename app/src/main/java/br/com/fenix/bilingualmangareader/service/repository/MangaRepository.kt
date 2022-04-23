@@ -38,8 +38,8 @@ class MangaRepository(context: Context) {
     }
 
     fun delete(obj: Manga) {
-        mCoverRepository.deleteAll(obj.id!!)
-        mDataBase.delete(obj)
+        //mCoverRepository.deleteAll(obj.id!!)
+        mDataBase.delete(obj.id!!)
     }
 
     fun list(): List<Manga>? {
