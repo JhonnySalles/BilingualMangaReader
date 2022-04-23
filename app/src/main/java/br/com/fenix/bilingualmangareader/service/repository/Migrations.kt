@@ -7,7 +7,7 @@ import br.com.fenix.bilingualmangareader.util.constants.DataBaseConsts
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 
 class Migrations {
-    object SQL_INITIAL {
+    object SQLINITIAL {
         const val KANJI: String = "INSERT INTO " + DataBaseConsts.JLPT.TABLE_NAME +
                 " (" + DataBaseConsts.JLPT.COLUMNS.KANJI + ", " + DataBaseConsts.JLPT.COLUMNS.LEVEL + ") VALUES "
 
@@ -27,11 +27,51 @@ class Migrations {
     }
 
     companion object {
-        // Migration version 1.
+        // Migration version 2.
         val MIGRATION_1_2 = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                Log.i(GeneralConsts.TAG.LOG, "Iniciando o migration 0 - 1")
+                Log.i(GeneralConsts.TAG.LOG, "Iniciando o migration 1 - 2")
 
+                database.execSQL("ALTER TABLE " + DataBaseConsts.MANGA.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.MANGA.COLUMNS.EXCLUDED + " INTEGER DEFAULT 0 NOT NULL")
+
+                database.execSQL( "CREATE TABLE " + DataBaseConsts.FILELINK.TABLE_NAME + " (" +
+                        DataBaseConsts.FILELINK.COLUMNS.ID + " INTEGER PRIMARY KEY, " +
+                        DataBaseConsts.FILELINK.COLUMNS.FK_ID_MANGA + " INTEGER NOT NULL, " +
+                        DataBaseConsts.FILELINK.COLUMNS.PAGES + " INTEGER NOT NULL, " +
+                        DataBaseConsts.FILELINK.COLUMNS.FILE_PATH + " TEXT NOT NULL, " +
+                        DataBaseConsts.FILELINK.COLUMNS.FILE_NAME + " TEXT NOT NULL, " +
+                        DataBaseConsts.FILELINK.COLUMNS.FILE_TYPE + " TEXT NOT NULL, " +
+                        DataBaseConsts.FILELINK.COLUMNS.FILE_FOLDER + " TEXT NOT NULL," +
+                        DataBaseConsts.FILELINK.COLUMNS.DATE_CREATE + " TEXT, " +
+                        DataBaseConsts.FILELINK.COLUMNS.LAST_ACCESS + " TEXT)")
+
+                database.execSQL( "CREATE INDEX index_" + DataBaseConsts.FILELINK.TABLE_NAME
+                        + "_" + DataBaseConsts.FILELINK.COLUMNS.FK_ID_MANGA + "_" + DataBaseConsts.FILELINK.COLUMNS.FILE_NAME
+                        + " ON " +  DataBaseConsts.FILELINK.TABLE_NAME +
+                        "(" + DataBaseConsts.FILELINK.COLUMNS.FK_ID_MANGA + ", " + DataBaseConsts.FILELINK.COLUMNS.FILE_NAME + ")")
+
+                database.execSQL( "CREATE TABLE " + DataBaseConsts.PAGESLINK.TABLE_NAME + " (" +
+                        DataBaseConsts.PAGESLINK.COLUMNS.ID + " INTEGER PRIMARY KEY NOT NULL, " +
+                        DataBaseConsts.PAGESLINK.COLUMNS.FK_ID_FILE + " INTEGER, " +
+                        DataBaseConsts.PAGESLINK.COLUMNS.MANGA_PAGE + " INTEGER NOT NULL, " +
+                        DataBaseConsts.PAGESLINK.COLUMNS.MANGA_PAGES + " INTEGER NOT NULL, " +
+                        DataBaseConsts.PAGESLINK.COLUMNS.FILE_LINK_PAGE + " INTEGER NOT NULL, " +
+                        DataBaseConsts.PAGESLINK.COLUMNS.FILE_LINK_PAGES + " INTEGER NOT NULL, " +
+                        DataBaseConsts.PAGESLINK.COLUMNS.MANGA_PAGE_NAME + " TEXT NOT NULL," +
+                        DataBaseConsts.PAGESLINK.COLUMNS.FILE_LINK_PAGE_NAME + " TEXT NOT NULL)")
+
+                database.execSQL( "CREATE INDEX index_" + DataBaseConsts.PAGESLINK.TABLE_NAME
+                        + "_" + DataBaseConsts.PAGESLINK.COLUMNS.FK_ID_FILE + " ON " +  DataBaseConsts.PAGESLINK.TABLE_NAME +
+                        "(" + DataBaseConsts.PAGESLINK.COLUMNS.FK_ID_FILE + ")")
+
+                Log.i(GeneralConsts.TAG.LOG, "Concluido a migration 1 - 2")
+            }
+        }
+
+        // Migration version 4.
+        val MIGRATION_3_4 = object : Migration(3, 4) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                Log.i(GeneralConsts.TAG.LOG, "Iniciando o migration 2 - 3")
             }
         }
     }

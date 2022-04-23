@@ -67,6 +67,9 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
     @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS)
     var lastAccess: Date? = null
 
+    @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.EXCLUDED)
+    var excluded: Boolean = false
+
     @Ignore
     var thumbnail: Cover? = null
 

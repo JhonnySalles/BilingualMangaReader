@@ -55,6 +55,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
     private lateinit var mToolbar: Toolbar
     private lateinit var mPageNavLayout: LinearLayout
     private lateinit var mPopupSubtitle: FrameLayout
+    private lateinit var mPopupColor: FrameLayout
     private lateinit var mToolbarBottom: LinearLayout
     private lateinit var mPageSeekBar: SeekBar
     private lateinit var mPageNavTextView: TextView
@@ -195,8 +196,17 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                         .build()
                 } else
                     Log.e(GeneralConsts.TAG.LOG, "Error in open file.")
-            } else
+            } else {
                 Log.e(GeneralConsts.TAG.LOG, "File not founded.")
+                AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
+                    .setTitle(R.string.manga_excluded)
+                    .setMessage(R.string.file_not_found)
+                    .setNeutralButton(
+                        R.string.action_neutral
+                    ) { _, _ -> }
+                    .create()
+                    .show()
+            }
 
             mPagerAdapter = ComicPagerAdapter()
             mGestureDetector = GestureDetector(requireActivity(), MyTouchListener())
@@ -206,8 +216,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 mPreferences.getString(
                     GeneralConsts.KEYS.READER.READER_MODE,
                     ReaderMode.FIT_WIDTH.toString()
-                )
-                    .toString()
+                ).toString()
             )
 
             mIsLeftToRight = PageMode.valueOf(
@@ -248,7 +257,8 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         }
 
         mToolbar = requireActivity().findViewById(R.id.toolbar_reader)
-        mPopupSubtitle = requireActivity().findViewById(R.id.menu_popup)
+        mPopupSubtitle = requireActivity().findViewById(R.id.menu_popup_translate)
+        mPopupColor = requireActivity().findViewById(R.id.menu_popup_color)
         mPageNavLayout = requireActivity().findViewById(R.id.nav_reader)
         mToolbarBottom = requireActivity().findViewById(R.id.toolbar_reader_bottom)
         (mPageNavLayout.findViewById<View>(R.id.nav_reader_progress) as SeekBar).also {
@@ -624,6 +634,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             mViewPager.systemUiVisibility = flag
             mPageNavLayout.visibility = View.INVISIBLE
             mPopupSubtitle.visibility = View.INVISIBLE
+            mPopupColor.visibility = View.INVISIBLE
             mToolbarBottom.visibility = View.INVISIBLE
             mToolbar.visibility = View.INVISIBLE
         } else {

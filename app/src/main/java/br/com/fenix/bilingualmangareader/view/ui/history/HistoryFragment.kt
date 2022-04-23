@@ -7,6 +7,7 @@ import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -16,8 +17,10 @@ import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.service.controller.ImageCoverController
 import br.com.fenix.bilingualmangareader.service.listener.MangaCardListener
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import br.com.fenix.bilingualmangareader.util.constants.ReaderConsts
 import br.com.fenix.bilingualmangareader.view.adapter.history.HistoryCardAdapter
 import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity
+import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderFragment
 import java.lang.ref.WeakReference
 import java.util.*
 
@@ -44,15 +47,25 @@ class HistoryFragment : Fragment() {
         mRecycleView = root.findViewById(R.id.rv_history)
         mListener = object : MangaCardListener {
             override fun onClick(manga: Manga) {
-                val intent = Intent(context, ReaderActivity::class.java)
-                val bundle = Bundle()
-                manga.lastAccess = Calendar.getInstance().time
-                bundle.putString(GeneralConsts.KEYS.MANGA.NAME, manga.title)
-                bundle.putInt(GeneralConsts.KEYS.MANGA.MARK, manga.bookMark)
-                bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, manga)
-                intent.putExtras(bundle)
-                context?.startActivity(intent)
-                mViewModel.updateLastAccess(manga)
+                if (!manga.excluded) {
+                    val intent = Intent(context, ReaderActivity::class.java)
+                    val bundle = Bundle()
+                    manga.lastAccess = Calendar.getInstance().time
+                    bundle.putString(GeneralConsts.KEYS.MANGA.NAME, manga.title)
+                    bundle.putInt(GeneralConsts.KEYS.MANGA.MARK, manga.bookMark)
+                    bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, manga)
+                    intent.putExtras(bundle)
+                    context?.startActivity(intent)
+                    mViewModel.updateLastAccess(manga)
+                } else
+                    AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
+                            .setTitle(R.string.manga_excluded)
+                            .setMessage(manga.file.name)
+                            .setNeutralButton(
+                                R.string.action_neutral
+                            ) { _, _ -> }
+                            .create()
+                            .show()
             }
 
             override fun onClickLong(manga: Manga, view: View, position: Int) {
@@ -108,9 +121,9 @@ class HistoryFragment : Fragment() {
     }
 
     private fun observer() {
-        mViewModel.save.observe(viewLifecycleOwner, {
+        mViewModel.save.observe(viewLifecycleOwner) {
             updateList(it)
-        })
+        }
     }
 
 }

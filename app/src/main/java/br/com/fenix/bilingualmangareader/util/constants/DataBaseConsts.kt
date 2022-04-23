@@ -17,6 +17,7 @@ class DataBaseConsts private constructor() {
             const val FAVORITE = "favorite"
             const val DATE_CREATE = "dateCreate"
             const val LAST_ACCESS = "lastAccess"
+            const val EXCLUDED = "excluded"
         }
     }
 
@@ -85,5 +86,38 @@ class DataBaseConsts private constructor() {
             const val MEANING_PT = "meaning_pt"
         }
     }
+
+    object FILELINK {
+        const val TABLE_NAME = "FileLink"
+
+        object COLUMNS {
+            const val ID = "id"
+            const val FK_ID_MANGA = "id_manga"
+            const val PAGES = "pages"
+            const val FILE_PATH = "path"
+            const val FILE_NAME = "name"
+            const val FILE_TYPE = "type"
+            const val FILE_FOLDER = "folder"
+            const val DATE_CREATE = "dateCreate"
+            const val LAST_ACCESS = "lastAccess"
+        }
+    }
+
+    object PAGESLINK {
+        const val TABLE_NAME = "PagesLink"
+
+        object COLUMNS {
+            const val ID = "id"
+            const val FK_ID_FILE = "id_file"
+            const val MANGA_PAGE = "manga_page"
+            const val MANGA_PAGES = "manga_pages"
+            const val FILE_LINK_PAGE = "file_link_page"
+            const val FILE_LINK_PAGES = "file_link_pages"
+            const val MANGA_PAGE_NAME = "manga_page_name"
+            const val FILE_LINK_PAGE_NAME = "file_link_page_name"
+        }
+    }
+
+
 
 }

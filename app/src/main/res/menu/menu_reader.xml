@@ -55,13 +55,30 @@
         android:iconTint="#FFFFFF"
         android:orderInCategory="102"
         android:title="@string/menu_reading_floating"
-        app:showAsAction="never"></item>
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/menu_popup_subtitle"
         android:icon="@drawable/ic_change_language"
         android:iconTint="#FFFFFF"
         android:orderInCategory="103"
-        android:title="@string/menu_reading_change_language"
-        app:showAsAction="never"></item>
+        android:title="@string/menu_reading_subtitle"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/menu_popup_color"
+        android:icon="@drawable/ic_color_settings"
+        android:iconTint="#FFFFFF"
+        android:orderInCategory="103"
+        android:title="@string/menu_reading_color"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/menu_file_link"
+        android:icon="@drawable/ic_file_link"
+        android:iconTint="#FFFFFF"
+        android:orderInCategory="103"
+        android:title="@string/menu_reading_file_link"
+        app:showAsAction="never"/>
+
 </menu>
