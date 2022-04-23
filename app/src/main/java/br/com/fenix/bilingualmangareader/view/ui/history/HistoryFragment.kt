@@ -17,10 +17,8 @@ import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.service.controller.ImageCoverController
 import br.com.fenix.bilingualmangareader.service.listener.MangaCardListener
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
-import br.com.fenix.bilingualmangareader.util.constants.ReaderConsts
 import br.com.fenix.bilingualmangareader.view.adapter.history.HistoryCardAdapter
 import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity
-import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderFragment
 import java.lang.ref.WeakReference
 import java.util.*
 
@@ -59,7 +57,7 @@ class HistoryFragment : Fragment() {
                     mViewModel.updateLastAccess(manga)
                 } else
                     AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
-                            .setTitle(R.string.manga_excluded)
+                            .setTitle(getString(R.string.manga_excluded))
                             .setMessage(manga.file.path)
                             .setNeutralButton(
                                 R.string.action_neutral

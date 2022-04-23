@@ -11,6 +11,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -32,7 +33,6 @@ import br.com.fenix.bilingualmangareader.view.ui.reader.FloatingSubtitleReader.C
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayout
 import java.io.File
-import java.time.LocalDateTime
 
 
 class ReaderActivity : AppCompatActivity() {
@@ -61,7 +61,7 @@ class ReaderActivity : AppCompatActivity() {
     private lateinit var mRepository: MangaRepository
     private var mManga: Manga? = null
     private var mBookMark: Int = 0
-    private var isTabletOrLandscape : Boolean = false
+    private var isTabletOrLandscape: Boolean = false
 
     companion object {
         private lateinit var mPopupTranslateTab: TabLayout
@@ -210,16 +210,16 @@ class ReaderActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             if (Intent.ACTION_VIEW == intent.action) {
-                val fragment: ReaderFragment = ReaderFragment.create(File(intent.data!!.path!!))
+                val file = File(intent.data!!.path!!)
+                val fragment: ReaderFragment = ReaderFragment.create(file)
+                setTitles(file.name, "")
                 setFragment(fragment)
             } else {
                 val extras = intent.extras
                 val manga = (extras!!.getSerializable(GeneralConsts.KEYS.OBJECT.MANGA) as Manga?)
                 val fragment: ReaderFragment = if (manga != null) {
                     mManga = manga
-                    mReaderTitle.text = manga.bookMark.toString()
-                    mToolbarTitle.text = manga.title
-
+                    setTitles(manga.title, manga.bookMark.toString())
                     ReaderFragment.create(manga)
                 } else
                     ReaderFragment.create()
@@ -230,14 +230,19 @@ class ReaderActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    override fun onSaveInstanceState(savedInstanceState : Bundle) {
+    fun setTitles(title: String, page: String) {
+        mReaderTitle.text = page
+        mToolbarTitle.text = title
+    }
+
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
         if (mManga != null)
             savedInstanceState.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, mManga)
 
         super.onSaveInstanceState(savedInstanceState)
     }
 
-    override fun onRestoreInstanceState(savedInstanceState : Bundle) {
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         val manga = (savedInstanceState.getSerializable(GeneralConsts.KEYS.OBJECT.MANGA) as Manga?)
         if (manga != null)
@@ -352,7 +357,8 @@ class ReaderActivity : AppCompatActivity() {
         mRepository.update(mManga!!)
     }
 
-    private fun prepareMenuFloat() {
+    private var mSubtitleSelected: Boolean = false
+    private fun prepareMenuFloat(): Boolean {
         val mSubTitleController = SubTitleController.getInstance(applicationContext)
 
         mSubTitleController.pageSelected.observe(this) {
@@ -373,6 +379,9 @@ class ReaderActivity : AppCompatActivity() {
             if (lastSubtitle != null)
                 mSubTitleController.initialize(lastSubtitle.chapterKey, lastSubtitle.pageKey)
         }
+
+        mSubtitleSelected = mSubTitleController.isSelected
+        return mSubTitleController.isNotEmpty
     }
 
     private fun menuFloat() {
@@ -383,8 +392,21 @@ class ReaderActivity : AppCompatActivity() {
             mFloatingSubtitleReader.dismiss()
         else {
             if (canDrawOverlays(applicationContext)) {
-                prepareMenuFloat()
-                mFloatingSubtitleReader.show()
+                if (prepareMenuFloat())
+                    mFloatingSubtitleReader.show()
+                else {
+                    var message = getString(if (mSubtitleSelected) R.string.popup_reading_subtitle_selected_empty
+                    else R.string.popup_reading_subtitle_embedded_empty)
+
+                    AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+                        .setTitle(getString(R.string.popup_reading_subtitle_empty))
+                        .setMessage(message)
+                        .setNeutralButton(
+                            R.string.action_neutral
+                        ) { _, _ -> }
+                        .create()
+                        .show()
+                }
             } else
                 startManageDrawOverlaysPermission()
         }
@@ -395,8 +417,21 @@ class ReaderActivity : AppCompatActivity() {
         when (requestCode) {
             5 -> {
                 if (canDrawOverlays(applicationContext)) {
-                    prepareMenuFloat()
-                    mFloatingSubtitleReader.show()
+                    if (prepareMenuFloat())
+                        mFloatingSubtitleReader.show()
+                    else {
+                        var message = getString(if (mSubtitleSelected) R.string.popup_reading_subtitle_selected_empty
+                        else R.string.popup_reading_subtitle_embedded_empty)
+
+                        AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+                            .setTitle(getString(R.string.popup_reading_subtitle_empty))
+                            .setMessage(message)
+                            .setNeutralButton(
+                                R.string.action_neutral
+                            ) { _, _ -> }
+                            .create()
+                            .show()
+                    }
                 } else
                     Toast.makeText(
                         application,

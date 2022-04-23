@@ -110,6 +110,10 @@
     <string name="popup_reading_button_before">Texto anterior</string>
     <string name="popup_reading_button_next">Próximo texto</string>
 
+    <string name="popup_reading_subtitle_empty">Legendas não encontrada</string>
+    <string name="popup_reading_subtitle_embedded_empty">Não encontrado legenda embutida no manga selecionado, favor selecionar um arquivo no menu.</string>
+    <string name="popup_reading_subtitle_selected_empty">Nenhuma legenda encontrada no arquivo selecionado.</string>
+
     <!-- READER FLOATING -->
     <string name="floating_reading_not_permission">Permissão não concedida!</string>
 

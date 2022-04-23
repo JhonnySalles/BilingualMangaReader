@@ -111,6 +111,10 @@
     <string name="popup_reading_button_before">Previous text</string>
     <string name="popup_reading_button_next">Next text</string>
 
+    <string name="popup_reading_subtitle_empty">Subtitles not found</string>
+    <string name="popup_reading_subtitle_embedded_empty">Subtitles not found in opened manga, please select a file from the menu.</string>
+    <string name="popup_reading_subtitle_selected_empty">Subtitles not found in selected file.</string>
+
     <!-- READER FLOATING -->
     <string name="floating_reading_not_permission">Permission is not granted!</string>
 

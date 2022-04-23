@@ -16,6 +16,7 @@ import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.service.parses.Parse
 import br.com.fenix.bilingualmangareader.service.repository.SubTitleRepository
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import br.com.fenix.bilingualmangareader.util.constants.ReaderConsts
 import br.com.fenix.bilingualmangareader.view.ui.reader.PageImageView
 import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderFragment
 import com.google.gson.Gson
@@ -25,12 +26,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.codec.binary.Hex
 import org.apache.commons.codec.digest.DigestUtils
+import java.io.BufferedInputStream
 import java.io.InputStream
 import java.lang.ref.WeakReference
-import java.util.*
-import android.graphics.BitmapFactory
-import br.com.fenix.bilingualmangareader.util.constants.ReaderConsts
-import java.io.BufferedInputStream
 
 
 class SubTitleController private constructor(private val context: Context) {
@@ -71,6 +69,7 @@ class SubTitleController private constructor(private val context: Context) {
         context.resources.getString(R.string.popup_reading_subtitle_extra)
 
     var isSelected = false
+    var isNotEmpty = false
     private fun getSubtitle(): HashMap<String, Chapter> =
         if (isSelected) mComboListSelected else mComboListInternal
 
@@ -142,6 +141,7 @@ class SubTitleController private constructor(private val context: Context) {
         this.isSelected = isSelected
         mLanguages.clear()
         getSubtitle().clear()
+        isNotEmpty = listJson.isNotEmpty()
         if (listJson.isNotEmpty()) {
             val gson = Gson()
             val listChapter: MutableList<Chapter> = arrayListOf()
@@ -683,7 +683,7 @@ class SubTitleController private constructor(private val context: Context) {
     }
 
     private var mOriginalSize: FloatArray? = null
-    fun selectTextByCoordinate(coord:  FloatArray) {
+    fun selectTextByCoordinate(coord: FloatArray) {
         if (pageSelected.value == null)
             return
 
@@ -700,7 +700,7 @@ class SubTitleController private constructor(private val context: Context) {
                 //Log.e(GeneralConsts.TAG.LOG, "${coord[0]} ${coord[1]} / ${coord[2]} ${coord[3]} - ${mOriginalSize!![0]} - ${mOriginalSize!![1]} - ${image.width}  ${image.height} - ${ReaderConsts.READER.MAX_PAGE_WIDTH}")
             }
 
-            Point((coord[0] / coord[2] * mOriginalSize!![0] ).toInt(), (coord[1] / coord[3] * mOriginalSize!![1]).toInt())
+            Point((coord[0] / coord[2] * mOriginalSize!![0]).toInt(), (coord[1] / coord[3] * mOriginalSize!![1]).toInt())
         } else
             Point(coord[0].toInt(), coord[1].toInt())
 
