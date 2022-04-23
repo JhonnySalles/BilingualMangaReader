@@ -68,7 +68,6 @@
                 android:layout_marginStart="@dimen/margin"
                 android:layout_marginEnd="32dp"
                 android:layout_marginTop="32dp"
-                app:endIconMode="clear_text"
                 android:hint="@string/config_text_library_folder"
                 android:textColorHint="@color/textPrimary"
                 app:endIconMode="clear_text"

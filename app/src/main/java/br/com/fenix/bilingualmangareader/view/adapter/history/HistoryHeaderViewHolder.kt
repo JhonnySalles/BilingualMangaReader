@@ -15,7 +15,7 @@ class HistoryHeaderViewHolder(itemView: View, private val listener: MangaCardLis
 
     fun bind(manga: Manga) {
         val title = itemView.findViewById<TextView>(R.id.history_divider_title)
-        val cardView = itemView.findViewById<LinearLayout>(R.id.history_divider)
+        //val cardView = itemView.findViewById<LinearLayout>(R.id.history_divider)
 
         if (manga.lastAccess != null) {
             title.text = if (manga.lastAccess!!.isAfter(LocalDateTime.now().minusDays(1)))
