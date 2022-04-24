@@ -9,10 +9,10 @@ import java.time.LocalDateTime
     tableName = DataBaseConsts.PAGESLINK.TABLE_NAME,
     indices = [Index(value = [DataBaseConsts.PAGESLINK.COLUMNS.FK_ID_FILE])]
 )
-class PageLink(id: Long, idFile: Long?, mangaPage: Int, mangaPages: Int, fileLinkPage: Int, fileLinkPages: Int, mangaPageName: String, fileLinkPageName: String) {
+class PageLink(id: Long?, idFile: Long?, mangaPage: Int, mangaPages: Int, fileLinkPage: Int, fileLinkPages: Int, mangaPageName: String, fileLinkPageName: String) {
 
     constructor(
-        id: Long, idFile: Long?, mangaPage: Int, mangaPages: Int, fileLinkPage: Int, fileLinkPages: Int, mangaPageName: String, fileLinkPageName: String,
+        id: Long?, idFile: Long?, mangaPage: Int, mangaPages: Int, fileLinkPage: Int, fileLinkPages: Int, mangaPageName: String, fileLinkPageName: String,
         imageMangaPage: Bitmap? = null, imageFileLinkPage: Bitmap? = null
     ) : this(id, idFile, mangaPage, mangaPages, fileLinkPage, fileLinkPages, mangaPageName, fileLinkPageName) {
         this.imageMangaPage = imageMangaPage
@@ -21,7 +21,7 @@ class PageLink(id: Long, idFile: Long?, mangaPage: Int, mangaPages: Int, fileLin
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = DataBaseConsts.PAGESLINK.COLUMNS.ID)
-    var id: Long = id
+    var id: Long? = id
     @ColumnInfo(name = DataBaseConsts.PAGESLINK.COLUMNS.FK_ID_FILE)
     var idFile: Long? = idFile
     @ColumnInfo(name = DataBaseConsts.PAGESLINK.COLUMNS.MANGA_PAGE)
@@ -31,11 +31,11 @@ class PageLink(id: Long, idFile: Long?, mangaPage: Int, mangaPages: Int, fileLin
     @ColumnInfo(name = DataBaseConsts.PAGESLINK.COLUMNS.FILE_LINK_PAGE)
     val fileLinkPage: Int = fileLinkPage
     @ColumnInfo(name = DataBaseConsts.PAGESLINK.COLUMNS.FILE_LINK_PAGES)
-    val fileLinkPages: Int = fileLinkPages
+    var fileLinkPages: Int = fileLinkPages
     @ColumnInfo(name = DataBaseConsts.PAGESLINK.COLUMNS.MANGA_PAGE_NAME)
     val mangaPageName: String = mangaPageName
     @ColumnInfo(name = DataBaseConsts.PAGESLINK.COLUMNS.FILE_LINK_PAGE_NAME)
-    val fileLinkPageName: String = fileLinkPageName
+    var fileLinkPageName: String = fileLinkPageName
     @Ignore
     var imageMangaPage: Bitmap? = null
     @Ignore

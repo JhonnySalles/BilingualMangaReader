@@ -19,6 +19,12 @@ class FileLink(id: Long?, idManga: Long, pages: Int, path: String, name: String,
         this.lastAccess = lastAccess
     }
 
+    constructor(idManga: Long, manga: Manga?) : this(null, idManga, 0, "", "", "", "") {
+        this.manga = manga
+        this.dateCreate = LocalDateTime.now()
+        this.lastAccess = LocalDateTime.now()
+    }
+
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = DataBaseConsts.FILELINK.COLUMNS.ID)
     var id: Long? = id
@@ -42,10 +48,10 @@ class FileLink(id: Long?, idManga: Long, pages: Int, path: String, name: String,
     var folder: String = folder
 
     @ColumnInfo(name = DataBaseConsts.FILELINK.COLUMNS.DATE_CREATE)
-    var dateCreate: LocalDateTime? = LocalDateTime.now()
+    var dateCreate: LocalDateTime? = null
 
     @ColumnInfo(name = DataBaseConsts.FILELINK.COLUMNS.LAST_ACCESS)
-    var lastAccess: LocalDateTime? = null
+    var lastAccess: LocalDateTime? = LocalDateTime.now()
 
     @Ignore
     var manga: Manga? = null
