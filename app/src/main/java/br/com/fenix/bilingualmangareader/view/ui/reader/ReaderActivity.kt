@@ -121,7 +121,22 @@ class ReaderActivity : AppCompatActivity() {
         }
         findViewById<ImageView>(R.id.menu_translate_floating_touch).setOnClickListener { menuFloat() }
         findViewById<Button>(R.id.btn_menu_file_link).setOnClickListener {
-            startActivity(Intent(applicationContext, PagesLinkActivity::class.java))
+            if (mManga != null) {
+                var intent = Intent(applicationContext, PagesLinkActivity::class.java)
+                val bundle = Bundle()
+                bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, mManga)
+                intent.putExtras(bundle)
+                startActivity(intent)
+            } else
+                AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+                    .setTitle(getString(R.string.popup_reading_subtitle_empty))
+                    .setMessage("Manga não selecionado")
+                    .setNeutralButton(
+                        R.string.action_neutral
+                    ) { _, _ -> }
+                    .create()
+                    .show()
+
         }
         findViewById<Button>(R.id.btn_popup_subtitle).setOnClickListener {
             mMenuPopupColor.visibility = View.GONE

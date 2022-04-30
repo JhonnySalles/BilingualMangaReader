@@ -68,6 +68,13 @@ class Migrations {
             }
         }
 
+        // Migration version 3.
+        val MIGRATION_2_3 = object : Migration(3, 4) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                Log.i(GeneralConsts.TAG.LOG, "Iniciando o migration 2 - 3")
+            }
+        }
+
         // Migration version 4.
         val MIGRATION_3_4 = object : Migration(3, 4) {
             override fun migrate(database: SupportSQLiteDatabase) {
