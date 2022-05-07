@@ -27,7 +27,7 @@ class PageLink(id: Long?, idFile: Long?, mangaPage: Int, mangaPages: Int, fileLi
     }
 
     constructor(idFile: Long?, mangaPage: Int, mangaPages: Int, mangaPageName: String, imageMangaPage: Bitmap? = null
-    ) : this(0L, idFile, mangaPage, mangaPages, 0, 0, mangaPageName, "") {
+    ) : this(0L, idFile, mangaPage, mangaPages, -1, 0, mangaPageName, "") {
         this.imageMangaPage = imageMangaPage
         this.imageFileLinkPage = null
     }

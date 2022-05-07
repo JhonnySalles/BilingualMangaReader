@@ -4,11 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.bilingualmangareader.R
-import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.entity.PageLink
-import br.com.fenix.bilingualmangareader.service.listener.MangaCardListener
 import br.com.fenix.bilingualmangareader.service.listener.PageLinkCardListener
-import br.com.fenix.bilingualmangareader.view.adapter.history.HistoryCardAdapter
 
 class PageLinkCardAdapter : RecyclerView.Adapter<PageLinkViewHolder>() {
 
@@ -20,7 +17,7 @@ class PageLinkCardAdapter : RecyclerView.Adapter<PageLinkViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PageLinkViewHolder {
-        return PageLinkViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.history_card, parent, false), mListener)
+        return PageLinkViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.page_link_card, parent, false), mListener)
     }
 
     override fun getItemCount(): Int {

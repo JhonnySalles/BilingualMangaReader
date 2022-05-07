@@ -3,13 +3,13 @@ package br.com.fenix.bilingualmangareader.view.ui.pages_link
 import android.app.Application
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.text.SpannableString
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import br.com.fenix.bilingualmangareader.model.entity.*
+import br.com.fenix.bilingualmangareader.model.entity.FileLink
+import br.com.fenix.bilingualmangareader.model.entity.Manga
+import br.com.fenix.bilingualmangareader.model.entity.PageLink
 import br.com.fenix.bilingualmangareader.model.enums.LoadFile
-import br.com.fenix.bilingualmangareader.service.kanji.Formatter
 import br.com.fenix.bilingualmangareader.service.parses.Parse
 import br.com.fenix.bilingualmangareader.service.parses.ParseFactory
 import br.com.fenix.bilingualmangareader.service.repository.FileLinkRepository
@@ -17,10 +17,8 @@ import br.com.fenix.bilingualmangareader.util.constants.ReaderConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.InputStream
-import java.io.OutputStream
 
 class PagesLinkViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -81,7 +79,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    fun readFileLink(path : String) : LoadFile {
+    fun readFileLink(path : String, function: (Int) -> (Unit)) : LoadFile {
         var loaded = LoadFile.ERROR_NOT_LOAD
         mPagesLink.value!!.forEach { page ->
             page.clearFileLInk()
@@ -94,6 +92,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
             file.name.endsWith(".zip") ||
             file.name.endsWith(".cbr") ||
             file.name.endsWith(".cbz")) {
+            loaded = LoadFile.LOADED
             val parse = ParseFactory.create(path)?: return loaded
             mFileLink.value = FileLink(mFileLink.value!!.manga!!, parse.numPages(), file.path, file.nameWithoutExtension, file.extension, file.parent)
 
@@ -105,20 +104,21 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                 else
                     name.substringAfterLast('\\')
 
-                if (mPagesLink.value!!.size < i){
+                if (i < mPagesLink.value!!.size){
                     val page = mPagesLink.value!![i]
                     page.fileLinkPage = i
                     page.fileLinkPageName = name
                     page.fileLinkPages = parse.numPages()
                     page.isFileLinkLoading = true
-                    getImage(parse, i) { image ->
+                    /*getImage(parse, i) { image ->
                         page.imageFileLinkPage = image
                         page.isFileLinkLoading = false
-                    }
+                    }*/
+                    function(i)
                 } else {
                     val page = PageLink(mFileLink.value!!.id, -1, mFileLink.value!!.manga!!.pages, i, mFileLink.value!!.pages,
                         mFileLink.value!!.manga!!.name, mFileLink.value!!.name)
-                    getImage(parse, i) { image -> page.imageFileLinkPage = image }
+                    //getImage(parse, i) { image -> page.imageFileLinkPage = image }
                     mPagesLink.value!!.add(page)
                 }
             }
