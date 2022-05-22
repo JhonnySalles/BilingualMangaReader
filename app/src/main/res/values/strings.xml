@@ -142,9 +142,12 @@
 
     <!-- PAGE LINK -->
     <string name="page_link_file">File in another language</string>
+    <string name="page_link_refresh">Refresh</string>
     <string name="page_link_save">Save</string>
     <string name="page_link_load_file_wrong">Unsupported file</string>
     <string name="page_link_load_error">Error opening file</string>
+    <string name="page_link_saved">Saved</string>
+    <string name="page_link_refreshed">Refreshed</string>
 
     <!-- HELP -->
     <string name="help_content">Content</string>

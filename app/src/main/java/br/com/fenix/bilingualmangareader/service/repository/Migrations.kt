@@ -57,8 +57,9 @@ class Migrations {
                         DataBaseConsts.PAGESLINK.COLUMNS.MANGA_PAGES + " INTEGER NOT NULL, " +
                         DataBaseConsts.PAGESLINK.COLUMNS.FILE_LINK_PAGE + " INTEGER NOT NULL, " +
                         DataBaseConsts.PAGESLINK.COLUMNS.FILE_LINK_PAGES + " INTEGER NOT NULL, " +
-                        DataBaseConsts.PAGESLINK.COLUMNS.MANGA_PAGE_NAME + " TEXT NOT NULL," +
-                        DataBaseConsts.PAGESLINK.COLUMNS.FILE_LINK_PAGE_NAME + " TEXT NOT NULL)")
+                        DataBaseConsts.PAGESLINK.COLUMNS.MANGA_PAGE_NAME + " TEXT NOT NULL, " +
+                        DataBaseConsts.PAGESLINK.COLUMNS.FILE_LINK_PAGE_NAME + " TEXT NOT NULL, " +
+                        DataBaseConsts.PAGESLINK.COLUMNS.NOT_LINKED + " INTEGER DEFAULT 0 NOT NULL)")
 
                 database.execSQL( "CREATE INDEX index_" + DataBaseConsts.PAGESLINK.TABLE_NAME
                         + "_" + DataBaseConsts.PAGESLINK.COLUMNS.FK_ID_FILE + " ON " +  DataBaseConsts.PAGESLINK.TABLE_NAME +

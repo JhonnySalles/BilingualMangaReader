@@ -11,22 +11,30 @@ class FileLinkRepository(context: Context) {
     private var mDataBasePage = DataBase.getDataBase(context).getPageLinkDao()
 
     fun save(obj: FileLink): Long {
+        delete(obj.manga!!)
         val id = mDataBase.save(obj)
         if (obj.pagesLink != null) {
             mDataBasePage.deleteAll(id)
-            for (page in obj.pagesLink!!)
-                mDataBasePage.save(page)
+            save(id, obj.pagesLink!!)
+            save(id, obj.pagesNotLink!!)
         }
 
         return id
+    }
+
+    private fun save(idFile : Long, pages : List<PageLink>) {
+        for (page in pages) {
+            page.idFile = idFile
+            page.id = mDataBasePage.save(page)
+        }
     }
 
     fun update(obj: FileLink) {
         mDataBase.save(obj)
         if (obj.pagesLink != null) {
             mDataBasePage.deleteAll(obj.id!!)
-            for (page in obj.pagesLink!!)
-                mDataBasePage.save(page)
+            save(obj.id!!, obj.pagesLink!!)
+            save(obj.id!!, obj.pagesNotLink!!)
         }
     }
 
@@ -44,16 +52,30 @@ class FileLinkRepository(context: Context) {
         }
     }
 
-    fun findByFileName(idManga: Long, name: String, pages: Int): FileLink? {
-        val fileLink = mDataBase.get(idManga, name, pages)
-        if (fileLink != null)
+    fun get(obj: Manga) : FileLink? {
+        val fileLink = if (obj.id != null && obj.id != 0L) mDataBase.get(obj.id!!) else null
+        if (fileLink != null) {
             fileLink.pagesLink = findPagesLink(fileLink.id!!)
-
+            fileLink.pagesNotLink = findPagesNotLink(fileLink.id!!)
+        }
         return fileLink
     }
 
-    private fun findPagesLink(idFileLink: Long): List<PageLink>? {
-        return mDataBasePage.get(idFileLink)
+    fun findByFileName(idManga: Long, name: String, pages: Int): FileLink? {
+        val fileLink = mDataBase.get(idManga, name, pages)
+        if (fileLink != null) {
+            fileLink.pagesLink = findPagesLink(fileLink.id!!)
+            fileLink.pagesNotLink = findPagesNotLink(fileLink.id!!)
+        }
+        return fileLink
+    }
+
+    private fun findPagesLink(idFileLink: Long): List<PageLink> {
+        return mDataBasePage.getPageLink(idFileLink)
+    }
+
+    private fun findPagesNotLink(idFileLink: Long): List<PageLink> {
+        return mDataBasePage.getPageNotLink(idFileLink)
     }
 
 }

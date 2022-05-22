@@ -68,6 +68,7 @@ class GeneralConsts private constructor() {
         object OBJECT {
             const val MANGA = "MANGA_OBJECT"
             const val FILE = "FILE_OBJECT"
+            const val PAGELINK = "PAGE_LINK"
         }
 
         object COLOR_FILTER {

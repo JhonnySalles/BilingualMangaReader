@@ -71,6 +71,9 @@ class FileLink(id: Long?, idManga: Long, pages: Int, path: String, name: String,
     @Ignore
     var pagesLink: List<PageLink>? = null
 
+    @Ignore
+    var pagesNotLink: List<PageLink>? = null
+    
     override fun toString(): String {
         return "FileLink(id=$id, idManga=$idManga, pages=$pages, path='$path', name='$name', type='$type', folder='$folder')"
     }

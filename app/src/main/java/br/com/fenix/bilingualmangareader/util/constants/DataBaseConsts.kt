@@ -115,6 +115,7 @@ class DataBaseConsts private constructor() {
             const val FILE_LINK_PAGES = "file_link_pages"
             const val MANGA_PAGE_NAME = "manga_page_name"
             const val FILE_LINK_PAGE_NAME = "file_link_page_name"
+            const val NOT_LINKED = "not_linked"
         }
     }
 

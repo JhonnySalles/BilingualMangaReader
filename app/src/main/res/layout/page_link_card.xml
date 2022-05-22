@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/page_link_card_margin"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:background="@color/onPrimary">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/manga_link_root"
@@ -74,8 +75,7 @@
                 android:textColor="@color/textPrimary"
                 android:textSize="@dimen/page_link_card_page_name_size"
                 android:background="@color/primarySemitransparent"
-                android:layout_marginStart="@dimen/page_link_card_page_name_margin_start"
-                android:layout_marginBottom="@dimen/page_link_card_page_name_margin_bottom"
+                android:paddingStart="@dimen/page_link_card_page_name_margin_start"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -151,8 +151,7 @@
                 android:textColor="@color/textPrimary"
                 android:textSize="@dimen/page_link_card_page_name_size"
                 android:background="@color/primarySemitransparent"
-                android:layout_marginStart="@dimen/page_link_card_page_name_margin_start"
-                android:layout_marginBottom="@dimen/page_link_card_page_name_margin_bottom"
+                android:paddingStart="@dimen/page_link_card_page_name_margin_start"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
