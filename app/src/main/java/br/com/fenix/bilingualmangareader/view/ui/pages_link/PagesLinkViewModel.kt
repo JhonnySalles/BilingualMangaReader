@@ -37,7 +37,6 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
     private var mParse: Parse? = null
 
     private fun find(manga : Manga, refresh: (index: Int?, type: Pages) -> (Unit)) : Boolean {
-        return false
         var obj = mFileLinkRepository.get(manga) ?: return false
         obj.manga = manga
         set(obj, refresh)
@@ -122,7 +121,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun readFileLink(path : String, refresh: (index: Int?, type: Pages) -> (Unit)) : LoadFile {
         var loaded = LoadFile.ERROR_NOT_LOAD
-        mFileLink.value = null
+        mFileLink.value!!.path = ""
         mPagesLink.value!!.forEach { page ->  page.clearFileLInk() }
         mPagesNotLinked.value!!.clear()
 
