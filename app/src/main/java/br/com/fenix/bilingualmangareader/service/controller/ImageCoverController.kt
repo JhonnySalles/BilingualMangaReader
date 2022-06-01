@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.util.Log
-import androidx.collection.LruCache
 import br.com.fenix.bilingualmangareader.model.entity.Cover
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.service.parses.Parse
@@ -19,23 +18,22 @@ import br.com.fenix.bilingualmangareader.util.helpers.Util
 import kotlinx.coroutines.*
 import java.io.File
 import java.io.InputStream
-import java.util.ArrayList
 
 
 class ImageCoverController private constructor() {
-
-    private var mUpdateHandler: MutableList<Handler>? = ArrayList()
-
-
-    private object HOLDER {
-        val INSTANCE = ImageCoverController()
-    }
 
     companion object {
         val instance: ImageCoverController by lazy { HOLDER.INSTANCE }
     }
 
-    private val lru: LruCache<Any, Any> = LruCache(1024)
+    private lateinit var mContext: Context
+    private var mUpdateHandler: MutableList<Handler>? = ArrayList()
+
+    private object HOLDER {
+        val INSTANCE = ImageCoverController()
+    }
+
+    /*private val lru: LruCache<Any, Any> = LruCache(1024)
 
     private fun saveBitmapToCache(key: String, bitmap: Bitmap) {
         try {
@@ -50,6 +48,32 @@ class ImageCoverController private constructor() {
         } catch (e: Exception) {
         }
 
+        return null
+    }*/
+
+    private fun saveBitmapToCache(key: String, bitmap: Bitmap) {
+        try {
+            val cacheDir = File(mContext.externalCacheDir, GeneralConsts.CACHEFOLDER.COVERS)
+            if (!cacheDir.exists())
+                cacheDir.mkdir()
+
+            val byte = Util.imageToByteArray(bitmap) ?: return
+            val image = File(cacheDir.path + '/' + key)
+            image.writeBytes(byte)
+        } catch (e: Exception) {
+        }
+    }
+
+    private fun retrieveBitmapFromCache(key: String): Bitmap? {
+        try {
+            val file = File(mContext.externalCacheDir,GeneralConsts.CACHEFOLDER.COVERS + '/' + key)
+
+            return if (file.exists()) {
+                BitmapFactory.decodeFile(file.absolutePath)
+            } else
+                null
+        } catch (e: Exception) {
+        }
         return null
     }
 
@@ -67,7 +91,7 @@ class ImageCoverController private constructor() {
                 val msg = Message()
                 msg.what = GeneralConsts.SCANNER.MESSAGE_COVER_UPDATE_FINISHED
                 msg.data = Bundle()
-                msg.data.putInt("position",position)
+                msg.data.putInt(GeneralConsts.SCANNER.POSITION,position)
                 h.sendMessage(msg)
             } else
                 h.sendEmptyMessage(GeneralConsts.SCANNER.MESSAGE_COVER_UPDATE_FINISHED)
@@ -126,8 +150,10 @@ class ImageCoverController private constructor() {
         } else {
             if (manga.id != null) {
                 manga.thumbnail = mRepository.findFirstByIdManga(manga.id!!)
-                if (manga.thumbnail?.image != null)
+                if (manga.thumbnail?.image != null) {
                     image = manga.thumbnail?.image
+                    saveBitmapToCache(hash, manga.thumbnail?.image!!)
+                }
             }
             if (image == null) {
                 val parse = ParseFactory.create(manga.file!!) ?: return
@@ -141,14 +167,16 @@ class ImageCoverController private constructor() {
         }
     }
 
-    var mErrors: Int = 0
+    private var mErrors: Int = 0
     fun setImageCoverAsync(
         context: Context,
         manga: Manga,
         position : Int? = null
     ) {
-        if (!::mRepository.isInitialized)
+        if (!::mRepository.isInitialized) {
             mRepository = CoverRepository(context)
+            mContext = context
+        }
 
         try {
             CoroutineScope(Dispatchers.IO).launch {

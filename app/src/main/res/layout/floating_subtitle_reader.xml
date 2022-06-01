@@ -125,6 +125,18 @@
         app:rippleColor="@color/onSecondary" />
 
     <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/nav_floating_page_linked"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:layout_width="@dimen/floating_reader_button_width"
+        android:layout_height="@dimen/floating_reader_button_width"
+        android:layout_gravity="top|start"
+        android:layout_marginTop="180dp"
+        android:background="@color/floatingButton"
+        android:src="@drawable/ic_page_linked"
+        android:tint="@color/textPrimary"
+        app:rippleColor="@color/onSecondary" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/nav_floating_before_text"
         style="@style/Base.Widget.AppCompat.Button.Borderless"
         android:layout_width="@dimen/floating_reader_button_width"

@@ -139,7 +139,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     }
                 }
                 GeneralConsts.SCANNER.MESSAGE_COVER_UPDATE_FINISHED -> {
-                    val idItem = msg.data.getInt("position")
+                    val idItem = msg.data.getInt(GeneralConsts.SCANNER.POSITION)
                     notifyDataSet(idItem)
                 }
             }

@@ -25,6 +25,7 @@ import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.entity.PageLink
 import br.com.fenix.bilingualmangareader.model.enums.LoadFile
 import br.com.fenix.bilingualmangareader.model.enums.Pages
+import br.com.fenix.bilingualmangareader.service.controller.SubTitleController
 import br.com.fenix.bilingualmangareader.service.listener.PageLinkCardListener
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
@@ -262,9 +263,10 @@ class PagesLinkFragment : Fragment() {
         super.onPause()
     }
 
-    override fun onDestroy() {
+    override fun onStop() {
         mViewModel.endThread()
-        super.onDestroy()
+        SubTitleController.getInstance(requireContext()).setFileLink(mViewModel.getFileLink(null))
+        super.onStop()
     }
 
     private inner class ImageLoadHandler(fragment: PagesLinkFragment) : Handler() {

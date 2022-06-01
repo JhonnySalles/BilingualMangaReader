@@ -29,6 +29,7 @@ import br.com.fenix.bilingualmangareader.service.repository.MangaRepository
 import br.com.fenix.bilingualmangareader.service.repository.SubTitleRepository
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.view.ui.pages_link.PagesLinkActivity
+import br.com.fenix.bilingualmangareader.view.ui.pages_link.PagesLinkViewModel
 import br.com.fenix.bilingualmangareader.view.ui.reader.FloatingSubtitleReader.Companion.canDrawOverlays
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayout
@@ -81,7 +82,8 @@ class ReaderActivity : AppCompatActivity() {
 
         Formatter.initializeAsync(applicationContext)
 
-        SubTitleController.getInstance(applicationContext).clearExternalSubtitlesSelected()
+        val subtitle = SubTitleController.getInstance(applicationContext)
+        subtitle.clearExternalSubtitlesSelected()
 
         mToolbar = findViewById(R.id.toolbar_reader)
         mToolbarTitle = findViewById(R.id.toolbar_title_custom)
@@ -158,6 +160,8 @@ class ReaderActivity : AppCompatActivity() {
                 ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
 
+        findViewById<Button>(R.id.btn_menu_page_linked).setOnClickListener { subtitle.drawPageLinked() }
+
         mPopupTranslateTab = findViewById(R.id.popup_translate_tab)
         mPopupTranslateView = findViewById(R.id.popup_translate_view_pager)
 
@@ -228,6 +232,7 @@ class ReaderActivity : AppCompatActivity() {
                 val file = File(intent.data!!.path!!)
                 val fragment: ReaderFragment = ReaderFragment.create(file)
                 setTitles(file.name, "")
+                SubTitleController.getInstance(applicationContext).setFileLink(null)
                 setFragment(fragment)
             } else {
                 val extras = intent.extras
@@ -238,6 +243,10 @@ class ReaderActivity : AppCompatActivity() {
                     ReaderFragment.create(manga)
                 } else
                     ReaderFragment.create()
+
+                val fileLink : PagesLinkViewModel by viewModels()
+                SubTitleController.getInstance(applicationContext).setFileLink(fileLink.getFileLink(manga))
+
                 setFragment(fragment)
             }
         }

@@ -100,7 +100,17 @@ class GeneralConsts private constructor() {
         val DATA_FORMAT = listOf("dd/MM/yyyy", "MM/dd/yy", "dd/MM/yy", "yyyy-MM-dd")
     }
 
+    object CACHEFOLDER {
+        const val COVERS = "Covers"
+        const val LINKED = "Linked"
+        const val A = "a"
+        const val B = "b"
+        const val C = "c"
+        const val D = "d"
+    }
+
     object SCANNER {
+        const val POSITION = "POSITION"
         const val MESSAGE_MANGA_UPDATE_FINISHED = 0
         const val MESSAGE_MANGA_UPDATED = 1
         const val MESSAGE_COVER_UPDATE_FINISHED = 2

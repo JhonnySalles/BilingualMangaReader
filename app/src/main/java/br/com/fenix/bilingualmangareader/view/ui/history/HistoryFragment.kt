@@ -100,7 +100,7 @@ class HistoryFragment : Fragment() {
         override fun handleMessage(msg: Message) {
             when (msg.what) {
                 GeneralConsts.SCANNER.MESSAGE_COVER_UPDATE_FINISHED -> {
-                    val idItem = msg.data.getInt("position")
+                    val idItem = msg.data.getInt(GeneralConsts.SCANNER.POSITION)
                     notifyDataSet(idItem)
                 }
             }

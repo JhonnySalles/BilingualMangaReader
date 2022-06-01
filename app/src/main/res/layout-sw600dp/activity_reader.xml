@@ -120,7 +120,7 @@
                 app:rippleColor="@color/onSecondary" />
 
             <Button
-                android:id="@+id/btn_menu_file_link"
+                android:id="@+id/btn_menu_page_linked"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="@dimen/popup_reader_button_width"
                 android:layout_height="match_parent"
@@ -131,7 +131,7 @@
                 android:minHeight="@dimen/popup_reader_button_min_height"
                 android:paddingLeft="@dimen/popup_reader_button_padding"
                 android:paddingRight="@dimen/popup_reader_button_padding"
-                app:icon="@drawable/ic_file_link"
+                app:icon="@drawable/ic_page_linked"
                 app:iconTint="@color/textPrimary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/nav_next_text"
@@ -170,6 +170,25 @@
                 android:paddingLeft="@dimen/popup_reader_button_padding"
                 android:paddingRight="@dimen/popup_reader_button_padding"
                 app:icon="@drawable/ic_color_settings"
+                app:iconTint="@color/textPrimary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/nav_next_text"
+                app:layout_constraintTop_toTopOf="parent"
+                app:rippleColor="@color/onSecondary" />
+
+            <Button
+                android:id="@+id/btn_menu_file_link"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="@dimen/popup_reader_button_width"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:background="@color/primarySemitransparent"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minHeight="@dimen/popup_reader_button_min_height"
+                android:paddingLeft="@dimen/popup_reader_button_padding"
+                android:paddingRight="@dimen/popup_reader_button_padding"
+                app:icon="@drawable/ic_file_link"
                 app:iconTint="@color/textPrimary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/nav_next_text"

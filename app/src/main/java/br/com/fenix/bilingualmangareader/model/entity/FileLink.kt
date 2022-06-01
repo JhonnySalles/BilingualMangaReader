@@ -1,6 +1,8 @@
 package br.com.fenix.bilingualmangareader.model.entity
 
 import androidx.room.*
+import br.com.fenix.bilingualmangareader.service.parses.Parse
+import br.com.fenix.bilingualmangareader.service.parses.ParseFactory
 import br.com.fenix.bilingualmangareader.util.constants.DataBaseConsts
 import java.io.File
 import java.time.LocalDateTime
@@ -73,6 +75,9 @@ class FileLink(id: Long?, idManga: Long, pages: Int, path: String, name: String,
 
     @Ignore
     var pagesNotLink: List<PageLink>? = null
+
+    @Ignore
+    var parse = if (path.isNotEmpty()) ParseFactory.create(path) else null
     
     override fun toString(): String {
         return "FileLink(id=$id, idManga=$idManga, pages=$pages, path='$path', name='$name', type='$type', folder='$folder')"
