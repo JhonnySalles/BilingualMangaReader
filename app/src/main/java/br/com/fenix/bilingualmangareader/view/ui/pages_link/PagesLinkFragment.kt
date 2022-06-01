@@ -5,6 +5,8 @@ import android.content.ClipData
 import android.content.ClipDescription
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.util.Log
 import android.view.DragEvent
 import android.view.LayoutInflater
@@ -29,6 +31,7 @@ import br.com.fenix.bilingualmangareader.util.helpers.Util
 import br.com.fenix.bilingualmangareader.view.adapter.page_link.PageLinkCardAdapter
 import br.com.fenix.bilingualmangareader.view.adapter.page_link.PageNotLinkCardAdapter
 import com.google.android.material.textfield.TextInputLayout
+import java.lang.ref.WeakReference
 
 class PagesLinkFragment : Fragment() {
 
@@ -40,6 +43,7 @@ class PagesLinkFragment : Fragment() {
     private lateinit var mSave: Button
     private lateinit var mRefresh : Button
     private lateinit var mListener: PageLinkCardListener
+    private val mImageLoadHandler: Handler = ImageLoadHandler(this)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -245,6 +249,30 @@ class PagesLinkFragment : Fragment() {
             getString(R.string.page_link_refreshed),
             Toast.LENGTH_SHORT
         ).show()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        mViewModel.addImageLoadHandler(mImageLoadHandler)
+    }
+
+    override fun onPause() {
+        mViewModel.removeImageLoadHandler(mImageLoadHandler)
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        mViewModel.endThread()
+        super.onDestroy()
+    }
+
+    private inner class ImageLoadHandler(fragment: PagesLinkFragment) : Handler() {
+        private val mOwner: WeakReference<PagesLinkFragment> = WeakReference(fragment)
+        override fun handleMessage(msg: Message) {
+            val imageLoad = msg.obj as PagesLinkViewModel.ImageLoad
+            notifyItemChanged(imageLoad.type, imageLoad.index)
+        }
     }
 
 }

@@ -13,9 +13,8 @@ import java.time.LocalDateTime
 class PageLink(id: Long?, idFile: Long?, mangaPage: Int, mangaPages: Int, fileLinkPage: Int, fileLinkPages: Int, mangaPageName: String, fileLinkPageName: String) :
     Serializable {
 
-    constructor(
-        id: Long?, idFile: Long?, mangaPage: Int, mangaPages: Int, fileLinkPage: Int, fileLinkPages: Int, mangaPageName: String, fileLinkPageName: String,
-        notLinked:Boolean, imageMangaPage: Bitmap? = null, imageFileLinkPage: Bitmap? = null
+    constructor(id: Long?, idFile: Long?, mangaPage: Int, mangaPages: Int, fileLinkPage: Int, fileLinkPages: Int, mangaPageName: String,
+                fileLinkPageName: String, notLinked:Boolean, imageMangaPage: Bitmap? = null, imageFileLinkPage: Bitmap? = null
     ) : this(id, idFile, mangaPage, mangaPages, fileLinkPage, fileLinkPages, mangaPageName, fileLinkPageName) {
         this.imageMangaPage = imageMangaPage
         this.imageFileLinkPage = imageFileLinkPage
@@ -34,6 +33,14 @@ class PageLink(id: Long?, idFile: Long?, mangaPage: Int, mangaPages: Int, fileLi
     ) : this(null, idFile, mangaPage, mangaPages, -1, 0, mangaPageName, "") {
         this.imageMangaPage = imageMangaPage
         this.imageFileLinkPage = null
+    }
+
+    constructor(idFile: Long?, mangaPage: Int, mangaPages: Int, fileLinkPage: Int, fileLinkPages: Int, mangaPageName: String,
+                fileLinkPageName: String, notLinked:Boolean, imageMangaPage: Bitmap? = null, imageFileLinkPage: Bitmap? = null
+    ) : this(null, idFile, mangaPage, mangaPages, fileLinkPage, fileLinkPages, mangaPageName, fileLinkPageName) {
+        this.imageMangaPage = imageMangaPage
+        this.imageFileLinkPage = imageFileLinkPage
+        this.notLinked = notLinked
     }
 
     @PrimaryKey(autoGenerate = true)

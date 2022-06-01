@@ -30,7 +30,7 @@ class FileLinkRepository(context: Context) {
     }
 
     fun update(obj: FileLink) {
-        mDataBase.save(obj)
+        mDataBase.update(obj)
         if (obj.pagesLink != null) {
             mDataBasePage.deleteAll(obj.id!!)
             save(obj.id!!, obj.pagesLink!!)
