@@ -239,7 +239,8 @@
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:paddingTop="5dp"
-        android:visibility="gone">
+        android:visibility="gone"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <ImageView
             android:id="@+id/menu_translate_close"
@@ -321,7 +322,8 @@
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:paddingTop="5dp"
-        android:visibility="gone">
+        android:visibility="gone"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <ImageView
             android:id="@+id/menu_color_close"
