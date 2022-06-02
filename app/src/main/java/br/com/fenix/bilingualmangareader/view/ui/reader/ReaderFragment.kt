@@ -157,7 +157,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
     }
 
     override fun onResume() {
-        setFullscreen(fullscreen = true, animated = true)
+        setFullscreen(fullscreen = true)
         super.onResume()
     }
 
@@ -573,7 +573,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
 
         override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
             if (!isFullscreen()) {
-                setFullscreen(fullscreen = true, animated = true)
+                setFullscreen(fullscreen = true)
                 return true
             }
             val isLandscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
@@ -595,7 +595,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 } else {
                     if (getCurrentPage() == 1) hitBeginning() else setCurrentPage(getCurrentPage() - 1)
                 }
-            } else setFullscreen(fullscreen = false, animated = true)
+            } else setFullscreen(fullscreen = false)
             return true
         }
     }
@@ -619,13 +619,9 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         return (requireActivity() as AppCompatActivity).supportActionBar
     }
 
-    private fun setFullscreen(fullscreen: Boolean) {
-        setFullscreen(fullscreen, false)
-    }
-
     private val windowInsetsController by lazy { WindowInsetsControllerCompat(requireActivity().window, mViewPager) }
 
-    fun setFullscreen(fullscreen: Boolean, animated: Boolean) {
+    fun setFullscreen(fullscreen: Boolean) {
         mIsFullscreen = fullscreen
         val w: Window = requireActivity().window
         if (fullscreen) {
@@ -638,6 +634,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 }
             } else {
                 getActionBar()?.hide()
+                @Suppress("DEPRECATION")
                 var flag = (View.SYSTEM_UI_FLAG_FULLSCREEN // Hide top iu
                         or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // Hide navigator
                         or View.SYSTEM_UI_FLAG_IMMERSIVE // Force navigator hide
@@ -645,7 +642,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                         or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN // Force full screen
                         or View.SYSTEM_UI_FLAG_LAYOUT_STABLE // Stable transition on fullscreen and immersive
                         )
-
+                @Suppress("DEPRECATION")
                 mViewPager.systemUiVisibility = flag
 
                 Handler(Looper.getMainLooper()).postDelayed({
@@ -669,9 +666,11 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
 
             } else {
                 getActionBar()?.show()
+                @Suppress("DEPRECATION")
                 var flag = (View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+                @Suppress("DEPRECATION")
                 mViewPager.systemUiVisibility = flag
 
                 Handler(Looper.getMainLooper()).postDelayed({
@@ -685,8 +684,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         }
     }
 
-    fun isFullscreen(): Boolean =
-        mIsFullscreen
+    fun isFullscreen(): Boolean = mIsFullscreen
 
     fun hitBeginning() {
         if (mManga != null) {
