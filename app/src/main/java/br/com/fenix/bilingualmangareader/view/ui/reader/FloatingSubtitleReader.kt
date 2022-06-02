@@ -123,6 +123,8 @@ class FloatingSubtitleReader constructor(private val context: Context) {
                 .setOnClickListener { mSubTitleController.drawSelectedText() }
             this.findViewById<AppCompatImageButton>(R.id.nav_floating_change_language)
                 .setOnClickListener { mSubTitleController.changeLanguage() }
+            this.findViewById<AppCompatImageButton>(R.id.nav_floating_page_linked)
+                .setOnClickListener { mSubTitleController.drawPageLinked() }
 
             this.findViewById<AppCompatImageButton>(R.id.nav_floating_go_to_top).setOnClickListener {
                 mScrollContent.smoothScrollTo(0, 0)
@@ -196,7 +198,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
         layoutParams = WindowManager.LayoutParams().apply {
             format = PixelFormat.TRANSLUCENT
             flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-            type = WindowManager.LayoutParams.TYPE_PHONE
+            type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
             gravity = Gravity.TOP
             width = WindowManager.LayoutParams.WRAP_CONTENT
             height = WindowManager.LayoutParams.WRAP_CONTENT

@@ -6,6 +6,7 @@ import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -16,8 +17,6 @@ import android.view.*
 import android.view.GestureDetector.SimpleOnGestureListener
 import android.widget.*
 import android.widget.SeekBar.OnSeekBarChangeListener
-import android.view.Window
-import android.view.WindowManager
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -95,7 +94,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
     companion object {
         var mCurrentPage = 0
         private var mCacheFolderIndex = 0
-        private val mCacheFolder = arrayOf("a", "b", "c", "d")
+        private val mCacheFolder = arrayOf(GeneralConsts.CACHEFOLDER.A, GeneralConsts.CACHEFOLDER.B, GeneralConsts.CACHEFOLDER.C, GeneralConsts.CACHEFOLDER.D)
 
         fun create(): ReaderFragment {
             if (mCacheFolderIndex >= 2)
@@ -189,7 +188,6 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 mParse = ParseFactory.create(file)
                 if (mParse != null) {
                     mSubtitleController = SubTitleController.getInstance(requireContext())
-                    mSubtitleController.clearExternalSubtitlesSelected()
                     mSubtitleController.getListChapter(mParse!!)
                     mSubtitleController.mReaderFragment = this
                     mFileName = file.name
@@ -502,6 +500,26 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
 
     }
 
+    fun loadImage(t: Target, path: Uri, resize: Boolean = true) {
+        try {
+            val request = mPicasso.load(path)
+                .memoryPolicy(MemoryPolicy.NO_STORE)
+                .tag(requireActivity())
+
+            if (resize)
+                request.resize(ReaderConsts.READER.MAX_PAGE_WIDTH, ReaderConsts.READER.MAX_PAGE_HEIGHT)
+                    .centerInside()
+                    .onlyScaleDown()
+
+            request.transform(mViewModel.filters.value!!)
+                .into(t)
+        } catch (e: Exception) {
+            Log.e(GeneralConsts.TAG.LOG, "Error in open image: " + e.message)
+            Log.e(GeneralConsts.TAG.LOG, e.stackTraceToString())
+        }
+
+    }
+
     fun loadImage(t: MyTarget) {
         val pos: Int = if (mIsLeftToRight)
             t.position
@@ -713,6 +731,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 ) { _, _ ->
                     val activity = requireActivity() as ReaderActivity
                     activity.setTitles(mNewManga!!.title, mNewManga!!.bookMark.toString())
+                    activity.setManga(mNewManga!!)
                     activity.setFragment(create(mNewManga!!))
                 }
                 .setNegativeButton(

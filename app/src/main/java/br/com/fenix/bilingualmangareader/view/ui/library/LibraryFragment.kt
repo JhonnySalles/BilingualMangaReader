@@ -35,6 +35,7 @@ import br.com.fenix.bilingualmangareader.view.adapter.library.MangaGridCardAdapt
 import br.com.fenix.bilingualmangareader.view.adapter.library.MangaLineCardAdapter
 import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity
 import java.lang.ref.WeakReference
+import java.time.LocalDateTime
 import java.util.*
 import kotlin.math.max
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -138,7 +139,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     }
                 }
                 GeneralConsts.SCANNER.MESSAGE_COVER_UPDATE_FINISHED -> {
-                    val idItem = msg.data.getInt("position")
+                    val idItem = msg.data.getInt(GeneralConsts.SCANNER.POSITION)
                     notifyDataSet(idItem)
                 }
             }
@@ -305,7 +306,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                             notifyDataSet(position)
                         }
                         R.id.menu_book_clear -> {
-                            manga.lastAccess = Calendar.getInstance().time
+                            manga.lastAccess = LocalDateTime.MIN
                             manga.bookMark = 0
                             mViewModel.save(manga)
                             notifyDataSet(position)

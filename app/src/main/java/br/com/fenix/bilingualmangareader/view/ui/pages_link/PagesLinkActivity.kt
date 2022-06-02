@@ -1,30 +1,30 @@
 package br.com.fenix.bilingualmangareader.view.ui.pages_link
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
-import androidx.activity.viewModels
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
 import br.com.fenix.bilingualmangareader.R
+import br.com.fenix.bilingualmangareader.model.entity.Manga
+import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 
 
 class PagesLinkActivity : AppCompatActivity() {
 
-    private val mViewModel: PagesLinkViewModel by viewModels()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pages_link)
+        val extras = intent.extras
+        val fragment = PagesLinkFragment()
+
+        if (extras != null) {
+            val bundle = Bundle()
+            bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, extras.getSerializable(GeneralConsts.KEYS.OBJECT.MANGA) as Manga)
+            fragment.arguments = bundle
+        }
 
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.root_frame_pages_link, PagesLinkFragment())
+            .replace(R.id.root_frame_pages_link, fragment)
             .commit()
     }
 

@@ -37,7 +37,7 @@ abstract class DataBase : RoomDatabase() {
             synchronized(DataBase::class.java) { // Used for a two or many cores
                 INSTANCE = Room.databaseBuilder(context, DataBase::class.java, DATABASE_NAME)
                     .addCallback(rdc)
-                    .addMigrations(Migrations.MIGRATION_1_2, Migrations.MIGRATION_3_4)
+                    .addMigrations(Migrations.MIGRATION_1_2, Migrations.MIGRATION_2_3, Migrations.MIGRATION_3_4)
                     .allowMainThreadQueries()
                     .build() // MainThread uses another thread in db conection
             }

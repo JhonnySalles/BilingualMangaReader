@@ -4,7 +4,7 @@ import androidx.room.*
 import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.util.constants.DataBaseConsts
 import java.io.File
-import java.util.*
+import java.time.LocalDateTime
 
 @Entity(
     tableName = DataBaseConsts.SUBTITLES.TABLE_NAME,
@@ -34,7 +34,7 @@ data class SubTitle(
     var path: String = "",
 
     @ColumnInfo(name = DataBaseConsts.SUBTITLES.COLUMNS.DATE_CREATE)
-    var dateCreate: Date? = Date(),
+    var dateCreate: LocalDateTime? = LocalDateTime.now(),
 
     @Ignore
     var file: File = File(path),
@@ -54,7 +54,7 @@ data class SubTitle(
         pageKey: String = "",
         pageCount: Int = 0,
         path: String = "",
-        dateCreate: Date? = Date(),
+        dateCreate: LocalDateTime? = LocalDateTime.now(),
     ) : this(
         id, id_manga, language, chapterKey, pageKey, pageCount, path, dateCreate,
         File(path)
@@ -69,7 +69,7 @@ data class SubTitle(
         path: String = "",
         chapter: Chapter?
     ) : this(
-        null, id_manga, language, chapterKey, pageKey, pageCount, path, Date(),
+        null, id_manga, language, chapterKey, pageKey, pageCount, path, LocalDateTime.now(),
         File(path)
     ) {
         this.chapter = chapter

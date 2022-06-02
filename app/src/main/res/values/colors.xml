@@ -26,6 +26,7 @@
     <color name="menuPrimary">#111111</color>
 
     <color name="textPrimary">#FFFFFFFF</color>
+    <color name="textSecondary">#000000</color>
 
     <color name="white">#FFFFFFFF</color>
 

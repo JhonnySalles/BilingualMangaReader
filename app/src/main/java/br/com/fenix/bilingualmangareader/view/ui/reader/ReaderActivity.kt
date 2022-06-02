@@ -29,6 +29,7 @@ import br.com.fenix.bilingualmangareader.service.repository.MangaRepository
 import br.com.fenix.bilingualmangareader.service.repository.SubTitleRepository
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.view.ui.pages_link.PagesLinkActivity
+import br.com.fenix.bilingualmangareader.view.ui.pages_link.PagesLinkViewModel
 import br.com.fenix.bilingualmangareader.view.ui.reader.FloatingSubtitleReader.Companion.canDrawOverlays
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayout
@@ -81,7 +82,8 @@ class ReaderActivity : AppCompatActivity() {
 
         Formatter.initializeAsync(applicationContext)
 
-        SubTitleController.getInstance(applicationContext).clearExternalSubtitlesSelected()
+        val subtitle = SubTitleController.getInstance(applicationContext)
+        subtitle.clearExternalSubtitlesSelected()
 
         mToolbar = findViewById(R.id.toolbar_reader)
         mToolbarTitle = findViewById(R.id.toolbar_title_custom)
@@ -121,7 +123,22 @@ class ReaderActivity : AppCompatActivity() {
         }
         findViewById<ImageView>(R.id.menu_translate_floating_touch).setOnClickListener { menuFloat() }
         findViewById<Button>(R.id.btn_menu_file_link).setOnClickListener {
-            startActivity(Intent(applicationContext, PagesLinkActivity::class.java))
+            if (mManga != null) {
+                var intent = Intent(applicationContext, PagesLinkActivity::class.java)
+                val bundle = Bundle()
+                bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, mManga)
+                intent.putExtras(bundle)
+                startActivity(intent)
+            } else
+                AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+                    .setTitle(getString(R.string.popup_reading_subtitle_empty))
+                    .setMessage("Manga não selecionado")
+                    .setNeutralButton(
+                        R.string.action_neutral
+                    ) { _, _ -> }
+                    .create()
+                    .show()
+
         }
         findViewById<Button>(R.id.btn_popup_subtitle).setOnClickListener {
             mMenuPopupColor.visibility = View.GONE
@@ -142,6 +159,8 @@ class ReaderActivity : AppCompatActivity() {
             else
                 ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
+
+        findViewById<Button>(R.id.btn_menu_page_linked).setOnClickListener { subtitle.drawPageLinked() }
 
         mPopupTranslateTab = findViewById(R.id.popup_translate_tab)
         mPopupTranslateView = findViewById(R.id.popup_translate_view_pager)
@@ -213,6 +232,7 @@ class ReaderActivity : AppCompatActivity() {
                 val file = File(intent.data!!.path!!)
                 val fragment: ReaderFragment = ReaderFragment.create(file)
                 setTitles(file.name, "")
+                SubTitleController.getInstance(applicationContext).setFileLink(null)
                 setFragment(fragment)
             } else {
                 val extras = intent.extras
@@ -223,6 +243,10 @@ class ReaderActivity : AppCompatActivity() {
                     ReaderFragment.create(manga)
                 } else
                     ReaderFragment.create()
+
+                val fileLink : PagesLinkViewModel by viewModels()
+                SubTitleController.getInstance(applicationContext).setFileLink(fileLink.getFileLink(manga))
+
                 setFragment(fragment)
             }
         }
@@ -233,6 +257,10 @@ class ReaderActivity : AppCompatActivity() {
     fun setTitles(title: String, page: String) {
         mReaderTitle.text = page
         mToolbarTitle.text = title
+    }
+
+    fun setManga(manga: Manga) {
+        mManga = manga
     }
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
@@ -409,6 +437,8 @@ class ReaderActivity : AppCompatActivity() {
                 }
             } else
                 startManageDrawOverlaysPermission()
+
+            //startActivity(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION))
         }
     }
 

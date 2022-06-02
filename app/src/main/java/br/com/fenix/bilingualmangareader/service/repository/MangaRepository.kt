@@ -33,7 +33,7 @@ class MangaRepository(context: Context) {
     }
 
     fun updateLastAcess(obj: Manga) {
-        if (obj != null)
+        if (obj.id != null)
             mDataBase.update(obj)
     }
 

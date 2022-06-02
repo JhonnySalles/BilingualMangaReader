@@ -8,7 +8,7 @@ import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.service.listener.MangaCardListener
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
-import java.util.*
+import java.time.LocalDateTime
 
 class HistoryHeaderViewHolder(itemView: View, private val listener: MangaCardListener) :
     RecyclerView.ViewHolder(itemView) {
@@ -18,9 +18,7 @@ class HistoryHeaderViewHolder(itemView: View, private val listener: MangaCardLis
         //val cardView = itemView.findViewById<LinearLayout>(R.id.history_divider)
 
         if (manga.lastAccess != null) {
-            val calendar = Calendar.getInstance()
-            calendar.add(Calendar.DAY_OF_YEAR, -1)
-            title.text = if (manga.lastAccess!!.after(calendar.time))
+            title.text = if (manga.lastAccess!!.isAfter(LocalDateTime.now().minusDays(1)))
                 itemView.context.getString(R.string.history_today)
             else
                 GeneralConsts.formatterDate(

@@ -1,6 +1,8 @@
 package br.com.fenix.bilingualmangareader.model.entity
 
 import androidx.room.*
+import br.com.fenix.bilingualmangareader.service.parses.Parse
+import br.com.fenix.bilingualmangareader.service.parses.ParseFactory
 import br.com.fenix.bilingualmangareader.util.constants.DataBaseConsts
 import java.io.File
 import java.time.LocalDateTime
@@ -18,6 +20,21 @@ class FileLink(id: Long?, idManga: Long, pages: Int, path: String, name: String,
         this.dateCreate = dateCreate
         this.lastAccess = lastAccess
     }
+
+    constructor(
+        manga: Manga, pages: Int, path: String, name: String, type: String, folder: String
+    ) : this(null, manga.id!!, pages, path, name, type, folder) {
+        this.manga = manga
+        this.dateCreate = LocalDateTime.now()
+        this.lastAccess = LocalDateTime.now()
+    }
+
+    constructor( manga: Manga ) : this(null, manga.id!!, 0, "", "", "", "") {
+        this.manga = manga
+        this.dateCreate = LocalDateTime.now()
+        this.lastAccess = LocalDateTime.now()
+    }
+
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = DataBaseConsts.FILELINK.COLUMNS.ID)
@@ -56,6 +73,15 @@ class FileLink(id: Long?, idManga: Long, pages: Int, path: String, name: String,
     @Ignore
     var pagesLink: List<PageLink>? = null
 
+    @Ignore
+    var pagesNotLink: List<PageLink>? = null
+
+    @Ignore
+    var parseManga = if (manga != null) ParseFactory.create(manga!!.path) else null
+
+    @Ignore
+    var parseFileLink = if (path.isNotEmpty()) ParseFactory.create(path) else null
+
     override fun toString(): String {
         return "FileLink(id=$id, idManga=$idManga, pages=$pages, path='$path', name='$name', type='$type', folder='$folder')"
     }
@@ -86,6 +112,12 @@ class FileLink(id: Long?, idManga: Long, pages: Int, path: String, name: String,
         result = 31 * result + type.hashCode()
         result = 31 * result + folder.hashCode()
         return result
+    }
+
+    fun addManga(manga : Manga) {
+        idManga = manga.id?: 0
+        lastAccess = LocalDateTime.now()
+        this.manga = manga
     }
 
 }

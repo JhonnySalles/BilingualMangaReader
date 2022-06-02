@@ -139,7 +139,12 @@
 
     <!-- PAGE LINK -->
     <string name="page_link_file">Arquivo em outro idioma</string>
+    <string name="page_link_refresh">Recarregar</string>
     <string name="page_link_save">Salvar</string>
+    <string name="page_link_load_file_wrong">Arquivo não suportado</string>
+    <string name="page_link_load_error">Erro ao abrir o arquivo</string>
+    <string name="page_link_saved">Salvo</string>
+    <string name="page_link_refreshed">Recarregado</string>
 
     <!-- HELP -->
     <string name="help_content">Conteúdo</string>

@@ -2,8 +2,8 @@ package br.com.fenix.bilingualmangareader.util.constants
 
 import android.content.Context
 import android.content.SharedPreferences
-import java.text.SimpleDateFormat
-import java.util.*
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class GeneralConsts private constructor() {
     companion object {
@@ -21,16 +21,16 @@ class GeneralConsts private constructor() {
             return mContext.getSharedPreferences(KEYS.PREFERENCE_NAME, Context.MODE_PRIVATE)
         }
 
-        fun formatterDate(dateTime: Date): String {
+        fun formatterDate(dateTime: LocalDateTime): String {
             val preferences = getSharedPreferences()
             val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, "yyyy-MM-dd")
-            return SimpleDateFormat(pattern, Locale.getDefault()).format(dateTime)
+            return dateTime.format(DateTimeFormatter.ofPattern(pattern))
         }
 
-        fun formatterDateTime(dateTime: Date): String {
+        fun formatterDateTime(dateTime: LocalDateTime): String {
             val preferences = getSharedPreferences()
             val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, "yyyy-MM-dd") + " hh:mm:ss a"
-            return SimpleDateFormat(pattern, Locale.getDefault()).format(dateTime)
+            return dateTime.format(DateTimeFormatter.ofPattern(pattern))
         }
     }
 
@@ -68,6 +68,7 @@ class GeneralConsts private constructor() {
         object OBJECT {
             const val MANGA = "MANGA_OBJECT"
             const val FILE = "FILE_OBJECT"
+            const val PAGELINK = "PAGE_LINK"
         }
 
         object COLOR_FILTER {
@@ -99,14 +100,25 @@ class GeneralConsts private constructor() {
         val DATA_FORMAT = listOf("dd/MM/yyyy", "MM/dd/yy", "dd/MM/yy", "yyyy-MM-dd")
     }
 
+    object CACHEFOLDER {
+        const val COVERS = "Covers"
+        const val LINKED = "Linked"
+        const val A = "a"
+        const val B = "b"
+        const val C = "c"
+        const val D = "d"
+    }
+
     object SCANNER {
+        const val POSITION = "POSITION"
         const val MESSAGE_MANGA_UPDATE_FINISHED = 0
         const val MESSAGE_MANGA_UPDATED = 1
         const val MESSAGE_COVER_UPDATE_FINISHED = 2
     }
 
-    object DEFAULT {
-        const val DATE_TIME_PATTERN = "yyyy-MM-dd hh:mm:ss"
+    object PAGESLINK {
+        const val MESSAGE_PAGES_LINK_FINISHED = 0
+        const val MESSAGE_PAGES_LINK_UPDATED = 1
     }
 
 }

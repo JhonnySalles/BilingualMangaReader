@@ -3,11 +3,14 @@ package br.com.fenix.bilingualmangareader.service.controller
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.collection.arraySetOf
+import androidx.core.graphics.drawable.toBitmap
+import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import br.com.fenix.bilingualmangareader.R
@@ -27,6 +30,7 @@ import kotlinx.coroutines.runBlocking
 import org.apache.commons.codec.binary.Hex
 import org.apache.commons.codec.digest.DigestUtils
 import java.io.BufferedInputStream
+import java.io.File
 import java.io.InputStream
 import java.lang.ref.WeakReference
 
@@ -67,6 +71,8 @@ class SubTitleController private constructor(private val context: Context) {
         context.resources.getString(R.string.popup_reading_subtitle_chapter)
     private var labelExtra: String =
         context.resources.getString(R.string.popup_reading_subtitle_extra)
+
+    private var mFileLink : FileLink? = null
 
     var isSelected = false
     var isNotEmpty = false
@@ -266,7 +272,7 @@ class SubTitleController private constructor(private val context: Context) {
         pageNumber: Int
     ): SubTitle {
         val image: InputStream? = mParse.getPage(pageNumber)
-        val hash: String? = String(Hex.encodeHex(DigestUtils.md5(image)))
+        val hash: String? = DigestUtils.md5Hex(image)
         var pageName: String? = mParse.getPagePath(pageNumber)
 
         pageName = if (pageName!!.contains('/'))
@@ -461,45 +467,62 @@ class SubTitleController private constructor(private val context: Context) {
             view.setImageBitmap(imageBackup)
             isDrawing = false
         } else {
-            target = MyTarget(view)
+            target = MyTarget(view, true)
             mReaderFragment!!.loadImage(target!!, ReaderFragment.mCurrentPage, false)
         }
     }
 
-    inner class MyTarget(layout: View) : Target {
+    private fun drawPageLinked(path : Uri) {
+        val view: PageImageView = mReaderFragment!!.getCurrencyImageView() ?: return
+        if (isDrawing) {
+            view.setImageBitmap(imageBackup)
+            isDrawing = false
+        }
+
+        target = MyTarget(view, false)
+        mReaderFragment!!.loadImage(target!!, path, false)
+    }
+
+    inner class MyTarget(layout: View, isText : Boolean) : Target {
         private val mLayout: WeakReference<View> = WeakReference(layout)
+        private val isText = isText
 
         override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
             val layout = mLayout.get() ?: return
             val iv = layout.findViewById<View>(R.id.page_image_view) as ImageView
-            imageBackup = bitmap
-            if (imageBackup == null)
-                return
+            if (isText) {
+                imageBackup = bitmap
+                if (imageBackup == null)
+                    return
 
-            val image: Bitmap = imageBackup!!.copy(imageBackup!!.config, true)
-            val canvas = Canvas(image)
-            val paint = Paint()
-            paint.color = Color.RED
-            paint.strokeWidth = 3f
-            paint.textSize = 50f
-            for (text in pageSelected.value!!.texts) {
-                paint.style = Paint.Style.FILL
-                canvas.drawText(
-                    text.sequence.toString(),
-                    text.x1.toFloat(),
-                    text.y1.toFloat(),
-                    paint
-                )
-                paint.style = Paint.Style.STROKE
-                canvas.drawRect(
-                    text.x1.toFloat(),
-                    text.y1.toFloat(),
-                    text.x2.toFloat(),
-                    text.y2.toFloat(),
-                    paint
-                )
+                val image: Bitmap = imageBackup!!.copy(imageBackup!!.config, true)
+                val canvas = Canvas(image)
+                val paint = Paint()
+                paint.color = Color.RED
+                paint.strokeWidth = 3f
+                paint.textSize = 50f
+                for (text in pageSelected.value!!.texts) {
+                    paint.style = Paint.Style.FILL
+                    canvas.drawText(
+                        text.sequence.toString(),
+                        text.x1.toFloat(),
+                        text.y1.toFloat(),
+                        paint
+                    )
+                    paint.style = Paint.Style.STROKE
+                    canvas.drawRect(
+                        text.x1.toFloat(),
+                        text.y1.toFloat(),
+                        text.x2.toFloat(),
+                        text.y2.toFloat(),
+                        paint
+                    )
+                }
+                iv.setImageBitmap(image)
+            } else {
+                imageBackup = iv.drawable.toBitmap()
+                iv.setImageBitmap(bitmap)
             }
-            iv.setImageBitmap(image)
             isDrawing = true
         }
 
@@ -712,5 +735,62 @@ class SubTitleController private constructor(private val context: Context) {
                 return@forEach
             }
         }
+    }
+
+    fun drawPageLinked() {
+        if (isDrawing) {
+            val view: PageImageView = mReaderFragment!!.getCurrencyImageView() ?: return
+            view.setImageBitmap(imageBackup)
+            isDrawing = false
+        } else
+            locateFileLink(ReaderFragment.mCurrentPage)
+    }
+
+    fun setFileLink(file : FileLink?) {
+        mFileLink = file
+    }
+
+    fun getFileLink() : FileLink? = mFileLink
+
+    fun locateFileLink(pageName : String) {
+        if (mFileLink == null || mFileLink!!.parseFileLink == null)
+            return
+
+        mFileLink!!.pagesLink!!.first { it.mangaPageName.compareTo(pageName, true) == 0 }.let {
+            if (it.fileLinkPage > -1) {
+                val uri = saveImageFolder(mFileLink!!.parseFileLink!!, it.fileLinkPage)?: return
+                drawPageLinked(uri)
+            }
+        }
+    }
+
+    fun locateFileLink(page : Int) {
+        if (mFileLink == null || mFileLink!!.parseFileLink == null)
+            return
+
+        mFileLink!!.pagesLink!!.first { it.mangaPage.compareTo(page) == 0 }.let {
+            if (it.fileLinkPage > -1) {
+                val uri = saveImageFolder(mFileLink!!.parseFileLink!!, it.fileLinkPage)?: return
+                drawPageLinked(uri)
+            }
+        }
+    }
+
+    private fun saveImageFolder(parse: Parse, index: Int) : Uri? {
+        val stream = parse.getPage(index)
+        val cacheDir = File(context.externalCacheDir, GeneralConsts.CACHEFOLDER.LINKED)
+        if (!cacheDir.exists())
+            cacheDir.mkdir()
+        else
+            for (f in cacheDir.listFiles()!!)
+                f.delete()
+        var name = parse.getPagePath(index)?: index.toString()
+        name = if (name.contains('/'))
+            name.substringAfterLast("/")
+        else
+            name.substringAfterLast('\\')
+        val image = File(cacheDir.path + '/' + name)
+        image.writeBytes(stream.readBytes())
+        return image.toUri()
     }
 }

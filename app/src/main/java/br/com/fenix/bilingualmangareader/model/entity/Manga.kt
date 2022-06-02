@@ -4,21 +4,20 @@ import androidx.room.*
 import br.com.fenix.bilingualmangareader.util.constants.DataBaseConsts
 import java.io.File
 import java.io.Serializable
-import java.util.*
+import java.time.LocalDateTime
 
 @Entity(
     tableName = DataBaseConsts.MANGA.TABLE_NAME,
     indices = [Index(value = [DataBaseConsts.MANGA.COLUMNS.FILE_NAME, DataBaseConsts.MANGA.COLUMNS.TITLE])]
 )
-class Manga(id: Long?, title: String, subTitle: String, path: String, folder: String, name: String, type: String, pages: Int) :
-    Serializable {
+class Manga(id: Long?, title: String, subTitle: String, path: String, folder: String, name: String, type: String, pages: Int) : Serializable {
 
     constructor(
         id: Long?, title: String, subTitle: String,
         path: String, folder: String, name: String, type: String,
         pages: Int, bookMark: Int, favorite: Boolean,
-        dateCreate: Date?, lastAccess: Date?,
-        sort: Date? = null
+        dateCreate: LocalDateTime?, lastAccess: LocalDateTime?,
+        sort: LocalDateTime? = null
     ) : this(id, title, subTitle, path, folder, name, type, pages) {
         this.bookMark = bookMark
         this.favorite = favorite
@@ -62,10 +61,10 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
     var favorite: Boolean = false
 
     @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.DATE_CREATE)
-    var dateCreate: Date? = Date()
+    var dateCreate: LocalDateTime? = LocalDateTime.now()
 
     @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS)
-    var lastAccess: Date? = null
+    var lastAccess: LocalDateTime? = null
 
     @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.EXCLUDED)
     var excluded: Boolean = false
@@ -77,10 +76,10 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
     var update: Boolean = false
 
     @Ignore
-    var subTitles: List<SubTitle> = arrayListOf()
+    var subTitles : List<SubTitle> = arrayListOf()
 
     @Ignore
-    var sort: Date? = null
+    var sort: LocalDateTime? = null
 
     override fun toString(): String {
         return "Book(id=$id, title='$title', subTitle='$subTitle', pages=$pages, bookMark=$bookMark, type='$type', update=$update)"

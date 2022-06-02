@@ -97,8 +97,8 @@ class Scanner {
             try {
                 val ctx: Context = MainActivity.getAppContext()
                 val preference: SharedPreferences = GeneralConsts.getSharedPreferences(ctx)
-                var libraryPath = preference.getString(GeneralConsts.KEYS.LIBRARY.FOLDER, "")
-                val teste = File(libraryPath)
+                val libraryPath = preference.getString(GeneralConsts.KEYS.LIBRARY.FOLDER, "")
+
                 if (libraryPath == "" || !File(libraryPath).exists()) return
 
                 val storage = Storage(ctx)

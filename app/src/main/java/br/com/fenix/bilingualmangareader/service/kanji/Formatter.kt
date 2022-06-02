@@ -2,6 +2,7 @@ package br.com.fenix.bilingualmangareader.service.kanji
 
 import android.annotation.TargetApi
 import android.content.Context
+import android.os.Build
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
@@ -43,9 +44,9 @@ class Formatter {
                 GlobalScope.async { // launch a new coroutine and continue
                     try {
                         mRepository = KanjaxRepository(context)
-                        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                            mSudachiTokenizer = br.com.fenix.mangareader.service.tokenizers.SudachiTokenizer(context).tokenizer
-                        else*/
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                            mSudachiTokenizer = br.com.fenix.bilingualmangareader.service.tokenizers.SudachiTokenizer(context).tokenizer
+                        else
                             mKuromojiTokenizer = com.atilika.kuromoji.ipadic.Tokenizer()
 
                         val repository = KanjiRepository(context)
@@ -194,7 +195,7 @@ class Formatter {
                 return
             }
 
-             /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            /*val textBuilder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                 sudachiTokenizer(text, vocabularyClick)
             else*/
             val textBuilder = kuromojiTokenizer(text, vocabularyClick)
