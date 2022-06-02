@@ -753,31 +753,31 @@ class SubTitleController private constructor(private val context: Context) {
     fun getFileLink() : FileLink? = mFileLink
 
     fun locateFileLink(pageName : String) {
-        if (mFileLink == null || mFileLink!!.parse == null)
+        if (mFileLink == null || mFileLink!!.parseFileLink == null)
             return
 
         mFileLink!!.pagesLink!!.first { it.mangaPageName.compareTo(pageName, true) == 0 }.let {
             if (it.fileLinkPage > -1) {
-                val uri = saveImageFolder(mFileLink!!.parse!!, it.fileLinkPage)?: return
+                val uri = saveImageFolder(mFileLink!!.parseFileLink!!, it.fileLinkPage)?: return
                 drawPageLinked(uri)
             }
         }
     }
 
     fun locateFileLink(page : Int) {
-        if (mFileLink == null || mFileLink!!.parse == null)
+        if (mFileLink == null || mFileLink!!.parseFileLink == null)
             return
 
         mFileLink!!.pagesLink!!.first { it.mangaPage.compareTo(page) == 0 }.let {
             if (it.fileLinkPage > -1) {
-                val uri = saveImageFolder(mFileLink!!.parse!!, it.fileLinkPage)?: return
+                val uri = saveImageFolder(mFileLink!!.parseFileLink!!, it.fileLinkPage)?: return
                 drawPageLinked(uri)
             }
         }
     }
 
     private fun saveImageFolder(parse: Parse, index: Int) : Uri? {
-        var stream = parse.getPage(index)
+        val stream = parse.getPage(index)
         val cacheDir = File(context.externalCacheDir, GeneralConsts.CACHEFOLDER.LINKED)
         if (!cacheDir.exists())
             cacheDir.mkdir()

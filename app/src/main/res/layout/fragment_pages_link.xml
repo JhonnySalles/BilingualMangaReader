@@ -94,17 +94,18 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <!--                                Ended                                -->
-
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/pages_link_scroll_up"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="@dimen/page_link_scrolling_button_margin"
             android:backgroundTint="@color/white"
             app:tint="@color/onSecondary"
             android:src="@drawable/ic_up_arrow"
-            app:fabCustomSize="@dimen/help_scroll_up_width"
-            app:maxImageSize="@dimen/help_scroll_up_image_width"
+            app:backgroundTint="@color/onSecondary"
+            app:borderWidth="@dimen/page_link_up_border"
+            app:fabCustomSize="@dimen/page_link_up_width"
+            app:maxImageSize="@dimen/page_link_up_image_width"
             app:layout_constraintTop_toBottomOf="@+id/txt_file_link"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"/>
@@ -114,12 +115,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
-            android:layout_margin="10dp"
+            android:layout_margin="@dimen/page_link_scrolling_button_margin"
             android:backgroundTint="@color/white"
             app:tint="@color/onSecondary"
             android:src="@drawable/ic_down_arrow"
-            app:fabCustomSize="@dimen/help_scroll_up_width"
-            app:maxImageSize="@dimen/help_scroll_up_image_width"
+            app:backgroundTint="@color/onSecondary"
+            app:borderWidth="@dimen/page_link_down_border"
+            app:fabCustomSize="@dimen/page_link_down_width"
+            app:maxImageSize="@dimen/page_link_down_image_width"
             app:layout_constraintBottom_toTopOf="@+id/btn_file_link_save"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"/>

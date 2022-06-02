@@ -167,18 +167,14 @@ class PagesLinkFragment : Fragment() {
         mRecyclePageLink.setOnDragListener { _, dragEvent ->
             when (dragEvent.action) {
                 DragEvent.ACTION_DRAG_LOCATION -> {
-                    var currentY = dragEvent.y
-                    val layoutManager = mRecyclePageLink.layoutManager as LinearLayoutManager
-                    var divider = 6
+                    val divider = 4
 
-                    val position = if (currentY < mRecyclePageLink.height.toFloat() / divider)
-                        layoutManager.findFirstVisibleItemPosition() -1
-                    else if (currentY > mRecyclePageLink.height.toFloat() / divider * (divider - 1))
-                        layoutManager.findLastVisibleItemPosition() + 1
-                    else -1
+                    val padding = if (dragEvent.y < mRecyclePageLink.height.toFloat() / divider) - 250
+                    else if (dragEvent.y > mRecyclePageLink.height.toFloat() / divider * (divider - 1)) + 250
+                    else 0
 
-                    if (position >= 0)
-                        mRecyclePageLink.smoothScrollToPosition(position)
+                    if (padding != 0)
+                        mRecyclePageLink.smoothScrollBy(0, padding)
                     true
                 }
                 DragEvent.ACTION_DRAG_STARTED -> {
@@ -314,21 +310,33 @@ class PagesLinkFragment : Fragment() {
     }
 
     private fun save() {
+        mSave.isEnabled = false
+        mRefresh.isEnabled = false
+
         mViewModel.save()
         Toast.makeText(
             requireContext(),
             getString(R.string.page_link_saved),
             Toast.LENGTH_SHORT
         ).show()
+
+        mSave.isEnabled = true
+        mRefresh.isEnabled = true
     }
 
     private fun refresh() {
-        mViewModel.refresh { index, type -> notifyItemChanged(type, index)  }
+        mSave.isEnabled = false
+        mRefresh.isEnabled = false
+
+        mViewModel.restoreBackup { index, type -> notifyItemChanged(type, index)  }
         Toast.makeText(
             requireContext(),
             getString(R.string.page_link_refreshed),
             Toast.LENGTH_SHORT
         ).show()
+
+        mSave.isEnabled = true
+        mRefresh.isEnabled = true
     }
 
     override fun onResume() {

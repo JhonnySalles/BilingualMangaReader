@@ -77,8 +77,11 @@ class FileLink(id: Long?, idManga: Long, pages: Int, path: String, name: String,
     var pagesNotLink: List<PageLink>? = null
 
     @Ignore
-    var parse = if (path.isNotEmpty()) ParseFactory.create(path) else null
-    
+    var parseManga = if (manga != null) ParseFactory.create(manga!!.path) else null
+
+    @Ignore
+    var parseFileLink = if (path.isNotEmpty()) ParseFactory.create(path) else null
+
     override fun toString(): String {
         return "FileLink(id=$id, idManga=$idManga, pages=$pages, path='$path', name='$name', type='$type', folder='$folder')"
     }

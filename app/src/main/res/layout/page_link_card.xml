@@ -59,9 +59,13 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textAppearance="?attr/textAppearanceHeadline6"
-                android:textColor="@color/textPrimary"
+                android:textColor="@color/textSecondary"
                 android:textSize="@dimen/page_link_card_page_number_size"
                 android:layout_margin="@dimen/page_link_card_page_number_margin"
+                android:shadowColor="@color/textPrimary"
+                android:shadowDx="1.5"
+                android:shadowDy="1.3"
+                android:shadowRadius="1.6"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"/>
 
@@ -135,9 +139,13 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textAppearance="?attr/textAppearanceHeadline6"
-                android:textColor="@color/textPrimary"
+                android:textColor="@color/textSecondary"
                 android:textSize="@dimen/page_link_card_page_number_size"
                 android:layout_margin="@dimen/page_link_card_page_number_margin"
+                android:shadowColor="@color/textPrimary"
+                android:shadowDx="1.5"
+                android:shadowDy="1.3"
+                android:shadowRadius="1.6"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"/>
 

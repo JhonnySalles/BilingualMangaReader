@@ -59,13 +59,10 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
             mPagesLink.value = fileLink.pagesLink?.let { ArrayList(it) }
             mPagesNotLinked.value = fileLink.pagesNotLink?.let { ArrayList(it) }
             refresh(null, Pages.ALL)
-
-            val mParseManga = ParseFactory.create(fileLink.manga!!.file)
-            if (mParseManga != null)
-                getImage(mParseManga, fileLink.parse, mPagesLink.value!!, Pages.ALL, true)
+            getImage(fileLink.parseManga, fileLink.parseFileLink, mPagesLink.value!!, Pages.ALL, true)
 
             if (fileLink.pagesNotLink!!.isNotEmpty())
-                getImage(null, fileLink.parse, mPagesNotLinked.value!!, Pages.NOT_LINKED, true)
+                getImage(null, fileLink.parseFileLink, mPagesNotLinked.value!!, Pages.NOT_LINKED, true)
 
             true
         } else false
@@ -93,7 +90,9 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
         mPagesNotLinked.value!!.clear()
 
         val mParseManga = ParseFactory.create(obj.manga!!.file) ?: return
+        mFileLink.value!!.parseManga = mParseManga
         val mParseLink = ParseFactory.create(obj.file) ?: return
+        mFileLink.value!!.parseFileLink = mParseLink
 
         if(obj.path.isNotEmpty())
             obj.pagesLink!!.forEach { it.isFileLinkLoading = true }
@@ -131,9 +130,44 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
         mFileLinkRepository.delete(obj)
     }
 
-    fun refresh(refresh: (index: Int?, type: Pages) -> (Unit)) {
-        if (mFileLink.value != null && mFileLink.value!!.path.isNotEmpty())
-            readFileLink(mFileLink.value!!.path, refresh)
+    fun restoreBackup(refresh: (index: Int?, type: Pages) -> (Unit)) {
+        if (mFileLink.value != null) {
+            var fileLink = mFileLinkRepository.get(mFileLink.value!!.manga!!)
+            if (fileLink != null) {
+                fileLink.manga = mFileLink.value!!.manga
+                fileLink.parseFileLink = mFileLink.value!!.parseFileLink
+                fileLink.parseManga = mFileLink.value!!.parseManga
+
+                for ((index, page) in fileLink.pagesLink!!.withIndex()) {
+                    page.imageMangaPage = mPagesLink.value!![index].imageMangaPage
+
+                    val item = mPagesLink.value!!.find { it.fileLinkPage.compareTo(page.fileLinkPage) == 0 } ?:
+                        mPagesNotLinked.value!!.find { it.fileLinkPage.compareTo(page.fileLinkPage) == 0 }
+
+                    if (item != null)
+                        page.imageFileLinkPage = item.imageFileLinkPage
+                }
+
+                for (page in fileLink.pagesNotLink!!) {
+                    val item = mPagesNotLinked.value!!.find { it.fileLinkPage.compareTo(page.fileLinkPage) == 0 } ?:
+                    mPagesLink.value!!.find { it.fileLinkPage.compareTo(page.fileLinkPage) == 0 }
+
+                    if (item != null)
+                        page.imageFileLinkPage = item.imageFileLinkPage
+                }
+
+                mFileLink.value = fileLink
+                mPagesLink.value = fileLink.pagesLink?.let { ArrayList(it) }
+                mPagesNotLinked.value = fileLink.pagesNotLink?.let { ArrayList(it) }
+
+                getImage(fileLink.parseManga, fileLink.parseFileLink, mPagesLink.value!!, Pages.ALL, true)
+
+                if (mPagesNotLinked.value!!.isNotEmpty())
+                    getImage(null, fileLink.parseFileLink, mPagesNotLinked.value!!, Pages.NOT_LINKED, true)
+
+            } else if (mFileLink.value!!.path.isNotEmpty())
+                readFileLink(mFileLink.value!!.path, refresh)
+        }
     }
 
     fun loadManga(manga : Manga, refresh: (index: Int?, type: Pages) -> (Unit)) {
@@ -144,6 +178,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
 
         val parse = ParseFactory.create(manga.file) ?: return
         mFileLink.value = FileLink(manga)
+        mFileLink.value!!.parseManga = parse
 
         val list = ArrayList<PageLink>()
         for (i in 0 until parse.numPages()) {
@@ -176,7 +211,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
             val parse = ParseFactory.create(path)?: return loaded
             loaded = LoadFile.LOADED
             mFileLink.value = FileLink(mFileLink.value!!.manga!!, parse.numPages(), path, file.nameWithoutExtension, file.extension, file.parent)
-            mFileLink.value!!.parse = parse
+            mFileLink.value!!.parseFileLink = parse
 
             val listNotLink = ArrayList<PageLink>()
             for (i in 0 until parse.numPages()) {
@@ -246,14 +281,23 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
         var differ = destinyIndex - originIndex
 
         if (originIndex > destinyIndex) {
+            var limit = mPagesLink.value!!.size-1
+            var index = mPagesLink.value!!.indexOf(mPagesLink.value!!.findLast { it.imageFileLinkPage != null })
+            if (index < 0)
+                index = mPagesLink.value!!.size-1
+
+            for(i in index downTo originIndex)
+                if (mPagesLink.value!![i].fileLinkPage == -1)
+                    limit = i
+
             for (i in destinyIndex until originIndex)
-                if (mPagesLink.value!![i].imageFileLinkPage != null)
+                if (mPagesLink.value!![i].fileLinkPage != -1)
                     mPagesNotLinked.value!!.add(PageLink(mPagesLink.value!![i].idFile, -1, 0, mPagesLink.value!![i].fileLinkPage,
                         mPagesLink.value!![i].fileLinkPages, "", mPagesLink.value!![i].fileLinkPageName, true, null,
                         mPagesLink.value!![i].imageFileLinkPage))
 
             differ *=-1
-            for (i in destinyIndex until mPagesLink.value!!.size) {
+            for (i in destinyIndex until limit) {
                 when {
                     i == destinyIndex -> {
                         mPagesLink.value!![i].imageFileLinkPage = origin.imageFileLinkPage
@@ -261,31 +305,71 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                         mPagesLink.value!![i].fileLinkPages = origin.fileLinkPages
                         mPagesLink.value!![i].fileLinkPageName = origin.fileLinkPageName
                     }
-                    (i + differ) > (mPagesLink.value!!.size-1) -> mPagesLink.value!![i].clearFileLInk()
+                    (i + differ) > (limit) -> { continue }
                     else -> {
                         mPagesLink.value!![i].imageFileLinkPage = mPagesLink.value!![i + differ].imageFileLinkPage
                         mPagesLink.value!![i].fileLinkPage = mPagesLink.value!![i + differ].fileLinkPage
                         mPagesLink.value!![i].fileLinkPages = mPagesLink.value!![i + differ].fileLinkPages
                         mPagesLink.value!![i].fileLinkPageName = mPagesLink.value!![i + differ].fileLinkPageName
+                        mPagesLink.value!![i + differ].clearFileLInk()
                     }
                 }
             }
         } else {
-            val size = mPagesLink.value!!.size-1
-            for (i in size downTo size - differ)
-                if (mPagesLink.value!![i].imageFileLinkPage != null)
-                    mPagesNotLinked.value!!.add(PageLink(mPagesLink.value!![i].idFile, -1, 0, mPagesLink.value!![i].fileLinkPage,
-                        mPagesLink.value!![i].fileLinkPages, "", mPagesLink.value!![i].fileLinkPageName, true, null,
-                        mPagesLink.value!![i].imageFileLinkPage))
+            var limit = mPagesLink.value!!.size-1
+            var spacesFree = 0
 
-            for (i in size downTo originIndex) {
-                when {
-                    i < destinyIndex -> mPagesLink.value!![i].clearFileLInk()
-                    else -> {
-                        mPagesLink.value!![i].imageFileLinkPage = mPagesLink.value!![i - differ].imageFileLinkPage
-                        mPagesLink.value!![i].fileLinkPage = mPagesLink.value!![i - differ].fileLinkPage
-                        mPagesLink.value!![i].fileLinkPages = mPagesLink.value!![i - differ].fileLinkPages
-                        mPagesLink.value!![i].fileLinkPageName = mPagesLink.value!![i - differ].fileLinkPageName
+            for(i in originIndex until limit)
+                if (mPagesLink.value!![i].fileLinkPage == -1)
+                    spacesFree++
+
+            if (differ > spacesFree) {
+                for (i in limit downTo limit - differ)
+                    if (mPagesLink.value!![i].fileLinkPage != -1)
+                        mPagesNotLinked.value!!.add(PageLink(mPagesLink.value!![i].idFile, -1, 0, mPagesLink.value!![i].fileLinkPage,
+                            mPagesLink.value!![i].fileLinkPages, "", mPagesLink.value!![i].fileLinkPageName, true, null,
+                            mPagesLink.value!![i].imageFileLinkPage))
+
+                for (i in limit downTo originIndex) {
+                    when {
+                        i < destinyIndex -> mPagesLink.value!![i].clearFileLInk()
+                        else -> {
+                            mPagesLink.value!![i].imageFileLinkPage = mPagesLink.value!![i - differ].imageFileLinkPage
+                            mPagesLink.value!![i].fileLinkPage = mPagesLink.value!![i - differ].fileLinkPage
+                            mPagesLink.value!![i].fileLinkPages = mPagesLink.value!![i - differ].fileLinkPages
+                            mPagesLink.value!![i].fileLinkPageName = mPagesLink.value!![i - differ].fileLinkPageName
+                        }
+                    }
+                }
+            } else {
+                var spaceUsed = 0
+                for(i in originIndex until limit) {
+                    if (mPagesLink.value!![i].fileLinkPage == -1) {
+                        spaceUsed++
+                        if (spaceUsed >= differ) {
+                            limit = i
+                            break
+                        }
+                    }
+                }
+
+                spaceUsed = 0
+                var index: Int
+                for (i in limit downTo originIndex) {
+                    if (i < destinyIndex)
+                        mPagesLink.value!![i].clearFileLInk()
+                    else {
+                        index = i - (1 + spaceUsed)
+                        if (mPagesLink.value!![index].fileLinkPage == -1) {
+                            do {
+                                spaceUsed++
+                                index = i - (1 + spaceUsed)
+                            } while (mPagesLink.value!![index].fileLinkPage == -1)
+                        }
+                        mPagesLink.value!![i].imageFileLinkPage = mPagesLink.value!![index].imageFileLinkPage
+                        mPagesLink.value!![i].fileLinkPage = mPagesLink.value!![index].fileLinkPage
+                        mPagesLink.value!![i].fileLinkPages = mPagesLink.value!![index].fileLinkPages
+                        mPagesLink.value!![i].fileLinkPageName = mPagesLink.value!![index].fileLinkPageName
                     }
                 }
             }
