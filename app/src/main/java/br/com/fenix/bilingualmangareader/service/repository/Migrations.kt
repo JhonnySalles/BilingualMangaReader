@@ -51,7 +51,7 @@ class Migrations {
                         "(" + DataBaseConsts.FILELINK.COLUMNS.FK_ID_MANGA + ", " + DataBaseConsts.FILELINK.COLUMNS.FILE_NAME + ")")
 
                 database.execSQL( "CREATE TABLE " + DataBaseConsts.PAGESLINK.TABLE_NAME + " (" +
-                        DataBaseConsts.PAGESLINK.COLUMNS.ID + " INTEGER PRIMARY KEY NOT NULL, " +
+                        DataBaseConsts.PAGESLINK.COLUMNS.ID + " INTEGER PRIMARY KEY, " +
                         DataBaseConsts.PAGESLINK.COLUMNS.FK_ID_FILE + " INTEGER, " +
                         DataBaseConsts.PAGESLINK.COLUMNS.MANGA_PAGE + " INTEGER NOT NULL, " +
                         DataBaseConsts.PAGESLINK.COLUMNS.MANGA_PAGES + " INTEGER NOT NULL, " +
