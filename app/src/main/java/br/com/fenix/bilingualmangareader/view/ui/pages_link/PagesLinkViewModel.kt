@@ -53,7 +53,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     private fun reload(manga : Manga, refresh: (index: Int?, type: Pages) -> (Unit)) : Boolean {
-        var fileLink = SubTitleController.getInstance(mContext).getFileLink()?: return false
+        val fileLink = SubTitleController.getInstance(mContext).getFileLink()?: return false
         return if (manga == fileLink.manga) {
             mFileLink.value = fileLink
             mPagesLink.value = fileLink.pagesLink?.let { ArrayList(it) }

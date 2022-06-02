@@ -731,6 +731,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 ) { _, _ ->
                     val activity = requireActivity() as ReaderActivity
                     activity.setTitles(mNewManga!!.title, mNewManga!!.bookMark.toString())
+                    activity.setManga(mNewManga!!)
                     activity.setFragment(create(mNewManga!!))
                 }
                 .setNegativeButton(

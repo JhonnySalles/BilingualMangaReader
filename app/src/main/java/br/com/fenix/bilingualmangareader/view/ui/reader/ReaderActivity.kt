@@ -259,6 +259,10 @@ class ReaderActivity : AppCompatActivity() {
         mToolbarTitle.text = title
     }
 
+    fun setManga(manga: Manga) {
+        mManga = manga
+    }
+
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         if (mManga != null)
             savedInstanceState.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, mManga)

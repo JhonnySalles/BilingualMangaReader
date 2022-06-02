@@ -18,6 +18,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.bilingualmangareader.R
@@ -33,6 +34,7 @@ import br.com.fenix.bilingualmangareader.view.adapter.page_link.PageLinkCardAdap
 import br.com.fenix.bilingualmangareader.view.adapter.page_link.PageNotLinkCardAdapter
 import com.google.android.material.textfield.TextInputLayout
 import java.lang.ref.WeakReference
+
 
 class PagesLinkFragment : Fragment() {
 
@@ -116,6 +118,28 @@ class PagesLinkFragment : Fragment() {
                 }
             }
         }
+
+        mRecyclePageLink.setOnDragListener { _, dragEvent ->
+            when (dragEvent.action) {
+                DragEvent.ACTION_DRAG_LOCATION -> {
+                    var currentY = dragEvent.y
+                    val layoutManager = mRecyclePageLink.layoutManager as LinearLayoutManager
+                    var divider = 6
+
+                    val position = if (currentY < mRecyclePageLink.height.toFloat() / divider)
+                        layoutManager.findFirstVisibleItemPosition() -1
+                    else if (currentY > mRecyclePageLink.height.toFloat() / divider * (divider - 1))
+                        layoutManager.findLastVisibleItemPosition() + 1
+                    else -1
+
+                    if (position >= 0)
+                        mRecyclePageLink.smoothScrollToPosition(position)
+                    true
+                }
+                else -> true
+            }
+        }
+
 
         mRecyclePageNotLink.setOnDragListener { _, dragEvent ->
             when (dragEvent.action) {
@@ -254,7 +278,6 @@ class PagesLinkFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-
         mViewModel.addImageLoadHandler(mImageLoadHandler)
     }
 

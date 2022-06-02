@@ -61,7 +61,7 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
             pageProgress.visibility = if (page.isFileLinkLoading) View.VISIBLE else View.GONE
         }
 
-        pageRoot.setOnDragListener { view, dragEvent ->
+        pageRoot.setOnDragListener { _, dragEvent ->
             when(dragEvent.action) {
                 DragEvent.ACTION_DRAG_STARTED -> {
                     dragEvent.clipDescription.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)
