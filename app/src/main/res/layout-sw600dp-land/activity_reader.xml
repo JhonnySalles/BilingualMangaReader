@@ -231,16 +231,14 @@
 
     <FrameLayout
         android:id="@+id/menu_popup_translate"
-        android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:layout_alignParentBottom="true"
+        android:layout_width="430dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
         android:background="@color/primary"
         android:fitsSystemWindows="true"
-        android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:paddingTop="5dp"
-        android:visibility="gone"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+        android:paddingTop="20dp"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/menu_translate_close"
@@ -314,16 +312,14 @@
 
     <FrameLayout
         android:id="@+id/menu_popup_color"
-        android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:layout_alignParentBottom="true"
+        android:layout_width="430dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
         android:background="@color/primary"
         android:fitsSystemWindows="true"
-        android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:paddingTop="5dp"
-        android:visibility="gone"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+        android:paddingTop="20dp"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/menu_color_close"

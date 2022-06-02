@@ -36,7 +36,7 @@ class SudachiTokenizer(context: Context) {
         }
     """.trimIndent()
 
-    var tokenizer: com.worksap.nlp.sudachi.Tokenizer? = null
+    /*var tokenizer: com.worksap.nlp.sudachi.Tokenizer? = null
 
     init {
         val mFileUtil = FileUtil(context)
@@ -49,5 +49,5 @@ class SudachiTokenizer(context: Context) {
 
     fun tokenizeString(str: String): Iterable<List<com.worksap.nlp.sudachi.Morpheme>> {
         return tokenizer!!.tokenizeSentences(str)
-    }
+    }*/
 }
