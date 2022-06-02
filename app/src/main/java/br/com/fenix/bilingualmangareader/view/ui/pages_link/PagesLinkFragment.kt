@@ -4,10 +4,7 @@ import android.app.Activity
 import android.content.ClipData
 import android.content.ClipDescription
 import android.content.Intent
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
+import android.os.*
 import android.util.Log
 import android.view.DragEvent
 import android.view.LayoutInflater
@@ -111,11 +108,20 @@ class PagesLinkFragment : Fragment() {
 
         mFileLinkAutoComplete.setOnClickListener {
             mFileLinkAutoComplete.setText("")
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                addCategory(Intent.CATEGORY_OPENABLE)
-                type = "application/*"
-                putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/zip", "application/x-cbz", "application/rar","application/x-cbr", "application/x-rar-compressed"))
-            }
+            val intent = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O)
+                Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                    addCategory(Intent.CATEGORY_OPENABLE)
+                    type = "*/*"
+                    putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/zip", "application/x-cbz", "application/rar", "application/x-cbr",
+                        "application/x-rar-compressed", "application/x-zip-compressed", "application/cbr", "application/cbz",))
+                }
+            else
+                Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                    addCategory(Intent.CATEGORY_OPENABLE)
+                    type = "application/*"
+                    putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/zip", "application/x-cbz", "application/rar", "application/x-cbr",
+                        "application/x-rar-compressed", "application/x-zip-compressed", "application/cbr", "application/cbz",))
+                }
             startActivityForResult(intent, 200)
         }
 
