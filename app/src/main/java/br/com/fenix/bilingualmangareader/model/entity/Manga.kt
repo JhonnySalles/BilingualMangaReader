@@ -4,7 +4,7 @@ import androidx.room.*
 import br.com.fenix.bilingualmangareader.util.constants.DataBaseConsts
 import java.io.File
 import java.io.Serializable
-import java.time.LocalDateTime
+import java.util.*
 
 @Entity(
     tableName = DataBaseConsts.MANGA.TABLE_NAME,
@@ -16,8 +16,8 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
         id: Long?, title: String, subTitle: String,
         path: String, folder: String, name: String, type: String,
         pages: Int, bookMark: Int, favorite: Boolean,
-        dateCreate: LocalDateTime?, lastAccess: LocalDateTime?,
-        sort: LocalDateTime? = null
+        dateCreate: Date?, lastAccess: Date?,
+        sort: Date? = null
     ) : this(id, title, subTitle, path, folder, name, type, pages) {
         this.bookMark = bookMark
         this.favorite = favorite
@@ -61,10 +61,10 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
     var favorite: Boolean = false
 
     @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.DATE_CREATE)
-    var dateCreate: LocalDateTime? = LocalDateTime.now()
+    var dateCreate: Date? = Date()
 
     @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS)
-    var lastAccess: LocalDateTime? = null
+    var lastAccess: Date? = null
 
     @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.EXCLUDED)
     var excluded: Boolean = false
@@ -79,7 +79,7 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
     var subTitles : List<SubTitle> = arrayListOf()
 
     @Ignore
-    var sort: LocalDateTime? = null
+    var sort: Date? = null
 
     override fun toString(): String {
         return "Book(id=$id, title='$title', subTitle='$subTitle', pages=$pages, bookMark=$bookMark, type='$type', update=$update)"

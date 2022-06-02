@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import androidx.room.*
 import br.com.fenix.bilingualmangareader.util.constants.DataBaseConsts
 import java.io.Serializable
-import java.time.LocalDateTime
 
 @Entity(
     tableName = DataBaseConsts.PAGESLINK.TABLE_NAME,

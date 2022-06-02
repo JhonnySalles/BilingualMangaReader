@@ -13,7 +13,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import br.com.fenix.bilingualmangareader.model.entity.Cover
 import br.com.fenix.bilingualmangareader.model.entity.Manga
-import java.time.LocalDateTime
+import java.util.*
 
 class Storage(context: Context) {
     private val mRepository = MangaRepository(context)
@@ -106,7 +106,7 @@ class Storage(context: Context) {
     }
 
     fun updateLastAccess(manga: Manga) {
-        manga.lastAccess = LocalDateTime.now()
+        manga.lastAccess = Date()
         mRepository.updateLastAcess(manga)
     }
 }

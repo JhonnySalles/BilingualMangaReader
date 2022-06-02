@@ -1,11 +1,10 @@
 package br.com.fenix.bilingualmangareader.model.entity
 
 import androidx.room.*
-import br.com.fenix.bilingualmangareader.service.parses.Parse
 import br.com.fenix.bilingualmangareader.service.parses.ParseFactory
 import br.com.fenix.bilingualmangareader.util.constants.DataBaseConsts
 import java.io.File
-import java.time.LocalDateTime
+import java.util.*
 
 @Entity(
     tableName = DataBaseConsts.FILELINK.TABLE_NAME,
@@ -15,7 +14,7 @@ class FileLink(id: Long?, idManga: Long, pages: Int, path: String, name: String,
 
     constructor(
         id: Long?, idManga: Long, pages: Int, path: String, name: String, type: String, folder: String,
-        dateCreate: LocalDateTime?, lastAccess: LocalDateTime?
+        dateCreate: Date?, lastAccess: Date?
     ) : this(id, idManga, pages, path, name, type, folder) {
         this.dateCreate = dateCreate
         this.lastAccess = lastAccess
@@ -25,14 +24,14 @@ class FileLink(id: Long?, idManga: Long, pages: Int, path: String, name: String,
         manga: Manga, pages: Int, path: String, name: String, type: String, folder: String
     ) : this(null, manga.id!!, pages, path, name, type, folder) {
         this.manga = manga
-        this.dateCreate = LocalDateTime.now()
-        this.lastAccess = LocalDateTime.now()
+        this.dateCreate = Date()
+        this.lastAccess = Date()
     }
 
     constructor( manga: Manga ) : this(null, manga.id!!, 0, "", "", "", "") {
         this.manga = manga
-        this.dateCreate = LocalDateTime.now()
-        this.lastAccess = LocalDateTime.now()
+        this.dateCreate = Date()
+        this.lastAccess = Date()
     }
 
 
@@ -59,10 +58,10 @@ class FileLink(id: Long?, idManga: Long, pages: Int, path: String, name: String,
     var folder: String = folder
 
     @ColumnInfo(name = DataBaseConsts.FILELINK.COLUMNS.DATE_CREATE)
-    var dateCreate: LocalDateTime? = LocalDateTime.now()
+    var dateCreate: Date? = Date()
 
     @ColumnInfo(name = DataBaseConsts.FILELINK.COLUMNS.LAST_ACCESS)
-    var lastAccess: LocalDateTime? = null
+    var lastAccess: Date? = null
 
     @Ignore
     var manga: Manga? = null
@@ -116,7 +115,7 @@ class FileLink(id: Long?, idManga: Long, pages: Int, path: String, name: String,
 
     fun addManga(manga : Manga) {
         idManga = manga.id?: 0
-        lastAccess = LocalDateTime.now()
+        lastAccess = Date()
         this.manga = manga
     }
 

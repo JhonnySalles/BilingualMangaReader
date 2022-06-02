@@ -2,8 +2,8 @@ package br.com.fenix.bilingualmangareader.util.constants
 
 import android.content.Context
 import android.content.SharedPreferences
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import java.text.SimpleDateFormat
+import java.util.*
 
 class GeneralConsts private constructor() {
     companion object {
@@ -21,17 +21,21 @@ class GeneralConsts private constructor() {
             return mContext.getSharedPreferences(KEYS.PREFERENCE_NAME, Context.MODE_PRIVATE)
         }
 
-        fun formatterDate(dateTime: LocalDateTime): String {
+        fun formatterDate(dateTime: Date): String {
             val preferences = getSharedPreferences()
             val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, "yyyy-MM-dd")
-            return dateTime.format(DateTimeFormatter.ofPattern(pattern))
+            return SimpleDateFormat(pattern, Locale.getDefault()).format(dateTime)
         }
 
-        fun formatterDateTime(dateTime: LocalDateTime): String {
+        fun formatterDateTime(dateTime: Date): String {
             val preferences = getSharedPreferences()
             val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, "yyyy-MM-dd") + " hh:mm:ss a"
-            return dateTime.format(DateTimeFormatter.ofPattern(pattern))
+            return SimpleDateFormat(pattern, Locale.getDefault()).format(dateTime)
         }
+    }
+
+    object DATE {
+        const val DATE_TIME_PATTERN = "yyyy-MM-dd hh:mm:ss"
     }
 
     object KEYS {

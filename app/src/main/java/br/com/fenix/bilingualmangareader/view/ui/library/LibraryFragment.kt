@@ -16,11 +16,13 @@ import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Manga
@@ -35,12 +37,8 @@ import br.com.fenix.bilingualmangareader.view.adapter.library.MangaGridCardAdapt
 import br.com.fenix.bilingualmangareader.view.adapter.library.MangaLineCardAdapter
 import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity
 import java.lang.ref.WeakReference
-import java.time.LocalDateTime
 import java.util.*
 import kotlin.math.max
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
-
-import androidx.core.app.ActivityCompat
 
 
 class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
@@ -306,7 +304,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                             notifyDataSet(position)
                         }
                         R.id.menu_book_clear -> {
-                            manga.lastAccess = LocalDateTime.MIN
+                            manga.lastAccess = Date()
                             manga.bookMark = 0
                             mViewModel.save(manga)
                             notifyDataSet(position)
