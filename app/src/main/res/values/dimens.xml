@@ -77,12 +77,12 @@
     <dimen name="page_link_list_not_link_margin_top">20dp</dimen>
     <dimen name="page_link_list_link_margin_top">5dp</dimen>
     <dimen name="page_link_list_link_margin_bottom">5dp</dimen>
-    <dimen name="page_link_list_link_padding_top">50dp</dimen>
-    <dimen name="page_link_list_link_padding_bottom">100dp</dimen>
+    <dimen name="page_link_list_link_padding_top">60dp</dimen>
+    <dimen name="page_link_list_link_padding_bottom">140dp</dimen>
 
     <dimen name="page_link_card_margin">1dp</dimen>
-    <dimen name="page_link_card_layout_width">150dp</dimen>
-    <dimen name="page_link_card_layout_height">200dp</dimen>
+    <dimen name="page_link_card_layout_width">180dp</dimen>
+    <dimen name="page_link_card_layout_height">230dp</dimen>
     <dimen name="page_link_card_layout_margin">2dp</dimen>
     <dimen name="page_link_card_page_number_size">12sp</dimen>
     <dimen name="page_link_card_page_number_margin">8dp</dimen>

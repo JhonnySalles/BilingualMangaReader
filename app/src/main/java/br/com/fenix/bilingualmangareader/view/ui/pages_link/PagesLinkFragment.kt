@@ -6,6 +6,7 @@ import android.content.ClipDescription
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.util.Log
 import android.view.DragEvent
@@ -16,9 +17,9 @@ import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.os.postDelayed
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.bilingualmangareader.R
@@ -32,6 +33,7 @@ import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import br.com.fenix.bilingualmangareader.view.adapter.page_link.PageLinkCardAdapter
 import br.com.fenix.bilingualmangareader.view.adapter.page_link.PageNotLinkCardAdapter
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputLayout
 import java.lang.ref.WeakReference
 
@@ -39,6 +41,8 @@ import java.lang.ref.WeakReference
 class PagesLinkFragment : Fragment() {
 
     private val mViewModel: PagesLinkViewModel by viewModels()
+    private lateinit var mScrollUp: FloatingActionButton
+    private lateinit var mScrollDown: FloatingActionButton
     private lateinit var mRecyclePageLink: RecyclerView
     private lateinit var mRecyclePageNotLink: RecyclerView
     private lateinit var mFileLink: TextInputLayout
@@ -47,6 +51,11 @@ class PagesLinkFragment : Fragment() {
     private lateinit var mRefresh : Button
     private lateinit var mListener: PageLinkCardListener
     private val mImageLoadHandler: Handler = ImageLoadHandler(this)
+    private var showScrollButton : Boolean = true
+
+    private var handler = Handler(Looper.getMainLooper())
+    private val dismissUpButton = Runnable { mScrollUp.hide() }
+    private val dismissDownButton = Runnable { mScrollDown.hide() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,6 +71,44 @@ class PagesLinkFragment : Fragment() {
         mSave = root.findViewById(R.id.btn_file_link_save)
         mRefresh = root.findViewById(R.id.btn_file_link_refresh)
 
+        mScrollUp = root.findViewById(R.id.pages_link_scroll_up)
+        mScrollDown = root.findViewById(R.id.pages_link_scroll_down)
+
+        mScrollUp.setOnClickListener { mRecyclePageLink.smoothScrollToPosition(0) }
+        mScrollDown.setOnClickListener {
+            var position = if (mViewModel.pagesLink.value != null)
+                mViewModel.pagesLink.value!!.size
+            else 0
+
+            mRecyclePageLink.smoothScrollToPosition(position)
+        }
+        mScrollUp.visibility = View.GONE
+        mScrollDown.visibility = View.GONE
+        mRecyclePageLink.setOnScrollChangeListener { _, _, _, _, yOld ->
+            if (showScrollButton) {
+                if (yOld > 200) {
+                    if (handler.hasCallbacks(dismissDownButton)) {
+                        handler.removeCallbacks(dismissDownButton)
+                        mScrollDown.hide()
+                    }
+                    handler.removeCallbacks(dismissUpButton)
+                    handler.postDelayed(dismissUpButton, 3000)
+                    mScrollUp.show()
+                } else if (yOld < -200) {
+                    if (handler.hasCallbacks(dismissUpButton)) {
+                        handler.removeCallbacks(dismissUpButton)
+                        mScrollUp.hide()
+                    }
+                    handler.removeCallbacks(dismissDownButton)
+                    handler.postDelayed(dismissDownButton, 3000)
+                    mScrollDown.show()
+                }
+            } else {
+                mScrollUp.hide()
+                mScrollDown.hide()
+            }
+        }
+
         mFileLinkAutoComplete.setOnClickListener {
             mFileLinkAutoComplete.setText("")
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
@@ -76,9 +123,7 @@ class PagesLinkFragment : Fragment() {
         mRefresh.setOnClickListener { refresh() }
 
         mListener = object : PageLinkCardListener {
-            override fun onClick(page: PageLink) {
-
-            }
+            override fun onClick(page: PageLink) { }
 
             override fun onClickLong(view : View, page: PageLink, origin : Pages): Boolean {
                 val pageLink = if (origin == Pages.LINKED) mViewModel.getPageLink(page) else mViewModel.getPageNotLink(page)
@@ -136,6 +181,14 @@ class PagesLinkFragment : Fragment() {
                         mRecyclePageLink.smoothScrollToPosition(position)
                     true
                 }
+                DragEvent.ACTION_DRAG_STARTED -> {
+                    showScrollButton = false
+                    true
+                }
+                DragEvent.ACTION_DRAG_ENDED -> {
+                    showScrollButton = true
+                    true
+                }
                 else -> true
             }
         }
@@ -144,6 +197,7 @@ class PagesLinkFragment : Fragment() {
         mRecyclePageNotLink.setOnDragListener { _, dragEvent ->
             when (dragEvent.action) {
                 DragEvent.ACTION_DRAG_STARTED -> {
+                    showScrollButton = false
                     dragEvent.clipDescription.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)
                 }
 
@@ -173,6 +227,7 @@ class PagesLinkFragment : Fragment() {
                 }
 
                 DragEvent.ACTION_DRAG_ENDED -> {
+                    showScrollButton = true
                     val v = dragEvent.localState as View
                     v.visibility = View.VISIBLE
                     true
@@ -290,6 +345,15 @@ class PagesLinkFragment : Fragment() {
         mViewModel.endThread()
         SubTitleController.getInstance(requireContext()).setFileLink(mViewModel.getFileLink(null))
         super.onStop()
+    }
+
+    override fun onDestroy() {
+        if (handler.hasCallbacks(dismissUpButton))
+            handler.removeCallbacks(dismissUpButton)
+        if (handler.hasCallbacks(dismissDownButton))
+            handler.removeCallbacks(dismissDownButton)
+
+        super.onDestroy()
     }
 
     private inner class ImageLoadHandler(fragment: PagesLinkFragment) : Handler() {
