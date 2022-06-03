@@ -108,19 +108,19 @@ class PagesLinkFragment : Fragment() {
 
         mFileLinkAutoComplete.setOnClickListener {
             mFileLinkAutoComplete.setText("")
-            val intent = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O)
+            val intent = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O) {
                 Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                     addCategory(Intent.CATEGORY_OPENABLE)
-                    type = "*/*"
-                    putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/zip", "application/x-cbz", "application/rar", "application/x-cbr",
-                        "application/x-rar-compressed", "application/x-zip-compressed", "application/cbr", "application/cbz",))
+                    type = "application/zip|application/x-cbz|application/rar|application/x-cbr|application/x-rar-compressed|" +
+                            "application/x-zip-compressed|application/cbr|application/cbz|*/*"
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 }
-            else
+            } else
                 Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                     addCategory(Intent.CATEGORY_OPENABLE)
                     type = "application/*"
                     putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/zip", "application/x-cbz", "application/rar", "application/x-cbr",
-                        "application/x-rar-compressed", "application/x-zip-compressed", "application/cbr", "application/cbz",))
+                        "application/x-rar-compressed", "application/x-zip-compressed", "application/cbr", "application/cbz"))
                 }
             startActivityForResult(intent, 200)
         }
