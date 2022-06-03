@@ -113,12 +113,14 @@ class PopupSubtitleConfiguration : Fragment() {
             val intent = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O)
                 Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                     addCategory(Intent.CATEGORY_OPENABLE)
-                    type = "application/json"
+                    type = "application/json|*/*"
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 }
             else
                 Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                     addCategory(Intent.CATEGORY_OPENABLE)
                     type = "application/json"
+                    putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/json"))
                 }
             startActivityForResult(intent, 200)
         }
