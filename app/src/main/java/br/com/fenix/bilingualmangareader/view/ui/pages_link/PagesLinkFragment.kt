@@ -138,7 +138,7 @@ class PagesLinkFragment : Fragment() {
         mSave.setOnClickListener { save() }
         mRefresh.setOnClickListener { refresh() }
 
-        mFullScreen.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_fullscreen 0, 0, 0)
+        mFullScreen.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_fullscreen, 0, 0, 0)
         mFullScreen.setOnClickListener {
             if (mFileLink.visibility == View.GONE) {
                 mFileLink.visibility = View.VISIBLE
