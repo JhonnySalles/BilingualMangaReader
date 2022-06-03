@@ -6,6 +6,8 @@
     <string name="action_delete">Delete</string>
     <string name="action_copy">Copied text: </string>
     <string name="action_app_not_installed">Required App is not installed</string>
+    <string name="action_scroll_up">Up</string>
+    <string name="action_scroll_down">Down</string>
 
     <!-- MENU -->
     <string name="menu_search">Search</string>
@@ -74,7 +76,6 @@
     <string name="reading_button_color">Pages colors</string>
     <string name="reading_button_file_link">File link</string>
     <string name="reading_button_popup_floating">Popup floating</string>
-
 
     <!-- READER POPUP TITLES -->
     <string name="popup_reading_open">Open</string>

@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.ClipData
 import android.content.ClipDescription
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.*
 import android.util.Log
 import android.view.DragEvent
@@ -28,6 +30,7 @@ import br.com.fenix.bilingualmangareader.service.controller.SubTitleController
 import br.com.fenix.bilingualmangareader.service.listener.PageLinkCardListener
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
+import br.com.fenix.bilingualmangareader.view.adapter.library.LineViewHolder
 import br.com.fenix.bilingualmangareader.view.adapter.page_link.PageLinkCardAdapter
 import br.com.fenix.bilingualmangareader.view.adapter.page_link.PageNotLinkCardAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -46,10 +49,14 @@ class PagesLinkFragment : Fragment() {
     private lateinit var mFileLinkAutoComplete: AutoCompleteTextView
     private lateinit var mSave: Button
     private lateinit var mRefresh : Button
+    private lateinit var mFullScreen: Button
     private lateinit var mListener: PageLinkCardListener
+
+    private lateinit var mImageFullScreen : Bitmap
+    private lateinit var mImageFullScreenExit : Bitmap
+
     private val mImageLoadHandler: Handler = ImageLoadHandler(this)
     private var showScrollButton : Boolean = true
-
     private var handler = Handler(Looper.getMainLooper())
     private val dismissUpButton = Runnable { mScrollUp.hide() }
     private val dismissDownButton = Runnable { mScrollDown.hide() }
@@ -67,9 +74,13 @@ class PagesLinkFragment : Fragment() {
         mFileLinkAutoComplete = root.findViewById(R.id.menu_autocomplete_file_link)
         mSave = root.findViewById(R.id.btn_file_link_save)
         mRefresh = root.findViewById(R.id.btn_file_link_refresh)
+        mFullScreen = root.findViewById(R.id.btn_file_link_full_screen)
 
         mScrollUp = root.findViewById(R.id.pages_link_scroll_up)
         mScrollDown = root.findViewById(R.id.pages_link_scroll_down)
+
+        mScrollUp.visibility = View.GONE
+        mScrollDown.visibility = View.GONE
 
         mScrollUp.setOnClickListener { mRecyclePageLink.smoothScrollToPosition(0) }
         mScrollDown.setOnClickListener {
@@ -79,8 +90,7 @@ class PagesLinkFragment : Fragment() {
 
             mRecyclePageLink.smoothScrollToPosition(position)
         }
-        mScrollUp.visibility = View.GONE
-        mScrollDown.visibility = View.GONE
+
         mRecyclePageLink.setOnScrollChangeListener { _, _, _, _, yOld ->
             if (showScrollButton) {
                 if (yOld > 200) {
@@ -127,6 +137,21 @@ class PagesLinkFragment : Fragment() {
 
         mSave.setOnClickListener { save() }
         mRefresh.setOnClickListener { refresh() }
+
+        mFullScreen.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_fullscreen 0, 0, 0)
+        mFullScreen.setOnClickListener {
+            if (mFileLink.visibility == View.GONE) {
+                mFileLink.visibility = View.VISIBLE
+                mSave.visibility = View.VISIBLE
+                mRefresh.visibility = View.VISIBLE
+                mFullScreen.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_fullscreen, 0, 0, 0)
+            } else {
+                mFileLink.visibility = View.GONE
+                mSave.visibility = View.GONE
+                mRefresh.visibility = View.GONE
+                mFullScreen.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_fullscreen_exit, 0, 0, 0)
+            }
+        }
 
         mListener = object : PageLinkCardListener {
             override fun onClick(page: PageLink) { }

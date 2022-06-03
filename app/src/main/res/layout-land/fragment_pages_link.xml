@@ -41,38 +41,43 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_pages_linked"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:scrollbars="vertical"
             android:layout_marginTop="@dimen/page_link_list_link_margin_top"
             android:layout_marginBottom="@dimen/page_link_list_link_margin_bottom"
-            android:paddingTop="@dimen/page_link_list_link_padding_top"
             android:paddingBottom="@dimen/page_link_list_link_padding_bottom"
             android:clipToPadding="false"
             android:scrollbarStyle="outsideOverlay"
             app:layout_constraintBottom_toTopOf="@+id/btn_file_link_save"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/rv_pages_not_linked"
             app:layout_constraintTop_toBottomOf="@+id/txt_file_link"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintVertical_bias="0"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_pages_not_linked"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/page_link_list_not_link_height"
+            android:layout_width="@dimen/page_link_list_not_link_height"
+            android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:scrollbars="horizontal"
-            android:orientation="horizontal"
+            android:scrollbars="vertical"
+            android:layout_marginTop="@dimen/page_link_list_link_margin_top"
+            android:layout_marginBottom="@dimen/page_link_list_link_margin_bottom"
+            android:paddingBottom="@dimen/page_link_list_link_padding_bottom"
+            android:clipToPadding="false"
+            android:scrollbarStyle="outsideOverlay"
             android:background="@color/onPrimary"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txt_file_link"
-            app:layout_constraintVertical_bias="0"
-            app:layout_constraintHorizontal_bias="0"/>
+            app:layout_constraintEnd_toStartOf="@+id/rv_pages_linked"
+            app:layout_constraintBottom_toTopOf="@+id/btn_file_link_save"
+            app:layout_constraintVertical_bias="0"/>
 
         <Button
             android:id="@+id/btn_file_link_refresh"
             android:layout_height="wrap_content"
-            android:layout_width="@dimen/page_link_button_width"
+            android:layout_width="@dimen/page_link_button_lands_width"
             android:textColor="@color/textPrimary"
             android:text="@string/page_link_refresh"
             android:textAllCaps="false"
@@ -85,7 +90,7 @@
         <Button
             android:id="@+id/btn_file_link_save"
             android:layout_height="wrap_content"
-            android:layout_width="@dimen/page_link_button_width"
+            android:layout_width="@dimen/page_link_button_lands_width"
             android:textColor="@color/textPrimary"
             android:text="@string/page_link_save"
             android:textAllCaps="false"
@@ -120,15 +125,14 @@
             android:layout_margin="@dimen/page_link_scrolling_button_margin"
             android:backgroundTint="@color/white"
             android:contentDescription="@string/action_scroll_up"
-            app:tint="@color/onSecondary"
             android:src="@drawable/ic_up_arrow"
             app:backgroundTint="@color/onSecondary"
             app:borderWidth="@dimen/page_link_up_border"
             app:fabCustomSize="@dimen/page_link_up_width"
-            app:maxImageSize="@dimen/page_link_up_image_width"
-            app:layout_constraintTop_toBottomOf="@+id/txt_file_link"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@+id/txt_file_link"
+            app:maxImageSize="@dimen/page_link_up_image_width"
+            app:tint="@color/onSecondary" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/pages_link_scroll_down"
@@ -138,15 +142,14 @@
             android:layout_margin="@dimen/page_link_scrolling_button_margin"
             android:backgroundTint="@color/white"
             android:contentDescription="@string/action_scroll_down"
-            app:tint="@color/onSecondary"
             android:src="@drawable/ic_down_arrow"
             app:backgroundTint="@color/onSecondary"
             app:borderWidth="@dimen/page_link_down_border"
             app:fabCustomSize="@dimen/page_link_down_width"
-            app:maxImageSize="@dimen/page_link_down_image_width"
             app:layout_constraintBottom_toTopOf="@+id/btn_file_link_full_screen"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"/>
+            app:maxImageSize="@dimen/page_link_down_image_width"
+            app:tint="@color/onSecondary" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
