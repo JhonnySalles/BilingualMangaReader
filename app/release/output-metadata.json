@@ -11,9 +11,9 @@
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 4,
-      "versionName": "2.2",
-      "outputFile": "BilingualManga_2.2-release.apk"
+      "versionCode": 5,
+      "versionName": "2.3 (Nougat)",
+      "outputFile": "BilingualManga_2.3 (Nougat)-release.apk"
     }
   ],
   "elementType": "File"
