@@ -37,7 +37,7 @@
             android:layout_centerHorizontal="true"
             android:scrollbars="horizontal"
             android:orientation="horizontal"
-            android:background="@color/onPrimary"
+            android:background="@drawable/file_linked_background"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txt_file_link"
             app:layout_constraintVertical_bias="0"

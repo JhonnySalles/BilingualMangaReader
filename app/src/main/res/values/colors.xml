@@ -38,6 +38,10 @@
     <color name="floatingButton">#546e7a</color>
     <color name="fileLinkFullScreen">#99212121</color>
 
+    <color name="fileLinkBackground">#000000</color>
+    <color name="fileLinkDragSelected">#79b700</color>
+    <color name="fileNotLinkDrag">#558000</color>
+
     <color name="JLPT0">#b3b3b3</color>
     <color name="JLPT1">#ff4d4d</color>
     <color name="JLPT2">#ffc266</color>

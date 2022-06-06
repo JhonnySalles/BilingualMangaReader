@@ -33,7 +33,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_pages_not_linked"
-            android:layout_width="@dimen/page_link_list_not_link_height"
+            android:layout_width="@dimen/page_link_list_not_link_height_land"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:layout_centerHorizontal="true"
@@ -44,6 +44,7 @@
             android:paddingBottom="@dimen/page_link_list_link_padding_bottom"
             android:clipToPadding="false"
             android:scrollbarStyle="outsideOverlay"
+            android:background="@drawable/file_linked_background"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txt_file_link"
             app:layout_constraintEnd_toStartOf="@+id/rv_pages_linked"

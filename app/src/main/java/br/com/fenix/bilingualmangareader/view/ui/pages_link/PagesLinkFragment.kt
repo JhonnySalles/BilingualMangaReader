@@ -223,23 +223,24 @@ class PagesLinkFragment : Fragment() {
         mRecyclePageNotLink.setOnDragListener { _, dragEvent ->
             when (dragEvent.action) {
                 DragEvent.ACTION_DRAG_STARTED -> {
+                    mRecyclePageNotLink.background = requireContext().getDrawable(R.drawable.file_linked_rounded_border)
                     showScrollButton = false
                     dragEvent.clipDescription.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)
                 }
 
                 DragEvent.ACTION_DRAG_ENTERED -> {
-                    mRecyclePageNotLink.setBackgroundColor(requireContext().getColor(R.color.onSecondary))
+                    mRecyclePageNotLink.background = requireContext().getDrawable(R.drawable.file_linked_background_selected)
                     true
                 }
 
                 DragEvent.ACTION_DRAG_LOCATION -> true
                 DragEvent.ACTION_DRAG_EXITED -> {
-                    mRecyclePageNotLink.setBackgroundColor(requireContext().getColor(R.color.onPrimary))
+                    mRecyclePageNotLink.background = requireContext().getDrawable(R.drawable.file_linked_rounded_border)
                     true
                 }
 
                 DragEvent.ACTION_DROP -> {
-                    mRecyclePageNotLink.setBackgroundColor(requireContext().getColor(R.color.onPrimary))
+                    mRecyclePageNotLink.background = requireContext().getDrawable(R.drawable.file_linked_background)
 
                     if (Pages.LINKED == Pages.valueOf(dragEvent.clipData.getItemAt(1).text.toString())) {
                         mViewModel.onNotLinked(mViewModel.getPageLink(Integer.valueOf(dragEvent.clipData.getItemAt(0).text.toString())))
@@ -253,6 +254,7 @@ class PagesLinkFragment : Fragment() {
                 }
 
                 DragEvent.ACTION_DRAG_ENDED -> {
+                    mRecyclePageNotLink.background = requireContext().getDrawable(R.drawable.file_linked_background)
                     showScrollButton = true
                     val v = dragEvent.localState as View
                     v.visibility = View.VISIBLE
