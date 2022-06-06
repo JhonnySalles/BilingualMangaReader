@@ -5,6 +5,7 @@ import br.com.fenix.bilingualmangareader.service.parses.Parse
 import br.com.fenix.bilingualmangareader.service.parses.ParseFactory
 import br.com.fenix.bilingualmangareader.util.constants.DataBaseConsts
 import java.io.File
+import java.io.Serializable
 import java.time.LocalDateTime
 
 @Entity(
@@ -25,6 +26,7 @@ class FileLink(id: Long?, idManga: Long, pages: Int, path: String, name: String,
         manga: Manga, parseManga : Parse?, pages: Int, path: String, name: String, type: String, folder: String
     ) : this(null, manga.id!!, pages, path, name, type, folder) {
         this.manga = manga
+        this.parseManga = parseManga
         this.dateCreate = LocalDateTime.now()
         this.lastAccess = LocalDateTime.now()
     }
