@@ -13,32 +13,6 @@
         android:layout_height="match_parent"
         android:layout_margin="@dimen/margin_small">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/txt_file_link"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/page_link_file"
-            android:textColorHint="@color/textPrimary"
-            app:boxBackgroundColor="@color/primary"
-            app:boxStrokeColor="@color/onSecondary"
-            app:startIconTint="@color/onSecondary"
-            app:startIconDrawable="@drawable/ic_file"
-            app:placeholderTextColor="@color/textPrimary"
-            app:hintTextColor="@color/onSecondary"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <AutoCompleteTextView
-                android:id="@+id/menu_autocomplete_file_link"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="none"
-                android:textColor="@color/textPrimary"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_pages_linked"
             android:layout_width="match_parent"
@@ -68,6 +42,32 @@
             app:layout_constraintTop_toBottomOf="@+id/txt_file_link"
             app:layout_constraintVertical_bias="0"
             app:layout_constraintHorizontal_bias="0"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txt_file_link"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/page_link_file"
+            android:textColorHint="@color/textPrimary"
+            app:boxBackgroundColor="@color/primary"
+            app:boxStrokeColor="@color/onSecondary"
+            app:startIconTint="@color/onSecondary"
+            app:startIconDrawable="@drawable/ic_file"
+            app:placeholderTextColor="@color/textPrimary"
+            app:hintTextColor="@color/onSecondary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <AutoCompleteTextView
+                android:id="@+id/menu_autocomplete_file_link"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:textColor="@color/textPrimary"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
             android:id="@+id/buttons_root"
