@@ -202,6 +202,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
         mFileLink.value!!.path = ""
         mPagesLink.value!!.forEach { page ->  page.clearFileLInk() }
         mPagesNotLinked.value!!.clear()
+        refresh(null, Pages.ALL)
 
       val file = File(path)
         if (file.name.endsWith(".rar") ||

@@ -37,6 +37,13 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         return obj
     }
 
+    fun add(manga: Manga, position: Int = -1) {
+        if (position > -1)
+            mListMangas.value!!.add(position, manga)
+        else
+            mListMangas.value!!.add(manga)
+    }
+
     fun delete(obj: Manga) {
         mMangaRepository.delete(obj)
         remove(obj)
@@ -80,21 +87,25 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         if (mListMangas.value == null || mListMangas.value!!.isEmpty())
             return
 
-        for (manga in mListMangas.value!!)
+        for ((index, manga) in mListMangas.value!!.withIndex())
             if (manga.thumbnail == null || manga.thumbnail!!.image == null)
-                ImageCoverController.instance.setImageCoverAsync(mContext, manga)
+                ImageCoverController.instance.setImageCoverAsync(mContext, manga, index)
     }
 
 
-    fun updateList() {
-        val list = mMangaRepository.list() ?: return
+    fun updateList() : ArrayList<Int> {
+        val indexes = arrayListOf<Int>()
+        val list = mMangaRepository.list() ?: return indexes
         if (list.isNotEmpty()) {
             for (manga in list) {
-                if (!mListMangas.value!!.contains(manga))
+                if (!mListMangas.value!!.contains(manga)) {
                     mListMangas.value!!.add(manga)
+                    indexes.add(mListMangas.value!!.size -1)
+                }
             }
         }
         updateCover()
+        return indexes
     }
 
     fun list() {
