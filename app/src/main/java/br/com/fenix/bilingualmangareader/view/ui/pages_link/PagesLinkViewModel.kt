@@ -199,58 +199,67 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun readFileLink(path : String, refresh: (index: Int?, type: Pages) -> (Unit)) : LoadFile {
         var loaded = LoadFile.ERROR_NOT_LOAD
-        mFileLink.value!!.path = ""
-        mPagesLink.value!!.forEach { page ->  page.clearFileLInk() }
-        mPagesNotLinked.value!!.clear()
-        refresh(null, Pages.ALL)
 
-      val file = File(path)
+        val file = File(path)
         if (file.name.endsWith(".rar") ||
             file.name.endsWith(".zip") ||
             file.name.endsWith(".cbr") ||
             file.name.endsWith(".cbz")) {
-            val parse = ParseFactory.create(path)?: return loaded
-            loaded = LoadFile.LOADED
-            mFileLink.value = FileLink(mFileLink.value!!.manga!!, parse.numPages(), path, file.nameWithoutExtension, file.extension, file.parent)
-            mFileLink.value!!.parseFileLink = parse
+            val parse = ParseFactory.create(path)
 
-            val listNotLink = ArrayList<PageLink>()
-            for (i in 0 until parse.numPages()) {
-                var name = parse.getPagePath(i)?: ""
-                if (Util.isImage(name)) {
-                    name = if (name.contains('/'))
-                        name.substringAfterLast("/")
-                    else
-                        name.substringAfterLast('\\')
+            if (parse != null) {
+                loaded = LoadFile.LOADED
+                mFileLink.value = FileLink(mFileLink.value!!.manga!!, parse.numPages(), path, file.nameWithoutExtension, file.extension, file.parent)
+                mFileLink.value!!.parseFileLink = parse
 
-                    if (i < mPagesLink.value!!.size) {
-                        val page = mPagesLink.value!![i]
-                        page.fileLinkPage = i
-                        page.fileLinkPageName = name
-                        page.fileLinkPages = parse.numPages()
-                        page.isFileLinkLoading = true
-                        refresh(i, Pages.LINKED)
-                    } else
-                        listNotLink.add(PageLink(
-                            mFileLink.value!!.id, -1, mFileLink.value!!.manga!!.pages, i, mFileLink.value!!.pages,
-                            mFileLink.value!!.manga!!.name, mFileLink.value!!.name
-                        ))
+                val listNotLink = ArrayList<PageLink>()
+                for (i in 0 until parse.numPages()) {
+                    var name = parse.getPagePath(i)?: ""
+                    if (Util.isImage(name)) {
+                        name = if (name.contains('/'))
+                            name.substringAfterLast("/")
+                        else
+                            name.substringAfterLast('\\')
+
+                        if (i < mPagesLink.value!!.size) {
+                            val page = mPagesLink.value!![i]
+                            page.fileLinkPage = i
+                            page.fileLinkPageName = name
+                            page.fileLinkPages = parse.numPages()
+                            page.isFileLinkLoading = true
+                            refresh(i, Pages.LINKED)
+                        } else
+                            listNotLink.add(PageLink(
+                                mFileLink.value!!.id, -1, mFileLink.value!!.manga!!.pages, i, mFileLink.value!!.pages,
+                                mFileLink.value!!.manga!!.name, mFileLink.value!!.name
+                            ))
+                    }
                 }
+
+                mPagesNotLinked.value = listNotLink
+                refresh(null, Pages.LINKED)
+                getImage(null, parse, mPagesLink.value!!, Pages.LINKED)
+
+                if (mPagesNotLinked.value!!.isNotEmpty()) {
+                    refresh(null, Pages.NOT_LINKED)
+                    getImage(null, parse, mPagesNotLinked.value!!, Pages.NOT_LINKED)
+                }
+
             }
-
-            mPagesNotLinked.value = listNotLink
-            refresh(null, Pages.LINKED)
-            getImage(null, parse, mPagesLink.value!!, Pages.LINKED)
-
-            if (mPagesNotLinked.value!!.isNotEmpty()) {
-                refresh(null, Pages.NOT_LINKED)
-                getImage(null, parse, mPagesNotLinked.value!!, Pages.NOT_LINKED)
-            }
-
         } else
             loaded = LoadFile.ERROR_FILE_WRONG
 
+        if (loaded != LoadFile.LOADED)
+            clearFileLink(refresh)
+
         return loaded
+    }
+
+    fun clearFileLink(refresh: (index: Int?, type: Pages) -> (Unit)) {
+        mFileLink.value!!.path = ""
+        mPagesNotLinked.value!!.clear()
+        mPagesLink.value!!.forEach { page ->  page.clearFileLInk() }
+        refresh(null, Pages.ALL)
     }
 
     private fun generateBitmap(parse: Parse, index: Int): Bitmap? {

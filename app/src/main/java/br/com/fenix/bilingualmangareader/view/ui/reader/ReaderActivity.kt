@@ -445,12 +445,12 @@ class ReaderActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            5 -> {
+            GeneralConsts.REQUEST.PERMISSION_DRAW_OVERLAYS -> {
                 if (canDrawOverlays(applicationContext)) {
                     if (prepareMenuFloat())
                         mFloatingSubtitleReader.show()
                     else {
-                        var message = getString(if (mSubtitleSelected) R.string.popup_reading_subtitle_selected_empty
+                        val message = getString(if (mSubtitleSelected) R.string.popup_reading_subtitle_selected_empty
                         else R.string.popup_reading_subtitle_embedded_empty)
 
                         AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
@@ -477,7 +477,7 @@ class ReaderActivity : AppCompatActivity() {
             Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
             Uri.parse("package:${applicationContext.packageName}")
         ).let {
-            startActivityForResult(it, 5)
+            startActivityForResult(it, GeneralConsts.REQUEST.PERMISSION_DRAW_OVERLAYS)
         }
     }
 

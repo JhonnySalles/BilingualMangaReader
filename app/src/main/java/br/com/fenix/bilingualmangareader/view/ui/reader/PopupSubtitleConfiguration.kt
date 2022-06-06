@@ -109,7 +109,6 @@ class PopupSubtitleConfiguration : Fragment() {
             }
 
         mLoadExternalSubtitleAutoComplete.setOnClickListener {
-            mLoadExternalSubtitleAutoComplete.setText("")
             val intent = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O)
                 Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                     addCategory(Intent.CATEGORY_OPENABLE)
@@ -122,7 +121,7 @@ class PopupSubtitleConfiguration : Fragment() {
                     type = "application/json"
                     putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/json"))
                 }
-            startActivityForResult(intent, 200)
+            startActivityForResult(intent, GeneralConsts.REQUEST.OPEN_JSON)
         }
 
         if (mSubTitleController.mManga != null && mSubTitleController.mManga!!.id != null) {
@@ -160,7 +159,7 @@ class PopupSubtitleConfiguration : Fragment() {
     override fun onActivityResult(
         requestCode: Int, resultCode: Int, resultData: Intent?
     ) {
-        if (requestCode == 200) {
+        if (requestCode == GeneralConsts.REQUEST.OPEN_JSON) {
             if (resultCode == Activity.RESULT_OK) {
                 resultData?.data?.also { uri ->
                     try {
@@ -173,12 +172,13 @@ class PopupSubtitleConfiguration : Fragment() {
                         Log.e(GeneralConsts.TAG.LOG, "Error when open file: " + e.message)
                     }
                 }
-            }
+            } else
+                mLoadExternalSubtitleAutoComplete.setText("")
         }
     }
 
     private fun observer() {
-        mSubTitleController.chaptersKeys.observe(viewLifecycleOwner, {
+        mSubTitleController.chaptersKeys.observe(viewLifecycleOwner) {
             mSubtitleSelectedAutoComplete.setAdapter(
                 ArrayAdapter(
                     requireContext(),
@@ -186,15 +186,15 @@ class PopupSubtitleConfiguration : Fragment() {
                     it.sorted()
                 )
             )
-        })
+        }
 
-        mSubTitleController.chapterSelected.observe(viewLifecycleOwner, {
+        mSubTitleController.chapterSelected.observe(viewLifecycleOwner) {
             var text = ""
             if (it != null)
                 text = mSubTitleController.getChapterKey(it)
 
             mSubtitleSelectedAutoComplete.setText(text, false)
-        })
+        }
 
     }
 

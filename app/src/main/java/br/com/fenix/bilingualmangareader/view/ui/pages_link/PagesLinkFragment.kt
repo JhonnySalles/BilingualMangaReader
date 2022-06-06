@@ -4,19 +4,15 @@ import android.app.Activity
 import android.content.ClipData
 import android.content.ClipDescription
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.graphics.Rect
 import android.os.*
 import android.util.Log
-import android.view.DragEvent
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.os.postDelayed
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,12 +26,12 @@ import br.com.fenix.bilingualmangareader.service.controller.SubTitleController
 import br.com.fenix.bilingualmangareader.service.listener.PageLinkCardListener
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
-import br.com.fenix.bilingualmangareader.view.adapter.library.LineViewHolder
 import br.com.fenix.bilingualmangareader.view.adapter.page_link.PageLinkCardAdapter
 import br.com.fenix.bilingualmangareader.view.adapter.page_link.PageNotLinkCardAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputLayout
 import java.lang.ref.WeakReference
+import com.google.android.material.button.MaterialButton
 
 
 class PagesLinkFragment : Fragment() {
@@ -49,11 +45,8 @@ class PagesLinkFragment : Fragment() {
     private lateinit var mFileLinkAutoComplete: AutoCompleteTextView
     private lateinit var mSave: Button
     private lateinit var mRefresh : Button
-    private lateinit var mFullScreen: Button
+    private lateinit var mFullScreen: MaterialButton
     private lateinit var mListener: PageLinkCardListener
-
-    private lateinit var mImageFullScreen : Bitmap
-    private lateinit var mImageFullScreenExit : Bitmap
 
     private val mImageLoadHandler: Handler = ImageLoadHandler(this)
     private var showScrollButton : Boolean = true
@@ -132,25 +125,25 @@ class PagesLinkFragment : Fragment() {
                     putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/zip", "application/x-cbz", "application/rar", "application/x-cbr",
                         "application/x-rar-compressed", "application/x-zip-compressed", "application/cbr", "application/cbz"))
                 }
-            startActivityForResult(intent, 200)
+            startActivityForResult(intent, GeneralConsts.REQUEST.OPEN_PAGE_LINK)
         }
 
         mSave.setOnClickListener { save() }
         mRefresh.setOnClickListener { refresh() }
 
-        mFullScreen.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_fullscreen, 0, 0, 0)
         mFullScreen.setOnClickListener {
-            if (mFileLink.visibility == View.GONE) {
+            val image = if (mFileLink.visibility == View.GONE) {
                 mFileLink.visibility = View.VISIBLE
                 mSave.visibility = View.VISIBLE
                 mRefresh.visibility = View.VISIBLE
-                mFullScreen.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_fullscreen, 0, 0, 0)
+                R.drawable.ic_fullscreen
             } else {
                 mFileLink.visibility = View.GONE
                 mSave.visibility = View.GONE
                 mRefresh.visibility = View.GONE
-                mFullScreen.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_fullscreen_exit, 0, 0, 0)
+                R.drawable.ic_fullscreen_exit
             }
+            mFullScreen.icon = ContextCompat.getDrawable(context!!, image)
         }
 
         mListener = object : PageLinkCardListener {
@@ -289,12 +282,12 @@ class PagesLinkFragment : Fragment() {
     override fun onActivityResult(
         requestCode: Int, resultCode: Int, resultData: Intent?
     ) {
-        if (requestCode == 200) {
+        if (requestCode == GeneralConsts.REQUEST.OPEN_PAGE_LINK) {
             if (resultCode == Activity.RESULT_OK) {
                 resultData?.data?.also { uri ->
                     try {
                         val path = Util.normalizeFilePath(uri.path.toString())
-                        var loaded = mViewModel.readFileLink(path) { index, type -> notifyItemChanged(type, index)  }
+                        val loaded = mViewModel.readFileLink(path) { index, type -> notifyItemChanged(type, index)  }
                         if (loaded != LoadFile.LOADED) {
                             val msg = if (loaded == LoadFile.ERROR_FILE_WRONG) getString(R.string.page_link_load_file_wrong) else getString(R.string.page_link_load_error)
                             AlertDialog.Builder(requireContext(), R.style.AppCompatAlertDialogStyle)
@@ -310,7 +303,8 @@ class PagesLinkFragment : Fragment() {
                         Log.e(GeneralConsts.TAG.LOG, "Error when open file: " + e.message)
                     }
                 }
-            }
+            } else
+                mViewModel.clearFileLink { index, type -> notifyItemChanged(type, index)  }
         }
     }
 
