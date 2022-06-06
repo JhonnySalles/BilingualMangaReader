@@ -40,13 +40,14 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
     private var mGenerateImageHandler: MutableList<Handler>? = java.util.ArrayList()
     private var mGenerateImageThread: ArrayList<ImageLoadThread> = ArrayList()
 
-    fun getFileLink(manga : Manga?) : FileLink? {
-        return if (mFileLink.value == null ||  mFileLink.value!!.path == "")
+    fun getFileLink(manga : Manga? = null, isBackup: Boolean = false) : FileLink? {
+        return if (!isBackup && (mFileLink.value == null ||  mFileLink.value!!.path == ""))
             if (manga == null)
                 null
             else
                 mFileLinkRepository.get(manga)
         else {
+            mFileLink.value!!.pagesNotLink = mPagesNotLinked.value
             mFileLink.value!!.pagesLink = mPagesLink.value
             mFileLink.value
         }
@@ -59,10 +60,25 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
             mPagesLink.value = fileLink.pagesLink?.let { ArrayList(it) }
             mPagesNotLinked.value = fileLink.pagesNotLink?.let { ArrayList(it) }
             refresh(null, Pages.ALL)
-            getImage(fileLink.parseManga, fileLink.parseFileLink, mPagesLink.value!!, Pages.ALL, true)
+            getImage(mFileLink.value!!.parseManga, mFileLink.value!!.parseFileLink, mPagesLink.value!!, Pages.ALL, true)
 
-            if (fileLink.pagesNotLink!!.isNotEmpty())
-                getImage(null, fileLink.parseFileLink, mPagesNotLinked.value!!, Pages.NOT_LINKED, true)
+            if (mPagesNotLinked.value!!.isNotEmpty())
+                getImage(null, mFileLink.value!!.parseFileLink, mPagesNotLinked.value!!, Pages.NOT_LINKED, true)
+
+            true
+        } else false
+    }
+
+    fun reload(obj: FileLink?, refresh: (index: Int?, type: Pages) -> (Unit)) : Boolean {
+        return if (obj != null) {
+            mFileLink.value = obj
+            mPagesLink.value = obj.pagesLink?.let { ArrayList(it) }
+            mPagesNotLinked.value = obj.pagesNotLink?.let { ArrayList(it) }
+            refresh(null, Pages.ALL)
+            getImage(mFileLink.value!!.parseManga, mFileLink.value!!.parseFileLink, mPagesLink.value!!, Pages.ALL, true)
+
+            if (mPagesNotLinked.value!!.isNotEmpty())
+                getImage(null, mFileLink.value!!.parseFileLink, mPagesNotLinked.value!!, Pages.NOT_LINKED, true)
 
             true
         } else false
@@ -209,7 +225,8 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
 
             if (parse != null) {
                 loaded = LoadFile.LOADED
-                mFileLink.value = FileLink(mFileLink.value!!.manga!!, parse.numPages(), path, file.nameWithoutExtension, file.extension, file.parent)
+                mFileLink.value = FileLink(mFileLink.value!!.manga!!, mFileLink.value!!.parseManga, parse.numPages(), path,
+                    file.nameWithoutExtension, file.extension, file.parent)
                 mFileLink.value!!.parseFileLink = parse
 
                 val listNotLink = ArrayList<PageLink>()
@@ -441,6 +458,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun endThread() {
         mForceEnd = true
+        mGenerateImageThread.forEach { it.thread.interrupt() }
         mGenerateImageThread.clear()
     }
 
@@ -488,8 +506,10 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
 
                     when {
                         type == Pages.ALL -> {
-                            page.imageMangaPage = generateBitmap(parseManga!!, page.mangaPage)
-                            page.imageFileLinkPage = generateBitmap(parsePageLink!!, page.fileLinkPage)
+                            if (parseManga != null)
+                                page.imageMangaPage = generateBitmap(parseManga!!, page.mangaPage)
+                            if (parsePageLink != null)
+                                page.imageFileLinkPage = generateBitmap(parsePageLink!!, page.fileLinkPage)
                             page.isFileLinkLoading = false
                         }
                         type == Pages.MANGA -> page.imageMangaPage = generateBitmap(parseManga!!, page.mangaPage)

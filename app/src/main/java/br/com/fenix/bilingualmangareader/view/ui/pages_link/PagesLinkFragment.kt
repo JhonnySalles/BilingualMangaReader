@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.ClipData
 import android.content.ClipDescription
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Rect
 import android.os.*
 import android.util.Log
@@ -18,6 +19,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.bilingualmangareader.R
+import br.com.fenix.bilingualmangareader.model.entity.FileLink
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.entity.PageLink
 import br.com.fenix.bilingualmangareader.model.enums.LoadFile
@@ -25,6 +27,7 @@ import br.com.fenix.bilingualmangareader.model.enums.Pages
 import br.com.fenix.bilingualmangareader.service.controller.SubTitleController
 import br.com.fenix.bilingualmangareader.service.listener.PageLinkCardListener
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import br.com.fenix.bilingualmangareader.util.constants.ReaderConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import br.com.fenix.bilingualmangareader.view.adapter.page_link.PageLinkCardAdapter
 import br.com.fenix.bilingualmangareader.view.adapter.page_link.PageNotLinkCardAdapter
@@ -53,6 +56,7 @@ class PagesLinkFragment : Fragment() {
     private var handler = Handler(Looper.getMainLooper())
     private val dismissUpButton = Runnable { mScrollUp.hide() }
     private val dismissDownButton = Runnable { mScrollDown.hide() }
+    private var openIntent : Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -125,6 +129,7 @@ class PagesLinkFragment : Fragment() {
                     putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/zip", "application/x-cbz", "application/rar", "application/x-cbr",
                         "application/x-rar-compressed", "application/x-zip-compressed", "application/cbr", "application/cbz"))
                 }
+            openIntent = true
             startActivityForResult(intent, GeneralConsts.REQUEST.OPEN_PAGE_LINK)
         }
 
@@ -270,18 +275,33 @@ class PagesLinkFragment : Fragment() {
 
         val adapterPageNotLink = PageNotLinkCardAdapter()
         mRecyclePageNotLink.adapter = adapterPageNotLink
-        mRecyclePageNotLink.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+        val orientation = if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) RecyclerView.VERTICAL else RecyclerView.HORIZONTAL
+        mRecyclePageNotLink.layoutManager = LinearLayoutManager(requireContext(), orientation, false)
         adapterPageNotLink.attachListener(mListener)
 
-        val bundle = this.arguments
-        if (bundle != null && bundle.containsKey(GeneralConsts.KEYS.OBJECT.MANGA))
-            mViewModel.loadManga(bundle[GeneralConsts.KEYS.OBJECT.MANGA] as Manga) { index, type -> notifyItemChanged(type, index)  }
+        if (savedInstanceState != null) {
+            val fileLink = savedInstanceState.getSerializable(GeneralConsts.KEYS.OBJECT.PAGELINK)
+            if (fileLink != null)
+                mViewModel.reload(fileLink as FileLink) { index, type -> notifyItemChanged(type, index)  }
+        } else {
+            val bundle = this.arguments
+            if (bundle != null && bundle.containsKey(GeneralConsts.KEYS.OBJECT.MANGA))
+                mViewModel.loadManga(bundle[GeneralConsts.KEYS.OBJECT.MANGA] as Manga) { index, type -> notifyItemChanged(type, index)  }
+        }
+    }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        if (!openIntent) {
+            val fileLink = mViewModel.getFileLink(isBackup = true)
+            outState.putSerializable(GeneralConsts.KEYS.OBJECT.PAGELINK, fileLink)
+        }
+        super.onSaveInstanceState(outState)
     }
 
     override fun onActivityResult(
         requestCode: Int, resultCode: Int, resultData: Intent?
     ) {
+        openIntent = false
         if (requestCode == GeneralConsts.REQUEST.OPEN_PAGE_LINK) {
             if (resultCode == Activity.RESULT_OK) {
                 resultData?.data?.also { uri ->
@@ -375,12 +395,12 @@ class PagesLinkFragment : Fragment() {
     }
 
     override fun onStop() {
-        mViewModel.endThread()
         SubTitleController.getInstance(requireContext()).setFileLink(mViewModel.getFileLink(null))
         super.onStop()
     }
 
     override fun onDestroy() {
+        mViewModel.endThread()
         if (handler.hasCallbacks(dismissUpButton))
             handler.removeCallbacks(dismissUpButton)
         if (handler.hasCallbacks(dismissDownButton))

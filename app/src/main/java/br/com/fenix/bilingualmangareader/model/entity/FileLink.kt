@@ -11,7 +11,7 @@ import java.time.LocalDateTime
     tableName = DataBaseConsts.FILELINK.TABLE_NAME,
     indices = [Index(value = [DataBaseConsts.FILELINK.COLUMNS.FK_ID_MANGA, DataBaseConsts.FILELINK.COLUMNS.FILE_NAME])]
 )
-class FileLink(id: Long?, idManga: Long, pages: Int, path: String, name: String, type: String, folder: String) {
+class FileLink(id: Long?, idManga: Long, pages: Int, path: String, name: String, type: String, folder: String) : Serializable {
 
     constructor(
         id: Long?, idManga: Long, pages: Int, path: String, name: String, type: String, folder: String,
@@ -22,7 +22,7 @@ class FileLink(id: Long?, idManga: Long, pages: Int, path: String, name: String,
     }
 
     constructor(
-        manga: Manga, pages: Int, path: String, name: String, type: String, folder: String
+        manga: Manga, parseManga : Parse?, pages: Int, path: String, name: String, type: String, folder: String
     ) : this(null, manga.id!!, pages, path, name, type, folder) {
         this.manga = manga
         this.dateCreate = LocalDateTime.now()

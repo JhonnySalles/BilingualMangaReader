@@ -14,17 +14,19 @@ class PagesLinkActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pages_link)
         val extras = intent.extras
-        val fragment = PagesLinkFragment()
+        val fragment = supportFragmentManager.findFragmentById(R.id.root_frame_pages_link)
+
+        val newFragment = if (fragment != null) fragment as PagesLinkFragment else PagesLinkFragment()
 
         if (extras != null) {
             val bundle = Bundle()
             bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, extras.getSerializable(GeneralConsts.KEYS.OBJECT.MANGA) as Manga)
-            fragment.arguments = bundle
+            newFragment.arguments = bundle
         }
 
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.root_frame_pages_link, fragment)
+            .replace(R.id.root_frame_pages_link, newFragment)
             .commit()
     }
 
