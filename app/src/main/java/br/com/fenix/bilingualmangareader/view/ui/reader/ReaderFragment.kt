@@ -21,8 +21,9 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -55,6 +56,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
 
     private val mViewModel: ReaderViewModel by activityViewModels()
 
+    private lateinit var mRoot: CoordinatorLayout
     private lateinit var mToolbar: Toolbar
     private lateinit var mPageNavLayout: LinearLayout
     private lateinit var mPopupSubtitle: FrameLayout
@@ -258,6 +260,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             return view
         }
 
+        mRoot = requireActivity().findViewById(R.id.root_activity_reader)
         mToolbar = requireActivity().findViewById(R.id.toolbar_reader)
         mPopupSubtitle = requireActivity().findViewById(R.id.menu_popup_translate)
         mPopupColor = requireActivity().findViewById(R.id.menu_popup_color)
@@ -645,11 +648,11 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         if (fullscreen) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 windowInsetsController.let {
+                    it.hide(WindowInsets.Type.systemBars())
                     it.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                    w.navigationBarColor = ContextCompat.getColor(requireContext(), R.color.transparent)
-                    w.statusBarColor = ContextCompat.getColor(requireContext(), R.color.transparent)
-                    it.hide(WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.statusBars()  or WindowInsetsCompat.Type.navigationBars())
                 }
+                WindowCompat.setDecorFitsSystemWindows(w, false)
+                w.setDecorFitsSystemWindows(false)
             } else {
                 getActionBar()?.hide()
                 @Suppress("DEPRECATION")
@@ -669,6 +672,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 }, 300)
             }
 
+            mRoot.fitsSystemWindows = false
             mPageNavLayout.visibility = View.INVISIBLE
             mPopupSubtitle.visibility = View.INVISIBLE
             mPopupColor.visibility = View.INVISIBLE
@@ -677,11 +681,10 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 windowInsetsController.let {
-                    w.navigationBarColor = ContextCompat.getColor(requireContext(), R.color.translucent_status)
-                    w.statusBarColor = ContextCompat.getColor(requireContext(), R.color.translucent_status)
-                    it.show(WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.statusBars()  or WindowInsetsCompat.Type.navigationBars())
+                    it.show(WindowInsets.Type.systemBars())
                 }
-
+                WindowCompat.setDecorFitsSystemWindows(w, true)
+                w.setDecorFitsSystemWindows(true)
             } else {
                 getActionBar()?.show()
                 @Suppress("DEPRECATION")
@@ -696,6 +699,8 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                     w.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
                 }, 300)
             }
+
+            mRoot.fitsSystemWindows = true
             mPageNavLayout.visibility = View.VISIBLE
             mToolbar.visibility = View.VISIBLE
             mToolbarBottom.visibility = View.VISIBLE
