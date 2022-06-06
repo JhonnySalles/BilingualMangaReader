@@ -68,18 +68,18 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
                 }
 
                 DragEvent.ACTION_DRAG_ENTERED -> {
-                    root.setBackgroundColor(itemView.context.getColor(R.color.onSecondary))
+                    root.background = itemView.context.getDrawable(R.drawable.file_linked_background_selected)
                     true
                 }
 
                 DragEvent.ACTION_DRAG_LOCATION -> true
                 DragEvent.ACTION_DRAG_EXITED -> {
-                    root.setBackgroundColor(itemView.context.getColor(R.color.onPrimary))
+                    root.setBackgroundColor(itemView.context.getColor(R.color.fileLinkBackground))
                     true
                 }
 
                 DragEvent.ACTION_DROP -> {
-                    root.setBackgroundColor(itemView.context.getColor(R.color.onPrimary))
+                    root.setBackgroundColor(itemView.context.getColor(R.color.fileLinkBackground))
                     listener.onDropItem(
                         Pages.valueOf(dragEvent.clipData.getItemAt(1).text.toString()),
                         Pages.LINKED,
