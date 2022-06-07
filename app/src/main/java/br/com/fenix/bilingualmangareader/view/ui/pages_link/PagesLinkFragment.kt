@@ -5,7 +5,6 @@ import android.content.ClipData
 import android.content.ClipDescription
 import android.content.Intent
 import android.content.res.Configuration
-import android.graphics.Rect
 import android.os.*
 import android.util.Log
 import android.view.*
@@ -13,6 +12,7 @@ import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -27,19 +27,20 @@ import br.com.fenix.bilingualmangareader.model.enums.Pages
 import br.com.fenix.bilingualmangareader.service.controller.SubTitleController
 import br.com.fenix.bilingualmangareader.service.listener.PageLinkCardListener
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
-import br.com.fenix.bilingualmangareader.util.constants.ReaderConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import br.com.fenix.bilingualmangareader.view.adapter.page_link.PageLinkCardAdapter
 import br.com.fenix.bilingualmangareader.view.adapter.page_link.PageNotLinkCardAdapter
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputLayout
 import java.lang.ref.WeakReference
-import com.google.android.material.button.MaterialButton
+import java.util.List
 
 
 class PagesLinkFragment : Fragment() {
 
     private val mViewModel: PagesLinkViewModel by viewModels()
+    private lateinit var mRoot : ConstraintLayout
     private lateinit var mScrollUp: FloatingActionButton
     private lateinit var mScrollDown: FloatingActionButton
     private lateinit var mRecyclePageLink: RecyclerView
@@ -57,6 +58,7 @@ class PagesLinkFragment : Fragment() {
     private val dismissUpButton = Runnable { mScrollUp.hide() }
     private val dismissDownButton = Runnable { mScrollDown.hide() }
     private var openIntent : Boolean = false
+    private var inDrag : Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,6 +67,7 @@ class PagesLinkFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_pages_link, container, false)
 
+        mRoot = root.findViewById(R.id.root_pages_link)
         mRecyclePageLink = root.findViewById(R.id.rv_pages_linked)
         mRecyclePageNotLink = root.findViewById(R.id.rv_pages_not_linked)
         mFileLink = root.findViewById(R.id.txt_file_link)
@@ -191,26 +194,22 @@ class PagesLinkFragment : Fragment() {
                     }
                 }
             }
+
+            override fun onDragScrolling(pointScreen: IntArray) {
+                onPageLinkScrolling(pointScreen)
+            }
         }
 
         mRecyclePageLink.setOnDragListener { _, dragEvent ->
             when (dragEvent.action) {
-                DragEvent.ACTION_DRAG_LOCATION -> {
-                    val divider = 4
-
-                    val padding = if (dragEvent.y < mRecyclePageLink.height.toFloat() / divider) - 250
-                    else if (dragEvent.y > mRecyclePageLink.height.toFloat() / divider * (divider - 1)) + 250
-                    else 0
-
-                    if (padding != 0)
-                        mRecyclePageLink.smoothScrollBy(0, padding)
-                    true
-                }
                 DragEvent.ACTION_DRAG_STARTED -> {
+                    inDrag = true
                     showScrollButton = false
                     true
                 }
+
                 DragEvent.ACTION_DRAG_ENDED -> {
+                    inDrag = false
                     showScrollButton = true
                     true
                 }
@@ -220,6 +219,7 @@ class PagesLinkFragment : Fragment() {
 
 
         mRecyclePageNotLink.setOnDragListener { _, dragEvent ->
+
             when (dragEvent.action) {
                 DragEvent.ACTION_DRAG_STARTED -> {
                     mRecyclePageNotLink.background = requireContext().getDrawable(R.drawable.file_linked_rounded_border)
@@ -232,7 +232,6 @@ class PagesLinkFragment : Fragment() {
                     true
                 }
 
-                DragEvent.ACTION_DRAG_LOCATION -> true
                 DragEvent.ACTION_DRAG_EXITED -> {
                     mRecyclePageNotLink.background = requireContext().getDrawable(R.drawable.file_linked_rounded_border)
                     true
@@ -259,6 +258,7 @@ class PagesLinkFragment : Fragment() {
                     v.visibility = View.VISIBLE
                     true
                 }
+
                 else -> true
             }
         }
@@ -328,6 +328,17 @@ class PagesLinkFragment : Fragment() {
             } else
                 mViewModel.clearFileLink { index, type -> notifyItemChanged(type, index)  }
         }
+    }
+
+    private fun onPageLinkScrolling(pointScreen : IntArray) {
+        val (x, y) = pointScreen
+        val divider = 3
+        val padding = if (y < (mRecyclePageLink.height.toFloat() / divider)) - 150
+        else if (y > (mRecyclePageLink.height.toFloat() / divider * (divider - 1))) + 150
+        else 0
+
+        if (padding != 0)
+            mRecyclePageLink.smoothScrollBy(0, padding)
     }
 
     private fun observer() {
@@ -418,5 +429,4 @@ class PagesLinkFragment : Fragment() {
             notifyItemChanged(imageLoad.type, imageLoad.index)
         }
     }
-
 }

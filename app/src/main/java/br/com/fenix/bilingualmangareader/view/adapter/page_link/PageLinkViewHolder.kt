@@ -61,7 +61,29 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
             pageProgress.visibility = if (page.isFileLinkLoading) View.VISIBLE else View.GONE
         }
 
-        pageRoot.setOnDragListener { _, dragEvent ->
+        root.setOnDragListener { view, dragEvent ->
+            when(dragEvent.action) {
+                DragEvent.ACTION_DRAG_ENTERED -> {
+                    root.background = itemView.context.getDrawable(R.drawable.file_linked_background_selected)
+                    true
+                }
+
+                DragEvent.ACTION_DRAG_LOCATION -> {
+                    val point = IntArray(2)
+                    view.getLocationOnScreen(point)
+                    listener.onDragScrolling(point)
+                    true
+                }
+
+                DragEvent.ACTION_DRAG_EXITED, DragEvent.ACTION_DROP  -> {
+                    root.setBackgroundColor(itemView.context.getColor(R.color.fileLinkBackground))
+                    true
+                }
+                else -> true
+            }
+        }
+
+        pageRoot.setOnDragListener { view, dragEvent ->
             when(dragEvent.action) {
                 DragEvent.ACTION_DRAG_STARTED -> {
                     dragEvent.clipDescription.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)
@@ -72,7 +94,13 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
                     true
                 }
 
-                DragEvent.ACTION_DRAG_LOCATION -> true
+                DragEvent.ACTION_DRAG_LOCATION -> {
+                    val point = IntArray(2)
+                    view.getLocationOnScreen(point)
+                    listener.onDragScrolling(point)
+                    true
+                }
+
                 DragEvent.ACTION_DRAG_EXITED -> {
                     root.setBackgroundColor(itemView.context.getColor(R.color.fileLinkBackground))
                     true

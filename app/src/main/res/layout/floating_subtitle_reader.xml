@@ -130,7 +130,7 @@
         android:layout_width="@dimen/floating_reader_button_width"
         android:layout_height="@dimen/floating_reader_button_width"
         android:layout_gravity="top|start"
-        android:layout_marginTop="180dp"
+        android:layout_marginStart="150dp"
         android:background="@color/floatingButton"
         android:src="@drawable/ic_page_linked"
         android:tint="@color/textPrimary"
