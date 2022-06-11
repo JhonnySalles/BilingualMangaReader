@@ -11,8 +11,8 @@ android {
         applicationId "br.com.fenix.bilingualmangareader"
         minSdk 24
         targetSdk 24
-        versionCode 5
-        versionName "2.3 (Nougat)"
+        versionCode 6
+        versionName "2.4 (Nougat)"
         archivesBaseName = "BilingualManga_" + versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
