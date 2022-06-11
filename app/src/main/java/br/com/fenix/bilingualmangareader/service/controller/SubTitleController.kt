@@ -17,9 +17,11 @@ import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.*
 import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.service.parses.Parse
+import br.com.fenix.bilingualmangareader.service.parses.ParseFactory
 import br.com.fenix.bilingualmangareader.service.repository.SubTitleRepository
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.constants.ReaderConsts
+import br.com.fenix.bilingualmangareader.util.helpers.Util
 import br.com.fenix.bilingualmangareader.view.ui.reader.PageImageView
 import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderFragment
 import com.google.gson.Gson
@@ -216,10 +218,7 @@ class SubTitleController private constructor(private val context: Context) {
             return
         }
 
-        pageName = if (pageName.contains('/'))
-            pageName.substringAfterLast("/")
-        else
-            pageName.substringAfterLast('\\')
+        pageName = Util.getNameFromPath(pageName)
 
         var chapterKey = ""
         var pageKey = ""
@@ -273,12 +272,9 @@ class SubTitleController private constructor(private val context: Context) {
     ): SubTitle {
         val image: InputStream? = mParse.getPage(pageNumber)
         val hash: String? = DigestUtils.md5Hex(image)
-        var pageName: String? = mParse.getPagePath(pageNumber)
+        var pageName: String = mParse.getPagePath(pageNumber)?: ""
 
-        pageName = if (pageName!!.contains('/'))
-            pageName.substringAfterLast("/")
-        else
-            pageName.substringAfterLast('\\')
+        pageName = Util.getNameFromPath(pageName)
 
         var chapterKey = ""
         var number = 0
@@ -719,8 +715,6 @@ class SubTitleController private constructor(private val context: Context) {
                     floatArrayOf(image.width.toFloat(), image.height.toFloat())
                 else
                     floatArrayOf(coord[2], coord[3])
-
-                //Log.e(GeneralConsts.TAG.LOG, "${coord[0]} ${coord[1]} / ${coord[2]} ${coord[3]} - ${mOriginalSize!![0]} - ${mOriginalSize!![1]} - ${image.width}  ${image.height} - ${ReaderConsts.READER.MAX_PAGE_WIDTH}")
             }
 
             Point((coord[0] / coord[2] * mOriginalSize!![0]).toInt(), (coord[1] / coord[3] * mOriginalSize!![1]).toInt())
@@ -728,7 +722,6 @@ class SubTitleController private constructor(private val context: Context) {
             Point(coord[0].toInt(), coord[1].toInt())
 
         pageSelected.value!!.texts.forEach {
-            //Log.e(GeneralConsts.TAG.LOG, "${point.x}  ${point.y} - ${it.x1}  ${it.x2} / ${it.y1}  ${it.y2}")
             if (it.x1 <= point.x && it.x2 >= point.x && it.y1 <= point.y && it.y2 >= point.y) {
                 setText(it)
                 mForceExpandFloatingPopup.value = !mForceExpandFloatingPopup.value!!
@@ -758,7 +751,10 @@ class SubTitleController private constructor(private val context: Context) {
 
         mFileLink!!.pagesLink!!.first { it.mangaPageName.compareTo(pageName, true) == 0 }.let {
             if (it.fileLinkPage > -1) {
-                val uri = saveImageFolder(mFileLink!!.parseFileLink!!, it.fileLinkPage)?: return
+                val uri = if (it.dualImage)
+                    saveImageFolder(mFileLink!!, it.fileLinkPage, it.fileRightLinkPage)
+                else
+                    saveImageFolder(mFileLink!!, it.fileLinkPage)
                 drawPageLinked(uri)
             }
         }
@@ -770,14 +766,48 @@ class SubTitleController private constructor(private val context: Context) {
 
         mFileLink!!.pagesLink!!.first { it.mangaPage.compareTo(page) == 0 }.let {
             if (it.fileLinkPage > -1) {
-                val uri = saveImageFolder(mFileLink!!.parseFileLink!!, it.fileLinkPage)?: return
+                val uri = if (it.dualImage)
+                    saveImageFolder(mFileLink!!, it.fileLinkPage, it.fileRightLinkPage)
+                else
+                    saveImageFolder(mFileLink!!, it.fileLinkPage)
                 drawPageLinked(uri)
             }
         }
     }
 
-    private fun saveImageFolder(parse: Parse, index: Int) : Uri? {
-        val stream = parse.getPage(index)
+    private var mError :Int = 0
+    private fun getCombinedBitmap(fileLink: FileLink, parse: Parse, index: Int, extra: Int): Bitmap? {
+        var drawnBitmap: Bitmap? = null
+        try {
+            val img1 = BitmapFactory.decodeStream(parse.getPage(index))
+            val img2 = BitmapFactory.decodeStream(parse.getPage(extra))
+            val width = img1.width + img2.width
+            val height = if (img1.height > img2.height) img1.height else img2.height
+            drawnBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(drawnBitmap)
+            canvas.drawBitmap(img1, 0f, 0f, null)
+            canvas.drawBitmap(img2, (img1.width + 1).toFloat(), 0f, null)
+        } catch (e: java.lang.Exception) {
+            Log.e(GeneralConsts.TAG.LOG, "Erro ao combinar imagens. Tentativa: " + mError + " - "  + e.message)
+            mError +=1
+            if (mError < 3) {
+                fileLink.parseFileLink = ParseFactory.create(fileLink.path)
+                drawnBitmap = getCombinedBitmap(fileLink, fileLink.parseFileLink!!, index, extra)
+            }
+        }
+        mError = 0
+        return drawnBitmap
+    }
+
+    private fun saveImageFolder(fileLink: FileLink, index: Int, extra: Int = -1) : Uri {
+        val parse = fileLink.parseFileLink!!
+        var stream = parse.getPage(index)
+        if (extra > -1) {
+            val newBitmap = getCombinedBitmap(fileLink, parse, index, extra)
+            if (newBitmap != null)
+                stream = Util.imageToInputStream(newBitmap)
+        }
+
         val cacheDir = File(context.externalCacheDir, GeneralConsts.CACHEFOLDER.LINKED)
         if (!cacheDir.exists())
             cacheDir.mkdir()
@@ -785,10 +815,14 @@ class SubTitleController private constructor(private val context: Context) {
             for (f in cacheDir.listFiles()!!)
                 f.delete()
         var name = parse.getPagePath(index)?: index.toString()
-        name = if (name.contains('/'))
-            name.substringAfterLast("/")
-        else
-            name.substringAfterLast('\\')
+        name = Util.getNameFromPath(name)
+
+        if (extra > -1) {
+            var nameExtra = parse.getPagePath(extra)?: index.toString()
+            nameExtra = Util.getNameFromPath(nameExtra)
+            name = "dual_" + name.substringBeforeLast('.') + "-" + nameExtra.substringBeforeLast('.') + ".jpeg"
+        }
+
         val image = File(cacheDir.path + '/' + name)
         image.writeBytes(stream.readBytes())
         return image.toUri()

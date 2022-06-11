@@ -120,11 +120,6 @@ class GeneralConsts private constructor() {
         const val MESSAGE_COVER_UPDATE_FINISHED = 2
     }
 
-    object PAGESLINK {
-        const val MESSAGE_PAGES_LINK_FINISHED = 0
-        const val MESSAGE_PAGES_LINK_UPDATED = 1
-    }
-
     object REQUEST {
         const val PERMISSION_DRAW_OVERLAYS = 505
         const val OPEN_JSON = 205

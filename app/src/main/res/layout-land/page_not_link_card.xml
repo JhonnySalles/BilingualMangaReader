@@ -5,8 +5,8 @@
     android:id="@+id/page_not_link_card"
     android:orientation="horizontal"
     android:background="@color/onPrimary"
-    android:layout_width="@dimen/page_not_link_card_layout_width"
-    android:layout_height="@dimen/page_not_link_card_layout_height"
+    android:layout_width="@dimen/page_not_link_card_layout_width_land"
+    android:layout_height="@dimen/page_not_link_card_layout_height_land"
     android:layout_margin="@dimen/page_link_card_layout_margin"
     android:tag="page_not_link"
     app:rippleColor="@color/secondary">

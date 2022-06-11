@@ -8,7 +8,7 @@
     android:layout_marginBottom="@dimen/page_link_card_margin"
     android:orientation="horizontal"
     android:background="@color/onPrimary"
-    android:tag="horizontal">
+    android:tag="tablet">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/manga_link_root"
@@ -102,10 +102,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/page_link_container"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:gravity="center|end"
         android:orientation="horizontal"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/divide_manga_root"
         app:layout_constraintRight_toRightOf="parent"
@@ -113,8 +115,8 @@
 
         <View
             android:id="@+id/dual_page_link_drop_root"
-            android:layout_width="@dimen/dual_page_link_card_drop_layout_width"
-            android:layout_height="@dimen/dual_page_link_card_drop_layout_height"
+            android:layout_width="@dimen/dual_page_link_card_drop_layout_width_tablet"
+            android:layout_height="@dimen/dual_page_link_card_drop_layout_height_tablet"
             android:translationY = "-2dp"
             android:background="@color/transparent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -205,11 +207,11 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/dual_page_link_root"
-            android:layout_width="@dimen/dual_page_link_card_layout_width"
+            android:layout_width="@dimen/dual_page_link_card_layout_width_tablet"
             android:layout_height="@dimen/dual_page_link_card_layout_height"
             android:layout_margin="@dimen/page_link_card_layout_margin"
-            android:visibility="gone"
             android:tag="page_link_right"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@+id/page_link_root"

@@ -33,6 +33,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_pages_not_linked"
+            android:tag="horizontal"
             android:layout_width="match_parent"
             android:layout_height="@dimen/page_link_list_not_link_height"
             android:layout_marginTop="@dimen/page_link_list_link_margin_top"
