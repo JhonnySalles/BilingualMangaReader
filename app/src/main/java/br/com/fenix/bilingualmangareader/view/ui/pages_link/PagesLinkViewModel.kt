@@ -336,7 +336,10 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun onMoveDualPage(originType: Pages, origin: PageLink, destinyType: Pages, destiny: PageLink) {
-        if (origin == destiny && destinyType == Pages.DUAL_PAGE) return
+        if (origin == destiny && destinyType == Pages.DUAL_PAGE) {
+            notifyImageLoad(mPagesLink.value!!.indexOf(destiny), originType)
+            return
+        }
 
         val size = mPagesNotLinked.value!!.size
         if (destinyType != Pages.LINKED && destiny.dualImage) {

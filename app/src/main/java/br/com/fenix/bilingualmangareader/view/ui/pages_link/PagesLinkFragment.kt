@@ -181,12 +181,6 @@ class PagesLinkFragment : Fragment() {
             override fun onDropItem(origin : Pages, destiny : Pages, dragIndex: String, drop: PageLink) {
                 when {
                     origin == Pages.DUAL_PAGE || destiny == Pages.DUAL_PAGE -> {
-                        val index = if (origin == Pages.NOT_LINKED)
-                            mViewModel.getPageNotLinkIndex(drop)
-                        else if (destiny == Pages.NOT_LINKED)
-                                mViewModel.getPageNotLinkLastIndex() + 1
-                        else null
-
                         val pageLink = if (origin == Pages.NOT_LINKED)
                             mViewModel.getPageNotLink(Integer.valueOf(dragIndex))
                         else
@@ -283,8 +277,8 @@ class PagesLinkFragment : Fragment() {
         mRecyclePageLink.layoutManager = LinearLayoutManager(requireContext())
         adapterPageLink.attachListener(mListener)
 
-        mIsTabletOrLandscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE or
-                mRecyclePageNotLink.tag.toString().compareTo("vertical", true)
+        mIsTabletOrLandscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE ||
+                mRecyclePageNotLink.tag.toString().compareTo("vertical", true) == 0
 
         val adapterPageNotLink = PageNotLinkCardAdapter()
         mRecyclePageNotLink.adapter = adapterPageNotLink
