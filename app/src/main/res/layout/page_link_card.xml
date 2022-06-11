@@ -97,7 +97,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@+id/manga_link_root"
-        app:layout_constraintEnd_toEndOf="@+id/page_link_container" />
+        app:layout_constraintEnd_toStartOf="@+id/page_link_container" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/page_link_container"
@@ -131,7 +131,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/dual_page_link_root"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:rippleColor="@color/secondary">
 
             <androidx.constraintlayout.widget.ConstraintLayout
