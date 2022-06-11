@@ -70,8 +70,12 @@ class Migrations {
         }
 
         // Migration version 3.
-        val MIGRATION_2_3 = object : Migration(3, 4) {
+        val MIGRATION_2_3 = object : Migration(2, 3) {
             override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE " + DataBaseConsts.PAGESLINK.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.PAGESLINK.COLUMNS.FILE_RIGHT_LINK_PAGE + " INTEGER DEFAULT -1 NOT NULL")
+                database.execSQL("ALTER TABLE " + DataBaseConsts.PAGESLINK.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.PAGESLINK.COLUMNS.FILE_RIGHT_LINK_PAGE_NAME + " TEXT DEFAULT '' NOT NULL")
+                database.execSQL("ALTER TABLE " + DataBaseConsts.PAGESLINK.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.PAGESLINK.COLUMNS.DUAL_IMAGE + " INTEGER DEFAULT 0 NOT NULL")
+
                 Log.i(GeneralConsts.TAG.LOG, "Iniciando o migration 2 - 3")
             }
         }
@@ -79,7 +83,7 @@ class Migrations {
         // Migration version 4.
         val MIGRATION_3_4 = object : Migration(3, 4) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                Log.i(GeneralConsts.TAG.LOG, "Iniciando o migration 2 - 3")
+                Log.i(GeneralConsts.TAG.LOG, "Iniciando o migration 3 - 4")
             }
         }
     }

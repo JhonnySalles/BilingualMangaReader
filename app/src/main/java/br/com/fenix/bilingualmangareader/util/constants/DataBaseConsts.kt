@@ -111,11 +111,14 @@ class DataBaseConsts private constructor() {
             const val FK_ID_FILE = "id_file"
             const val MANGA_PAGE = "manga_page"
             const val MANGA_PAGES = "manga_pages"
+            const val MANGA_PAGE_NAME = "manga_page_name"
             const val FILE_LINK_PAGE = "file_link_page"
             const val FILE_LINK_PAGES = "file_link_pages"
-            const val MANGA_PAGE_NAME = "manga_page_name"
             const val FILE_LINK_PAGE_NAME = "file_link_page_name"
+            const val FILE_RIGHT_LINK_PAGE = "file_right_link_page"
+            const val FILE_RIGHT_LINK_PAGE_NAME = "file_right_link_page_name"
             const val NOT_LINKED = "not_linked"
+            const val DUAL_IMAGE = "dual_image"
         }
     }
 

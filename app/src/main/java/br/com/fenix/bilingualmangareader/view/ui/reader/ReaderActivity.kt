@@ -62,7 +62,7 @@ class ReaderActivity : AppCompatActivity() {
     private lateinit var mRepository: MangaRepository
     private var mManga: Manga? = null
     private var mBookMark: Int = 0
-    private var isTabletOrLandscape: Boolean = false
+    private var mIsTabletOrLandscape: Boolean = false
 
     companion object {
         private lateinit var mPopupTranslateTab: TabLayout
@@ -98,7 +98,7 @@ class ReaderActivity : AppCompatActivity() {
         mMenuPopupColor = findViewById(R.id.menu_popup_color)
 
         if (findViewById<ImageView>(R.id.menu_translate_touch) == null)
-            isTabletOrLandscape = true
+            mIsTabletOrLandscape = true
         else {
             mBottomSheetTranslate = BottomSheetBehavior.from(mMenuPopupTranslate).apply {
                 peekHeight = 195
@@ -142,13 +142,13 @@ class ReaderActivity : AppCompatActivity() {
         }
         findViewById<Button>(R.id.btn_popup_subtitle).setOnClickListener {
             mMenuPopupColor.visibility = View.GONE
-            if (!isTabletOrLandscape)
+            if (!mIsTabletOrLandscape)
                 mBottomSheetTranslate.state = BottomSheetBehavior.STATE_EXPANDED
             mMenuPopupTranslate.visibility = View.VISIBLE
         }
         findViewById<Button>(R.id.btn_popup_color).setOnClickListener {
             mMenuPopupTranslate.visibility = View.GONE
-            if (!isTabletOrLandscape)
+            if (!mIsTabletOrLandscape)
                 mBottomSheetColor.state = BottomSheetBehavior.STATE_EXPANDED
             mMenuPopupColor.visibility = View.VISIBLE
         }

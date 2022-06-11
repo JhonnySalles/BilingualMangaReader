@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.math.BigInteger
@@ -143,6 +144,23 @@ class Util {
         fun decodeImageBase64(image: String): Bitmap {
             val imageBytes = android.util.Base64.decode(image, android.util.Base64.DEFAULT)
             return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+        }
+
+        fun imageToInputStream(image: Bitmap): InputStream {
+            val output = ByteArrayOutputStream()
+            return output.use { otp ->
+                image.compress(Bitmap.CompressFormat.JPEG, 100, otp)
+                ByteArrayInputStream(output.toByteArray())
+            }
+        }
+
+        fun getNameFromPath(path: String): String {
+            return if (path.contains('/'))
+                path.substringAfterLast("/")
+            else if (path.contains('\\'))
+                path.substringAfterLast('\\')
+            else
+                path
         }
 
         fun normalizeFilePath(path: String): String {

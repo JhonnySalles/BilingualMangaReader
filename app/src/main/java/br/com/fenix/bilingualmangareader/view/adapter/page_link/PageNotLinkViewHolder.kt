@@ -16,8 +16,8 @@ class PageNotLinkViewHolder(itemView: View, private val listener: PageLinkCardLi
     fun bind(page: PageLink) {
         val root = itemView.findViewById<MaterialCardView>(R.id.page_not_link_card)
         val image = itemView.findViewById<ImageView>(R.id.page_not_link_image)
-        if (page.imageFileLinkPage != null)
-            image.setImageBitmap(page.imageFileLinkPage)
+        if (page.imageLeftFileLinkPage != null)
+            image.setImageBitmap(page.imageLeftFileLinkPage)
 
         root.setOnLongClickListener { listener.onClickLong(it, page, Pages.NOT_LINKED) }
     }
