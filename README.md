@@ -105,8 +105,17 @@ O aplicativo é também compatível com legendas extraidas e pré processadas co
     * Adicionado tela de ajuda com detalhes do funcionamento.
     * Adicionado controle de luz azul e sépia.
 * 0.2.2
+    * Ajustes de bugs e erros.
+    * Novo calculo de posicionamento para a aplicação da legenda 
+* 0.2.7
+    * Adicionado método para vincular páginas de dois arquivos diferentes.
+    * Adicionado método de arrasta e solta para a organização das imagens.
+    * Adicionado método para vincular páginas duplas quando necessário no arquivo vinculado.
+    * Implementado a correções de alguns bugs.
+    * Correção para a leitura aproveitar a tela inteira em android recente.
+    * Ajuste na busca da legenda e a implementação da busca pela página vinculada.
+* 0.2.8
     * Em progresso. 
-
 
 ### Features
 
@@ -136,6 +145,14 @@ O aplicativo é também compatível com legendas extraidas e pré processadas co
 - [ ] Adição de dicionarios japonês
 - [ ] Exportar vocabularios ao Anki
 - [X] Localizar a legenda pela cordenada do texto
+- [X] Ajuste para a leitura aproveitar a tela inteira do celular
+- [X] Adicionado nova tela para vincular as páginas de dois arquivos
+- [X] Implementar a abertura de um segundo arquivo para leitura de multi idioma (com a troca de imagens entre o original e outro arquivo em outro idioma)
+- [X] Implementar a troca de imagens na leitura para a página vinculada
+- [X] Implementar a re-organização de outras páginas ao movimentar uma página em específica
+- [X] Adicionar funcionalidade para páginas duplas
+- [X] Ajustar a busca das legendas para utilizar da página vinculada
+- [X] Implementar a organização dos arquivos vinculados por idioma, sendo possível o vinculo de mais de um arquivo e manter a organização feita
 
 
 ## Contribuindo
@@ -173,6 +190,12 @@ O aplicativo é também compatível com legendas extraidas e pré processadas co
 
 
 > Recursos
+
+![Vinculo de paginas em dois arquivos](https://imgur.com/j7X54dr)
+
+![Paginas não vinculadas](https://imgur.com/ZLbjGYE)
+
+![Paginas duplas](https://imgur.com/fMTZQoT)
 
 ![Popup flutuante](https://i.imgur.com/dIuQO9N.jpg)
 
