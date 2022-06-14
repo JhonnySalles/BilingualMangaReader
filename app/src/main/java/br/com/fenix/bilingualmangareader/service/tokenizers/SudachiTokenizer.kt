@@ -1,11 +1,13 @@
 package br.com.fenix.bilingualmangareader.service.tokenizers
 
+import android.annotation.TargetApi
 import android.content.Context
+import br.com.fenix.bilingualmangareader.util.helpers.FileUtil
 
-
+@TargetApi(26)
 class SudachiTokenizer(context: Context) {
 
-    /*private val SUDACHI_DATA_PATH = context.filesDir.absolutePath + "/sudachi"
+    private val SUDACHI_DATA_PATH = context.filesDir.absolutePath + "/sudachi"
     private val settings = """
         {
             "systemDict" : "${SUDACHI_DATA_PATH}/system_small.dic",
@@ -34,18 +36,18 @@ class SudachiTokenizer(context: Context) {
         }
     """.trimIndent()
 
-    var tokenizer: Tokenizer? = null
+    /*var tokenizer: com.worksap.nlp.sudachi.Tokenizer? = null
 
     init {
         val mFileUtil = FileUtil(context)
         // Load language files from asset packs
         mFileUtil.copyAssetToFilesIfNotExist("sudachi/", "system_small.dic")
         //mFileUtil.copyAssetToFilesIfNotExist("sudachi/", "char.def")
-        val dict = DictionaryFactory().create(settings)
+        val dict = com.worksap.nlp.sudachi.DictionaryFactory().create(settings)
         tokenizer = dict.create()
     }
 
-    fun tokenizeString(str: String): Iterable<List<Morpheme>> {
+    fun tokenizeString(str: String): Iterable<List<com.worksap.nlp.sudachi.Morpheme>> {
         return tokenizer!!.tokenizeSentences(str)
     }*/
 }

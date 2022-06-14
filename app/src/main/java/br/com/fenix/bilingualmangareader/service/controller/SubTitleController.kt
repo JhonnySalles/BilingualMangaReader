@@ -3,19 +3,25 @@ package br.com.fenix.bilingualmangareader.service.controller
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.collection.arraySetOf
+import androidx.core.graphics.drawable.toBitmap
+import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.*
 import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.service.parses.Parse
+import br.com.fenix.bilingualmangareader.service.parses.ParseFactory
 import br.com.fenix.bilingualmangareader.service.repository.SubTitleRepository
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import br.com.fenix.bilingualmangareader.util.constants.ReaderConsts
+import br.com.fenix.bilingualmangareader.util.helpers.Util
 import br.com.fenix.bilingualmangareader.view.ui.reader.PageImageView
 import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderFragment
 import com.google.gson.Gson
@@ -25,12 +31,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.codec.binary.Hex
 import org.apache.commons.codec.digest.DigestUtils
+import java.io.BufferedInputStream
+import java.io.File
 import java.io.InputStream
 import java.lang.ref.WeakReference
-import java.util.*
-import android.graphics.BitmapFactory
-import br.com.fenix.bilingualmangareader.util.constants.ReaderConsts
-import java.io.BufferedInputStream
 
 
 class SubTitleController private constructor(private val context: Context) {
@@ -70,7 +74,11 @@ class SubTitleController private constructor(private val context: Context) {
     private var labelExtra: String =
         context.resources.getString(R.string.popup_reading_subtitle_extra)
 
+    private var mUseFileLink: Boolean = false
+    private var mFileLink: FileLink? = null
+
     var isSelected = false
+    var isNotEmpty = false
     private fun getSubtitle(): HashMap<String, Chapter> =
         if (isSelected) mComboListSelected else mComboListInternal
 
@@ -89,6 +97,7 @@ class SubTitleController private constructor(private val context: Context) {
                     Languages.PORTUGUESE.toString()
                 )!!
             )
+            mUseFileLink = sharedPreferences.getBoolean(GeneralConsts.KEYS.PAGE_LINK.USE_IN_SEARCH_TRANSLATE, false)
         } catch (e: Exception) {
             Log.i(
                 GeneralConsts.TAG.LOG,
@@ -142,6 +151,7 @@ class SubTitleController private constructor(private val context: Context) {
         this.isSelected = isSelected
         mLanguages.clear()
         getSubtitle().clear()
+        isNotEmpty = listJson.isNotEmpty()
         if (listJson.isNotEmpty()) {
             val gson = Gson()
             val listChapter: MutableList<Chapter> = arrayListOf()
@@ -184,6 +194,73 @@ class SubTitleController private constructor(private val context: Context) {
         mChaptersKeys.value = getSubtitle().keys.toTypedArray().sorted()
     }
 
+    private fun findKeys(imagePath: String, imageHash: String): Triple<String, String, Int> {
+        var find = false
+        var chapterKey = ""
+        var pageKey = ""
+        var pageNumber = 0
+        val subtitles = getSubtitle()
+        val keys = run {
+            val selectedLanguage = chapterSelected.value!!.language
+            subtitles.keys.filter { it.contains(selectedLanguage.name) }
+        }
+
+        for (k in keys) {
+            for (p in subtitles[k]?.pages!!) {
+                if (p.hash.equals(imageHash, true)) {
+                    chapterKey = k
+                    pageKey = getPageKey(p)
+                    pageNumber = p.number
+                    find = true
+                    break
+                }
+            }
+            if (find)
+                break
+        }
+
+        if (chapterKey.isEmpty()) {
+            find = false
+            val pageName = Util.getNameFromPath(imagePath)
+            val chapter = Util.getChapterFromPath(imagePath)
+            for (k in keys) {
+                if (chapter > -1f && (subtitles[k]?.chapter?.compareTo(chapter) ?: 0) != 0)
+                    continue
+
+                for (p in subtitles[k]?.pages!!) {
+                    if (p.name.equals(pageName, true)) {
+                        chapterKey = k
+                        pageKey = getPageKey(p)
+                        pageNumber = p.number
+                        find = true
+                        break
+                    }
+                }
+                if (find)
+                    break
+            }
+
+            if (chapter > -1f && chapterKey.isEmpty()) {
+                find = false
+                for (k in keys) {
+                    for (p in subtitles[k]?.pages!!) {
+                        if (p.name.equals(pageName, true)) {
+                            chapterKey = k
+                            pageKey = getPageKey(p)
+                            pageNumber = p.number
+                            find = true
+                            break
+                        }
+                    }
+                    if (find)
+                        break
+                }
+            }
+        }
+
+        return Triple(chapterKey, pageKey, pageNumber)
+    }
+
     fun findSubtitle() {
         val currentPage = ReaderFragment.mCurrentPage
 
@@ -198,10 +275,10 @@ class SubTitleController private constructor(private val context: Context) {
 
         val image: InputStream = mParse.getPage(currentPage)
         val hash = String(Hex.encodeHex(DigestUtils.md5(image)))
+        Util.closeInputStream(image)
+        val path: String = mParse.getPagePath(currentPage) ?: ""
 
-        var pageName: String? = mParse.getPagePath(currentPage)
-
-        if (chapterSelected.value == null || pageName == null || pageName.isEmpty()) {
+        if (chapterSelected.value == null || path.isEmpty()) {
             Toast.makeText(
                 context,
                 context.resources.getString(R.string.popup_reading_subtitle_not_find_subtitle),
@@ -210,34 +287,7 @@ class SubTitleController private constructor(private val context: Context) {
             return
         }
 
-        pageName = if (pageName.contains('/'))
-            pageName.substringAfterLast("/")
-        else
-            pageName.substringAfterLast('\\')
-
-        var chapterKey = ""
-        var pageKey = ""
-        var pageNumber = 0
-        val subtitles = getSubtitle()
-        val keys = run {
-            val selectedLanguage = chapterSelected.value!!.language
-            subtitles.keys.filter { it.contains(selectedLanguage.name) }
-        }
-
-        for (k in keys) {
-            var find = false
-            for (p in subtitles[k]?.pages!!) {
-                if (p.name.equals(pageName, true) || p.hash == hash) {
-                    chapterKey = k
-                    pageKey = getPageKey(p)
-                    pageNumber = p.number
-                    find = true
-                    break
-                }
-            }
-            if (find)
-                break
-        }
+        val (chapterKey, pageKey, pageNumber) = findKeys(path, hash)
 
         if (chapterKey.isNotEmpty()) {
             mSelectedSubTitle.value?.chapterKey = chapterKey
@@ -246,6 +296,7 @@ class SubTitleController private constructor(private val context: Context) {
             updatePageSelect()
             initialize(chapterKey, pageKey)
 
+            val subtitles = getSubtitle()
             val text: String =
                 context.resources.getString(R.string.popup_reading_subtitle_find_subtitle)
             Toast.makeText(
@@ -265,33 +316,11 @@ class SubTitleController private constructor(private val context: Context) {
         manga: Manga,
         pageNumber: Int
     ): SubTitle {
-        val image: InputStream? = mParse.getPage(pageNumber)
-        val hash: String? = String(Hex.encodeHex(DigestUtils.md5(image)))
-        var pageName: String? = mParse.getPagePath(pageNumber)
-
-        pageName = if (pageName!!.contains('/'))
-            pageName.substringAfterLast("/")
-        else
-            pageName.substringAfterLast('\\')
-
-        var chapterKey = ""
-        var number = 0
-        val subtitles = getSubtitle()
-        val keys = subtitles.keys
-
-        for (k in keys) {
-            var find = false
-            for (p in subtitles[k]?.pages!!) {
-                if (p.name.equals(pageName, true) || p.hash == hash) {
-                    chapterKey = k
-                    number = p.number
-                    find = true
-                    break
-                }
-            }
-            if (find)
-                break
-        }
+        val image: InputStream = mParse.getPage(pageNumber)
+        val hash = String(DigestUtils.md5(image))
+        Util.closeInputStream(image)
+        val path: String = mParse.getPagePath(pageNumber) ?: ""
+        val (chapterKey, _, pageNumber) = findKeys(path, hash)
 
         return if (chapterKey.isNotEmpty()) {
             SubTitle(
@@ -299,7 +328,7 @@ class SubTitleController private constructor(private val context: Context) {
                 mSubtitleLang,
                 chapterKey,
                 "",
-                number,
+                pageNumber,
                 pathSubtitle,
                 chapterSelected.value
             )
@@ -309,10 +338,130 @@ class SubTitleController private constructor(private val context: Context) {
                 mSubtitleLang,
                 "",
                 "",
-                number,
+                pageNumber,
                 pathSubtitle,
                 null
             )
+    }
+
+    private fun searchSubtitleFromFileLink(language: Languages, isMangaLanguage : Boolean = false): Boolean {
+        var findSubtitle = false
+        if (mUseFileLink && mFileLink != null) {
+            val currentPageNumber = ReaderFragment.mCurrentPage
+            var currentPage: PageLink? = null
+            for (page in mFileLink!!.pagesLink!!) {
+                if (page.mangaPage.compareTo(currentPageNumber) == 0) {
+                    currentPage = page
+                    break
+                }
+            }
+
+            if (currentPage != null) {
+                if (isMangaLanguage || currentPage.fileLinkPage > -1) {
+                    var keyChapter = ""
+                    var keyPage = ""
+                    var pageName = ""
+
+                    var parse: Parse? = null
+                    try {
+                        parse = if (isMangaLanguage)
+                            mFileLink!!.parseManga ?: ParseFactory.create(mFileLink!!.manga!!.file)
+                        else
+                            mFileLink!!.parseFileLink ?: ParseFactory.create(mFileLink!!.file)
+
+                        val pageNumber = if (isMangaLanguage)
+                            currentPage.mangaPage
+                        else
+                            currentPage.fileLinkPage
+                        val image: InputStream = parse!!.getPage(pageNumber)
+                        val hash = String(Hex.encodeHex(DigestUtils.md5(image)))
+                        Util.closeInputStream(image)
+                        val subtitles = getSubtitle().filterKeys { it.contains(language.name) }
+
+                        var find = false
+                        for (chapters in subtitles) {
+                            for (page in chapters.value.pages) {
+                                if (page.hash.equals(hash, true)) {
+                                    keyChapter = getChapterKey(chapters.value)
+                                    keyPage = getPageKey(page)
+                                    find = true
+                                    break
+                                }
+                            }
+                            if (find) break
+                        }
+
+                        if (keyPage.isEmpty()) {
+                            val path = parse.getPagePath(pageNumber) ?: ""
+                            val chapter = Util.getChapterFromPath(path)
+
+                            find = false
+                            pageName = if (isMangaLanguage)
+                                currentPage.mangaPageName
+                            else
+                                currentPage.fileLinkPageName
+                            for (chapters in subtitles) {
+                                if (chapter > -1f && chapters.value.chapter.compareTo(chapter) != 0)
+                                    continue
+
+                                for (page in chapters.value.pages) {
+                                    if (page.name.equals(pageName, true)) {
+                                        keyChapter = getChapterKey(chapters.value)
+                                        keyPage = getPageKey(page)
+                                        find = true
+                                        break
+                                    }
+                                }
+                                if (find) break
+                            }
+
+                            if (chapter > -1f && keyPage.isEmpty()) {
+                                find = false
+                                for (chapters in subtitles) {
+                                    for (page in chapters.value.pages) {
+                                        if (page.name.equals(pageName, true)) {
+                                            keyChapter = getChapterKey(chapters.value)
+                                            keyPage = getPageKey(page)
+                                            find = true
+                                            break
+                                        }
+                                    }
+                                    if (find) break
+                                }
+                            }
+                        }
+
+                        if (keyChapter.isNotEmpty()) {
+                            selectedSubtitle(keyChapter)
+
+                            if (keyPage.isNotEmpty())
+                                selectedPage(keyPage)
+
+                            if (mSelectedSubTitle.value != null)
+                                mSelectedSubTitle.value?.language = language
+                        }
+                    } catch (e: Exception) {
+                        Log.e(GeneralConsts.TAG.LOG, "Error find page link: " + e.message)
+                    } finally {
+                        if ((isMangaLanguage && parse != mFileLink!!.parseManga) || (!isMangaLanguage && parse != mFileLink!!.parseFileLink))
+                            Util.destroyParse(parse)
+                    }
+
+                    if (keyChapter.isNotEmpty() || keyPage.isNotEmpty())
+                        findSubtitle = true
+                    else {
+                        Toast.makeText(
+                            context,
+                            context.resources.getString(R.string.popup_reading_subtitle_chapter_from_page_link_not_found) + " (" +
+                                    pageName + ")",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+        }
+
+        return findSubtitle
     }
 
     fun changeLanguage() =
@@ -327,10 +476,12 @@ class SubTitleController private constructor(private val context: Context) {
                     return@launch
                 }
 
+                var toMangaLanguage = true
                 var language = mSubtitleLang
                 var chapterSelect = ""
                 var pageSelect = ""
                 if (selectedSubtitle.value != null && selectedSubtitle.value!!.chapterKey.isNotEmpty()) {
+                    toMangaLanguage = selectedSubtitle.value!!.language.compareTo(mTranslateLang) == 0
                     language = if (selectedSubtitle.value!!.language.compareTo(mTranslateLang) == 0)
                         mSubtitleLang
                     else
@@ -341,10 +492,12 @@ class SubTitleController private constructor(private val context: Context) {
                         chapterSelect = chapterSelect.substringAfterLast("-").trim()
 
                     pageSelect = selectedSubtitle.value!!.pageKey
-
                     if (pageSelect.isNotEmpty())
                         pageSelect = pageSelect.substringBefore(" ").trim()
                 }
+
+                if (searchSubtitleFromFileLink(language, toMangaLanguage))
+                    return@launch
 
                 var key = ""
                 var first = ""
@@ -423,6 +576,7 @@ class SubTitleController private constructor(private val context: Context) {
                 }
 
                 if (mSelectedSubTitle.value?.pageCount != pageNumber) {
+                    isDrawing = false
                     var differ = pageNumber - mSelectedSubTitle.value?.pageCount!!
                     if (differ == 0) differ = 1
                     val run = if (mSelectedSubTitle.value?.pageCount!! < pageNumber)
@@ -461,45 +615,63 @@ class SubTitleController private constructor(private val context: Context) {
             view.setImageBitmap(imageBackup)
             isDrawing = false
         } else {
-            target = MyTarget(view)
+            target = MyTarget(view, true)
             mReaderFragment!!.loadImage(target!!, ReaderFragment.mCurrentPage, false)
         }
     }
 
-    inner class MyTarget(layout: View) : Target {
+    private fun drawPageLinked(path: Uri) {
+        val view: PageImageView = mReaderFragment!!.getCurrencyImageView() ?: return
+        if (isDrawing) {
+            view.setImageBitmap(imageBackup)
+            isDrawing = false
+            return
+        }
+
+        target = MyTarget(view, false)
+        mReaderFragment!!.loadImage(target!!, path, false)
+    }
+
+    inner class MyTarget(layout: View, isText: Boolean) : Target {
         private val mLayout: WeakReference<View> = WeakReference(layout)
+        private val isText = isText
 
         override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
             val layout = mLayout.get() ?: return
             val iv = layout.findViewById<View>(R.id.page_image_view) as ImageView
-            imageBackup = bitmap
-            if (imageBackup == null)
-                return
+            if (isText) {
+                imageBackup = bitmap
+                if (imageBackup == null)
+                    return
 
-            val image: Bitmap = imageBackup!!.copy(imageBackup!!.config, true)
-            val canvas = Canvas(image)
-            val paint = Paint()
-            paint.color = Color.RED
-            paint.strokeWidth = 3f
-            paint.textSize = 50f
-            for (text in pageSelected.value!!.texts) {
-                paint.style = Paint.Style.FILL
-                canvas.drawText(
-                    text.sequence.toString(),
-                    text.x1.toFloat(),
-                    text.y1.toFloat(),
-                    paint
-                )
-                paint.style = Paint.Style.STROKE
-                canvas.drawRect(
-                    text.x1.toFloat(),
-                    text.y1.toFloat(),
-                    text.x2.toFloat(),
-                    text.y2.toFloat(),
-                    paint
-                )
+                val image: Bitmap = imageBackup!!.copy(imageBackup!!.config, true)
+                val canvas = Canvas(image)
+                val paint = Paint()
+                paint.color = Color.RED
+                paint.strokeWidth = 3f
+                paint.textSize = 50f
+                for (text in pageSelected.value!!.texts) {
+                    paint.style = Paint.Style.FILL
+                    canvas.drawText(
+                        text.sequence.toString(),
+                        text.x1.toFloat(),
+                        text.y1.toFloat(),
+                        paint
+                    )
+                    paint.style = Paint.Style.STROKE
+                    canvas.drawRect(
+                        text.x1.toFloat(),
+                        text.y1.toFloat(),
+                        text.x2.toFloat(),
+                        text.y2.toFloat(),
+                        paint
+                    )
+                }
+                iv.setImageBitmap(image)
+            } else {
+                imageBackup = iv.drawable.toBitmap()
+                iv.setImageBitmap(bitmap)
             }
-            iv.setImageBitmap(image)
             isDrawing = true
         }
 
@@ -580,7 +752,7 @@ class SubTitleController private constructor(private val context: Context) {
             chapterSelected.value!!.pages.forEach { mListPages[getPageKey(it)] = it }
             mPagesKeys.value = mListPages.keys.toTypedArray().sorted()
             mSelectedSubTitle.value?.chapterKey = getChapterKey(mChapterSelected.value!!)
-            mSelectedSubTitle.value!!.language = chapterSelected.value!!.language
+            mSelectedSubTitle.value?.language = chapterSelected.value!!.language
             setPage(false, chapterSelected.value!!.pages[0])
         } else
             mSelectedSubTitle.value?.chapterKey = ""
@@ -588,7 +760,6 @@ class SubTitleController private constructor(private val context: Context) {
 
     private fun setPage(lastText: Boolean, page: Page?) {
         mOriginalSize = null
-        isDrawing = false
         mPageSelected.value = page
         mSelectedSubTitle.value?.pageKey =
             if (mPageSelected.value == null) "" else getPageKey(mPageSelected.value!!)
@@ -683,7 +854,7 @@ class SubTitleController private constructor(private val context: Context) {
     }
 
     private var mOriginalSize: FloatArray? = null
-    fun selectTextByCoordinate(coord:  FloatArray) {
+    fun selectTextByCoordinate(coord: FloatArray) {
         if (pageSelected.value == null)
             return
 
@@ -696,21 +867,126 @@ class SubTitleController private constructor(private val context: Context) {
                     floatArrayOf(image.width.toFloat(), image.height.toFloat())
                 else
                     floatArrayOf(coord[2], coord[3])
-
-                //Log.e(GeneralConsts.TAG.LOG, "${coord[0]} ${coord[1]} / ${coord[2]} ${coord[3]} - ${mOriginalSize!![0]} - ${mOriginalSize!![1]} - ${image.width}  ${image.height} - ${ReaderConsts.READER.MAX_PAGE_WIDTH}")
+                Util.closeInputStream(input)
             }
 
-            Point((coord[0] / coord[2] * mOriginalSize!![0] ).toInt(), (coord[1] / coord[3] * mOriginalSize!![1]).toInt())
+            Point((coord[0] / coord[2] * mOriginalSize!![0]).toInt(), (coord[1] / coord[3] * mOriginalSize!![1]).toInt())
         } else
             Point(coord[0].toInt(), coord[1].toInt())
 
         pageSelected.value!!.texts.forEach {
-            //Log.e(GeneralConsts.TAG.LOG, "${point.x}  ${point.y} - ${it.x1}  ${it.x2} / ${it.y1}  ${it.y2}")
             if (it.x1 <= point.x && it.x2 >= point.x && it.y1 <= point.y && it.y2 >= point.y) {
                 setText(it)
                 mForceExpandFloatingPopup.value = !mForceExpandFloatingPopup.value!!
                 return@forEach
             }
         }
+    }
+
+    fun drawPageLinked() {
+        if (isDrawing) {
+            val view: PageImageView = mReaderFragment!!.getCurrencyImageView() ?: return
+            view.setImageBitmap(imageBackup)
+            isDrawing = false
+        } else
+            locateFileLink(ReaderFragment.mCurrentPage)
+    }
+
+    fun setUseFileLink(useInSearchTranslate: Boolean) {
+        mUseFileLink = useInSearchTranslate
+    }
+
+    fun setFileLink(file: FileLink?) {
+        mFileLink = file
+    }
+
+    fun getFileLink(): FileLink? =
+        mFileLink
+
+    fun locateFileLink(pageName: String) {
+        if (mFileLink == null || mFileLink!!.parseFileLink == null)
+            return
+
+        mFileLink!!.pagesLink!!.first { it.mangaPageName.compareTo(pageName, true) == 0 }.let {
+            if (it.fileLinkPage > -1) {
+                val uri = if (it.dualImage)
+                    saveImageFolder(mFileLink!!, it.fileLinkPage, it.fileRightLinkPage)
+                else
+                    saveImageFolder(mFileLink!!, it.fileLinkPage)
+                drawPageLinked(uri)
+            }
+        }
+    }
+
+    fun locateFileLink(page: Int) {
+        if (mFileLink == null || mFileLink!!.parseFileLink == null)
+            return
+
+        mFileLink!!.pagesLink!!.first { it.mangaPage.compareTo(page) == 0 }.let {
+            if (it.fileLinkPage > -1) {
+                val uri = if (it.dualImage)
+                    saveImageFolder(mFileLink!!, it.fileLinkPage, it.fileRightLinkPage)
+                else
+                    saveImageFolder(mFileLink!!, it.fileLinkPage)
+                drawPageLinked(uri)
+            }
+        }
+    }
+
+    private var mError: Int = 0
+    private fun getCombinedBitmap(fileLink: FileLink, parse: Parse, index: Int, extra: Int): Bitmap? {
+        var drawnBitmap: Bitmap? = null
+        try {
+            val img1 = BitmapFactory.decodeStream(parse.getPage(index))
+            val img2 = BitmapFactory.decodeStream(parse.getPage(extra))
+            val width = img1.width + img2.width
+            val height = if (img1.height > img2.height) img1.height else img2.height
+            drawnBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(drawnBitmap)
+            canvas.drawBitmap(img1, 0f, 0f, null)
+            canvas.drawBitmap(img2, (img1.width + 1).toFloat(), 0f, null)
+        } catch (e: java.lang.Exception) {
+            Log.e(GeneralConsts.TAG.LOG, "Erro ao combinar imagens. Tentativa: " + mError + " - " + e.message)
+            mError += 1
+            if (mError < 3) {
+                Util.destroyParse(fileLink.parseFileLink)
+                fileLink.parseFileLink = ParseFactory.create(fileLink.path)
+                drawnBitmap = getCombinedBitmap(fileLink, fileLink.parseFileLink!!, index, extra)
+            }
+        }
+        mError = 0
+        return drawnBitmap
+    }
+
+    private fun saveImageFolder(fileLink: FileLink, index: Int, extra: Int = -1): Uri {
+        val parse = fileLink.parseFileLink!!
+        var stream = parse.getPage(index)
+        if (extra > -1) {
+            val newBitmap = getCombinedBitmap(fileLink, parse, index, extra)
+            if (newBitmap != null) {
+                Util.closeInputStream(stream)
+                stream = Util.imageToInputStream(newBitmap)
+            }
+        }
+
+        val cacheDir = File(context.externalCacheDir, GeneralConsts.CACHEFOLDER.LINKED)
+        if (!cacheDir.exists())
+            cacheDir.mkdir()
+        else
+            for (f in cacheDir.listFiles()!!)
+                f.delete()
+        var name = parse.getPagePath(index) ?: index.toString()
+        name = Util.getNameFromPath(name)
+
+        if (extra > -1) {
+            var nameExtra = parse.getPagePath(extra) ?: index.toString()
+            nameExtra = Util.getNameFromPath(nameExtra)
+            name = "dual_" + name.substringBeforeLast('.') + "-" + nameExtra.substringBeforeLast('.') + ".jpeg"
+        }
+
+        val image = File(cacheDir.path + '/' + name)
+        image.writeBytes(stream.readBytes())
+        Util.closeInputStream(stream)
+        return image.toUri()
     }
 }

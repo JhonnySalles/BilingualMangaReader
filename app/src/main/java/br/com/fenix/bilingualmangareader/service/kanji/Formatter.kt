@@ -25,6 +25,7 @@ class Formatter {
     companion object KANJI {
         private var mRepository: KanjaxRepository? = null
         private val mPattern = Regex(".*[\u4E00-\u9FFF].*")
+        //@TargetApi(26)
         //var mSudachiTokenizer: com.worksap.nlp.sudachi.Tokenizer? = null
         var mKuromojiTokenizer: com.atilika.kuromoji.ipadic.Tokenizer? = null
         private var JLPT: Map<String, Int>? = null
@@ -42,7 +43,7 @@ class Formatter {
                     try {
                         mRepository = KanjaxRepository(context)
                         /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                            mSudachiTokenizer = br.com.fenix.mangareader.service.tokenizers.SudachiTokenizer(context).tokenizer
+                            mSudachiTokenizer = br.com.fenix.bilingualmangareader.service.tokenizers.SudachiTokenizer(context).tokenizer
                         else*/
                             mKuromojiTokenizer = com.atilika.kuromoji.ipadic.Tokenizer()
 
@@ -154,7 +155,8 @@ class Formatter {
             return textBuilder
         }
 
-        /*private fun sudachiTokenizer(text: String, vocabularyClick: (String) -> (Unit)): SpannableStringBuilder {
+        /*@TargetApi(26)
+        private fun sudachiTokenizer(text: String, vocabularyClick: (String) -> (Unit)): SpannableStringBuilder {
             val textBuilder = SpannableStringBuilder()
             textBuilder.append(text)
             for (t in mSudachiTokenizer!!.tokenize(com.worksap.nlp.sudachi.Tokenizer.SplitMode.C, text)) {
@@ -191,7 +193,7 @@ class Formatter {
                 return
             }
 
-             /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            /*val textBuilder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                 sudachiTokenizer(text, vocabularyClick)
             else*/
             val textBuilder = kuromojiTokenizer(text, vocabularyClick)

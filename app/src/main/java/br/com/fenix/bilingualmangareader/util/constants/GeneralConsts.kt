@@ -29,9 +29,13 @@ class GeneralConsts private constructor() {
 
         fun formatterDateTime(dateTime: Date): String {
             val preferences = getSharedPreferences()
-            val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, "yyyy-MM-dd") + " hh:mm:ss"
+            val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, "yyyy-MM-dd") + " hh:mm:ss a"
             return SimpleDateFormat(pattern, Locale.getDefault()).format(dateTime)
         }
+    }
+
+    object DATE {
+        const val DATE_TIME_PATTERN = "yyyy-MM-dd hh:mm:ss"
     }
 
     object KEYS {
@@ -63,11 +67,13 @@ class GeneralConsts private constructor() {
         object MANGA {
             const val NAME = "MANGA_NAME"
             const val MARK = "MANGA_MARK"
+            const val PAGE_NUMBER = "PAGE_NUMBER"
         }
 
         object OBJECT {
             const val MANGA = "MANGA_OBJECT"
             const val FILE = "FILE_OBJECT"
+            const val PAGELINK = "PAGE_LINK"
         }
 
         object COLOR_FILTER {
@@ -81,6 +87,10 @@ class GeneralConsts private constructor() {
             const val SEPIA = "SEPIA"
             const val BLUE_LIGHT = "BLUE_LIGHT"
             const val BLUE_LIGHT_ALPHA = "BLUE_LIGHT_ALPHA"
+        }
+
+        object PAGE_LINK {
+            const val USE_IN_SEARCH_TRANSLATE = "USE_PAGE_LINK_IN_SEARCH_TRANSLATE"
         }
     }
 
@@ -99,14 +109,27 @@ class GeneralConsts private constructor() {
         val DATA_FORMAT = listOf("dd/MM/yyyy", "MM/dd/yy", "dd/MM/yy", "yyyy-MM-dd")
     }
 
+    object CACHEFOLDER {
+        const val COVERS = "Covers"
+        const val LINKED = "Linked"
+        const val A = "a"
+        const val B = "b"
+        const val C = "c"
+        const val D = "d"
+    }
+
     object SCANNER {
+        const val POSITION = "POSITION"
         const val MESSAGE_MANGA_UPDATE_FINISHED = 0
         const val MESSAGE_MANGA_UPDATED = 1
         const val MESSAGE_COVER_UPDATE_FINISHED = 2
     }
 
-    object DEFAULT {
-        const val DATE_TIME_PATTERN = "yyyy-MM-dd hh:mm:ss"
+    object REQUEST {
+        const val PERMISSION_DRAW_OVERLAYS = 505
+        const val OPEN_JSON = 205
+        const val OPEN_PAGE_LINK = 206
+        const val OPEN_MANGA_FOLDER = 105
     }
 
 }

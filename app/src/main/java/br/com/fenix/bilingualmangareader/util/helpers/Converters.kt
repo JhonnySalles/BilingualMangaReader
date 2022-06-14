@@ -19,17 +19,18 @@ class Converters {
     }
 
     @TypeConverter
-    fun fromDate(dateTime: String?): Date? {
+    fun fromLocalDateTime(dateTime: String?): Date? {
         if (dateTime == null)
             return null
-        return SimpleDateFormat(GeneralConsts.DEFAULT.DATE_TIME_PATTERN, Locale.getDefault()).parse(dateTime)
+        return SimpleDateFormat(GeneralConsts.DATE.DATE_TIME_PATTERN, Locale.getDefault()).parse(dateTime)
     }
 
     @TypeConverter
-    fun localDateToString(dateTime: Date?): String? {
+    fun localDateTimeToString(dateTime: Date?): String? {
         if (dateTime == null)
             return null
-        return SimpleDateFormat(GeneralConsts.DEFAULT.DATE_TIME_PATTERN, Locale.getDefault()).format(dateTime);
+
+        return SimpleDateFormat(GeneralConsts.DATE.DATE_TIME_PATTERN, Locale.getDefault()).format(dateTime);
     }
 
 }

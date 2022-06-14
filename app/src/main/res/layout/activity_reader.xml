@@ -2,6 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_activity_reader"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primary"
@@ -12,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/onPrimary"
-        android:fitsSystemWindows="false" />
+        android:fitsSystemWindows="false"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -107,6 +108,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="5dp"
                 android:background="@color/primarySemitransparent"
+                android:contentDescription="@string/reading_button_screen_rotate"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:minHeight="@dimen/popup_reader_button_min_height"
@@ -114,6 +116,7 @@
                 android:paddingRight="@dimen/popup_reader_button_padding"
                 app:icon="@drawable/ic_screen_rotation"
                 app:iconTint="@color/textPrimary"
+                app:iconSize="28dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/nav_next_text"
                 app:layout_constraintTop_toTopOf="parent"
@@ -126,6 +129,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="5dp"
                 android:background="@color/primarySemitransparent"
+                android:contentDescription="@string/reading_button_subtitle"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:minHeight="@dimen/popup_reader_button_min_height"
@@ -133,6 +137,70 @@
                 android:paddingRight="@dimen/popup_reader_button_padding"
                 app:icon="@drawable/ic_change_language"
                 app:iconTint="@color/textPrimary"
+                app:iconSize="28dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/nav_next_text"
+                app:layout_constraintTop_toTopOf="parent"
+                app:rippleColor="@color/onSecondary" />
+
+            <Button
+                android:id="@+id/btn_popup_color"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="@dimen/popup_reader_button_width"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:background="@color/primarySemitransparent"
+                android:contentDescription="@string/reading_button_color"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minHeight="@dimen/popup_reader_button_min_height"
+                android:paddingLeft="@dimen/popup_reader_button_padding"
+                android:paddingRight="@dimen/popup_reader_button_padding"
+                app:icon="@drawable/ic_color_settings"
+                app:iconTint="@color/textPrimary"
+                app:iconSize="30dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/nav_next_text"
+                app:layout_constraintTop_toTopOf="parent"
+                app:rippleColor="@color/onSecondary" />
+
+            <Button
+                android:id="@+id/btn_menu_page_linked"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="@dimen/popup_reader_button_width"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:background="@color/primarySemitransparent"
+                android:contentDescription="@string/reading_button_page_linked"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minHeight="@dimen/popup_reader_button_min_height"
+                android:paddingLeft="@dimen/popup_reader_button_padding"
+                android:paddingRight="@dimen/popup_reader_button_padding"
+                app:icon="@drawable/ic_page_linked"
+                app:iconTint="@color/textPrimary"
+                app:iconSize="30dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/nav_next_text"
+                app:layout_constraintTop_toTopOf="parent"
+                app:rippleColor="@color/onSecondary" />
+
+            <Button
+                android:id="@+id/btn_menu_file_link"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="@dimen/popup_reader_button_width"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:background="@color/primarySemitransparent"
+                android:contentDescription="@string/reading_button_file_link"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minHeight="@dimen/popup_reader_button_min_height"
+                android:paddingLeft="@dimen/popup_reader_button_padding"
+                android:paddingRight="@dimen/popup_reader_button_padding"
+                app:icon="@drawable/ic_file_link"
+                app:iconTint="@color/textPrimary"
+                app:iconSize="30dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/nav_next_text"
                 app:layout_constraintTop_toTopOf="parent"
@@ -145,6 +213,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="20dp"
                 android:background="@color/primarySemitransparent"
+                android:contentDescription="@string/reading_button_popup_floating"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:minHeight="@dimen/popup_reader_button_min_height"
@@ -152,6 +221,7 @@
                 android:paddingRight="@dimen/popup_reader_button_padding"
                 app:icon="@drawable/ic_floating_window"
                 app:iconTint="@color/textPrimary"
+                app:iconSize="30dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/nav_next_text"
                 app:layout_constraintTop_toTopOf="parent"
@@ -161,20 +231,20 @@
     </RelativeLayout>
 
     <FrameLayout
-        android:id="@+id/menu_popup"
+        android:id="@+id/menu_popup_translate"
         android:layout_width="match_parent"
         android:layout_height="350dp"
         android:layout_alignParentBottom="true"
         android:background="@color/primary"
-        android:fitsSystemWindows="true"
+        android:fitsSystemWindows="false"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:paddingTop="5dp"
+        android:paddingTop="1dp"
         android:visibility="gone"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <ImageView
-            android:id="@+id/menu_popup_touch"
+            android:id="@+id/menu_translate_touch"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
@@ -184,7 +254,7 @@
             app:tint="@color/onSecondary" />
 
         <ImageView
-            android:id="@+id/menu_close"
+            android:id="@+id/menu_translate_close"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:layout_gravity="end|top"
@@ -195,7 +265,7 @@
             app:tint="@color/onSecondary" />
 
         <ImageView
-            android:id="@+id/menu_floating_touch"
+            android:id="@+id/menu_translate_floating_touch"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:layout_gravity="start|top"
@@ -212,7 +282,7 @@
             android:orientation="vertical">
 
             <com.google.android.material.tabs.TabLayout
-                android:id="@+id/popup_tab"
+                android:id="@+id/popup_translate_tab"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/primary"
@@ -244,6 +314,72 @@
                     android:layout_height="wrap_content"
                     android:text="@string/popup_reading_tab_item_subtitle_import" />
 
+            </com.google.android.material.tabs.TabLayout>
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/popup_translate_view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="2dp"
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/menu_popup_color"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/primary"
+        android:fitsSystemWindows="false"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingTop="1dp"
+        android:visibility="gone"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <ImageView
+            android:id="@+id/menu_color_touch"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
+            android:contentDescription="@string/popup_reading_open"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_line_popup"
+            app:tint="@color/onSecondary" />
+
+        <ImageView
+            android:id="@+id/menu_color_close"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|top"
+            android:layout_marginTop="1dp"
+            android:contentDescription="@string/popup_reading_close"
+            android:scaleType="center"
+            android:src="@drawable/ic_close"
+            app:tint="@color/onSecondary" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:orientation="vertical">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/popup_color_tab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/primary"
+                app:tabGravity="fill"
+                app:tabMode="fixed"
+                app:tabPaddingBottom="0dp"
+                app:tabPaddingEnd="0dp"
+                app:tabPaddingStart="0dp"
+                app:tabPaddingTop="0dp"
+                app:tabSelectedTextColor="@color/secondary"
+                app:tabTextAppearance="@style/PopupTab"
+                app:tabTextColor="@color/onSecondary">
+
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/tab_item_brightness"
                     android:layout_width="wrap_content"
@@ -253,7 +389,7 @@
             </com.google.android.material.tabs.TabLayout>
 
             <androidx.viewpager.widget.ViewPager
-                android:id="@+id/popup_view_pager"
+                android:id="@+id/popup_color_view_pager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingTop="2dp"

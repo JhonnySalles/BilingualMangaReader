@@ -18,7 +18,7 @@ class LineViewHolder(itemView: View, private val listener: MangaCardListener) :
     RecyclerView.ViewHolder(itemView) {
 
     companion object {
-        lateinit var mImageCover: Bitmap
+        lateinit var mImageCover : Bitmap
     }
 
     init {
@@ -50,8 +50,6 @@ class LineViewHolder(itemView: View, private val listener: MangaCardListener) :
             mangaImage.setImageBitmap(mImageCover)
             ImageCoverController.instance.setImageCoverAsync(itemView.context, manga, layoutPosition)
         }
-
-
 
         mangaTitle.text = manga.title
 

@@ -2,6 +2,8 @@ package br.com.fenix.bilingualmangareader.view.ui.reader
 
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,7 +11,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.MimeTypeMap
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
@@ -21,6 +22,7 @@ import br.com.fenix.bilingualmangareader.service.controller.SubTitleController
 import br.com.fenix.bilingualmangareader.service.repository.SubTitleRepository
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputLayout
 import java.io.File
 import java.io.InputStream
@@ -28,12 +30,14 @@ import java.util.*
 
 class PopupSubtitleConfiguration : Fragment() {
 
+    private lateinit var mPreferences: SharedPreferences
     private lateinit var mLoadExternalSubtitle: TextInputLayout
     private lateinit var mLoadExternalSubtitleAutoComplete: AutoCompleteTextView
     private lateinit var mSubtitleSelected: TextInputLayout
     private lateinit var mSubtitleSelectedAutoComplete: AutoCompleteTextView
     private lateinit var mSubtitleLanguage: TextInputLayout
     private lateinit var mSubtitleLanguageAutoComplete: AutoCompleteTextView
+    private lateinit var mUsePageLinkInSearchTranslate: SwitchMaterial
 
     private lateinit var mSubTitleController: SubTitleController
     private lateinit var mMapLanguage: HashMap<String, Languages>
@@ -44,6 +48,8 @@ class PopupSubtitleConfiguration : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.popup_subtitle_configuration, container, false)
+        mPreferences = GeneralConsts.getSharedPreferences(requireContext())
+
         mLoadExternalSubtitle = root.findViewById(R.id.txt_external_subtitle_select_path)
         mLoadExternalSubtitleAutoComplete =
             root.findViewById(R.id.menu_autocomplete_external_subtitle_select_path)
@@ -53,7 +59,18 @@ class PopupSubtitleConfiguration : Fragment() {
         mSubtitleLanguage = root.findViewById(R.id.cb_subtitle_language)
         mSubtitleLanguageAutoComplete = root.findViewById(R.id.menu_autocomplete_subtitle_language)
 
+        mUsePageLinkInSearchTranslate = root.findViewById(R.id.switch_use_page_linked_in_search_translate)
+
         mSubTitleController = SubTitleController.getInstance(requireContext())
+
+        mUsePageLinkInSearchTranslate.isChecked = mPreferences.getBoolean(
+            GeneralConsts.KEYS.PAGE_LINK.USE_IN_SEARCH_TRANSLATE,
+            false
+        )
+        mUsePageLinkInSearchTranslate.setOnClickListener {
+            mSubTitleController.setUseFileLink(mUsePageLinkInSearchTranslate.isChecked)
+            mPreferences.edit().putBoolean(GeneralConsts.KEYS.PAGE_LINK.USE_IN_SEARCH_TRANSLATE, mUsePageLinkInSearchTranslate.isChecked).commit()
+        }
 
         observer()
 
@@ -109,13 +126,19 @@ class PopupSubtitleConfiguration : Fragment() {
             }
 
         mLoadExternalSubtitleAutoComplete.setOnClickListener {
-            mLoadExternalSubtitleAutoComplete.setText("")
-            val jsonType = MimeTypeMap.getSingleton().getMimeTypeFromExtension("json") ?: "application/octet-stream"
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                addCategory(Intent.CATEGORY_OPENABLE)
-                type = jsonType
-            }
-            startActivityForResult(intent, 200)
+            val intent = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O)
+                Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                    addCategory(Intent.CATEGORY_OPENABLE)
+                    type = "application/json|*/*"
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                }
+            else
+                Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                    addCategory(Intent.CATEGORY_OPENABLE)
+                    type = "application/json"
+                    putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/json"))
+                }
+            startActivityForResult(intent, GeneralConsts.REQUEST.OPEN_JSON)
         }
 
         if (mSubTitleController.mManga != null && mSubTitleController.mManga!!.id != null) {
@@ -153,12 +176,11 @@ class PopupSubtitleConfiguration : Fragment() {
     override fun onActivityResult(
         requestCode: Int, resultCode: Int, resultData: Intent?
     ) {
-        if (requestCode == 200) {
+        if (requestCode == GeneralConsts.REQUEST.OPEN_JSON) {
             if (resultCode == Activity.RESULT_OK) {
                 resultData?.data?.also { uri ->
                     try {
                         val path = Util.normalizeFilePath(uri.path.toString())
-                        if (!path.endsWith(".json")) return
                         val inputStream: InputStream = File(path).inputStream()
                         val inputString = inputStream.bufferedReader().use { it.readText() }
                         mLoadExternalSubtitleAutoComplete.setText(path)
@@ -167,12 +189,13 @@ class PopupSubtitleConfiguration : Fragment() {
                         Log.e(GeneralConsts.TAG.LOG, "Error when open file: " + e.message)
                     }
                 }
-            }
+            } else
+                mLoadExternalSubtitleAutoComplete.setText("")
         }
     }
 
     private fun observer() {
-        mSubTitleController.chaptersKeys.observe(viewLifecycleOwner, {
+        mSubTitleController.chaptersKeys.observe(viewLifecycleOwner) {
             mSubtitleSelectedAutoComplete.setAdapter(
                 ArrayAdapter(
                     requireContext(),
@@ -180,15 +203,15 @@ class PopupSubtitleConfiguration : Fragment() {
                     it.sorted()
                 )
             )
-        })
+        }
 
-        mSubTitleController.chapterSelected.observe(viewLifecycleOwner, {
+        mSubTitleController.chapterSelected.observe(viewLifecycleOwner) {
             var text = ""
             if (it != null)
                 text = mSubTitleController.getChapterKey(it)
 
             mSubtitleSelectedAutoComplete.setText(text, false)
-        })
+        }
 
     }
 

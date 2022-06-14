@@ -10,8 +10,7 @@ import java.util.*
     tableName = DataBaseConsts.MANGA.TABLE_NAME,
     indices = [Index(value = [DataBaseConsts.MANGA.COLUMNS.FILE_NAME, DataBaseConsts.MANGA.COLUMNS.TITLE])]
 )
-class Manga(id: Long?, title: String, subTitle: String, path: String, folder: String, name: String, type: String, pages: Int) :
-    Serializable {
+class Manga(id: Long?, title: String, subTitle: String, path: String, folder: String, name: String, type: String, pages: Int) : Serializable {
 
     constructor(
         id: Long?, title: String, subTitle: String,
@@ -67,6 +66,9 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
     @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS)
     var lastAccess: Date? = null
 
+    @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.EXCLUDED)
+    var excluded: Boolean = false
+
     @Ignore
     var thumbnail: Cover? = null
 
@@ -74,7 +76,7 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
     var update: Boolean = false
 
     @Ignore
-    var subTitles: List<SubTitle> = arrayListOf()
+    var subTitles : List<SubTitle> = arrayListOf()
 
     @Ignore
     var sort: Date? = null

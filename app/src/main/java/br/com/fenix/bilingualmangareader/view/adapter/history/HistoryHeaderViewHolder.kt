@@ -1,7 +1,6 @@
 package br.com.fenix.bilingualmangareader.view.adapter.history
 
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.bilingualmangareader.R
@@ -15,7 +14,7 @@ class HistoryHeaderViewHolder(itemView: View, private val listener: MangaCardLis
 
     fun bind(manga: Manga) {
         val title = itemView.findViewById<TextView>(R.id.history_divider_title)
-        val cardView = itemView.findViewById<LinearLayout>(R.id.history_divider)
+        //val cardView = itemView.findViewById<LinearLayout>(R.id.history_divider)
 
         if (manga.lastAccess != null) {
             val calendar = Calendar.getInstance()

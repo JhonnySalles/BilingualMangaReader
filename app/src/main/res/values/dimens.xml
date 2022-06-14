@@ -5,7 +5,7 @@
     <dimen name="nav_header_height">200dp</dimen>
     <dimen name="margin">10dp</dimen>
     <dimen name="margin_small">6dp</dimen>
-    <dimen name="margin_bottom">40dp</dimen>
+    <dimen name="margin_bottom">50dp</dimen>
 
     <dimen name="manga_grid_card_image">200dp</dimen>
     <dimen name="manga_grid_card_layout_width">150dp</dimen>
@@ -20,11 +20,14 @@
     <dimen name="manga_grid_card_layout_height_small">150dp</dimen>
     <dimen name="manga_grid_card_image_small">150dp</dimen>
 
-
     <dimen name="manga_line_card_image">50dp</dimen>
     <dimen name="manga_line_title_size">15sp</dimen>
     <dimen name="manga_line_sub_title">10sp</dimen>
     <dimen name="manga_line_favorite">10dp</dimen>
+
+    <dimen name="manga_page_link_layout_width">200dp</dimen>
+    <dimen name="manga_page_link_layout_height">250dp</dimen>
+    <dimen name="manga_page_link_number_size">12sp</dimen>
 
     <dimen name="title_size">20sp</dimen>
     <dimen name="title_small_size">14sp</dimen>
@@ -34,8 +37,8 @@
     <dimen name="popup_reader_text">20sp</dimen>
 
     <dimen name="popup_reader_button_width">50dp</dimen>
-    <dimen name="popup_reader_button_min_height">55dp</dimen>
-    <dimen name="popup_reader_button_padding">12dp</dimen>
+    <dimen name="popup_reader_button_min_height">50dp</dimen>
+    <dimen name="popup_reader_button_padding">10dp</dimen>
 
     <dimen name="popup_reader_color_filter_padding">16dp</dimen>
     <dimen name="popup_reader_blue_light_padding">10dp</dimen>
@@ -61,6 +64,8 @@
     <dimen name="about_button_width_big">180dp</dimen>
     <dimen name="about_button_width_tablet">220dp</dimen>
 
+    <dimen name="help_scrolling_button_margin">50dp</dimen>
+    <dimen name="help_scroll_up_border">2dp</dimen>
     <dimen name="help_scroll_up_width">40dp</dimen>
     <dimen name="help_scroll_up_image_width">30dp</dimen>
     <dimen name="help_button_example_width">40dp</dimen>
@@ -68,5 +73,52 @@
     <dimen name="help_title_size">18sp</dimen>
     <dimen name="help_content_size">12sp</dimen>
     <dimen name="help_image_width">200dp</dimen>
+
+    <dimen name="page_link_language_margin">3dp</dimen>
+    <dimen name="page_link_fullscreen_width">50dp</dimen>
+    <dimen name="page_link_fullscreen_padding">10dp</dimen>
+    <dimen name="page_link_scrolling_button_margin">10dp</dimen>
+    <dimen name="page_link_image_loading_size">30dp</dimen>
+    <dimen name="page_link_image_loading_margin">10dp</dimen>
+    <dimen name="page_link_up_border">2dp</dimen>
+    <dimen name="page_link_up_width">40dp</dimen>
+    <dimen name="page_link_up_image_width">30dp</dimen>
+    <dimen name="page_link_down_border">2dp</dimen>
+    <dimen name="page_link_down_width">40dp</dimen>
+    <dimen name="page_link_down_image_width">30dp</dimen>
+    <dimen name="page_link_button_margin">5dp</dimen>
+    <dimen name="page_link_list_not_link_height">55dp</dimen>
+    <dimen name="page_link_list_not_link_height_land_or_tablet">105dp</dimen>
+    <dimen name="page_link_list_not_link_margin_land_or_tablet">2dp</dimen>
+    <dimen name="page_link_list_not_link_margin_top">20dp</dimen>
+    <dimen name="page_link_list_link_margin_top">5dp</dimen>
+    <dimen name="page_link_list_link_margin_bottom">5dp</dimen>
+    <dimen name="page_link_list_link_padding_top">10dp</dimen>
+    <dimen name="page_link_list_link_padding_bottom">140dp</dimen>
+
+    <dimen name="page_link_card_margin">1dp</dimen>
+    <dimen name="page_link_card_layout_width">180dp</dimen>
+    <dimen name="page_link_card_layout_height">230dp</dimen>
+    <dimen name="page_link_card_layout_margin">2dp</dimen>
+    <dimen name="page_link_card_layout_width_in_dual">100dp</dimen>
+    <dimen name="dual_page_link_card_layout_width">100dp</dimen>
+    <dimen name="dual_page_link_card_layout_height">230dp</dimen>
+    <dimen name="dual_page_link_card_layout_width_tablet">140dp</dimen>
+    <dimen name="dual_page_link_card_layout_height_tablet">230dp</dimen>
+    <dimen name="dual_page_link_card_drop_layout_width">130dp</dimen>
+    <dimen name="dual_page_link_card_drop_layout_height">234dp</dimen>
+    <dimen name="dual_page_link_card_drop_layout_width_tablet">150dp</dimen>
+    <dimen name="dual_page_link_card_drop_layout_height_tablet">234dp</dimen>
+    <dimen name="page_link_card_page_number_size">12sp</dimen>
+    <dimen name="page_link_card_page_number_margin">8dp</dimen>
+    <dimen name="page_link_card_page_name_size">12sp</dimen>
+    <dimen name="page_link_card_page_name_margin_start">8dp</dimen>
+    <dimen name="page_link_card_page_name_margin_bottom">2dp</dimen>
+    <dimen name="page_not_link_card_layout_width">40dp</dimen>
+    <dimen name="page_not_link_card_layout_height">50dp</dimen>
+    <dimen name="page_not_link_card_layout_width_land">100dp</dimen>
+    <dimen name="page_not_link_card_layout_height_land">130dp</dimen>
+    <dimen name="page_not_link_card_layout_width_tablet">100dp</dimen>
+    <dimen name="page_not_link_card_layout_height_tablet">130dp</dimen>
 
 </resources>

@@ -11,8 +11,7 @@
         <item name="colorSecondaryVariant">@color/secondaryVariant</item>
         <item name="colorOnSecondary">@color/onSecondary</item>
         <!-- Status bar color -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
     </style>
 
 </resources>

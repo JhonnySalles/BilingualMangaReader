@@ -12,6 +12,7 @@ import br.com.fenix.bilingualmangareader.service.parses.Parse
 import br.com.fenix.bilingualmangareader.service.parses.ParseFactory
 import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import br.com.fenix.bilingualmangareader.util.helpers.Util
 import java.io.File
 import java.lang.ref.WeakReference
 import java.util.*
@@ -97,8 +98,8 @@ class Scanner {
             try {
                 val ctx: Context = MainActivity.getAppContext()
                 val preference: SharedPreferences = GeneralConsts.getSharedPreferences(ctx)
-                var libraryPath = preference.getString(GeneralConsts.KEYS.LIBRARY.FOLDER, "")
-                val teste = File(libraryPath)
+                val libraryPath = preference.getString(GeneralConsts.KEYS.LIBRARY.FOLDER, "")
+
                 if (libraryPath == "" || !File(libraryPath).exists()) return
 
                 val storage = Storage(ctx)
@@ -123,23 +124,27 @@ class Scanner {
                                 storageFiles.remove(it.path)
                             else {
                                 val parse: Parse? = ParseFactory.create(it)
-                                if (parse != null)
-                                    if (parse.numPages() > 0) {
-                                        val manga = Manga(
-                                            null,
-                                            it.name,
-                                            "",
-                                            it.path,
-                                            it.parent,
-                                            it.nameWithoutExtension,
-                                            it.extension,
-                                            parse.numPages()
-                                        )
+                                try {
+                                    if (parse != null)
+                                        if (parse.numPages() > 0) {
+                                            val manga = Manga(
+                                                null,
+                                                it.name,
+                                                "",
+                                                it.path,
+                                                it.parent,
+                                                it.nameWithoutExtension,
+                                                it.extension,
+                                                parse.numPages()
+                                            )
 
-                                        generateCover(parse, manga)
-                                        storage.save(manga)
-                                        notifyMediaUpdated()
-                                    }
+                                            generateCover(parse, manga)
+                                            storage.save(manga)
+                                            notifyMediaUpdated()
+                                        }
+                                } finally {
+                                    Util.destroyParse(parse)
+                                }
                             }
                         }
                     }

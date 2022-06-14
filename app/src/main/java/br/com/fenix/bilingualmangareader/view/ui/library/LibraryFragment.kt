@@ -16,11 +16,13 @@ import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Manga
@@ -37,9 +39,6 @@ import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity
 import java.lang.ref.WeakReference
 import java.util.*
 import kotlin.math.max
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
-
-import androidx.core.app.ActivityCompat
 
 
 class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
@@ -133,29 +132,38 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATE_FINISHED -> {
                     mViewModel.list {
                         setIsRefreshing(false)
+                        sortList(mViewModel.save.value!!)
                         notifyDataSet()
                     }
                 }
                 GeneralConsts.SCANNER.MESSAGE_COVER_UPDATE_FINISHED -> {
-                    val idItem = msg.data.getInt("position")
+                    val idItem = msg.data.getInt(GeneralConsts.SCANNER.POSITION)
                     notifyDataSet(idItem)
                 }
             }
         }
     }
 
-    private fun notifyDataSet(idItem: Int? = null) {
-        if (idItem != null)
-            mRecycleView.adapter?.notifyItemChanged(idItem)
-        else
+    private fun notifyDataSet(idItem: Int? = null, insert: Boolean = false, removed : Boolean = false) {
+        if (idItem != null) {
+            if (insert)
+                mRecycleView.adapter?.notifyItemInserted(idItem)
+            else if (removed)
+                mRecycleView.adapter?.notifyItemRemoved(idItem)
+            else
+                mRecycleView.adapter?.notifyItemChanged(idItem)
+        } else
             mRecycleView.adapter?.notifyDataSetChanged()
     }
 
     private fun refreshLibraryDelayed() {
         if (!mIsRefreshPlanned) {
             val updateRunnable = Runnable {
-                mViewModel.updateList()
-                notifyDataSet()
+                val indexes = mViewModel.updateList()
+                if (indexes.isNotEmpty()) {
+                    for (index in indexes)
+                        notifyDataSet(index, insert = true)
+                }
                 mIsRefreshPlanned = false
             }
             mIsRefreshPlanned = true
@@ -276,13 +284,11 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             override fun onClick(manga: Manga) {
                 val intent = Intent(context, ReaderActivity::class.java)
                 val bundle = Bundle()
-                manga.lastAccess = Calendar.getInstance().time
                 bundle.putString(GeneralConsts.KEYS.MANGA.NAME, manga.title)
                 bundle.putInt(GeneralConsts.KEYS.MANGA.MARK, manga.bookMark)
                 bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, manga)
                 intent.putExtras(bundle)
                 context?.startActivity(intent)
-                mViewModel.updateLastAccess(manga)
             }
 
             override fun onClickLong(manga: Manga, view: View, position: Int) {
@@ -306,7 +312,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                             notifyDataSet(position)
                         }
                         R.id.menu_book_clear -> {
-                            manga.lastAccess = Calendar.getInstance().time
+                            manga.lastAccess = Date()
                             manga.bookMark = 0
                             mViewModel.save(manga)
                             notifyDataSet(position)
@@ -320,7 +326,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                                         R.string.action_positive
                                     ) { _, _ ->
                                         deleteFile(manga)
-                                        notifyDataSet()
+                                        notifyDataSet(position, removed = true)
                                     }
                                     .setNegativeButton(
                                         R.string.action_negative
@@ -417,9 +423,9 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun observer() {
-        mViewModel.save.observe(viewLifecycleOwner, {
+        mViewModel.save.observe(viewLifecycleOwner) {
             updateList(it)
-        })
+        }
     }
 
     fun setIsRefreshing(enabled: Boolean) {
@@ -464,6 +470,8 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
             val manga = mViewModel.get(viewHolder.adapterPosition) ?: return
+            val position = viewHolder.adapterPosition
+            mViewModel.remove(manga)
             var excluded = false
             val dialog: AlertDialog =
                 AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
@@ -473,11 +481,13 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                         R.string.action_delete
                     ) { _, _ ->
                         deleteFile(manga)
-                        notifyDataSet()
+                        notifyDataSet(position, removed = true)
                         excluded = true
                     }.setOnDismissListener {
-                        if (!excluded)
-                            onRefresh()
+                        if (!excluded) {
+                            mViewModel.add(manga, position)
+                            notifyDataSet(position)
+                        }
                     }
                     .create()
             dialog.show()

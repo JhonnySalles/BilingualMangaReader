@@ -85,7 +85,7 @@ class ConfigFragment : Fragment() {
         mLibraryPathAutoComplete.setOnClickListener {
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
             intent.addCategory(Intent.CATEGORY_DEFAULT)
-            startActivityForResult(intent, 101)
+            startActivityForResult(intent, GeneralConsts.REQUEST.OPEN_MANGA_FOLDER)
         }
 
         val languages = resources.getStringArray(R.array.languages)
@@ -211,18 +211,18 @@ class ConfigFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        var folder = ""
-        if (data != null && resultCode == RESULT_OK) {
-            data.data?.also { uri ->
-                folder = Util.normalizeFilePath(uri.path.toString())
-            }
-
-            if (!Storage.isPermissionGranted(requireContext()))
-                Storage.takePermission(requireContext(), requireActivity())
-        }
-
         when (requestCode) {
-            101 -> mLibraryPathAutoComplete.setText(folder)
+            GeneralConsts.REQUEST.OPEN_MANGA_FOLDER -> {
+                var folder = ""
+                if (data != null && resultCode == RESULT_OK) {
+                    folder = Util.normalizeFilePath(data.data?.path.toString())
+
+                    if (!Storage.isPermissionGranted(requireContext()))
+                        Storage.takePermission(requireContext(), requireActivity())
+                }
+
+                mLibraryPathAutoComplete.setText(folder)
+            }
         }
     }
 
