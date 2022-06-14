@@ -27,6 +27,8 @@ import br.com.fenix.bilingualmangareader.util.helpers.Util
 import java.io.File
 import java.io.InputStream
 import java.time.LocalDateTime
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class PagesLinkViewModel(application: Application) : AndroidViewModel(application) {
@@ -130,7 +132,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun save(obj: FileLink): FileLink {
-        obj.lastAccess = LocalDateTime.now()
+        obj.lastAccess = Date()
         if (obj.id == 0L)
             obj.id = mFileLinkRepository.save(obj)
         else
@@ -141,7 +143,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun save() {
         val obj = this.get()
-        obj.lastAccess = LocalDateTime.now()
+        obj.lastAccess = Date()
         if (obj.id == null || obj.id == 0L)
             mFileLink.value!!.id = mFileLinkRepository.save(obj)
         else

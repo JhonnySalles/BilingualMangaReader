@@ -14,21 +14,21 @@ import java.util.*
     indices = [Index(value = [DataBaseConsts.FILELINK.COLUMNS.FK_ID_MANGA, DataBaseConsts.FILELINK.COLUMNS.FILE_NAME])]
 )
 class FileLink(id: Long?, idManga: Long, pages: Int, path: String, name: String, type: String, folder: String,
-               language: Languages, dateCreate: LocalDateTime?, lastAccess: LocalDateTime?) : Serializable {
+               language: Languages, dateCreate: Date?, lastAccess: Date?) : Serializable {
 
     constructor(
         id: Long?, idManga: Long, pages: Int, path: String, name: String, type: String, folder: String, language: Languages
-    ) : this(id, idManga, pages, path, name, type, folder, language, LocalDateTime.now(), LocalDateTime.now())
+    ) : this(id, idManga, pages, path, name, type, folder, language, Date(), Date())
 
     constructor(
         manga: Manga, parseManga : Parse?, pages: Int, path: String, name: String, type: String, folder: String
-    ) : this(null, manga.id!!, pages, path, name, type, folder, Languages.PORTUGUESE, LocalDateTime.now(), LocalDateTime.now()) {
+    ) : this(null, manga.id!!, pages, path, name, type, folder, Languages.PORTUGUESE, Date(), Date()) {
         this.manga = manga
         this.parseManga = parseManga
     }
 
     constructor( manga: Manga ) : this(null, manga.id!!, 0, "", "", "", "", Languages.PORTUGUESE,
-        LocalDateTime.now(), LocalDateTime.now()) {
+        Date(), Date()) {
         this.manga = manga
     }
 
@@ -56,10 +56,10 @@ class FileLink(id: Long?, idManga: Long, pages: Int, path: String, name: String,
     var folder: String = folder
 
     @ColumnInfo(name = DataBaseConsts.FILELINK.COLUMNS.DATE_CREATE)
-    var dateCreate: LocalDateTime? = dateCreate
+    var dateCreate: Date? = dateCreate
 
     @ColumnInfo(name = DataBaseConsts.FILELINK.COLUMNS.LAST_ACCESS)
-    var lastAccess: LocalDateTime? = lastAccess
+    var lastAccess: Date? = lastAccess
 
     @ColumnInfo(name = DataBaseConsts.FILELINK.COLUMNS.LANGUAGE)
     var language: Languages = language
