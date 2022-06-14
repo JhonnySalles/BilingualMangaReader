@@ -576,6 +576,7 @@ class SubTitleController private constructor(private val context: Context) {
                 }
 
                 if (mSelectedSubTitle.value?.pageCount != pageNumber) {
+                    isDrawing = false
                     var differ = pageNumber - mSelectedSubTitle.value?.pageCount!!
                     if (differ == 0) differ = 1
                     val run = if (mSelectedSubTitle.value?.pageCount!! < pageNumber)
@@ -624,6 +625,7 @@ class SubTitleController private constructor(private val context: Context) {
         if (isDrawing) {
             view.setImageBitmap(imageBackup)
             isDrawing = false
+            return
         }
 
         target = MyTarget(view, false)
@@ -750,7 +752,7 @@ class SubTitleController private constructor(private val context: Context) {
             chapterSelected.value!!.pages.forEach { mListPages[getPageKey(it)] = it }
             mPagesKeys.value = mListPages.keys.toTypedArray().sorted()
             mSelectedSubTitle.value?.chapterKey = getChapterKey(mChapterSelected.value!!)
-            mSelectedSubTitle.value!!.language = chapterSelected.value!!.language
+            mSelectedSubTitle.value?.language = chapterSelected.value!!.language
             setPage(false, chapterSelected.value!!.pages[0])
         } else
             mSelectedSubTitle.value?.chapterKey = ""
@@ -758,7 +760,6 @@ class SubTitleController private constructor(private val context: Context) {
 
     private fun setPage(lastText: Boolean, page: Page?) {
         mOriginalSize = null
-        isDrawing = false
         mPageSelected.value = page
         mSelectedSubTitle.value?.pageKey =
             if (mPageSelected.value == null) "" else getPageKey(mPageSelected.value!!)

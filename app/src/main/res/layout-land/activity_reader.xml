@@ -12,11 +12,13 @@
         android:id="@+id/root_frame_reader"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/onPrimary" />
+        android:background="@color/onPrimary"
+        android:fitsSystemWindows="false"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar_reader"
