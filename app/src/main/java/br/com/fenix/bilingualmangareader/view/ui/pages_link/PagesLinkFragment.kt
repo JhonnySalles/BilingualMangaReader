@@ -443,8 +443,8 @@ class PagesLinkFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        verifyImageLoading()
         mViewModel.addImageLoadHandler(mImageLoadHandler)
+        verifyImageLoading()
         mRecyclePageLink.scrollToPosition(mPageSelected)
     }
 

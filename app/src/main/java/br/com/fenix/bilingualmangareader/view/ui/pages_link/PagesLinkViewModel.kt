@@ -108,8 +108,8 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
         mPagesNotLinked.value!!.clear()
         setLanguage(obj.language)
 
-        Util.destroyParse(mFileLink.value!!.parseManga)
-        Util.destroyParse(mFileLink.value!!.parseFileLink)
+        Util.destroyParse(mFileLink.value?.parseManga)
+        Util.destroyParse(mFileLink.value?.parseFileLink)
 
         val mParseManga = ParseFactory.create(mManga!!.file) ?: return
         mFileLink.value!!.parseManga = mParseManga
@@ -212,7 +212,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
         if (reload(refresh)) return
         if (find(refresh)) return
 
-        Util.destroyParse(mFileLink.value!!.parseManga)
+        Util.destroyParse(mFileLink.value?.parseManga)
 
         val parse = ParseFactory.create(manga.file) ?: return
         mFileLink.value = FileLink(manga)
@@ -246,7 +246,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
 
                 if (!isReload && find(file.nameWithoutExtension, parse.numPages(), refresh)) return loaded
 
-                Util.destroyParse(mFileLink.value!!.parseFileLink)
+                Util.destroyParse(mFileLink.value?.parseFileLink)
                 mFileLink.value = FileLink(mManga!!, mFileLink.value!!.parseManga, parse.numPages(), path,
                     file.nameWithoutExtension, file.extension, file.parent)
                 mFileLink.value!!.parseFileLink = parse
@@ -633,8 +633,8 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
         val parseManga = ParseFactory.create(mManga!!.file)
         val parseFileLink = ParseFactory.create(mFileLink.value!!.file)
 
-        Util.destroyParse(mFileLink.value!!.parseManga)
-        Util.destroyParse(mFileLink.value!!.parseFileLink)
+        Util.destroyParse(mFileLink.value?.parseManga)
+        Util.destroyParse(mFileLink.value?.parseFileLink)
 
         mFileLink.value!!.parseManga = parseManga
         mFileLink.value!!.parseFileLink = parseFileLink
