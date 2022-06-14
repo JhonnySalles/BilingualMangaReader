@@ -105,6 +105,7 @@
     <string name="popup_reading_import_subtitle_translate">Translated language</string>
     <string name="popup_reading_import_subtitle_is_empty">Subtitle empty.</string>
     <string name="popup_reading_import_subtitle_page_is_empty">Pages empty in subtitle or subtitle not selected.</string>
+    <string name="popup_reading_use_page_linked_in_search">Use linked pages to search for the translation</string>
 
     <!-- READER POPUP SUBTITLE -->
     <string name="popup_reading_subtitle_chapter">Chapter</string>
@@ -115,6 +116,7 @@
     <string name="popup_reading_subtitle_not_find_subtitle">Could not find the subtitle in files.</string>
     <string name="popup_reading_subtitle_list_empty">Subtitle list is empty.</string>
     <string name="popup_reading_subtitle_chapter_not_found">Chapter in another language not found.</string>
+    <string name="popup_reading_subtitle_chapter_from_page_link_not_found">Chapter in another language from linked file page not found.</string>
 
     <string name="popup_reading_button_translate">Switch between selected languages</string>
     <string name="popup_reading_button_draw">Draw subtitle positions on the screen</string>
@@ -150,7 +152,10 @@
     <string name="history_today">Today</string>
 
     <!-- PAGE LINK -->
+    <string name="page_link_manga_empty">Manga not found</string>
+    <string name="page_link_manga_empty_description">Manga not selected</string>
     <string name="page_link_file">File in another language</string>
+    <string name="page_link_file_language">File language</string>
     <string name="page_link_refresh">Refresh</string>
     <string name="page_link_save">Save</string>
     <string name="page_link_load_file_wrong">Unsupported file</string>

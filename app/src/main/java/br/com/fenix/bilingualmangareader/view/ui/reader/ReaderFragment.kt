@@ -40,6 +40,7 @@ import br.com.fenix.bilingualmangareader.service.parses.RarParse
 import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.constants.ReaderConsts
+import br.com.fenix.bilingualmangareader.util.helpers.Util
 import br.com.fenix.bilingualmangareader.view.managers.MangaHandler
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
@@ -367,11 +368,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
 
     override fun onDestroy() {
         mSubtitleController.mReaderFragment = null
-        try {
-            mParse?.destroy()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        Util.destroyParse(mParse)
         mPicasso.shutdown()
         super.onDestroy()
     }

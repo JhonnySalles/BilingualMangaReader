@@ -11,9 +11,7 @@ import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AutoCompleteTextView
-import android.widget.Button
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -25,6 +23,7 @@ import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.FileLink
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.entity.PageLink
+import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.model.enums.LoadFile
 import br.com.fenix.bilingualmangareader.model.enums.Pages
 import br.com.fenix.bilingualmangareader.service.controller.SubTitleController
@@ -36,25 +35,31 @@ import br.com.fenix.bilingualmangareader.view.adapter.page_link.PageLinkCardAdap
 import br.com.fenix.bilingualmangareader.view.adapter.page_link.PageNotLinkCardAdapter
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.textfield.TextInputLayout
 import java.lang.ref.WeakReference
+import java.util.HashMap
 
 
 class PagesLinkFragment : Fragment() {
 
     private val mViewModel: PagesLinkViewModel by viewModels()
     private lateinit var mRoot : ConstraintLayout
+    private lateinit var mImageLoading: CircularProgressIndicator
     private lateinit var mScrollUp: FloatingActionButton
     private lateinit var mScrollDown: FloatingActionButton
     private lateinit var mRecyclePageLink: RecyclerView
     private lateinit var mRecyclePageNotLink: RecyclerView
     private lateinit var mFileLink: TextInputLayout
     private lateinit var mFileLinkAutoComplete: AutoCompleteTextView
+    private lateinit var mFileLinkLanguage: TextInputLayout
+    private lateinit var mFileLinkLanguageAutoComplete: AutoCompleteTextView
     private lateinit var mSave: Button
     private lateinit var mRefresh : Button
     private lateinit var mFullScreen: MaterialButton
     private lateinit var mListener: PageLinkCardListener
 
+    private lateinit var mMapLanguage: HashMap<String, Languages>
     private val mImageLoadHandler: Handler = ImageLoadHandler(this)
     private var mShowScrollButton : Boolean = true
     private var mHandler = Handler(Looper.getMainLooper())
@@ -63,6 +68,7 @@ class PagesLinkFragment : Fragment() {
     private var mOpenedIntent : Boolean = false
     private var mInDrag : Boolean = false
     private var mIsTabletOrLandscape: Boolean = false
+    private var mPageSelected: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -76,10 +82,13 @@ class PagesLinkFragment : Fragment() {
         mRecyclePageNotLink = root.findViewById(R.id.rv_pages_not_linked)
         mFileLink = root.findViewById(R.id.txt_file_link)
         mFileLinkAutoComplete = root.findViewById(R.id.menu_autocomplete_file_link)
+        mFileLinkLanguage = root.findViewById(R.id.cb_file_link_language)
+        mFileLinkLanguageAutoComplete = root.findViewById(R.id.menu_autocomplete_file_link_language)
         mSave = root.findViewById(R.id.btn_file_link_save)
         mRefresh = root.findViewById(R.id.btn_file_link_refresh)
         mFullScreen = root.findViewById(R.id.btn_file_link_full_screen)
 
+        mImageLoading = root.findViewById(R.id.image_loading)
         mScrollUp = root.findViewById(R.id.pages_link_scroll_up)
         mScrollDown = root.findViewById(R.id.pages_link_scroll_down)
 
@@ -140,17 +149,39 @@ class PagesLinkFragment : Fragment() {
             startActivityForResult(intent, GeneralConsts.REQUEST.OPEN_PAGE_LINK)
         }
 
+        val languages = resources.getStringArray(R.array.languages)
+        mMapLanguage = hashMapOf(
+            languages[0] to Languages.PORTUGUESE,
+            languages[1] to Languages.ENGLISH,
+            languages[2] to Languages.JAPANESE
+        )
+
+        mFileLinkLanguageAutoComplete.setAdapter(ArrayAdapter(requireContext(), R.layout.list_item, mMapLanguage.keys.toTypedArray()))
+        mFileLinkLanguageAutoComplete.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, _, position, _ ->
+                val language = if (parent.getItemAtPosition(position).toString().isNotEmpty() &&
+                    mMapLanguage.containsKey(parent.getItemAtPosition(position).toString())
+                )
+                    mMapLanguage[parent.getItemAtPosition(position).toString()]
+                else
+                    null
+
+                mViewModel.setLanguage(language)
+            }
+
         mSave.setOnClickListener { save() }
         mRefresh.setOnClickListener { refresh() }
 
         mFullScreen.setOnClickListener {
             val image = if (mFileLink.visibility == View.GONE) {
                 mFileLink.visibility = View.VISIBLE
+                mFileLinkLanguage.visibility = View.VISIBLE
                 mSave.visibility = View.VISIBLE
                 mRefresh.visibility = View.VISIBLE
                 R.drawable.ic_fullscreen
             } else {
                 mFileLink.visibility = View.GONE
+                mFileLinkLanguage.visibility = View.GONE
                 mSave.visibility = View.GONE
                 mRefresh.visibility = View.GONE
                 R.drawable.ic_fullscreen_exit
@@ -191,10 +222,7 @@ class PagesLinkFragment : Fragment() {
                     origin == Pages.LINKED && destiny == Pages.NOT_LINKED -> {
                         mViewModel.onNotLinked(mViewModel.getPageLink(Integer.valueOf(dragIndex)))
                     }
-                    origin == Pages.NOT_LINKED && destiny == Pages.LINKED -> {
-                        val index = mViewModel.getPageNotLinkIndex(drop)
-                        mViewModel.fromNotLinked(mViewModel.getPageNotLink(Integer.valueOf(dragIndex)), drop)
-                    }
+                    origin == Pages.NOT_LINKED && destiny == Pages.LINKED -> mViewModel.fromNotLinked(mViewModel.getPageNotLink(Integer.valueOf(dragIndex)), drop)
                 }
             }
 
@@ -222,7 +250,6 @@ class PagesLinkFragment : Fragment() {
 
 
         mRecyclePageNotLink.setOnDragListener { _, dragEvent ->
-
             when (dragEvent.action) {
                 DragEvent.ACTION_DRAG_STARTED -> {
                     mRecyclePageNotLink.background = requireContext().getDrawable(R.drawable.file_linked_rounded_border)
@@ -247,6 +274,7 @@ class PagesLinkFragment : Fragment() {
                             val pageLink = mViewModel.getPageLink(Integer.valueOf(dragEvent.clipData.getItemAt(0).text.toString()))
                             mViewModel.onMoveDualPage(origin, pageLink, Pages.NOT_LINKED, pageLink)
                         }
+                        else -> {}
                     }
                     true
                 }
@@ -266,7 +294,6 @@ class PagesLinkFragment : Fragment() {
         }
 
         observer()
-
         return root
     }
 
@@ -292,8 +319,10 @@ class PagesLinkFragment : Fragment() {
                 mViewModel.reload(fileLink as FileLink) { index, type -> notifyItemChanged(type, index)  }
         } else {
             val bundle = this.arguments
-            if (bundle != null && bundle.containsKey(GeneralConsts.KEYS.OBJECT.MANGA))
-                mViewModel.loadManga(bundle[GeneralConsts.KEYS.OBJECT.MANGA] as Manga) { index, type -> notifyItemChanged(type, index)  }
+            if (bundle != null && bundle.containsKey(GeneralConsts.KEYS.OBJECT.MANGA)) {
+                mViewModel.loadManga(bundle[GeneralConsts.KEYS.OBJECT.MANGA] as Manga) { index, type -> notifyItemChanged(type, index) }
+                mPageSelected = bundle.getInt(GeneralConsts.KEYS.MANGA.PAGE_NUMBER, 0)
+            }
         }
     }
 
@@ -336,7 +365,7 @@ class PagesLinkFragment : Fragment() {
     }
 
     private fun onPageLinkScrolling(pointScreen : IntArray) {
-        val (x, y) = pointScreen
+        val (_, y) = pointScreen
         val divider = 3
         val padding = if (y < (mRecyclePageLink.height.toFloat() / divider)) - 150
         else if (y > (mRecyclePageLink.height.toFloat() / divider * (divider - 1))) + 150
@@ -361,6 +390,11 @@ class PagesLinkFragment : Fragment() {
             else
                 mFileLinkAutoComplete.setText("")
         }
+
+        mViewModel.language.observe(viewLifecycleOwner) {
+            mFileLinkLanguageAutoComplete.setText(it.name, false)
+        }
+
     }
 
     private fun notifyItemChanged(type : Pages, index : Int?, add: Boolean = false, remove: Boolean = false) {
@@ -409,10 +443,13 @@ class PagesLinkFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        verifyImageLoading()
         mViewModel.addImageLoadHandler(mImageLoadHandler)
+        mRecyclePageLink.scrollToPosition(mPageSelected)
     }
 
     override fun onPause() {
+        mPageSelected = (mRecyclePageLink.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
         mViewModel.removeImageLoadHandler(mImageLoadHandler)
         super.onPause()
     }
@@ -432,15 +469,27 @@ class PagesLinkFragment : Fragment() {
         super.onDestroy()
     }
 
+    private fun verifyImageLoading() {
+        mImageLoading.visibility = if (mViewModel.imageThreadLoadingProgress())
+            View.VISIBLE
+        else
+            View.GONE
+    }
+
     private inner class ImageLoadHandler(fragment: PagesLinkFragment) : Handler() {
         private val mOwner: WeakReference<PagesLinkFragment> = WeakReference(fragment)
         override fun handleMessage(msg: Message) {
             val imageLoad = msg.obj as PagesLinkViewModel.ImageLoad
             when (msg.what) {
-                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_UPDATED -> notifyItemChanged(imageLoad.type, imageLoad.index)
-                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_LOAD_IMAGE_ERROR -> mViewModel.reLoadImages()
-                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_ADDED -> notifyItemChanged(imageLoad.type, imageLoad.index, add = true)
-                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_REMOVED -> notifyItemChanged(imageLoad.type, imageLoad.index, remove = true)
+                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_START -> mImageLoading.visibility = View.VISIBLE
+                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_UPDATED -> notifyItemChanged(imageLoad.type, imageLoad.index)
+                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_LOAD_ERROR -> mViewModel.reLoadImages(imageLoad.type)
+                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_ADDED -> notifyItemChanged(imageLoad.type, imageLoad.index, add = true)
+                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_REMOVED -> notifyItemChanged(imageLoad.type, imageLoad.index, remove = true)
+                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_FINISHED -> {
+                    verifyImageLoading()
+                    mViewModel.reLoadImages(imageLoad.type, true)
+                }
             }
         }
     }

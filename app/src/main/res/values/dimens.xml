@@ -5,7 +5,7 @@
     <dimen name="nav_header_height">200dp</dimen>
     <dimen name="margin">10dp</dimen>
     <dimen name="margin_small">6dp</dimen>
-    <dimen name="margin_bottom">40dp</dimen>
+    <dimen name="margin_bottom">50dp</dimen>
 
     <dimen name="manga_grid_card_image">200dp</dimen>
     <dimen name="manga_grid_card_layout_width">150dp</dimen>
@@ -74,9 +74,12 @@
     <dimen name="help_content_size">12sp</dimen>
     <dimen name="help_image_width">200dp</dimen>
 
+    <dimen name="page_link_language_margin">3dp</dimen>
     <dimen name="page_link_fullscreen_width">50dp</dimen>
     <dimen name="page_link_fullscreen_padding">10dp</dimen>
     <dimen name="page_link_scrolling_button_margin">10dp</dimen>
+    <dimen name="page_link_image_loading_size">30dp</dimen>
+    <dimen name="page_link_image_loading_margin">10dp</dimen>
     <dimen name="page_link_up_border">2dp</dimen>
     <dimen name="page_link_up_width">40dp</dimen>
     <dimen name="page_link_up_image_width">30dp</dimen>

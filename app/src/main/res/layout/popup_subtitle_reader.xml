@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/margin_small"
     android:paddingTop="@dimen/margin_small"
     android:paddingRight="@dimen/margin_small"
-    android:paddingBottom="@dimen/margin"
+    android:paddingBottom="@dimen/margin_bottom"
     tools:context=".view.ui.reader.PopupSubtitleReader">
 
     <androidx.constraintlayout.widget.ConstraintLayout

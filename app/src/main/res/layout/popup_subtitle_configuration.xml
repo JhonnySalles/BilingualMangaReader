@@ -14,6 +14,17 @@
         android:paddingTop="@dimen/margin"
         android:paddingBottom="@dimen/margin_bottom">
 
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switch_use_page_linked_in_search_translate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/popup_reading_use_page_linked_in_search"
+            android:textColor="@color/textPrimary"
+            app:thumbTint="@color/onSecondary" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/txt_external_subtitle_select_path"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"

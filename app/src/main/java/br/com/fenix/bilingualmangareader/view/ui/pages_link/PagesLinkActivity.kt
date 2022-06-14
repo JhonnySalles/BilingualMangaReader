@@ -1,6 +1,5 @@
 package br.com.fenix.bilingualmangareader.view.ui.pages_link
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import br.com.fenix.bilingualmangareader.R
@@ -21,6 +20,7 @@ class PagesLinkActivity : AppCompatActivity() {
         if (extras != null) {
             val bundle = Bundle()
             bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, extras.getSerializable(GeneralConsts.KEYS.OBJECT.MANGA) as Manga)
+            bundle.putInt(GeneralConsts.KEYS.MANGA.PAGE_NUMBER, extras.getInt(GeneralConsts.KEYS.MANGA.PAGE_NUMBER, 0))
             newFragment.arguments = bundle
         }
 
@@ -33,13 +33,6 @@ class PagesLinkActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         finish()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-
-        }
     }
 
 }

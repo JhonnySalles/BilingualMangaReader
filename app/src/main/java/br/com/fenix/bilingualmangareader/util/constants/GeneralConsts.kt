@@ -63,6 +63,7 @@ class GeneralConsts private constructor() {
         object MANGA {
             const val NAME = "MANGA_NAME"
             const val MARK = "MANGA_MARK"
+            const val PAGE_NUMBER = "PAGE_NUMBER"
         }
 
         object OBJECT {
@@ -82,6 +83,10 @@ class GeneralConsts private constructor() {
             const val SEPIA = "SEPIA"
             const val BLUE_LIGHT = "BLUE_LIGHT"
             const val BLUE_LIGHT_ALPHA = "BLUE_LIGHT_ALPHA"
+        }
+
+        object PAGE_LINK {
+            const val USE_IN_SEARCH_TRANSLATE = "USE_PAGE_LINK_IN_SEARCH_TRANSLATE"
         }
     }
 

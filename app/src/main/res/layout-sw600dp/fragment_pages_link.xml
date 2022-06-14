@@ -57,8 +57,9 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/txt_file_link"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/page_link_language_margin"
             android:hint="@string/page_link_file"
             android:textColorHint="@color/textPrimary"
             app:boxBackgroundColor="@color/primary"
@@ -67,7 +68,9 @@
             app:startIconDrawable="@drawable/ic_file"
             app:placeholderTextColor="@color/textPrimary"
             app:hintTextColor="@color/onSecondary"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintHorizontal_weight="1.2"
+            app:layout_constraintEnd_toStartOf="@+id/cb_file_link_language"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -78,6 +81,33 @@
                 android:inputType="none"
                 android:textColor="@color/textPrimary"
                 />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/cb_file_link_language"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/page_link_language_margin"
+            android:hint="@string/page_link_file_language"
+            android:textColorHint="@color/textPrimary"
+            app:boxBackgroundColor="@color/primary"
+            app:boxStrokeColor="@color/onSecondary"
+            app:hintTextColor="@color/onSecondary"
+            app:startIconDrawable="@drawable/ic_translate"
+            app:startIconTint="@color/onSecondary"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/txt_file_link"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <AutoCompleteTextView
+                android:id="@+id/menu_autocomplete_file_link_language"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="none"
+                android:textColor="@color/textPrimary" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
@@ -134,11 +164,26 @@
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
         </LinearLayout>
 
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/image_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="@dimen/page_link_scrolling_button_margin"
+            android:indeterminate="true"
+            android:max="100"
+            android:progress="70"
+            android:visibility="gone"
+            app:indicatorColor="@color/onSecondary"
+            app:layout_constraintBottom_toTopOf="@+id/buttons_root"
+            app:layout_constraintRight_toRightOf="parent" />
+
         <!--                                Ended                                -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/pages_link_scroll_up"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="top|right"
             android:layout_margin="@dimen/page_link_scrolling_button_margin"
             android:backgroundTint="@color/white"
             android:contentDescription="@string/action_scroll_up"
@@ -155,7 +200,7 @@
             android:id="@+id/pages_link_scroll_down"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
+            android:layout_gravity="bottom|right"
             android:layout_margin="@dimen/page_link_scrolling_button_margin"
             android:backgroundTint="@color/white"
             android:contentDescription="@string/action_scroll_down"

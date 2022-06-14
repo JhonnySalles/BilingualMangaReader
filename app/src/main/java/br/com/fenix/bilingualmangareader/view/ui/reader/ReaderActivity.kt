@@ -124,15 +124,16 @@ class ReaderActivity : AppCompatActivity() {
         findViewById<ImageView>(R.id.menu_translate_floating_touch).setOnClickListener { menuFloat() }
         findViewById<Button>(R.id.btn_menu_file_link).setOnClickListener {
             if (mManga != null) {
-                var intent = Intent(applicationContext, PagesLinkActivity::class.java)
+                val intent = Intent(applicationContext, PagesLinkActivity::class.java)
                 val bundle = Bundle()
                 bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, mManga)
+                bundle.putInt(GeneralConsts.KEYS.MANGA.PAGE_NUMBER, mReaderProgress.progress)
                 intent.putExtras(bundle)
                 startActivity(intent)
             } else
                 AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
-                    .setTitle(getString(R.string.popup_reading_subtitle_empty))
-                    .setMessage("Manga não selecionado")
+                    .setTitle(getString(R.string.page_link_manga_empty))
+                    .setMessage(getString(R.string.page_link_manga_empty_description))
                     .setNeutralButton(
                         R.string.action_neutral
                     ) { _, _ -> }

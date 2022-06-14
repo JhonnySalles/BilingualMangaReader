@@ -1,6 +1,7 @@
 package br.com.fenix.bilingualmangareader.model.entity
 
 import androidx.room.*
+import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.service.parses.Parse
 import br.com.fenix.bilingualmangareader.service.parses.ParseFactory
 import br.com.fenix.bilingualmangareader.util.constants.DataBaseConsts
@@ -12,29 +13,23 @@ import java.time.LocalDateTime
     tableName = DataBaseConsts.FILELINK.TABLE_NAME,
     indices = [Index(value = [DataBaseConsts.FILELINK.COLUMNS.FK_ID_MANGA, DataBaseConsts.FILELINK.COLUMNS.FILE_NAME])]
 )
-class FileLink(id: Long?, idManga: Long, pages: Int, path: String, name: String, type: String, folder: String) : Serializable {
+class FileLink(id: Long?, idManga: Long, pages: Int, path: String, name: String, type: String, folder: String,
+               language: Languages, dateCreate: LocalDateTime?, lastAccess: LocalDateTime?) : Serializable {
 
     constructor(
-        id: Long?, idManga: Long, pages: Int, path: String, name: String, type: String, folder: String,
-        dateCreate: LocalDateTime?, lastAccess: LocalDateTime?
-    ) : this(id, idManga, pages, path, name, type, folder) {
-        this.dateCreate = dateCreate
-        this.lastAccess = lastAccess
-    }
+        id: Long?, idManga: Long, pages: Int, path: String, name: String, type: String, folder: String, language: Languages
+    ) : this(id, idManga, pages, path, name, type, folder, language, LocalDateTime.now(), LocalDateTime.now())
 
     constructor(
         manga: Manga, parseManga : Parse?, pages: Int, path: String, name: String, type: String, folder: String
-    ) : this(null, manga.id!!, pages, path, name, type, folder) {
+    ) : this(null, manga.id!!, pages, path, name, type, folder, Languages.PORTUGUESE, LocalDateTime.now(), LocalDateTime.now()) {
         this.manga = manga
         this.parseManga = parseManga
-        this.dateCreate = LocalDateTime.now()
-        this.lastAccess = LocalDateTime.now()
     }
 
-    constructor( manga: Manga ) : this(null, manga.id!!, 0, "", "", "", "") {
+    constructor( manga: Manga ) : this(null, manga.id!!, 0, "", "", "", "", Languages.PORTUGUESE,
+        LocalDateTime.now(), LocalDateTime.now()) {
         this.manga = manga
-        this.dateCreate = LocalDateTime.now()
-        this.lastAccess = LocalDateTime.now()
     }
 
 
@@ -61,10 +56,13 @@ class FileLink(id: Long?, idManga: Long, pages: Int, path: String, name: String,
     var folder: String = folder
 
     @ColumnInfo(name = DataBaseConsts.FILELINK.COLUMNS.DATE_CREATE)
-    var dateCreate: LocalDateTime? = LocalDateTime.now()
+    var dateCreate: LocalDateTime? = dateCreate
 
     @ColumnInfo(name = DataBaseConsts.FILELINK.COLUMNS.LAST_ACCESS)
-    var lastAccess: LocalDateTime? = null
+    var lastAccess: LocalDateTime? = lastAccess
+
+    @ColumnInfo(name = DataBaseConsts.FILELINK.COLUMNS.LANGUAGE)
+    var language: Languages = language
 
     @Ignore
     var manga: Manga? = null

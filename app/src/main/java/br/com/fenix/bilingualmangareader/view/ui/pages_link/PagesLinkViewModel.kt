@@ -13,6 +13,7 @@ import androidx.lifecycle.MutableLiveData
 import br.com.fenix.bilingualmangareader.model.entity.FileLink
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.entity.PageLink
+import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.model.enums.LoadFile
 import br.com.fenix.bilingualmangareader.model.enums.Pages
 import br.com.fenix.bilingualmangareader.service.controller.SubTitleController
@@ -25,6 +26,7 @@ import br.com.fenix.bilingualmangareader.util.constants.ReaderConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import java.io.File
 import java.io.InputStream
+import java.time.LocalDateTime
 
 
 class PagesLinkViewModel(application: Application) : AndroidViewModel(application) {
@@ -32,35 +34,35 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
     private val mContext = application.applicationContext
     private val mFileLinkRepository: FileLinkRepository = FileLinkRepository(mContext)
 
+    private var mManga : Manga? = null
     private var mFileLink = MutableLiveData<FileLink>()
     val fileLink: LiveData<FileLink> = mFileLink
     private var mPagesLink = MutableLiveData<ArrayList<PageLink>>(ArrayList())
     val pagesLink: LiveData<ArrayList<PageLink>> = mPagesLink
     private var mPagesNotLinked = MutableLiveData<ArrayList<PageLink>>(ArrayList())
     val pagesLinkNotLinked: LiveData<ArrayList<PageLink>> = mPagesNotLinked
+    private var mLanguage = MutableLiveData(Languages.PORTUGUESE)
+    val language: LiveData<Languages> = mLanguage
 
     private var mGenerateImageHandler: MutableList<Handler>? = java.util.ArrayList()
     private var mGenerateImageThread: ArrayList<ImageLoadThread> = ArrayList()
 
     fun getFileLink(manga : Manga? = null, isBackup: Boolean = false) : FileLink? {
         return if (!isBackup && (mFileLink.value == null ||  mFileLink.value!!.path == ""))
-            if (manga == null)
-                null
-            else
+            if (manga != null)
                 mFileLinkRepository.get(manga)
-        else {
-            mFileLink.value!!.pagesNotLink = mPagesNotLinked.value
-            mFileLink.value!!.pagesLink = mPagesLink.value
-            mFileLink.value
-        }
+            else
+                null
+        else this.get()
     }
 
-    private fun reload(manga : Manga, refresh: (index: Int?, type: Pages) -> (Unit)) : Boolean {
+    private fun reload(refresh: (index: Int?, type: Pages) -> (Unit)) : Boolean {
         val fileLink = SubTitleController.getInstance(mContext).getFileLink()?: return false
-        return if (manga == fileLink.manga) {
+        return if (mManga == fileLink.manga) {
             mFileLink.value = fileLink
             mPagesLink.value = fileLink.pagesLink?.let { ArrayList(it) }
             mPagesNotLinked.value = fileLink.pagesNotLink?.let { ArrayList(it) }
+            setLanguage(fileLink.language)
             refresh(null, Pages.ALL)
             getImage(mFileLink.value!!.parseManga, mFileLink.value!!.parseFileLink, mPagesLink.value!!, Pages.ALL, true)
 
@@ -86,28 +88,30 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
         } else false
     }
 
-    private fun find(manga : Manga, refresh: (index: Int?, type: Pages) -> (Unit)) : Boolean {
-        var obj = mFileLinkRepository.get(manga) ?: return false
-        obj.manga = manga
+    private fun find(refresh: (index: Int?, type: Pages) -> (Unit)) : Boolean {
+        if (mManga == null) return false
+        val obj = mFileLinkRepository.get(mManga!!) ?: return false
         set(obj, refresh)
         return (obj.pagesLink != null) && (obj.pagesLink!!.isNotEmpty())
     }
 
-    fun find(idManga: Long, name: String, pages: Int, refresh: (index: Int?, type: Pages) -> (Unit)) : Boolean {
-        var obj = mFileLinkRepository.findByFileName(idManga, name, pages)
-
-        if (obj != null)
-            set(obj, refresh)
-
-        return obj != null
+    fun find(name: String, pages: Int, refresh: (index: Int?, type: Pages) -> (Unit)) : Boolean {
+        if (mManga == null || mManga!!.id == null) return false
+        val obj = mFileLinkRepository.findByFileName(mManga!!.id!!, name, pages) ?: return false
+        set(obj, refresh)
+        return true
     }
 
     fun set(obj: FileLink, refresh: (index: Int?, type: Pages) -> (Unit)) {
         mFileLink.value = obj
         mPagesLink.value!!.clear()
         mPagesNotLinked.value!!.clear()
+        setLanguage(obj.language)
 
-        val mParseManga = ParseFactory.create(obj.manga!!.file) ?: return
+        Util.destroyParse(mFileLink.value!!.parseManga)
+        Util.destroyParse(mFileLink.value!!.parseFileLink)
+
+        val mParseManga = ParseFactory.create(mManga!!.file) ?: return
         mFileLink.value!!.parseManga = mParseManga
         val mParseLink = ParseFactory.create(obj.file) ?: return
         mFileLink.value!!.parseFileLink = mParseLink
@@ -126,6 +130,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun save(obj: FileLink): FileLink {
+        obj.lastAccess = LocalDateTime.now()
         if (obj.id == 0L)
             obj.id = mFileLinkRepository.save(obj)
         else
@@ -135,13 +140,21 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun save() {
-        val obj = mFileLink.value!!
-        obj.pagesLink = mPagesLink.value
-        obj.pagesNotLink = mPagesNotLinked.value
+        val obj = this.get()
+        obj.lastAccess = LocalDateTime.now()
         if (obj.id == null || obj.id == 0L)
             mFileLink.value!!.id = mFileLinkRepository.save(obj)
         else
             mFileLinkRepository.update(obj)
+    }
+
+    fun get(): FileLink {
+        val obj = mFileLink.value!!
+        obj.manga = mManga
+        obj.idManga = mManga!!.id!!
+        obj.pagesLink = mPagesLink.value
+        obj.pagesNotLink = mPagesNotLinked.value
+        return obj
     }
 
     fun delete(obj: FileLink) {
@@ -150,9 +163,8 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun restoreBackup(refresh: (index: Int?, type: Pages) -> (Unit)) {
         if (mFileLink.value != null) {
-            var fileLink = mFileLinkRepository.get(mFileLink.value!!.manga!!)
+            val fileLink = mFileLinkRepository.get(mManga!!)
             if (fileLink != null) {
-                fileLink.manga = mFileLink.value!!.manga
                 fileLink.parseFileLink = mFileLink.value!!.parseFileLink
                 fileLink.parseManga = mFileLink.value!!.parseManga
 
@@ -184,15 +196,23 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                     getImage(null, fileLink.parseFileLink, mPagesNotLinked.value!!, Pages.NOT_LINKED, true)
 
             } else if (mFileLink.value!!.path.isNotEmpty())
-                readFileLink(mFileLink.value!!.path, refresh)
+                readFileLink(mFileLink.value!!.path, true, refresh)
         }
     }
 
-    fun loadManga(manga : Manga, refresh: (index: Int?, type: Pages) -> (Unit)) {
-        mPagesLink.value!!.clear()
+    fun setLanguage(language: Languages? = null, isClear : Boolean = false) {
+        mLanguage.value = if (isClear || language == null) Languages.PORTUGUESE else language
+    }
 
-        if (reload(manga, refresh)) return
-        if (find(manga, refresh)) return
+    fun loadManga(manga : Manga, refresh: (index: Int?, type: Pages) -> (Unit)) {
+        mManga = manga
+        mPagesLink.value!!.clear()
+        setLanguage(isClear = true)
+
+        if (reload(refresh)) return
+        if (find(refresh)) return
+
+        Util.destroyParse(mFileLink.value!!.parseManga)
 
         val parse = ParseFactory.create(manga.file) ?: return
         mFileLink.value = FileLink(manga)
@@ -211,7 +231,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
         getImage(parse, null, mPagesLink.value!!, Pages.MANGA)
     }
 
-    fun readFileLink(path : String, refresh: (index: Int?, type: Pages) -> (Unit)) : LoadFile {
+    fun readFileLink(path : String, isReload: Boolean = false, refresh: (index: Int?, type: Pages) -> (Unit)) : LoadFile {
         var loaded = LoadFile.ERROR_NOT_LOAD
 
         val file = File(path)
@@ -219,11 +239,15 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
             file.name.endsWith(".zip") ||
             file.name.endsWith(".cbr") ||
             file.name.endsWith(".cbz")) {
-            val parse = ParseFactory.create(path)
 
+            val parse = ParseFactory.create(path)
             if (parse != null) {
                 loaded = LoadFile.LOADED
-                mFileLink.value = FileLink(mFileLink.value!!.manga!!, mFileLink.value!!.parseManga, parse.numPages(), path,
+
+                if (!isReload && find(file.nameWithoutExtension, parse.numPages(), refresh)) return loaded
+
+                Util.destroyParse(mFileLink.value!!.parseFileLink)
+                mFileLink.value = FileLink(mManga!!, mFileLink.value!!.parseManga, parse.numPages(), path,
                     file.nameWithoutExtension, file.extension, file.parent)
                 mFileLink.value!!.parseFileLink = parse
 
@@ -242,8 +266,8 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                             refresh(i, Pages.LINKED)
                         } else
                             listNotLink.add(PageLink(
-                                mFileLink.value!!.id, -1, mFileLink.value!!.manga!!.pages, i, mFileLink.value!!.pages,
-                                mFileLink.value!!.manga!!.name, mFileLink.value!!.name
+                                mFileLink.value!!.id, -1, mManga!!.pages, i, mFileLink.value!!.pages,
+                                mManga!!.name, mFileLink.value!!.name
                             ))
                     }
                 }
@@ -269,6 +293,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun clearFileLink(refresh: (index: Int?, type: Pages) -> (Unit)) {
         mFileLink.value!!.path = ""
+        setLanguage(isClear = true)
         mPagesNotLinked.value!!.clear()
         mPagesLink.value!!.forEach { page ->  page.clearFileLink() }
         refresh(null, Pages.ALL)
@@ -276,9 +301,11 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
 
     private fun generateBitmap(parse: Parse, index: Int): Bitmap? {
         return try {
-            var stream: InputStream? = parse.getPage(index)
-            var image  = BitmapFactory.decodeStream(stream)
-            Bitmap.createScaledBitmap(image, ReaderConsts.PAGESLINK.IMAGES_WIDTH, ReaderConsts.PAGESLINK.IMAGES_HEIGHT, false)
+            val stream: InputStream = parse.getPage(index)
+            val image  = BitmapFactory.decodeStream(stream)
+            val bitmap = Bitmap.createScaledBitmap(image, ReaderConsts.PAGESLINK.IMAGES_WIDTH, ReaderConsts.PAGESLINK.IMAGES_HEIGHT, false)
+            Util.closeInputStream(stream)
+            bitmap
         } catch (e: Exception) {
             Log.i(
                 GeneralConsts.TAG.LOG,
@@ -296,7 +323,12 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun getPageNotLink(index : Int) : PageLink = mPagesNotLinked.value!![index]
 
-    fun getPageNotLinkLastIndex() = mPagesNotLinked.value!!.size - 1
+    fun getPageNotLinkLastIndex(): Int {
+        return if (mPagesNotLinked.value!!.isEmpty())
+            0
+        else
+            mPagesNotLinked.value!!.size - 1
+    }
 
     fun getPageNotLinkIndex(page : PageLink?) : Int? {
         return if (page == null || mPagesNotLinked.value!!.isEmpty()) null
@@ -310,7 +342,6 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     private fun addNotLinked(page: PageLink) {
-        val size = mPagesNotLinked.value!!.size
         if (page.fileLinkPage != -1) {
             mPagesNotLinked.value!!.add(
                 PageLink(
@@ -319,7 +350,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                     true, null, page.imageLeftFileLinkPage
                 )
             )
-            notifyImageLoadAdded(size, Pages.NOT_LINKED)
+            notifyImageLoadAdded(getPageNotLinkLastIndex(), Pages.NOT_LINKED)
         }
 
         if (page.dualImage) {
@@ -331,7 +362,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                 )
             )
             page.clearRightFileLink()
-            notifyImageLoadAdded(size, Pages.NOT_LINKED)
+            notifyImageLoadAdded(getPageNotLinkLastIndex(), Pages.NOT_LINKED)
         }
     }
 
@@ -341,7 +372,6 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
             return
         }
 
-        val size = mPagesNotLinked.value!!.size
         if (destinyType != Pages.LINKED && destiny.dualImage) {
             mPagesNotLinked.value!!.add(
                 PageLink(
@@ -349,7 +379,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                     destiny.fileLinkPages, destiny.fileRightLinkPageName, true, null, destiny.imageRightFileLinkPage
                 )
             )
-            notifyImageLoadAdded(size, Pages.NOT_LINKED)
+            notifyImageLoadAdded(getPageNotLinkLastIndex(), Pages.NOT_LINKED)
         } else if (destinyType == Pages.LINKED && destiny.fileLinkPage != -1) {
             mPagesNotLinked.value!!.add(
                 PageLink(
@@ -357,7 +387,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                     destiny.fileLinkPages, destiny.fileLinkPageName, true, null, destiny.imageLeftFileLinkPage
                 )
             )
-            notifyImageLoadAdded(size, Pages.NOT_LINKED)
+            notifyImageLoadAdded(getPageNotLinkLastIndex(), Pages.NOT_LINKED)
         }
 
         when {
@@ -529,11 +559,10 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun onNotLinked(origin : PageLink) {
-        val size = mPagesNotLinked.value!!.size
         mPagesNotLinked.value!!.add(PageLink(origin.idFile, -1, 0, "", origin.fileLinkPage,
             origin.fileLinkPages, origin.fileLinkPageName, true, null, origin.imageLeftFileLinkPage))
 
-        notifyImageLoadAdded(size, Pages.NOT_LINKED)
+        notifyImageLoadAdded(getPageNotLinkLastIndex(), Pages.NOT_LINKED)
         val originIndex = mPagesLink.value!!.indexOf(origin)
 
         if (origin.dualImage)
@@ -575,18 +604,53 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
+    private fun isAllImagesLoaded(type : Pages = Pages.ALL): Boolean {
+        val isFileLink = mFileLink.value!!.path != ""
+        if (type != Pages.NOT_LINKED)
+            for (page in mPagesLink.value!!) {
+                if (page.imageMangaPage == null)
+                    return false
+                if (isFileLink && page.fileLinkPage > -1 && ((page.imageLeftFileLinkPage == null) || (page.dualImage && page.imageRightFileLinkPage == null)))
+                    return false
+            }
+
+        if (isFileLink && (type == Pages.NOT_LINKED || type == Pages.ALL))
+            for (page in mPagesNotLinked.value!!) {
+                if (page.fileLinkPage > -1 && page.imageLeftFileLinkPage == null)
+                    return false
+            }
+
+        return true
+    }
+
+    private var mLoadVerify : Int = 0
     private var mLoadError : Int = 0
-    fun reLoadImages() {
-        if (mLoadError > 5) return
+    fun reLoadImages(type : Pages, isVerifyImages: Boolean = false, isForced: Boolean = false) {
+        mLoadVerify += 1
+        if ((!isForced) && (mLoadError > 5 || (isVerifyImages && mLoadVerify > 3))) return
+        if (!isForced && isVerifyImages && isAllImagesLoaded(type)) return
 
-        getImage(mFileLink.value!!.parseManga, mFileLink.value!!.parseFileLink, mPagesLink.value!!, Pages.ALL, true)
+        val parseManga = ParseFactory.create(mManga!!.file)
+        val parseFileLink = ParseFactory.create(mFileLink.value!!.file)
 
-        if (mPagesNotLinked.value!!.isNotEmpty())
-            getImage(null, mFileLink.value!!.parseFileLink, mPagesNotLinked.value!!, Pages.NOT_LINKED, true)
+        Util.destroyParse(mFileLink.value!!.parseManga)
+        Util.destroyParse(mFileLink.value!!.parseFileLink)
+
+        mFileLink.value!!.parseManga = parseManga
+        mFileLink.value!!.parseFileLink = parseFileLink
+
+        if (type != Pages.NOT_LINKED)
+            getImage(parseManga, parseFileLink, mPagesLink.value!!, Pages.ALL, true)
+
+        if ((type == Pages.NOT_LINKED || type == Pages.ALL) && mPagesNotLinked.value!!.isNotEmpty())
+            getImage(null, parseFileLink, mPagesNotLinked.value!!, Pages.NOT_LINKED, true)
     }
 
     private fun getImage(parseManga: Parse?, parsePageLink: Parse?, list : ArrayList<PageLink>, type : Pages, reload : Boolean = false) {
+        if (!reload) mLoadVerify = 0
+
         mGenerateImageThread.forEach { if (it.type == type) it.thread.interrupt() }
+        mGenerateImageThread.removeAll { it.type == type }
 
         val runnable = ImageLoadRunnable(parseManga, parsePageLink, list, type, reload)
         val thread = Thread(runnable)
@@ -601,6 +665,8 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
         mGenerateImageThread.clear()
     }
 
+    fun imageThreadLoadingProgress(): Boolean = mGenerateImageThread.isNotEmpty()
+
     fun addImageLoadHandler(handler: Handler) {
         mGenerateImageHandler!!.add(handler)
     }
@@ -609,10 +675,18 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
         mGenerateImageHandler!!.remove(handler)
     }
 
+    private fun notifyImageLoadStart(type: Pages) {
+        val message = Message()
+        message.obj = ImageLoad(null, type)
+        message.what = PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_START
+        for (h in mGenerateImageHandler!!)
+            h.sendMessage(message)
+    }
+
     private fun notifyImageLoadAdded(index: Int?, type: Pages) {
         val message = Message()
         message.obj = ImageLoad(index, type)
-        message.what = PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_ADDED
+        message.what = PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_ADDED
         for (h in mGenerateImageHandler!!)
             h.sendMessage(message)
     }
@@ -620,7 +694,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
     private fun notifyImageLoadRemoved(index: Int?, type: Pages) {
         val message = Message()
         message.obj = ImageLoad(index, type)
-        message.what = PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_REMOVED
+        message.what = PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_REMOVED
         for (h in mGenerateImageHandler!!)
             h.sendMessage(message)
     }
@@ -628,29 +702,29 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
     private fun notifyImageLoad(index: Int?, type: Pages) {
         val message = Message()
         message.obj = ImageLoad(index, type)
-        message.what = PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_UPDATED
+        message.what = PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_UPDATED
         for (h in mGenerateImageHandler!!)
             h.sendMessage(message)
     }
 
     private fun notifyImageLoadFinished(type: Pages) {
+        mGenerateImageThread.removeAll { it.type == type }
+
         val message = Message()
         message.obj = ImageLoad(null, type)
-        message.what = PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_FINISHED
+        message.what = PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_FINISHED
         for (h in mGenerateImageHandler!!)
             h.sendMessage(message)
-
-        mGenerateImageThread.removeIf { it.type == type }
     }
 
     private fun notifyErrorLoad(type: Pages) {
+        mGenerateImageThread.removeAll { it.type == type }
+
         val message = Message()
         message.obj = ImageLoad(null, type)
-        message.what = PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_LOAD_IMAGE_ERROR
+        message.what = PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_LOAD_ERROR
         for (h in mGenerateImageHandler!!)
             h.sendMessage(message)
-
-        mGenerateImageThread.removeIf { it.type == type }
     }
 
     private var mForceEnd : Boolean = false
@@ -661,8 +735,8 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
             var error = false
             try {
                 mForceEnd = false
+                notifyImageLoadStart(type)
                 for ((index, page) in list.withIndex()) {
-
                     if (reload) {
                         when (type) {
                             Pages.ALL -> {
@@ -675,6 +749,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                                 if (page.imageLeftFileLinkPage != null)
                                     continue
                             }
+                            else -> {}
                         }
                     }
 
@@ -702,6 +777,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                             page.imageLeftFileLinkPage = generateBitmap(parsePageLink!!, page.fileLinkPage)
                             page.isFileLinkLoading = false
                         }
+                        else -> {}
                     }
 
                     if (mForceEnd)

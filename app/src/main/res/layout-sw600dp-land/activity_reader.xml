@@ -123,27 +123,6 @@
                 app:rippleColor="@color/onSecondary" />
 
             <Button
-                android:id="@+id/btn_menu_page_linked"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="@dimen/popup_reader_button_width"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="5dp"
-                android:background="@color/primarySemitransparent"
-                android:contentDescription="@string/reading_button_page_linked"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                android:minHeight="@dimen/popup_reader_button_min_height"
-                android:paddingLeft="@dimen/popup_reader_button_padding"
-                android:paddingRight="@dimen/popup_reader_button_padding"
-                app:icon="@drawable/ic_page_linked"
-                app:iconTint="@color/textPrimary"
-                app:iconSize="33dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/nav_next_text"
-                app:layout_constraintTop_toTopOf="parent"
-                app:rippleColor="@color/onSecondary" />
-
-            <Button
                 android:id="@+id/btn_popup_subtitle"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="@dimen/popup_reader_button_width"
@@ -178,6 +157,27 @@
                 android:paddingLeft="@dimen/popup_reader_button_padding"
                 android:paddingRight="@dimen/popup_reader_button_padding"
                 app:icon="@drawable/ic_color_settings"
+                app:iconTint="@color/textPrimary"
+                app:iconSize="33dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/nav_next_text"
+                app:layout_constraintTop_toTopOf="parent"
+                app:rippleColor="@color/onSecondary" />
+
+            <Button
+                android:id="@+id/btn_menu_page_linked"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="@dimen/popup_reader_button_width"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:background="@color/primarySemitransparent"
+                android:contentDescription="@string/reading_button_page_linked"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minHeight="@dimen/popup_reader_button_min_height"
+                android:paddingLeft="@dimen/popup_reader_button_padding"
+                android:paddingRight="@dimen/popup_reader_button_padding"
+                app:icon="@drawable/ic_page_linked"
                 app:iconTint="@color/textPrimary"
                 app:iconSize="33dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -238,7 +238,7 @@
         android:background="@color/primary"
         android:fitsSystemWindows="true"
         android:orientation="vertical"
-        android:paddingTop="20dp"
+        android:paddingTop="10dp"
         android:visibility="gone">
 
         <ImageView
@@ -319,7 +319,7 @@
         android:background="@color/primary"
         android:fitsSystemWindows="true"
         android:orientation="vertical"
-        android:paddingTop="20dp"
+        android:paddingTop="10dp"
         android:visibility="gone">
 
         <ImageView
