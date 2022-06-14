@@ -5,12 +5,15 @@ import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import br.com.fenix.bilingualmangareader.service.parses.Parse
+import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.util.*
+import kotlin.experimental.and
 
 class Util {
     companion object Storage {
@@ -83,6 +86,28 @@ class Util {
             }
         }
 
+        fun MD5(image: InputStream): String {
+            return try {
+                val buffer = ByteArray(1024)
+                val digest = MessageDigest.getInstance("MD5")
+                var numRead = 0
+                while (numRead != -1) {
+                    numRead = image.read(buffer)
+                    if (numRead > 0) digest.update(buffer, 0, numRead)
+                }
+                val md5Bytes = digest.digest()
+                var returnVal = ""
+                for (element in md5Bytes)
+                    returnVal += Integer.toString((element and 0xff.toByte()) + 0x100, 16).substring(1)
+
+                returnVal
+            } catch (e: Exception) {
+                ""
+            } finally {
+                closeInputStream(image)
+            }
+        }
+
         fun calculateInSampleSize(
             options: BitmapFactory.Options,
             reqWidth: Int,
@@ -145,6 +170,41 @@ class Util {
             return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
         }
 
+        fun imageToInputStream(image: Bitmap): InputStream {
+            val output = ByteArrayOutputStream()
+            return output.use { otp ->
+                image.compress(Bitmap.CompressFormat.JPEG, 100, otp)
+                ByteArrayInputStream(output.toByteArray())
+            }
+        }
+
+        fun closeInputStream(input: InputStream?) {
+            if (input != null) {
+                try {
+                    input.close()
+                } catch (e: Exception) {
+                }
+            }
+        }
+
+        fun destroyParse(parse: Parse?) {
+            if (parse != null) {
+                try {
+                    parse.destroy()
+                } catch (e: Exception) {
+                }
+            }
+        }
+
+        fun getNameFromPath(path: String): String {
+            return if (path.contains('/'))
+                path.substringAfterLast("/")
+            else if (path.contains('\\'))
+                path.substringAfterLast('\\')
+            else
+                path
+        }
+
         fun normalizeFilePath(path: String): String {
             var folder: String = path
 
@@ -157,6 +217,23 @@ class Util {
                 folder = folder.replace("/document", "/storage").replace(":", "/")
 
             return folder
+        }
+
+        fun getChapterFromPath(path: String): Float {
+            if (path.isEmpty()) return -1f
+
+            var folder = if (path.contains('/', true))
+                path.replaceAfterLast('/', "").replace("/", "", false).lowercase()
+            else
+                path.replaceAfterLast('\\', "").replace("\\", "", false).lowercase()
+
+            folder = if (folder.contains("capitulo", true))
+                folder.substringAfterLast("capitulo").replace("capitulo", "", true)
+            else if (folder.contains("capítulo", true))
+                folder.substringAfterLast("capítulo").replace("capítulo", "", true)
+            else folder
+
+            return folder.toFloatOrNull() ?: -1f
         }
 
     }

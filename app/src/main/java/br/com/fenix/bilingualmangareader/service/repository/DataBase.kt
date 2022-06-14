@@ -13,7 +13,7 @@ import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Converters
 import java.io.BufferedReader
 
-@Database(entities = [Manga::class, Cover::class, SubTitle::class, KanjiJLPT::class, Kanjax::class], version = 1)
+@Database(version = 4, entities = [Manga::class, Cover::class, SubTitle::class, KanjiJLPT::class, Kanjax::class, FileLink::class, PageLink::class])
 @TypeConverters(Converters::class)
 abstract class DataBase : RoomDatabase() {
 
@@ -22,6 +22,8 @@ abstract class DataBase : RoomDatabase() {
     abstract fun getSubTitleDao(): SubTitleDAO
     abstract fun getKanjiJLPTDao(): KanjiJLPTDAO
     abstract fun getKanjaxDao(): KanjaxDAO
+    abstract fun getFileLinkDao(): FileLinkDAO
+    abstract fun getPageLinkDao(): PageLinkDAO
 
     // Singleton - One database initialize only
     companion object {
@@ -35,7 +37,7 @@ abstract class DataBase : RoomDatabase() {
             synchronized(DataBase::class.java) { // Used for a two or many cores
                 INSTANCE = Room.databaseBuilder(context, DataBase::class.java, DATABASE_NAME)
                     .addCallback(rdc)
-                    .addMigrations(Migrations.MIGRATION_1_2)
+                    .addMigrations(Migrations.MIGRATION_1_2, Migrations.MIGRATION_2_3, Migrations.MIGRATION_3_4)
                     .allowMainThreadQueries()
                     .build() // MainThread uses another thread in db conection
             }
@@ -46,9 +48,9 @@ abstract class DataBase : RoomDatabase() {
             override fun onCreate(database: SupportSQLiteDatabase) {
                 Log.i(GeneralConsts.TAG.LOG, "Run initial data....")
                 val kanji = mAssets.open("kanji.sql").bufferedReader().use(BufferedReader::readText)
-                database.execSQL(Migrations.SQL_INITIAL.KANJI + kanji)
+                database.execSQL(Migrations.SQLINITIAL.KANJI + kanji)
                 val kanjax = mAssets.open("kanjax.sql").bufferedReader().use(BufferedReader::readText)
-                database.execSQL(Migrations.SQL_INITIAL.KANJAX + kanjax)
+                database.execSQL(Migrations.SQLINITIAL.KANJAX + kanjax)
             }
         }
     }

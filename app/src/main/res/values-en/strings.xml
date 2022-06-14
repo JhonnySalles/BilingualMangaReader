@@ -7,6 +7,8 @@
     <string name="action_delete">Delete</string>
     <string name="action_copy">Copied text: </string>
     <string name="action_app_not_installed">Required App is not installed</string>
+    <string name="action_scroll_up">Up</string>
+    <string name="action_scroll_down">Down</string>
 
     <!-- MENU -->
     <string name="menu_search">Search</string>
@@ -48,6 +50,7 @@
     <!-- READER -->
     <string name="reader_reload">Reload</string>
     <string name="reader_not_found">Not found</string>
+    <string name="file_not_found">File not found</string>
     <string name="menu_view_mode">View Mode</string>
     <string name="menu_view_mode_aspect_fill">Aspect Fill</string>
     <string name="menu_view_mode_aspect_fit">Aspect Fit</string>
@@ -60,9 +63,17 @@
     <string name="menu_reading_favorite">Favorite</string>
     <string name="menu_reading_order">List order</string>
     <string name="menu_reading_order_change">Sort:</string>
-    <string name="menu_reading_change_language">Change language</string>
-
+    <string name="menu_reading_subtitle">Subtitle</string>
+    <string name="menu_reading_color">Page color</string>
+    <string name="menu_reading_file_link">File in another language</string>
     <string name="menu_reading_floating">Floating popup</string>
+
+    <string name="reading_button_screen_rotate">Screen rotate</string>
+    <string name="reading_button_page_linked">Page linked</string>
+    <string name="reading_button_subtitle">Subtitle</string>
+    <string name="reading_button_color">Pages colors</string>
+    <string name="reading_button_file_link">File link</string>
+    <string name="reading_button_popup_floating">Popup floating</string>
 
     <!-- READER POPUP TITLES -->
     <string name="popup_reading_open">Open</string>
@@ -92,6 +103,7 @@
     <string name="popup_reading_import_subtitle_translate">Translated language</string>
     <string name="popup_reading_import_subtitle_is_empty">Subtitle empty</string>
     <string name="popup_reading_import_subtitle_page_is_empty">Pages empty in subtitle or subtitle not selected.</string>
+    <string name="popup_reading_use_page_linked_in_search">Use linked pages to search for the translation</string>
 
     <!-- READER POPUP SUBTITLE -->
     <string name="popup_reading_subtitle_chapter">Chapter</string>
@@ -102,6 +114,7 @@
     <string name="popup_reading_subtitle_not_find_subtitle">Could not find the subtitle in files.</string>
     <string name="popup_reading_subtitle_list_empty">Subtitle list is empty.</string>
     <string name="popup_reading_subtitle_chapter_not_found">Chapter in another language not found.</string>
+    <string name="popup_reading_subtitle_chapter_from_page_link_not_found">Chapter in another language from linked file page not found.</string>
 
     <string name="popup_reading_button_translate">Switch between selected languages</string>
     <string name="popup_reading_button_draw">Draw subtitle positions on the screen</string>
@@ -109,10 +122,16 @@
     <string name="popup_reading_button_before">Previous text</string>
     <string name="popup_reading_button_next">Next text</string>
 
+    <string name="popup_reading_subtitle_empty">Subtitles not found</string>
+    <string name="popup_reading_subtitle_embedded_empty">Subtitles not found in opened manga, please select a file from the menu.</string>
+    <string name="popup_reading_subtitle_selected_empty">Subtitles not found in selected file.</string>
+
     <!-- READER FLOATING -->
     <string name="floating_reading_not_permission">Permission is not granted!</string>
 
     <!-- ALERT -->
+    <string name="manga_excluded">Manga not found or excluded</string>
+    <string name="action_neutral">Ok</string>
     <string name="switch_action_positive">Yes</string>
     <string name="switch_action_negative">No</string>
     <string name="switch_next_comic">Would you like to switch to the next comic?</string>
@@ -120,7 +139,6 @@
 
     <!-- LIBRARY -->
     <string name="library_last_access">Last access</string>
-
     <string name="library_menu_favorite_add">Add favorite</string>
     <string name="library_menu_favorite_remove">Remove favorite</string>
     <string name="library_menu_delete">Delete</string>
@@ -130,6 +148,18 @@
     <!-- HISTORY -->
     <string name="history_last_acess">Last access</string>
     <string name="history_today">Today</string>
+
+    <!-- PAGE LINK -->
+    <string name="page_link_manga_empty">Manga not found</string>
+    <string name="page_link_manga_empty_description">Manga not selected</string>
+    <string name="page_link_file">File in another language</string>
+    <string name="page_link_file_language">File language</string>
+    <string name="page_link_refresh">Refresh</string>
+    <string name="page_link_save">Save</string>
+    <string name="page_link_load_file_wrong">Unsupported file</string>
+    <string name="page_link_load_error">Error opening file</string>
+    <string name="page_link_saved">Saved</string>
+    <string name="page_link_refreshed">Refreshed</string>
 
     <!-- HELP -->
     <string name="help_content">Content</string>

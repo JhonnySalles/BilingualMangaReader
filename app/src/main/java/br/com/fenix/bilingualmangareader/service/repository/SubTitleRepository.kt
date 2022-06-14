@@ -17,7 +17,7 @@ class SubTitleRepository(context: Context) {
         mDataBase.delete(obj)
     }
 
-    fun deleteAll(idManga: Long) {
+    private fun deleteAll(idManga: Long) {
         mDataBase.deleteAll(idManga)
     }
 

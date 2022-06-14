@@ -13,6 +13,11 @@ class ReaderConsts {
         const val COVER_THUMBNAIL_WIDTH = 200
     }
 
+    object PAGESLINK {
+        const val IMAGES_HEIGHT = 300
+        const val IMAGES_WIDTH = 200
+    }
+
     object STATES {
         const val STATE_FULLSCREEN = "STATE_FULLSCREEN"
         const val STATE_NEW_COMIC = "STATE_NEW_COMIC"

@@ -23,10 +23,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MangaReader">
         <activity
-            android:name="br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity"
-            android:exported="true"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name="br.com.fenix.bilingualmangareader.MainActivity"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar">
@@ -35,6 +31,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity"
+            android:exported="true"
+            android:theme="@style/AppTheme.FullScreen"/>
+        <activity
+            android:name="br.com.fenix.bilingualmangareader.view.ui.pages_link.PagesLinkActivity"
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

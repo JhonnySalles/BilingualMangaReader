@@ -51,8 +51,6 @@ class LineViewHolder(itemView: View, private val listener: MangaCardListener) :
             ImageCoverController.instance.setImageCoverAsync(itemView.context, manga, layoutPosition)
         }
 
-
-
         mangaTitle.text = manga.title
 
         if (manga.subTitle.isEmpty()) {

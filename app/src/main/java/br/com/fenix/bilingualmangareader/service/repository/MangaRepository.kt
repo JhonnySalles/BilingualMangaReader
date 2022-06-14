@@ -34,12 +34,12 @@ class MangaRepository(context: Context) {
 
     fun updateLastAcess(obj: Manga) {
         if (obj.id != null)
-            mDataBase.updateLastAccess(obj.id!!, obj.lastAccess.toString())
+            mDataBase.update(obj)
     }
 
     fun delete(obj: Manga) {
-        mCoverRepository.deleteAll(obj.id!!)
-        mDataBase.delete(obj)
+        //mCoverRepository.deleteAll(obj.id!!)
+        mDataBase.delete(obj.id!!)
     }
 
     fun list(): List<Manga>? {

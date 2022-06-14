@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary"
+    tools:context=".view.ui.pages_link.PagesLinkActivity">
+
+    <FrameLayout
+        android:id="@+id/root_frame_pages_link"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/onPrimary"
+        android:fitsSystemWindows="false" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

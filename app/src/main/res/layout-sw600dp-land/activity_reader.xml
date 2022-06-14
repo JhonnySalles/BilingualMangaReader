@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_activity_reader"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary"
+    tools:context=".view.ui.reader.ReaderActivity">
+
+    <FrameLayout
+        android:id="@+id/root_frame_reader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/onPrimary"
+        android:fitsSystemWindows="false" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_reader"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/actionBarSize"
+            android:background="@color/primarySemitransparent"
+            app:popupTheme="@style/MyDarkToolbarStyle"
+            app:theme="@style/ToolbarTheme">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:gravity="center|start"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/toolbar_title_custom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@color/onSecondary"
+                    android:textSize="@dimen/title_size" />
+
+                <TextView
+                    android:id="@+id/toolbar_subtitle_custom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="start"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@color/onSecondary"
+                    android:textSize="@dimen/title_small_size" />
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+        <LinearLayout
+            android:id="@+id/nav_reader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="80dp"
+            android:background="@drawable/reader_nav_bg"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingLeft="10dp"
+            android:paddingTop="2dp"
+            android:paddingRight="10dp">
+
+            <TextView
+                android:id="@+id/nav_reader_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/onSecondary"
+                android:textSize="@dimen/title_small_size" />
+
+            <SeekBar
+                android:id="@+id/nav_reader_progress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxHeight="2dp"
+                android:minHeight="2dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="10dp"
+                android:progressDrawable="@drawable/reader_nav_progress"
+                android:thumb="@drawable/reader_nav_thumb"
+                android:thumbOffset="6dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/toolbar_reader_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/primarySemitransparent"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_screen_rotate"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="@dimen/popup_reader_button_width"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:background="@color/primarySemitransparent"
+                android:contentDescription="@string/reading_button_screen_rotate"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minHeight="@dimen/popup_reader_button_min_height"
+                android:paddingLeft="@dimen/popup_reader_button_padding"
+                android:paddingRight="@dimen/popup_reader_button_padding"
+                app:icon="@drawable/ic_screen_rotation"
+                app:iconTint="@color/textPrimary"
+                app:iconSize="30dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/nav_next_text"
+                app:layout_constraintTop_toTopOf="parent"
+                app:rippleColor="@color/onSecondary" />
+
+            <Button
+                android:id="@+id/btn_popup_subtitle"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="@dimen/popup_reader_button_width"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:background="@color/primarySemitransparent"
+                android:contentDescription="@string/reading_button_subtitle"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minHeight="@dimen/popup_reader_button_min_height"
+                android:paddingLeft="@dimen/popup_reader_button_padding"
+                android:paddingRight="@dimen/popup_reader_button_padding"
+                app:icon="@drawable/ic_change_language"
+                app:iconTint="@color/textPrimary"
+                app:iconSize="30dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/nav_next_text"
+                app:layout_constraintTop_toTopOf="parent"
+                app:rippleColor="@color/onSecondary" />
+
+            <Button
+                android:id="@+id/btn_popup_color"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="@dimen/popup_reader_button_width"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:background="@color/primarySemitransparent"
+                android:contentDescription="@string/reading_button_color"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minHeight="@dimen/popup_reader_button_min_height"
+                android:paddingLeft="@dimen/popup_reader_button_padding"
+                android:paddingRight="@dimen/popup_reader_button_padding"
+                app:icon="@drawable/ic_color_settings"
+                app:iconTint="@color/textPrimary"
+                app:iconSize="33dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/nav_next_text"
+                app:layout_constraintTop_toTopOf="parent"
+                app:rippleColor="@color/onSecondary" />
+
+            <Button
+                android:id="@+id/btn_menu_page_linked"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="@dimen/popup_reader_button_width"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:background="@color/primarySemitransparent"
+                android:contentDescription="@string/reading_button_page_linked"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minHeight="@dimen/popup_reader_button_min_height"
+                android:paddingLeft="@dimen/popup_reader_button_padding"
+                android:paddingRight="@dimen/popup_reader_button_padding"
+                app:icon="@drawable/ic_page_linked"
+                app:iconTint="@color/textPrimary"
+                app:iconSize="33dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/nav_next_text"
+                app:layout_constraintTop_toTopOf="parent"
+                app:rippleColor="@color/onSecondary" />
+
+            <Button
+                android:id="@+id/btn_menu_file_link"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="@dimen/popup_reader_button_width"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:background="@color/primarySemitransparent"
+                android:contentDescription="@string/reading_button_file_link"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minHeight="@dimen/popup_reader_button_min_height"
+                android:paddingLeft="@dimen/popup_reader_button_padding"
+                android:paddingRight="@dimen/popup_reader_button_padding"
+                app:icon="@drawable/ic_file_link"
+                app:iconTint="@color/textPrimary"
+                app:iconSize="30dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/nav_next_text"
+                app:layout_constraintTop_toTopOf="parent"
+                app:rippleColor="@color/onSecondary" />
+
+            <Button
+                android:id="@+id/btn_popup_open_floating"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="@dimen/popup_reader_button_width"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="20dp"
+                android:background="@color/primarySemitransparent"
+                android:contentDescription="@string/reading_button_popup_floating"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minHeight="@dimen/popup_reader_button_min_height"
+                android:paddingLeft="@dimen/popup_reader_button_padding"
+                android:paddingRight="@dimen/popup_reader_button_padding"
+                app:icon="@drawable/ic_floating_window"
+                app:iconTint="@color/textPrimary"
+                app:iconSize="30dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/nav_next_text"
+                app:layout_constraintTop_toTopOf="parent"
+                app:rippleColor="@color/onSecondary" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/menu_popup_translate"
+        android:layout_width="430dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:background="@color/primary"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical"
+        android:paddingTop="10dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/menu_translate_close"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|top"
+            android:contentDescription="@string/popup_reading_close"
+            android:scaleType="center"
+            android:src="@drawable/ic_close"
+            app:tint="@color/onSecondary" />
+
+        <ImageView
+            android:id="@+id/menu_translate_floating_touch"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|top"
+            android:contentDescription="@string/popup_reading_floating_popup"
+            android:scaleType="center"
+            android:src="@drawable/ic_floating_window"
+            app:tint="@color/onSecondary" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:orientation="vertical">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/popup_translate_tab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/primary"
+                app:tabGravity="fill"
+                app:tabMode="fixed"
+                app:tabPaddingBottom="0dp"
+                app:tabPaddingEnd="0dp"
+                app:tabPaddingStart="0dp"
+                app:tabPaddingTop="0dp"
+                app:tabSelectedTextColor="@color/secondary"
+                app:tabTextAppearance="@style/PopupTab"
+                app:tabTextColor="@color/onSecondary">
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab_item_subtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/popup_reading_tab_item_subtitle" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab_item_vocabulary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/popup_reading_tab_item_subtitle_vocabulary" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab_item_file_import"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/popup_reading_tab_item_subtitle_import" />
+
+            </com.google.android.material.tabs.TabLayout>
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/popup_translate_view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="2dp"
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/menu_popup_color"
+        android:layout_width="430dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:background="@color/primary"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical"
+        android:paddingTop="10dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/menu_color_close"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|top"
+            android:contentDescription="@string/popup_reading_close"
+            android:scaleType="center"
+            android:src="@drawable/ic_close"
+            app:tint="@color/onSecondary" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:orientation="vertical">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/popup_color_tab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/primary"
+                app:tabGravity="fill"
+                app:tabMode="fixed"
+                app:tabPaddingBottom="0dp"
+                app:tabPaddingEnd="0dp"
+                app:tabPaddingStart="0dp"
+                app:tabPaddingTop="0dp"
+                app:tabSelectedTextColor="@color/secondary"
+                app:tabTextAppearance="@style/PopupTab"
+                app:tabTextColor="@color/onSecondary">
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab_item_brightness"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/popup_reading_tab_item_brightness" />
+
+            </com.google.android.material.tabs.TabLayout>
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/popup_color_view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="2dp"
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+        </LinearLayout>
+    </FrameLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

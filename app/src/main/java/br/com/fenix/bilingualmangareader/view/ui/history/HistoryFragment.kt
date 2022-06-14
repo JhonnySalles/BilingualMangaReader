@@ -7,6 +7,7 @@ import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -20,7 +21,6 @@ import br.com.fenix.bilingualmangareader.view.adapter.history.HistoryCardAdapter
 import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity
 import java.lang.ref.WeakReference
 import java.time.LocalDateTime
-import java.util.*
 
 class HistoryFragment : Fragment() {
 
@@ -45,15 +45,25 @@ class HistoryFragment : Fragment() {
         mRecycleView = root.findViewById(R.id.rv_history)
         mListener = object : MangaCardListener {
             override fun onClick(manga: Manga) {
-                val intent = Intent(context, ReaderActivity::class.java)
-                val bundle = Bundle()
-                manga.lastAccess = LocalDateTime.now()
-                bundle.putString(GeneralConsts.KEYS.MANGA.NAME, manga.title)
-                bundle.putInt(GeneralConsts.KEYS.MANGA.MARK, manga.bookMark)
-                bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, manga)
-                intent.putExtras(bundle)
-                context?.startActivity(intent)
-                mViewModel.updateLastAccess(manga)
+                if (!manga.excluded) {
+                    val intent = Intent(context, ReaderActivity::class.java)
+                    val bundle = Bundle()
+                    manga.lastAccess = LocalDateTime.now()
+                    bundle.putString(GeneralConsts.KEYS.MANGA.NAME, manga.title)
+                    bundle.putInt(GeneralConsts.KEYS.MANGA.MARK, manga.bookMark)
+                    bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, manga)
+                    intent.putExtras(bundle)
+                    context?.startActivity(intent)
+                    mViewModel.updateLastAccess(manga)
+                } else
+                    AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
+                            .setTitle(getString(R.string.manga_excluded))
+                            .setMessage(manga.file.path)
+                            .setNeutralButton(
+                                R.string.action_neutral
+                            ) { _, _ -> }
+                            .create()
+                            .show()
             }
 
             override fun onClickLong(manga: Manga, view: View, position: Int) {
@@ -90,7 +100,7 @@ class HistoryFragment : Fragment() {
         override fun handleMessage(msg: Message) {
             when (msg.what) {
                 GeneralConsts.SCANNER.MESSAGE_COVER_UPDATE_FINISHED -> {
-                    val idItem = msg.data.getInt("position")
+                    val idItem = msg.data.getInt(GeneralConsts.SCANNER.POSITION)
                     notifyDataSet(idItem)
                 }
             }
@@ -109,9 +119,9 @@ class HistoryFragment : Fragment() {
     }
 
     private fun observer() {
-        mViewModel.save.observe(viewLifecycleOwner, {
+        mViewModel.save.observe(viewLifecycleOwner) {
             updateList(it)
-        })
+        }
     }
 
 }
