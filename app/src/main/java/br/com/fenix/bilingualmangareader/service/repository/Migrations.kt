@@ -3,6 +3,7 @@ package br.com.fenix.bilingualmangareader.service.repository
 import android.util.Log
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.util.constants.DataBaseConsts
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 
@@ -83,6 +84,7 @@ class Migrations {
         // Migration version 4.
         val MIGRATION_3_4 = object : Migration(3, 4) {
             override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE " + DataBaseConsts.FILELINK.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.FILELINK.COLUMNS.LANGUAGE + " TEXT DEFAULT '" + Languages.PORTUGUESE + "' NOT NULL")
                 Log.i(GeneralConsts.TAG.LOG, "Iniciando o migration 3 - 4")
             }
         }

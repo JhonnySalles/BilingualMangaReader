@@ -3,11 +3,12 @@ package br.com.fenix.bilingualmangareader.util.constants
 class PageLinkConsts {
 
     object MESSAGES {
-        const val MESSAGE_PAGES_LINK_FINISHED = 0
-        const val MESSAGE_PAGES_LINK_UPDATED = 1
-        const val MESSAGE_PAGES_LINK_ADDED = 2
-        const val MESSAGE_PAGES_LINK_REMOVED = 3
-        const val MESSAGE_PAGES_LINK_LOAD_IMAGE_ERROR = 4
+        const val MESSAGE_PAGES_LINK_IMAGE_START = 0
+        const val MESSAGE_PAGES_LINK_IMAGE_UPDATED = 1
+        const val MESSAGE_PAGES_LINK_IMAGE_ADDED = 2
+        const val MESSAGE_PAGES_LINK_IMAGE_REMOVED = 3
+        const val MESSAGE_PAGES_LINK_IMAGE_FINISHED = 4
+        const val MESSAGE_PAGES_LINK_IMAGE_LOAD_ERROR = 5
     }
 
     object TAG {

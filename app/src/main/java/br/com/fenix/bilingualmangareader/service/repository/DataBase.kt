@@ -13,7 +13,7 @@ import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Converters
 import java.io.BufferedReader
 
-@Database(version = 3, entities = [Manga::class, Cover::class, SubTitle::class, KanjiJLPT::class, Kanjax::class, FileLink::class, PageLink::class])
+@Database(version = 4, entities = [Manga::class, Cover::class, SubTitle::class, KanjiJLPT::class, Kanjax::class, FileLink::class, PageLink::class])
 @TypeConverters(Converters::class)
 abstract class DataBase : RoomDatabase() {
 

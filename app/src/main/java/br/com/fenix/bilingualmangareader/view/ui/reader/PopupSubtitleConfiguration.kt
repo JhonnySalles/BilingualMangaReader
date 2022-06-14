@@ -2,6 +2,7 @@ package br.com.fenix.bilingualmangareader.view.ui.reader
 
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
@@ -21,6 +22,7 @@ import br.com.fenix.bilingualmangareader.service.controller.SubTitleController
 import br.com.fenix.bilingualmangareader.service.repository.SubTitleRepository
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputLayout
 import java.io.File
 import java.io.InputStream
@@ -28,12 +30,14 @@ import java.util.*
 
 class PopupSubtitleConfiguration : Fragment() {
 
+    private lateinit var mPreferences: SharedPreferences
     private lateinit var mLoadExternalSubtitle: TextInputLayout
     private lateinit var mLoadExternalSubtitleAutoComplete: AutoCompleteTextView
     private lateinit var mSubtitleSelected: TextInputLayout
     private lateinit var mSubtitleSelectedAutoComplete: AutoCompleteTextView
     private lateinit var mSubtitleLanguage: TextInputLayout
     private lateinit var mSubtitleLanguageAutoComplete: AutoCompleteTextView
+    private lateinit var mUsePageLinkInSearchTranslate: SwitchMaterial
 
     private lateinit var mSubTitleController: SubTitleController
     private lateinit var mMapLanguage: HashMap<String, Languages>
@@ -44,6 +48,8 @@ class PopupSubtitleConfiguration : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.popup_subtitle_configuration, container, false)
+        mPreferences = GeneralConsts.getSharedPreferences(requireContext())
+
         mLoadExternalSubtitle = root.findViewById(R.id.txt_external_subtitle_select_path)
         mLoadExternalSubtitleAutoComplete =
             root.findViewById(R.id.menu_autocomplete_external_subtitle_select_path)
@@ -53,7 +59,18 @@ class PopupSubtitleConfiguration : Fragment() {
         mSubtitleLanguage = root.findViewById(R.id.cb_subtitle_language)
         mSubtitleLanguageAutoComplete = root.findViewById(R.id.menu_autocomplete_subtitle_language)
 
+        mUsePageLinkInSearchTranslate = root.findViewById(R.id.switch_use_page_linked_in_search_translate)
+
         mSubTitleController = SubTitleController.getInstance(requireContext())
+
+        mUsePageLinkInSearchTranslate.isChecked = mPreferences.getBoolean(
+            GeneralConsts.KEYS.PAGE_LINK.USE_IN_SEARCH_TRANSLATE,
+            false
+        )
+        mUsePageLinkInSearchTranslate.setOnClickListener {
+            mSubTitleController.setUseFileLink(mUsePageLinkInSearchTranslate.isChecked)
+            mPreferences.edit().putBoolean(GeneralConsts.KEYS.PAGE_LINK.USE_IN_SEARCH_TRANSLATE, mUsePageLinkInSearchTranslate.isChecked).commit()
+        }
 
         observer()
 

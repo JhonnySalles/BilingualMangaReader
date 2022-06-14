@@ -33,24 +33,6 @@ class ImageCoverController private constructor() {
         val INSTANCE = ImageCoverController()
     }
 
-    /*private val lru: LruCache<Any, Any> = LruCache(1024)
-
-    private fun saveBitmapToCache(key: String, bitmap: Bitmap) {
-        try {
-            instance.lru.put(key, bitmap)
-        } catch (e: Exception) {
-        }
-    }
-
-    private fun retrieveBitmapFromCache(key: String): Bitmap? {
-        try {
-            return instance.lru.get(key) as Bitmap?
-        } catch (e: Exception) {
-        }
-
-        return null
-    }*/
-
     private fun saveBitmapToCache(key: String, bitmap: Bitmap) {
         try {
             val cacheDir = File(mContext.externalCacheDir, GeneralConsts.CACHEFOLDER.COVERS)
@@ -61,6 +43,7 @@ class ImageCoverController private constructor() {
             val image = File(cacheDir.path + '/' + key)
             image.writeBytes(byte)
         } catch (e: Exception) {
+            Log.e(GeneralConsts.TAG.LOG, "Error save bitmap to cache: " + e.message)
         }
     }
 
@@ -73,6 +56,7 @@ class ImageCoverController private constructor() {
             } else
                 null
         } catch (e: Exception) {
+            Log.e(GeneralConsts.TAG.LOG, "Error retrieve bitmap from cache: " + e.message)
         }
         return null
     }
@@ -124,12 +108,14 @@ class ImageCoverController private constructor() {
         )
 
         options.inJustDecodeBounds = false
-        stream?.close()
+        Util.closeInputStream(stream)
         stream = parse.getPage(index)
         val result = BitmapFactory.decodeStream(stream, null, options)
 
         return if (result != null) {
             saveBitmapToCache(hash, result)
+            Util.closeInputStream(stream)
+            Util.destroyParse(parse)
             Cover(
                 null, 0, hash, ReaderConsts.COVER.COVER_THUMBNAIL_WIDTH,
                 parse.getType()!!, result

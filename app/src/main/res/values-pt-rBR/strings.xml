@@ -102,6 +102,7 @@
     <string name="popup_reading_import_subtitle_translate">Linguagem da tradução</string>
     <string name="popup_reading_import_subtitle_is_empty">Nenhuma legenda encontrada</string>
     <string name="popup_reading_import_subtitle_page_is_empty">As paginas estão vazias na legenda ou ela não foi selecionada.</string>
+    <string name="popup_reading_use_page_linked_in_search">Utilizar as páginas vinculada na busca da tradução</string>
 
     <!-- READER POPUP SUBTITLE -->
     <string name="popup_reading_subtitle_chapter">Capítulo</string>
@@ -112,6 +113,7 @@
     <string name="popup_reading_subtitle_not_find_subtitle">Não foi possível encontrar a legenda.</string>
     <string name="popup_reading_subtitle_list_empty">Lista de legenda vazias.</string>
     <string name="popup_reading_subtitle_chapter_not_found">Não encontrado o capítulo em outra linguagem.</string>
+    <string name="popup_reading_subtitle_chapter_from_page_link_not_found">Não localizado o capítulo em outra linguagem a partir da página do arquivo vinculado.</string>
 
     <string name="popup_reading_button_translate">Alternar entre linguagens selecionadas</string>
     <string name="popup_reading_button_draw">Desenhar as posições da legenda na tela</string>
@@ -147,7 +149,10 @@
     <string name="history_today">Hoje</string>
 
     <!-- PAGE LINK -->
+    <string name="page_link_manga_empty">Manga não encontrado</string>
+    <string name="page_link_manga_empty_description">Manga não selecionado</string>
     <string name="page_link_file">Arquivo em outro idioma</string>
+    <string name="page_link_file_language">Linguagem do arquivo</string>
     <string name="page_link_refresh">Recarregar</string>
     <string name="page_link_save">Salvar</string>
     <string name="page_link_load_file_wrong">Arquivo não suportado</string>

@@ -53,8 +53,9 @@ class FileLinkRepository(context: Context) {
     }
 
     fun get(obj: Manga) : FileLink? {
-        val fileLink = if (obj.id != null && obj.id != 0L) mDataBase.get(obj.id!!) else null
+        val fileLink = if (obj.id != null && obj.id != 0L) mDataBase.getLastAccess(obj.id!!) else null
         if (fileLink != null) {
+            fileLink.manga = obj
             fileLink.pagesLink = findPagesLink(fileLink.id!!)
             fileLink.pagesNotLink = findPagesNotLink(fileLink.id!!)
         }

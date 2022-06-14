@@ -98,6 +98,7 @@ class DataBaseConsts private constructor() {
             const val FILE_NAME = "name"
             const val FILE_TYPE = "type"
             const val FILE_FOLDER = "folder"
+            const val LANGUAGE = "language"
             const val DATE_CREATE = "dateCreate"
             const val LAST_ACCESS = "lastAccess"
         }
