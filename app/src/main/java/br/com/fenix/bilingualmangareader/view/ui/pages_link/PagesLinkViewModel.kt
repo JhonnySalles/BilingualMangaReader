@@ -317,11 +317,21 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun getPageLink(page : PageLink) : String = mPagesLink.value!!.indexOf(page).toString()
 
-    fun getPageLink(index : Int) : PageLink = mPagesLink.value!![index]
+    fun getPageLink(index : Int) : PageLink? {
+        return if (index >= mPagesLink.value!!.size || index == -1)
+            null
+        else
+            mPagesLink.value!![index]
+    }
 
     fun getPageNotLink(page : PageLink) : String = mPagesNotLinked.value!!.indexOf(page).toString()
 
-    fun getPageNotLink(index : Int) : PageLink = mPagesNotLinked.value!![index]
+    fun getPageNotLink(index : Int) : PageLink? {
+        return if (index >= mPagesNotLinked.value!!.size || index == -1)
+            null
+        else
+            mPagesNotLinked.value!![index]
+    }
 
     fun getPageNotLinkLastIndex(): Int {
         return if (mPagesNotLinked.value!!.isEmpty())
@@ -366,7 +376,12 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    fun onMoveDualPage(originType: Pages, origin: PageLink, destinyType: Pages, destiny: PageLink) {
+    fun onMoveDualPage(originType: Pages, origin: PageLink?, destinyType: Pages, destiny: PageLink?) {
+        if (origin == null || destiny == null) {
+            notifyImageLoad(null, Pages.ALL)
+            return
+        }
+
         if (origin == destiny && destinyType == Pages.DUAL_PAGE) {
             notifyImageLoad(mPagesLink.value!!.indexOf(destiny), originType)
             return
@@ -460,7 +475,11 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    fun onMove(origin: PageLink, destiny: PageLink) {
+    fun onMove(origin: PageLink?, destiny: PageLink?) {
+        if (origin == null || destiny == null) {
+            notifyImageLoad(null, Pages.ALL)
+            return
+        }
         if (origin == destiny) return
         val originIndex = mPagesLink.value!!.indexOf(origin)
         val destinyIndex = mPagesLink.value!!.indexOf(destiny)
@@ -558,7 +577,12 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    fun onNotLinked(origin : PageLink) {
+    fun onNotLinked(origin : PageLink?) {
+        if (origin == null) {
+            notifyImageLoad(null, Pages.LINKED)
+            return
+        }
+
         mPagesNotLinked.value!!.add(PageLink(origin.idFile, -1, 0, "", origin.fileLinkPage,
             origin.fileLinkPages, origin.fileLinkPageName, true, null, origin.imageLeftFileLinkPage))
 
@@ -573,7 +597,12 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
         notifyImageLoad(originIndex, Pages.LINKED)
     }
 
-    fun fromNotLinked(origin : PageLink, destiny :PageLink) {
+    fun fromNotLinked(origin : PageLink?, destiny :PageLink?) {
+        if (origin == null || destiny == null) {
+            notifyImageLoad(null, Pages.NOT_LINKED)
+            return
+        }
+
         val destinyIndex = mPagesLink.value!!.indexOf(destiny)
         val size = mPagesLink.value!!.size-1
         mPagesNotLinked.value!!.remove(origin)
