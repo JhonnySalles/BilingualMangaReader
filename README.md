@@ -191,11 +191,11 @@ O aplicativo é também compatível com legendas extraidas e pré processadas co
 
 > Recursos
 
-![Vinculo de paginas em dois arquivos](https://imgur.com/uCvYPV6)
+![Vinculo de paginas em dois arquivos](https://i.imgur.com/uCvYPV6.png)
 
-![Paginas não vinculadas](https://imgur.com/E1kyoQ4)
+![Paginas não vinculadas](https://i.imgur.com/E1kyoQ4.png)
 
-![Paginas duplas](https://imgur.com/adp9MwE)
+![Paginas duplas](https://i.imgur.com/adp9MwE.png)
 
 ![Popup flutuante](https://i.imgur.com/dIuQO9N.jpg)
 
