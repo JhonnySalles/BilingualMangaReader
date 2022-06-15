@@ -35,13 +35,14 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
         mIsTablet = if (root.tag != null) root.tag.toString().compareTo("tablet", true) == 0 else false
 
         mPageLinkCardWidth = when {
+            mIsTablet ->  itemView.resources.getDimension(R.dimen.page_link_card_layout_width_tablet).toInt()
+            mIsLandscape -> itemView.resources.getDimension(R.dimen.page_link_card_layout_width_land).toInt()
+            else -> itemView.resources.getDimension(R.dimen.page_link_card_layout_width).toInt()
+        }
+
+        mPageLinkCardWidthInDual = when {
             mIsTablet ->  itemView.resources.getDimension(R.dimen.dual_page_link_card_layout_width_tablet).toInt()
             mIsLandscape -> itemView.resources.getDimension(R.dimen.dual_page_link_card_layout_width_land).toInt()
-            else -> itemView.resources.getDimension(R.dimen.dual_page_link_card_layout_width).toInt()
-        }
-        mPageLinkCardWidthInDual = when {
-            mIsTablet ->  itemView.resources.getDimension(R.dimen.page_link_card_layout_width_in_dual_tablet).toInt()
-            mIsLandscape -> itemView.resources.getDimension(R.dimen.page_link_card_layout_width_in_dual_land).toInt()
             else -> itemView.resources.getDimension(R.dimen.page_link_card_layout_width_in_dual).toInt()
         }
 

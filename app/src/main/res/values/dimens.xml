@@ -99,6 +99,8 @@
     <dimen name="page_link_card_margin">1dp</dimen>
     <dimen name="page_link_card_layout_width">180dp</dimen>
     <dimen name="page_link_card_layout_height">230dp</dimen>
+    <dimen name="page_link_card_layout_width_land">180dp</dimen>
+    <dimen name="page_link_card_layout_height_land">230dp</dimen>
     <dimen name="page_link_card_layout_width_tablet">200dp</dimen>
     <dimen name="page_link_card_layout_height_tablet">250dp</dimen>
     <dimen name="page_link_card_layout_margin">2dp</dimen>
@@ -107,7 +109,7 @@
     <dimen name="page_link_card_layout_width_in_dual_tablet">150dp</dimen>
     <dimen name="dual_page_link_card_layout_width">100dp</dimen>
     <dimen name="dual_page_link_card_layout_height">230dp</dimen>
-    <dimen name="dual_page_link_card_layout_width_land">140dp</dimen>
+    <dimen name="dual_page_link_card_layout_width_land">150dp</dimen>
     <dimen name="dual_page_link_card_layout_height_land">230dp</dimen>
     <dimen name="dual_page_link_card_layout_width_tablet">200dp</dimen>
     <dimen name="dual_page_link_card_layout_height_tablet">250dp</dimen>
