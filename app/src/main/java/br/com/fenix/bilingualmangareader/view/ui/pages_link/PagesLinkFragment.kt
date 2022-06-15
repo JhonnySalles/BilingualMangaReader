@@ -192,12 +192,13 @@ class PagesLinkFragment : Fragment() {
         mListener = object : PageLinkCardListener {
             override fun onClick(page: PageLink) { }
 
-            override fun onClickLong(view : View, page: PageLink, origin : Pages): Boolean {
+            override fun onClickLong(view : View, page: PageLink, origin : Pages, position: Int): Boolean {
                 val pageLink = if (origin == Pages.NOT_LINKED) mViewModel.getPageNotLink(page) else mViewModel.getPageLink(page)
                 val item = ClipData.Item(pageLink)
                 val name = if (origin == Pages.DUAL_PAGE) page.fileRightLinkPageName else page.fileLinkPageName
-                val dragData = ClipData( name, arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN), item)
+                val dragData = ClipData(position.toString(), arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN), item)
                 dragData.addItem(ClipData.Item(origin.name))
+                dragData.addItem(ClipData.Item(name))
                 val myShadow = View.DragShadowBuilder(view)
 
                 view.startDragAndDrop(dragData,
@@ -268,10 +269,10 @@ class PagesLinkFragment : Fragment() {
                 }
 
                 DragEvent.ACTION_DROP -> {
-                    when (val origin = Pages.valueOf(dragEvent.clipData.getItemAt(1).text.toString())) {
-                        Pages.LINKED -> mViewModel.onNotLinked(mViewModel.getPageLink(Integer.valueOf(dragEvent.clipData.getItemAt(0).text.toString())))
+                    when (val origin = Pages.valueOf(dragEvent.clipData.getItemAt(PageLinkConsts.CLIPDATA.PAGE_TYPE).text.toString())) {
+                        Pages.LINKED -> mViewModel.onNotLinked(mViewModel.getPageLink(Integer.valueOf(dragEvent.clipData.getItemAt(PageLinkConsts.CLIPDATA.PAGE_LINK).text.toString())))
                         Pages.DUAL_PAGE -> {
-                            val pageLink = mViewModel.getPageLink(Integer.valueOf(dragEvent.clipData.getItemAt(0).text.toString()))
+                            val pageLink = mViewModel.getPageLink(Integer.valueOf(dragEvent.clipData.getItemAt(PageLinkConsts.CLIPDATA.PAGE_LINK).text.toString()))
                             mViewModel.onMoveDualPage(origin, pageLink, Pages.NOT_LINKED, pageLink)
                         }
                         else -> {}
