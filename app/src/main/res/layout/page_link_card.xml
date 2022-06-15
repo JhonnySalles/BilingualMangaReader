@@ -111,17 +111,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <View
-            android:id="@+id/dual_page_link_drop_root"
-            android:layout_width="@dimen/dual_page_link_card_drop_layout_width"
-            android:layout_height="@dimen/dual_page_link_card_drop_layout_height"
-            android:translationY = "-2dp"
-            android:background="@color/transparent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
-
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/page_link_root"
             android:layout_width="@dimen/page_link_card_layout_width"
@@ -210,6 +199,8 @@
             android:layout_margin="@dimen/page_link_card_layout_margin"
             android:visibility="gone"
             android:tag="page_link_right"
+            app:strokeWidth="0dp"
+            app:strokeColor="@color/secondary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@+id/page_link_root"
