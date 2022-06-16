@@ -6,6 +6,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.PixelFormat
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.provider.Settings
 import android.text.method.LinkMovementMethod
 import android.view.*
@@ -195,10 +196,15 @@ class FloatingSubtitleReader constructor(private val context: Context) {
         mSubtitleTitle.setOnTouchListener(onTouchListener)
         mFloatingView.setOnTouchListener(onTouchListener)
 
+        var layoutType = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O)
+            WindowManager.LayoutParams.TYPE_PHONE
+        else
+            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+
         layoutParams = WindowManager.LayoutParams().apply {
             format = PixelFormat.TRANSLUCENT
             flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-            type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+            type = layoutType
             gravity = Gravity.TOP
             width = WindowManager.LayoutParams.WRAP_CONTENT
             height = WindowManager.LayoutParams.WRAP_CONTENT
