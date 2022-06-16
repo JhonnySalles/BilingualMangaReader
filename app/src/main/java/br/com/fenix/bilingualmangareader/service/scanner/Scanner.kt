@@ -10,6 +10,7 @@ import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.service.controller.ImageCoverController
 import br.com.fenix.bilingualmangareader.service.parses.Parse
 import br.com.fenix.bilingualmangareader.service.parses.ParseFactory
+import br.com.fenix.bilingualmangareader.service.parses.RarParse
 import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
@@ -125,6 +126,11 @@ class Scanner {
                             else {
                                 val parse: Parse? = ParseFactory.create(it)
                                 try {
+                                    if (parse is RarParse) {
+                                        val cacheDir = File(GeneralConsts.getCacheDir(), GeneralConsts.CACHEFOLDER.RAR)
+                                        (parse as RarParse?)!!.setCacheDirectory(cacheDir)
+                                    }
+
                                     if (parse != null)
                                         if (parse.numPages() > 0) {
                                             val manga = Manga(

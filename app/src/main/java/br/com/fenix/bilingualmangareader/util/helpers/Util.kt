@@ -205,6 +205,16 @@ class Util {
                 path
         }
 
+        fun normalizeName(name: String): String {
+            val normalize = if (name.contains("-"))
+                name.substringBefore("-")
+            else if (name.contains(" "))
+                name.substringBefore(" ")
+            else name
+
+            return normalize.replace("[^\\w\\d ]".toRegex(), "").lowercase()
+        }
+
         fun normalizeFilePath(path: String): String {
             var folder: String = path
 

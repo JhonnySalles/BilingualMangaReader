@@ -18,6 +18,7 @@ import br.com.fenix.bilingualmangareader.model.entity.*
 import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.service.parses.Parse
 import br.com.fenix.bilingualmangareader.service.parses.ParseFactory
+import br.com.fenix.bilingualmangareader.service.parses.RarParse
 import br.com.fenix.bilingualmangareader.service.repository.SubTitleRepository
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.constants.ReaderConsts
@@ -362,12 +363,30 @@ class SubTitleController private constructor(private val context: Context) {
                     var keyPage = ""
                     var pageName = ""
 
-                    var parse: Parse? = null
+                    var parse: Parse?
                     try {
                         parse = if (isMangaLanguage)
                             mFileLink!!.parseManga ?: ParseFactory.create(mFileLink!!.manga!!.file)
                         else
                             mFileLink!!.parseFileLink ?: ParseFactory.create(mFileLink!!.file)
+
+                        val fileName = if (isMangaLanguage)
+                            mFileLink!!.manga!!.file.nameWithoutExtension
+                        else
+                            mFileLink!!.file.nameWithoutExtension
+
+                        if ((isMangaLanguage && mFileLink!!.parseManga == null) || (!isMangaLanguage && mFileLink!!.parseFileLink == null)) {
+                            if (parse is RarParse) {
+                                val folder = GeneralConsts.CACHEFOLDER.LINKED + '/' + Util.normalizeName(fileName)
+                                val cacheDir = File(context.externalCacheDir, folder)
+                                (parse as RarParse?)!!.setCacheDirectory(cacheDir)
+                            }
+                            
+                            if (isMangaLanguage)
+                                mFileLink!!.parseManga = parse
+                            else
+                                mFileLink!!.parseFileLink = parse
+                        }
 
                         val pageNumber = if (isMangaLanguage)
                             currentPage.mangaPage
@@ -442,9 +461,6 @@ class SubTitleController private constructor(private val context: Context) {
                         }
                     } catch (e: Exception) {
                         Log.e(GeneralConsts.TAG.LOG, "Error find page link: " + e.message)
-                    } finally {
-                        if ((isMangaLanguage && parse != mFileLink!!.parseManga) || (!isMangaLanguage && parse != mFileLink!!.parseFileLink))
-                            Util.destroyParse(parse)
                     }
 
                     if (keyChapter.isNotEmpty() || keyPage.isNotEmpty())
@@ -919,8 +935,7 @@ class SubTitleController private constructor(private val context: Context) {
     }
 
     fun locateFileLink(page: Int) {
-        if (mFileLink == null || mFileLink!!.parseFileLink == null)
-            return
+        if (mFileLink == null) return
 
         mFileLink!!.pagesLink!!.first { it.mangaPage.compareTo(page) == 0 }.let {
             if (it.fileLinkPage > -1) {
@@ -949,8 +964,7 @@ class SubTitleController private constructor(private val context: Context) {
             Log.e(GeneralConsts.TAG.LOG, "Erro ao combinar imagens. Tentativa: " + mError + " - " + e.message)
             mError += 1
             if (mError < 3) {
-                Util.destroyParse(fileLink.parseFileLink)
-                fileLink.parseFileLink = ParseFactory.create(fileLink.path)
+                getFileLinkParser(fileLink.path, fileLink)
                 drawnBitmap = getCombinedBitmap(fileLink, fileLink.parseFileLink!!, index, extra)
             }
         }
@@ -959,7 +973,7 @@ class SubTitleController private constructor(private val context: Context) {
     }
 
     private fun saveImageFolder(fileLink: FileLink, index: Int, extra: Int = -1): Uri {
-        val parse = fileLink.parseFileLink!!
+        val parse = fileLink.parseFileLink ?: getFileLinkParser(fileLink.path, fileLink)!!
         var stream = parse.getPage(index)
         if (extra > -1) {
             val newBitmap = getCombinedBitmap(fileLink, parse, index, extra)
@@ -969,12 +983,12 @@ class SubTitleController private constructor(private val context: Context) {
             }
         }
 
-        val cacheDir = File(context.externalCacheDir, GeneralConsts.CACHEFOLDER.LINKED)
+        val cacheDir = File(context.externalCacheDir, GeneralConsts.CACHEFOLDER.IMAGE)
         if (!cacheDir.exists())
             cacheDir.mkdir()
-        else
-            for (f in cacheDir.listFiles()!!)
+        else for (f in cacheDir.listFiles()!!)
                 f.delete()
+
         var name = parse.getPagePath(index) ?: index.toString()
         name = Util.getNameFromPath(name)
 
@@ -988,5 +1002,24 @@ class SubTitleController private constructor(private val context: Context) {
         image.writeBytes(stream.readBytes())
         Util.closeInputStream(stream)
         return image.toUri()
+    }
+
+    private fun getFileLinkParser(path: String, fileLink: FileLink? = null): Parse? {
+        if (fileLink?.parseFileLink != null) {
+            Util.destroyParse(fileLink.parseFileLink)
+            fileLink.parseFileLink = null
+        }
+
+        val parse = ParseFactory.create(path)
+        if (parse is RarParse) {
+            val folder = GeneralConsts.CACHEFOLDER.IMAGE
+            val cacheDir = File(context.externalCacheDir, folder)
+            (parse as RarParse?)!!.setCacheDirectory(cacheDir)
+        }
+
+        if (fileLink != null)
+            fileLink.parseFileLink = parse
+
+        return parse
     }
 }

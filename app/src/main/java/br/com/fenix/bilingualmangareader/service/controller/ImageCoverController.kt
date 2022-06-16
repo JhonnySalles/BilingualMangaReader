@@ -11,6 +11,7 @@ import br.com.fenix.bilingualmangareader.model.entity.Cover
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.service.parses.Parse
 import br.com.fenix.bilingualmangareader.service.parses.ParseFactory
+import br.com.fenix.bilingualmangareader.service.parses.RarParse
 import br.com.fenix.bilingualmangareader.service.repository.CoverRepository
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.constants.ReaderConsts
@@ -143,6 +144,13 @@ class ImageCoverController private constructor() {
             }
             if (image == null) {
                 val parse = ParseFactory.create(manga.file!!) ?: return
+
+                if (parse is RarParse) {
+                    val folder = GeneralConsts.CACHEFOLDER.RAR
+                    val cacheDir = File(mContext.externalCacheDir, folder)
+                    (parse as RarParse?)!!.setCacheDirectory(cacheDir)
+                }
+
                 val cover = getCoverFromFile(hash, parse)
                 if (cover != null) {
                     cover.id_manga = manga.id!!
