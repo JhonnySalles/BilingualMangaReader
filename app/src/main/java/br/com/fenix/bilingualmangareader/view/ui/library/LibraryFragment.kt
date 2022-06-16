@@ -111,10 +111,13 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             setIsRefreshing(true)
 
         mViewModel.update()
-        notifyDataSet()
 
         if (mViewModel.isEmpty())
             onRefresh()
+        else if (mViewModel.save.value != null)
+            sortList(mViewModel.save.value!!)
+
+        notifyDataSet()
     }
 
     override fun onPause() {
