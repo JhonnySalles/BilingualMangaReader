@@ -377,7 +377,7 @@ class SubTitleController private constructor(private val context: Context) {
 
                         if ((isMangaLanguage && mFileLink!!.parseManga == null) || (!isMangaLanguage && mFileLink!!.parseFileLink == null)) {
                             if (parse is RarParse) {
-                                val folder = GeneralConsts.CACHEFOLDER.LINKED + '/' + Util.normalizeName(fileName)
+                                val folder = GeneralConsts.CACHEFOLDER.LINKED + '/' + Util.normalizeNameCache(fileName)
                                 val cacheDir = File(context.externalCacheDir, folder)
                                 (parse as RarParse?)!!.setCacheDirectory(cacheDir)
                             }

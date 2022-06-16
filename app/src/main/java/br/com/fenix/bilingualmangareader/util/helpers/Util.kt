@@ -205,14 +205,15 @@ class Util {
                 path
         }
 
-        fun normalizeName(name: String): String {
+        fun normalizeNameCache(name: String): String {
             val normalize = if (name.contains("-"))
                 name.substringBefore("-")
             else if (name.contains(" "))
                 name.substringBefore(" ")
             else name
 
-            return normalize.replace("[^\\w\\d ]".toRegex(), "").lowercase()
+            val random = (0..1000).random()
+            return normalize.replace("[^\\w\\d ]".toRegex(), "").trim().plus(random).lowercase()
         }
 
         fun normalizeFilePath(path: String): String {

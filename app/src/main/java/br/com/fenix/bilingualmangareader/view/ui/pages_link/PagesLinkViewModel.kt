@@ -55,7 +55,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
     private fun getParse(file: File): Parse? {
         val parse = ParseFactory.create(file)
         if (parse is RarParse) {
-            val folder = GeneralConsts.CACHEFOLDER.LINKED + '/' + Util.normalizeName(file.nameWithoutExtension)
+            val folder = GeneralConsts.CACHEFOLDER.LINKED + '/' + Util.normalizeNameCache(file.nameWithoutExtension)
             val cacheDir = File(mContext.externalCacheDir, folder)
             (parse as RarParse?)!!.setCacheDirectory(cacheDir)
         }
