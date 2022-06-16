@@ -2,6 +2,7 @@ package br.com.fenix.bilingualmangareader.util.constants
 
 import android.content.Context
 import android.content.SharedPreferences
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -10,6 +11,10 @@ class GeneralConsts private constructor() {
         private lateinit var mContext: Context
         fun setContext(context: Context) {
             mContext = context
+        }
+
+        fun getCacheDir(): File? {
+            return mContext.externalCacheDir
         }
 
         fun getSharedPreferences(context: Context): SharedPreferences {
@@ -110,8 +115,10 @@ class GeneralConsts private constructor() {
     }
 
     object CACHEFOLDER {
+        const val RAR = "RarTemp"
         const val COVERS = "Covers"
         const val LINKED = "Linked"
+        const val IMAGE = "Image"
         const val A = "a"
         const val B = "b"
         const val C = "c"

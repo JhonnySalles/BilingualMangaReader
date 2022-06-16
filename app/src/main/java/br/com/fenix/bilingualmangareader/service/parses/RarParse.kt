@@ -128,13 +128,12 @@ class RarParse : Parse {
 
     fun setCacheDirectory(cacheDirectory: File?) {
         mCacheDir = cacheDirectory
-        if (!mCacheDir!!.exists()) {
-            mCacheDir!!.mkdir()
-        }
+        if (!mCacheDir!!.exists())
+            mCacheDir!!.mkdirs()
+
         if (mCacheDir!!.listFiles() != null) {
-            for (f in mCacheDir?.listFiles()!!) {
+            for (f in mCacheDir?.listFiles()!!)
                 f.delete()
-            }
         }
     }
 }

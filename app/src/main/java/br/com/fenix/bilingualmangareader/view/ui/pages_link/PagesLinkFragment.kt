@@ -318,6 +318,8 @@ class PagesLinkFragment : Fragment() {
             val fileLink = savedInstanceState.getSerializable(GeneralConsts.KEYS.OBJECT.PAGELINK)
             if (fileLink != null)
                 mViewModel.reload(fileLink as FileLink) { index, type -> notifyItemChanged(type, index)  }
+            else
+                mViewModel.reLoadImages(Pages.ALL, true, isCloseThreads = true)
         } else {
             val bundle = this.arguments
             if (bundle != null && bundle.containsKey(GeneralConsts.KEYS.OBJECT.MANGA)) {
@@ -325,14 +327,6 @@ class PagesLinkFragment : Fragment() {
                 mPageSelected = bundle.getInt(GeneralConsts.KEYS.MANGA.PAGE_NUMBER, 0)
             }
         }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        if (!mOpenedIntent) {
-            val fileLink = mViewModel.getFileLink(isBackup = true)
-            outState.putSerializable(GeneralConsts.KEYS.OBJECT.PAGELINK, fileLink)
-        }
-        super.onSaveInstanceState(outState)
     }
 
     override fun onActivityResult(
@@ -471,10 +465,22 @@ class PagesLinkFragment : Fragment() {
     }
 
     private fun verifyImageLoading() {
+        updateProgress()
         mImageLoading.visibility = if (mViewModel.imageThreadLoadingProgress())
             View.VISIBLE
         else
             View.GONE
+    }
+
+    private fun updateProgress() {
+        val (progress, size) = mViewModel.getProgress()
+        if (progress == -1)
+            mImageLoading.isIndeterminate = true
+        else {
+            mImageLoading.isIndeterminate = false
+            mImageLoading.max = size
+            mImageLoading.progress = progress
+        }
     }
 
     private inner class ImageLoadHandler(fragment: PagesLinkFragment) : Handler() {
@@ -482,8 +488,14 @@ class PagesLinkFragment : Fragment() {
         override fun handleMessage(msg: Message) {
             val imageLoad = msg.obj as PagesLinkViewModel.ImageLoad
             when (msg.what) {
-                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_START -> mImageLoading.visibility = View.VISIBLE
-                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_UPDATED -> notifyItemChanged(imageLoad.type, imageLoad.index)
+                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_START -> {
+                    mImageLoading.isIndeterminate = true
+                    mImageLoading.visibility = View.VISIBLE
+                }
+                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_UPDATED -> {
+                    updateProgress()
+                    notifyItemChanged(imageLoad.type, imageLoad.index)
+                }
                 PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_LOAD_ERROR -> mViewModel.reLoadImages(imageLoad.type)
                 PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_ADDED -> notifyItemChanged(imageLoad.type, imageLoad.index, add = true)
                 PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_REMOVED -> notifyItemChanged(imageLoad.type, imageLoad.index, remove = true)
