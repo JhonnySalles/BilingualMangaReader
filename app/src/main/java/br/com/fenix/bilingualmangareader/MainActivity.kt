@@ -12,35 +12,45 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
-import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.view.ui.configuration.ConfigFragment
 import br.com.fenix.bilingualmangareader.view.ui.help.AboutFragment
 import br.com.fenix.bilingualmangareader.view.ui.help.HelpFragment
 import br.com.fenix.bilingualmangareader.view.ui.history.HistoryFragment
 import br.com.fenix.bilingualmangareader.view.ui.library.LibraryFragment
 import com.google.android.material.navigation.NavigationView
+import org.slf4j.LoggerFactory
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    private lateinit var toolBar: Toolbar
-    private lateinit var fragmentManager: FragmentManager
-    private lateinit var navigationView: NavigationView
-    private lateinit var menu: Menu
+    private val mLOGGER = LoggerFactory.getLogger(MainActivity::class.java)
+
+    private lateinit var mToolBar: Toolbar
+    private lateinit var mFragmentManager: FragmentManager
+    private lateinit var mNavigationView: NavigationView
+    private lateinit var mMenu: Menu
+
+    private val mDefaultUncaughtHandler = Thread.getDefaultUncaughtExceptionHandler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Thread.setDefaultUncaughtExceptionHandler { t, e ->
+            mLOGGER.error("*** CRASH APP *** ", e)
+            mDefaultUncaughtHandler?.uncaughtException(t, e)
+        }
+
         setContentView(R.layout.activity_main)
 
-        toolBar = findViewById(R.id.main_toolbar)
-        setSupportActionBar(toolBar)
+        mToolBar = findViewById(R.id.main_toolbar)
+        setSupportActionBar(mToolBar)
 
         // drawer_Layout is a default layout from app
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         val toggle = ActionBarDrawerToggle(
             this,
             drawer,
-            toolBar,
+            mToolBar,
             R.string.navigation_drawer_open,
             R.string.navigation_drawer_close
         )
@@ -48,13 +58,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
 
         // nav_view have a menu layout
-        navigationView = findViewById(R.id.nav_view)
-        navigationView.setNavigationItemSelectedListener(this)
+        mNavigationView = findViewById(R.id.nav_view)
+        mNavigationView.setNavigationItemSelectedListener(this)
 
-        fragmentManager = supportFragmentManager
+        mFragmentManager = supportFragmentManager
 
         // content_fragment use for receive fragments layout
-        fragmentManager.beginTransaction().replace(R.id.content_root, LibraryFragment())
+        mFragmentManager.beginTransaction().replace(R.id.content_root, LibraryFragment())
             .commit()
     }
 
@@ -65,20 +75,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
-        menu = navigationView.menu
+        mMenu = mNavigationView.menu
         when (item.itemId) {
-            R.id.menu_library -> fragmentManager.beginTransaction()
+            R.id.menu_library -> mFragmentManager.beginTransaction()
                 .replace(R.id.content_root, LibraryFragment())
                 .commit()
-            R.id.menu_configuration -> fragmentManager.beginTransaction()
+            R.id.menu_configuration -> mFragmentManager.beginTransaction()
                 .replace(R.id.content_root, ConfigFragment()).commit()
-            R.id.menu_help -> fragmentManager.beginTransaction()
+            R.id.menu_help -> mFragmentManager.beginTransaction()
                 .replace(R.id.content_root, HelpFragment())
                 .commit()
-            R.id.menu_about -> fragmentManager.beginTransaction()
+            R.id.menu_about -> mFragmentManager.beginTransaction()
                 .replace(R.id.content_root, AboutFragment())
                 .commit()
-            R.id.menu_history -> fragmentManager.beginTransaction()
+            R.id.menu_history -> mFragmentManager.beginTransaction()
                 .replace(R.id.content_root, HistoryFragment())
                 .commit()
         }

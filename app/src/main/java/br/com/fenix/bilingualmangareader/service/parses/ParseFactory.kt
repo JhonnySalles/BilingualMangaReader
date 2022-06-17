@@ -1,14 +1,14 @@
 package br.com.fenix.bilingualmangareader.service.parses
 
 import br.com.fenix.bilingualmangareader.util.helpers.Util
-import mu.KotlinLogging
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.util.*
 
 class ParseFactory {
 
     companion object Factory {
-        private val mLOGGER = KotlinLogging.logger {}
+        private val mLOGGER = LoggerFactory.getLogger(ParseFactory::class.java)
         fun create(file: String): Parse? {
             return create(File(file))
         }
@@ -36,7 +36,7 @@ class ParseFactory {
             try {
                 parser.parse(file)
             } catch (e: Exception) {
-                mLOGGER.warn { "Error when parse: " + e.message }
+                mLOGGER.warn("Error when parse: " + e.message, e)
                 return null
             }
             return if (parser is DirectoryParse && parser.numPages() < 4) null else parser

@@ -20,14 +20,14 @@ import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import com.google.android.material.textfield.TextInputLayout
-import mu.KotlinLogging
+import org.slf4j.LoggerFactory
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 class ConfigFragment : Fragment() {
 
-    private val mLOGGER = KotlinLogging.logger {}
+    private val mLOGGER = LoggerFactory.getLogger(ConfigFragment::class.java)
     private lateinit var mLibraryPath: TextInputLayout
     private lateinit var mLibraryPathAutoComplete: AutoCompleteTextView
     private lateinit var mLibraryOrder: TextInputLayout
@@ -284,12 +284,11 @@ class ConfigFragment : Fragment() {
             this.commit()
         }
 
-        mLOGGER.info { "Save prefer CONFIG:" + "\n[Library] Path " + mLibraryPath.editText?.text +
+        mLOGGER.info("Save prefer CONFIG:" + "\n[Library] Path " + mLibraryPath.editText?.text +
                 " - Order " + mLibraryOrder.editText?.text +
                 "\n[SubTitle] Language " + mDefaultSubtitleLanguage.editText?.text +
                 " - Translate " + mDefaultSubtitleTranslate.editText?.text +
-                "\n[System] Format Data " + mSystemFormatDate.editText?.text
-        }
+                "\n[System] Format Data " + mSystemFormatDate.editText?.text)
 
     }
 
