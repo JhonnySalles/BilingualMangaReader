@@ -321,11 +321,11 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
             if (parse != null) {
                 loaded = LoadFile.LOADED
 
-                if (!isReload && find(file.nameWithoutExtension, parse.numPages(), refresh)) return loaded
+                if (!isReload && find(file.name, parse.numPages(), refresh)) return loaded
 
                 endThread(true)
                 mFileLink.value = FileLink(mManga!!, mFileLink.value!!.parseManga, parse.numPages(), path,
-                    file.nameWithoutExtension, file.extension, file.parent)
+                    file.name, file.extension, file.parent)
                 mFileLink.value!!.parseFileLink = parse
                 mPagesLink.value?.forEach { it.clearFileLink()  }
                 val listNotLink = ArrayList<PageLink>()

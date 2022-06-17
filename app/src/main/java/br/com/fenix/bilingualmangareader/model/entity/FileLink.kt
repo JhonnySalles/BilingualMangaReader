@@ -3,7 +3,6 @@ package br.com.fenix.bilingualmangareader.model.entity
 import androidx.room.*
 import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.service.parses.Parse
-import br.com.fenix.bilingualmangareader.service.parses.ParseFactory
 import br.com.fenix.bilingualmangareader.util.constants.DataBaseConsts
 import java.io.File
 import java.io.Serializable
