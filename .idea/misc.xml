@@ -78,7 +78,7 @@
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout-sw600dp-land/page_link_card.xml" value="0.21428571428571427" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout-sw600dp/activity_reader.xml" value="0.375" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout-sw600dp/fragment_about.xml" value="0.5" />
-        <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout-sw600dp/fragment_pages_link.xml" value="0.5287356321839081" />
+        <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout-sw600dp/fragment_pages_link.xml" value="0.3720316622691293" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout-sw600dp/page_link_card.xml" value="0.5495495495495496" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout-sw600dp/page_not_link_card.xml" value="0.55078125" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/activity_PagesLink.xml" value="0.1527777777777778" />
@@ -106,7 +106,7 @@
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/fragment_history.xml" value="0.20572916666666666" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/fragment_library.xml" value="0.20572916666666666" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/fragment_manga_page_link.xml" value="0.24537037037037038" />
-        <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/fragment_pages_link.xml" value="0.23028785982478098" />
+        <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/fragment_pages_link.xml" value="0.55" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/fragment_reader.xml" value="0.20572916666666666" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/fragment_reader_page.xml" value="0.20572916666666666" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/history_card.xml" value="0.11969286359530262" />
