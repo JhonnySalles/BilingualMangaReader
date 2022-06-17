@@ -38,6 +38,7 @@ Também irá salvar algumas preferências e o progresso e tem suporte a furigana
   <li> Room - Uma biblioteca nativa com vários recusos para gerenciar banco de dados SQLite. </li>
   <li> PageView - Implementado a estrutura de apresentação de imagens em carrocel. </li>
   <li><a href="https://github.com/junrar/junrar">Junrar</a> - Biblioteca para leitura e extração de arquivos rar e cbr. </li>
+  <li><a href="https://github.com/0xbad1d3a5/Kaku]">Kaku</a> - Leitor OCR para android. <i>"Apenas chamada por dentro aplicativo, necessário estar instalado."</i> </li>	
 </ul>
 
 
@@ -115,6 +116,11 @@ O aplicativo é também compatível com legendas extraidas e pré processadas co
     * Correção para a leitura aproveitar a tela inteira em android recente.
     * Ajuste na busca da legenda e a implementação da busca pela página vinculada.
 * 0.2.8
+    * Implementado métodos para rastrear possiveis erros.
+    * Ajuste de erros e bug.
+    * Refatorado alguns icones.
+    * Implementado a chamada ao App Kaku.
+* 0.2.9
     * Em progresso. 
 
 ### Features
@@ -141,9 +147,6 @@ O aplicativo é também compatível com legendas extraidas e pré processadas co
 - [X] Localizar no vocabulário na ao toque na palavra
 - [X] Troca das legendas entre idiomas selecionados (devido a diferenças de paginas entre versões pode não localizar de forma satisfatória)
 - [X] Luz azul para leitura norturna
-- [ ] Favoritar vocabulário para estudo posterior
-- [ ] Adição de dicionarios japonês
-- [ ] Exportar vocabularios ao Anki
 - [X] Localizar a legenda pela cordenada do texto
 - [X] Ajuste para a leitura aproveitar a tela inteira do celular
 - [X] Adicionado nova tela para vincular as páginas de dois arquivos
@@ -153,6 +156,11 @@ O aplicativo é também compatível com legendas extraidas e pré processadas co
 - [X] Adicionar funcionalidade para páginas duplas
 - [X] Ajustar a busca das legendas para utilizar da página vinculada
 - [X] Implementar a organização dos arquivos vinculados por idioma, sendo possível o vinculo de mais de um arquivo e manter a organização feita
+- [X] Implementar rastreamento de erros e logs.
+- [X] Adicionado a chamada ao aplicativo Kaku
+- [ ] Favoritar vocabulário para estudo posterior
+- [ ] Adição de dicionarios japonês
+- [ ] Exportar vocabularios ao Anki
 
 
 ## Contribuindo
