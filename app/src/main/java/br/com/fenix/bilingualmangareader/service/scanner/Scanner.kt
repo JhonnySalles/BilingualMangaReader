@@ -105,10 +105,14 @@ class Scanner {
 
                 val storage = Storage(ctx)
                 val storageFiles: MutableMap<String, Manga> = HashMap()
+                val storageDeletes: MutableMap<String, Manga> = HashMap()
 
                 // create list of files available in storage
-                for (c in storage.listBook()!!)
-                    storageFiles[c.path] = c
+                for (c in storage.listMangas()!!)
+                    storageFiles[c.title] = c
+
+                for (c in storage.listDeleted()!!)
+                    storageDeletes[c.title] = c
 
                 // search and add comics if necessary
                 val file = File(libraryPath)
@@ -121,8 +125,8 @@ class Scanner {
                             it.name.endsWith(".cbr") ||
                             it.name.endsWith(".cbz")
                         ) {
-                            if (storageFiles.containsKey(it.path))
-                                storageFiles.remove(it.path)
+                            if (storageFiles.containsKey(it.name))
+                                storageFiles.remove(it.name)
                             else {
                                 val parse: Parse? = ParseFactory.create(it)
                                 try {
@@ -133,7 +137,9 @@ class Scanner {
 
                                     if (parse != null)
                                         if (parse.numPages() > 0) {
-                                            val manga = Manga(
+                                            val manga = if (storageDeletes.containsKey(it.name))
+                                                storageDeletes.getValue(it.name)
+                                            else Manga(
                                                 null,
                                                 it.name,
                                                 "",
@@ -144,6 +150,7 @@ class Scanner {
                                                 parse.numPages()
                                             )
 
+                                            manga.excluded = false
                                             generateCover(parse, manga)
                                             storage.save(manga)
                                             notifyMediaUpdated()

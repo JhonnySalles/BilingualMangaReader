@@ -38,8 +38,9 @@ class Storage(context: Context) {
     fun findByName(name: String): Manga? =
         mRepository.findByFileName(name)
 
-    fun listBook(): List<Manga>? =
-        mRepository.list()
+    fun listMangas(): List<Manga>? = mRepository.list()
+
+    fun listDeleted(): List<Manga>? = mRepository.listDeleted()
 
     fun delete(manga: Manga) {
         mRepositoryCover.deleteAll(manga.id!!)
@@ -51,7 +52,12 @@ class Storage(context: Context) {
     }
 
     fun save(manga: Manga): Long {
-        val id = mRepository.save(manga)
+        val id = if (manga.id != null) {
+            mRepository.update(manga)
+            manga.id!!
+        } else
+            mRepository.save(manga)
+
         if (manga.thumbnail != null) {
             manga.thumbnail!!.id_manga = id
             mRepositoryCover.save(manga.thumbnail!!)
