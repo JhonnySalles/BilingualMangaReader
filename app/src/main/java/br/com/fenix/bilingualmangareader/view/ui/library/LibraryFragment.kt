@@ -273,8 +273,8 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             Order.Favorite to getString(R.string.config_option_order_favorite)
         )
 
-        mRecycleView = root.findViewById(R.id.rv_library)
-        mRefreshLayout = root.findViewById(R.id.rl_library)
+        mRecycleView = root.findViewById(R.id.library_recycler_view)
+        mRefreshLayout = root.findViewById(R.id.library_refresh)
         mRefreshLayout.setColorSchemeResources(
             R.color.onSecondary,
             R.color.onSecondary,
