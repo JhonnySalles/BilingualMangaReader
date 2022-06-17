@@ -51,8 +51,8 @@
     <string name="reader_not_found">Não encontrado</string>
     <string name="file_not_found">Arquivo não encontrado</string>
     <string name="menu_view_mode">Modo de preenchimento</string>
-    <string name="menu_view_mode_aspect_fill">Aspecto Fill</string>
-    <string name="menu_view_mode_aspect_fit">Aspect Fit</string>
+    <string name="menu_view_mode_aspect_fill">Aspecto preencher</string>
+    <string name="menu_view_mode_aspect_fit">Aspecto ajustar</string>
     <string name="menu_view_mode_fit_width">Ajustar à largura</string>
 
     <string name="menu_reading_mode">Modo de leitura</string>
@@ -66,6 +66,7 @@
     <string name="menu_reading_color">Cor da página</string>
     <string name="menu_reading_file_link">Arquivo em outro idioma</string>
     <string name="menu_reading_floating">Popup flutuante</string>
+    <string name="menu_reading_open_kaku">Abrir o app Kaku</string>
 
     <string name="reading_button_screen_rotate">Rotação de tela</string>
     <string name="reading_button_page_linked">Página vinculada</string>
@@ -73,6 +74,8 @@
     <string name="reading_button_color">Cor da página</string>
     <string name="reading_button_file_link">Arquivo vinculado</string>
     <string name="reading_button_popup_floating">Popup flutuante</string>
+
+    <string name="open_app_kaku_not_founded">App Kaku não encontrado.</string>
 
     <!-- READER POPUP TITLES -->
     <string name="popup_reading_open">Abrir</string>

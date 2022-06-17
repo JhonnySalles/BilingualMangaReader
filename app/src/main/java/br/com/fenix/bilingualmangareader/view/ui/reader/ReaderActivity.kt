@@ -122,25 +122,7 @@ class ReaderActivity : AppCompatActivity() {
             mMenuPopupColor.visibility = View.GONE
         }
         findViewById<ImageView>(R.id.menu_translate_floating_touch).setOnClickListener { menuFloat() }
-        findViewById<Button>(R.id.btn_menu_file_link).setOnClickListener {
-            if (mManga != null) {
-                val intent = Intent(applicationContext, PagesLinkActivity::class.java)
-                val bundle = Bundle()
-                bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, mManga)
-                bundle.putInt(GeneralConsts.KEYS.MANGA.PAGE_NUMBER, mReaderProgress.progress)
-                intent.putExtras(bundle)
-                startActivity(intent)
-            } else
-                AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
-                    .setTitle(getString(R.string.page_link_manga_empty))
-                    .setMessage(getString(R.string.page_link_manga_empty_description))
-                    .setNeutralButton(
-                        R.string.action_neutral
-                    ) { _, _ -> }
-                    .create()
-                    .show()
-
-        }
+        findViewById<Button>(R.id.btn_menu_file_link).setOnClickListener { openFileLink() }
         findViewById<Button>(R.id.btn_popup_subtitle).setOnClickListener {
             mMenuPopupColor.visibility = View.GONE
             if (!mIsTabletOrLandscape)
@@ -351,6 +333,15 @@ class ReaderActivity : AppCompatActivity() {
                     mBottomSheetColor.state = BottomSheetBehavior.STATE_EXPANDED
                     View.VISIBLE
                 } else View.INVISIBLE
+            R.id.menu_file_link -> openFileLink()
+            R.id.menu_open_kaku -> {
+                val launchIntent = packageManager.getLaunchIntentForPackage("ca.fuwafuwa.kaku")
+                launchIntent?.let { startActivity(it) } ?: Toast.makeText(
+                    application,
+                    getString(R.string.open_app_kaku_not_founded),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -411,6 +402,25 @@ class ReaderActivity : AppCompatActivity() {
 
         mSubtitleSelected = mSubTitleController.isSelected
         return mSubTitleController.isNotEmpty
+    }
+
+    private fun openFileLink() {
+        if (mManga != null) {
+            val intent = Intent(applicationContext, PagesLinkActivity::class.java)
+            val bundle = Bundle()
+            bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, mManga)
+            bundle.putInt(GeneralConsts.KEYS.MANGA.PAGE_NUMBER, mReaderProgress.progress)
+            intent.putExtras(bundle)
+            startActivity(intent)
+        } else
+            AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+                .setTitle(getString(R.string.page_link_manga_empty))
+                .setMessage(getString(R.string.page_link_manga_empty_description))
+                .setNeutralButton(
+                    R.string.action_neutral
+                ) { _, _ -> }
+                .create()
+                .show()
     }
 
     private fun menuFloat() {
