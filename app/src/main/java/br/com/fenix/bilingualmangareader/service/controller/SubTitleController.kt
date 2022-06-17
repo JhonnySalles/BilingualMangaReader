@@ -30,6 +30,7 @@ import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import mu.KotlinLogging
 import org.apache.commons.codec.binary.Hex
 import org.apache.commons.codec.digest.DigestUtils
 import java.io.BufferedInputStream
@@ -39,6 +40,8 @@ import java.lang.ref.WeakReference
 
 
 class SubTitleController private constructor(private val context: Context) {
+
+    private val mLOGGER = KotlinLogging.logger {}
 
     var mReaderFragment: ReaderFragment? = null
     private val mSubtitleRepository: SubTitleRepository = SubTitleRepository(context)
@@ -84,7 +87,7 @@ class SubTitleController private constructor(private val context: Context) {
         if (isSelected) mComboListSelected else mComboListInternal
 
     init {
-        val sharedPreferences = GeneralConsts.getSharedPreferences(context)
+        val sharedPreferences = GeneralConsts.getSharedPreferences()
         try {
             mSubtitleLang = Languages.valueOf(
                 sharedPreferences.getString(
@@ -100,10 +103,7 @@ class SubTitleController private constructor(private val context: Context) {
             )
             mUseFileLink = sharedPreferences.getBoolean(GeneralConsts.KEYS.PAGE_LINK.USE_IN_SEARCH_TRANSLATE, false)
         } catch (e: Exception) {
-            Log.i(
-                GeneralConsts.TAG.LOG,
-                "Error, preferences languages not loaded - " + e.message
-            )
+            mLOGGER.error { "Preferences languages not loaded: " + e.message }
         }
     }
 
@@ -460,7 +460,7 @@ class SubTitleController private constructor(private val context: Context) {
                                 mSelectedSubTitle.value?.language = language
                         }
                     } catch (e: Exception) {
-                        Log.e(GeneralConsts.TAG.LOG, "Error find page link: " + e.message)
+                        mLOGGER.error { "Error find page link: " + e.message }
                     }
 
                     if (keyChapter.isNotEmpty() || keyPage.isNotEmpty())
@@ -583,10 +583,7 @@ class SubTitleController private constructor(private val context: Context) {
                         try {
                             mSelectedSubTitle.value = findSubtitle(manga, pageNumber)
                         } catch (e: java.lang.Exception) {
-                            Log.e(
-                                GeneralConsts.TAG.LOG,
-                                "Error, subtitle not founded in file. " + e.message
-                            )
+                            mLOGGER.info { "Subtitle not founded in file: " + e.message }
                             return@launch
                         }
                 }
@@ -702,7 +699,7 @@ class SubTitleController private constructor(private val context: Context) {
 
     ///////////////////////// LANGUAGE ///////////////
     fun clearLanguage() {
-        val sharedPreferences = GeneralConsts.getSharedPreferences(context)
+        val sharedPreferences = GeneralConsts.getSharedPreferences()
         mTranslateLang = Languages.valueOf(
             sharedPreferences.getString(
                 GeneralConsts.KEYS.SUBTITLE.TRANSLATE,
@@ -961,7 +958,7 @@ class SubTitleController private constructor(private val context: Context) {
             canvas.drawBitmap(img1, 0f, 0f, null)
             canvas.drawBitmap(img2, (img1.width + 1).toFloat(), 0f, null)
         } catch (e: java.lang.Exception) {
-            Log.e(GeneralConsts.TAG.LOG, "Erro ao combinar imagens. Tentativa: " + mError + " - " + e.message)
+            mLOGGER.warn { "Error when combine images. Attempt number: " + mError + " - " + e.message }
             mError += 1
             if (mError < 3) {
                 getFileLinkParser(fileLink.path, fileLink)

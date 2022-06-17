@@ -33,12 +33,12 @@ class AboutFragment : Fragment() {
 
         view.findViewById<Button>(R.id.about_btn_rate_us).setOnClickListener {
             try {
-                val uri = Uri.parse("market://details?id=" + requireActivity().getPackageName())
+                val uri = Uri.parse("market://details?id=" + requireActivity().packageName)
                 val intent = Intent(Intent.ACTION_VIEW, uri)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
             } catch (e : ActivityNotFoundException) {
-                val uri = Uri.parse("http://play.google.com/store/apps/details?id=" + requireActivity().getPackageName())
+                val uri = Uri.parse("http://play.google.com/store/apps/details?id=" + requireActivity().packageName)
                 val intent = Intent(Intent.ACTION_VIEW, uri)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)

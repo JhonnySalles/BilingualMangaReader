@@ -16,7 +16,7 @@ import jp.wasabeef.picasso.transformations.gpu.SepiaFilterTransformation
 class ReaderViewModel(application: Application) : AndroidViewModel(application) {
 
     private val mContext = application.applicationContext
-    private var mPreferences: SharedPreferences? = GeneralConsts.getSharedPreferences(mContext)
+    private var mPreferences: SharedPreferences? = GeneralConsts.getSharedPreferences()
 
     private var mFilters: MutableLiveData<MutableList<Transformation>> = MutableLiveData(arrayListOf())
     val filters: LiveData<MutableList<Transformation>> = mFilters

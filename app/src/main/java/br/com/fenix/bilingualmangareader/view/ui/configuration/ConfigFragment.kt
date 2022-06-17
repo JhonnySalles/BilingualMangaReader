@@ -4,7 +4,6 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,12 +20,14 @@ import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import com.google.android.material.textfield.TextInputLayout
+import mu.KotlinLogging
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 class ConfigFragment : Fragment() {
 
+    private val mLOGGER = KotlinLogging.logger {}
     private lateinit var mLibraryPath: TextInputLayout
     private lateinit var mLibraryPathAutoComplete: AutoCompleteTextView
     private lateinit var mLibraryOrder: TextInputLayout
@@ -249,7 +250,7 @@ class ConfigFragment : Fragment() {
 
     private fun saveConfig() {
         val sharedPreferences =
-            GeneralConsts.getSharedPreferences(requireContext())
+            GeneralConsts.getSharedPreferences()
         with(sharedPreferences.edit()) {
             this!!.putString(
                 GeneralConsts.KEYS.LIBRARY.FOLDER,
@@ -283,19 +284,17 @@ class ConfigFragment : Fragment() {
             this.commit()
         }
 
-        Log.i(
-            GeneralConsts.TAG.LOG,
-            "Save prefer CONFIG:" + "\n[Library] Path " + mLibraryPath.editText?.text +
-                    " - Order " + mLibraryOrder.editText?.text +
-                    "\n[SubTitle] Language " + mDefaultSubtitleLanguage.editText?.text +
-                    " - Translate " + mDefaultSubtitleTranslate.editText?.text +
-                    "\n[System] Format Data " + mSystemFormatDate.editText?.text
-        )
+        mLOGGER.info { "Save prefer CONFIG:" + "\n[Library] Path " + mLibraryPath.editText?.text +
+                " - Order " + mLibraryOrder.editText?.text +
+                "\n[SubTitle] Language " + mDefaultSubtitleLanguage.editText?.text +
+                " - Translate " + mDefaultSubtitleTranslate.editText?.text +
+                "\n[System] Format Data " + mSystemFormatDate.editText?.text
+        }
 
     }
 
     private fun loadConfig() {
-        val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
+        val sharedPreferences = GeneralConsts.getSharedPreferences()
 
         mLibraryPath.editText?.setText(
             sharedPreferences.getString(

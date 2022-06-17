@@ -16,6 +16,7 @@ import br.com.fenix.bilingualmangareader.model.entity.Manga
 import java.time.LocalDateTime
 
 class Storage(context: Context) {
+
     private val mRepository = MangaRepository(context)
     private val mRepositoryCover = CoverRepository(context)
 

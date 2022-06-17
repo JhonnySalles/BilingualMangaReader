@@ -1,12 +1,12 @@
 package br.com.fenix.bilingualmangareader.service.repository
 
 import android.content.Context
-import android.util.Log
 import br.com.fenix.bilingualmangareader.model.entity.SubTitle
-import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import mu.KotlinLogging
 
 class SubTitleRepository(context: Context) {
 
+    private val mLOGGER = KotlinLogging.logger {}
     private var mDataBase = DataBase.getDataBase(context).getSubTitleDao()
 
     fun save(obj: SubTitle): Long {
@@ -25,7 +25,7 @@ class SubTitleRepository(context: Context) {
         return try {
             mDataBase.get(idManga, id)
         } catch (e: Exception) {
-            Log.e(GeneralConsts.TAG.LOG, e.message.toString())
+            mLOGGER.error { "Error when get SubTitle: " + e.message }
             null
         }
     }
@@ -34,7 +34,7 @@ class SubTitleRepository(context: Context) {
         return try {
             mDataBase.findByIdManga(idManga)
         } catch (e: Exception) {
-            Log.e(GeneralConsts.TAG.LOG, e.message.toString())
+            mLOGGER.error { "Error when find SubTitle by id manga: " + e.message }
             null
         }
     }

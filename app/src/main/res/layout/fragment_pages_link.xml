@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/onPrimary"
+    android:fitsSystemWindows="true"
     tools:context=".view.ui.pages_link.PagesLinkFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,12 +22,12 @@
             android:layout_centerHorizontal="true"
             android:scrollbars="vertical"
             android:layout_marginTop="@dimen/page_link_list_link_margin_top"
-            android:layout_marginBottom="@dimen/page_link_list_link_margin_bottom"
             android:paddingTop="@dimen/page_link_list_link_padding_top"
             android:paddingBottom="@dimen/page_link_list_link_padding_bottom"
             android:clipToPadding="false"
             android:scrollbarStyle="outsideOverlay"
-            app:layout_constraintBottom_toTopOf="@+id/pages_link_buttons_content"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pages_link_pages_not_linked_recycler"
             app:layout_constraintVertical_bias="0"/>
@@ -114,8 +115,7 @@
                 android:text="@string/page_link_refresh"
                 android:textAllCaps="false"
                 android:layout_margin="@dimen/page_link_button_margin"
-                android:layout_gravity="center"
-                android:visibility="gone"/>
+                android:layout_gravity="center"/>
 
             <Button
                 android:id="@+id/pages_link_save_button"
@@ -126,8 +126,7 @@
                 android:text="@string/page_link_save"
                 android:textAllCaps="false"
                 android:layout_margin="@dimen/page_link_button_margin"
-                android:layout_gravity="center"
-                android:visibility="gone"/>
+                android:layout_gravity="center"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"

@@ -86,7 +86,7 @@ class GridViewHolder(itemView: View, private val listener: MangaCardListener) :
             mangaImage.setImageBitmap(manga.thumbnail!!.image)
         else {
             mangaImage.setImageBitmap(mImageCover)
-            ImageCoverController.instance.setImageCoverAsync(itemView.context, manga, layoutPosition)
+            ImageCoverController.instance.setImageCoverAsync(manga, layoutPosition)
         }
 
         mangaTitle.text = manga.title

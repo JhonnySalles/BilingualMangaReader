@@ -98,7 +98,7 @@ class Scanner {
         override fun run() {
             try {
                 val ctx: Context = MainActivity.getAppContext()
-                val preference: SharedPreferences = GeneralConsts.getSharedPreferences(ctx)
+                val preference: SharedPreferences = GeneralConsts.getSharedPreferences()
                 val libraryPath = preference.getString(GeneralConsts.KEYS.LIBRARY.FOLDER, "")
 
                 if (libraryPath == "" || !File(libraryPath).exists()) return

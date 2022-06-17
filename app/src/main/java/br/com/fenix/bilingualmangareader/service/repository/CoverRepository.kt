@@ -1,12 +1,12 @@
 package br.com.fenix.bilingualmangareader.service.repository
 
 import android.content.Context
-import android.util.Log
 import br.com.fenix.bilingualmangareader.model.entity.Cover
-import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import mu.KotlinLogging
 
 class CoverRepository(context: Context) {
 
+    private val mLOGGER = KotlinLogging.logger {}
     private var mDataBase = DataBase.getDataBase(context).getCoverDao()
 
     fun save(obj: Cover): Long {
@@ -29,7 +29,7 @@ class CoverRepository(context: Context) {
         return try {
             mDataBase.get(idManga, id)
         } catch (e: Exception) {
-            Log.e(GeneralConsts.TAG.LOG, e.message.toString())
+            mLOGGER.error { "Error when get cover: " + e.message }
             null
         }
     }
@@ -38,7 +38,7 @@ class CoverRepository(context: Context) {
         return try {
             mDataBase.findFirstByIdManga(idManga)
         } catch (e: Exception) {
-            Log.e(GeneralConsts.TAG.LOG, e.message.toString())
+            mLOGGER.error { "Error when find cover by manga: " + e.message }
             null
         }
     }
@@ -47,7 +47,7 @@ class CoverRepository(context: Context) {
         return try {
             mDataBase.listByIdManga(idManga)
         } catch (e: Exception) {
-            Log.e(GeneralConsts.TAG.LOG, e.message.toString())
+            mLOGGER.error { "Error when list cover by manga: " + e.message }
             null
         }
     }

@@ -91,9 +91,8 @@
     <dimen name="page_link_list_not_link_margin_land_or_tablet">2dp</dimen>
     <dimen name="page_link_list_not_link_margin_top">20dp</dimen>
     <dimen name="page_link_list_link_margin_top">5dp</dimen>
-    <dimen name="page_link_list_link_margin_bottom">5dp</dimen>
     <dimen name="page_link_list_link_padding_top">10dp</dimen>
-    <dimen name="page_link_list_link_padding_bottom">140dp</dimen>
+    <dimen name="page_link_list_link_padding_bottom">80dp</dimen>
 
     <dimen name="page_link_card_margin">1dp</dimen>
     <dimen name="page_link_card_layout_width">180dp</dimen>

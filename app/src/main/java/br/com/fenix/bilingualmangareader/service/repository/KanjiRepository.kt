@@ -1,19 +1,19 @@
 package br.com.fenix.bilingualmangareader.service.repository
 
 import android.content.Context
-import android.util.Log
 import br.com.fenix.bilingualmangareader.model.entity.KanjiJLPT
-import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import mu.KotlinLogging
 
 class KanjiRepository(context: Context) {
 
+    private val mLOGGER = KotlinLogging.logger {}
     private var mDataBase = DataBase.getDataBase(context).getKanjiJLPTDao()
 
     fun get(id: Long): KanjiJLPT? {
         return try {
             mDataBase.get(id)
         } catch (e: Exception) {
-            Log.e(GeneralConsts.TAG.LOG, e.message.toString())
+            mLOGGER.error { "Error when get KanjiJLPT: " + e.message }
             null
         }
     }
@@ -22,7 +22,7 @@ class KanjiRepository(context: Context) {
         return try {
             mDataBase.list()
         } catch (e: Exception) {
-            Log.e(GeneralConsts.TAG.LOG, e.message.toString())
+            mLOGGER.error { "Error when list KanjiJLPT: " + e.message }
             null
         }
     }
@@ -30,9 +30,9 @@ class KanjiRepository(context: Context) {
 
     fun getHashMap(): Map<String, Int>? {
         return try {
-            mDataBase.list().map { it.kanji to it.level }.toMap()
+            mDataBase.list().associate { it.kanji to it.level }
         } catch (e: Exception) {
-            Log.e(GeneralConsts.TAG.LOG, e.message.toString())
+            mLOGGER.error { "Error when get HashMap: " + e.message }
             null
         }
     }
