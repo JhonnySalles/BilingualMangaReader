@@ -19,7 +19,7 @@ class PageNotLinkViewHolder(itemView: View, private val listener: PageLinkCardLi
         if (page.imageLeftFileLinkPage != null)
             image.setImageBitmap(page.imageLeftFileLinkPage)
 
-        root.setOnLongClickListener { listener.onClickLong(it, page, Pages.NOT_LINKED) }
+        root.setOnLongClickListener { listener.onClickLong(it, page, Pages.NOT_LINKED, -1) }
     }
 
 }

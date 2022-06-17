@@ -69,6 +69,7 @@
     <string name="menu_reading_color">Page color</string>
     <string name="menu_reading_file_link">File in another language</string>
     <string name="menu_reading_floating">Floating popup</string>
+    <string name="menu_reading_open_kaku">Open Kaku App</string>
 
     <string name="reading_button_screen_rotate">Screen rotate</string>
     <string name="reading_button_page_linked">Page linked</string>
@@ -76,6 +77,8 @@
     <string name="reading_button_color">Pages colors</string>
     <string name="reading_button_file_link">File link</string>
     <string name="reading_button_popup_floating">Popup floating</string>
+
+    <string name="open_app_kaku_not_founded">App Kaku not found.</string>
 
     <!-- READER POPUP TITLES -->
     <string name="popup_reading_open">Open</string>

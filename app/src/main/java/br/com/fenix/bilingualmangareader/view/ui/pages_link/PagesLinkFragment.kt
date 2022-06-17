@@ -6,7 +6,6 @@ import android.content.ClipDescription
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.*
-import android.util.Log
 import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -37,11 +36,13 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.textfield.TextInputLayout
+import org.slf4j.LoggerFactory
 import java.lang.ref.WeakReference
-import java.util.HashMap
 
 
 class PagesLinkFragment : Fragment() {
+
+    private val mLOGGER = LoggerFactory.getLogger(PagesLinkFragment::class.java)
 
     private val mViewModel: PagesLinkViewModel by viewModels()
     private lateinit var mRoot : ConstraintLayout
@@ -65,7 +66,6 @@ class PagesLinkFragment : Fragment() {
     private var mHandler = Handler(Looper.getMainLooper())
     private val mDismissUpButton = Runnable { mScrollUp.hide() }
     private val mDismissDownButton = Runnable { mScrollDown.hide() }
-    private var mOpenedIntent : Boolean = false
     private var mInDrag : Boolean = false
     private var mIsTabletOrLandscape: Boolean = false
     private var mPageSelected: Int = 0
@@ -77,18 +77,18 @@ class PagesLinkFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_pages_link, container, false)
 
-        mRoot = root.findViewById(R.id.root_pages_link)
-        mRecyclePageLink = root.findViewById(R.id.rv_pages_linked)
-        mRecyclePageNotLink = root.findViewById(R.id.rv_pages_not_linked)
-        mFileLink = root.findViewById(R.id.txt_file_link)
-        mFileLinkAutoComplete = root.findViewById(R.id.menu_autocomplete_file_link)
-        mFileLinkLanguage = root.findViewById(R.id.cb_file_link_language)
-        mFileLinkLanguageAutoComplete = root.findViewById(R.id.menu_autocomplete_file_link_language)
-        mSave = root.findViewById(R.id.btn_file_link_save)
-        mRefresh = root.findViewById(R.id.btn_file_link_refresh)
-        mFullScreen = root.findViewById(R.id.btn_file_link_full_screen)
+        mRoot = root.findViewById(R.id.pages_link_root)
+        mRecyclePageLink = root.findViewById(R.id.pages_link_pages_linked_recycler)
+        mRecyclePageNotLink = root.findViewById(R.id.pages_link_pages_not_linked_recycler)
+        mFileLink = root.findViewById(R.id.pages_link_file_link_text)
+        mFileLinkAutoComplete = root.findViewById(R.id.pages_link_file_link_autocomplete)
+        mFileLinkLanguage = root.findViewById(R.id.pages_link_language_combo)
+        mFileLinkLanguageAutoComplete = root.findViewById(R.id.pages_link_language_autocomplete)
+        mSave = root.findViewById(R.id.pages_link_save_button)
+        mRefresh = root.findViewById(R.id.pages_link_refresh_button)
+        mFullScreen = root.findViewById(R.id.pages_link_full_screen_button)
 
-        mImageLoading = root.findViewById(R.id.image_loading)
+        mImageLoading = root.findViewById(R.id.pages_link_loading_progress)
         mScrollUp = root.findViewById(R.id.pages_link_scroll_up)
         mScrollDown = root.findViewById(R.id.pages_link_scroll_down)
 
@@ -97,28 +97,28 @@ class PagesLinkFragment : Fragment() {
 
         mScrollUp.setOnClickListener { mRecyclePageLink.smoothScrollToPosition(0) }
         mScrollDown.setOnClickListener {
-            var position = if (mViewModel.pagesLink.value != null)
-                mViewModel.pagesLink.value!!.size
-            else 0
-
-            mRecyclePageLink.smoothScrollToPosition(position)
+            mRecyclePageLink.smoothScrollToPosition((mRecyclePageLink.adapter as RecyclerView.Adapter).itemCount)
         }
 
         mRecyclePageLink.setOnScrollChangeListener { _, _, _, _, yOld ->
             if (mShowScrollButton) {
-                if (yOld > 200) {
-                    if (mHandler.hasCallbacks(mDismissDownButton)) {
+                if (yOld > 20 && mScrollDown.visibility == View.VISIBLE) {
+                    if (mHandler.hasCallbacks(mDismissDownButton))
                         mHandler.removeCallbacks(mDismissDownButton)
-                        mScrollDown.hide()
-                    }
+
+                    mScrollDown.hide()
+                } else if (yOld < -20 && mScrollUp.visibility == View.VISIBLE) {
+                    if (mHandler.hasCallbacks(mDismissUpButton))
+                        mHandler.removeCallbacks(mDismissUpButton)
+
+                    mScrollUp.hide()
+                }
+
+                if (yOld > 200) {
                     mHandler.removeCallbacks(mDismissUpButton)
                     mHandler.postDelayed(mDismissUpButton, 3000)
                     mScrollUp.show()
                 } else if (yOld < -200) {
-                    if (mHandler.hasCallbacks(mDismissUpButton)) {
-                        mHandler.removeCallbacks(mDismissUpButton)
-                        mScrollUp.hide()
-                    }
                     mHandler.removeCallbacks(mDismissDownButton)
                     mHandler.postDelayed(mDismissDownButton, 3000)
                     mScrollDown.show()
@@ -145,7 +145,6 @@ class PagesLinkFragment : Fragment() {
                     putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/zip", "application/x-cbz", "application/rar", "application/x-cbr",
                         "application/x-rar-compressed", "application/x-zip-compressed", "application/cbr", "application/cbz"))
                 }
-            mOpenedIntent = true
             startActivityForResult(intent, GeneralConsts.REQUEST.OPEN_PAGE_LINK)
         }
 
@@ -192,12 +191,13 @@ class PagesLinkFragment : Fragment() {
         mListener = object : PageLinkCardListener {
             override fun onClick(page: PageLink) { }
 
-            override fun onClickLong(view : View, page: PageLink, origin : Pages): Boolean {
+            override fun onClickLong(view : View, page: PageLink, origin : Pages, position: Int): Boolean {
                 val pageLink = if (origin == Pages.NOT_LINKED) mViewModel.getPageNotLink(page) else mViewModel.getPageLink(page)
                 val item = ClipData.Item(pageLink)
                 val name = if (origin == Pages.DUAL_PAGE) page.fileRightLinkPageName else page.fileLinkPageName
-                val dragData = ClipData( name, arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN), item)
+                val dragData = ClipData(position.toString(), arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN), item)
                 dragData.addItem(ClipData.Item(origin.name))
+                dragData.addItem(ClipData.Item(name))
                 val myShadow = View.DragShadowBuilder(view)
 
                 view.startDragAndDrop(dragData,
@@ -268,10 +268,10 @@ class PagesLinkFragment : Fragment() {
                 }
 
                 DragEvent.ACTION_DROP -> {
-                    when (val origin = Pages.valueOf(dragEvent.clipData.getItemAt(1).text.toString())) {
-                        Pages.LINKED -> mViewModel.onNotLinked(mViewModel.getPageLink(Integer.valueOf(dragEvent.clipData.getItemAt(0).text.toString())))
+                    when (val origin = Pages.valueOf(dragEvent.clipData.getItemAt(PageLinkConsts.CLIPDATA.PAGE_TYPE).text.toString())) {
+                        Pages.LINKED -> mViewModel.onNotLinked(mViewModel.getPageLink(Integer.valueOf(dragEvent.clipData.getItemAt(PageLinkConsts.CLIPDATA.PAGE_LINK).text.toString())))
                         Pages.DUAL_PAGE -> {
-                            val pageLink = mViewModel.getPageLink(Integer.valueOf(dragEvent.clipData.getItemAt(0).text.toString()))
+                            val pageLink = mViewModel.getPageLink(Integer.valueOf(dragEvent.clipData.getItemAt(PageLinkConsts.CLIPDATA.PAGE_LINK).text.toString()))
                             mViewModel.onMoveDualPage(origin, pageLink, Pages.NOT_LINKED, pageLink)
                         }
                         else -> {}
@@ -317,6 +317,8 @@ class PagesLinkFragment : Fragment() {
             val fileLink = savedInstanceState.getSerializable(GeneralConsts.KEYS.OBJECT.PAGELINK)
             if (fileLink != null)
                 mViewModel.reload(fileLink as FileLink) { index, type -> notifyItemChanged(type, index)  }
+            else
+                mViewModel.reLoadImages(Pages.ALL, true, isCloseThreads = true)
         } else {
             val bundle = this.arguments
             if (bundle != null && bundle.containsKey(GeneralConsts.KEYS.OBJECT.MANGA)) {
@@ -326,24 +328,15 @@ class PagesLinkFragment : Fragment() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        if (!mOpenedIntent) {
-            val fileLink = mViewModel.getFileLink(isBackup = true)
-            outState.putSerializable(GeneralConsts.KEYS.OBJECT.PAGELINK, fileLink)
-        }
-        super.onSaveInstanceState(outState)
-    }
-
     override fun onActivityResult(
         requestCode: Int, resultCode: Int, resultData: Intent?
     ) {
-        mOpenedIntent = false
         if (requestCode == GeneralConsts.REQUEST.OPEN_PAGE_LINK) {
             if (resultCode == Activity.RESULT_OK) {
                 resultData?.data?.also { uri ->
                     try {
                         val path = Util.normalizeFilePath(uri.path.toString())
-                        val loaded = mViewModel.readFileLink(path) { index, type -> notifyItemChanged(type, index)  }
+                        val loaded = mViewModel.readFileLink(path) { index, type -> notifyItemChanged(type, index) }
                         if (loaded != LoadFile.LOADED) {
                             val msg = if (loaded == LoadFile.ERROR_FILE_WRONG) getString(R.string.page_link_load_file_wrong) else getString(R.string.page_link_load_error)
                             AlertDialog.Builder(requireContext(), R.style.AppCompatAlertDialogStyle)
@@ -356,7 +349,7 @@ class PagesLinkFragment : Fragment() {
                                 .show()
                         }
                     } catch (e: Exception) {
-                        Log.e(GeneralConsts.TAG.LOG, "Error when open file: " + e.message)
+                        mLOGGER.warn("Error when open file: " + e.message, e)
                     }
                 }
             } else
@@ -385,14 +378,20 @@ class PagesLinkFragment : Fragment() {
         }
 
         mViewModel.fileLink.observe(viewLifecycleOwner) {
-            if (it != null)
-                mFileLinkAutoComplete.setText(it.path)
-            else
-                mFileLinkAutoComplete.setText("")
+            val description = it?.name ?: ""
+            mFileLinkAutoComplete.setText(description)
         }
 
         mViewModel.language.observe(viewLifecycleOwner) {
-            mFileLinkLanguageAutoComplete.setText(it.name, false)
+            var description = ""
+
+            if (it != null) {
+                for (language in mMapLanguage.entries)
+                    if (language.value.compareTo(it) == 0)
+                        description = language.key
+            }
+
+            mFileLinkLanguageAutoComplete.setText(description, false)
         }
 
     }
@@ -444,7 +443,7 @@ class PagesLinkFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         mViewModel.addImageLoadHandler(mImageLoadHandler)
-        verifyImageLoading()
+        processImageLoading(isVerify = true)
         mRecyclePageLink.scrollToPosition(mPageSelected)
     }
 
@@ -469,11 +468,26 @@ class PagesLinkFragment : Fragment() {
         super.onDestroy()
     }
 
-    private fun verifyImageLoading() {
-        mImageLoading.visibility = if (mViewModel.imageThreadLoadingProgress())
-            View.VISIBLE
-        else
-            View.GONE
+    private fun processImageLoading(isInitial: Boolean = false, isEnding: Boolean = false, isVerify : Boolean = false) {
+        if (isInitial) {
+            mImageLoading.isIndeterminate = true
+            mImageLoading.visibility = View.VISIBLE
+        } else if (isEnding || isVerify) {
+            mImageLoading.isIndeterminate = isVerify
+            mImageLoading.visibility = if (mViewModel.imageThreadLoadingProgress())
+                View.VISIBLE
+            else
+                View.INVISIBLE
+        } else {
+            val (progress, size) = mViewModel.getProgress()
+            if (progress == -1)
+                mImageLoading.isIndeterminate = true
+            else {
+                mImageLoading.isIndeterminate = false
+                mImageLoading.max = size
+                mImageLoading.progress = progress
+            }
+        }
     }
 
     private inner class ImageLoadHandler(fragment: PagesLinkFragment) : Handler() {
@@ -481,13 +495,16 @@ class PagesLinkFragment : Fragment() {
         override fun handleMessage(msg: Message) {
             val imageLoad = msg.obj as PagesLinkViewModel.ImageLoad
             when (msg.what) {
-                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_START -> mImageLoading.visibility = View.VISIBLE
-                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_UPDATED -> notifyItemChanged(imageLoad.type, imageLoad.index)
+                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_START -> processImageLoading(true)
+                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_UPDATED -> {
+                    processImageLoading()
+                    notifyItemChanged(imageLoad.type, imageLoad.index)
+                }
                 PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_LOAD_ERROR -> mViewModel.reLoadImages(imageLoad.type)
                 PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_ADDED -> notifyItemChanged(imageLoad.type, imageLoad.index, add = true)
                 PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_REMOVED -> notifyItemChanged(imageLoad.type, imageLoad.index, remove = true)
                 PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_FINISHED -> {
-                    verifyImageLoading()
+                    processImageLoading(isEnding = true)
                     mViewModel.reLoadImages(imageLoad.type, true)
                 }
             }

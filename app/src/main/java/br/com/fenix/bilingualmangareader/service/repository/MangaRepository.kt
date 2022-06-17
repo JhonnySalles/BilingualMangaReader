@@ -1,13 +1,13 @@
 package br.com.fenix.bilingualmangareader.service.repository
 
 import android.content.Context
-import android.util.Log
 import br.com.fenix.bilingualmangareader.model.entity.Cover
 import br.com.fenix.bilingualmangareader.model.entity.Manga
-import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import org.slf4j.LoggerFactory
 
 class MangaRepository(context: Context) {
 
+    private val mLOGGER = LoggerFactory.getLogger(MangaRepository::class.java)
     private val mCoverRepository: CoverRepository = CoverRepository(context)
     private var mDataBase = DataBase.getDataBase(context).getMangaDao()
 
@@ -38,15 +38,24 @@ class MangaRepository(context: Context) {
     }
 
     fun delete(obj: Manga) {
-        //mCoverRepository.deleteAll(obj.id!!)
-        mDataBase.delete(obj.id!!)
+        if (obj.id != null)
+            mDataBase.delete(obj.id!!)
     }
 
     fun list(): List<Manga>? {
         return try {
             mDataBase.list()
         } catch (e: Exception) {
-            Log.e(GeneralConsts.TAG.DATABASE.LIST, e.message.toString())
+            mLOGGER.error("Error when list Manga: " + e.message, e)
+            null
+        }
+    }
+
+    fun listDeleted(): List<Manga>? {
+        return try {
+            mDataBase.listDeleted()
+        } catch (e: Exception) {
+            mLOGGER.error("Error when list Manga: " + e.message, e)
             null
         }
     }
@@ -55,7 +64,7 @@ class MangaRepository(context: Context) {
         return try {
             mDataBase.listHistory()
         } catch (e: Exception) {
-            Log.e(GeneralConsts.TAG.DATABASE.LIST, e.message.toString())
+            mLOGGER.error("Error when list Manga History: " + e.message, e)
             null
         }
     }
@@ -68,7 +77,7 @@ class MangaRepository(context: Context) {
             else
                 mDataBase.clearHistory()
         } catch (e: Exception) {
-            Log.e(GeneralConsts.TAG.DATABASE.LIST, e.message.toString())
+            mLOGGER.error("Error when clear Manga History: " + e.message, e)
         }
     }
 
@@ -80,7 +89,7 @@ class MangaRepository(context: Context) {
         return try {
             mDataBase.get(id)
         } catch (e: Exception) {
-            Log.e(GeneralConsts.TAG.DATABASE.SELECT, e.message.toString())
+            mLOGGER.error("Error when get Manga: " + e.message, e)
             null
         }
     }
@@ -89,7 +98,7 @@ class MangaRepository(context: Context) {
         return try {
             mDataBase.get(name)
         } catch (e: Exception) {
-            Log.e(GeneralConsts.TAG.DATABASE.SELECT, e.message.toString())
+            mLOGGER.error("Error when find Manga by file name: " + e.message, e)
             null
         }
     }
@@ -98,7 +107,7 @@ class MangaRepository(context: Context) {
         return try {
             mDataBase.listByFolder(folder)
         } catch (e: Exception) {
-            Log.e(GeneralConsts.TAG.DATABASE.LIST, e.message.toString())
+            mLOGGER.error("Error when find Manga by file folder: " + e.message, e)
             null
         }
     }

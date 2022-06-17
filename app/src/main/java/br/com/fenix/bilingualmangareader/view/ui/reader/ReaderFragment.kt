@@ -216,7 +216,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             mPagerAdapter = ComicPagerAdapter()
             mGestureDetector = GestureDetector(requireActivity(), MyTouchListener())
 
-            mPreferences = GeneralConsts.getSharedPreferences(requireContext())
+            mPreferences = GeneralConsts.getSharedPreferences()
             mReaderMode = ReaderMode.valueOf(
                 mPreferences.getString(
                     GeneralConsts.KEYS.READER.READER_MODE,
@@ -313,7 +313,6 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         })
         if (mCurrentPage != -1)
             setCurrentPage(mCurrentPage)
-        //mCurrentPage = -1
 
         if (savedInstanceState != null) {
             val fullscreen = savedInstanceState.getBoolean(ReaderConsts.STATES.STATE_FULLSCREEN)

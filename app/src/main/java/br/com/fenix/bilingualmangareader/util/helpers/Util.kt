@@ -205,6 +205,17 @@ class Util {
                 path
         }
 
+        fun normalizeNameCache(name: String): String {
+            val normalize = if (name.contains("-"))
+                name.substringBefore("-")
+            else if (name.contains(" "))
+                name.substringBefore(" ")
+            else name
+
+            val random = (0..1000).random()
+            return normalize.replace("[^\\w\\d ]".toRegex(), "").trim().plus(random).lowercase()
+        }
+
         fun normalizeFilePath(path: String): String {
             var folder: String = path
 

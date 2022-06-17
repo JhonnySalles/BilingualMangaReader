@@ -10,6 +10,7 @@ import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.service.controller.ImageCoverController
 import br.com.fenix.bilingualmangareader.service.parses.Parse
 import br.com.fenix.bilingualmangareader.service.parses.ParseFactory
+import br.com.fenix.bilingualmangareader.service.parses.RarParse
 import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
@@ -97,17 +98,21 @@ class Scanner {
         override fun run() {
             try {
                 val ctx: Context = MainActivity.getAppContext()
-                val preference: SharedPreferences = GeneralConsts.getSharedPreferences(ctx)
+                val preference: SharedPreferences = GeneralConsts.getSharedPreferences()
                 val libraryPath = preference.getString(GeneralConsts.KEYS.LIBRARY.FOLDER, "")
 
                 if (libraryPath == "" || !File(libraryPath).exists()) return
 
                 val storage = Storage(ctx)
                 val storageFiles: MutableMap<String, Manga> = HashMap()
+                val storageDeletes: MutableMap<String, Manga> = HashMap()
 
                 // create list of files available in storage
-                for (c in storage.listBook()!!)
-                    storageFiles[c.path] = c
+                for (c in storage.listMangas()!!)
+                    storageFiles[c.title] = c
+
+                for (c in storage.listDeleted()!!)
+                    storageDeletes[c.title] = c
 
                 // search and add comics if necessary
                 val file = File(libraryPath)
@@ -120,14 +125,21 @@ class Scanner {
                             it.name.endsWith(".cbr") ||
                             it.name.endsWith(".cbz")
                         ) {
-                            if (storageFiles.containsKey(it.path))
-                                storageFiles.remove(it.path)
+                            if (storageFiles.containsKey(it.name))
+                                storageFiles.remove(it.name)
                             else {
                                 val parse: Parse? = ParseFactory.create(it)
                                 try {
+                                    if (parse is RarParse) {
+                                        val cacheDir = File(GeneralConsts.getCacheDir(), GeneralConsts.CACHEFOLDER.RAR)
+                                        (parse as RarParse?)!!.setCacheDirectory(cacheDir)
+                                    }
+
                                     if (parse != null)
                                         if (parse.numPages() > 0) {
-                                            val manga = Manga(
+                                            val manga = if (storageDeletes.containsKey(it.name))
+                                                storageDeletes.getValue(it.name)
+                                            else Manga(
                                                 null,
                                                 it.name,
                                                 "",
@@ -138,6 +150,7 @@ class Scanner {
                                                 parse.numPages()
                                             )
 
+                                            manga.excluded = false
                                             generateCover(parse, manga)
                                             storage.save(manga)
                                             notifyMediaUpdated()

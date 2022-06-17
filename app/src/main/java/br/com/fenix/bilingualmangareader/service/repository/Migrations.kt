@@ -1,11 +1,10 @@
 package br.com.fenix.bilingualmangareader.service.repository
 
-import android.util.Log
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.util.constants.DataBaseConsts
-import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import org.slf4j.LoggerFactory
 
 class Migrations {
     object SQLINITIAL {
@@ -28,10 +27,12 @@ class Migrations {
     }
 
     companion object {
+        private val mLOGGER = LoggerFactory.getLogger(Migrations::class.java)
+
         // Migration version 2.
         val MIGRATION_1_2 = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                Log.i(GeneralConsts.TAG.LOG, "Iniciando o migration 1 - 2")
+                mLOGGER.info("Start migration 1 - 2...")
 
                 database.execSQL("ALTER TABLE " + DataBaseConsts.MANGA.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.MANGA.COLUMNS.EXCLUDED + " INTEGER DEFAULT 0 NOT NULL")
 
@@ -66,26 +67,31 @@ class Migrations {
                         + "_" + DataBaseConsts.PAGESLINK.COLUMNS.FK_ID_FILE + " ON " +  DataBaseConsts.PAGESLINK.TABLE_NAME +
                         "(" + DataBaseConsts.PAGESLINK.COLUMNS.FK_ID_FILE + ")")
 
-                Log.i(GeneralConsts.TAG.LOG, "Concluido a migration 1 - 2")
+                mLOGGER.info("Completed migration 1 - 2." )
             }
         }
 
         // Migration version 3.
         val MIGRATION_2_3 = object : Migration(2, 3) {
             override fun migrate(database: SupportSQLiteDatabase) {
+                mLOGGER.info("Start migration 2 - 3...")
+
                 database.execSQL("ALTER TABLE " + DataBaseConsts.PAGESLINK.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.PAGESLINK.COLUMNS.FILE_RIGHT_LINK_PAGE + " INTEGER DEFAULT -1 NOT NULL")
                 database.execSQL("ALTER TABLE " + DataBaseConsts.PAGESLINK.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.PAGESLINK.COLUMNS.FILE_RIGHT_LINK_PAGE_NAME + " TEXT DEFAULT '' NOT NULL")
                 database.execSQL("ALTER TABLE " + DataBaseConsts.PAGESLINK.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.PAGESLINK.COLUMNS.DUAL_IMAGE + " INTEGER DEFAULT 0 NOT NULL")
 
-                Log.i(GeneralConsts.TAG.LOG, "Iniciando o migration 2 - 3")
+                mLOGGER.info("Completed migration 2 - 3.")
             }
         }
 
         // Migration version 4.
         val MIGRATION_3_4 = object : Migration(3, 4) {
             override fun migrate(database: SupportSQLiteDatabase) {
+                mLOGGER.info("Start migration 3 - 4...")
+
                 database.execSQL("ALTER TABLE " + DataBaseConsts.FILELINK.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.FILELINK.COLUMNS.LANGUAGE + " TEXT DEFAULT '" + Languages.PORTUGUESE + "' NOT NULL")
-                Log.i(GeneralConsts.TAG.LOG, "Iniciando o migration 3 - 4")
+
+                mLOGGER.info("Completed migration 3 - 4.")
             }
         }
     }

@@ -6,33 +6,34 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/onPrimary"
+    android:fitsSystemWindows="true"
     tools:context=".view.ui.pages_link.PagesLinkFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/root_pages_link"
+        android:id="@+id/pages_link_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/margin_small">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_pages_linked"
+            android:id="@+id/pages_link_pages_linked_recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:scrollbars="vertical"
             android:layout_marginTop="@dimen/page_link_list_link_margin_top"
-            android:layout_marginBottom="@dimen/page_link_list_link_margin_bottom"
             android:paddingTop="@dimen/page_link_list_link_padding_top"
             android:paddingBottom="@dimen/page_link_list_link_padding_bottom"
             android:clipToPadding="false"
             android:scrollbarStyle="outsideOverlay"
-            app:layout_constraintBottom_toTopOf="@+id/buttons_root"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rv_pages_not_linked"
+            app:layout_constraintTop_toBottomOf="@+id/pages_link_pages_not_linked_recycler"
             app:layout_constraintVertical_bias="0"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_pages_not_linked"
+            android:id="@+id/pages_link_pages_not_linked_recycler"
             android:tag="horizontal"
             android:layout_width="match_parent"
             android:layout_height="@dimen/page_link_list_not_link_height"
@@ -42,12 +43,12 @@
             android:orientation="horizontal"
             android:background="@drawable/file_linked_background"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cb_file_link_language"
+            app:layout_constraintTop_toBottomOf="@+id/pages_link_language_combo"
             app:layout_constraintVertical_bias="0"
             app:layout_constraintHorizontal_bias="0"/>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/txt_file_link"
+            android:id="@+id/pages_link_file_link_text"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -64,16 +65,15 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <AutoCompleteTextView
-                android:id="@+id/menu_autocomplete_file_link"
+                android:id="@+id/pages_link_file_link_autocomplete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="none"
-                android:textColor="@color/textPrimary"
-                />
+                android:textColor="@color/textPrimary" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/cb_file_link_language"
+            android:id="@+id/pages_link_language_combo"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -87,10 +87,10 @@
             app:startIconTint="@color/onSecondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_file_link">
+            app:layout_constraintTop_toBottomOf="@+id/pages_link_file_link_text">
 
             <AutoCompleteTextView
-                android:id="@+id/menu_autocomplete_file_link_language"
+                android:id="@+id/pages_link_language_autocomplete"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="none"
@@ -98,7 +98,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
-            android:id="@+id/buttons_root"
+            android:id="@+id/pages_link_buttons_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -107,7 +107,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:gravity="end">
             <Button
-                android:id="@+id/btn_file_link_refresh"
+                android:id="@+id/pages_link_refresh_button"
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -115,10 +115,10 @@
                 android:text="@string/page_link_refresh"
                 android:textAllCaps="false"
                 android:layout_margin="@dimen/page_link_button_margin"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"/>
 
             <Button
-                android:id="@+id/btn_file_link_save"
+                android:id="@+id/pages_link_save_button"
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -126,45 +126,60 @@
                 android:text="@string/page_link_save"
                 android:textAllCaps="false"
                 android:layout_margin="@dimen/page_link_button_margin"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"/>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_file_link_full_screen"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_width="@dimen/page_link_fullscreen_width"
-                android:textColor="@color/textPrimary"
-                android:contentDescription="@string/reading_button_popup_floating"
                 android:paddingLeft="@dimen/page_link_fullscreen_padding"
                 android:paddingRight="@dimen/page_link_fullscreen_padding"
                 android:paddingStart="@dimen/page_link_fullscreen_padding"
                 android:paddingEnd="@dimen/page_link_fullscreen_padding"
+                android:layout_margin="1dp"
                 android:layout_gravity="bottom"
-                android:gravity="center"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                app:strokeWidth="0dp"
-                app:backgroundTint="@color/fileLinkFullScreen"
-                app:icon="@drawable/ic_fullscreen"
-                app:iconTint="@color/textPrimary"
-                app:iconSize="28dp"
-                app:cornerRadius="100dp"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
-        </LinearLayout>
+                android:gravity="center">
 
-        <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:id="@+id/image_loading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
-            android:layout_margin="@dimen/page_link_image_loading_margin"
-            android:indeterminate="true"
-            android:max="100"
-            android:progress="70"
-            android:visibility="gone"
-            app:indicatorSize="@dimen/page_link_image_loading_size"
-            app:indicatorColor="@color/onSecondary"
-            app:layout_constraintBottom_toTopOf="@+id/buttons_root"
-            app:layout_constraintRight_toRightOf="parent" />
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/pages_link_loading_progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:indeterminate="false"
+                    android:max="100"
+                    android:progress="100"
+                    android:visibility="invisible"
+                    app:indicatorSize="@dimen/page_link_loading_progress_size"
+                    app:indicatorColor="@color/onSecondary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/pages_link_full_screen_button"
+                    android:layout_height="@dimen/page_link_fullscreen_size"
+                    android:layout_width="@dimen/page_link_fullscreen_size"
+                    android:textColor="@color/textPrimary"
+                    android:contentDescription="@string/reading_button_popup_floating"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:strokeWidth="0dp"
+                    app:backgroundTint="@color/fileLinkFullScreen"
+                    app:icon="@drawable/ic_fullscreen"
+                    app:iconTint="@color/textPrimary"
+                    app:iconSize="28dp"
+                    app:cornerRadius="100dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
         <!--                                Ended                                -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -175,13 +190,14 @@
             android:layout_margin="@dimen/page_link_scrolling_button_margin"
             android:backgroundTint="@color/white"
             android:contentDescription="@string/action_scroll_up"
+            android:visibility="gone"
             app:tint="@color/onSecondary"
             android:src="@drawable/ic_up_arrow"
             app:backgroundTint="@color/onSecondary"
             app:borderWidth="@dimen/page_link_up_border"
             app:fabCustomSize="@dimen/page_link_up_width"
             app:maxImageSize="@dimen/page_link_up_image_width"
-            app:layout_constraintTop_toBottomOf="@+id/cb_file_link_language"
+            app:layout_constraintTop_toBottomOf="@+id/pages_link_language_combo"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"/>
 
@@ -193,13 +209,14 @@
             android:layout_margin="@dimen/page_link_scrolling_button_margin"
             android:backgroundTint="@color/white"
             android:contentDescription="@string/action_scroll_down"
+            android:visibility="gone"
             app:tint="@color/onSecondary"
             android:src="@drawable/ic_down_arrow"
             app:backgroundTint="@color/onSecondary"
             app:borderWidth="@dimen/page_link_down_border"
             app:fabCustomSize="@dimen/page_link_down_width"
             app:maxImageSize="@dimen/page_link_down_image_width"
-            app:layout_constraintBottom_toTopOf="@+id/buttons_root"
+            app:layout_constraintBottom_toTopOf="@+id/pages_link_buttons_content"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"/>
 

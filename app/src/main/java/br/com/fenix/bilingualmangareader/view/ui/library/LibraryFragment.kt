@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.util.DisplayMetrics
 import android.util.Log
@@ -16,11 +17,13 @@ import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Manga
@@ -29,22 +32,23 @@ import br.com.fenix.bilingualmangareader.model.enums.Order
 import br.com.fenix.bilingualmangareader.service.controller.ImageCoverController
 import br.com.fenix.bilingualmangareader.service.listener.MangaCardListener
 import br.com.fenix.bilingualmangareader.service.repository.Storage
+import br.com.fenix.bilingualmangareader.service.repository.SubTitleRepository
 import br.com.fenix.bilingualmangareader.service.scanner.Scanner
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.view.adapter.library.MangaGridCardAdapter
 import br.com.fenix.bilingualmangareader.view.adapter.library.MangaLineCardAdapter
 import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity
+import ch.qos.logback.core.net.SocketConnector
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import org.slf4j.LoggerFactory
 import java.lang.ref.WeakReference
 import java.time.LocalDateTime
-import java.util.*
 import kotlin.math.max
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
-
-import androidx.core.app.ActivityCompat
 
 
 class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
+    private val mLOGGER = LoggerFactory.getLogger(LibraryFragment::class.java)
     private lateinit var mViewModel: LibraryViewModel
     private var mLibraryPath: String = ""
     private var mOrderBy: Order = Order.Name
@@ -57,6 +61,12 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var miSearch: MenuItem
     private lateinit var searchView: SearchView
     private lateinit var mListener: MangaCardListener
+    private lateinit var mScrollUp: FloatingActionButton
+    private lateinit var mScrollDown: FloatingActionButton
+
+    private var mHandler = Handler(Looper.getMainLooper())
+    private val mDismissUpButton = Runnable { mScrollUp.hide() }
+    private val mDismissDownButton = Runnable { mScrollDown.hide() }
     private var mIsRefreshPlanned = false
 
     companion object {
@@ -111,10 +121,13 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             setIsRefreshing(true)
 
         mViewModel.update()
-        notifyDataSet()
 
         if (mViewModel.isEmpty())
             onRefresh()
+        else if (mViewModel.save.value != null)
+            sortList(mViewModel.save.value!!)
+
+        notifyDataSet()
     }
 
     override fun onPause() {
@@ -198,7 +211,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             Toast.LENGTH_SHORT
         ).show()
 
-        val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
+        val sharedPreferences = GeneralConsts.getSharedPreferences()
         with(sharedPreferences.edit()) {
             this!!.putString(GeneralConsts.KEYS.LIBRARY.ORDER, mOrderBy.toString())
             this.commit()
@@ -229,7 +242,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             else -> LibraryType.LINE
         }
 
-        val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
+        val sharedPreferences = GeneralConsts.getSharedPreferences()
         with(sharedPreferences.edit()) {
             this!!.putString(GeneralConsts.KEYS.LIBRARY.LIBRARY_TYPE, mGridType.toString())
             this.commit()
@@ -257,7 +270,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     ): View? {
         mViewModel = ViewModelProvider(this).get(LibraryViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_library, container, false)
-        val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
+        val sharedPreferences = GeneralConsts.getSharedPreferences()
         mGridType = LibraryType.valueOf(
             sharedPreferences.getString(GeneralConsts.KEYS.LIBRARY.LIBRARY_TYPE, "LINE")
                 .toString()
@@ -270,8 +283,11 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             Order.Favorite to getString(R.string.config_option_order_favorite)
         )
 
-        mRecycleView = root.findViewById(R.id.rv_library)
-        mRefreshLayout = root.findViewById(R.id.rl_library)
+        mRecycleView = root.findViewById(R.id.library_recycler_view)
+        mRefreshLayout = root.findViewById(R.id.library_refresh)
+        mScrollUp = root.findViewById(R.id.library_scroll_up)
+        mScrollDown = root.findViewById(R.id.library_scroll_down)
+
         mRefreshLayout.setColorSchemeResources(
             R.color.onSecondary,
             R.color.onSecondary,
@@ -279,6 +295,38 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         mRefreshLayout.setOnRefreshListener(this)
         mRefreshLayout.isEnabled = true
+
+        mScrollUp.visibility = View.GONE
+        mScrollDown.visibility = View.GONE
+
+        mScrollUp.setOnClickListener { mRecycleView.smoothScrollToPosition(0) }
+        mScrollDown.setOnClickListener {
+            mRecycleView.smoothScrollToPosition((mRecycleView.adapter as RecyclerView.Adapter).itemCount)
+        }
+
+        mRecycleView.setOnScrollChangeListener { _, _, _, _, yOld ->
+            if (yOld > 20 && mScrollDown.visibility == View.VISIBLE) {
+                if (mHandler.hasCallbacks(mDismissDownButton))
+                    mHandler.removeCallbacks(mDismissDownButton)
+
+                mScrollDown.hide()
+            } else if (yOld < -20 && mScrollUp.visibility == View.VISIBLE) {
+                if (mHandler.hasCallbacks(mDismissUpButton))
+                    mHandler.removeCallbacks(mDismissUpButton)
+
+                mScrollUp.hide()
+            }
+
+            if (yOld > 200) {
+                mHandler.removeCallbacks(mDismissUpButton)
+                mHandler.postDelayed(mDismissUpButton, 3000)
+                mScrollUp.show()
+            } else if (yOld < -200) {
+                mHandler.removeCallbacks(mDismissDownButton)
+                mHandler.postDelayed(mDismissDownButton, 3000)
+                mScrollDown.show()
+            }
+        }
 
         ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(mRecycleView)
 
@@ -361,7 +409,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun loadConfig() {
-        val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
+        val sharedPreferences = GeneralConsts.getSharedPreferences()
         mLibraryPath =
             sharedPreferences.getString(GeneralConsts.KEYS.LIBRARY.FOLDER, "").toString()
         mOrderBy = Order.valueOf(
@@ -501,7 +549,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             mViewModel.delete(manga)
             if (manga.file.exists()) {
                 val isDeleted = manga.file.delete()
-                Log.i(GeneralConsts.TAG.LOG, "File deleted ${manga.name}: $isDeleted")
+                mLOGGER.info("File deleted ${manga.name}: $isDeleted")
             }
         }
     }

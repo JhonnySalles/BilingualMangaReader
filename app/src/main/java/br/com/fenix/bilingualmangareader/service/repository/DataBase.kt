@@ -2,15 +2,14 @@ package br.com.fenix.bilingualmangareader.service.repository
 
 import android.content.Context
 import android.content.res.AssetManager
-import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import br.com.fenix.bilingualmangareader.model.entity.*
-import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Converters
+import org.slf4j.LoggerFactory
 import java.io.BufferedReader
 
 @Database(version = 4, entities = [Manga::class, Cover::class, SubTitle::class, KanjiJLPT::class, Kanjax::class, FileLink::class, PageLink::class])
@@ -27,6 +26,7 @@ abstract class DataBase : RoomDatabase() {
 
     // Singleton - One database initialize only
     companion object {
+        private val mLOGGER = LoggerFactory.getLogger(DataBase::class.java)
         private const val DATABASE_NAME = "BilingualMangaReader.db"
 
         lateinit var mAssets: AssetManager
@@ -46,11 +46,14 @@ abstract class DataBase : RoomDatabase() {
 
         private var rdc: Callback = object : Callback() {
             override fun onCreate(database: SupportSQLiteDatabase) {
-                Log.i(GeneralConsts.TAG.LOG, "Run initial data....")
+                mLOGGER.info("Create initial database data....")
+
                 val kanji = mAssets.open("kanji.sql").bufferedReader().use(BufferedReader::readText)
                 database.execSQL(Migrations.SQLINITIAL.KANJI + kanji)
                 val kanjax = mAssets.open("kanjax.sql").bufferedReader().use(BufferedReader::readText)
                 database.execSQL(Migrations.SQLINITIAL.KANJAX + kanjax)
+
+                mLOGGER.info("Completed initial database data.")
             }
         }
     }

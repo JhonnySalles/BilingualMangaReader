@@ -1,21 +1,22 @@
 package br.com.fenix.bilingualmangareader.service.controller
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.util.Log
+import br.com.fenix.bilingualmangareader.MainActivity
 import br.com.fenix.bilingualmangareader.model.entity.Cover
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.service.parses.Parse
 import br.com.fenix.bilingualmangareader.service.parses.ParseFactory
+import br.com.fenix.bilingualmangareader.service.parses.RarParse
 import br.com.fenix.bilingualmangareader.service.repository.CoverRepository
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.constants.ReaderConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import kotlinx.coroutines.*
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.InputStream
 
@@ -26,7 +27,7 @@ class ImageCoverController private constructor() {
         val instance: ImageCoverController by lazy { HOLDER.INSTANCE }
     }
 
-    private lateinit var mContext: Context
+    private val mLOGGER = LoggerFactory.getLogger(ImageCoverController::class.java)
     private var mUpdateHandler: MutableList<Handler>? = ArrayList()
 
     private object HOLDER {
@@ -35,7 +36,7 @@ class ImageCoverController private constructor() {
 
     private fun saveBitmapToCache(key: String, bitmap: Bitmap) {
         try {
-            val cacheDir = File(mContext.externalCacheDir, GeneralConsts.CACHEFOLDER.COVERS)
+            val cacheDir = File(MainActivity.getAppContext().externalCacheDir, GeneralConsts.CACHEFOLDER.COVERS)
             if (!cacheDir.exists())
                 cacheDir.mkdir()
 
@@ -43,20 +44,20 @@ class ImageCoverController private constructor() {
             val image = File(cacheDir.path + '/' + key)
             image.writeBytes(byte)
         } catch (e: Exception) {
-            Log.e(GeneralConsts.TAG.LOG, "Error save bitmap to cache: " + e.message)
+            mLOGGER.error("Error save bitmap to cache: " + e.message, e)
         }
     }
 
     private fun retrieveBitmapFromCache(key: String): Bitmap? {
         try {
-            val file = File(mContext.externalCacheDir,GeneralConsts.CACHEFOLDER.COVERS + '/' + key)
+            val file = File(MainActivity.getAppContext().externalCacheDir,GeneralConsts.CACHEFOLDER.COVERS + '/' + key)
 
             return if (file.exists()) {
                 BitmapFactory.decodeFile(file.absolutePath)
             } else
                 null
         } catch (e: Exception) {
-            Log.e(GeneralConsts.TAG.LOG, "Error retrieve bitmap from cache: " + e.message)
+            mLOGGER.error("Error retrieve bitmap from cache: " + e.message, e)
         }
         return null
     }
@@ -143,6 +144,13 @@ class ImageCoverController private constructor() {
             }
             if (image == null) {
                 val parse = ParseFactory.create(manga.file!!) ?: return
+
+                if (parse is RarParse) {
+                    val folder = GeneralConsts.CACHEFOLDER.RAR
+                    val cacheDir = File(MainActivity.getAppContext().externalCacheDir, folder)
+                    (parse as RarParse?)!!.setCacheDirectory(cacheDir)
+                }
+
                 val cover = getCoverFromFile(hash, parse)
                 if (cover != null) {
                     cover.id_manga = manga.id!!
@@ -155,14 +163,11 @@ class ImageCoverController private constructor() {
 
     private var mErrors: Int = 0
     fun setImageCoverAsync(
-        context: Context,
         manga: Manga,
         position : Int? = null
     ) {
-        if (!::mRepository.isInitialized) {
-            mRepository = CoverRepository(context)
-            mContext = context
-        }
+        if (!::mRepository.isInitialized)
+            mRepository = CoverRepository(MainActivity.getAppContext())
 
         try {
             CoroutineScope(Dispatchers.IO).launch {
@@ -174,10 +179,10 @@ class ImageCoverController private constructor() {
                 mErrors = 0
             }
         } catch (e: Exception) {
-            Log.e(GeneralConsts.TAG.LOG, "Erro ao processar lista " + e.message)
+            mLOGGER.warn("Error when process image cover async. Attempt number: " + mErrors + " - " + e.message, e)
             mErrors++
             if (mErrors < 3)
-                setImageCoverAsync(context, manga, position)
+                setImageCoverAsync(manga, position)
         }
     }
 

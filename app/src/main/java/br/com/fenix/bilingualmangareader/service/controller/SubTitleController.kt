@@ -18,6 +18,7 @@ import br.com.fenix.bilingualmangareader.model.entity.*
 import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.service.parses.Parse
 import br.com.fenix.bilingualmangareader.service.parses.ParseFactory
+import br.com.fenix.bilingualmangareader.service.parses.RarParse
 import br.com.fenix.bilingualmangareader.service.repository.SubTitleRepository
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.constants.ReaderConsts
@@ -31,6 +32,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.codec.binary.Hex
 import org.apache.commons.codec.digest.DigestUtils
+import org.slf4j.LoggerFactory
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.InputStream
@@ -38,6 +40,8 @@ import java.lang.ref.WeakReference
 
 
 class SubTitleController private constructor(private val context: Context) {
+
+    private val mLOGGER = LoggerFactory.getLogger(SubTitleController::class.java)
 
     var mReaderFragment: ReaderFragment? = null
     private val mSubtitleRepository: SubTitleRepository = SubTitleRepository(context)
@@ -83,7 +87,7 @@ class SubTitleController private constructor(private val context: Context) {
         if (isSelected) mComboListSelected else mComboListInternal
 
     init {
-        val sharedPreferences = GeneralConsts.getSharedPreferences(context)
+        val sharedPreferences = GeneralConsts.getSharedPreferences()
         try {
             mSubtitleLang = Languages.valueOf(
                 sharedPreferences.getString(
@@ -99,10 +103,7 @@ class SubTitleController private constructor(private val context: Context) {
             )
             mUseFileLink = sharedPreferences.getBoolean(GeneralConsts.KEYS.PAGE_LINK.USE_IN_SEARCH_TRANSLATE, false)
         } catch (e: Exception) {
-            Log.i(
-                GeneralConsts.TAG.LOG,
-                "Error, preferences languages not loaded - " + e.message
-            )
+            mLOGGER.error("Preferences languages not loaded: " + e.message, e)
         }
     }
 
@@ -362,12 +363,30 @@ class SubTitleController private constructor(private val context: Context) {
                     var keyPage = ""
                     var pageName = ""
 
-                    var parse: Parse? = null
+                    var parse: Parse?
                     try {
                         parse = if (isMangaLanguage)
                             mFileLink!!.parseManga ?: ParseFactory.create(mFileLink!!.manga!!.file)
                         else
                             mFileLink!!.parseFileLink ?: ParseFactory.create(mFileLink!!.file)
+
+                        val fileName = if (isMangaLanguage)
+                            mFileLink!!.manga!!.file.nameWithoutExtension
+                        else
+                            mFileLink!!.file.nameWithoutExtension
+
+                        if ((isMangaLanguage && mFileLink!!.parseManga == null) || (!isMangaLanguage && mFileLink!!.parseFileLink == null)) {
+                            if (parse is RarParse) {
+                                val folder = GeneralConsts.CACHEFOLDER.LINKED + '/' + Util.normalizeNameCache(fileName)
+                                val cacheDir = File(context.externalCacheDir, folder)
+                                (parse as RarParse?)!!.setCacheDirectory(cacheDir)
+                            }
+                            
+                            if (isMangaLanguage)
+                                mFileLink!!.parseManga = parse
+                            else
+                                mFileLink!!.parseFileLink = parse
+                        }
 
                         val pageNumber = if (isMangaLanguage)
                             currentPage.mangaPage
@@ -441,10 +460,7 @@ class SubTitleController private constructor(private val context: Context) {
                                 mSelectedSubTitle.value?.language = language
                         }
                     } catch (e: Exception) {
-                        Log.e(GeneralConsts.TAG.LOG, "Error find page link: " + e.message)
-                    } finally {
-                        if ((isMangaLanguage && parse != mFileLink!!.parseManga) || (!isMangaLanguage && parse != mFileLink!!.parseFileLink))
-                            Util.destroyParse(parse)
+                        mLOGGER.warn("Error find page link: " + e.message, e)
                     }
 
                     if (keyChapter.isNotEmpty() || keyPage.isNotEmpty())
@@ -567,10 +583,7 @@ class SubTitleController private constructor(private val context: Context) {
                         try {
                             mSelectedSubTitle.value = findSubtitle(manga, pageNumber)
                         } catch (e: java.lang.Exception) {
-                            Log.e(
-                                GeneralConsts.TAG.LOG,
-                                "Error, subtitle not founded in file. " + e.message
-                            )
+                            mLOGGER.info("Subtitle not founded in file: " + e.message)
                             return@launch
                         }
                 }
@@ -686,7 +699,7 @@ class SubTitleController private constructor(private val context: Context) {
 
     ///////////////////////// LANGUAGE ///////////////
     fun clearLanguage() {
-        val sharedPreferences = GeneralConsts.getSharedPreferences(context)
+        val sharedPreferences = GeneralConsts.getSharedPreferences()
         mTranslateLang = Languages.valueOf(
             sharedPreferences.getString(
                 GeneralConsts.KEYS.SUBTITLE.TRANSLATE,
@@ -919,8 +932,7 @@ class SubTitleController private constructor(private val context: Context) {
     }
 
     fun locateFileLink(page: Int) {
-        if (mFileLink == null || mFileLink!!.parseFileLink == null)
-            return
+        if (mFileLink == null) return
 
         mFileLink!!.pagesLink!!.first { it.mangaPage.compareTo(page) == 0 }.let {
             if (it.fileLinkPage > -1) {
@@ -946,11 +958,10 @@ class SubTitleController private constructor(private val context: Context) {
             canvas.drawBitmap(img1, 0f, 0f, null)
             canvas.drawBitmap(img2, (img1.width + 1).toFloat(), 0f, null)
         } catch (e: java.lang.Exception) {
-            Log.e(GeneralConsts.TAG.LOG, "Erro ao combinar imagens. Tentativa: " + mError + " - " + e.message)
+            mLOGGER.warn("Error when combine images. Attempt number: " + mError + " - " + e.message, e)
             mError += 1
             if (mError < 3) {
-                Util.destroyParse(fileLink.parseFileLink)
-                fileLink.parseFileLink = ParseFactory.create(fileLink.path)
+                getFileLinkParser(fileLink.path, fileLink)
                 drawnBitmap = getCombinedBitmap(fileLink, fileLink.parseFileLink!!, index, extra)
             }
         }
@@ -959,7 +970,7 @@ class SubTitleController private constructor(private val context: Context) {
     }
 
     private fun saveImageFolder(fileLink: FileLink, index: Int, extra: Int = -1): Uri {
-        val parse = fileLink.parseFileLink!!
+        val parse = fileLink.parseFileLink ?: getFileLinkParser(fileLink.path, fileLink)!!
         var stream = parse.getPage(index)
         if (extra > -1) {
             val newBitmap = getCombinedBitmap(fileLink, parse, index, extra)
@@ -969,12 +980,12 @@ class SubTitleController private constructor(private val context: Context) {
             }
         }
 
-        val cacheDir = File(context.externalCacheDir, GeneralConsts.CACHEFOLDER.LINKED)
+        val cacheDir = File(context.externalCacheDir, GeneralConsts.CACHEFOLDER.IMAGE)
         if (!cacheDir.exists())
             cacheDir.mkdir()
-        else
-            for (f in cacheDir.listFiles()!!)
+        else for (f in cacheDir.listFiles()!!)
                 f.delete()
+
         var name = parse.getPagePath(index) ?: index.toString()
         name = Util.getNameFromPath(name)
 
@@ -988,5 +999,24 @@ class SubTitleController private constructor(private val context: Context) {
         image.writeBytes(stream.readBytes())
         Util.closeInputStream(stream)
         return image.toUri()
+    }
+
+    private fun getFileLinkParser(path: String, fileLink: FileLink? = null): Parse? {
+        if (fileLink?.parseFileLink != null) {
+            Util.destroyParse(fileLink.parseFileLink)
+            fileLink.parseFileLink = null
+        }
+
+        val parse = ParseFactory.create(path)
+        if (parse is RarParse) {
+            val folder = GeneralConsts.CACHEFOLDER.IMAGE
+            val cacheDir = File(context.externalCacheDir, folder)
+            (parse as RarParse?)!!.setCacheDirectory(cacheDir)
+        }
+
+        if (fileLink != null)
+            fileLink.parseFileLink = parse
+
+        return parse
     }
 }

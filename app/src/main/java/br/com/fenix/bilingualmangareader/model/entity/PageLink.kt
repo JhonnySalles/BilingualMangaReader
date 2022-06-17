@@ -3,15 +3,16 @@ package br.com.fenix.bilingualmangareader.model.entity
 import android.graphics.Bitmap
 import androidx.room.*
 import br.com.fenix.bilingualmangareader.util.constants.DataBaseConsts
+import br.com.fenix.bilingualmangareader.util.constants.PageLinkConsts
 import java.io.Serializable
 
 @Entity(
     tableName = DataBaseConsts.PAGESLINK.TABLE_NAME,
     indices = [Index(value = [DataBaseConsts.PAGESLINK.COLUMNS.FK_ID_FILE])]
 )
-class PageLink(id: Long?, idFile: Long?, mangaPage: Int, mangaPages: Int, mangaPageName: String, fileLinkPage: Int = -1, fileLinkPages: Int = 0,
-               fileLinkPageName: String = "", fileRightLinkPage: Int = -1, fileRightLinkPageName: String = "", notLinked: Boolean = false,
-               dualImage : Boolean = false) : Serializable {
+class PageLink(id: Long?, idFile: Long?, mangaPage: Int, mangaPages: Int, mangaPageName: String, fileLinkPage: Int = PageLinkConsts.VALUES.PAGE_EMPTY,
+               fileLinkPages: Int = 0, fileLinkPageName: String = "", fileRightLinkPage: Int = PageLinkConsts.VALUES.PAGE_EMPTY,
+               fileRightLinkPageName: String = "", notLinked: Boolean = false, dualImage : Boolean = false) : Serializable {
 
     constructor(id: Long?, idFile: Long?, mangaPage: Int, mangaPages: Int, mangaPageName: String, fileLinkPage: Int, fileLinkPages: Int,
                 fileLinkPageName: String, fileRightLinkPage: Int, fileRightLinkPageName: String, notLinked: Boolean, dualImage : Boolean,
@@ -25,7 +26,8 @@ class PageLink(id: Long?, idFile: Long?, mangaPage: Int, mangaPages: Int, mangaP
 
     constructor(idFile: Long?, mangaPage: Int, mangaPages: Int, fileLinkPage: Int, fileLinkPages: Int, mangaPageName: String,
                 fileLinkPageName: String, imageFileLinkPage: Bitmap? = null, imageRightFileLinkPage: Bitmap? = null
-    ) : this(null, idFile, mangaPage, mangaPages, mangaPageName, fileLinkPage, fileLinkPages, fileLinkPageName, notLinked = mangaPage == -1) {
+    ) : this(null, idFile, mangaPage, mangaPages, mangaPageName, fileLinkPage, fileLinkPages, fileLinkPageName,
+            notLinked = mangaPage == PageLinkConsts.VALUES.PAGE_EMPTY) {
         this.imageMangaPage = null
         this.imageLeftFileLinkPage = imageFileLinkPage
         this.imageRightFileLinkPage = imageRightFileLinkPage
@@ -77,8 +79,18 @@ class PageLink(id: Long?, idFile: Long?, mangaPage: Int, mangaPages: Int, mangaP
     var imageLeftFileLinkPage: Bitmap? = null
     @Ignore
     var imageRightFileLinkPage: Bitmap? = null
-    @Ignore
-    var isFileLinkLoading: Boolean = false
+
+    fun merge(another: PageLink) {
+        this.fileLinkPage = another.fileLinkPage
+        this.fileLinkPages = another.fileLinkPages
+        this.fileLinkPageName = another.fileLinkPageName
+        this.fileRightLinkPage = another.fileRightLinkPage
+        this.fileRightLinkPageName = another.fileRightLinkPageName
+        this.imageLeftFileLinkPage = another.imageLeftFileLinkPage
+        this.imageRightFileLinkPage = another.imageRightFileLinkPage
+        this.notLinked = another.notLinked
+        this.dualImage = another.dualImage
+    }
 
     fun addLeftFileLinkImage(page: Int, pages: Int, pageName : String, image: Bitmap?) {
         this.fileLinkPage = page
@@ -88,7 +100,7 @@ class PageLink(id: Long?, idFile: Long?, mangaPage: Int, mangaPages: Int, mangaP
     }
 
     fun addRightFileLinkImage(page: Int, pageName : String, image: Bitmap?) {
-        if (this.fileLinkPage == -1) {
+        if (this.fileLinkPage == PageLinkConsts.VALUES.PAGE_EMPTY) {
             this.fileLinkPage = page
             this.fileLinkPageName = pageName
             this.imageLeftFileLinkPage = image
@@ -97,34 +109,33 @@ class PageLink(id: Long?, idFile: Long?, mangaPage: Int, mangaPages: Int, mangaP
             this.fileRightLinkPageName = pageName
             this.imageRightFileLinkPage = image
         }
-        this.dualImage = this.fileRightLinkPage != -1
+        this.dualImage = this.fileRightLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY
     }
 
     fun moveFileLinkRightToLeft() {
         this.fileLinkPage = this.fileRightLinkPage
         this.fileLinkPageName = this.fileRightLinkPageName
         this.imageLeftFileLinkPage = this.imageRightFileLinkPage
-        this.fileRightLinkPage = -1
+        this.fileRightLinkPage = PageLinkConsts.VALUES.PAGE_EMPTY
         this.fileRightLinkPageName = ""
         this.imageRightFileLinkPage = null
         this.dualImage = false
     }
 
     fun clearFileLink() {
-        this.fileLinkPage = -1
+        this.fileLinkPage = PageLinkConsts.VALUES.PAGE_EMPTY
         this.fileLinkPages = 0
         this.fileLinkPageName = ""
-        this.fileRightLinkPage = -1
+        this.fileRightLinkPage = PageLinkConsts.VALUES.PAGE_EMPTY
         this.fileRightLinkPageName = ""
         this.imageLeftFileLinkPage = null
         this.imageRightFileLinkPage = null
-        this.isFileLinkLoading = false
         this.notLinked = false
         this.dualImage = false
     }
 
     fun clearLeftFileLink(canMoved: Boolean = false) : Boolean {
-        val moved = if (canMoved && this.fileRightLinkPage != -1) {
+        val moved = if (canMoved && this.fileRightLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY) {
             this.fileLinkPage = this.fileRightLinkPage
             this.fileLinkPageName = this.fileRightLinkPageName
             this.imageLeftFileLinkPage = this.imageRightFileLinkPage
@@ -132,7 +143,7 @@ class PageLink(id: Long?, idFile: Long?, mangaPage: Int, mangaPages: Int, mangaP
             this.dualImage = false
             true
         } else {
-            this.fileLinkPage = -1
+            this.fileLinkPage = PageLinkConsts.VALUES.PAGE_EMPTY
             this.fileLinkPages = 0
             this.fileLinkPageName = ""
             this.imageLeftFileLinkPage = null
@@ -142,7 +153,7 @@ class PageLink(id: Long?, idFile: Long?, mangaPage: Int, mangaPages: Int, mangaP
     }
 
     fun clearRightFileLink() {
-        this.fileRightLinkPage = -1
+        this.fileRightLinkPage = PageLinkConsts.VALUES.PAGE_EMPTY
         this.fileRightLinkPageName = ""
         this.imageRightFileLinkPage = null
         this.dualImage = false

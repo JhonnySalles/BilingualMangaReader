@@ -81,4 +81,12 @@
         android:title="@string/menu_reading_file_link"
         app:showAsAction="never"/>
 
+    <item
+        android:id="@+id/menu_open_kaku"
+        android:icon="@mipmap/app_kaku"
+        android:iconTint="#FFFFFF"
+        android:orderInCategory="103"
+        android:title="@string/menu_reading_open_kaku"
+        app:showAsAction="never"/>
+
 </menu>
