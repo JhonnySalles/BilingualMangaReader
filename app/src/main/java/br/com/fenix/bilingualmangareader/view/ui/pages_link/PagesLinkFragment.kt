@@ -383,7 +383,14 @@ class PagesLinkFragment : Fragment() {
         }
 
         mViewModel.language.observe(viewLifecycleOwner) {
-            val description = it?.name ?: ""
+            var description = ""
+
+            if (it != null) {
+                for (language in mMapLanguage.entries)
+                    if (language.value.compareTo(it) == 0)
+                        description = language.key
+            }
+
             mFileLinkLanguageAutoComplete.setText(description, false)
         }
 

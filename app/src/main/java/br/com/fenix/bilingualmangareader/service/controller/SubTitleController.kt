@@ -583,7 +583,7 @@ class SubTitleController private constructor(private val context: Context) {
                         try {
                             mSelectedSubTitle.value = findSubtitle(manga, pageNumber)
                         } catch (e: java.lang.Exception) {
-                            mLOGGER.error("Subtitle not founded in file: " + e.message, e)
+                            mLOGGER.info("Subtitle not founded in file: " + e.message)
                             return@launch
                         }
                 }
