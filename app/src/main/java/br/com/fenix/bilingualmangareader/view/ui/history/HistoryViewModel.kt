@@ -9,8 +9,7 @@ import br.com.fenix.bilingualmangareader.service.repository.MangaRepository
 
 class HistoryViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val mContext = application.applicationContext
-    private val mMangaRepository: MangaRepository = MangaRepository(mContext)
+    private val mMangaRepository: MangaRepository = MangaRepository(application.applicationContext)
 
     private var mListMangas = MutableLiveData<ArrayList<Manga>>(ArrayList())
     val save: LiveData<ArrayList<Manga>> = mListMangas

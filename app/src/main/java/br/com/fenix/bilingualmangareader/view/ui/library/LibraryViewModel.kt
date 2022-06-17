@@ -12,9 +12,8 @@ import br.com.fenix.bilingualmangareader.service.repository.MangaRepository
 
 class LibraryViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val mContext = application.applicationContext
-    private val mMangaRepository: MangaRepository = MangaRepository(mContext)
-    private val mCoverRepository: CoverRepository = CoverRepository(mContext)
+    private val mMangaRepository: MangaRepository = MangaRepository(application.applicationContext)
+    private val mCoverRepository: CoverRepository = CoverRepository(application.applicationContext)
 
     private var mListMangas = MutableLiveData<ArrayList<Manga>>(ArrayList())
     val save: LiveData<ArrayList<Manga>> = mListMangas
@@ -89,7 +88,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
 
         for ((index, manga) in mListMangas.value!!.withIndex())
             if (manga.thumbnail == null || manga.thumbnail!!.image == null)
-                ImageCoverController.instance.setImageCoverAsync(mContext, manga, index)
+                ImageCoverController.instance.setImageCoverAsync(manga, index)
     }
 
 

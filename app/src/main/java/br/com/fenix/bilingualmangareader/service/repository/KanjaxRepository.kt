@@ -1,19 +1,19 @@
 package br.com.fenix.bilingualmangareader.service.repository
 
 import android.content.Context
-import android.util.Log
 import br.com.fenix.bilingualmangareader.model.entity.Kanjax
-import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import mu.KotlinLogging
 
 class KanjaxRepository(context: Context) {
 
+    private val mLOGGER = KotlinLogging.logger {}
     private var mDataBase = DataBase.getDataBase(context).getKanjaxDao()
 
     fun get(id: Long): Kanjax? {
         return try {
             mDataBase.get(id)
         } catch (e: Exception) {
-            Log.e(GeneralConsts.TAG.LOG, e.message.toString())
+            mLOGGER.error { "Error when get Kanjax: " + e.message }
             null
         }
     }
@@ -22,7 +22,7 @@ class KanjaxRepository(context: Context) {
         return try {
             mDataBase.get(kanji)
         } catch (e: Exception) {
-            Log.e(GeneralConsts.TAG.LOG, e.message.toString())
+            mLOGGER.error { "Error when get Kanjax: " + e.message }
             null
         }
     }
@@ -31,7 +31,7 @@ class KanjaxRepository(context: Context) {
         return try {
             mDataBase.list()
         } catch (e: Exception) {
-            Log.e(GeneralConsts.TAG.LOG, e.message.toString())
+            mLOGGER.error { "Error when list Kanjax: " + e.message }
             null
         }
     }

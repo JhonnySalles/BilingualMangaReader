@@ -315,7 +315,7 @@ class ReaderActivity : AppCompatActivity() {
             return
 
         val sharedPreferences: SharedPreferences =
-            GeneralConsts.getSharedPreferences(applicationContext)
+            GeneralConsts.getSharedPreferences()
         when (any) {
             is PageMode -> sharedPreferences.edit()
                 .putString(GeneralConsts.KEYS.READER.PAGE_MODE, any.toString())

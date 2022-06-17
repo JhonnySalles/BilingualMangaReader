@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory
 import android.os.Handler
 import android.os.Message
 import android.os.Process
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -25,7 +24,7 @@ import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.constants.PageLinkConsts
 import br.com.fenix.bilingualmangareader.util.constants.ReaderConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
-import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderFragment
+import mu.KotlinLogging
 import java.io.File
 import java.io.InputStream
 import java.io.InterruptedIOException
@@ -36,8 +35,9 @@ import kotlin.collections.ArrayList
 
 class PagesLinkViewModel(application: Application) : AndroidViewModel(application) {
 
+    private val mLOGGER = KotlinLogging.logger {}
     private val mContext = application.applicationContext
-    private val mFileLinkRepository: FileLinkRepository = FileLinkRepository(mContext)
+    private val mFileLinkRepository: FileLinkRepository = FileLinkRepository(application.applicationContext)
 
     private var mManga : Manga? = null
     private var mFileLink = MutableLiveData<FileLink>()
@@ -385,12 +385,10 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                 Util.closeInputStream(stream)
                 bitmap
             } catch (i: InterruptedIOException) {
+                mLOGGER.error { "Interrupted error when generate bitmap: " + i.message }
                 null
             } catch (e: Exception) {
-                Log.i(
-                    GeneralConsts.TAG.LOG,
-                    "Error, not loading image - " + e.message
-                )
+                mLOGGER.error { "Error when generate bitmap: " + e.message }
                 null
             }
     }

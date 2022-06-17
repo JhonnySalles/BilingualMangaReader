@@ -60,7 +60,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
         mContext = context
-        GeneralConsts.setContext(mContext)
         return super.onCreateView(name, context, attrs)
     }
 

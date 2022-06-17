@@ -6,7 +6,6 @@ import android.content.ClipDescription
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.*
-import android.util.Log
 import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -37,11 +36,13 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.textfield.TextInputLayout
+import mu.KotlinLogging
 import java.lang.ref.WeakReference
-import java.util.HashMap
 
 
 class PagesLinkFragment : Fragment() {
+
+    private val mLOGGER = KotlinLogging.logger {}
 
     private val mViewModel: PagesLinkViewModel by viewModels()
     private lateinit var mRoot : ConstraintLayout
@@ -65,7 +66,6 @@ class PagesLinkFragment : Fragment() {
     private var mHandler = Handler(Looper.getMainLooper())
     private val mDismissUpButton = Runnable { mScrollUp.hide() }
     private val mDismissDownButton = Runnable { mScrollDown.hide() }
-    private var mOpenedIntent : Boolean = false
     private var mInDrag : Boolean = false
     private var mIsTabletOrLandscape: Boolean = false
     private var mPageSelected: Int = 0
@@ -97,28 +97,28 @@ class PagesLinkFragment : Fragment() {
 
         mScrollUp.setOnClickListener { mRecyclePageLink.smoothScrollToPosition(0) }
         mScrollDown.setOnClickListener {
-            var position = if (mViewModel.pagesLink.value != null)
-                mViewModel.pagesLink.value!!.size
-            else 0
-
-            mRecyclePageLink.smoothScrollToPosition(position)
+            mRecyclePageLink.smoothScrollToPosition((mRecyclePageLink.adapter as RecyclerView.Adapter).itemCount)
         }
 
         mRecyclePageLink.setOnScrollChangeListener { _, _, _, _, yOld ->
             if (mShowScrollButton) {
-                if (yOld > 200) {
-                    if (mHandler.hasCallbacks(mDismissDownButton)) {
+                if (yOld > 20 && mScrollDown.visibility == View.VISIBLE) {
+                    if (mHandler.hasCallbacks(mDismissDownButton))
                         mHandler.removeCallbacks(mDismissDownButton)
-                        mScrollDown.hide()
-                    }
+
+                    mScrollDown.hide()
+                } else if (yOld < -20 && mScrollUp.visibility == View.VISIBLE) {
+                    if (mHandler.hasCallbacks(mDismissUpButton))
+                        mHandler.removeCallbacks(mDismissUpButton)
+
+                    mScrollUp.hide()
+                }
+
+                if (yOld > 200) {
                     mHandler.removeCallbacks(mDismissUpButton)
                     mHandler.postDelayed(mDismissUpButton, 3000)
                     mScrollUp.show()
                 } else if (yOld < -200) {
-                    if (mHandler.hasCallbacks(mDismissUpButton)) {
-                        mHandler.removeCallbacks(mDismissUpButton)
-                        mScrollUp.hide()
-                    }
                     mHandler.removeCallbacks(mDismissDownButton)
                     mHandler.postDelayed(mDismissDownButton, 3000)
                     mScrollDown.show()
@@ -145,7 +145,6 @@ class PagesLinkFragment : Fragment() {
                     putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/zip", "application/x-cbz", "application/rar", "application/x-cbr",
                         "application/x-rar-compressed", "application/x-zip-compressed", "application/cbr", "application/cbz"))
                 }
-            mOpenedIntent = true
             startActivityForResult(intent, GeneralConsts.REQUEST.OPEN_PAGE_LINK)
         }
 
@@ -332,13 +331,12 @@ class PagesLinkFragment : Fragment() {
     override fun onActivityResult(
         requestCode: Int, resultCode: Int, resultData: Intent?
     ) {
-        mOpenedIntent = false
         if (requestCode == GeneralConsts.REQUEST.OPEN_PAGE_LINK) {
             if (resultCode == Activity.RESULT_OK) {
                 resultData?.data?.also { uri ->
                     try {
                         val path = Util.normalizeFilePath(uri.path.toString())
-                        val loaded = mViewModel.readFileLink(path) { index, type -> notifyItemChanged(type, index)  }
+                        val loaded = mViewModel.readFileLink(path) { index, type -> notifyItemChanged(type, index) }
                         if (loaded != LoadFile.LOADED) {
                             val msg = if (loaded == LoadFile.ERROR_FILE_WRONG) getString(R.string.page_link_load_file_wrong) else getString(R.string.page_link_load_error)
                             AlertDialog.Builder(requireContext(), R.style.AppCompatAlertDialogStyle)
@@ -351,7 +349,7 @@ class PagesLinkFragment : Fragment() {
                                 .show()
                         }
                     } catch (e: Exception) {
-                        Log.e(GeneralConsts.TAG.LOG, "Error when open file: " + e.message)
+                        mLOGGER.error { "Error when open file: " + e.message }
                     }
                 }
             } else
@@ -438,7 +436,7 @@ class PagesLinkFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         mViewModel.addImageLoadHandler(mImageLoadHandler)
-        processImageLoading()
+        processImageLoading(isVerify = true)
         mRecyclePageLink.scrollToPosition(mPageSelected)
     }
 
@@ -463,12 +461,12 @@ class PagesLinkFragment : Fragment() {
         super.onDestroy()
     }
 
-    private fun processImageLoading(isInitial: Boolean = false, isEnding: Boolean = false) {
+    private fun processImageLoading(isInitial: Boolean = false, isEnding: Boolean = false, isVerify : Boolean = false) {
         if (isInitial) {
             mImageLoading.isIndeterminate = true
             mImageLoading.visibility = View.VISIBLE
-        } else if (isEnding) {
-            mImageLoading.isIndeterminate = false
+        } else if (isEnding || isVerify) {
+            mImageLoading.isIndeterminate = isVerify
             mImageLoading.visibility = if (mViewModel.imageThreadLoadingProgress())
                 View.VISIBLE
             else
