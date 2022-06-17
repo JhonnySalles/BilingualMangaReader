@@ -30,9 +30,9 @@ import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import mu.KotlinLogging
 import org.apache.commons.codec.binary.Hex
 import org.apache.commons.codec.digest.DigestUtils
+import org.slf4j.LoggerFactory
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.InputStream
@@ -41,7 +41,7 @@ import java.lang.ref.WeakReference
 
 class SubTitleController private constructor(private val context: Context) {
 
-    private val mLOGGER = KotlinLogging.logger {}
+    private val mLOGGER = LoggerFactory.getLogger(SubTitleController::class.java)
 
     var mReaderFragment: ReaderFragment? = null
     private val mSubtitleRepository: SubTitleRepository = SubTitleRepository(context)
@@ -103,7 +103,7 @@ class SubTitleController private constructor(private val context: Context) {
             )
             mUseFileLink = sharedPreferences.getBoolean(GeneralConsts.KEYS.PAGE_LINK.USE_IN_SEARCH_TRANSLATE, false)
         } catch (e: Exception) {
-            mLOGGER.error { "Preferences languages not loaded: " + e.message }
+            mLOGGER.error("Preferences languages not loaded: " + e.message, e)
         }
     }
 
@@ -460,7 +460,7 @@ class SubTitleController private constructor(private val context: Context) {
                                 mSelectedSubTitle.value?.language = language
                         }
                     } catch (e: Exception) {
-                        mLOGGER.error { "Error find page link: " + e.message }
+                        mLOGGER.warn("Error find page link: " + e.message, e)
                     }
 
                     if (keyChapter.isNotEmpty() || keyPage.isNotEmpty())
@@ -583,7 +583,7 @@ class SubTitleController private constructor(private val context: Context) {
                         try {
                             mSelectedSubTitle.value = findSubtitle(manga, pageNumber)
                         } catch (e: java.lang.Exception) {
-                            mLOGGER.info { "Subtitle not founded in file: " + e.message }
+                            mLOGGER.error("Subtitle not founded in file: " + e.message, e)
                             return@launch
                         }
                 }
@@ -958,7 +958,7 @@ class SubTitleController private constructor(private val context: Context) {
             canvas.drawBitmap(img1, 0f, 0f, null)
             canvas.drawBitmap(img2, (img1.width + 1).toFloat(), 0f, null)
         } catch (e: java.lang.Exception) {
-            mLOGGER.warn { "Error when combine images. Attempt number: " + mError + " - " + e.message }
+            mLOGGER.warn("Error when combine images. Attempt number: " + mError + " - " + e.message, e)
             mError += 1
             if (mError < 3) {
                 getFileLinkParser(fileLink.path, fileLink)

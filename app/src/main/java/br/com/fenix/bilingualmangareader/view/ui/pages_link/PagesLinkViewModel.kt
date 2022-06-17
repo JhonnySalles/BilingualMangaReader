@@ -24,7 +24,7 @@ import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.constants.PageLinkConsts
 import br.com.fenix.bilingualmangareader.util.constants.ReaderConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
-import mu.KotlinLogging
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.InputStream
 import java.io.InterruptedIOException
@@ -35,7 +35,7 @@ import kotlin.collections.ArrayList
 
 class PagesLinkViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val mLOGGER = KotlinLogging.logger {}
+    private val mLOGGER = LoggerFactory.getLogger(PagesLinkViewModel::class.java)
     private val mContext = application.applicationContext
     private val mFileLinkRepository: FileLinkRepository = FileLinkRepository(application.applicationContext)
 
@@ -385,10 +385,10 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                 Util.closeInputStream(stream)
                 bitmap
             } catch (i: InterruptedIOException) {
-                mLOGGER.error { "Interrupted error when generate bitmap: " + i.message }
+                mLOGGER.info("Interrupted error when generate bitmap: " + i.message)
                 null
             } catch (e: Exception) {
-                mLOGGER.error { "Error when generate bitmap: " + e.message }
+                mLOGGER.info("Error when generate bitmap: " + e.message)
                 null
             }
     }

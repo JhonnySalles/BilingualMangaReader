@@ -2,11 +2,11 @@ package br.com.fenix.bilingualmangareader.service.repository
 
 import android.content.Context
 import br.com.fenix.bilingualmangareader.model.entity.SubTitle
-import mu.KotlinLogging
+import org.slf4j.LoggerFactory
 
 class SubTitleRepository(context: Context) {
 
-    private val mLOGGER = KotlinLogging.logger {}
+    private val mLOGGER = LoggerFactory.getLogger(SubTitleRepository::class.java)
     private var mDataBase = DataBase.getDataBase(context).getSubTitleDao()
 
     fun save(obj: SubTitle): Long {
@@ -25,7 +25,7 @@ class SubTitleRepository(context: Context) {
         return try {
             mDataBase.get(idManga, id)
         } catch (e: Exception) {
-            mLOGGER.error { "Error when get SubTitle: " + e.message }
+            mLOGGER.error("Error when get SubTitle: " + e.message, e)
             null
         }
     }
@@ -34,7 +34,7 @@ class SubTitleRepository(context: Context) {
         return try {
             mDataBase.findByIdManga(idManga)
         } catch (e: Exception) {
-            mLOGGER.error { "Error when find SubTitle by id manga: " + e.message }
+            mLOGGER.error("Error when find SubTitle by id manga: " + e.message, e)
             null
         }
     }

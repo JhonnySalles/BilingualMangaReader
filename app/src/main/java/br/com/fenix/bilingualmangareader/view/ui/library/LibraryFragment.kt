@@ -32,13 +32,15 @@ import br.com.fenix.bilingualmangareader.model.enums.Order
 import br.com.fenix.bilingualmangareader.service.controller.ImageCoverController
 import br.com.fenix.bilingualmangareader.service.listener.MangaCardListener
 import br.com.fenix.bilingualmangareader.service.repository.Storage
+import br.com.fenix.bilingualmangareader.service.repository.SubTitleRepository
 import br.com.fenix.bilingualmangareader.service.scanner.Scanner
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.view.adapter.library.MangaGridCardAdapter
 import br.com.fenix.bilingualmangareader.view.adapter.library.MangaLineCardAdapter
 import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity
+import ch.qos.logback.core.net.SocketConnector
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import mu.KotlinLogging
+import org.slf4j.LoggerFactory
 import java.lang.ref.WeakReference
 import java.util.*
 import kotlin.math.max
@@ -46,7 +48,7 @@ import kotlin.math.max
 
 class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
-    private val mLOGGER = KotlinLogging.logger {}
+    private val mLOGGER = LoggerFactory.getLogger(LibraryFragment::class.java)
     private lateinit var mViewModel: LibraryViewModel
     private var mLibraryPath: String = ""
     private var mOrderBy: Order = Order.Name
@@ -547,7 +549,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             mViewModel.delete(manga)
             if (manga.file.exists()) {
                 val isDeleted = manga.file.delete()
-                mLOGGER.info { "File deleted ${manga.name}: $isDeleted" }
+                mLOGGER.info("File deleted ${manga.name}: $isDeleted")
             }
         }
     }

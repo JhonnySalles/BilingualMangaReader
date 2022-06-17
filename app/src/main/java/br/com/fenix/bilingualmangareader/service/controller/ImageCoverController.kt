@@ -16,7 +16,7 @@ import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.constants.ReaderConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import kotlinx.coroutines.*
-import mu.KotlinLogging
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.InputStream
 
@@ -27,7 +27,7 @@ class ImageCoverController private constructor() {
         val instance: ImageCoverController by lazy { HOLDER.INSTANCE }
     }
 
-    private val mLOGGER = KotlinLogging.logger {}
+    private val mLOGGER = LoggerFactory.getLogger(ImageCoverController::class.java)
     private var mUpdateHandler: MutableList<Handler>? = ArrayList()
 
     private object HOLDER {
@@ -44,7 +44,7 @@ class ImageCoverController private constructor() {
             val image = File(cacheDir.path + '/' + key)
             image.writeBytes(byte)
         } catch (e: Exception) {
-            mLOGGER.error { "Error save bitmap to cache: " + e.message }
+            mLOGGER.error("Error save bitmap to cache: " + e.message, e)
         }
     }
 
@@ -57,7 +57,7 @@ class ImageCoverController private constructor() {
             } else
                 null
         } catch (e: Exception) {
-            mLOGGER.error { "Error retrieve bitmap from cache: " + e.message }
+            mLOGGER.error("Error retrieve bitmap from cache: " + e.message, e)
         }
         return null
     }
@@ -179,7 +179,7 @@ class ImageCoverController private constructor() {
                 mErrors = 0
             }
         } catch (e: Exception) {
-            mLOGGER.error { "Error when process image cover async. Attempt number: " + mErrors + " - " + e.message }
+            mLOGGER.warn("Error when process image cover async. Attempt number: " + mErrors + " - " + e.message, e)
             mErrors++
             if (mErrors < 3)
                 setImageCoverAsync(manga, position)

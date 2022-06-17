@@ -17,12 +17,12 @@ import com.github.javiersantos.materialstyleddialogs.enums.Style
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
-import mu.KotlinLogging
+import org.slf4j.LoggerFactory
 
 
 class Formatter {
     companion object KANJI {
-        private val mLOGGER = KotlinLogging.logger {}
+        private val mLOGGER = LoggerFactory.getLogger(Formatter::class.java)
         private var mRepository: KanjaxRepository? = null
         private val mPattern = Regex(".*[\u4E00-\u9FFF].*")
         //@TargetApi(26)
@@ -58,7 +58,7 @@ class Formatter {
                         N5 = context.getColor(R.color.JLPT5)
                         VOCABULARY = context.getColor(R.color.VOCABULARY)
                     } catch (e: Exception) {
-                        mLOGGER.error { "Error in open tokenizer file." + e.message }
+                        mLOGGER.warn("Error in open tokenizer file." + e.message, e)
                     }
                 }
             }

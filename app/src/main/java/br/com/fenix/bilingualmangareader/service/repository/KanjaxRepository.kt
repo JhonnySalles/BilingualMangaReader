@@ -2,18 +2,18 @@ package br.com.fenix.bilingualmangareader.service.repository
 
 import android.content.Context
 import br.com.fenix.bilingualmangareader.model.entity.Kanjax
-import mu.KotlinLogging
+import org.slf4j.LoggerFactory
 
 class KanjaxRepository(context: Context) {
 
-    private val mLOGGER = KotlinLogging.logger {}
+    private val mLOGGER = LoggerFactory.getLogger(KanjaxRepository::class.java)
     private var mDataBase = DataBase.getDataBase(context).getKanjaxDao()
 
     fun get(id: Long): Kanjax? {
         return try {
             mDataBase.get(id)
         } catch (e: Exception) {
-            mLOGGER.error { "Error when get Kanjax: " + e.message }
+            mLOGGER.error("Error when get Kanjax: " + e.message, e)
             null
         }
     }
@@ -22,7 +22,7 @@ class KanjaxRepository(context: Context) {
         return try {
             mDataBase.get(kanji)
         } catch (e: Exception) {
-            mLOGGER.error { "Error when get Kanjax: " + e.message }
+            mLOGGER.error("Error when get Kanjax: " + e.message, e)
             null
         }
     }
@@ -31,7 +31,7 @@ class KanjaxRepository(context: Context) {
         return try {
             mDataBase.list()
         } catch (e: Exception) {
-            mLOGGER.error { "Error when list Kanjax: " + e.message }
+            mLOGGER.error("Error when list Kanjax: " + e.message, e)
             null
         }
     }

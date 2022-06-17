@@ -36,13 +36,13 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.textfield.TextInputLayout
-import mu.KotlinLogging
+import org.slf4j.LoggerFactory
 import java.lang.ref.WeakReference
 
 
 class PagesLinkFragment : Fragment() {
 
-    private val mLOGGER = KotlinLogging.logger {}
+    private val mLOGGER = LoggerFactory.getLogger(PagesLinkFragment::class.java)
 
     private val mViewModel: PagesLinkViewModel by viewModels()
     private lateinit var mRoot : ConstraintLayout
@@ -349,7 +349,7 @@ class PagesLinkFragment : Fragment() {
                                 .show()
                         }
                     } catch (e: Exception) {
-                        mLOGGER.error { "Error when open file: " + e.message }
+                        mLOGGER.warn("Error when open file: " + e.message, e)
                     }
                 }
             } else
