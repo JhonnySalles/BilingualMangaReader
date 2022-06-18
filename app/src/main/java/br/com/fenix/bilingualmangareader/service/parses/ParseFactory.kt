@@ -36,7 +36,7 @@ class ParseFactory {
             try {
                 parser.parse(file)
             } catch (e: Exception) {
-                mLOGGER.warn("Error when parse: " + e.message, e)
+                mLOGGER.warn("Error when parse: " + e.message + " - File: " + file.name, e)
                 return null
             }
             return if (parser is DirectoryParse && parser.numPages() < 4) null else parser

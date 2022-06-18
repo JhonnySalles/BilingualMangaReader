@@ -119,6 +119,7 @@ class RarParse : Parse {
             mCacheDir!!.delete()
         }
         mArchive!!.close()
+        mArchive = null
     }
 
     override fun getType(): String {

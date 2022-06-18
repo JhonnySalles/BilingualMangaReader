@@ -1,31 +1,19 @@
 package br.com.fenix.bilingualmangareader.service.repository
 
 import android.content.Context
-import br.com.fenix.bilingualmangareader.model.entity.Cover
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import org.slf4j.LoggerFactory
 
 class MangaRepository(context: Context) {
 
     private val mLOGGER = LoggerFactory.getLogger(MangaRepository::class.java)
-    private val mCoverRepository: CoverRepository = CoverRepository(context)
     private var mDataBase = DataBase.getDataBase(context).getMangaDao()
 
     fun save(obj: Manga): Long {
-        val id = mDataBase.save(obj)
-
-        if (obj.thumbnail != null)
-            mCoverRepository.save(obj.thumbnail!!)
-
-        return id
+        return mDataBase.save(obj)
     }
 
-    fun update(obj: Manga) {
-        mDataBase.update(obj)
-
-        if (obj.thumbnail != null && obj.thumbnail!!.update)
-            mCoverRepository.save(obj.thumbnail!!)
-    }
+    fun update(obj: Manga) = mDataBase.update(obj)
 
     fun updateBookMark(obj: Manga) {
         if (obj.id != null)
@@ -79,10 +67,6 @@ class MangaRepository(context: Context) {
         } catch (e: Exception) {
             mLOGGER.error("Error when clear Manga History: " + e.message, e)
         }
-    }
-
-    fun getThumbnail(idManga: Long): Cover? {
-        return mCoverRepository.findFirstByIdManga(idManga)
     }
 
     fun get(id: Long): Manga? {

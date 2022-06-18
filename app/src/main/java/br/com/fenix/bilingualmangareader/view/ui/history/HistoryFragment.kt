@@ -2,8 +2,6 @@ package br.com.fenix.bilingualmangareader.view.ui.history
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +12,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Manga
-import br.com.fenix.bilingualmangareader.service.controller.ImageCoverController
 import br.com.fenix.bilingualmangareader.service.listener.MangaCardListener
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.view.adapter.history.HistoryCardAdapter
@@ -27,8 +24,6 @@ class HistoryFragment : Fragment() {
     private lateinit var mViewModel: HistoryViewModel
     private lateinit var mRecycleView: RecyclerView
     private lateinit var mListener: MangaCardListener
-
-    private val mUpdateHandler: Handler = UpdateHandler(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,26 +79,8 @@ class HistoryFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        ImageCoverController.instance.addUpdateHandler(mUpdateHandler)
         mViewModel.list {
             notifyDataSet()
-        }
-    }
-
-    override fun onPause() {
-        ImageCoverController.instance.removeUpdateHandler(mUpdateHandler)
-        super.onPause()
-    }
-
-    private inner class UpdateHandler(fragment: HistoryFragment) : Handler() {
-        private val mOwner: WeakReference<HistoryFragment> = WeakReference(fragment)
-        override fun handleMessage(msg: Message) {
-            when (msg.what) {
-                GeneralConsts.SCANNER.MESSAGE_COVER_UPDATE_FINISHED -> {
-                    val idItem = msg.data.getInt(GeneralConsts.SCANNER.POSITION)
-                    notifyDataSet(idItem)
-                }
-            }
         }
     }
 

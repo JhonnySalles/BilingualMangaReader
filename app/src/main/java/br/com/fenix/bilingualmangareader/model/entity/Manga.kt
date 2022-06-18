@@ -70,9 +70,6 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
     var excluded: Boolean = false
 
     @Ignore
-    var thumbnail: Cover? = null
-
-    @Ignore
     var update: Boolean = false
 
     @Ignore
