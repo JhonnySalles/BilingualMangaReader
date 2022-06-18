@@ -11,14 +11,12 @@ import android.os.Environment
 import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import br.com.fenix.bilingualmangareader.model.entity.Cover
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import java.util.*
 
 class Storage(context: Context) {
 
     private val mRepository = MangaRepository(context)
-    private val mRepositoryCover = CoverRepository(context)
 
     fun getPrevManga(manga: Manga): Manga? {
         val mangas: List<Manga>? = mRepository.findByFileFolder(manga.file.parent ?: "")
@@ -42,31 +40,19 @@ class Storage(context: Context) {
 
     fun listDeleted(): List<Manga>? = mRepository.listDeleted()
 
-    fun delete(manga: Manga) {
-        mRepositoryCover.deleteAll(manga.id!!)
-        mRepository.delete(manga)
-    }
+    fun delete(manga: Manga) = mRepository.delete(manga)
 
     fun updateBookMark(manga: Manga) {
         mRepository.updateBookMark(manga)
     }
 
     fun save(manga: Manga): Long {
-        val id = if (manga.id != null) {
+        return if (manga.id != null) {
             mRepository.update(manga)
             manga.id!!
         } else
             mRepository.save(manga)
-
-        if (manga.thumbnail != null) {
-            manga.thumbnail!!.id_manga = id
-            mRepositoryCover.save(manga.thumbnail!!)
-        }
-        return id
     }
-
-    fun save(cover: Cover): Long =
-        mRepositoryCover.save(cover)
 
     // Used to get the cache images
     companion object Storage {

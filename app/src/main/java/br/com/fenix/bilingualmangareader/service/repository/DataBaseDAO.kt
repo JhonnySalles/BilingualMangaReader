@@ -81,23 +81,6 @@ abstract class MangaDAO : DataBaseDAO<Manga> {
 
 
 @Dao
-abstract class CoverDAO : DataBaseDAO<Cover> {
-
-    @Query("SELECT * FROM " + DataBaseConsts.COVER.TABLE_NAME + " WHERE " + DataBaseConsts.COVER.COLUMNS.FK_ID_MANGA + " = :idManga AND " + DataBaseConsts.COVER.COLUMNS.ID + " = :id")
-    abstract fun get(idManga: Long, id: Long): Cover
-
-    @Query("SELECT * FROM " + DataBaseConsts.COVER.TABLE_NAME + " WHERE " + DataBaseConsts.COVER.COLUMNS.FK_ID_MANGA + " = :idManga LIMIT 1")
-    abstract fun findFirstByIdManga(idManga: Long): Cover
-
-    @Query("SELECT * FROM " + DataBaseConsts.COVER.TABLE_NAME + " WHERE " + DataBaseConsts.COVER.COLUMNS.FK_ID_MANGA + " = :idManga")
-    abstract fun listByIdManga(idManga: Long): List<Cover>
-
-    @Query("DELETE FROM " + DataBaseConsts.COVER.TABLE_NAME + " WHERE " + DataBaseConsts.COVER.COLUMNS.FK_ID_MANGA + " = :idManga")
-    abstract fun deleteAll(idManga: Long)
-
-}
-
-@Dao
 abstract class SubTitleDAO : DataBaseDAO<SubTitle> {
 
     @Query("SELECT * FROM " + DataBaseConsts.SUBTITLES.TABLE_NAME + " WHERE " + DataBaseConsts.SUBTITLES.COLUMNS.FK_ID_MANGA + " = :idManga AND " + DataBaseConsts.SUBTITLES.COLUMNS.ID + " = :Id")

@@ -121,7 +121,6 @@ class GeneralConsts private constructor() {
         const val POSITION = "POSITION"
         const val MESSAGE_MANGA_UPDATE_FINISHED = 0
         const val MESSAGE_MANGA_UPDATED = 1
-        const val MESSAGE_COVER_UPDATE_FINISHED = 2
     }
 
     object REQUEST {

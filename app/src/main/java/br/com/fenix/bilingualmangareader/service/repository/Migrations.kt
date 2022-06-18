@@ -94,5 +94,16 @@ class Migrations {
                 mLOGGER.info("Completed migration 3 - 4.")
             }
         }
+
+        // Migration version 4.
+        val MIGRATION_4_5 = object : Migration(4, 5) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                mLOGGER.info("Start migration 4 - 5...")
+
+                database.execSQL("DROP TABLE IF EXISTS " + DataBaseConsts.COVER.TABLE_NAME)
+
+                mLOGGER.info("Completed migration 4 - 5.")
+            }
+        }
     }
 }

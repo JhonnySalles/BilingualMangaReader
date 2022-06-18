@@ -238,7 +238,7 @@
         android:background="@color/primary"
         android:fitsSystemWindows="true"
         android:orientation="vertical"
-        android:paddingTop="10dp"
+        android:paddingTop="30dp"
         android:visibility="gone">
 
         <ImageView
@@ -319,7 +319,7 @@
         android:background="@color/primary"
         android:fitsSystemWindows="true"
         android:orientation="vertical"
-        android:paddingTop="10dp"
+        android:paddingTop="30dp"
         android:visibility="gone">
 
         <ImageView
