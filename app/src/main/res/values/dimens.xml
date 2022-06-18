@@ -76,7 +76,10 @@
 
     <dimen name="page_link_language_margin">3dp</dimen>
     <dimen name="page_link_fullscreen_size">50dp</dimen>
-    <dimen name="page_link_fullscreen_padding">10dp</dimen>
+    <dimen name="page_link_help_size">50dp</dimen>
+    <dimen name="page_link_fullscreen_padding">5dp</dimen>
+    <dimen name="page_link_buttons_size">40dp</dimen>
+    <dimen name="page_link_buttons_size_land">50dp</dimen>
     <dimen name="page_link_scrolling_button_margin">10dp</dimen>
     <dimen name="page_link_loading_progress_size">58dp</dimen>
     <dimen name="page_link_up_border">2dp</dimen>
@@ -86,6 +89,9 @@
     <dimen name="page_link_down_width">40dp</dimen>
     <dimen name="page_link_down_image_width">30dp</dimen>
     <dimen name="page_link_button_margin">5dp</dimen>
+    <dimen name="page_link_list_not_link_icon_height">40dp</dimen>
+    <dimen name="page_link_list_not_link_icon_height_land">60dp</dimen>
+    <dimen name="page_link_list_not_link_icon_height_tablet">80dp</dimen>
     <dimen name="page_link_list_not_link_height">55dp</dimen>
     <dimen name="page_link_list_not_link_height_land_or_tablet">105dp</dimen>
     <dimen name="page_link_list_not_link_margin_land_or_tablet">2dp</dimen>
