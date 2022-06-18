@@ -30,8 +30,13 @@ class ImageCoverController private constructor() {
         val INSTANCE = ImageCoverController()
     }
 
-    var cacheSize = 12 * 1024 * 1024 // 12Mb
-    private val lru: LruCache<String, Bitmap> = LruCache(cacheSize)
+    private val maxMemory = (Runtime.getRuntime().maxMemory() / 1024).toInt()
+    private val cacheSize = maxMemory / 4
+    private val lru = object : LruCache<String, Bitmap> (cacheSize)  {
+        override fun sizeOf(key: String, bitmap: Bitmap): Int {
+            return bitmap.byteCount / 1024
+        }
+    }
 
     private fun saveBitmapToLru(key: String, bitmap: Bitmap) {
         try {
