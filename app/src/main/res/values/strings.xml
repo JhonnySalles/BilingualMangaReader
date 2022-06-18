@@ -164,7 +164,15 @@
     <string name="page_link_load_file_wrong">Unsupported file</string>
     <string name="page_link_load_error">Error opening file</string>
     <string name="page_link_saved">Saved</string>
+    <string name="page_link_page_not_linked">Pages not linked</string>
     <string name="page_link_refreshed">Refreshed</string>
+    <string name="page_link_auto_process">Auto process</string>
+    <string name="page_link_dual_page">Dual pages</string>
+    <string name="page_link_single_page">Single page</string>
+    <string name="page_link_reorder">Reorder</string>
+    <string name="page_link_help">Help</string>
+    <string name="page_link_full_screen">Full screen</string>
+    <string name="page_link_process_ended">Process done</string>
 
     <!-- HELP -->
     <string name="help_content">Content</string>

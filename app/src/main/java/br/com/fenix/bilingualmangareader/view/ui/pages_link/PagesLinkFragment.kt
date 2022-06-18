@@ -10,10 +10,12 @@ import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,6 +35,7 @@ import br.com.fenix.bilingualmangareader.util.helpers.Util
 import br.com.fenix.bilingualmangareader.view.adapter.page_link.PageLinkCardAdapter
 import br.com.fenix.bilingualmangareader.view.adapter.page_link.PageNotLinkCardAdapter
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.textfield.TextInputLayout
@@ -51,24 +54,40 @@ class PagesLinkFragment : Fragment() {
     private lateinit var mScrollDown: FloatingActionButton
     private lateinit var mRecyclePageLink: RecyclerView
     private lateinit var mRecyclePageNotLink: RecyclerView
+    private lateinit var mPageNotLinkContent: ConstraintLayout
+    private lateinit var mPageNotLinkIcon: ImageView
     private lateinit var mFileLink: TextInputLayout
     private lateinit var mFileLinkAutoComplete: AutoCompleteTextView
     private lateinit var mFileLinkLanguage: TextInputLayout
     private lateinit var mFileLinkLanguageAutoComplete: AutoCompleteTextView
+    private lateinit var mContentButton: LinearLayout
     private lateinit var mSave: Button
-    private lateinit var mRefresh : Button
+    private lateinit var mRefresh : MaterialButton
     private lateinit var mFullScreen: MaterialButton
     private lateinit var mListener: PageLinkCardListener
+    private lateinit var mButtonsGroup: MaterialButtonToggleGroup
+    private lateinit var mAutoProcess: MaterialButton
+    private lateinit var mReorderPages: MaterialButton
+    private lateinit var mSinglePages: MaterialButton
+    private lateinit var mDualPages: MaterialButton
+    private lateinit var mHelp: MaterialButton
 
     private lateinit var mMapLanguage: HashMap<String, Languages>
     private val mImageLoadHandler: Handler = ImageLoadHandler(this)
     private var mShowScrollButton : Boolean = true
     private var mHandler = Handler(Looper.getMainLooper())
+
     private val mDismissUpButton = Runnable { mScrollUp.hide() }
     private val mDismissDownButton = Runnable { mScrollDown.hide() }
+    private val mReduceSizeGroupButton = Runnable {
+        mButtonsGroup.layoutParams = mButtonsGroupSize
+        changColorButton(requireContext().getColor(R.color.fileLinkButtons))
+    }
+
     private var mInDrag : Boolean = false
     private var mIsTabletOrLandscape: Boolean = false
     private var mPageSelected: Int = 0
+    private lateinit var mButtonsGroupSize: LayoutParams
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -80,10 +99,14 @@ class PagesLinkFragment : Fragment() {
         mRoot = root.findViewById(R.id.pages_link_root)
         mRecyclePageLink = root.findViewById(R.id.pages_link_pages_linked_recycler)
         mRecyclePageNotLink = root.findViewById(R.id.pages_link_pages_not_linked_recycler)
+        mPageNotLinkContent = root.findViewById(R.id.pages_link_content_pages_not_linked)
+        mPageNotLinkIcon = root.findViewById(R.id.pages_link_icon_pages_not_linked)
+
         mFileLink = root.findViewById(R.id.pages_link_file_link_text)
         mFileLinkAutoComplete = root.findViewById(R.id.pages_link_file_link_autocomplete)
         mFileLinkLanguage = root.findViewById(R.id.pages_link_language_combo)
         mFileLinkLanguageAutoComplete = root.findViewById(R.id.pages_link_language_autocomplete)
+        mContentButton = root.findViewById(R.id.pages_link_buttons_content)
         mSave = root.findViewById(R.id.pages_link_save_button)
         mRefresh = root.findViewById(R.id.pages_link_refresh_button)
         mFullScreen = root.findViewById(R.id.pages_link_full_screen_button)
@@ -91,6 +114,14 @@ class PagesLinkFragment : Fragment() {
         mImageLoading = root.findViewById(R.id.pages_link_loading_progress)
         mScrollUp = root.findViewById(R.id.pages_link_scroll_up)
         mScrollDown = root.findViewById(R.id.pages_link_scroll_down)
+
+        mButtonsGroup = root.findViewById(R.id.page_link_buttons_group)
+        mAutoProcess = root.findViewById(R.id.pages_link_auto_process_button)
+        mReorderPages = root.findViewById(R.id.pages_link_reorder_button)
+        mSinglePages = root.findViewById(R.id.pages_link_single_page_button)
+        mDualPages = root.findViewById(R.id.pages_link_dual_page_button)
+        mHelp = root.findViewById(R.id.pages_link_help_button)
+        mButtonsGroupSize = mButtonsGroup.layoutParams
 
         mScrollUp.visibility = View.GONE
         mScrollDown.visibility = View.GONE
@@ -171,18 +202,43 @@ class PagesLinkFragment : Fragment() {
         mSave.setOnClickListener { save() }
         mRefresh.setOnClickListener { refresh() }
 
+        mAutoProcess.setOnClickListener { mViewModel.autoGenerateDualPages(Pages.LINKED, true) }
+        mReorderPages.setOnClickListener { mViewModel.reorderPages()  }
+        mSinglePages.setOnClickListener { mViewModel.clearDualPages() }
+        mDualPages.setOnClickListener { mViewModel.generateDualPages() }
+
+        mHelp.setOnClickListener {
+            if (mHandler.hasCallbacks(mReduceSizeGroupButton))
+                mHandler.removeCallbacks(mReduceSizeGroupButton)
+            mHandler.postDelayed(mReduceSizeGroupButton, 2000)
+
+            mButtonsGroup.layoutParams = ConstraintLayout.LayoutParams(
+                LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT
+            )
+
+            mButtonsGroup.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                startToStart = mRoot.id
+                bottomToTop = mContentButton.id
+            }
+
+            changColorButton(requireContext().getColor(R.color.fileLinkButtonsExpanded))
+        }
+
         mFullScreen.setOnClickListener {
             val image = if (mFileLink.visibility == View.GONE) {
                 mFileLink.visibility = View.VISIBLE
                 mFileLinkLanguage.visibility = View.VISIBLE
                 mSave.visibility = View.VISIBLE
                 mRefresh.visibility = View.VISIBLE
+                mButtonsGroup.visibility = View.VISIBLE
                 R.drawable.ic_fullscreen
             } else {
                 mFileLink.visibility = View.GONE
                 mFileLinkLanguage.visibility = View.GONE
                 mSave.visibility = View.GONE
                 mRefresh.visibility = View.GONE
+                mButtonsGroup.visibility = View.GONE
                 R.drawable.ic_fullscreen_exit
             }
             mFullScreen.icon = ContextCompat.getDrawable(context!!, image)
@@ -252,18 +308,21 @@ class PagesLinkFragment : Fragment() {
         mRecyclePageNotLink.setOnDragListener { _, dragEvent ->
             when (dragEvent.action) {
                 DragEvent.ACTION_DRAG_STARTED -> {
-                    mRecyclePageNotLink.background = requireContext().getDrawable(R.drawable.file_linked_rounded_border)
+                    mPageNotLinkContent.background = requireContext().getDrawable(R.drawable.file_linked_rounded_border)
+                    mPageNotLinkIcon.visibility = View.VISIBLE
                     mShowScrollButton = false
                     dragEvent.clipDescription.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)
                 }
 
                 DragEvent.ACTION_DRAG_ENTERED -> {
-                    mRecyclePageNotLink.background = requireContext().getDrawable(R.drawable.file_linked_background_selected)
+                    mPageNotLinkContent.background = requireContext().getDrawable(R.drawable.file_linked_background_selected)
+                    mPageNotLinkIcon.visibility = View.VISIBLE
                     true
                 }
 
                 DragEvent.ACTION_DRAG_EXITED -> {
-                    mRecyclePageNotLink.background = requireContext().getDrawable(R.drawable.file_linked_rounded_border)
+                    mPageNotLinkContent.background = requireContext().getDrawable(R.drawable.file_linked_rounded_border)
+                    mPageNotLinkIcon.visibility = View.VISIBLE
                     true
                 }
 
@@ -280,7 +339,8 @@ class PagesLinkFragment : Fragment() {
                 }
 
                 DragEvent.ACTION_DRAG_ENDED -> {
-                    mRecyclePageNotLink.background = requireContext().getDrawable(R.drawable.file_linked_background)
+                    mPageNotLinkContent.background = requireContext().getDrawable(R.drawable.file_linked_background)
+                    mPageNotLinkIcon.visibility = View.INVISIBLE
                     mShowScrollButton = true
 
                     val v = dragEvent.localState as View
@@ -410,9 +470,27 @@ class PagesLinkFragment : Fragment() {
         }
     }
 
+    private fun disableContent(enabled: Boolean) {
+        mRecyclePageLink.isEnabled = enabled
+        mRecyclePageNotLink.isEnabled = enabled
+        mFileLink.isEnabled = enabled
+        mFileLinkLanguage.isEnabled = enabled
+        mSave.isEnabled = enabled
+        mRefresh.isEnabled = enabled
+        mButtonsGroup.isEnabled = enabled
+    }
+
+    private fun changColorButton(color: Int) {
+        mAutoProcess.setBackgroundColor(color)
+        mReorderPages.setBackgroundColor(color)
+        mSinglePages.setBackgroundColor(color)
+        mDualPages.setBackgroundColor(color)
+        mHelp.setBackgroundColor(color)
+        mRefresh.setBackgroundColor(color)
+    }
+
     private fun save() {
-        mSave.isEnabled = false
-        mRefresh.isEnabled = false
+        disableContent(false)
 
         mViewModel.save()
         Toast.makeText(
@@ -421,13 +499,11 @@ class PagesLinkFragment : Fragment() {
             Toast.LENGTH_SHORT
         ).show()
 
-        mSave.isEnabled = true
-        mRefresh.isEnabled = true
+        disableContent(true)
     }
 
     private fun refresh() {
-        mSave.isEnabled = false
-        mRefresh.isEnabled = false
+        disableContent(false)
 
         mViewModel.restoreBackup { index, type -> notifyItemChanged(type, index)  }
         Toast.makeText(
@@ -436,8 +512,7 @@ class PagesLinkFragment : Fragment() {
             Toast.LENGTH_SHORT
         ).show()
 
-        mSave.isEnabled = true
-        mRefresh.isEnabled = true
+        disableContent(true)
     }
 
     override fun onResume() {
@@ -468,13 +543,14 @@ class PagesLinkFragment : Fragment() {
         super.onDestroy()
     }
 
-    private fun processImageLoading(isInitial: Boolean = false, isEnding: Boolean = false, isVerify : Boolean = false) {
+    private fun processImageLoading(isInitial: Boolean = false, isEnding: Boolean = false, isVerify: Boolean = false) {
         if (isInitial) {
             mImageLoading.isIndeterminate = true
             mImageLoading.visibility = View.VISIBLE
         } else if (isEnding || isVerify) {
             mImageLoading.isIndeterminate = isVerify
-            mImageLoading.visibility = if (mViewModel.imageThreadLoadingProgress())
+            val progress = mViewModel.imageThreadLoadingProgress()
+            mImageLoading.visibility = if (isEnding && progress > 1 || isVerify && progress > 0)
                 View.VISIBLE
             else
                 View.INVISIBLE
@@ -488,6 +564,24 @@ class PagesLinkFragment : Fragment() {
                 mImageLoading.progress = progress
             }
         }
+    }
+
+    private fun processImages(isInitial: Boolean = false, isEnding: Boolean = false, message: String = "") {
+        processImageLoading(isInitial, isEnding)
+
+        val enabled = if (isInitial)
+            true
+        else
+            !isEnding
+
+        disableContent(enabled)
+
+        if (message.isNotEmpty())
+            Toast.makeText(
+                requireContext(),
+                message,
+                Toast.LENGTH_SHORT
+            ).show()
     }
 
     private inner class ImageLoadHandler(fragment: PagesLinkFragment) : Handler() {
@@ -507,6 +601,17 @@ class PagesLinkFragment : Fragment() {
                     processImageLoading(isEnding = true)
                     mViewModel.reLoadImages(imageLoad.type, true)
                 }
+                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_ALL_IMAGES_LOADED -> processImageLoading(isEnding = true)
+
+                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_AUTO_GENERATE_DUAL_PAGES_START -> processImages(isInitial = true)
+                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_AUTO_GENERATE_DUAL_PAGES_FINISHED -> processImages(isEnding = true, message = getString(R.string.page_link_process_ended))
+                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_GENERATE_DUAL_PAGES_START -> processImages(isInitial = true)
+                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_GENERATE_DUAL_PAGES_FINISHED -> processImages(isEnding = true, message = getString(R.string.page_link_process_ended))
+                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_CLEAR_DUAL_PAGES_START -> processImages(isInitial = true)
+                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_CLEAR_DUAL_PAGES_FINISHED -> processImages(isEnding = true, message = getString(R.string.page_link_process_ended))
+                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_REORDER_PAGES_START -> processImages(isInitial = true)
+                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_REORDER_PAGES_FINISHED -> processImages(isEnding = true, message = getString(R.string.page_link_process_ended))
+
             }
         }
     }

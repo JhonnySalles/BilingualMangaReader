@@ -341,8 +341,8 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                             page.fileLinkPages = parse.numPages()
                             refresh(i, Pages.LINKED)
                         } else
-                            listNotLink.add(PageLink( mFileLink.value!!.id, PageLinkConsts.VALUES.PAGE_EMPTY, 0, "",
-                                i, parse.numPages(), name, true ))
+                            listNotLink.add(PageLink(mFileLink.value!!.id, PageLinkConsts.VALUES.PAGE_EMPTY, 0, "",
+                                i, parse.numPages(), name, true))
                     }
                 }
 
@@ -374,23 +374,6 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
         refresh(null, Pages.ALL)
     }
 
-    private fun generateBitmap(parse: Parse, index: Int): Bitmap? {
-        return if (index == -1) null else
-            try {
-                val stream: InputStream = parse.getPage(index)
-                val image  = BitmapFactory.decodeStream(stream)
-                val bitmap = Bitmap.createScaledBitmap(image, ReaderConsts.PAGESLINK.IMAGES_WIDTH, ReaderConsts.PAGESLINK.IMAGES_HEIGHT, false)
-                Util.closeInputStream(stream)
-                bitmap
-            } catch (i: InterruptedIOException) {
-                mLOGGER.info("Interrupted error when generate bitmap: " + i.message)
-                null
-            } catch (e: Exception) {
-                mLOGGER.info("Error when generate bitmap: " + e.message)
-                null
-            }
-    }
-
     fun getPageLink(page : PageLink) : String = mPagesLink.value!!.indexOf(page).toString()
 
     fun getPageLink(index : Int) : PageLink? {
@@ -409,7 +392,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
             mPagesNotLinked.value!![index]
     }
 
-    fun getPageNotLinkLastIndex(): Int {
+    private fun getPageNotLinkLastIndex(): Int {
         return if (mPagesNotLinked.value!!.isEmpty())
             0
         else
@@ -433,10 +416,10 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                 PageLink(
                     page.idFile, PageLinkConsts.VALUES.PAGE_EMPTY, 0, "",
                     page.fileLinkPage, page.fileLinkPages, page.fileLinkPageName,
-                    true, null, page.imageLeftFileLinkPage
+                    isFileLeftDualPage = page.isFileLeftDualPage, imageFileLinkPage = page.imageLeftFileLinkPage
                 )
             )
-            notifyImageLoadAdded(getPageNotLinkLastIndex(), Pages.NOT_LINKED)
+            notifyMessages(Pages.NOT_LINKED, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_ADDED, getPageNotLinkLastIndex())
         }
 
         if (page.dualImage) {
@@ -444,22 +427,22 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                 PageLink(
                     page.idFile, PageLinkConsts.VALUES.PAGE_EMPTY, 0, "",
                     page.fileRightLinkPage, page.fileLinkPages, page.fileRightLinkPageName,
-                    true, null, page.imageRightFileLinkPage
+                    isFileLeftDualPage = page.isFileRightDualPage, imageFileLinkPage = page.imageRightFileLinkPage
                 )
             )
             page.clearRightFileLink()
-            notifyImageLoadAdded(getPageNotLinkLastIndex(), Pages.NOT_LINKED)
+            notifyMessages(Pages.NOT_LINKED, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_ADDED, getPageNotLinkLastIndex())
         }
     }
 
     fun onMoveDualPage(originType: Pages, origin: PageLink?, destinyType: Pages, destiny: PageLink?) {
         if (origin == null || destiny == null) {
-            notifyImageLoad(null, Pages.ALL)
+            notifyMessages(Pages.ALL, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_UPDATED)
             return
         }
 
         if (origin == destiny && destinyType == Pages.DUAL_PAGE) {
-            notifyImageLoad(mPagesLink.value!!.indexOf(destiny), originType)
+            notifyMessages(Pages.LINKED, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_UPDATED, mPagesLink.value!!.indexOf(destiny))
             return
         }
 
@@ -467,18 +450,20 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
             mPagesNotLinked.value!!.add(
                 PageLink(
                     destiny.idFile, PageLinkConsts.VALUES.PAGE_EMPTY, 0, "", destiny.fileRightLinkPage,
-                    destiny.fileLinkPages, destiny.fileRightLinkPageName, true, null, destiny.imageRightFileLinkPage
+                    destiny.fileLinkPages, destiny.fileRightLinkPageName, isFileLeftDualPage = destiny.isFileRightDualPage,
+                    imageFileLinkPage = destiny.imageRightFileLinkPage
                 )
             )
-            notifyImageLoadAdded(getPageNotLinkLastIndex(), Pages.NOT_LINKED)
+            notifyMessages(Pages.NOT_LINKED, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_ADDED, getPageNotLinkLastIndex())
         } else if (destinyType == Pages.LINKED && destiny.fileLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY) {
             mPagesNotLinked.value!!.add(
                 PageLink(
                     destiny.idFile, PageLinkConsts.VALUES.PAGE_EMPTY, 0, "", destiny.fileLinkPage,
-                    destiny.fileLinkPages, destiny.fileLinkPageName, true, null, destiny.imageLeftFileLinkPage
+                    destiny.fileLinkPages, destiny.fileLinkPageName, isFileLeftDualPage = destiny.isFileLeftDualPage,
+                    imageFileLinkPage = destiny.imageLeftFileLinkPage
                 )
             )
-            notifyImageLoadAdded(getPageNotLinkLastIndex(), Pages.NOT_LINKED)
+            notifyMessages(Pages.NOT_LINKED, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_ADDED, getPageNotLinkLastIndex())
         }
 
         when {
@@ -486,11 +471,11 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                 val originIndex = mPagesLink.value!!.indexOf(origin)
                 val destinyIndex = mPagesLink.value!!.indexOf(destiny)
 
-                destiny.addRightFileLinkImage(origin.fileRightLinkPage, origin.fileRightLinkPageName, origin.imageRightFileLinkPage)
+                destiny.addRightFileLinkImage(origin.fileRightLinkPage, origin.fileRightLinkPageName, origin.isFileRightDualPage, origin.imageRightFileLinkPage)
                 origin.clearRightFileLink()
 
-                notifyImageLoad(originIndex, originType)
-                notifyImageLoad(destinyIndex, destinyType)
+                notifyMessages(originType, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_UPDATED, originIndex)
+                notifyMessages(destinyType, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_UPDATED, destinyIndex)
             }
             (originType == Pages.NOT_LINKED || destinyType == Pages.NOT_LINKED) ->  {
                 if (originType == Pages.NOT_LINKED && destinyType == Pages.NOT_LINKED)
@@ -499,15 +484,15 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                     val originIndex = mPagesNotLinked.value!!.indexOf(origin)
                     val destinyIndex = mPagesLink.value!!.indexOf(destiny)
 
-                    destiny.addRightFileLinkImage(origin.fileLinkPage, origin.fileLinkPageName, origin.imageLeftFileLinkPage)
+                    destiny.addRightFileLinkImage(origin.fileLinkPage, origin.fileLinkPageName, origin.isFileLeftDualPage, origin.imageLeftFileLinkPage)
                     mPagesNotLinked.value!!.remove(origin)
 
-                    notifyImageLoadRemoved(originIndex, originType)
-                    notifyImageLoad(destinyIndex, destinyType)
+                    notifyMessages(originType, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_REMOVED, originIndex)
+                    notifyMessages(destinyType, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_UPDATED, destinyIndex)
                 } else if (destinyType == Pages.NOT_LINKED) {
                     val originIndex = mPagesLink.value!!.indexOf(destiny)
                     origin.clearRightFileLink()
-                    notifyImageLoad(originIndex, originType)
+                    notifyMessages(originType, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_UPDATED, originIndex)
                 }
             }
             else -> {
@@ -515,13 +500,13 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                 var destinyIndex = mPagesLink.value!!.indexOf(destiny)
 
                 when {
-                    originType != Pages.DUAL_PAGE && destinyType == Pages.LINKED -> destiny.addLeftFileLinkImage(origin.fileLinkPage, origin.fileLinkPages, origin.fileLinkPageName, origin.imageLeftFileLinkPage)
-                    originType != Pages.DUAL_PAGE && destinyType != Pages.LINKED -> destiny.addRightFileLinkImage(origin.fileLinkPage, origin.fileLinkPageName, origin.imageLeftFileLinkPage)
-                    originType == Pages.DUAL_PAGE && destinyType == Pages.LINKED -> destiny.addLeftFileLinkImage(origin.fileRightLinkPage, origin.fileLinkPages, origin.fileRightLinkPageName, origin.imageRightFileLinkPage)
-                    originType == Pages.DUAL_PAGE && destinyType != Pages.LINKED -> destiny.addRightFileLinkImage(origin.fileRightLinkPage, origin.fileRightLinkPageName, origin.imageRightFileLinkPage)
+                    originType != Pages.DUAL_PAGE && destinyType == Pages.LINKED -> destiny.addLeftFileLinkImage(origin.fileLinkPage, origin.fileLinkPages, origin.fileLinkPageName, origin.isFileLeftDualPage, origin.imageLeftFileLinkPage)
+                    originType != Pages.DUAL_PAGE && destinyType != Pages.LINKED -> destiny.addRightFileLinkImage(origin.fileLinkPage, origin.fileLinkPageName, origin.isFileLeftDualPage, origin.imageLeftFileLinkPage)
+                    originType == Pages.DUAL_PAGE && destinyType == Pages.LINKED -> destiny.addLeftFileLinkImage(origin.fileRightLinkPage, origin.fileLinkPages, origin.fileRightLinkPageName, origin.isFileRightDualPage, origin.imageRightFileLinkPage)
+                    originType == Pages.DUAL_PAGE && destinyType != Pages.LINKED -> destiny.addRightFileLinkImage(origin.fileRightLinkPage, origin.fileRightLinkPageName, origin.isFileRightDualPage, origin.imageRightFileLinkPage)
                 }
 
-                notifyImageLoad(destinyIndex, destinyType)
+                notifyMessages(destinyType, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_UPDATED, destinyIndex)
 
                 val moved = when (originType) {
                     Pages.LINKED -> origin.clearLeftFileLink(true)
@@ -532,7 +517,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                     else -> false
                 }
 
-                notifyImageLoad(originIndex, originType)
+                notifyMessages(originType, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_UPDATED, originIndex)
 
                 if (originIndex > destinyIndex && originType != Pages.DUAL_PAGE && !moved) {
                     originIndex += 1
@@ -553,7 +538,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun onMove(origin: PageLink?, destiny: PageLink?) {
         if (origin == null || destiny == null) {
-            notifyImageLoad(null, Pages.ALL)
+            notifyMessages(Pages.ALL, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_UPDATED)
             return
         }
         if (origin == destiny) return
@@ -577,24 +562,26 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
             differ *=-1
             for (i in destinyIndex until limit) {
                 when {
-                    i == destinyIndex -> mPagesLink.value!![i].addLeftFileLinkImage(origin.fileLinkPage, origin.fileLinkPages, origin.fileLinkPageName, origin.imageLeftFileLinkPage)
-                    (i + differ) > (limit) -> { continue }
+                    i == destinyIndex -> mPagesLink.value!![i].addLeftFileLinkImage(origin.fileLinkPage, origin.fileLinkPages, origin.fileLinkPageName,
+                        origin.isFileLeftDualPage, origin.imageLeftFileLinkPage)
+                    (i + differ) > (limit) -> continue
                     else -> {
                         mPagesLink.value!![i].addLeftFileLinkImage(mPagesLink.value!![i + differ].fileLinkPage,
                             mPagesLink.value!![i + differ].fileLinkPages,
                             mPagesLink.value!![i + differ].fileLinkPageName,
+                            mPagesLink.value!![i + differ].isFileLeftDualPage,
                             mPagesLink.value!![i + differ].imageLeftFileLinkPage)
                         mPagesLink.value!![i + differ].clearLeftFileLink()
                     }
                 }
-                notifyImageLoad(i, Pages.LINKED)
+                notifyMessages(Pages.LINKED, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_UPDATED, i)
             }
 
             for (i in destinyIndex until limit)
                 if (mPagesLink.value!![i].dualImage && mPagesLink.value!![i].fileLinkPage == PageLinkConsts.VALUES.PAGE_EMPTY &&
                     mPagesLink.value!![i].fileRightLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY) {
                     mPagesLink.value!![i].moveFileLinkRightToLeft()
-                    notifyImageLoad(i, Pages.LINKED)
+                    notifyMessages(Pages.LINKED, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_UPDATED, i)
                 }
         } else {
             var limit = mPagesLink.value!!.size-1
@@ -614,9 +601,10 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                         else -> mPagesLink.value!![i].addLeftFileLinkImage(mPagesLink.value!![i - differ].fileLinkPage,
                             mPagesLink.value!![i - differ].fileLinkPages,
                             mPagesLink.value!![i - differ].fileLinkPageName,
+                            mPagesLink.value!![i - differ].isFileLeftDualPage,
                             mPagesLink.value!![i - differ].imageLeftFileLinkPage)
                     }
-                    notifyImageLoad(i, Pages.LINKED)
+                    notifyMessages(Pages.LINKED, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_UPDATED, i)
                 }
             } else {
                 var spaceUsed = 0
@@ -646,9 +634,10 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                         mPagesLink.value!![i].addLeftFileLinkImage(mPagesLink.value!![index].fileLinkPage,
                             mPagesLink.value!![index].fileLinkPages,
                             mPagesLink.value!![index].fileLinkPageName,
+                            mPagesLink.value!![index].isFileLeftDualPage,
                             mPagesLink.value!![index].imageLeftFileLinkPage)
                     }
-                    notifyImageLoad(i, Pages.LINKED)
+                    notifyMessages(Pages.LINKED, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_UPDATED, i)
                 }
             }
         }
@@ -656,58 +645,395 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun onNotLinked(origin : PageLink?) {
         if (origin == null) {
-            notifyImageLoad(null, Pages.LINKED)
+            notifyMessages(Pages.LINKED, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_UPDATED)
             return
         }
 
         mPagesNotLinked.value!!.add(PageLink(origin.idFile, PageLinkConsts.VALUES.PAGE_EMPTY, 0, "", origin.fileLinkPage,
-            origin.fileLinkPages, origin.fileLinkPageName, true, null, origin.imageLeftFileLinkPage))
+            origin.fileLinkPages, origin.fileLinkPageName, isFileLeftDualPage = origin.isFileLeftDualPage,
+            imageFileLinkPage = origin.imageLeftFileLinkPage))
 
-        notifyImageLoadAdded(getPageNotLinkLastIndex(), Pages.NOT_LINKED)
+        notifyMessages(Pages.NOT_LINKED, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_ADDED, mPagesNotLinked.value!!.size-1)
+
         val originIndex = mPagesLink.value!!.indexOf(origin)
-
         if (origin.dualImage)
             origin.moveFileLinkRightToLeft()
         else
             origin.clearFileLink()
 
-        notifyImageLoad(originIndex, Pages.LINKED)
+        notifyMessages(Pages.LINKED, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_UPDATED, originIndex)
     }
 
     fun fromNotLinked(origin : PageLink?, destiny :PageLink?) {
         if (origin == null || destiny == null) {
-            notifyImageLoad(null, Pages.NOT_LINKED)
+            notifyMessages(Pages.NOT_LINKED, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_UPDATED)
             return
         }
 
         val destinyIndex = mPagesLink.value!!.indexOf(destiny)
         val size = mPagesLink.value!!.size-1
         mPagesNotLinked.value!!.remove(origin)
-        notifyImageLoadRemoved(size, Pages.NOT_LINKED)
+        notifyMessages(Pages.NOT_LINKED, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_REMOVED, size)
 
         if (destiny.imageLeftFileLinkPage == null) {
             mPagesLink.value!![destinyIndex].addLeftFileLinkImage(
                 origin.fileLinkPage,
                 origin.fileLinkPages,
                 origin.fileLinkPageName,
+                origin.isFileLeftDualPage,
                 origin.imageLeftFileLinkPage
             )
-            notifyImageLoad(destinyIndex, Pages.LINKED)
+            notifyMessages(Pages.LINKED, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_UPDATED, destinyIndex)
         } else {
             if (mPagesLink.value!![size].imageLeftFileLinkPage != null)
                 addNotLinked(mPagesLink.value!![size])
 
             for (i in size downTo destinyIndex) {
                 when (i) {
-                    destinyIndex -> mPagesLink.value!![i].addLeftFileLinkImage(origin.fileLinkPage, origin.fileLinkPages, origin.fileLinkPageName, origin.imageLeftFileLinkPage)
+                    destinyIndex -> mPagesLink.value!![i].addLeftFileLinkImage(origin.fileLinkPage, origin.fileLinkPages, origin.fileLinkPageName,
+                        origin.isFileLeftDualPage, origin.imageLeftFileLinkPage)
                     else -> mPagesLink.value!![i].addLeftFileLinkImage(mPagesLink.value!![i - 1].fileLinkPage,
                         mPagesLink.value!![i - 1].fileLinkPages,
                         mPagesLink.value!![i - 1].fileLinkPageName,
+                        mPagesLink.value!![i - 1].isFileLeftDualPage,
                         mPagesLink.value!![i - 1].imageLeftFileLinkPage)
                 }
-                notifyImageLoad(i, Pages.LINKED)
+                notifyMessages(Pages.LINKED, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_UPDATED, i)
             }
         }
+    }
+
+    fun generateDualPages(isIgnoreCalculateDualPage: Boolean = true) {
+        if (mFileLink.value == null || mFileLink.value!!.path.isEmpty())    return
+
+        if (mFileLink.value != null) {
+            notifyMessages(Pages.LINKED, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_GENERATE_DUAL_PAGES_START)
+
+            val pagesLink = mPagesLink.value!!
+            var padding = 1
+
+            for ((index, page) in pagesLink.withIndex()) {
+                if(page.dualImage || (!isIgnoreCalculateDualPage && page.isFileLeftDualPage && page.fileRightLinkPage == PageLinkConsts.VALUES.PAGE_EMPTY))
+                    continue
+
+                var next = pagesLink[index + padding]
+                if (next.fileLinkPage == PageLinkConsts.VALUES.PAGE_EMPTY) {
+                    do {
+                        if ((index + padding) > pagesLink.size-1)
+                            break
+                        padding++
+                        next = pagesLink[index + padding]
+                    } while (next.fileLinkPage == PageLinkConsts.VALUES.PAGE_EMPTY)
+                }
+
+                if ((index + padding) > pagesLink.size-1)
+                    break
+
+                if (isIgnoreCalculateDualPage) {
+                    if (next.dualImage) {
+                        if (page.fileLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY)
+                            continue
+                        else
+                            page.merge(next)
+                        next.clearFileLink()
+                    } else {
+                        if (page.fileLinkPage == PageLinkConsts.VALUES.PAGE_EMPTY) {
+                            page.addLeftFileLinkImage(
+                                next.fileLinkPage,
+                                next.fileLinkPage,
+                                next.fileLinkPageName,
+                                next.isFileLeftDualPage,
+                                next.imageLeftFileLinkPage
+                            )
+                            next.clearLeftFileLink()
+
+                            if (next.fileRightLinkPage == PageLinkConsts.VALUES.PAGE_EMPTY) {
+                                page.addRightFileLinkImage(
+                                    next.fileRightLinkPage,
+                                    next.fileRightLinkPageName,
+                                    next.isFileRightDualPage,
+                                    next.imageRightFileLinkPage
+                                )
+                                next.clearRightFileLink()
+                            } else {
+                                padding++
+                                next = pagesLink[index + padding]
+                                if (!next.dualImage && next.fileLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY) {
+                                    page.addRightFileLinkImage(
+                                        next.fileLinkPage,
+                                        next.fileLinkPageName,
+                                        next.isFileLeftDualPage,
+                                        next.imageLeftFileLinkPage
+                                    )
+                                    next.clearLeftFileLink()
+                                    notifyMessages(Pages.LINKED, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_UPDATED, index + padding)
+                                } else
+                                    padding--
+                            }
+                        } else {
+                            page.addRightFileLinkImage(
+                                next.fileLinkPage,
+                                next.fileLinkPageName,
+                                next.isFileLeftDualPage,
+                                next.imageLeftFileLinkPage
+                            )
+                            next.clearLeftFileLink()
+                        }
+                    }
+                } else {
+                    if (next.dualImage || next.isFileLeftDualPage) {
+                        if (page.fileLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY)
+                            continue
+                        else
+                            page.merge(next)
+                        next.clearFileLink()
+                    }
+
+                }
+
+                notifyMessages(Pages.LINKED, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_UPDATED, index)
+                notifyMessages(Pages.LINKED, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_UPDATED, index + padding)
+            }
+
+            notifyMessages(Pages.LINKED, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_GENERATE_DUAL_PAGES_FINISHED)
+        }
+    }
+
+    fun clearDualPages(isNotify: Boolean = true) {
+        if (mFileLink.value == null || mFileLink.value!!.path.isEmpty()) return
+
+        val hasDualImage = mPagesLink.value?.any { it.dualImage } ?: false
+
+        if (hasDualImage) {
+            if (isNotify)
+                notifyMessages(Pages.LINKED, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_CLEAR_DUAL_PAGES_START)
+
+            val pagesLink = mPagesLink.value!!
+            var amount = 0
+            pagesLink.forEach { if (it.dualImage) amount+=1 }
+
+            for (i in pagesLink.size -1 downTo (pagesLink.size -1) - amount)
+                addNotLinked(pagesLink[i])
+
+            if (isNotify)
+                notifyMessages(Pages.NOT_LINKED, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_CLEAR_DUAL_PAGES_FINISHED)
+
+            var process = amount
+            for (i in pagesLink.size -1 downTo 0) {
+                val page = pagesLink[i-process]
+                if (page.dualImage) {
+                    pagesLink[i].addLeftFileLinkImage(page.fileRightLinkPage, page.fileRightLinkPage,
+                        page.fileRightLinkPageName, page.isFileRightDualPage, page.imageRightFileLinkPage)
+                    page.clearRightFileLink()
+                    notifyMessages(Pages.LINKED, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_UPDATED, i-process)
+                    process -=1
+                } else
+                    pagesLink[i].addLeftFileLinkImage(page.fileLinkPage, page.fileLinkPages,
+                        page.fileLinkPageName, page.isFileLeftDualPage, page.imageLeftFileLinkPage)
+
+                notifyMessages(Pages.LINKED, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_UPDATED, i)
+                if (process <= 0)
+                    break
+            }
+
+            if (isNotify)
+                notifyMessages(Pages.LINKED, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_CLEAR_DUAL_PAGES_FINISHED)
+        }
+    }
+
+    fun autoGenerateDualPages(type: Pages, isClear: Boolean = false) {
+        if (mFileLink.value == null || mFileLink.value!!.path.isEmpty()) return
+
+        notifyMessages(type, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_AUTO_GENERATE_DUAL_PAGES_START)
+
+        val hasDualImage = if(isClear) {
+            clearDualPages(false)
+            true
+        } else
+            mPagesLink.value?.any { it.dualImage } ?: false
+
+        if (!hasDualImage && mFileLink.value?.id == null) {
+            val pagesLink = mPagesLink.value!!
+            val lastIndex = pagesLink.size -1
+            var ignoreNext = false
+            for ((index, page) in pagesLink.withIndex()) {
+                if (ignoreNext || index >= lastIndex) {
+                    ignoreNext = false
+                    continue
+                }
+
+                if (page.isMangaDualPage && page.isFileLeftDualPage)
+                    continue
+
+                if (page.isMangaDualPage) {
+                    val nextPage = pagesLink[index + 1]
+                    page.addRightFileLinkImage(nextPage.fileLinkPage, nextPage.fileLinkPageName, nextPage.isFileRightDualPage, nextPage.imageLeftFileLinkPage)
+                    nextPage.clearFileLink()
+
+                    for ((idxNext, next) in pagesLink.withIndex()) {
+                        if (idxNext < index + 1 || idxNext >= lastIndex) continue
+
+                        val aux = pagesLink[index + 1]
+                        next.addLeftFileLinkImage(aux.fileLinkPage, aux.fileLinkPages, aux.fileLinkPageName, aux.isFileLeftDualPage, aux.imageLeftFileLinkPage)
+                        aux.clearLeftFileLink()
+                    }
+                } else if(page.isFileLeftDualPage) {
+                    ignoreNext = true
+
+                    var process = pagesLink[lastIndex]
+                    if (process.imageLeftFileLinkPage != null )
+                        addNotLinked(process)
+
+                    for (i in lastIndex downTo index +1) {
+                        process = pagesLink[i]
+                        val aux = pagesLink[i - 1]
+
+                        process.addLeftFileLinkImage(aux.fileLinkPage, aux.fileLinkPages, aux.fileLinkPageName, aux.isFileRightDualPage, aux.imageLeftFileLinkPage)
+                        aux.clearLeftFileLink()
+                    }
+                }
+            }
+        }
+
+        notifyMessages(type, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_AUTO_GENERATE_DUAL_PAGES_FINISHED)
+    }
+
+    fun reorderPages() {
+        if (mFileLink.value == null || mFileLink.value!!.path.isEmpty()) return
+
+        notifyMessages(Pages.LINKED, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_REORDER_PAGES_START)
+
+        val pagesNotLink = mPagesNotLinked.value!!
+        val pagesLink = mPagesLink.value!!
+        val pagesLinkTemp = pagesLink.toList()
+        val pagesNotLinkTemp = ArrayList<PageLink>()
+        var maxNumPage = 0
+
+        for (page in pagesLink) {
+            if (page.fileLinkPage > maxNumPage)
+                maxNumPage = page.fileLinkPage
+
+            if (page.fileRightLinkPage > maxNumPage)
+                maxNumPage = page.fileLinkPage
+        }
+
+        for (page in pagesNotLink) {
+            if (page.fileLinkPage > maxNumPage)
+                maxNumPage = page.fileLinkPage
+        }
+
+        for (page in pagesLinkTemp) {
+            if (page.mangaPage > maxNumPage)
+                page.clearFileLink()
+            else {
+                val pageLink = pagesLink.find { it.fileLinkPage == page.mangaPage || it.fileRightLinkPage == page.mangaPage  } ?: pagesNotLink.find { it.fileLinkPage == page.mangaPage }
+
+                if (pageLink != null) {
+                    if (pageLink.fileLinkPage == page.mangaPage)
+                        page.addLeftFileLinkImage(pageLink.fileLinkPage, pageLink.fileLinkPages, pageLink.fileLinkPageName, pageLink.isFileLeftDualPage, pageLink.imageLeftFileLinkPage)
+                    else
+                        page.addLeftFileLinkImage(pageLink.fileRightLinkPage, pageLink.fileLinkPages, pageLink.fileRightLinkPageName, pageLink.isFileRightDualPage, pageLink.imageRightFileLinkPage)
+
+                    page.clearRightFileLink()
+                } else
+                    page.clearFileLink()
+            }
+        }
+
+        if (maxNumPage >= pagesLinkTemp.size) {
+            for (numPage in pagesLinkTemp.size until maxNumPage) {
+                val pageLink = pagesLink.find { it.fileLinkPage == numPage || it.fileRightLinkPage == numPage }
+                    ?: pagesNotLink.find { it.fileLinkPage == numPage }
+
+                if (pageLink != null) {
+                    if (pageLink.fileLinkPage == numPage)
+                        pagesNotLinkTemp.add(
+                            PageLink(
+                                pageLink.idFile, PageLinkConsts.VALUES.PAGE_EMPTY, 0, "",
+                                pageLink.fileLinkPage, pageLink.fileLinkPages, pageLink.fileLinkPageName,
+                                isFileLeftDualPage = pageLink.isFileLeftDualPage, imageFileLinkPage = pageLink.imageLeftFileLinkPage
+                            )
+                        )
+                    else
+                        pagesNotLinkTemp.add(
+                            PageLink(
+                                pageLink.idFile, PageLinkConsts.VALUES.PAGE_EMPTY, 0, "",
+                                pageLink.fileRightLinkPage, pageLink.fileLinkPages, pageLink.fileRightLinkPageName,
+                                isFileLeftDualPage = pageLink.isFileRightDualPage, imageFileLinkPage = pageLink.imageRightFileLinkPage
+                            )
+                        )
+                }
+            }
+        }
+
+        mPagesNotLinked.value = ArrayList(pagesLinkTemp)
+        mPagesLink.value = pagesNotLinkTemp
+
+        notifyMessages(Pages.LINKED, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_REORDER_PAGES_FINISHED)
+    }
+
+    private fun removeThread(type: Pages, isEnd: Boolean = false) {
+        if (!isEnd)
+            mGenerateImageThread.filter { it.type.compareTo(type) == 0 }.forEach {
+                (it.runnable as ImageLoadRunnable).forceEnd = true
+                it.thread.interrupt()
+            }
+
+        mGenerateImageThread.removeAll { it.type.compareTo(type) == 0 }
+    }
+
+    fun endThread(isIgnoreManga: Boolean = false) {
+        if (isIgnoreManga) {
+            val reloadManga = mGenerateImageThread.isNotEmpty() && mGenerateImageThread.any { it.type.compareTo(Pages.ALL) == 0 } &&
+                    !mGenerateImageThread.any { it.type.compareTo(Pages.MANGA) == 0 }
+
+            mGenerateImageThread.filter { it.type.compareTo(Pages.MANGA) != 0 }.forEach {
+                (it.runnable as ImageLoadRunnable).forceEnd = true
+                it.thread.interrupt()
+            }
+            mGenerateImageThread.removeAll { it.type.compareTo(Pages.MANGA) != 0 }
+
+            if (reloadManga)
+                reLoadImages(Pages.MANGA, isVerifyImages = true, isForced = true)
+        } else {
+            mGenerateImageThread.forEach {
+                (it.runnable as ImageLoadRunnable).forceEnd = true
+                it.thread.interrupt()
+            }
+            mGenerateImageThread.clear()
+        }
+    }
+
+    fun imageThreadLoadingProgress(): Int = mGenerateImageThread.size
+
+    fun addImageLoadHandler(handler: Handler) {
+        mGenerateImageHandler!!.add(handler)
+    }
+
+    fun removeImageLoadHandler(handler: Handler) {
+        mGenerateImageHandler!!.remove(handler)
+    }
+
+    private fun notifyMessages(type: Pages, message: Int, index: Int? = null) {
+        val msg = Message()
+        msg.obj = ImageLoad(index, type)
+        msg.what = message
+        for (h in mGenerateImageHandler!!)
+            h.sendMessage(msg)
+    }
+
+    fun getProgress() : Pair<Int, Int> {
+        if (mGenerateImageThread.isEmpty())
+            return Pair(-1, 1)
+
+        var size = 0
+        var progress = 0
+        mGenerateImageThread.forEach {
+            size += (it.runnable as ImageLoadRunnable).size
+            progress += (it.runnable as ImageLoadRunnable).progress
+        }
+
+        return Pair(progress, size)
     }
 
     private fun isAllImagesLoaded(type : Pages = Pages.ALL): Boolean {
@@ -718,7 +1044,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                     return false
                 if (isFileLink && (type == Pages.ALL || type == Pages.LINKED)) {
                     if ((page.fileLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY && page.imageLeftFileLinkPage == null)
-                            || (page.dualImage && page.imageRightFileLinkPage == null))
+                        || (page.dualImage && page.imageRightFileLinkPage == null))
                         return false
                 }
             }
@@ -729,6 +1055,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                     return false
             }
 
+        notifyMessages(type, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_ALL_IMAGES_LOADED)
         return true
     }
 
@@ -768,112 +1095,27 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
         mGenerateImageThread.add(ImageLoadThread(type, thread, runnable))
     }
 
-    private fun removeThread(type: Pages, isEnd: Boolean = false) {
-        if (!isEnd)
-            mGenerateImageThread.filter { it.type.compareTo(type) == 0 }.forEach {
-                (it.runnable as ImageLoadRunnable).forceEnd = true
-                it.thread.interrupt()
+    private fun generateBitmap(parse: Parse, index: Int, setImage: (isDualPage: Boolean, image: Bitmap?) -> (Unit)) {
+        val image = generateBitmap(parse, index)
+        setImage(image.first, image.second)
+    }
+
+    private fun generateBitmap(parse: Parse, index: Int): Pair<Boolean, Bitmap?> {
+        return if (index == -1) Pair(false, null) else
+            try {
+                val stream: InputStream = parse.getPage(index)
+                val image  = BitmapFactory.decodeStream(stream)
+                val isDualPage = (image.width / image.height) > 0.9
+                val bitmap = Bitmap.createScaledBitmap(image, ReaderConsts.PAGESLINK.IMAGES_WIDTH, ReaderConsts.PAGESLINK.IMAGES_HEIGHT, false)
+                Util.closeInputStream(stream)
+                Pair(isDualPage, bitmap)
+            } catch (i: InterruptedIOException) {
+                mLOGGER.info("Interrupted error when generate bitmap: " + i.message)
+                Pair(false, null)
+            } catch (e: Exception) {
+                mLOGGER.info("Error when generate bitmap: " + e.message)
+                Pair(false, null)
             }
-
-        mGenerateImageThread.removeAll { it.type.compareTo(type) == 0 }
-    }
-
-    fun endThread(isIgnoreManga: Boolean = false) {
-        if (isIgnoreManga) {
-            val reloadManga = mGenerateImageThread.isNotEmpty() && mGenerateImageThread.any { it.type.compareTo(Pages.ALL) == 0 } &&
-                    !mGenerateImageThread.any { it.type.compareTo(Pages.MANGA) == 0 }
-
-            mGenerateImageThread.filter { it.type.compareTo(Pages.MANGA) != 0 }.forEach {
-                (it.runnable as ImageLoadRunnable).forceEnd = true
-                it.thread.interrupt()
-            }
-            mGenerateImageThread.removeAll { it.type.compareTo(Pages.MANGA) != 0 }
-
-            if (reloadManga)
-                reLoadImages(Pages.MANGA, isVerifyImages = true, isForced = true)
-        } else {
-            mGenerateImageThread.forEach {
-                (it.runnable as ImageLoadRunnable).forceEnd = true
-                it.thread.interrupt()
-            }
-            mGenerateImageThread.clear()
-        }
-    }
-
-    fun imageThreadLoadingProgress(): Boolean = mGenerateImageThread.isNotEmpty()
-
-    fun addImageLoadHandler(handler: Handler) {
-        mGenerateImageHandler!!.add(handler)
-    }
-
-    fun removeImageLoadHandler(handler: Handler) {
-        mGenerateImageHandler!!.remove(handler)
-    }
-
-    private fun notifyImageLoadStart(type: Pages) {
-        val message = Message()
-        message.obj = ImageLoad(null, type)
-        message.what = PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_START
-        for (h in mGenerateImageHandler!!)
-            h.sendMessage(message)
-    }
-
-    private fun notifyImageLoadAdded(index: Int?, type: Pages) {
-        val message = Message()
-        message.obj = ImageLoad(index, type)
-        message.what = PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_ADDED
-        for (h in mGenerateImageHandler!!)
-            h.sendMessage(message)
-    }
-
-    private fun notifyImageLoadRemoved(index: Int?, type: Pages) {
-        val message = Message()
-        message.obj = ImageLoad(index, type)
-        message.what = PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_REMOVED
-        for (h in mGenerateImageHandler!!)
-            h.sendMessage(message)
-    }
-
-    private fun notifyImageLoad(index: Int?, type: Pages) {
-        val message = Message()
-        message.obj = ImageLoad(index, type)
-        message.what = PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_UPDATED
-        for (h in mGenerateImageHandler!!)
-            h.sendMessage(message)
-    }
-
-    private fun notifyImageLoadFinished(type: Pages) {
-        removeThread(type, true)
-
-        val message = Message()
-        message.obj = ImageLoad(null, type)
-        message.what = PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_FINISHED
-        for (h in mGenerateImageHandler!!)
-            h.sendMessage(message)
-    }
-
-    private fun notifyErrorLoad(type: Pages) {
-        removeThread(type)
-
-        val message = Message()
-        message.obj = ImageLoad(null, type)
-        message.what = PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_LOAD_ERROR
-        for (h in mGenerateImageHandler!!)
-            h.sendMessage(message)
-    }
-
-    fun getProgress() : Pair<Int, Int> {
-        if (mGenerateImageThread.isEmpty())
-            return Pair(-1, 1)
-
-        var size = 0
-        var progress = 0
-        mGenerateImageThread.forEach {
-            size += (it.runnable as ImageLoadRunnable).size
-            progress += (it.runnable as ImageLoadRunnable).progress
-        }
-
-        return Pair(progress, size)
     }
 
     inner class ImageLoad(var index: Int?, var type: Pages)
@@ -889,7 +1131,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                 progress = 0
                 forceEnd = false
                 size = list.size
-                notifyImageLoadStart(type)
+                notifyMessages(type, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_START)
                 for ((index, page) in list.withIndex()) {
                     progress = index
                     if (reload) {
@@ -914,22 +1156,30 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
 
                     when (type) {
                         Pages.ALL -> {
-                            if (parseManga != null)
-                                page.imageMangaPage = generateBitmap(parseManga!!, page.mangaPage)
+                            if (parseManga != null) {
+                                val (isDualPage, image) = generateBitmap(parseManga!!, page.mangaPage)
+                                page.isMangaDualPage = isDualPage
+                                page.imageMangaPage = image
+                            }
 
                             if (parsePageLink != null) {
-                                page.imageLeftFileLinkPage = generateBitmap(parsePageLink!!, page.fileLinkPage)
+                                val (isDualPage, image) = generateBitmap(parsePageLink!!, page.fileLinkPage)
+                                page.imageLeftFileLinkPage = image
+                                page.isFileLeftDualPage = isDualPage
 
                                 if (page.dualImage)
-                                    page.imageRightFileLinkPage = generateBitmap(parsePageLink!!, page.fileRightLinkPage)
+                                    generateBitmap(parsePageLink!!, page.fileRightLinkPage) { IsDualPage, Image -> page.imageRightFileLinkPage = Image; page.isFileRightDualPage = IsDualPage }
                             }
                         }
-                        Pages.MANGA -> page.imageMangaPage = generateBitmap(parseManga!!, page.mangaPage)
-                        Pages.NOT_LINKED -> page.imageLeftFileLinkPage = generateBitmap(parsePageLink!!, page.fileLinkPage)
+                        Pages.MANGA -> generateBitmap(parseManga!!, page.mangaPage) { isDualPage, image -> page.imageMangaPage = image; page.isMangaDualPage = isDualPage }
+                        Pages.NOT_LINKED -> generateBitmap(parsePageLink!!, page.fileLinkPage) { isDualPage, image -> page.imageLeftFileLinkPage = image; page.isFileLeftDualPage = isDualPage }
                         Pages.LINKED -> {
-                            page.imageLeftFileLinkPage = generateBitmap(parsePageLink!!, page.fileLinkPage)
+                            val (isDualPage, image) = generateBitmap(parsePageLink!!, page.fileLinkPage)
+                            page.imageLeftFileLinkPage = image
+                            page.isFileLeftDualPage = isDualPage
+
                             if (page.dualImage)
-                                page.imageRightFileLinkPage = generateBitmap(parsePageLink!!, page.fileRightLinkPage)
+                                generateBitmap(parsePageLink!!, page.fileRightLinkPage) { IsDualPage, Image -> page.imageRightFileLinkPage = Image; page.isFileRightDualPage = IsDualPage }
                         }
                         else -> {}
                     }
@@ -937,13 +1187,13 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                     if (forceEnd)
                         break
                     else
-                        notifyImageLoad(index, type)
+                        notifyMessages(type, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_UPDATED, index)
                 }
             } catch(e: Exception) {
                 error = true
                 if (!forceEnd) {
                     mLoadError += 1
-                    notifyErrorLoad(type)
+                    notifyMessages(type, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_LOAD_ERROR)
                 }
             } finally {
                 progress = size
@@ -951,7 +1201,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                     mLoadError = 0
 
                 if (!forceEnd)
-                    notifyImageLoadFinished(type)
+                    notifyMessages(type, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_FINISHED)
             }
         }
     }
