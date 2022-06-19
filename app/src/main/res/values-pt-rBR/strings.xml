@@ -144,7 +144,7 @@
     <string name="library_menu_favorite_add">Adicionar favorito</string>
     <string name="library_menu_favorite_remove">Remover favorito</string>
     <string name="library_menu_delete">Deletar</string>
-    <string name="library_menu_delete_description">Deseja mesmo excluir o arquivo?</string>
+    <string name="library_menu_delete_description">Deseja excluir o arquivo?</string>
     <string name="library_menu_clear">Limpar histórico</string>
 
     <!-- HISTORY -->
@@ -158,6 +158,8 @@
     <string name="page_link_file_language">Linguagem do arquivo</string>
     <string name="page_link_refresh">Recarregar</string>
     <string name="page_link_save">Salvar</string>
+    <string name="page_link_delete">Deletar</string>
+    <string name="page_link_delete_description">Deseja excluir as páginas vinculadas?</string>
     <string name="page_link_load_file_wrong">Arquivo não suportado</string>
     <string name="page_link_load_error">Erro ao abrir o arquivo</string>
     <string name="page_link_saved">Salvo</string>
