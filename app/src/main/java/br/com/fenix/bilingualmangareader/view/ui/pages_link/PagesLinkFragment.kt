@@ -254,7 +254,7 @@ class PagesLinkFragment : Fragment() {
                 mSave.visibility = View.VISIBLE
                 mRefresh.visibility = View.VISIBLE
                 mButtonsGroup.visibility = View.VISIBLE
-                mHelp.visibility = View.VISIBLE
+                mHelp.visibility = if (mHelp.tag.toString().compareTo("not_used", true) == 0) View.GONE else View.VISIBLE
                 R.drawable.ic_fullscreen
             } else {
                 mFileLink.visibility = View.GONE
