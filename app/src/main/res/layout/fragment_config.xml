@@ -262,6 +262,36 @@
                     android:textColor="@color/textPrimary"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/secondary"
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginLeft="@dimen/margin"
+                android:layout_marginRight="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin_small"
+                app:dividerInsetStart="16dp"
+                app:dividerInsetEnd="16dp"/>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:textColor="@color/onSecondary"
+                android:text="@string/config_title_file_link"/>
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/switch_use_dual_page_calculate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/config_switch_use_dual_page_calculate"
+                android:textColor="@color/textPrimary"
+                app:thumbTint="@color/onSecondary" />
+
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

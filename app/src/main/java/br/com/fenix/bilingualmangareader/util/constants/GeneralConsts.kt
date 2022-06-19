@@ -87,6 +87,7 @@ class GeneralConsts private constructor() {
 
         object PAGE_LINK {
             const val USE_IN_SEARCH_TRANSLATE = "USE_PAGE_LINK_IN_SEARCH_TRANSLATE"
+            const val USE_DUAL_PAGE_CALCULATE = "USE_DUAL_PAGE_CALCULATE"
         }
     }
 

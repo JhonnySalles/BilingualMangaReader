@@ -19,6 +19,7 @@ import br.com.fenix.bilingualmangareader.model.enums.ReaderMode
 import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputLayout
 import org.slf4j.LoggerFactory
 import java.text.SimpleDateFormat
@@ -45,6 +46,8 @@ class ConfigFragment : Fragment() {
 
     private lateinit var mSystemFormatDate: TextInputLayout
     private lateinit var mSystemFormatDateAutoComplete: AutoCompleteTextView
+
+    private lateinit var mUseDualPageCalculate: SwitchMaterial
 
     private var mDateSelect: String = GeneralConsts.CONFIG.DATA_FORMAT[0]
     private val mDatePattern = GeneralConsts.CONFIG.DATA_FORMAT
@@ -82,6 +85,8 @@ class ConfigFragment : Fragment() {
 
         mSystemFormatDate = view.findViewById(R.id.txt_system_format_date)
         mSystemFormatDateAutoComplete = view.findViewById(R.id.menu_autocomplete_system_format_date)
+
+        mUseDualPageCalculate = view.findViewById(R.id.switch_use_dual_page_calculate)
 
         mLibraryPathAutoComplete.setOnClickListener {
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
@@ -281,6 +286,11 @@ class ConfigFragment : Fragment() {
                 mDateSelect
             )
 
+            this.putBoolean(
+                GeneralConsts.KEYS.PAGE_LINK.USE_DUAL_PAGE_CALCULATE,
+                mUseDualPageCalculate.isChecked
+            )
+
             this.commit()
         }
 
@@ -366,5 +376,9 @@ class ConfigFragment : Fragment() {
             false
         )
 
+        mUseDualPageCalculate.isChecked = sharedPreferences.getBoolean(
+                GeneralConsts.KEYS.PAGE_LINK.USE_DUAL_PAGE_CALCULATE,
+                false
+            )
     }
 }
