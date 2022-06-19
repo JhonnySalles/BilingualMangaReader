@@ -24,7 +24,9 @@
     <string name="config_title_sub_title">SubTitle</string>
     <string name="config_title_system">System</string>
     <string name="config_title_reader">Reader</string>
+    <string name="config_title_file_link">File link</string>
 
+    <string name="config_switch_use_dual_page_calculate">Consider double page by calculating dimensions?</string>
     <string name="config_text_library_folder">Library folder</string>
     <string name="config_text_library_order">Library order</string>
     <string name="config_text_default_subtitle_language">Default language</string>
@@ -37,7 +39,7 @@
     <string name="config_system_format_date">Date format</string>
     <string name="config_system_language">System language</string>
 
-    <string name="config_option_date_time_format_0">Defalt (%s)</string>
+    <string name="config_option_date_time_format_0">Default (%s)</string>
 
     <!-- LANGUAGE -->
     <string-array name="languages">
@@ -157,22 +159,26 @@
     <string name="page_link_manga_empty_description">Manga not selected</string>
     <string name="page_link_file">File in another language</string>
     <string name="page_link_file_language">File language</string>
-    <string name="page_link_refresh">Refresh</string>
+    <string name="page_link_refresh_file_link">Refresh file link</string>
     <string name="page_link_save">Save</string>
-    <string name="page_link_delete">Delete</string>
+    <string name="page_link_delete_file_link">Delete file link</string>
     <string name="page_link_delete_description">You want to delete linked pages?</string>
     <string name="page_link_load_file_wrong">Unsupported file</string>
     <string name="page_link_load_error">Error opening file</string>
     <string name="page_link_saved">Saved</string>
     <string name="page_link_page_not_linked">Pages not linked</string>
     <string name="page_link_refreshed">Refreshed</string>
-    <string name="page_link_auto_process">Auto process</string>
-    <string name="page_link_dual_page">Dual pages</string>
-    <string name="page_link_single_page">Single page</string>
-    <string name="page_link_reorder">Reorder</string>
+    <string name="page_link_reorder_auto">Auto reorder pages</string>
+    <string name="page_link_reorder_dual_page">Reorder dual pages</string>
+    <string name="page_link_reorder_single_page">Reorder single page</string>
+    <string name="page_link_reorder_sorted_page">Sort by pages sequence</string>
     <string name="page_link_help">Help</string>
     <string name="page_link_full_screen">Full screen</string>
-    <string name="page_link_process_ended">Process done</string>
+    <string name="page_link_process_ended">Process done.</string>
+    <string name="page_link_process_reorder_auto_done">Auto reorder pages done.</string>
+    <string name="page_link_process_reorder_dual_pages_done">Reorder double pages done.</string>
+    <string name="page_link_process_reorder_single_page_done">Reorder simple pages done.</string>
+    <string name="page_link_process_reorder_sorted_page_done">Sort by pages sequence done.</string>
 
     <!-- HELP -->
     <string name="help_content">Content</string>
