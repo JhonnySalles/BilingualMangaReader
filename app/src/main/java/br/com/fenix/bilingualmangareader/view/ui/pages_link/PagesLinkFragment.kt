@@ -5,6 +5,8 @@ import android.content.ClipData
 import android.content.ClipDescription
 import android.content.Intent
 import android.content.res.Configuration
+import android.graphics.Point
+import android.graphics.Rect
 import android.os.*
 import android.view.DragEvent
 import android.view.LayoutInflater
@@ -298,7 +300,7 @@ class PagesLinkFragment : Fragment() {
                 }
             }
 
-            override fun onDragScrolling(pointScreen: IntArray) {
+            override fun onDragScrolling(pointScreen: Point) {
                 onPageLinkScrolling(pointScreen)
             }
         }
@@ -433,11 +435,25 @@ class PagesLinkFragment : Fragment() {
         }
     }
 
-    private fun onPageLinkScrolling(pointScreen : IntArray) {
-        val (_, y) = pointScreen
-        val divider = 3
-        val padding = if (y < (mRecyclePageLink.height.toFloat() / divider)) - 150
-        else if (y > (mRecyclePageLink.height.toFloat() / divider * (divider - 1))) + 150
+    private fun onPageLinkScrolling(point: Point) {
+        val recycler = Rect()
+        mRecyclePageLink.getGlobalVisibleRect(recycler)
+
+        val space = recycler.height() / 4
+        val spaceTop = recycler.top + space
+        val spaceBottom = recycler.bottom - space
+
+        val padding = if (point.y < spaceTop) {
+            val fast = (space / 4)
+            if (point.y < (recycler.top + fast)) -600
+            else if (point.y < (recycler.top + (fast * 2))) -350
+            else -150
+        } else if (point.y > spaceBottom) {
+            val fast = (space / 4)
+            if (point.y > (recycler.bottom - fast)) +600
+            else if (point.y > (recycler.bottom - (fast * 2))) +350
+            else +150
+        }
         else 0
 
         if (padding != 0)

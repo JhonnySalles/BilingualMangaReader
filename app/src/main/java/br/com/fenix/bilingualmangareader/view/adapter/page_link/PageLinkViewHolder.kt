@@ -2,6 +2,8 @@ package br.com.fenix.bilingualmangareader.view.adapter.page_link
 
 import android.content.ClipDescription
 import android.content.res.Configuration
+import android.graphics.Point
+import android.graphics.Rect
 import android.view.DragEvent
 import android.view.View
 import android.widget.ImageView
@@ -15,6 +17,7 @@ import br.com.fenix.bilingualmangareader.model.enums.Pages
 import br.com.fenix.bilingualmangareader.service.listener.PageLinkCardListener
 import br.com.fenix.bilingualmangareader.util.constants.PageLinkConsts
 import com.google.android.material.card.MaterialCardView
+import kotlin.math.roundToInt
 
 
 class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListener) :
@@ -132,13 +135,14 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
                 }
 
                 DragEvent.ACTION_DRAG_LOCATION -> {
-                    val point = IntArray(2)
-                    view.getLocationOnScreen(point)
+                    val item = IntArray(2)
+                    view.getLocationOnScreen(item)
+                    val point = Point(item[0] + dragEvent.x.roundToInt(), item[1] + dragEvent.y.roundToInt())
                     listener.onDragScrolling(point)
                     true
                 }
 
-                DragEvent.ACTION_DRAG_EXITED  -> {
+                DragEvent.ACTION_DRAG_EXITED -> {
                     root.setBackgroundColor(itemView.context.getColor(R.color.fileLinkBackground))
                     setSelectedPageLink(page, pageRoot, dualPageRoot, isClear = true)
                     true
@@ -172,8 +176,9 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
                 }
 
                 DragEvent.ACTION_DRAG_LOCATION -> {
-                    val point = IntArray(2)
-                    view.getLocationOnScreen(point)
+                    val item = Rect()
+                    view.getGlobalVisibleRect(item)
+                    val point = Point(item.left + dragEvent.x.roundToInt(), item.top + dragEvent.y.roundToInt())
                     listener.onDragScrolling(point)
                     true
                 }
