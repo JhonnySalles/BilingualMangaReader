@@ -121,6 +121,11 @@ O aplicativo é também compatível com legendas extraidas e pré processadas co
     * Refatorado alguns icones.
     * Implementado a chamada ao App Kaku.
 * 0.2.9
+    * Otimização para o aplicativo utilizar menos memória.
+    * Otimização no carregamento das capas.
+    * Implementado a utilização da biblioteca LruCache para as imagens.
+    * Implementação de novas funcionalidades de ordenação na tela de vinculo de arquivo.
+* 0.2.10
     * Em progresso. 
 
 ### Features
@@ -158,6 +163,11 @@ O aplicativo é também compatível com legendas extraidas e pré processadas co
 - [X] Implementar a organização dos arquivos vinculados por idioma, sendo possível o vinculo de mais de um arquivo e manter a organização feita
 - [X] Implementar rastreamento de erros e logs.
 - [X] Adicionado a chamada ao aplicativo Kaku
+- [X] Implementar novas funcionalidades de ordenação na tela de vinculo de arquivo.
+- [X] Implementar ordenação de páginas simples e dupla.
+- [X] Implementar ordenação de páginas automática, utilizando o tamanho da imagem para identificar se é página dupla.
+- [X] Implementar exclusão do vinculo do arquivo.
+- [X] Ajustar o carregamento das imagens de capa, realizar otimização no aplicativo e menor consumo de memória.
 - [ ] Favoritar vocabulário para estudo posterior
 - [ ] Adição de dicionarios japonês
 - [ ] Exportar vocabularios ao Anki
