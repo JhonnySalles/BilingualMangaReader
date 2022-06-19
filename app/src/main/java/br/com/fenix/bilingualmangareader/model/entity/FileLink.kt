@@ -126,8 +126,8 @@ class FileLink(id: Long?, idManga: Long, pages: Int, path: String, name: String,
         this.name = ""
         this.type = ""
         this.folder = ""
-        this.dateCreate = LocalDateTime.now()
-        this.lastAccess = LocalDateTime.now()
+        this.dateCreate = Date()
+        this.lastAccess = Date()
         this.language = Languages.PORTUGUESE
         this.file = File("")
         this.pagesLink = null
