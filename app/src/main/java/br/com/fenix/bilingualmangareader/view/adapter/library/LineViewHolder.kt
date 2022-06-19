@@ -18,11 +18,11 @@ class LineViewHolder(itemView: View, private val listener: MangaCardListener) :
     RecyclerView.ViewHolder(itemView) {
 
     companion object {
-        lateinit var mImageCover : Bitmap
+        lateinit var mDefaultImageCover : Bitmap
     }
 
     init {
-        mImageCover = BitmapFactory.decodeResource(itemView.resources, R.mipmap.book_icon)
+        mDefaultImageCover = BitmapFactory.decodeResource(itemView.resources, R.mipmap.book_icon)
     }
 
     fun bind(manga: Manga) {
@@ -44,12 +44,8 @@ class LineViewHolder(itemView: View, private val listener: MangaCardListener) :
             true
         }
 
-        if (manga.thumbnail != null && manga.thumbnail!!.image != null)
-            mangaImage.setImageBitmap(manga.thumbnail!!.image)
-        else {
-            mangaImage.setImageBitmap(mImageCover)
-            ImageCoverController.instance.setImageCoverAsync(manga, layoutPosition)
-        }
+        mangaImage.setImageBitmap(GridViewHolder.mDefaultImageCover)
+        ImageCoverController.instance.setImageCoverAsync(manga, mangaImage)
 
         mangaTitle.text = manga.title
 

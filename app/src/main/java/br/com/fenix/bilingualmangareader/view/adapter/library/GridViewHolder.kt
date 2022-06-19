@@ -31,7 +31,7 @@ class GridViewHolder(itemView: View, private val listener: MangaCardListener) :
         var mMangaCardHeightSmall: Int = 0
         var mMangaImage: Int = 0
         var mMangaImageSmall: Int = 0
-        lateinit var mImageCover: Bitmap
+        lateinit var mDefaultImageCover: Bitmap
     }
 
     init {
@@ -44,7 +44,7 @@ class GridViewHolder(itemView: View, private val listener: MangaCardListener) :
         mMangaCardHeightSmall = itemView.resources.getDimension(R.dimen.manga_grid_card_layout_height_small).toInt()
         mMangaImageSmall = itemView.resources.getDimension(R.dimen.manga_grid_card_image_small).toInt()
         mMangaImage = itemView.resources.getDimension(R.dimen.manga_grid_card_image).toInt()
-        mImageCover = BitmapFactory.decodeResource(itemView.resources, R.mipmap.book)
+        mDefaultImageCover = BitmapFactory.decodeResource(itemView.resources, R.mipmap.book)
     }
 
     fun bind(manga: Manga) {
@@ -82,12 +82,8 @@ class GridViewHolder(itemView: View, private val listener: MangaCardListener) :
             true
         }
 
-        if (manga.thumbnail != null && manga.thumbnail!!.image != null)
-            mangaImage.setImageBitmap(manga.thumbnail!!.image)
-        else {
-            mangaImage.setImageBitmap(mImageCover)
-            ImageCoverController.instance.setImageCoverAsync(manga, layoutPosition)
-        }
+        mangaImage.setImageBitmap(mDefaultImageCover)
+        ImageCoverController.instance.setImageCoverAsync(manga, mangaImage)
 
         mangaTitle.text = manga.title
 

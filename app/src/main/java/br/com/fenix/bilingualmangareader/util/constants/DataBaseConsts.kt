@@ -120,6 +120,9 @@ class DataBaseConsts private constructor() {
             const val FILE_RIGHT_LINK_PAGE_NAME = "file_right_link_page_name"
             const val NOT_LINKED = "not_linked"
             const val DUAL_IMAGE = "dual_image"
+            const val MANGA_DUAL_PAGE = "manga_dual_page"
+            const val FILE_LEFT_DUAL_PAGE = "file_left_dual_page"
+            const val FILE_RIGHT_DUAL_PAGE = "file_right_dual_page"
         }
     }
 

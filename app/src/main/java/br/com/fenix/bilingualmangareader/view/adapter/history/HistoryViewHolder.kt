@@ -13,16 +13,17 @@ import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.service.controller.ImageCoverController
 import br.com.fenix.bilingualmangareader.service.listener.MangaCardListener
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import br.com.fenix.bilingualmangareader.view.adapter.library.GridViewHolder
 
 class HistoryViewHolder(itemView: View, private val listener: MangaCardListener) :
     RecyclerView.ViewHolder(itemView) {
 
     companion object {
-        lateinit var mImageCover: Bitmap
+        lateinit var mDefaultImageCover: Bitmap
     }
 
     init {
-        mImageCover = BitmapFactory.decodeResource(itemView.resources, R.mipmap.book_icon)
+        mDefaultImageCover = BitmapFactory.decodeResource(itemView.resources, R.mipmap.book_icon)
     }
 
     fun bind(manga: Manga) {
@@ -32,12 +33,8 @@ class HistoryViewHolder(itemView: View, private val listener: MangaCardListener)
         val cardView = itemView.findViewById<LinearLayout>(R.id.history_card)
         cardView.setOnClickListener { listener.onClick(manga) }
 
-        if (manga.thumbnail != null && manga.thumbnail!!.image != null)
-            mangaImage.setImageBitmap(manga.thumbnail!!.image)
-        else {
-            mangaImage.setImageBitmap(mImageCover)
-            ImageCoverController.instance.setImageCoverAsync(manga, layoutPosition)
-        }
+        mangaImage.setImageBitmap(GridViewHolder.mDefaultImageCover)
+        ImageCoverController.instance.setImageCoverAsync(manga, mangaImage)
 
         mangaTitle.text = manga.title
 

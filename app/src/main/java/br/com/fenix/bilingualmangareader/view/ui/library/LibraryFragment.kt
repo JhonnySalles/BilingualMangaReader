@@ -116,7 +116,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         super.onResume()
 
         Scanner.getInstance().addUpdateHandler(mUpdateHandler)
-        ImageCoverController.instance.addUpdateHandler(mUpdateHandler)
+
         if (Scanner.getInstance().isRunning())
             setIsRefreshing(true)
 
@@ -132,7 +132,6 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onPause() {
         Scanner.getInstance().removeUpdateHandler(mUpdateHandler)
-        ImageCoverController.instance.removeUpdateHandler(mUpdateHandler)
         super.onPause()
     }
 
@@ -150,10 +149,6 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                         sortList(mViewModel.save.value!!)
                         notifyDataSet()
                     }
-                }
-                GeneralConsts.SCANNER.MESSAGE_COVER_UPDATE_FINISHED -> {
-                    val idItem = msg.data.getInt(GeneralConsts.SCANNER.POSITION)
-                    notifyDataSet(idItem)
                 }
             }
         }
@@ -174,11 +169,8 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private fun refreshLibraryDelayed() {
         if (!mIsRefreshPlanned) {
             val updateRunnable = Runnable {
-                val indexes = mViewModel.updateList()
-                if (indexes.isNotEmpty()) {
-                    for (index in indexes)
-                        notifyDataSet(index, insert = true)
-                }
+                mViewModel.updateList()
+                mRecycleView.adapter?.notifyDataSetChanged()
                 mIsRefreshPlanned = false
             }
             mIsRefreshPlanned = true
@@ -504,6 +496,14 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     override fun onRefresh() {
+        if (mHandler.hasCallbacks(mDismissUpButton))
+            mHandler.removeCallbacks(mDismissUpButton)
+        if (mHandler.hasCallbacks(mDismissDownButton))
+            mHandler.removeCallbacks(mDismissDownButton)
+
+        mScrollUp.hide()
+        mScrollDown.hide()
+
         if (!Scanner.getInstance().isRunning()) {
             setIsRefreshing(true)
             Scanner.getInstance().scanLibrary()

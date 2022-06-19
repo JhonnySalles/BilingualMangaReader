@@ -37,6 +37,8 @@
     <color name="translucent_status">#6F000000</color>
     <color name="floatingButton">#546e7a</color>
     <color name="fileLinkFullScreen">#99212121</color>
+    <color name="fileLinkButtons">#55000000</color>
+    <color name="fileLinkButtonsExpanded">#AA000000</color>
 
     <color name="fileLinkBackground">#000000</color>
     <color name="fileLinkDragSelected">#79b700</color>

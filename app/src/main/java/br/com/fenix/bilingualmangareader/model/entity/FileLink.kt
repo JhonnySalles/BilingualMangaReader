@@ -119,4 +119,20 @@ class FileLink(id: Long?, idManga: Long, pages: Int, path: String, name: String,
         this.manga = manga
     }
 
+    fun clear() {
+        this.id = null
+        this.pages = 0
+        this.path = ""
+        this.name = ""
+        this.type = ""
+        this.folder = ""
+        this.dateCreate = LocalDateTime.now()
+        this.lastAccess = LocalDateTime.now()
+        this.language = Languages.PORTUGUESE
+        this.file = File("")
+        this.pagesLink = null
+        this.pagesNotLink = null
+        this.parseFileLink = null
+    }
+
 }

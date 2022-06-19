@@ -4,16 +4,12 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import br.com.fenix.bilingualmangareader.model.entity.Cover
 import br.com.fenix.bilingualmangareader.model.entity.Manga
-import br.com.fenix.bilingualmangareader.service.controller.ImageCoverController
-import br.com.fenix.bilingualmangareader.service.repository.CoverRepository
 import br.com.fenix.bilingualmangareader.service.repository.MangaRepository
 
 class LibraryViewModel(application: Application) : AndroidViewModel(application) {
 
     private val mMangaRepository: MangaRepository = MangaRepository(application.applicationContext)
-    private val mCoverRepository: CoverRepository = CoverRepository(application.applicationContext)
 
     private var mListMangas = MutableLiveData<ArrayList<Manga>>(ArrayList())
     val save: LiveData<ArrayList<Manga>> = mListMangas
@@ -23,15 +19,6 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
             obj.id = mMangaRepository.save(obj)
         else
             mMangaRepository.update(obj)
-
-        return obj
-    }
-
-    fun save(obj: Cover): Cover {
-        if (obj.id == 0L)
-            obj.id = mCoverRepository.save(obj)
-        else
-            mCoverRepository.update(obj)
 
         return obj
     }
@@ -82,16 +69,6 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    private fun updateCover() {
-        if (mListMangas.value == null || mListMangas.value!!.isEmpty())
-            return
-
-        for ((index, manga) in mListMangas.value!!.withIndex())
-            if (manga.thumbnail == null || manga.thumbnail!!.image == null)
-                ImageCoverController.instance.setImageCoverAsync(manga, index)
-    }
-
-
     fun updateList() : ArrayList<Int> {
         val indexes = arrayListOf<Int>()
         val list = mMangaRepository.list() ?: return indexes
@@ -103,16 +80,8 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
                 }
             }
         }
-        updateCover()
-        return indexes
-    }
 
-    fun list() {
-        val list = mMangaRepository.list()
-        if (list != null)
-            mListMangas.value = ArrayList(list)
-        else
-            mListMangas.value = ArrayList()
+        return indexes
     }
 
     fun list(refreshComplete: () -> (Unit)) {

@@ -16,8 +16,6 @@ import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import java.io.File
 import java.lang.ref.WeakReference
-import java.util.*
-import kotlin.collections.HashMap
 
 class Scanner {
 
@@ -90,9 +88,7 @@ class Scanner {
             h.sendEmptyMessage(GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATE_FINISHED)
     }
 
-    private fun generateCover(parse: Parse, manga: Manga) {
-        manga.thumbnail = ImageCoverController.instance.getCoverFromFile(manga.file, parse) ?: return
-    }
+    private fun generateCover(parse: Parse, manga: Manga) = ImageCoverController.instance.getCoverFromFile(manga.file, parse)
 
     private inner class LibraryUpdateRunnable : Runnable {
         override fun run() {

@@ -24,7 +24,9 @@
     <string name="config_title_sub_title">Legenda</string>
     <string name="config_title_system">Sistema</string>
     <string name="config_title_reader">Leitor</string>
+    <string name="config_title_file_link">Arquivo vinculado</string>
 
+    <string name="config_switch_use_dual_page_calculate">Considerar página dupla pelo calculo das dimensões?</string>
     <string name="config_text_library_folder">Caminho da biblioteca</string>
     <string name="config_text_library_order">Ordenação da biblioteca</string>
     <string name="config_text_default_subtitle_language">Linguagem padrão</string>
@@ -144,7 +146,7 @@
     <string name="library_menu_favorite_add">Adicionar favorito</string>
     <string name="library_menu_favorite_remove">Remover favorito</string>
     <string name="library_menu_delete">Deletar</string>
-    <string name="library_menu_delete_description">Deseja mesmo excluir o arquivo?</string>
+    <string name="library_menu_delete_description">Deseja excluir o arquivo?</string>
     <string name="library_menu_clear">Limpar histórico</string>
 
     <!-- HISTORY -->
@@ -156,12 +158,26 @@
     <string name="page_link_manga_empty_description">Manga não selecionado</string>
     <string name="page_link_file">Arquivo em outro idioma</string>
     <string name="page_link_file_language">Linguagem do arquivo</string>
-    <string name="page_link_refresh">Recarregar</string>
+    <string name="page_link_refresh_file_link">Recarregar arquivo vinculado</string>
     <string name="page_link_save">Salvar</string>
+    <string name="page_link_delete_file_link">Deletar arquivo vinculado</string>
+    <string name="page_link_delete_description">Deseja excluir as páginas vinculadas?</string>
     <string name="page_link_load_file_wrong">Arquivo não suportado</string>
     <string name="page_link_load_error">Erro ao abrir o arquivo</string>
     <string name="page_link_saved">Salvo</string>
+    <string name="page_link_page_not_linked">Páginas não vinculadas</string>
     <string name="page_link_refreshed">Recarregado</string>
+    <string name="page_link_reorder_auto">Reordenação automática</string>
+    <string name="page_link_reorder_dual_page">Ordenar página duplas</string>
+    <string name="page_link_reorder_single_page">Ordenar página única</string>
+    <string name="page_link_reorder_sorted_page">Ordenar sequência da página</string>
+    <string name="page_link_help">Ajuda</string>
+    <string name="page_link_full_screen">Full screen</string>
+    <string name="page_link_process_ended">Processo concluído.</string>
+    <string name="page_link_process_reorder_auto_done">Reordenação das páginas automatica concluída.</string>
+    <string name="page_link_process_reorder_dual_pages_done">Reordenação de páginas duplas concluída.</string>
+    <string name="page_link_process_reorder_single_page_done">Reordenação de páginas simples concluída.</string>
+    <string name="page_link_process_reorder_sorted_page_done">Ordenação pela sequência da página concluída.</string>
 
     <!-- HELP -->
     <string name="help_content">Conteúdo</string>

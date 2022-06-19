@@ -363,7 +363,7 @@ class SubTitleController private constructor(private val context: Context) {
                     var keyPage = ""
                     var pageName = ""
 
-                    var parse: Parse?
+                    val parse: Parse?
                     try {
                         parse = if (isMangaLanguage)
                             mFileLink!!.parseManga ?: ParseFactory.create(mFileLink!!.manga!!.file)

@@ -94,5 +94,29 @@ class Migrations {
                 mLOGGER.info("Completed migration 3 - 4.")
             }
         }
+
+        // Migration version 5.
+        val MIGRATION_4_5 = object : Migration(4, 5) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                mLOGGER.info("Start migration 4 - 5...")
+
+                database.execSQL("DROP TABLE IF EXISTS " + DataBaseConsts.COVER.TABLE_NAME)
+
+                mLOGGER.info("Completed migration 4 - 5.")
+            }
+        }
+
+        // Migration version 6.
+        val MIGRATION_5_6 = object : Migration(5, 6) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                mLOGGER.info("Start migration 5 - 6...")
+
+                database.execSQL("ALTER TABLE " + DataBaseConsts.PAGESLINK.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.PAGESLINK.COLUMNS.MANGA_DUAL_PAGE + " INTEGER DEFAULT 0 NOT NULL")
+                database.execSQL("ALTER TABLE " + DataBaseConsts.PAGESLINK.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.PAGESLINK.COLUMNS.FILE_LEFT_DUAL_PAGE + " INTEGER DEFAULT 0 NOT NULL")
+                database.execSQL("ALTER TABLE " + DataBaseConsts.PAGESLINK.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.PAGESLINK.COLUMNS.FILE_RIGHT_DUAL_PAGE + " INTEGER DEFAULT 0 NOT NULL")
+
+                mLOGGER.info("Completed migration 5 - 6.")
+            }
+        }
     }
 }
