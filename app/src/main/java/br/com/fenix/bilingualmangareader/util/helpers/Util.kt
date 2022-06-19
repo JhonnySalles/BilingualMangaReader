@@ -14,6 +14,7 @@ import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.util.*
 import kotlin.experimental.and
+import kotlin.random.Random.Default.nextInt
 
 class Util {
     companion object Storage {
@@ -203,6 +204,17 @@ class Util {
                 path.substringAfterLast('\\')
             else
                 path
+        }
+
+        fun normalizeNameCache(name: String): String {
+            val normalize = if (name.contains("-"))
+                name.substringBefore("-")
+            else if (name.contains(" "))
+                name.substringBefore(" ")
+            else name
+
+            val random = (0..1000).random()
+            return normalize.replace("[^\\w\\d]".toRegex(), "").trim().plus(random).lowercase()
         }
 
         fun normalizeFilePath(path: String): String {

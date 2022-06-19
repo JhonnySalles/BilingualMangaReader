@@ -10,13 +10,12 @@ import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.service.controller.ImageCoverController
 import br.com.fenix.bilingualmangareader.service.parses.Parse
 import br.com.fenix.bilingualmangareader.service.parses.ParseFactory
+import br.com.fenix.bilingualmangareader.service.parses.RarParse
 import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import java.io.File
 import java.lang.ref.WeakReference
-import java.util.*
-import kotlin.collections.HashMap
 
 class Scanner {
 
@@ -89,25 +88,27 @@ class Scanner {
             h.sendEmptyMessage(GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATE_FINISHED)
     }
 
-    private fun generateCover(parse: Parse, manga: Manga) {
-        manga.thumbnail = ImageCoverController.instance.getCoverFromFile(manga.file, parse) ?: return
-    }
+    private fun generateCover(parse: Parse, manga: Manga) = ImageCoverController.instance.getCoverFromFile(manga.file, parse)
 
     private inner class LibraryUpdateRunnable : Runnable {
         override fun run() {
             try {
                 val ctx: Context = MainActivity.getAppContext()
-                val preference: SharedPreferences = GeneralConsts.getSharedPreferences(ctx)
+                val preference: SharedPreferences = GeneralConsts.getSharedPreferences()
                 val libraryPath = preference.getString(GeneralConsts.KEYS.LIBRARY.FOLDER, "")
 
                 if (libraryPath == "" || !File(libraryPath).exists()) return
 
                 val storage = Storage(ctx)
                 val storageFiles: MutableMap<String, Manga> = HashMap()
+                val storageDeletes: MutableMap<String, Manga> = HashMap()
 
                 // create list of files available in storage
-                for (c in storage.listBook()!!)
-                    storageFiles[c.path] = c
+                for (c in storage.listMangas()!!)
+                    storageFiles[c.title] = c
+
+                for (c in storage.listDeleted()!!)
+                    storageDeletes[c.title] = c
 
                 // search and add comics if necessary
                 val file = File(libraryPath)
@@ -120,14 +121,21 @@ class Scanner {
                             it.name.endsWith(".cbr") ||
                             it.name.endsWith(".cbz")
                         ) {
-                            if (storageFiles.containsKey(it.path))
-                                storageFiles.remove(it.path)
+                            if (storageFiles.containsKey(it.name))
+                                storageFiles.remove(it.name)
                             else {
                                 val parse: Parse? = ParseFactory.create(it)
                                 try {
+                                    if (parse is RarParse) {
+                                        val cacheDir = File(GeneralConsts.getCacheDir(), GeneralConsts.CACHEFOLDER.RAR)
+                                        (parse as RarParse?)!!.setCacheDirectory(cacheDir)
+                                    }
+
                                     if (parse != null)
                                         if (parse.numPages() > 0) {
-                                            val manga = Manga(
+                                            val manga = if (storageDeletes.containsKey(it.name))
+                                                storageDeletes.getValue(it.name)
+                                            else Manga(
                                                 null,
                                                 it.name,
                                                 "",
@@ -138,6 +146,7 @@ class Scanner {
                                                 parse.numPages()
                                             )
 
+                                            manga.excluded = false
                                             generateCover(parse, manga)
                                             storage.save(manga)
                                             notifyMediaUpdated()

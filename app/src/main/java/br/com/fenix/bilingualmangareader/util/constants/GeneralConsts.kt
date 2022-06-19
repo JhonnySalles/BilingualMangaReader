@@ -2,23 +2,19 @@ package br.com.fenix.bilingualmangareader.util.constants
 
 import android.content.Context
 import android.content.SharedPreferences
+import br.com.fenix.bilingualmangareader.MainActivity
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
 class GeneralConsts private constructor() {
     companion object {
-        private lateinit var mContext: Context
-        fun setContext(context: Context) {
-            mContext = context
-        }
-
-        fun getSharedPreferences(context: Context): SharedPreferences {
-            mContext = context
-            return mContext.getSharedPreferences(KEYS.PREFERENCE_NAME, Context.MODE_PRIVATE)
+        fun getCacheDir(): File? {
+            return MainActivity.getAppContext().externalCacheDir
         }
 
         fun getSharedPreferences(): SharedPreferences {
-            return mContext.getSharedPreferences(KEYS.PREFERENCE_NAME, Context.MODE_PRIVATE)
+            return MainActivity.getAppContext().getSharedPreferences(KEYS.PREFERENCE_NAME, Context.MODE_PRIVATE)
         }
 
         fun formatterDate(dateTime: Date): String {
@@ -91,11 +87,13 @@ class GeneralConsts private constructor() {
 
         object PAGE_LINK {
             const val USE_IN_SEARCH_TRANSLATE = "USE_PAGE_LINK_IN_SEARCH_TRANSLATE"
+            const val USE_DUAL_PAGE_CALCULATE = "USE_DUAL_PAGE_CALCULATE"
         }
     }
 
     object TAG {
         const val LOG = "MangaReader"
+        const val STACKTRACE = "[STACKTRACE] "
 
         object DATABASE {
             const val INSERT = "$LOG - [DATABASE] INSERT"
@@ -110,8 +108,10 @@ class GeneralConsts private constructor() {
     }
 
     object CACHEFOLDER {
+        const val RAR = "RarTemp"
         const val COVERS = "Covers"
         const val LINKED = "Linked"
+        const val IMAGE = "Image"
         const val A = "a"
         const val B = "b"
         const val C = "c"
@@ -122,7 +122,6 @@ class GeneralConsts private constructor() {
         const val POSITION = "POSITION"
         const val MESSAGE_MANGA_UPDATE_FINISHED = 0
         const val MESSAGE_MANGA_UPDATED = 1
-        const val MESSAGE_COVER_UPDATE_FINISHED = 2
     }
 
     object REQUEST {

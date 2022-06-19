@@ -7,22 +7,22 @@ import android.text.Spanned
 import android.text.TextPaint
 import android.text.style.ClickableSpan
 import android.text.style.RelativeSizeSpan
-import android.util.Log
 import android.view.View
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.service.repository.KanjaxRepository
 import br.com.fenix.bilingualmangareader.service.repository.KanjiRepository
-import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.JapaneseCharacter
 import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog
 import com.github.javiersantos.materialstyleddialogs.enums.Style
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
+import org.slf4j.LoggerFactory
 
 
 class Formatter {
     companion object KANJI {
+        private val mLOGGER = LoggerFactory.getLogger(Formatter::class.java)
         private var mRepository: KanjaxRepository? = null
         private val mPattern = Regex(".*[\u4E00-\u9FFF].*")
         //@TargetApi(26)
@@ -58,7 +58,7 @@ class Formatter {
                         N5 = context.getColor(R.color.JLPT5)
                         VOCABULARY = context.getColor(R.color.VOCABULARY)
                     } catch (e: Exception) {
-                        Log.e(GeneralConsts.TAG.LOG, "Error in open tokenizer file." + e.message)
+                        mLOGGER.warn("Error in open tokenizer file." + e.message, e)
                     }
                 }
             }

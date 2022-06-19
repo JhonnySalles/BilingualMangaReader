@@ -13,7 +13,7 @@ class PageLinkCardAdapter : RecyclerView.Adapter<PageLinkViewHolder>() {
     private var mPageLinkList: ArrayList<PageLink> = arrayListOf()
 
     override fun onBindViewHolder(holder: PageLinkViewHolder, position: Int) {
-        holder.bind(mPageLinkList[position])
+        holder.bind(mPageLinkList[position], position)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PageLinkViewHolder {

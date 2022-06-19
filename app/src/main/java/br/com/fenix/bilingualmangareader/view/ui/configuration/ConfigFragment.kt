@@ -4,7 +4,6 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,13 +19,16 @@ import br.com.fenix.bilingualmangareader.model.enums.ReaderMode
 import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputLayout
+import org.slf4j.LoggerFactory
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 class ConfigFragment : Fragment() {
 
+    private val mLOGGER = LoggerFactory.getLogger(ConfigFragment::class.java)
     private lateinit var mLibraryPath: TextInputLayout
     private lateinit var mLibraryPathAutoComplete: AutoCompleteTextView
     private lateinit var mLibraryOrder: TextInputLayout
@@ -44,6 +46,8 @@ class ConfigFragment : Fragment() {
 
     private lateinit var mSystemFormatDate: TextInputLayout
     private lateinit var mSystemFormatDateAutoComplete: AutoCompleteTextView
+
+    private lateinit var mUseDualPageCalculate: SwitchMaterial
 
     private var mDateSelect: String = GeneralConsts.CONFIG.DATA_FORMAT[0]
     private val mDatePattern = GeneralConsts.CONFIG.DATA_FORMAT
@@ -81,6 +85,8 @@ class ConfigFragment : Fragment() {
 
         mSystemFormatDate = view.findViewById(R.id.txt_system_format_date)
         mSystemFormatDateAutoComplete = view.findViewById(R.id.menu_autocomplete_system_format_date)
+
+        mUseDualPageCalculate = view.findViewById(R.id.switch_use_dual_page_calculate)
 
         mLibraryPathAutoComplete.setOnClickListener {
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
@@ -249,7 +255,7 @@ class ConfigFragment : Fragment() {
 
     private fun saveConfig() {
         val sharedPreferences =
-            GeneralConsts.getSharedPreferences(requireContext())
+            GeneralConsts.getSharedPreferences()
         with(sharedPreferences.edit()) {
             this!!.putString(
                 GeneralConsts.KEYS.LIBRARY.FOLDER,
@@ -280,22 +286,24 @@ class ConfigFragment : Fragment() {
                 mDateSelect
             )
 
+            this.putBoolean(
+                GeneralConsts.KEYS.PAGE_LINK.USE_DUAL_PAGE_CALCULATE,
+                mUseDualPageCalculate.isChecked
+            )
+
             this.commit()
         }
 
-        Log.i(
-            GeneralConsts.TAG.LOG,
-            "Save prefer CONFIG:" + "\n[Library] Path " + mLibraryPath.editText?.text +
-                    " - Order " + mLibraryOrder.editText?.text +
-                    "\n[SubTitle] Language " + mDefaultSubtitleLanguage.editText?.text +
-                    " - Translate " + mDefaultSubtitleTranslate.editText?.text +
-                    "\n[System] Format Data " + mSystemFormatDate.editText?.text
-        )
+        mLOGGER.info("Save prefer CONFIG:" + "\n[Library] Path " + mLibraryPath.editText?.text +
+                " - Order " + mLibraryOrder.editText?.text +
+                "\n[SubTitle] Language " + mDefaultSubtitleLanguage.editText?.text +
+                " - Translate " + mDefaultSubtitleTranslate.editText?.text +
+                "\n[System] Format Data " + mSystemFormatDate.editText?.text)
 
     }
 
     private fun loadConfig() {
-        val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
+        val sharedPreferences = GeneralConsts.getSharedPreferences()
 
         mLibraryPath.editText?.setText(
             sharedPreferences.getString(
@@ -368,5 +376,9 @@ class ConfigFragment : Fragment() {
             false
         )
 
+        mUseDualPageCalculate.isChecked = sharedPreferences.getBoolean(
+                GeneralConsts.KEYS.PAGE_LINK.USE_DUAL_PAGE_CALCULATE,
+                false
+            )
     }
 }

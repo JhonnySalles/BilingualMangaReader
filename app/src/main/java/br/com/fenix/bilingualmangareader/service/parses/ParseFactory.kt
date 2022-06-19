@@ -1,15 +1,14 @@
 package br.com.fenix.bilingualmangareader.service.parses
 
-import android.util.Log
-import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
+import org.slf4j.LoggerFactory
 import java.io.File
-import java.io.IOException
 import java.util.*
 
 class ParseFactory {
 
     companion object Factory {
+        private val mLOGGER = LoggerFactory.getLogger(ParseFactory::class.java)
         fun create(file: String): Parse? {
             return create(File(file))
         }
@@ -37,7 +36,7 @@ class ParseFactory {
             try {
                 parser.parse(file)
             } catch (e: Exception) {
-                Log.e(GeneralConsts.TAG.LOG, "Error when parse: " + e.message)
+                mLOGGER.warn("Error when parse: " + e.message + " - File: " + file.name, e)
                 return null
             }
             return if (parser is DirectoryParse && parser.numPages() < 4) null else parser

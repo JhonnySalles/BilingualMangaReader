@@ -5,7 +5,6 @@ import com.github.junrar.Archive
 import com.github.junrar.exception.RarException
 import com.github.junrar.rarfile.FileHeader
 import java.io.*
-import java.util.*
 
 class RarParse : Parse {
 
@@ -19,7 +18,7 @@ class RarParse : Parse {
         mArchive = try {
             Archive(file)
         } catch (e: RarException) {
-            throw IOException("unable to open archive")
+            throw IOException("Unable to open archive")
         }
         var header = mArchive!!.nextFileHeader()
         while (header != null) {
@@ -108,7 +107,7 @@ class RarParse : Parse {
             }
             mArchive!!.getInputStream(header)
         } catch (e: RarException) {
-            throw IOException("unable to parse rar")
+            throw IOException("Unable to parse rar")
         }
     }
 
@@ -120,6 +119,7 @@ class RarParse : Parse {
             mCacheDir!!.delete()
         }
         mArchive!!.close()
+        mArchive = null
     }
 
     override fun getType(): String {
@@ -128,13 +128,12 @@ class RarParse : Parse {
 
     fun setCacheDirectory(cacheDirectory: File?) {
         mCacheDir = cacheDirectory
-        if (!mCacheDir!!.exists()) {
-            mCacheDir!!.mkdir()
-        }
+        if (!mCacheDir!!.exists())
+            mCacheDir!!.mkdirs()
+
         if (mCacheDir!!.listFiles() != null) {
-            for (f in mCacheDir?.listFiles()!!) {
+            for (f in mCacheDir?.listFiles()!!)
                 f.delete()
-            }
         }
     }
 }

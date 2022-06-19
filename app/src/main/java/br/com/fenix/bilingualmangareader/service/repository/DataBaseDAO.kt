@@ -72,25 +72,13 @@ abstract class MangaDAO : DataBaseDAO<Manga> {
     @Query("UPDATE " + DataBaseConsts.MANGA.TABLE_NAME + " SET " + DataBaseConsts.MANGA.COLUMNS.EXCLUDED + " = 1 WHERE " + DataBaseConsts.MANGA.COLUMNS.ID + " = :id")
     abstract fun delete(id: Long)
 
+    @Query("SELECT * FROM " + DataBaseConsts.MANGA.TABLE_NAME + " WHERE " + DataBaseConsts.MANGA.COLUMNS.EXCLUDED + " = 1")
+    abstract fun listDeleted(): List<Manga>
+
+    @Query("UPDATE " + DataBaseConsts.MANGA.TABLE_NAME + " SET " + DataBaseConsts.MANGA.COLUMNS.EXCLUDED + " = 0 WHERE " + DataBaseConsts.MANGA.COLUMNS.ID + " = :id")
+    abstract fun clearDelete(id: Long)
 }
 
-
-@Dao
-abstract class CoverDAO : DataBaseDAO<Cover> {
-
-    @Query("SELECT * FROM " + DataBaseConsts.COVER.TABLE_NAME + " WHERE " + DataBaseConsts.COVER.COLUMNS.FK_ID_MANGA + " = :idManga AND " + DataBaseConsts.COVER.COLUMNS.ID + " = :id")
-    abstract fun get(idManga: Long, id: Long): Cover
-
-    @Query("SELECT * FROM " + DataBaseConsts.COVER.TABLE_NAME + " WHERE " + DataBaseConsts.COVER.COLUMNS.FK_ID_MANGA + " = :idManga LIMIT 1")
-    abstract fun findFirstByIdManga(idManga: Long): Cover
-
-    @Query("SELECT * FROM " + DataBaseConsts.COVER.TABLE_NAME + " WHERE " + DataBaseConsts.COVER.COLUMNS.FK_ID_MANGA + " = :idManga")
-    abstract fun listByIdManga(idManga: Long): List<Cover>
-
-    @Query("DELETE FROM " + DataBaseConsts.COVER.TABLE_NAME + " WHERE " + DataBaseConsts.COVER.COLUMNS.FK_ID_MANGA + " = :idManga")
-    abstract fun deleteAll(idManga: Long)
-
-}
 
 @Dao
 abstract class SubTitleDAO : DataBaseDAO<SubTitle> {

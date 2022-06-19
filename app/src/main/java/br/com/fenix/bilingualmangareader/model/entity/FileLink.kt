@@ -3,7 +3,6 @@ package br.com.fenix.bilingualmangareader.model.entity
 import androidx.room.*
 import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.service.parses.Parse
-import br.com.fenix.bilingualmangareader.service.parses.ParseFactory
 import br.com.fenix.bilingualmangareader.util.constants.DataBaseConsts
 import java.io.File
 import java.io.Serializable
@@ -77,10 +76,10 @@ class FileLink(id: Long?, idManga: Long, pages: Int, path: String, name: String,
     var pagesNotLink: List<PageLink>? = null
 
     @Ignore
-    var parseManga = if (manga != null) ParseFactory.create(manga!!.path) else null
+    var parseManga: Parse? = null
 
     @Ignore
-    var parseFileLink = if (path.isNotEmpty()) ParseFactory.create(path) else null
+    var parseFileLink: Parse? = null
 
     override fun toString(): String {
         return "FileLink(id=$id, idManga=$idManga, pages=$pages, path='$path', name='$name', type='$type', folder='$folder')"
@@ -118,6 +117,22 @@ class FileLink(id: Long?, idManga: Long, pages: Int, path: String, name: String,
         idManga = manga.id?: 0
         lastAccess = Date()
         this.manga = manga
+    }
+
+    fun clear() {
+        this.id = null
+        this.pages = 0
+        this.path = ""
+        this.name = ""
+        this.type = ""
+        this.folder = ""
+        this.dateCreate = Date()
+        this.lastAccess = Date()
+        this.language = Languages.PORTUGUESE
+        this.file = File("")
+        this.pagesLink = null
+        this.pagesNotLink = null
+        this.parseFileLink = null
     }
 
 }

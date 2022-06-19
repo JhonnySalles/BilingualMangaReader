@@ -4,7 +4,7 @@ import br.com.fenix.bilingualmangareader.util.helpers.Util
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStream
-import java.util.*
+import java.nio.charset.StandardCharsets
 import java.util.zip.ZipEntry
 import java.util.zip.ZipFile
 
@@ -15,7 +15,7 @@ class ZipParse : Parse {
     private var mSubtitles: ArrayList<ZipEntry>? = null
 
     override fun parse(file: File?) {
-        mZipFile = ZipFile(file?.absolutePath)
+        mZipFile = ZipFile(file?.absolutePath, StandardCharsets.UTF_8)
         mEntries = ArrayList()
         mSubtitles = ArrayList()
         val e = mZipFile!!.entries()
