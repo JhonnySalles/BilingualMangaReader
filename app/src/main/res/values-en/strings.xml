@@ -159,6 +159,8 @@
     <string name="page_link_file_language">File language</string>
     <string name="page_link_refresh">Refresh</string>
     <string name="page_link_save">Save</string>
+    <string name="page_link_delete">Delete</string>
+    <string name="page_link_delete_description">You want to delete linked pages?</string>
     <string name="page_link_load_file_wrong">Unsupported file</string>
     <string name="page_link_load_error">Error opening file</string>
     <string name="page_link_saved">Saved</string>

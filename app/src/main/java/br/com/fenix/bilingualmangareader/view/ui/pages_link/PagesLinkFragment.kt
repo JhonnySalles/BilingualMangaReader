@@ -62,7 +62,7 @@ class PagesLinkFragment : Fragment() {
     private lateinit var mFileLinkLanguageAutoComplete: AutoCompleteTextView
     private lateinit var mContentButton: LinearLayout
     private lateinit var mSave: Button
-    private lateinit var mRefresh : MaterialButton
+    private lateinit var mRefresh: MaterialButton
     private lateinit var mFullScreen: MaterialButton
     private lateinit var mListener: PageLinkCardListener
     private lateinit var mButtonsGroup: MaterialButtonToggleGroup
@@ -71,6 +71,7 @@ class PagesLinkFragment : Fragment() {
     private lateinit var mSinglePages: MaterialButton
     private lateinit var mDualPages: MaterialButton
     private lateinit var mHelp: MaterialButton
+    private lateinit var mDelete: MaterialButton
 
     private lateinit var mMapLanguage: HashMap<String, Languages>
     private val mImageLoadHandler: Handler = ImageLoadHandler(this)
@@ -121,6 +122,7 @@ class PagesLinkFragment : Fragment() {
         mSinglePages = root.findViewById(R.id.pages_link_single_page_button)
         mDualPages = root.findViewById(R.id.pages_link_dual_page_button)
         mHelp = root.findViewById(R.id.pages_link_help_button)
+        mDelete = root.findViewById(R.id.file_link_delete_button)
         mButtonsGroupSize = mButtonsGroup.layoutParams
 
         mScrollUp.visibility = View.GONE
@@ -206,6 +208,20 @@ class PagesLinkFragment : Fragment() {
         mReorderPages.setOnClickListener { mViewModel.reorderPages()  }
         mSinglePages.setOnClickListener { mViewModel.clearDualPages() }
         mDualPages.setOnClickListener { mViewModel.generateDualPages() }
+        mDelete.setOnClickListener {
+            AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
+                .setTitle(getString(R.string.library_menu_delete))
+                .setMessage(getString(R.string.page_link_delete_description))
+                .setPositiveButton(
+                    R.string.action_positive
+                ) { _, _ ->
+                    mViewModel.delete { index, type -> notifyItemChanged(type, index)  }
+                }
+                .setNegativeButton(
+                    R.string.action_negative
+                ) { _, _ -> }
+                .create().show()
+        }
 
         mHelp.setOnClickListener {
             if (mHandler.hasCallbacks(mReduceSizeGroupButton))
@@ -487,6 +503,7 @@ class PagesLinkFragment : Fragment() {
         mDualPages.setBackgroundColor(color)
         mHelp.setBackgroundColor(color)
         mRefresh.setBackgroundColor(color)
+        mDelete.setBackgroundColor(color)
     }
 
     private fun save() {
@@ -550,7 +567,7 @@ class PagesLinkFragment : Fragment() {
         } else if (isEnding || isVerify) {
             mImageLoading.isIndeterminate = isVerify
             val progress = mViewModel.imageThreadLoadingProgress()
-            mImageLoading.visibility = if (isEnding && progress > 1 || isVerify && progress > 0)
+            mImageLoading.visibility = if (isVerify && progress > 0 || isEnding && progress > 1)
                 View.VISIBLE
             else
                 View.INVISIBLE
@@ -570,9 +587,9 @@ class PagesLinkFragment : Fragment() {
         processImageLoading(isInitial, isEnding)
 
         val enabled = if (isInitial)
-            true
+            false
         else
-            !isEnding
+            isEnding
 
         disableContent(enabled)
 
