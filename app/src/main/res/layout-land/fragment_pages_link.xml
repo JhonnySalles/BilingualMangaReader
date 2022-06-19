@@ -150,13 +150,33 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:gravity="end">
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/pages_link_help_button"
+                android:layout_width="@dimen/page_link_help_size"
+                android:layout_height="match_parent"
+                android:textColor="@color/textPrimary"
+                android:contentDescription="@string/page_link_help"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textAllCaps="false"
+                android:tag="not_used"
+                android:visibility="gone"
+                app:rippleColor="@color/secondary"
+                app:strokeWidth="0dp"
+                app:backgroundTint="@color/fileLinkFullScreen"
+                app:icon="@drawable/ic_help"
+                app:iconTint="@color/textPrimary"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
+
             <com.google.android.material.button.MaterialButtonToggleGroup
                 android:id="@+id/page_link_buttons_group"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="13dp">
+                android:layout_marginRight="5dp"
+                android:layout_gravity="center"
+                android:gravity="center">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/pages_link_auto_process_button"

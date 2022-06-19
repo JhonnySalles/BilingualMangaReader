@@ -293,6 +293,7 @@
                 android:insetBottom="0dp"
                 android:insetLeft="0dp"
                 android:textAllCaps="false"
+                android:tag="used"
                 app:rippleColor="@color/secondary"
                 app:strokeWidth="0dp"
                 app:backgroundTint="@color/fileLinkFullScreen"
