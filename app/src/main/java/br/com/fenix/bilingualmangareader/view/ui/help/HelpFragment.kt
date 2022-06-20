@@ -1,6 +1,8 @@
 package br.com.fenix.bilingualmangareader.view.ui.help
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,6 +37,9 @@ class HelpFragment : Fragment() {
     private lateinit var mLanguageSupportContent: TextView
     private lateinit var mLanguageSupportTitle: TextView
 
+    private val mDismissUpButton = Runnable { mScrollUp.hide() }
+    private var mHandler = Handler(Looper.getMainLooper())
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -48,16 +53,21 @@ class HelpFragment : Fragment() {
         mScrollView = view.findViewById(R.id.help_scroll_view)
         mScrollUp = view.findViewById(R.id.help_scroll_up)
 
-        mScrollUp.setOnClickListener {
-            mScrollUp.hide()
-            mScrollView.smoothScrollTo(0, 0)
-        }
+        mScrollUp.setOnClickListener { mScrollView.smoothScrollTo(0, 0) }
         mScrollUp.visibility = View.GONE
         mScrollView.setOnScrollChangeListener { _, _, yNew, _, yOld ->
-            if ((yNew - yOld) < -150)
+            if ((yNew - yOld) < -150) {
+                if (mHandler.hasCallbacks(mDismissUpButton))
+                    mHandler.removeCallbacks(mDismissUpButton)
+                mHandler.postDelayed(mDismissUpButton, 3000)
+
                 mScrollUp.show()
-            else if ((yNew - yOld) > 1)
+            } else if ((yNew - yOld) > 1) {
+                if (mHandler.hasCallbacks(mDismissUpButton))
+                    mHandler.removeCallbacks(mDismissUpButton)
+                
                 mScrollUp.hide()
+            }
         }
 
         mLibraryContent = view.findViewById(R.id.help_library_content)
@@ -91,5 +101,11 @@ class HelpFragment : Fragment() {
         mKanjiContent.setOnClickListener { mScrollView.smoothScrollTo(0, mKanjiTitle.top) }
         mFloatingPopupContent.setOnClickListener { mScrollView.smoothScrollTo(0, mFloatingPopupTitle.top) }
         mLanguageSupportContent.setOnClickListener { mScrollView.smoothScrollTo(0, mLanguageSupportTitle.top) }
+    }
+
+    override fun onDestroy() {
+        if (mHandler.hasCallbacks(mDismissUpButton))
+            mHandler.removeCallbacks(mDismissUpButton)
+        super.onDestroy()
     }
 }
