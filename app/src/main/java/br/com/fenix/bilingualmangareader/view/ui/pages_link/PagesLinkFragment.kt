@@ -145,23 +145,23 @@ class PagesLinkFragment : Fragment() {
 
         mRecyclePageLink.setOnScrollChangeListener { _, _, _, _, yOld ->
             if (mShowScrollButton) {
-                if (yOld > 20 && mScrollDown.visibility == View.VISIBLE) {
+                if (yOld > 20) {
                     if (mHandler.hasCallbacks(mDismissDownButton))
                         mHandler.removeCallbacks(mDismissDownButton)
 
                     mScrollDown.hide()
-                } else if (yOld < -20 && mScrollUp.visibility == View.VISIBLE) {
+                } else if (yOld < -20) {
                     if (mHandler.hasCallbacks(mDismissUpButton))
                         mHandler.removeCallbacks(mDismissUpButton)
 
                     mScrollUp.hide()
                 }
 
-                if (yOld > 200) {
+                if (yOld > 150) {
                     mHandler.removeCallbacks(mDismissUpButton)
                     mHandler.postDelayed(mDismissUpButton, 3000)
                     mScrollUp.show()
-                } else if (yOld < -200) {
+                } else if (yOld < -150) {
                     mHandler.removeCallbacks(mDismissDownButton)
                     mHandler.postDelayed(mDismissDownButton, 3000)
                     mScrollDown.show()
@@ -238,7 +238,7 @@ class PagesLinkFragment : Fragment() {
         mHelp.setOnClickListener {
             if (mHandler.hasCallbacks(mReduceSizeGroupButton))
                 mHandler.removeCallbacks(mReduceSizeGroupButton)
-            mHandler.postDelayed(mReduceSizeGroupButton, 2000)
+            mHandler.postDelayed(mReduceSizeGroupButton, 3000)
 
             mButtonsGroup.layoutParams = ConstraintLayout.LayoutParams(
                 LayoutParams.WRAP_CONTENT,

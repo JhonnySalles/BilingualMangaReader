@@ -422,7 +422,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun clearFileLink(refresh: (index: Int?, type: Pages) -> (Unit)) {
         endThread(true)
-        mFileLink.value?.clear()
+        mFileLink.value = FileLink(mManga!!, mFileLink.value!!.parseManga)
         setLanguage(isClear = true)
         mPagesNotLinked.value?.clear()
         mPagesLink.value?.forEach { page ->  page.clearFileLink() }
