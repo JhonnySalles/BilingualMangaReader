@@ -85,6 +85,7 @@
     <string name="reading_button_previus_file">Previous file</string>
 
     <string name="reading_page_index">Page index</string>
+    <string name="reading_page_empty">File has no folders</string>
 
     <string name="open_app_kaku_not_founded">App Kaku not found.</string>
 
@@ -181,12 +182,14 @@
     <string name="page_link_reorder_single_page">Reorder single page</string>
     <string name="page_link_reorder_sorted_page">Sort by pages sequence</string>
     <string name="page_link_help">Help</string>
+    <string name="page_link_page_index">Page index</string>
     <string name="page_link_full_screen">Full screen</string>
     <string name="page_link_process_ended">Process done.</string>
     <string name="page_link_process_reorder_auto_done">Auto reorder pages done.</string>
     <string name="page_link_process_reorder_dual_pages_done">Reorder double pages done.</string>
     <string name="page_link_process_reorder_single_page_done">Reorder simple pages done.</string>
     <string name="page_link_process_reorder_sorted_page_done">Sort by pages sequence done.</string>
+    <string name="page_link_select_file_page_index">Choose a file</string>
 
     <!-- HELP -->
     <string name="help_content">Content</string>
