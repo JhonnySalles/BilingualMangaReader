@@ -46,6 +46,9 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
     var path: String = path
 
     @Ignore
+    var fileName: String = title
+
+    @Ignore
     var file: File = File(path)
 
     @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.FILE_NAME)

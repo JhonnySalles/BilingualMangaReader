@@ -241,7 +241,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun getFilesNames(): Pair<String, String> {
-        val manga = mManga?.name ?: ""
+        val manga = mManga?.fileName ?: ""
         val fileLink = mFileLink.value?.name ?: ""
         return Pair(manga, fileLink)
     }

@@ -333,7 +333,7 @@ class ReaderActivity : AppCompatActivity() {
         index.setTextColor(ContextCompat.getColor(this, R.color.onSecondary))
         title.addView(index)
 
-        MaterialAlertDialogBuilder(this, R.style.AppCompatAlertDialogStyle)
+        MaterialAlertDialogBuilder(this, R.style.AppCompatAlertDialogStyleAlert)
             .setCustomTitle(title)
             .setItems(items) { _, selected ->
                 val pageNumber = paths[items[selected]]

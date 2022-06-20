@@ -599,10 +599,13 @@ class PagesLinkFragment : Fragment() {
             openMenuIndexes(true)
         else {
             val (manga, linked) = mViewModel.getFilesNames()
-            MaterialAlertDialogBuilder(requireActivity(), R.style.AppCompatAlertDialogStyle)
+            val items = arrayOf(manga, linked)
+            MaterialAlertDialogBuilder(requireActivity(), R.style.AppCompatAlertDialogStyleFileChoice)
                 .setTitle(resources.getString(R.string.page_link_select_file_page_index))
-                .setPositiveButton(manga) { _, _ -> openMenuIndexes(true) }
-                .setNegativeButton(linked) { _, _ -> openMenuIndexes(false) }
+                .setItems(items) { _, selected ->
+                    val itemSelected = items[selected]
+                    openMenuIndexes(itemSelected == manga)
+                }
                 .show()
         }
     }
