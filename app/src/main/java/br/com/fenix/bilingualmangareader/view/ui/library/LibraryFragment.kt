@@ -309,11 +309,11 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 mScrollUp.hide()
             }
 
-            if (yOld > 200) {
+            if (yOld > 180) {
                 mHandler.removeCallbacks(mDismissUpButton)
                 mHandler.postDelayed(mDismissUpButton, 3000)
                 mScrollUp.show()
-            } else if (yOld < -200) {
+            } else if (yOld < -180) {
                 mHandler.removeCallbacks(mDismissDownButton)
                 mHandler.postDelayed(mDismissDownButton, 3000)
                 mScrollDown.show()
