@@ -48,6 +48,7 @@ class ConfigFragment : Fragment() {
     private lateinit var mSystemFormatDateAutoComplete: AutoCompleteTextView
 
     private lateinit var mUseDualPageCalculate: SwitchMaterial
+    private lateinit var mUsePathNameForLinked: SwitchMaterial
 
     private var mDateSelect: String = GeneralConsts.CONFIG.DATA_FORMAT[0]
     private val mDatePattern = GeneralConsts.CONFIG.DATA_FORMAT
@@ -87,6 +88,7 @@ class ConfigFragment : Fragment() {
         mSystemFormatDateAutoComplete = view.findViewById(R.id.menu_autocomplete_system_format_date)
 
         mUseDualPageCalculate = view.findViewById(R.id.switch_use_dual_page_calculate)
+        mUsePathNameForLinked = view.findViewById(R.id.switch_use_path_name_for_linked)
 
         mLibraryPathAutoComplete.setOnClickListener {
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
@@ -291,6 +293,11 @@ class ConfigFragment : Fragment() {
                 mUseDualPageCalculate.isChecked
             )
 
+            this.putBoolean(
+                GeneralConsts.KEYS.PAGE_LINK.USE_PAGE_PATH_FOR_LINKED,
+                mUsePathNameForLinked.isChecked
+            )
+
             this.commit()
         }
 
@@ -380,5 +387,11 @@ class ConfigFragment : Fragment() {
                 GeneralConsts.KEYS.PAGE_LINK.USE_DUAL_PAGE_CALCULATE,
                 false
             )
+
+        mUsePathNameForLinked.isChecked = sharedPreferences.getBoolean(
+            GeneralConsts.KEYS.PAGE_LINK.USE_PAGE_PATH_FOR_LINKED,
+            false
+        )
+
     }
 }

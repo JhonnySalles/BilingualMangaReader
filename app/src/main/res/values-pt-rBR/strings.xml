@@ -26,6 +26,7 @@
     <string name="config_title_reader">Leitor</string>
     <string name="config_title_file_link">Arquivo vinculado</string>
 
+    <string name="config_switch_use_path_name_for_linked">Utilizar o caminho da página para vincular as páginas?</string>
     <string name="config_switch_use_dual_page_calculate">Considerar página dupla pelo calculo das dimensões?</string>
     <string name="config_text_library_folder">Caminho da biblioteca</string>
     <string name="config_text_library_order">Ordenação da biblioteca</string>
@@ -76,6 +77,10 @@
     <string name="reading_button_color">Cor da página</string>
     <string name="reading_button_file_link">Arquivo vinculado</string>
     <string name="reading_button_popup_floating">Popup flutuante</string>
+    <string name="reading_button_next_file">Próximo arquivo</string>
+    <string name="reading_button_previus_file">Arquivo anterior</string>
+
+    <string name="reading_page_index">Índice</string>
 
     <string name="open_app_kaku_not_founded">App Kaku não encontrado.</string>
 

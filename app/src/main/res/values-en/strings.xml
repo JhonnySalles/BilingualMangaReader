@@ -26,6 +26,7 @@
     <string name="config_title_reader">Reader</string>
     <string name="config_title_file_link">File link</string>
 
+    <string name="config_switch_use_path_name_for_linked">Use page path to link pages?</string>
     <string name="config_switch_use_dual_page_calculate">Consider double page by calculating dimensions?</string>
     <string name="config_text_library_folder">Library folder</string>
     <string name="config_text_library_order">Library order</string>
@@ -77,6 +78,10 @@
     <string name="reading_button_color">Pages colors</string>
     <string name="reading_button_file_link">File link</string>
     <string name="reading_button_popup_floating">Popup floating</string>
+    <string name="reading_button_next_file">Next file</string>
+    <string name="reading_button_previus_file">Previous file</string>
+
+    <string name="reading_page_index">Page index</string>
 
     <string name="open_app_kaku_not_founded">App Kaku not found.</string>
 

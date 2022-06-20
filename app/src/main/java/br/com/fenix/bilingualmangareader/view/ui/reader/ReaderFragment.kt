@@ -42,6 +42,7 @@ import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.constants.ReaderConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import br.com.fenix.bilingualmangareader.view.managers.MangaHandler
+import com.google.android.material.button.MaterialButton
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Picasso.LoadedFrom
@@ -69,6 +70,8 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
     private lateinit var mPreferences: SharedPreferences
     private lateinit var mGestureDetector: GestureDetector
     private lateinit var mViewPager: PageViewPager
+    private lateinit var mPreviousButton: MaterialButton
+    private lateinit var mNextButton: MaterialButton
 
     private var mResourceViewMode: HashMap<Int, ReaderMode>? = null
     private var mIsFullscreen = false
@@ -267,6 +270,9 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         mPopupColor = requireActivity().findViewById(R.id.menu_popup_color)
         mPageNavLayout = requireActivity().findViewById(R.id.nav_reader)
         mToolbarBottom = requireActivity().findViewById(R.id.toolbar_reader_bottom)
+        mPreviousButton = requireActivity().findViewById(R.id.nav_previous_file)
+        mNextButton = requireActivity().findViewById(R.id.nav_next_file)
+
         (mPageNavLayout.findViewById<View>(R.id.nav_reader_progress) as SeekBar).also {
             mPageSeekBar = it
         }
@@ -431,7 +437,8 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
 
         if (mManga != null)
             mSubtitleController.changeSubtitleInReader(mManga!!, mCurrentPage)
-        ReaderActivity.setSubtitle(mParse?.getPagePath(mCurrentPage)!!)
+
+        (requireActivity() as ReaderActivity).setSubtitle(mParse?.getPagePath(mCurrentPage)!!)
     }
 
     inner class ComicPagerAdapter : PagerAdapter() {
@@ -674,6 +681,8 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             mPopupColor.visibility = View.INVISIBLE
             mToolbarBottom.visibility = View.INVISIBLE
             mToolbar.visibility = View.INVISIBLE
+            mNextButton.visibility = View.INVISIBLE
+            mPreviousButton.visibility = View.INVISIBLE
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 windowInsetsController.let {
@@ -700,6 +709,8 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             mPageNavLayout.visibility = View.VISIBLE
             mToolbar.visibility = View.VISIBLE
             mToolbarBottom.visibility = View.VISIBLE
+            mNextButton.visibility = View.VISIBLE
+            mPreviousButton.visibility = View.VISIBLE
         }
     }
 
@@ -731,9 +742,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                     R.string.switch_action_positive
                 ) { _, _ ->
                     val activity = requireActivity() as ReaderActivity
-                    activity.setTitles(mNewManga!!.title, mNewManga!!.bookMark.toString())
-                    activity.setManga(mNewManga!!)
-                    activity.setFragment(create(mNewManga!!))
+                    activity.changeManga(mNewManga!!)
                 }
                 .setNegativeButton(
                     R.string.switch_action_negative

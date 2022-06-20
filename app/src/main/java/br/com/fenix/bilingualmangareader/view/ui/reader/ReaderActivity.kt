@@ -26,12 +26,15 @@ import br.com.fenix.bilingualmangareader.model.enums.ReaderMode
 import br.com.fenix.bilingualmangareader.service.controller.SubTitleController
 import br.com.fenix.bilingualmangareader.service.kanji.Formatter
 import br.com.fenix.bilingualmangareader.service.repository.MangaRepository
+import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.service.repository.SubTitleRepository
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.view.ui.pages_link.PagesLinkActivity
 import br.com.fenix.bilingualmangareader.view.ui.pages_link.PagesLinkViewModel
 import br.com.fenix.bilingualmangareader.view.ui.reader.FloatingSubtitleReader.Companion.canDrawOverlays
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
 import java.io.File
 
@@ -44,6 +47,8 @@ class ReaderActivity : AppCompatActivity() {
     private lateinit var mNavReader: LinearLayout
     private lateinit var mToolbar: Toolbar
     private lateinit var mToolbarTitle: TextView
+    private lateinit var mToolbarSubTitle: TextView
+    private lateinit var mToolbarTitleContent: LinearLayout
     private lateinit var mMenuPopupTranslate: FrameLayout
     private lateinit var mPopupTranslateView: ViewPager
     private lateinit var mMenuPopupColor: FrameLayout
@@ -59,6 +64,7 @@ class ReaderActivity : AppCompatActivity() {
 
     private lateinit var mFloatingSubtitleReader: FloatingSubtitleReader
 
+    private lateinit var mStorage: Storage
     private lateinit var mRepository: MangaRepository
     private var mManga: Manga? = null
     private var mBookMark: Int = 0
@@ -66,14 +72,8 @@ class ReaderActivity : AppCompatActivity() {
 
     companion object {
         private lateinit var mPopupTranslateTab: TabLayout
-        private lateinit var mToolbarSubTitle: TextView
         fun selectTabReader() =
             mPopupTranslateTab.selectTab(mPopupTranslateTab.getTabAt(0), true)
-
-        fun setSubtitle(text: String) {
-            if (::mToolbarSubTitle.isInitialized)
-                mToolbarSubTitle.text = text
-        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,6 +88,7 @@ class ReaderActivity : AppCompatActivity() {
         mToolbar = findViewById(R.id.toolbar_reader)
         mToolbarTitle = findViewById(R.id.toolbar_title_custom)
         mToolbarSubTitle = findViewById(R.id.toolbar_subtitle_custom)
+        mToolbarTitleContent = findViewById(R.id.toolbar_title_content)
         setSupportActionBar(mToolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(true)
 
@@ -144,6 +145,12 @@ class ReaderActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.btn_menu_page_linked).setOnClickListener { subtitle.drawPageLinked() }
+
+        mStorage = Storage(applicationContext)
+        findViewById<MaterialButton>(R.id.nav_previous_file).setOnClickListener { switchManga(false) }
+        findViewById<MaterialButton>(R.id.nav_next_file).setOnClickListener { switchManga(true) }
+
+        mToolbarTitleContent.setOnClickListener { dialogPageIndex() }
 
         mPopupTranslateTab = findViewById(R.id.popup_translate_tab)
         mPopupTranslateView = findViewById(R.id.popup_translate_view_pager)
@@ -237,13 +244,73 @@ class ReaderActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
+    private fun switchManga(isNext: Boolean = true) {
+        if (mManga == null) return
+
+        val changeManga = if (isNext)
+            mStorage.getNextManga(mManga!!)
+        else
+            mStorage.getPrevManga(mManga!!)
+
+        if (changeManga == null) return
+
+        val title = if (isNext) R.string.switch_next_comic else R.string.switch_prev_comic
+
+        val dialog: AlertDialog =
+            AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+                .setTitle(title)
+                .setMessage(changeManga.file.name)
+                .setPositiveButton(
+                    R.string.switch_action_positive
+                ) { _, _ ->
+                    changeManga(changeManga)
+                }
+                .setNegativeButton(
+                    R.string.switch_action_negative
+                ) { _, _ -> }
+                .create()
+        dialog.show()
+    }
+
+    fun changeManga(manga: Manga) {
+        setTitles(manga.title, manga.bookMark.toString())
+        setManga(manga)
+
+        val fileLink : PagesLinkViewModel by viewModels()
+        SubTitleController.getInstance(applicationContext).setFileLink(fileLink.getFileLink(manga))
+
+        setFragment(ReaderFragment.create(manga))
+    }
+
     fun setTitles(title: String, page: String) {
         mReaderTitle.text = page
         mToolbarTitle.text = title
     }
 
+    fun setSubtitle(text: String) {
+        mToolbarSubTitle.text = text
+    }
+
     fun setManga(manga: Manga) {
         mManga = manga
+    }
+
+
+    private fun dialogPageIndex() {
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.root_frame_reader)?: return
+        val parse = (currentFragment as ReaderFragment).mParse ?: return
+
+        val paths = parse.getPagePaths()
+        val items = paths.keys.toTypedArray()
+
+        MaterialAlertDialogBuilder(this, R.style.AppCompatAlertDialogStyle)
+            .setTitle(resources.getString(R.string.reading_page_index))
+            .setItems(items) { _, selected ->
+                val pageNumber = paths[items[selected]]
+                if (pageNumber != null)
+                    currentFragment.setCurrentPage(pageNumber)
+            }
+            .show()
     }
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
