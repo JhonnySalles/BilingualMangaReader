@@ -99,7 +99,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     companion object {
         private lateinit var mContext: Context
-        fun getAppContext() =
-            mContext
+        fun getAppContext() = mContext
+        fun setAppContext(context: Context) {
+            if (!::mContext.isInitialized)
+                mContext = context
+        }
     }
 }

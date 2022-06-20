@@ -31,6 +31,8 @@
 
     <dimen name="title_size">20sp</dimen>
     <dimen name="title_small_size">14sp</dimen>
+    <dimen name="title_index_dialog_size">20sp</dimen>
+    <dimen name="title_small_index_dialog_size">16sp</dimen>
 
     <dimen name="popup_reader_title">15sp</dimen>
     <dimen name="popup_reader_file_page_name">10sp</dimen>
@@ -74,8 +76,10 @@
     <dimen name="help_content_size">12sp</dimen>
     <dimen name="help_image_width">200dp</dimen>
 
+    <dimen name="page_link_page_index_title_padding">15dp</dimen>
     <dimen name="page_link_language_margin">3dp</dimen>
     <dimen name="page_link_fullscreen_size">50dp</dimen>
+    <dimen name="page_link_pages_index">55dp</dimen>
     <dimen name="page_link_help_size">50dp</dimen>
     <dimen name="page_link_fullscreen_padding">5dp</dimen>
     <dimen name="page_link_buttons_size">40dp</dimen>

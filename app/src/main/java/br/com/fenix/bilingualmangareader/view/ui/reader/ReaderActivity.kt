@@ -6,6 +6,8 @@ import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.util.TypedValue
+import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -15,6 +17,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -301,10 +304,37 @@ class ReaderActivity : AppCompatActivity() {
         val parse = (currentFragment as ReaderFragment).mParse ?: return
 
         val paths = parse.getPagePaths()
+
+        if (paths.isEmpty()) {
+            AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+                .setTitle(resources.getString(R.string.reading_page_index))
+                .setMessage(resources.getString(R.string.reading_page_empty))
+                .setNeutralButton(
+                    R.string.action_neutral
+                ) { _, _ -> }
+                .create()
+                .show()
+            return
+        }
+
         val items = paths.keys.toTypedArray()
 
+        val title = LinearLayout(this)
+        title.orientation = LinearLayout.VERTICAL
+        title.setPadding(resources.getDimensionPixelOffset(R.dimen.page_link_page_index_title_padding))
+        val name = TextView(this)
+        name.text = mToolbarTitle.text
+        name.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.title_index_dialog_size))
+        name.setTextColor(ContextCompat.getColor(this, R.color.textPrimary))
+        title.addView(name)
+        val index = TextView(this)
+        index.text = resources.getString(R.string.reading_page_index)
+        index.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.title_small_index_dialog_size))
+        index.setTextColor(ContextCompat.getColor(this, R.color.onSecondary))
+        title.addView(index)
+
         MaterialAlertDialogBuilder(this, R.style.AppCompatAlertDialogStyle)
-            .setTitle(resources.getString(R.string.reading_page_index))
+            .setCustomTitle(title)
             .setItems(items) { _, selected ->
                 val pageNumber = paths[items[selected]]
                 if (pageNumber != null)

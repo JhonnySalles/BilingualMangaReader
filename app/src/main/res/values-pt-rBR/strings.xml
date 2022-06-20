@@ -81,6 +81,7 @@
     <string name="reading_button_previus_file">Arquivo anterior</string>
 
     <string name="reading_page_index">Índice</string>
+    <string name="reading_page_empty">O arquivo não possui pastas</string>
 
     <string name="open_app_kaku_not_founded">App Kaku não encontrado.</string>
 
@@ -177,12 +178,14 @@
     <string name="page_link_reorder_single_page">Ordenar página única</string>
     <string name="page_link_reorder_sorted_page">Ordenar sequência da página</string>
     <string name="page_link_help">Ajuda</string>
+    <string name="page_link_page_index">Índice</string>
     <string name="page_link_full_screen">Full screen</string>
     <string name="page_link_process_ended">Processo concluído.</string>
     <string name="page_link_process_reorder_auto_done">Reordenação das páginas automatica concluída.</string>
     <string name="page_link_process_reorder_dual_pages_done">Reordenação de páginas duplas concluída.</string>
     <string name="page_link_process_reorder_single_page_done">Reordenação de páginas simples concluída.</string>
     <string name="page_link_process_reorder_sorted_page_done">Ordenação pela sequência da página concluída.</string>
+    <string name="page_link_select_file_page_index">Selecione um arquivo</string>
 
     <!-- HELP -->
     <string name="help_content">Conteúdo</string>
