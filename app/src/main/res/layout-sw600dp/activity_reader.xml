@@ -16,7 +16,6 @@
         android:fitsSystemWindows="false" />
 
     <RelativeLayout
-        android:id="@+id/toolbar_title_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
@@ -30,6 +29,7 @@
             app:theme="@style/ToolbarTheme">
 
             <LinearLayout
+                android:id="@+id/toolbar_title_content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentBottom="true"
