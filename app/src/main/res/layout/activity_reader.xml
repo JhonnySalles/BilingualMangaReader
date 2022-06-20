@@ -29,6 +29,7 @@
             app:theme="@style/ToolbarTheme">
 
             <LinearLayout
+                android:id="@+id/toolbar_title_content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentBottom="true"
@@ -62,8 +63,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginLeft="55dp"
+            android:layout_marginRight="55dp"
             android:layout_marginBottom="80dp"
             android:background="@drawable/reader_nav_bg"
             android:gravity="center_horizontal"
@@ -91,6 +92,59 @@
                 android:thumb="@drawable/reader_nav_thumb"
                 android:thumbOffset="6dp" />
         </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/nav_previous_file"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:textColor="@color/textPrimary"
+            android:contentDescription="@string/reading_button_previus_file"
+            android:insetLeft="0dp"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
+            android:insetBottom="0dp"
+            android:textAllCaps="false"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="85dp"
+            android:padding="0dp"
+            app:iconPadding="0dp"
+            app:iconGravity="textStart"
+            app:rippleColor="@color/secondary"
+            app:strokeWidth="0dp"
+            app:backgroundTint="@color/onPrimarySemitransparent"
+            app:icon="@drawable/ic_previous_file"
+            app:iconTint="@color/textPrimary"
+            app:iconSize="28dp"
+            app:cornerRadius="100dp"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/nav_next_file"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:textColor="@color/textPrimary"
+            android:contentDescription="@string/reading_button_next_file"
+             android:insetLeft="0dp"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
+            android:insetBottom="0dp"
+            android:textAllCaps="false"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="85dp"
+            android:padding="0dp"
+            app:iconPadding="0dp"
+            app:iconGravity="textStart"
+            app:rippleColor="@color/secondary"
+            app:strokeWidth="0dp"
+            app:backgroundTint="@color/onPrimarySemitransparent"
+            app:icon="@drawable/ic_next_file"
+            app:iconTint="@color/textPrimary"
+            app:iconSize="28dp"
+            app:cornerRadius="100dp"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
 
         <LinearLayout
             android:id="@+id/toolbar_reader_bottom"
