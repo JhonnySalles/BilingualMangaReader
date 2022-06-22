@@ -10,6 +10,9 @@
     <string name="action_scroll_up">Up</string>
     <string name="action_scroll_down">Down</string>
 
+    <string name="alert_permission_files_access_denied_title">Access denied</string>
+    <string name="alert_permission_files_access_denied">It not possible to obtain the access permissions to the informed folder, please obtain access in android settings.</string>
+
     <!-- MENU -->
     <string name="menu_search">Search</string>
     <string name="menu_help">Help</string>

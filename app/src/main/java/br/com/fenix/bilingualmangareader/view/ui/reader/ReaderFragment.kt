@@ -209,7 +209,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
                     .setTitle(getString(R.string.manga_excluded))
                     .setMessage(getString(R.string.file_not_found))
-                    .setNeutralButton(
+                    .setPositiveButton(
                         R.string.action_neutral
                     ) { _, _ -> }
                     .create()

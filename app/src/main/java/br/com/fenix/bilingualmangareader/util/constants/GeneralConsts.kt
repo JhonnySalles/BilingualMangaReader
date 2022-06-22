@@ -126,6 +126,7 @@ class GeneralConsts private constructor() {
         const val OPEN_JSON = 205
         const val OPEN_PAGE_LINK = 206
         const val OPEN_MANGA_FOLDER = 105
+        const val PERMISSION_FILES_ACCESS = 101
     }
 
 }

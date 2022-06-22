@@ -419,7 +419,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if (requestCode == 121 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+        if (requestCode == GeneralConsts.REQUEST.PERMISSION_FILES_ACCESS && grantResults[0] == PackageManager.PERMISSION_GRANTED)
             onRefresh()
     }
 
