@@ -8,6 +8,7 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import br.com.fenix.bilingualmangareader.MainActivity
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.service.controller.ImageCoverController
@@ -44,7 +45,7 @@ class LineViewHolder(itemView: View, private val listener: MangaCardListener) :
             true
         }
 
-        mangaImage.setImageBitmap(GridViewHolder.mDefaultImageCover)
+        mangaImage.setImageBitmap(mDefaultImageCover)
         ImageCoverController.instance.setImageCoverAsync(manga, mangaImage)
 
         mangaTitle.text = manga.title

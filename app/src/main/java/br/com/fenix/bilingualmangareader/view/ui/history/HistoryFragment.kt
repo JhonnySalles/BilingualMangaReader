@@ -53,7 +53,7 @@ class HistoryFragment : Fragment() {
                     AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
                             .setTitle(getString(R.string.manga_excluded))
                             .setMessage(manga.file.path)
-                            .setNeutralButton(
+                            .setPositiveButton(
                                 R.string.action_neutral
                             ) { _, _ -> }
                             .create()

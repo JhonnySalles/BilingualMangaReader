@@ -309,7 +309,7 @@ class ReaderActivity : AppCompatActivity() {
             AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
                 .setTitle(resources.getString(R.string.reading_page_index))
                 .setMessage(resources.getString(R.string.reading_page_empty))
-                .setNeutralButton(
+                .setPositiveButton(
                     R.string.action_neutral
                 ) { _, _ -> }
                 .create()
@@ -513,7 +513,7 @@ class ReaderActivity : AppCompatActivity() {
             AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
                 .setTitle(getString(R.string.page_link_manga_empty))
                 .setMessage(getString(R.string.page_link_manga_empty_description))
-                .setNeutralButton(
+                .setPositiveButton(
                     R.string.action_neutral
                 ) { _, _ -> }
                 .create()
@@ -537,7 +537,7 @@ class ReaderActivity : AppCompatActivity() {
                     AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
                         .setTitle(getString(R.string.popup_reading_subtitle_empty))
                         .setMessage(message)
-                        .setNeutralButton(
+                        .setPositiveButton(
                             R.string.action_neutral
                         ) { _, _ -> }
                         .create()
@@ -545,8 +545,6 @@ class ReaderActivity : AppCompatActivity() {
                 }
             } else
                 startManageDrawOverlaysPermission()
-
-            //startActivity(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION))
         }
     }
 
@@ -564,7 +562,7 @@ class ReaderActivity : AppCompatActivity() {
                         AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
                             .setTitle(getString(R.string.popup_reading_subtitle_empty))
                             .setMessage(message)
-                            .setNeutralButton(
+                            .setPositiveButton(
                                 R.string.action_neutral
                             ) { _, _ -> }
                             .create()

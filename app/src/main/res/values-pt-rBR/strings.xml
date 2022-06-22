@@ -10,6 +10,9 @@
     <string name="action_scroll_up">Subir</string>
     <string name="action_scroll_down">Descer</string>
 
+    <string name="alert_permission_files_access_denied_title">Acesso negado</string>
+    <string name="alert_permission_files_access_denied">Não foi possível obter a permissão de acesso a pasta informada, por favor libere o acesso na configuração do android.</string>
+
     <!-- MENU -->
     <string name="menu_search">Procurar</string>
     <string name="menu_help">Ajuda</string>

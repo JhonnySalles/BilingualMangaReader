@@ -440,7 +440,7 @@ class PagesLinkFragment : Fragment() {
                             AlertDialog.Builder(requireContext(), R.style.AppCompatAlertDialogStyle)
                                 .setTitle(msg)
                                 .setMessage(path)
-                                .setNeutralButton(
+                                .setPositiveButton(
                                     R.string.action_neutral
                                 ) { _, _ -> }
                                 .create()
@@ -623,7 +623,7 @@ class PagesLinkFragment : Fragment() {
             AlertDialog.Builder(requireContext(), R.style.AppCompatAlertDialogStyle)
                 .setTitle(resources.getString(R.string.reading_page_index))
                 .setMessage(resources.getString(R.string.reading_page_empty))
-                .setNeutralButton(
+                .setPositiveButton(
                     R.string.action_neutral
                 ) { _, _ -> }
                 .create()

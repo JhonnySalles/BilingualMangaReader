@@ -61,7 +61,7 @@ class Storage(context: Context) {
         )
 
         fun isPermissionGranted(context: Context): Boolean {
-            return if (Build.VERSION.SDK_INT == Build.VERSION_CODES.R)
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
             // Valid permission on android 10 or above
                 Environment.isExternalStorageManager()
             else {
@@ -74,7 +74,7 @@ class Storage(context: Context) {
         }
 
         fun takePermission(context: Context, activity: Activity) =
-            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.R) try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) try {
                 val intent =
                     Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
                 intent.addCategory("android.intent.category.DEFAULT")
@@ -93,7 +93,7 @@ class Storage(context: Context) {
                 ActivityCompat.requestPermissions(
                     activity,
                     EXTERNAL_PERMS,
-                    101
+                    GeneralConsts.REQUEST.PERMISSION_FILES_ACCESS
                 )
             }
     }
