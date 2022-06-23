@@ -81,8 +81,9 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     private lateinit var mRepository: MangaRepository
     private var mManga: Manga? = null
     private var mBookMark: Int = 0
-    private var mIsTabletOrLandscape: Boolean = false
+    private var mMenuPopupBottomSheet: Boolean = false
     private var mLanguageOcr: Languages? = null
+    private var mIsAlertSubtitle = false
 
     companion object {
         private lateinit var mPopupTranslateTab: TabLayout
@@ -117,7 +118,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         mMenuPopupColor = findViewById(R.id.menu_popup_color)
 
         if (findViewById<ImageView>(R.id.menu_translate_touch) == null)
-            mIsTabletOrLandscape = true
+            mMenuPopupBottomSheet = true
         else {
             mBottomSheetTranslate = BottomSheetBehavior.from(mMenuPopupTranslate).apply {
                 peekHeight = 195
@@ -140,21 +141,21 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         findViewById<ImageView>(R.id.menu_color_close).setOnClickListener {
             mMenuPopupColor.visibility = View.GONE
         }
-        findViewById<ImageView>(R.id.menu_translate_floating_touch).setOnClickListener { menuFloat() }
+        findViewById<ImageView>(R.id.menu_translate_floating_touch).setOnClickListener { openFloatingSubtitle() }
         findViewById<Button>(R.id.btn_menu_file_link).setOnClickListener { openFileLink() }
         findViewById<Button>(R.id.btn_popup_subtitle).setOnClickListener {
             mMenuPopupColor.visibility = View.GONE
-            if (!mIsTabletOrLandscape)
+            if (!mMenuPopupBottomSheet)
                 mBottomSheetTranslate.state = BottomSheetBehavior.STATE_EXPANDED
             mMenuPopupTranslate.visibility = View.VISIBLE
         }
         findViewById<Button>(R.id.btn_popup_color).setOnClickListener {
             mMenuPopupTranslate.visibility = View.GONE
-            if (!mIsTabletOrLandscape)
+            if (!mMenuPopupBottomSheet)
                 mBottomSheetColor.state = BottomSheetBehavior.STATE_EXPANDED
             mMenuPopupColor.visibility = View.VISIBLE
         }
-        findViewById<Button>(R.id.btn_popup_open_floating).setOnClickListener { menuFloat() }
+        findViewById<Button>(R.id.btn_popup_open_floating).setOnClickListener { openFloatingSubtitle() }
         findViewById<Button>(R.id.btn_screen_rotate).setOnClickListener {
             requestedOrientation = if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -454,20 +455,22 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
             R.id.view_mode_aspect_fill -> optionsSave(ReaderMode.ASPECT_FILL)
             R.id.view_mode_aspect_fit -> optionsSave(ReaderMode.ASPECT_FIT)
             R.id.view_mode_fit_width -> optionsSave(ReaderMode.FIT_WIDTH)
-            R.id.menu_item_popup_open_floating -> menuFloat()
+            R.id.menu_item_popup_open_floating -> openFloatingSubtitle()
             R.id.menu_item_reader_favorite -> changeFavorite(item)
             R.id.menu_item_popup_subtitle -> mMenuPopupTranslate.visibility =
-                if (mMenuPopupTranslate.visibility == View.INVISIBLE) {
+                if (mMenuPopupTranslate.visibility == View.GONE) {
                     mMenuPopupColor.visibility = View.GONE
-                    mBottomSheetTranslate.state = BottomSheetBehavior.STATE_EXPANDED
+                    if (!mMenuPopupBottomSheet)
+                        mBottomSheetTranslate.state = BottomSheetBehavior.STATE_EXPANDED
                     View.VISIBLE
-                } else View.INVISIBLE
+                } else View.GONE
             R.id.menu_item_popup_color -> mMenuPopupColor.visibility =
-                if (mMenuPopupTranslate.visibility == View.INVISIBLE) {
+                if (mMenuPopupTranslate.visibility == View.GONE) {
                     mMenuPopupTranslate.visibility = View.GONE
-                    mBottomSheetColor.state = BottomSheetBehavior.STATE_EXPANDED
+                    if (!mMenuPopupBottomSheet)
+                        mBottomSheetColor.state = BottomSheetBehavior.STATE_EXPANDED
                     View.VISIBLE
-                } else View.INVISIBLE
+                } else View.GONE
             R.id.menu_item_file_link -> openFileLink()
             R.id.menu_item_open_kaku -> {
                 val launchIntent = packageManager.getLaunchIntentForPackage("ca.fuwafuwa.kaku")
@@ -532,7 +535,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     }
 
     private var mSubtitleSelected: Boolean = false
-    private fun prepareMenuFloat(): Boolean {
+    private fun prepareFloatingSubtitle(): Boolean {
         val mSubTitleController = SubTitleController.getInstance(applicationContext)
 
         mSubTitleController.pageSelected.observe(this) {
@@ -577,7 +580,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
                 .show()
     }
 
-    private fun menuFloat() {
+    private fun openFloatingSubtitle() {
         mMenuPopupTranslate.visibility = View.INVISIBLE
         mMenuPopupColor.visibility = View.INVISIBLE
 
@@ -585,10 +588,9 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
             mFloatingSubtitleReader.dismiss()
         else {
             if (canDrawOverlays(applicationContext)) {
-                if (prepareMenuFloat())
-                    mFloatingSubtitleReader.show()
-                else {
-                    var message = getString(
+                if (!prepareFloatingSubtitle() && !mIsAlertSubtitle) {
+                    mIsAlertSubtitle = true
+                    val message = getString(
                         if (mSubtitleSelected) R.string.popup_reading_subtitle_selected_empty
                         else R.string.popup_reading_subtitle_embedded_empty
                     )
@@ -602,6 +604,8 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
                         .create()
                         .show()
                 }
+
+                mFloatingSubtitleReader.show()
             } else
                 startManageDrawOverlaysPermission()
         }
@@ -612,7 +616,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         when (requestCode) {
             GeneralConsts.REQUEST.PERMISSION_DRAW_OVERLAYS -> {
                 if (canDrawOverlays(applicationContext)) {
-                    if (prepareMenuFloat())
+                    if (prepareFloatingSubtitle())
                         mFloatingSubtitleReader.show()
                     else {
                         val message = getString(
@@ -714,12 +718,24 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     override fun getImage(x: Int, y: Int, width: Int, height: Int): Bitmap? {
         val currentFragment = supportFragmentManager.findFragmentById(R.id.root_frame_reader) ?: return null
         val view = (currentFragment as ReaderFragment).getCurrencyImageView() ?: return null
-        val screenshot = view.drawable.toBitmap()
-        return Bitmap.createBitmap(screenshot, x, y, width, height, null, false)
+        view.isDrawingCacheEnabled = true
+        view.buildDrawingCache()
+        val screenshot = view.drawingCache
+        val image = Bitmap.createBitmap(screenshot, x, y, width, height, null, false).copy(screenshot.config, true)
+        view.isDrawingCacheEnabled = false
+        return image
     }
 
     override fun getLanguage(): Languages {
         return mLanguageOcr ?: Languages.JAPANESE
+    }
+
+    override fun setText(text: String?) {
+        if (::mFloatingSubtitleReader.isInitialized) {
+            mIsAlertSubtitle = true
+            mFloatingSubtitleReader.updateTextOcr(text)
+            mFloatingSubtitleReader.show()
+        }
     }
 
 }

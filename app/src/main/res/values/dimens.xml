@@ -45,11 +45,12 @@
     <dimen name="popup_reader_color_filter_padding">16dp</dimen>
     <dimen name="popup_reader_blue_light_padding">10dp</dimen>
 
+    <dimen name="floating_reader_height">230dp</dimen>
+    <dimen name="floating_reader_width">340dp</dimen>
+    <dimen name="floating_reader_title">15sp</dimen>
+    <dimen name="floating_reader_text">20sp</dimen>
     <dimen name="floating_reader_button_width">25dp</dimen>
     <dimen name="floating_reader_button_close">25dp</dimen>
-    <dimen name="floating_reader_button_selector">100dp</dimen>
-    <dimen name="floating_reader_scroll_max_height">200dp</dimen>
-    <dimen name="floating_reader_scroll_max_width">300dp</dimen>
 
     <dimen name="floating_ocr_button_close">25dp</dimen>
     <dimen name="floating_ocr_language">25dp</dimen>
