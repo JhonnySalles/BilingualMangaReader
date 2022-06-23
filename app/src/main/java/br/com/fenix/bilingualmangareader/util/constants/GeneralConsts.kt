@@ -105,6 +105,7 @@ class GeneralConsts private constructor() {
     }
 
     object CACHEFOLDER {
+        const val TESSERACT = "tesseract"
         const val RAR = "RarTemp"
         const val COVERS = "Covers"
         const val LINKED = "Linked"

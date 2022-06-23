@@ -712,9 +712,24 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
     private val duration = 300L
     private fun changeContentsVisibility(isFullScreen: Boolean) {
         val visibility = if (isFullScreen) View.GONE else View.VISIBLE
-        val alpha = if (isFullScreen) 0.0f else 1.0f
+        val finalAlpha = if (isFullScreen) 0.0f else 1.0f
+        val initialAlpha = if (isFullScreen) 1.0f else 0.0f
 
-        mPageNavLayout.animate().alpha(alpha).setDuration(duration)
+        if (!isFullScreen) {
+            mPageNavLayout.visibility = visibility
+            mToolbarBottom.visibility = visibility
+            mToolbarTop.visibility = visibility
+            mNextButton.visibility = visibility
+            mPreviousButton.visibility = visibility
+
+            mPageNavLayout.alpha = initialAlpha
+            mToolbarBottom.alpha = initialAlpha
+            mToolbarTop.alpha = initialAlpha
+            mNextButton.alpha = initialAlpha
+            mPreviousButton.alpha = initialAlpha
+        }
+
+        mPageNavLayout.animate().alpha(finalAlpha).setDuration(duration)
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator?) {
                     super.onAnimationEnd(animation)
@@ -722,7 +737,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 }
             })
 
-        mToolbarBottom.animate().alpha(alpha).setDuration(duration)
+        mToolbarBottom.animate().alpha(finalAlpha).setDuration(duration)
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator?) {
                     super.onAnimationEnd(animation)
@@ -730,7 +745,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 }
             })
 
-        mToolbarTop.animate().alpha(alpha).setDuration(duration)
+        mToolbarTop.animate().alpha(finalAlpha).setDuration(duration)
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator?) {
                     super.onAnimationEnd(animation)
@@ -738,7 +753,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 }
             })
 
-        mNextButton.animate().alpha(alpha).setDuration(duration)
+        mNextButton.animate().alpha(finalAlpha).setDuration(duration)
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator?) {
                     super.onAnimationEnd(animation)
@@ -746,7 +761,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 }
             })
 
-        mPreviousButton.animate().alpha(alpha).setDuration(duration)
+        mPreviousButton.animate().alpha(finalAlpha).setDuration(duration)
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator?) {
                     super.onAnimationEnd(animation)

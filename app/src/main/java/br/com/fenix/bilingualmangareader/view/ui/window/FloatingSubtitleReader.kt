@@ -87,18 +87,23 @@ class FloatingSubtitleReader constructor(private val context: Context) {
         touchConsumedByMove
     }
 
+    private var mSubtitleContent: LinearLayout
+    private var mOcrContent: LinearLayout
+
     private var mSubTitleController: SubTitleController
     private var mScrollContent: ScrollView
     private var mLabelChapter: String
     private var mLabelPage: String
     private var mLabelText: String
     private var mSubtitleTitle: TextView
-    private var mSubtitleContent: TextView
+    private var mSubtitleText: TextView
     private var mListPageVocabulary: ListView
     private var mVocabulary: Map<String, String> = mapOf()
     private var mVocabularyItem = ArrayList<String>()
     private var mOriginalHeight: Int = 0
     private var mGestureDetector: GestureDetector
+
+    private var mOcrText: TextView
 
     private var mBtnExpanded: AppCompatImageButton
     private var mIconExpanded: Drawable?
@@ -107,39 +112,46 @@ class FloatingSubtitleReader constructor(private val context: Context) {
     init {
         with(mFloatingView) {
             mSubTitleController = SubTitleController.getInstance(context)
-            mScrollContent = this.findViewById(R.id.scr_floating)
+            mScrollContent = this.findViewById(R.id.floating_subtitle_scrooll)
             mLabelChapter = context.getString(R.string.popup_reading_subtitle_chapter)
             mLabelPage = context.getString(R.string.popup_reading_subtitle_page)
             mLabelText = context.getString(R.string.popup_reading_subtitle_text)
 
-            this.findViewById<AppCompatImageButton>(R.id.nav_close)
+            this.findViewById<AppCompatImageButton>(R.id.nav_floating_subtitle_close)
                 .setOnClickListener { dismiss() }
-            this.findViewById<AppCompatImageButton>(R.id.nav_floating_before_text)
+            this.findViewById<AppCompatImageButton>(R.id.nav_floating_subtitle_before_text)
                 .setOnClickListener { mSubTitleController.getBeforeText() }
-            this.findViewById<AppCompatImageButton>(R.id.nav_floating_next_text)
+            this.findViewById<AppCompatImageButton>(R.id.nav_floating_subtitle_next_text)
                 .setOnClickListener { mSubTitleController.getNextText() }
-            this.findViewById<AppCompatImageButton>(R.id.nav_floating_refresh)
+            this.findViewById<AppCompatImageButton>(R.id.nav_floating_subtitle_refresh)
                 .setOnClickListener { mSubTitleController.findSubtitle() }
-            this.findViewById<AppCompatImageButton>(R.id.nav_floating_draw)
+            this.findViewById<AppCompatImageButton>(R.id.nav_floating_subtitle_draw)
                 .setOnClickListener { mSubTitleController.drawSelectedText() }
-            this.findViewById<AppCompatImageButton>(R.id.nav_floating_change_language)
+            this.findViewById<AppCompatImageButton>(R.id.nav_floating_subtitle_change_language)
                 .setOnClickListener { mSubTitleController.changeLanguage() }
-            this.findViewById<AppCompatImageButton>(R.id.nav_floating_page_linked)
+            this.findViewById<AppCompatImageButton>(R.id.nav_floating_subtitle_page_linked)
                 .setOnClickListener { mSubTitleController.drawPageLinked() }
 
-            this.findViewById<AppCompatImageButton>(R.id.nav_floating_go_to_top).setOnClickListener {
+            this.findViewById<AppCompatImageButton>(R.id.nav_floating_subtitle_change_subtitle)
+                .setOnClickListener { changeLayout() }
+
+            this.findViewById<AppCompatImageButton>(R.id.nav_floating_subtitle_change_ocr)
+                .setOnClickListener { changeLayout(false) }
+
+            this.findViewById<AppCompatImageButton>(R.id.nav_floating_subtitle_go_to_top).setOnClickListener {
                 mScrollContent.smoothScrollTo(0, 0)
             }
 
             mIconExpanded = AppCompatResources.getDrawable(context, R.drawable.ic_expanded)
             mIconRetracted = AppCompatResources.getDrawable(context, R.drawable.ic_retracted)
 
-            mBtnExpanded = this.findViewById(R.id.nav_expanded)
+            mBtnExpanded = this.findViewById(R.id.nav_floating_subtitle_expanded)
             mBtnExpanded.setOnClickListener { expanded() }
 
-            mSubtitleTitle = this.findViewById(R.id.txt_floating_title)
-            mSubtitleContent = this.findViewById(R.id.txt_floating_content)
-            mListPageVocabulary = this.findViewById(R.id.list_floating_page_vocabulary)
+            mSubtitleContent = this.findViewById(R.id.floating_subtitle_subtitle_content)
+            mSubtitleTitle = this.findViewById(R.id.floating_subtitle_title)
+            mSubtitleText = this.findViewById(R.id.floating_subtitle_subtitle)
+            mListPageVocabulary = this.findViewById(R.id.floating_subtitle_list_page_vocabulary)
             mListPageVocabulary.adapter = ArrayAdapter(context, R.layout.list_item_vocabulary_small, mVocabularyItem)
             mListPageVocabulary.choiceMode = ListView.CHOICE_MODE_SINGLE
             mListPageVocabulary.isLongClickable = true
@@ -159,7 +171,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
                 true
             }
 
-            mSubtitleContent.setOnClickListener(
+            mSubtitleText.setOnClickListener(
                 DoubleClick(object : DoubleClickListener {
                     override fun onSingleClick(view: View?) {}
                     override fun onDoubleClick(view: View?) {
@@ -168,7 +180,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
                 }, 500)
             )
 
-            mSubtitleContent.setOnLongClickListener {
+            mSubtitleText.setOnLongClickListener {
                 val text = mSubTitleController.textSelected.value?.text ?: ""
                 if (text.isNotEmpty()) {
                     Toast.makeText(
@@ -184,11 +196,14 @@ class FloatingSubtitleReader constructor(private val context: Context) {
                 true
             }
 
-            mSubtitleContent.movementMethod = LinkMovementMethod.getInstance()
+            mSubtitleText.movementMethod = LinkMovementMethod.getInstance()
+
+            mOcrContent = this.findViewById(R.id.floating_subtitle_ocr_content)
+            mOcrText = this.findViewById(R.id.floating_subtitle_ocr_text)
         }
 
         mGestureDetector = GestureDetector(context, ChangeTextTouchListener())
-        mSubtitleContent.setOnTouchListener { _, motionEvent ->
+        mSubtitleText.setOnTouchListener { _, motionEvent ->
             mGestureDetector.onTouchEvent(motionEvent)
         }
         mListPageVocabulary.setOnTouchListener { _, motionEvent -> mGestureDetector.onTouchEvent(motionEvent) }
@@ -206,8 +221,8 @@ class FloatingSubtitleReader constructor(private val context: Context) {
             flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
             type = layoutType
             gravity = Gravity.TOP
-            width = WindowManager.LayoutParams.WRAP_CONTENT
-            height = WindowManager.LayoutParams.WRAP_CONTENT
+            width = context.resources.getDimension(R.dimen.floating_reader_width).toInt()
+            height = context.resources.getDimension(R.dimen.floating_reader_height).toInt()
         }
     }
 
@@ -289,7 +304,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
 
     fun updateText(text: Text?) {
         var title = ""
-        mSubtitleContent.text = ""
+        mSubtitleText.text = ""
         mScrollContent.smoothScrollTo(0, 0)
         if (text != null) {
             val index =
@@ -301,7 +316,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
                         "$mLabelPage ${mSubTitleController.pageSelected.value!!.number} - " +
                         "$mLabelText $index/${mSubTitleController.pageSelected.value?.texts?.size}"
 
-            Formatter.generateFurigana(text.text, furigana = { mSubtitleContent.text = it }, vocabularyClick = { findVocabulary(it) })
+            Formatter.generateFurigana(text.text, furigana = { mSubtitleText.text = it }, vocabularyClick = { findVocabulary(it) })
         } else if (mSubTitleController.chapterSelected.value != null && mSubTitleController.pageSelected.value != null) {
             title =
                 "$mLabelChapter ${mSubTitleController.chapterSelected.value?.chapter.toString()} - " +
@@ -310,6 +325,26 @@ class FloatingSubtitleReader constructor(private val context: Context) {
         }
 
         mSubtitleTitle.text = title
+
+        changeLayout()
+    }
+
+    fun updateTextOcr(text: String?) {
+        if (text != null) {
+            changeLayout(false)
+            Formatter.generateFurigana(text, furigana = { mOcrText.text = it }, vocabularyClick = { findVocabulary(it) })
+        } else
+            mOcrText.text = ""
+    }
+
+    fun changeLayout(isSubtitle: Boolean = true) {
+        if (isSubtitle) {
+            mSubtitleContent.visibility = View.VISIBLE
+            mOcrContent.visibility = View.GONE
+        } else {
+            mSubtitleContent.visibility = View.GONE
+            mOcrContent.visibility = View.VISIBLE
+        }
     }
 
     fun show() {

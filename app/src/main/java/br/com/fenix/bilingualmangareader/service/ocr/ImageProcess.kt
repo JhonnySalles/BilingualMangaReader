@@ -11,7 +11,7 @@ class ImageProcess {
         }
 
         fun toGrayscale(image: Bitmap): Bitmap {
-            val grayScale = Bitmap.createBitmap(image.width, image.height, Bitmap.Config.RGB_565)
+            val grayScale = Bitmap.createBitmap(image.width, image.height, Bitmap.Config.ARGB_8888)
 
             val cmGray = ColorMatrix()
             cmGray.setSaturation(0F)

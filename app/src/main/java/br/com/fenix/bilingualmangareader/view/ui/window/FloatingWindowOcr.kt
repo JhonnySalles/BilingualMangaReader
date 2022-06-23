@@ -10,8 +10,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.view.GestureDetectorCompat
 import br.com.fenix.bilingualmangareader.R
+import br.com.fenix.bilingualmangareader.model.entity.PageLink
 import br.com.fenix.bilingualmangareader.model.enums.Languages
+import br.com.fenix.bilingualmangareader.model.enums.Pages
 import br.com.fenix.bilingualmangareader.service.ocr.Tesseract
+import br.com.fenix.bilingualmangareader.service.parses.Parse
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import br.com.fenix.bilingualmangareader.view.components.OcrProcess
 import br.com.fenix.bilingualmangareader.view.components.ResizeView
@@ -127,7 +130,7 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
 
     override fun onDoubleTapEvent(e: MotionEvent?): Boolean {
         if (e?.action == MotionEvent.ACTION_DOWN)
-            processTesseract((activity as OcrProcess).getLanguage())
+            processTesseractAsync()
 
         return false
     }
@@ -155,8 +158,8 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
     override fun onResize(e: MotionEvent): Boolean {
         when (e.action) {
             MotionEvent.ACTION_DOWN -> {
-                layoutParams.width - e.rawX.toInt()
-                layoutParams.height - e.rawY.toInt()
+                mDX = layoutParams.width - e.rawX.toInt()
+                mDY = layoutParams.height - e.rawY.toInt()
                 return true
             }
             MotionEvent.ACTION_UP -> {
@@ -258,10 +261,27 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
         mFloatingView.visibility = visibility
     }
 
+    fun processTesseractAsync() {
+        try {
+            val language = (activity as OcrProcess).getLanguage()
+            val location = IntArray(2)
+            mFloatingView.getLocationOnScreen(location)
+            val image = (activity as OcrProcess).getImage(location[0], location[1], mFloatingView.width, mFloatingView.height) ?: return
+            Tesseract.getInstance(context).processAsync(language, image) {
+                (activity as OcrProcess).setText(it)
+            }
+        } catch (e: Exception) {
+            mLOGGER.error("Error when start async process tesseract: " + e.message, e)
+            e.printStackTrace()
+            null
+        }
+    }
+
+
     fun processTesseract(languages: Languages): String? {
         return try {
             val location = IntArray(2)
-            mFloatingView.getLocationInWindow(location)
+            mFloatingView.getLocationOnScreen(location)
             val image = (activity as OcrProcess).getImage(location[0], location[1], mFloatingView.width, mFloatingView.height) ?: return null
 
             val tess = Tesseract.getInstance(context)
@@ -270,6 +290,24 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
             mLOGGER.error("Error when process tesseract: " + e.message, e)
             e.printStackTrace()
             null
+        }
+    }
+
+    inner class ImageLoad(var index: Int?, var type: Pages)
+    private inner class ImageLoadThread(var type: Pages, var thread: Thread, var runnable: Runnable)
+    private inner class ImageLoadRunnable(private var parseManga: Parse?, private var parsePageLink: Parse?, private var list: ArrayList<PageLink>,
+                                          private var type: Pages, private var reload : Boolean = false, private var callEnded: () -> (Unit)) : Runnable {
+        var forceEnd: Boolean = false
+        var progress: Int = 0
+        var size: Int = 0
+
+        override fun run() {
+            var error = false
+            try {
+
+            } catch(e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 
