@@ -17,46 +17,52 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_reader"
+        <LinearLayout
+            android:id="@+id/toolbar_reader_top"
             android:layout_width="match_parent"
-            android:layout_height="?android:attr/actionBarSize"
-            android:background="@color/primarySemitransparent"
-            app:popupTheme="@style/MyDarkToolbarStyle"
-            app:theme="@style/ToolbarTheme">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/toolbar_title_content"
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar_reader"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentBottom="true"
-                android:gravity="center|start"
-                android:orientation="vertical">
+                android:layout_height="?android:attr/actionBarSize"
+                android:background="@color/primarySemitransparent"
+                app:popupTheme="@style/MyDarkToolbarStyle"
+                app:theme="@style/ToolbarTheme">
 
-                <TextView
-                    android:id="@+id/toolbar_title_custom"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:textColor="@color/onSecondary"
-                    android:textSize="@dimen/title_size" />
+                <LinearLayout
+                    android:id="@+id/toolbar_title_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="center|start"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/toolbar_subtitle_custom"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="start"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:textColor="@color/onSecondary"
-                    android:textSize="@dimen/title_small_size" />
-            </LinearLayout>
-        </androidx.appcompat.widget.Toolbar>
+                    <TextView
+                        android:id="@+id/toolbar_title_custom"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColor="@color/onSecondary"
+                        android:textSize="@dimen/title_size" />
+
+                    <TextView
+                        android:id="@+id/toolbar_subtitle_custom"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="start"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColor="@color/onSecondary"
+                        android:textSize="@dimen/title_small_size" />
+                </LinearLayout>
+            </androidx.appcompat.widget.Toolbar>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/nav_reader"
@@ -98,7 +104,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:textColor="@color/textPrimary"
-            android:contentDescription="@string/reading_button_previus_file"
+            android:contentDescription="@string/reading_button_previous_file"
             android:insetLeft="0dp"
             android:insetTop="0dp"
             android:insetRight="0dp"
@@ -155,6 +161,24 @@
             android:gravity="end"
             android:orientation="horizontal">
 
+            <LinearLayout
+                android:id="@+id/sub_toolbar"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+                <TextView
+                    android:id="@+id/ocr_language"
+                    android:layout_marginStart="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:autoLink="all"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/textPrimary"
+                    android:textSize="@dimen/floating_ocr_language_text_size" />
+            </LinearLayout>
+
             <Button
                 android:id="@+id/btn_screen_rotate"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
@@ -171,9 +195,24 @@
                 app:icon="@drawable/ic_screen_rotation"
                 app:iconTint="@color/textPrimary"
                 app:iconSize="30dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/nav_next_text"
-                app:layout_constraintTop_toTopOf="parent"
+                app:rippleColor="@color/onSecondary" />
+
+            <Button
+                android:id="@+id/btn_menu_ocr"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="@dimen/popup_reader_button_width"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:background="@color/primarySemitransparent"
+                android:contentDescription="@string/reading_button_menu_ocr"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minHeight="@dimen/popup_reader_button_min_height"
+                android:paddingLeft="@dimen/popup_reader_button_padding"
+                android:paddingRight="@dimen/popup_reader_button_padding"
+                app:icon="@drawable/ic_reader_ocr"
+                app:iconTint="@color/textPrimary"
+                app:iconSize="28dp"
                 app:rippleColor="@color/onSecondary" />
 
             <Button
@@ -192,9 +231,6 @@
                 app:icon="@drawable/ic_change_language"
                 app:iconTint="@color/textPrimary"
                 app:iconSize="30dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/nav_next_text"
-                app:layout_constraintTop_toTopOf="parent"
                 app:rippleColor="@color/onSecondary" />
 
             <Button
@@ -213,9 +249,6 @@
                 app:icon="@drawable/ic_color_settings"
                 app:iconTint="@color/textPrimary"
                 app:iconSize="33dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/nav_next_text"
-                app:layout_constraintTop_toTopOf="parent"
                 app:rippleColor="@color/onSecondary" />
 
             <Button
@@ -234,9 +267,6 @@
                 app:icon="@drawable/ic_page_linked"
                 app:iconTint="@color/textPrimary"
                 app:iconSize="33dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/nav_next_text"
-                app:layout_constraintTop_toTopOf="parent"
                 app:rippleColor="@color/onSecondary" />
 
             <Button
@@ -255,9 +285,6 @@
                 app:icon="@drawable/ic_file_link"
                 app:iconTint="@color/textPrimary"
                 app:iconSize="30dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/nav_next_text"
-                app:layout_constraintTop_toTopOf="parent"
                 app:rippleColor="@color/onSecondary" />
 
             <Button
@@ -276,9 +303,6 @@
                 app:icon="@drawable/ic_floating_window"
                 app:iconTint="@color/textPrimary"
                 app:iconSize="30dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/nav_next_text"
-                app:layout_constraintTop_toTopOf="parent"
                 app:rippleColor="@color/onSecondary" />
 
         </LinearLayout>

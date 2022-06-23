@@ -75,4 +75,7 @@ dependencies {
     implementation 'com.github.pedromassango:doubleClick:3.0'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.36'
     implementation 'com.github.tony19:logback-android:2.0.0'
+
+    implementation 'cz.adaptech:tesseract4android:4.1.1'
+    implementation 'com.google.android.gms:play-services-mlkit-text-recognition:18.0.0'
 }

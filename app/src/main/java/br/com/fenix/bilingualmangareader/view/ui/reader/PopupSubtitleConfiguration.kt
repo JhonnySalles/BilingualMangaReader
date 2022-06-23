@@ -102,14 +102,7 @@ class PopupSubtitleConfiguration : Fragment() {
                 ReaderActivity.selectTabReader()
             }
 
-
-        val languages = resources.getStringArray(R.array.languages)
-        mMapLanguage = hashMapOf(
-            languages[0] to Languages.PORTUGUESE,
-            languages[1] to Languages.ENGLISH,
-            languages[2] to Languages.JAPANESE,
-            languages[3] to Languages.PORTUGUESE_GOOGLE
-        )
+        mMapLanguage = Util.getLanguages(requireContext())
 
         mSubtitleLanguageAutoComplete.setAdapter(ArrayAdapter(requireContext(), R.layout.list_item, mMapLanguage.keys.toTypedArray()))
         mSubtitleLanguageAutoComplete.setOnClickListener {

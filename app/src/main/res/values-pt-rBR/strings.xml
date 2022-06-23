@@ -45,6 +45,8 @@
     <string name="config_option_date_time_format_0">Padrão (%s)</string>
 
     <!-- LANGUAGE -->
+    <string name="languages_choice">Selecione a linguagem</string>
+    <string name="languages_description">Linguagem</string>
     <string-array name="languages">
         <item>Português</item>
         <item>Inglês</item>
@@ -81,7 +83,8 @@
     <string name="reading_button_file_link">Arquivo vinculado</string>
     <string name="reading_button_popup_floating">Popup flutuante</string>
     <string name="reading_button_next_file">Próximo arquivo</string>
-    <string name="reading_button_previus_file">Arquivo anterior</string>
+    <string name="reading_button_previous_file">Arquivo anterior</string>
+    <string name="reading_button_menu_ocr">Menu OCR</string>
 
     <string name="reading_page_index">Índice</string>
     <string name="reading_page_empty">O arquivo não possui pastas</string>

@@ -5,7 +5,11 @@ import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.util.DisplayMetrics
+import br.com.fenix.bilingualmangareader.R
+import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.service.parses.Parse
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
@@ -14,7 +18,7 @@ import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.util.*
 import kotlin.experimental.and
-import kotlin.random.Random.Default.nextInt
+import kotlin.math.roundToInt
 
 class Util {
     companion object Storage {
@@ -137,6 +141,16 @@ class Util {
             return 1024 * 1024 * memoryClass / percentage
         }
 
+        fun dpToPx(context: Context, dp: Int): Int {
+            val displayMetrics = context.resources.displayMetrics
+            return (dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT)).roundToInt()
+        }
+
+        fun pxToDp(context: Context, px: Int): Int {
+            val displayMetrics = context.resources.displayMetrics
+            return (px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT)).roundToInt()
+        }
+
         fun toByteArray(`is`: InputStream): ByteArray? {
             val output = ByteArrayOutputStream()
             return try {
@@ -221,7 +235,7 @@ class Util {
             var folder: String = path
 
             if (folder.contains("primary"))
-                folder = folder.replaceFirst("primary", "emulated/0" )
+                folder = folder.replaceFirst("primary", "emulated/0")
 
             if (folder.contains("/tree"))
                 folder = folder.replace("/tree", "/storage").replace(":", "/")
@@ -249,8 +263,8 @@ class Util {
         }
 
         fun getFolderFromPath(path: String): String {
-             // Two validations are needed, because the rar file only has the base values, with the beginning already in the folder when it exists
-             val folder = if (path.contains('/'))
+            // Two validations are needed, because the rar file only has the base values, with the beginning already in the folder when it exists
+            val folder = if (path.contains('/'))
                 path.replaceAfterLast('/', "").substring(0, path.lastIndexOf('/'))
             else if (path.contains('\\'))
                 path.replaceAfterLast('\\', "").substring(0, path.lastIndexOf('\\'))
@@ -263,6 +277,59 @@ class Util {
                 folder.replaceBeforeLast('\\', "").replaceFirst("/", "")
             else
                 folder
+        }
+
+        var googleLang: String = ""
+        private var mapLanguages: HashMap<String, Languages>? = null
+        fun getLanguages(context: Context): HashMap<String, Languages> {
+            return if (mapLanguages != null)
+                mapLanguages!!
+            else {
+                val languages = context.resources.getStringArray(R.array.languages)
+                googleLang = languages[3]
+                mapLanguages = hashMapOf(
+                    languages[0] to Languages.PORTUGUESE,
+                    languages[1] to Languages.ENGLISH,
+                    languages[2] to Languages.JAPANESE,
+                    languages[3] to Languages.PORTUGUESE_GOOGLE
+                )
+                mapLanguages!!
+            }
+        }
+
+        fun stringToLanguage(context: Context, language: String): Languages? {
+            val mapLanguages = getLanguages(context)
+            return if (mapLanguages.containsKey(language)) mapLanguages[language] else null
+        }
+
+        fun languageToString(context: Context, language: Languages): String {
+            val mapLanguages = getLanguages(context)
+            return if (mapLanguages.containsValue(language))
+                mapLanguages.filter { language == it.value }.keys.first()
+            else
+                ""
+        }
+
+        fun choiceLanguage(
+            context: Context,
+            theme: Int = R.style.AppCompatMaterialAlertDialogStyle,
+            ignoreGoogle: Boolean = true,
+            setLanguage: (language: Languages) -> (Unit)
+        ) {
+            val mapLanguage = getLanguages(context)
+            val items = if (ignoreGoogle)
+                mapLanguage.keys.filterNot { it == googleLang }.toTypedArray()
+            else
+                mapLanguage.keys.toTypedArray()
+
+            MaterialAlertDialogBuilder(context, theme)
+                .setTitle(context.resources.getString(R.string.languages_choice))
+                .setItems(items) { _, selected ->
+                    val language = mapLanguage[items[selected]]
+                    if (language != null)
+                        setLanguage(language)
+                }
+                .show()
         }
 
     }

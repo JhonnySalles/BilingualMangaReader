@@ -49,6 +49,8 @@
 
 
     <!-- LANGUAGE -->
+    <string name="languages_choice">Select language</string>
+    <string name="languages_description">Language</string>
     <string-array name="languages">
         <item>Portuguese</item>
         <item>English</item>
@@ -85,7 +87,8 @@
     <string name="reading_button_file_link">File link</string>
     <string name="reading_button_popup_floating">Popup floating</string>
     <string name="reading_button_next_file">Next file</string>
-    <string name="reading_button_previus_file">Previous file</string>
+    <string name="reading_button_previous_file">Previous file</string>
+    <string name="reading_button_menu_ocr">Menu OCR</string>
 
     <string name="reading_page_index">Page index</string>
     <string name="reading_page_empty">File has no folders</string>
