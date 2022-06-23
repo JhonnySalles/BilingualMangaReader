@@ -15,4 +15,9 @@
         <attr name="android:layout_marginStart" />
         <attr name="furiganaSize" format="dimension" />
     </declare-styleable>
+
+    <declare-styleable name="FloatingWindowOcr">
+        <attr name="android:layout_margin" format="dimension"  />
+        <attr name="android:background" />
+    </declare-styleable>
 </resources>

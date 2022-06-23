@@ -104,13 +104,7 @@ class ConfigFragment : Fragment() {
             startActivityForResult(intent, GeneralConsts.REQUEST.OPEN_MANGA_FOLDER)
         }
 
-        val languages = resources.getStringArray(R.array.languages)
-        mMapLanguage = hashMapOf(
-            languages[0] to Languages.PORTUGUESE,
-            languages[1] to Languages.ENGLISH,
-            languages[2] to Languages.JAPANESE,
-            languages[3] to Languages.PORTUGUESE_GOOGLE
-        )
+        mMapLanguage = Util.getLanguages(requireContext())
 
         mMapOrder = hashMapOf(
             getString(R.string.config_option_order_name) to Order.Name,

@@ -51,6 +51,10 @@
     <dimen name="floating_reader_scroll_max_height">200dp</dimen>
     <dimen name="floating_reader_scroll_max_width">300dp</dimen>
 
+    <dimen name="floating_ocr_button_close">25dp</dimen>
+    <dimen name="floating_ocr_language">25dp</dimen>
+    <dimen name="floating_ocr_language_text_size">13sp</dimen>
+
     <dimen name="history_card_image">70dp</dimen>
     <dimen name="history_title_size">18sp</dimen>
     <dimen name="history_sub_title">15sp</dimen>
