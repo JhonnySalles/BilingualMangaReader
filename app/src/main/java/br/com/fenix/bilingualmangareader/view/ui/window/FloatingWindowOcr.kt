@@ -16,7 +16,7 @@ import br.com.fenix.bilingualmangareader.model.enums.Pages
 import br.com.fenix.bilingualmangareader.service.ocr.Tesseract
 import br.com.fenix.bilingualmangareader.service.parses.Parse
 import br.com.fenix.bilingualmangareader.util.helpers.Util
-import br.com.fenix.bilingualmangareader.view.components.OcrProcess
+import br.com.fenix.bilingualmangareader.service.ocr.OcrProcess
 import br.com.fenix.bilingualmangareader.view.components.ResizeView
 import br.com.fenix.bilingualmangareader.view.components.WindowListener
 import br.com.fenix.bilingualmangareader.view.components.WindowView
@@ -257,10 +257,6 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
         dismiss()
     }
 
-    fun setVisibility(visibility: Int) {
-        mFloatingView.visibility = visibility
-    }
-
     fun processTesseractAsync() {
         try {
             val language = (activity as OcrProcess).getLanguage()
@@ -272,11 +268,8 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
             }
         } catch (e: Exception) {
             mLOGGER.error("Error when start async process tesseract: " + e.message, e)
-            e.printStackTrace()
-            null
         }
     }
-
 
     fun processTesseract(languages: Languages): String? {
         return try {
@@ -288,26 +281,7 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
             tess.process(languages, image)
         } catch (e: Exception) {
             mLOGGER.error("Error when process tesseract: " + e.message, e)
-            e.printStackTrace()
             null
-        }
-    }
-
-    inner class ImageLoad(var index: Int?, var type: Pages)
-    private inner class ImageLoadThread(var type: Pages, var thread: Thread, var runnable: Runnable)
-    private inner class ImageLoadRunnable(private var parseManga: Parse?, private var parsePageLink: Parse?, private var list: ArrayList<PageLink>,
-                                          private var type: Pages, private var reload : Boolean = false, private var callEnded: () -> (Unit)) : Runnable {
-        var forceEnd: Boolean = false
-        var progress: Int = 0
-        var size: Int = 0
-
-        override fun run() {
-            var error = false
-            try {
-
-            } catch(e: Exception) {
-                e.printStackTrace()
-            }
         }
     }
 

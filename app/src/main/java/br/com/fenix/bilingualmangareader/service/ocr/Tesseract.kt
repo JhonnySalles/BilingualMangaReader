@@ -10,9 +10,12 @@ import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.FileUtil
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import com.googlecode.tesseract.android.TessBaseAPI
+import org.slf4j.LoggerFactory
 import java.io.File
 
 class Tesseract(context: Context) {
+
+    private val mLOGGER = LoggerFactory.getLogger(GoogleVision::class.java)
 
     companion object {
         fun copyTessData(context: Context) {
@@ -78,25 +81,29 @@ class Tesseract(context: Context) {
     private inner class ImageProcessRunnable(private var language: Languages, private var image: Bitmap, private var setText: Handler) : Runnable {
         private var tesseract: TessBaseAPI? = null
         override fun run() {
-            tesseract = TessBaseAPI()
-            val isInit =  when(language) {
-                Languages.PORTUGUESE -> tesseract!!.init(TESSERACT_DATA_PATH, "por")
-                Languages.ENGLISH -> tesseract!!.init(TESSERACT_DATA_PATH, "eng")
-                Languages.JAPANESE -> tesseract!!.init(TESSERACT_DATA_PATH, "jpn")
-                else -> false
-            }
-
             try {
-                if (isInit) {
-                    val grayScale = ImageProcess.processGrayscale(image)
-                    tesseract!!.setImage(grayScale)
-                    val msg = Message()
-                    msg.obj = tesseract!!.utF8Text
-                    msg.what = 1
-                    setText.sendMessage(msg)
+                tesseract = TessBaseAPI()
+                val isInit =  when(language) {
+                    Languages.PORTUGUESE -> tesseract!!.init(TESSERACT_DATA_PATH, "por")
+                    Languages.ENGLISH -> tesseract!!.init(TESSERACT_DATA_PATH, "eng")
+                    Languages.JAPANESE -> tesseract!!.init(TESSERACT_DATA_PATH, "jpn")
+                    else -> false
                 }
-            } finally {
-                tesseract!!.recycle()
+
+                try {
+                    if (isInit) {
+                        val grayScale = ImageProcess.processGrayscale(image)
+                        tesseract!!.setImage(grayScale)
+                        val msg = Message()
+                        msg.obj = tesseract!!.utF8Text
+                        msg.what = 1
+                        setText.sendMessage(msg)
+                    }
+                } finally {
+                    tesseract!!.recycle()
+                }
+            } catch (e: Exception) {
+                mLOGGER.error("Error to process Tesseract ocr image async: " + e.message, e)
             }
         }
     }

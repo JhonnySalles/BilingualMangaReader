@@ -91,7 +91,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
     private var mOcrContent: LinearLayout
 
     private var mSubTitleController: SubTitleController
-    private var mScrollContent: ScrollView
+    private var mSubtitleScrollContent: ScrollView
     private var mLabelChapter: String
     private var mLabelPage: String
     private var mLabelText: String
@@ -104,6 +104,9 @@ class FloatingSubtitleReader constructor(private val context: Context) {
     private var mGestureDetector: GestureDetector
 
     private var mOcrText: TextView
+    private var mOcrItem = ArrayList<String>()
+    private var mOcrListText: ListView
+    private var mOcrScrollContent: ScrollView
 
     private var mBtnExpanded: AppCompatImageButton
     private var mIconExpanded: Drawable?
@@ -112,7 +115,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
     init {
         with(mFloatingView) {
             mSubTitleController = SubTitleController.getInstance(context)
-            mScrollContent = this.findViewById(R.id.floating_subtitle_scrooll)
+            mSubtitleScrollContent = this.findViewById(R.id.floating_subtitle_scroll)
             mLabelChapter = context.getString(R.string.popup_reading_subtitle_chapter)
             mLabelPage = context.getString(R.string.popup_reading_subtitle_page)
             mLabelText = context.getString(R.string.popup_reading_subtitle_text)
@@ -139,7 +142,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
                 .setOnClickListener { changeLayout(false) }
 
             this.findViewById<AppCompatImageButton>(R.id.nav_floating_subtitle_go_to_top).setOnClickListener {
-                mScrollContent.smoothScrollTo(0, 0)
+                mSubtitleScrollContent.smoothScrollTo(0, 0)
             }
 
             mIconExpanded = AppCompatResources.getDrawable(context, R.drawable.ic_expanded)
@@ -200,6 +203,27 @@ class FloatingSubtitleReader constructor(private val context: Context) {
 
             mOcrContent = this.findViewById(R.id.floating_subtitle_ocr_content)
             mOcrText = this.findViewById(R.id.floating_subtitle_ocr_text)
+            mOcrScrollContent = this.findViewById(R.id.floating_subtitle_ocr_scroll)
+
+            mOcrListText = this.findViewById(R.id.floating_subtitle_ocr_list)
+            mOcrListText.adapter = ArrayAdapter(context, R.layout.list_item_vocabulary_small, mOcrItem)
+            mOcrListText.choiceMode = ListView.CHOICE_MODE_SINGLE
+            mOcrListText.isLongClickable = true
+            mOcrListText.onItemLongClickListener = OnItemLongClickListener { _, _, index, _ ->
+                if (index >= 0 && mOcrItem.size > index) {
+                    val text = mOcrItem[index]
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.action_copy) + " $text",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    val clip = ClipData.newPlainText("Copied Text", text)
+                    clipboard.setPrimaryClip(clip)
+                }
+                true
+            }
         }
 
         mGestureDetector = GestureDetector(context, ChangeTextTouchListener())
@@ -274,7 +298,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
                     return
             }
 
-            mScrollContent.smoothScrollTo(0, mListPageVocabulary.top)
+            mSubtitleScrollContent.smoothScrollTo(0, mListPageVocabulary.top)
             mListPageVocabulary.smoothScrollToPosition(index)
             mListPageVocabulary.requestFocusFromTouch()
             mListPageVocabulary.setSelection(index)
@@ -305,7 +329,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
     fun updateText(text: Text?) {
         var title = ""
         mSubtitleText.text = ""
-        mScrollContent.smoothScrollTo(0, 0)
+        mSubtitleScrollContent.smoothScrollTo(0, 0)
         if (text != null) {
             val index =
                 mSubTitleController.pageSelected.value?.texts?.indexOf(mSubTitleController.textSelected.value)
@@ -330,11 +354,24 @@ class FloatingSubtitleReader constructor(private val context: Context) {
     }
 
     fun updateTextOcr(text: String?) {
+        mOcrItem.clear()
         if (text != null) {
             changeLayout(false)
-            Formatter.generateFurigana(text, furigana = { mOcrText.text = it }, vocabularyClick = { findVocabulary(it) })
+            Formatter.generateKanjiColor(context, text) { kanji ->
+                mOcrText.text = kanji
+            }
         } else
             mOcrText.text = ""
+    }
+
+    fun updateTextOcr(text: Array<String>) {
+        mOcrText.text = ""
+        if (text != null) {
+            changeLayout(false)
+            mOcrItem.clear()
+            mOcrItem.addAll(text)
+            //Formatter.generateFurigana(text, furigana = { mOcrText.text = it }, vocabularyClick = { findVocabulary(it) })
+        }
     }
 
     fun changeLayout(isSubtitle: Boolean = true) {

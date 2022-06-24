@@ -36,7 +36,7 @@ import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.service.repository.SubTitleRepository
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
-import br.com.fenix.bilingualmangareader.view.components.OcrProcess
+import br.com.fenix.bilingualmangareader.service.ocr.OcrProcess
 import br.com.fenix.bilingualmangareader.view.ui.pages_link.PagesLinkActivity
 import br.com.fenix.bilingualmangareader.view.ui.pages_link.PagesLinkViewModel
 import br.com.fenix.bilingualmangareader.view.ui.window.FloatingSubtitleReader
@@ -706,7 +706,9 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
 
     private fun openGoogleVisionOcr() {
         val image = getImage() ?: return
-        GoogleVision.getInstance(this).process(image)
+        GoogleVision.getInstance().process(image) {
+
+        }
     }
 
     override fun getImage(): Bitmap? {
@@ -731,6 +733,14 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     }
 
     override fun setText(text: String?) {
+        if (::mFloatingSubtitleReader.isInitialized) {
+            mIsAlertSubtitle = true
+            mFloatingSubtitleReader.updateTextOcr(text)
+            mFloatingSubtitleReader.show()
+        }
+    }
+
+    override fun setText(text: Array<String>) {
         if (::mFloatingSubtitleReader.isInitialized) {
             mIsAlertSubtitle = true
             mFloatingSubtitleReader.updateTextOcr(text)
