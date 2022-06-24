@@ -39,6 +39,7 @@
     <color name="fileLinkFullScreen">#99212121</color>
     <color name="fileLinkButtons">#55000000</color>
     <color name="fileLinkButtonsExpanded">#AA000000</color>
+    <color name="floatingList">#66000000</color>
 
     <color name="fileLinkBackground">#000000</color>
     <color name="fileLinkDragSelected">#79b700</color>
