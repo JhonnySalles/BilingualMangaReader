@@ -12,6 +12,7 @@ import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import br.com.fenix.bilingualmangareader.model.entity.Manga
+import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import java.util.*
 
 class Storage(context: Context) {
