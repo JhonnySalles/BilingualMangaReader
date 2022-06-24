@@ -53,7 +53,7 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
 
         mPageLinkRightSelectStroke  = itemView.resources.getDimension(R.dimen.dual_page_link_card_selected_stroke).toInt()
 
-        mUsePagePath = GeneralConsts.getSharedPreferences().getBoolean(GeneralConsts.KEYS.PAGE_LINK.USE_PAGE_PATH_FOR_LINKED, false)
+        mUsePagePath = GeneralConsts.getSharedPreferences(itemView.context).getBoolean(GeneralConsts.KEYS.PAGE_LINK.USE_PAGE_PATH_FOR_LINKED, false)
     }
 
     fun bind(page: PageLink, position: Int) {

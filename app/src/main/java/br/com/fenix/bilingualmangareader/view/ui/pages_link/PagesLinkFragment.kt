@@ -215,7 +215,7 @@ class PagesLinkFragment : Fragment() {
                 mViewModel.setLanguage(language)
             }
 
-        mUseDualPageCalculate = GeneralConsts.getSharedPreferences().getBoolean(GeneralConsts.KEYS.PAGE_LINK.USE_DUAL_PAGE_CALCULATE, false)
+        mUseDualPageCalculate = GeneralConsts.getSharedPreferences(requireContext()).getBoolean(GeneralConsts.KEYS.PAGE_LINK.USE_DUAL_PAGE_CALCULATE, false)
 
         mSave.setOnClickListener { save() }
         mRefresh.setOnClickListener { refresh() }

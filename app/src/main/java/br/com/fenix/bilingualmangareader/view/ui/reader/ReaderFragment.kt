@@ -222,7 +222,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             mPagerAdapter = ComicPagerAdapter()
             mGestureDetector = GestureDetector(requireActivity(), MyTouchListener())
 
-            mPreferences = GeneralConsts.getSharedPreferences()
+            mPreferences = GeneralConsts.getSharedPreferences(requireContext())
             mReaderMode = ReaderMode.valueOf(
                 mPreferences.getString(
                     GeneralConsts.KEYS.READER.READER_MODE,

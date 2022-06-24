@@ -9,12 +9,12 @@ import java.time.format.DateTimeFormatter
 
 class GeneralConsts private constructor() {
     companion object {
-        fun getCacheDir(): File? {
-            return MainActivity.getAppContext().externalCacheDir
+        fun getCacheDir(context: Context): File? {
+            return context.externalCacheDir
         }
 
-        fun getSharedPreferences(): SharedPreferences {
-            return MainActivity.getAppContext().getSharedPreferences(KEYS.PREFERENCE_NAME, Context.MODE_PRIVATE)
+        fun getSharedPreferences(context: Context): SharedPreferences {
+            return context.getSharedPreferences(KEYS.PREFERENCE_NAME, Context.MODE_PRIVATE)
         }
 
         fun formatterDate(dateTime: LocalDateTime): String {

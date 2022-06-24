@@ -34,7 +34,7 @@ class HistoryViewHolder(itemView: View, private val listener: MangaCardListener)
         cardView.setOnClickListener { listener.onClick(manga) }
 
         mangaImage.setImageBitmap(GridViewHolder.mDefaultImageCover)
-        ImageCoverController.instance.setImageCoverAsync(manga, mangaImage)
+        ImageCoverController.instance.setImageCoverAsync(itemView.context, manga, mangaImage)
 
         mangaTitle.text = manga.title
 
@@ -42,6 +42,7 @@ class HistoryViewHolder(itemView: View, private val listener: MangaCardListener)
             val title = if (manga.lastAccess != null)
                 "${manga.bookMark} / ${manga.pages}  -  ${itemView.resources.getString(R.string.library_last_access)}: ${
                     GeneralConsts.formatterDateTime(
+                        itemView.context, 
                         manga.lastAccess!!
                     )
                 }"

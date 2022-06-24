@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import android.os.Handler
 import android.os.Message
 import android.os.Process
-import br.com.fenix.bilingualmangareader.MainActivity
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.service.controller.ImageCoverController
 import br.com.fenix.bilingualmangareader.service.parses.Parse
@@ -17,7 +16,7 @@ import br.com.fenix.bilingualmangareader.util.helpers.Util
 import java.io.File
 import java.lang.ref.WeakReference
 
-class Scanner {
+class Scanner(private val context: Context) {
 
     private var mUpdateHandler: MutableList<Handler>? = ArrayList()
     private var mUpdateThread: Thread? = null
@@ -38,10 +37,10 @@ class Scanner {
     // Singleton - One thread initialize only
     companion object {
         private lateinit var INSTANCE: Scanner
-        fun getInstance(): Scanner {
+        fun getInstance(context: Context): Scanner {
             if (!::INSTANCE.isInitialized)
                 synchronized(Scanner::class.java) { // Used for a two or many cores
-                    INSTANCE = Scanner()
+                    INSTANCE = Scanner(context)
                 }
             return INSTANCE
         }
@@ -88,18 +87,17 @@ class Scanner {
             h.sendEmptyMessage(GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATE_FINISHED)
     }
 
-    private fun generateCover(parse: Parse, manga: Manga) = ImageCoverController.instance.getCoverFromFile(manga.file, parse)
+    private fun generateCover(parse: Parse, manga: Manga) = ImageCoverController.instance.getCoverFromFile(context, manga.file, parse)
 
     private inner class LibraryUpdateRunnable : Runnable {
         override fun run() {
             try {
-                val ctx: Context = MainActivity.getAppContext()
-                val preference: SharedPreferences = GeneralConsts.getSharedPreferences()
+                val preference: SharedPreferences = GeneralConsts.getSharedPreferences(context)
                 val libraryPath = preference.getString(GeneralConsts.KEYS.LIBRARY.FOLDER, "")
 
                 if (libraryPath == "" || !File(libraryPath).exists()) return
 
-                val storage = Storage(ctx)
+                val storage = Storage(context)
                 val storageFiles: MutableMap<String, Manga> = HashMap()
                 val storageDeletes: MutableMap<String, Manga> = HashMap()
 
@@ -127,7 +125,7 @@ class Scanner {
                                 val parse: Parse? = ParseFactory.create(it)
                                 try {
                                     if (parse is RarParse) {
-                                        val cacheDir = File(GeneralConsts.getCacheDir(), GeneralConsts.CACHEFOLDER.RAR)
+                                        val cacheDir = File(GeneralConsts.getCacheDir(context), GeneralConsts.CACHEFOLDER.RAR)
                                         (parse as RarParse?)!!.setCacheDirectory(cacheDir)
                                     }
 

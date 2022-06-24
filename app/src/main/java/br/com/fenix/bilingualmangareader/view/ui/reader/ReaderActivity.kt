@@ -433,7 +433,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
             return
 
         val sharedPreferences: SharedPreferences =
-            GeneralConsts.getSharedPreferences()
+            GeneralConsts.getSharedPreferences(this)
         when (any) {
             is PageMode -> sharedPreferences.edit()
                 .putString(GeneralConsts.KEYS.READER.PAGE_MODE, any.toString())

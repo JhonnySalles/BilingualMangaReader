@@ -260,7 +260,7 @@ class ConfigFragment : Fragment() {
 
     private fun saveConfig() {
         val sharedPreferences =
-            GeneralConsts.getSharedPreferences()
+            GeneralConsts.getSharedPreferences(requireContext())
         with(sharedPreferences.edit()) {
             this!!.putString(
                 GeneralConsts.KEYS.LIBRARY.FOLDER,
@@ -313,7 +313,7 @@ class ConfigFragment : Fragment() {
     }
 
     private fun loadConfig() {
-        val sharedPreferences = GeneralConsts.getSharedPreferences()
+        val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
 
         mLibraryPath.editText?.setText(
             sharedPreferences.getString(
