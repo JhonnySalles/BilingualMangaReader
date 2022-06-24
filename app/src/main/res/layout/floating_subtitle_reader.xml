@@ -15,7 +15,7 @@
         <ScrollView
             android:id="@+id/floating_subtitle_ocr_scroll"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -70,11 +70,12 @@
                     android:id="@+id/floating_subtitle_ocr_list"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="5dp"
                     android:listSelector="@color/itemSelectedSemiTransparent"
                     android:nestedScrollingEnabled="true"
-                    android:background="@color/floatingList"/>
+                    android:divider="@color/floatingListDivider"
+                    android:dividerHeight="2dip"/>
 
             </LinearLayout>
         </ScrollView>
@@ -168,7 +169,7 @@
         <ScrollView
             android:id="@+id/floating_subtitle_scroll"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/nav_floating_subtitle_buttons_container"
@@ -213,7 +214,8 @@
                     android:layout_marginBottom="5dp"
                     android:listSelector="@color/itemSelectedSemiTransparent"
                     android:nestedScrollingEnabled="true"
-                    android:background="@color/floatingList"/>
+                    android:divider="@color/floatingListDivider"
+                    android:dividerHeight="2dip"/>
 
             </LinearLayout>
         </ScrollView>

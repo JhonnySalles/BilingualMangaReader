@@ -23,6 +23,7 @@ import br.com.fenix.bilingualmangareader.model.entity.Page
 import br.com.fenix.bilingualmangareader.model.entity.Text
 import br.com.fenix.bilingualmangareader.service.controller.SubTitleController
 import br.com.fenix.bilingualmangareader.service.kanji.Formatter
+import br.com.fenix.bilingualmangareader.service.ocr.OcrProcess
 import br.com.fenix.bilingualmangareader.view.components.ComponentsUtil
 import com.pedromassango.doubleclick.DoubleClick
 import com.pedromassango.doubleclick.DoubleClickListener
@@ -223,8 +224,7 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
             mOcrListText.isLongClickable = true
             mOcrListText.onItemClickListener = AdapterView.OnItemClickListener { _, _, index, _ ->
                 if (index >= 0 && mOcrItem.size > index)
-                    updateTextOcr(mOcrItem[index], false)
-                true
+                    updateTextOcr(mOcrItem[index])
             }
 
             mOcrListText.onItemLongClickListener = OnItemLongClickListener { _, _, index, _ ->
@@ -244,8 +244,7 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
             }
 
             this.findViewById<AppCompatImageButton>(R.id.floating_subtitle_ocr_clear_list).setOnClickListener {
-                mOcrItem.clear()
-                (mOcrListText.adapter as ArrayAdapter<*>).notifyDataSetChanged()
+                (activity as OcrProcess).clearList()
                 mOcrText.text = ""
                 mOcrKanjiDetail.text = ""
                 mOcrKanjiDetail.visibility = View.GONE
@@ -451,17 +450,21 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
             mOcrKanjiDetail.visibility = View.GONE
         } else {
             mOcrKanjiDetail.text = String().plus(kanji).plus(": ").plus(detail)
-            mOcrKanjiDetail.visibility = View.VISIBLE
-            mOcrScrollContent.smoothScrollTo(0, mOcrKanjiDetail.top)
+            if (mOcrKanjiDetail.visibility == View.GONE) {
+                mOcrKanjiDetail.visibility = View.VISIBLE
+                mOcrScrollContent.smoothScrollTo(0, mOcrListText.top)
+            } else
+                mOcrScrollContent.smoothScrollTo(0, mOcrKanjiDetail.top)
         }
     }
 
-    fun updateTextOcr(text: String?, isNew: Boolean = true) {
-        if (isNew && text != null && !mOcrItem.contains(text)) {
-            mOcrItem.add(text)
-            (mOcrListText.adapter as ArrayAdapter<*>).notifyDataSetChanged()
-        }
+    fun updateOcrList(texts: ArrayList<String>) {
+        mOcrItem.clear()
+        mOcrItem.addAll(texts)
+        (mOcrListText.adapter as ArrayAdapter<*>).notifyDataSetChanged()
+    }
 
+    fun updateTextOcr(text: String?) {
         if (text != null) {
             changeLayout(false)
             Formatter.generateKanjiColor(text,
@@ -470,13 +473,6 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
             mOcrScrollContent.smoothScrollTo(0, 0)
         } else
             mOcrText.text = ""
-    }
-
-    fun updateTextOcr(texts: ArrayList<String>) {
-        mOcrText.text = ""
-        changeLayout(false)
-        mOcrItem.addAll(texts)
-        (mOcrListText.adapter as ArrayAdapter<*>).notifyDataSetChanged()
     }
 
     fun changeLayout(isSubtitle: Boolean = true) {

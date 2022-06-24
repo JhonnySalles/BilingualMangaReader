@@ -541,6 +541,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         mSubTitleController.pageSelected.observe(this) {
             mFloatingSubtitleReader.updatePage(it)
         }
+
         mSubTitleController.textSelected.observe(this) {
             mFloatingSubtitleReader.updateText(it)
         }
@@ -548,6 +549,10 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         mSubTitleController.forceExpandFloatingPopup.observe(this) {
             if (mFloatingSubtitleReader.isShowing)
                 mFloatingSubtitleReader.expanded(true)
+        }
+
+        mViewModel.ocrItem.observe(this) {
+            mFloatingSubtitleReader.updateOcrList(it)
         }
 
         if (mSubTitleController.mManga != null && mSubTitleController.mManga!!.id != null && mSubTitleController.textSelected.value == null) {
@@ -733,17 +738,23 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     override fun setText(text: String?) {
         if (::mFloatingSubtitleReader.isInitialized) {
             mIsAlertSubtitle = true
+            mViewModel.addOcrItem(text)
             mFloatingSubtitleReader.updateTextOcr(text)
             mFloatingSubtitleReader.showWithoutDismiss()
         }
     }
 
-    override fun setText(text: ArrayList<String>) {
+    override fun setText(texts: ArrayList<String>) {
         if (::mFloatingSubtitleReader.isInitialized) {
             mIsAlertSubtitle = true
-            mFloatingSubtitleReader.updateTextOcr(text)
+            mViewModel.addOcrItem(texts)
             mFloatingSubtitleReader.showWithoutDismiss()
+            mFloatingSubtitleReader.changeLayout(false)
         }
+    }
+
+    override fun clearList() {
+        mViewModel.clearOcrItem()
     }
 
 }

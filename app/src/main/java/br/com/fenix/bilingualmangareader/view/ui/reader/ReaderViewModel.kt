@@ -44,6 +44,9 @@ class ReaderViewModel(application: Application) : AndroidViewModel(application) 
     private var mSepia: MutableLiveData<Boolean> = MutableLiveData(false)
     val sepia: LiveData<Boolean> = mSepia
 
+    private var mOcrItem: MutableLiveData<ArrayList<String>> =  MutableLiveData(arrayListOf())
+    var ocrItem: LiveData<ArrayList<String>> = mOcrItem
+
     private var mBlueLightColor = Color.argb(mBlueLightAlpha.value!!, 255, 50, 0)
 
     init {
@@ -91,6 +94,24 @@ class ReaderViewModel(application: Application) : AndroidViewModel(application) 
 
         if (mBlueLight.value!!)
             generateFilters()
+    }
+
+    fun clearOcrItem() {
+        mOcrItem.value = arrayListOf()
+    }
+
+    fun addOcrItem(text: ArrayList<String>) {
+        mOcrItem.value?.addAll(text)
+        mOcrItem.value = mOcrItem.value // Force live data in add item
+    }
+
+    fun addOcrItem(text: String?) {
+        if (text == null || mOcrItem.value == null) return
+
+        if (!mOcrItem.value!!.contains(text)) {
+            mOcrItem.value!!.add(text)
+            mOcrItem.value = mOcrItem.value // Force live data in add item
+        }
     }
 
     private fun loadPreferences() {
