@@ -177,7 +177,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="@color/primarySemitransparent"
-            android:gravity="end"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <Button

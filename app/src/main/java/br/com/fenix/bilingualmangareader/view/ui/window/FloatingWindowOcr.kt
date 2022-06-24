@@ -49,7 +49,7 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
     init {
         with(mFloatingView) {
             this@FloatingWindowOcr.mRealDisplaySize = getRealDisplaySizeFromContext()
-            this@FloatingWindowOcr.minSize = Util.dpToPx(context, 40)
+            this@FloatingWindowOcr.minSize = context.resources.getDimension(R.dimen.floating_ocr_min_size).toInt()
             this@FloatingWindowOcr.layoutParams = getDefaultParams()
 
             this.findViewById<AppCompatImageButton>(R.id.window_ocr_close).setOnClickListener { dismiss() }
@@ -67,8 +67,8 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
 
     private fun getDefaultParams(): WindowManager.LayoutParams {
         val params = WindowManager.LayoutParams()
-        params.width = Util.dpToPx(context, 100)
-        params.height = Util.dpToPx(context, 100)
+        params.width = context.resources.getDimension(R.dimen.floating_ocr_height).toInt()
+        params.height = context.resources.getDimension(R.dimen.floating_ocr_width).toInt()
         params.type = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O)
             WindowManager.LayoutParams.TYPE_PHONE
         else
