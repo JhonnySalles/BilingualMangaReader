@@ -73,9 +73,9 @@ class Formatter {
             var description = SpannableString(middle + bottom)
             if (kanjax != null) {
                 middle = kanjax.keyword + "  -  " + kanjax.keywordPt + "\n\n" +
-                        kanjax.meaning + "\n" + kanjax.meaningPt + "\n\n"
+                        kanjax.meaning + " | " + kanjax.meaningPt + "\n"
 
-                middle += "onYomi: " + kanjax.onYomi + "\nKunYomi: " + kanjax.kunYomi + "\n\n"
+                middle += "onYomi: " + kanjax.onYomi + " | nKunYomi: " + kanjax.kunYomi + "\n"
 
                 bottom =
                     "jlpt: " + kanjax.jlpt + " grade: " + kanjax.grade + " frequency: " + kanjax.frequence + "\n"

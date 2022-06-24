@@ -18,13 +18,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.widget.NestedScrollView
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Page
 import br.com.fenix.bilingualmangareader.model.entity.Text
 import br.com.fenix.bilingualmangareader.service.controller.SubTitleController
 import br.com.fenix.bilingualmangareader.service.kanji.Formatter
 import br.com.fenix.bilingualmangareader.service.ocr.OcrProcess
-import br.com.fenix.bilingualmangareader.view.components.ComponentsUtil
 import com.pedromassango.doubleclick.DoubleClick
 import com.pedromassango.doubleclick.DoubleClickListener
 import kotlin.math.abs
@@ -98,7 +98,7 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
     private var mOcrContent: LinearLayout
 
     private var mSubTitleController: SubTitleController
-    private var mSubtitleScrollContent: ScrollView
+    private var mSubtitleScrollContent: NestedScrollView
     private var mLabelChapter: String
     private var mLabelPage: String
     private var mLabelText: String
@@ -114,7 +114,7 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
     private var mOcrKanjiDetail: TextView
     private var mOcrItem = ArrayList<String>()
     private var mOcrListText: ListView
-    private var mOcrScrollContent: ScrollView
+    private var mOcrScrollContent: NestedScrollView
 
     private var mBtnExpanded: AppCompatImageButton
     private var mIconExpanded: Drawable?

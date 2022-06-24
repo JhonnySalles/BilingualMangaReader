@@ -12,13 +12,20 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
+import br.com.fenix.bilingualmangareader.service.ocr.Tesseract
+import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.view.ui.configuration.ConfigFragment
 import br.com.fenix.bilingualmangareader.view.ui.help.AboutFragment
 import br.com.fenix.bilingualmangareader.view.ui.help.HelpFragment
 import br.com.fenix.bilingualmangareader.view.ui.history.HistoryFragment
 import br.com.fenix.bilingualmangareader.view.ui.library.LibraryFragment
 import com.google.android.material.navigation.NavigationView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
+import java.io.File
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -39,6 +46,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             mLOGGER.error("*** CRASH APP *** ", e)
             mDefaultUncaughtHandler?.uncaughtException(t, e)
         }
+
+        clearCache()
 
         setContentView(R.layout.activity_main)
 
@@ -66,6 +75,34 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // content_fragment use for receive fragments layout
         mFragmentManager.beginTransaction().replace(R.id.content_root, LibraryFragment())
             .commit()
+    }
+
+    private fun clearCache() {
+        val cacheDir = GeneralConsts.getCacheDir(this)
+        CoroutineScope(Dispatchers.IO).launch {
+            async {
+                try {
+                    val rar = File(cacheDir, GeneralConsts.CACHEFOLDER.RAR)
+                    if (rar.exists())
+                        for (f in rar.listFiles()!!)
+                            f.delete()
+
+                    val images = File(cacheDir, GeneralConsts.CACHEFOLDER.IMAGE)
+
+                    if (images.exists())
+                        for (f in rar.listFiles()!!)
+                            f.delete()
+
+                    val linked = File(cacheDir, GeneralConsts.CACHEFOLDER.LINKED)
+
+                    if (linked.exists())
+                        for (f in rar.listFiles()!!)
+                            f.delete()
+                } catch (e : Exception) {
+                    mLOGGER.error("Error clearing cache folders.", e)
+                }
+            }
+        }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

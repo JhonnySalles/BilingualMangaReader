@@ -12,10 +12,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:visibility="gone">
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/floating_subtitle_ocr_scroll"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -78,7 +78,7 @@
                     android:dividerHeight="2dip"/>
 
             </LinearLayout>
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -166,10 +166,10 @@
                 app:rippleColor="@color/onSecondary" />
         </LinearLayout>
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/floating_subtitle_scroll"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginStart="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/nav_floating_subtitle_buttons_container"
@@ -218,7 +218,7 @@
                     android:dividerHeight="2dip"/>
 
             </LinearLayout>
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
