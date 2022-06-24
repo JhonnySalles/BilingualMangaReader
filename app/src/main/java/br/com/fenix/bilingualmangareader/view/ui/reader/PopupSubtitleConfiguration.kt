@@ -48,7 +48,7 @@ class PopupSubtitleConfiguration : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.popup_subtitle_configuration, container, false)
-        mPreferences = GeneralConsts.getSharedPreferences()
+        mPreferences = GeneralConsts.getSharedPreferences(requireContext())
 
         mLoadExternalSubtitle = root.findViewById(R.id.txt_external_subtitle_select_path)
         mLoadExternalSubtitleAutoComplete =

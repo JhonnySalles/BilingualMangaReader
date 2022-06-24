@@ -17,7 +17,7 @@ class Tesseract(context: Context) {
     companion object {
         fun copyTessData(context: Context) {
             val mFileUtil = FileUtil(context)
-            val tessData = Util.normalizeFilePath(File(context.externalCacheDir, GeneralConsts.CACHEFOLDER.TESSERACT).absolutePath)
+            val tessData = Util.normalizeFilePath(File(GeneralConsts.getCacheDir(context), GeneralConsts.CACHEFOLDER.TESSERACT).absolutePath)
             // Load language files from asset packs
             mFileUtil.copyAssetToFilesIfNotExist("tessdata/", "eng.traineddata", tessData)
             mFileUtil.copyAssetToFilesIfNotExist("tessdata/", "jpn.traineddata", tessData)
@@ -38,7 +38,7 @@ class Tesseract(context: Context) {
         copyTessData(context)
     }
 
-    private val TESSERACT_DATA_PATH = File(context.externalCacheDir, GeneralConsts.CACHEFOLDER.TESSERACT).absolutePath
+    private val TESSERACT_DATA_PATH = File(GeneralConsts.getCacheDir(context), GeneralConsts.CACHEFOLDER.TESSERACT).absolutePath
     private var tesseract: TessBaseAPI? = null
 
     fun process(language: Languages, image: Bitmap): String? {

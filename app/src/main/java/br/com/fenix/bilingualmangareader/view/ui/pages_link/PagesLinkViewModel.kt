@@ -52,7 +52,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
     private var mGenerateImageHandler: MutableList<Handler>? = java.util.ArrayList()
     private var mGenerateImageThread: ArrayList<ImageLoadThread> = ArrayList()
 
-    private var mUsePagePath = GeneralConsts.getSharedPreferences().getBoolean(GeneralConsts.KEYS.PAGE_LINK.USE_PAGE_PATH_FOR_LINKED, false)
+    private var mUsePagePath = GeneralConsts.getSharedPreferences(mContext).getBoolean(GeneralConsts.KEYS.PAGE_LINK.USE_PAGE_PATH_FOR_LINKED, false)
 
     private fun getParse(path: String): Parse? = getParse(File(path))
 
@@ -60,7 +60,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
         val parse = ParseFactory.create(file)
         if (parse is RarParse) {
             val folder = GeneralConsts.CACHEFOLDER.LINKED + '/' + Util.normalizeNameCache(file.nameWithoutExtension)
-            val cacheDir = File(mContext.externalCacheDir, folder)
+            val cacheDir = File(GeneralConsts.getCacheDir(mContext), folder)
             (parse as RarParse?)!!.setCacheDirectory(cacheDir)
         }
         return parse

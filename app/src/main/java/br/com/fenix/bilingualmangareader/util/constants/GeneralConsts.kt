@@ -9,22 +9,22 @@ import java.util.*
 
 class GeneralConsts private constructor() {
     companion object {
-        fun getCacheDir(): File? {
-            return MainActivity.getAppContext().externalCacheDir
+        fun getCacheDir(context: Context): File? {
+            return context.externalCacheDir
         }
 
-        fun getSharedPreferences(): SharedPreferences {
-            return MainActivity.getAppContext().getSharedPreferences(KEYS.PREFERENCE_NAME, Context.MODE_PRIVATE)
+        fun getSharedPreferences(context: Context): SharedPreferences {
+            return context.getSharedPreferences(KEYS.PREFERENCE_NAME, Context.MODE_PRIVATE)
         }
 
-        fun formatterDate(dateTime: Date): String {
-            val preferences = getSharedPreferences()
+        fun formatterDate(context: Context, dateTime: Date): String {
+            val preferences = getSharedPreferences(context)
             val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, "yyyy-MM-dd")
             return SimpleDateFormat(pattern, Locale.getDefault()).format(dateTime)
         }
 
-        fun formatterDateTime(dateTime: Date): String {
-            val preferences = getSharedPreferences()
+        fun formatterDateTime(context: Context, dateTime: Date): String {
+            val preferences = getSharedPreferences(context)
             val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, "yyyy-MM-dd") + " hh:mm:ss a"
             return SimpleDateFormat(pattern, Locale.getDefault()).format(dateTime)
         }

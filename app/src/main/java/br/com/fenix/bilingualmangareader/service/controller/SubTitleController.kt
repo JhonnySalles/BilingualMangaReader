@@ -87,7 +87,7 @@ class SubTitleController private constructor(private val context: Context) {
         if (isSelected) mComboListSelected else mComboListInternal
 
     init {
-        val sharedPreferences = GeneralConsts.getSharedPreferences()
+        val sharedPreferences = GeneralConsts.getSharedPreferences(context)
         try {
             mSubtitleLang = Languages.valueOf(
                 sharedPreferences.getString(
@@ -379,7 +379,7 @@ class SubTitleController private constructor(private val context: Context) {
                         if ((isMangaLanguage && mFileLink!!.parseManga == null) || (!isMangaLanguage && mFileLink!!.parseFileLink == null)) {
                             if (parse is RarParse) {
                                 val folder = GeneralConsts.CACHEFOLDER.LINKED + '/' + Util.normalizeNameCache(fileName)
-                                val cacheDir = File(context.externalCacheDir, folder)
+                                val cacheDir = File(GeneralConsts.getCacheDir(context), folder)
                                 (parse as RarParse?)!!.setCacheDirectory(cacheDir)
                             }
                             
@@ -700,7 +700,7 @@ class SubTitleController private constructor(private val context: Context) {
 
     ///////////////////////// LANGUAGE ///////////////
     fun clearLanguage() {
-        val sharedPreferences = GeneralConsts.getSharedPreferences()
+        val sharedPreferences = GeneralConsts.getSharedPreferences(context)
         mTranslateLang = Languages.valueOf(
             sharedPreferences.getString(
                 GeneralConsts.KEYS.SUBTITLE.TRANSLATE,

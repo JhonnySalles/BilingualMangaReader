@@ -83,13 +83,13 @@ class GridViewHolder(itemView: View, private val listener: MangaCardListener) :
         }
 
         mangaImage.setImageBitmap(mDefaultImageCover)
-        ImageCoverController.instance.setImageCoverAsync(manga, mangaImage)
+        ImageCoverController.instance.setImageCoverAsync(itemView.context, manga, mangaImage)
 
         mangaTitle.text = manga.title
 
         if (manga.subTitle.isEmpty()) {
             val title = if (manga.lastAccess != null)
-                "${manga.bookMark} / ${manga.pages}  -  ${GeneralConsts.formatterDate(manga.lastAccess!!)}"
+                "${manga.bookMark} / ${manga.pages}  -  ${GeneralConsts.formatterDate(itemView.context, manga.lastAccess!!)}"
             else
                 "${manga.bookMark} / ${manga.pages}"
 
