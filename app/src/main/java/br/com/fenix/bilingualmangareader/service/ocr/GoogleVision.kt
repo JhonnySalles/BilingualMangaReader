@@ -66,9 +66,6 @@ class GoogleVision(private var context: Context) {
             Toast.LENGTH_SHORT
         ).show()
 
-        val teste = arrayListOf<String>("ねこちゃんホンポ: 猫", "との暮らしを応援する", "専門情報", "サイト", "teste")
-        setText(teste)
-        return
         recognizer.process(input)
             .addOnSuccessListener { visionText -> setText(getBlocks(visionText)) }
             .addOnFailureListener { e ->

@@ -96,6 +96,7 @@
     <string name="open_app_kaku_not_founded">App Kaku not found.</string>
 
     <!-- OCR -->
+    <string name="ocr_tesseract_get_request">Processing image, please wait...</string>
     <string name="ocr_google_vision_get_request">Communicating with google vision api, please wait...</string>
     <string name="ocr_google_vision_error">Processing could not be performed. Try again later.</string>
 
