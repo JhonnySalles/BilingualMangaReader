@@ -8,12 +8,15 @@ import android.graphics.PixelFormat
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.provider.Settings
+import android.text.SpannableString
 import android.text.method.LinkMovementMethod
 import android.view.*
 import android.widget.*
 import android.widget.AdapterView.OnItemLongClickListener
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatImageButton
+import androidx.constraintlayout.widget.ConstraintLayout
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Page
 import br.com.fenix.bilingualmangareader.model.entity.Text
@@ -25,7 +28,7 @@ import kotlin.math.abs
 
 
 @SuppressLint("ClickableViewAccessibility")
-class FloatingSubtitleReader constructor(private val context: Context) {
+class FloatingSubtitleReader constructor(private val context: Context, private val activity: AppCompatActivity) {
 
     private var windowManager: WindowManager? = null
         get() {
@@ -87,7 +90,7 @@ class FloatingSubtitleReader constructor(private val context: Context) {
         touchConsumedByMove
     }
 
-    private var mSubtitleContent: LinearLayout
+    private var mSubtitleContent: ConstraintLayout
     private var mOcrContent: LinearLayout
 
     private var mSubTitleController: SubTitleController
@@ -203,12 +206,19 @@ class FloatingSubtitleReader constructor(private val context: Context) {
 
             mOcrContent = this.findViewById(R.id.floating_subtitle_ocr_content)
             mOcrText = this.findViewById(R.id.floating_subtitle_ocr_text)
+            mOcrText.movementMethod = LinkMovementMethod.getInstance()
             mOcrScrollContent = this.findViewById(R.id.floating_subtitle_ocr_scroll)
 
             mOcrListText = this.findViewById(R.id.floating_subtitle_ocr_list)
             mOcrListText.adapter = ArrayAdapter(context, R.layout.list_item_vocabulary_small, mOcrItem)
             mOcrListText.choiceMode = ListView.CHOICE_MODE_SINGLE
             mOcrListText.isLongClickable = true
+            mOcrListText.onItemClickListener = AdapterView.OnItemClickListener { _, _, index, _ ->
+                if (index >= 0 && mOcrItem.size > index)
+                    updateTextOcr(mOcrItem[index], false)
+                true
+            }
+
             mOcrListText.onItemLongClickListener = OnItemLongClickListener { _, _, index, _ ->
                 if (index >= 0 && mOcrItem.size > index) {
                     val text = mOcrItem[index]
@@ -224,6 +234,12 @@ class FloatingSubtitleReader constructor(private val context: Context) {
                 }
                 true
             }
+
+            this.findViewById<AppCompatImageButton>(R.id.floating_subtitle_ocr_clear_list).setOnClickListener {
+                mOcrItem.clear()
+                (mOcrListText.adapter as ArrayAdapter<*>).notifyDataSetChanged()
+            }
+
         }
 
         mGestureDetector = GestureDetector(context, ChangeTextTouchListener())
@@ -353,25 +369,24 @@ class FloatingSubtitleReader constructor(private val context: Context) {
         changeLayout()
     }
 
-    fun updateTextOcr(text: String?) {
-        mOcrItem.clear()
+    fun updateTextOcr(text: String?, isNew: Boolean = true) {
+        if (isNew && text != null)
+            mOcrItem.add(text)
+
         if (text != null) {
             changeLayout(false)
-            Formatter.generateKanjiColor(context, text) { kanji ->
+            Formatter.generateKanjiColor(activity, text) { kanji ->
                 mOcrText.text = kanji
             }
         } else
             mOcrText.text = ""
     }
 
-    fun updateTextOcr(text: Array<String>) {
+    fun updateTextOcr(texts: ArrayList<String>) {
         mOcrText.text = ""
-        if (text != null) {
-            changeLayout(false)
-            mOcrItem.clear()
-            mOcrItem.addAll(text)
-            //Formatter.generateFurigana(text, furigana = { mOcrText.text = it }, vocabularyClick = { findVocabulary(it) })
-        }
+        changeLayout(false)
+        mOcrItem.addAll(texts)
+        (mOcrListText.adapter as ArrayAdapter<*>).notifyDataSetChanged()
     }
 
     fun changeLayout(isSubtitle: Boolean = true) {
@@ -390,6 +405,11 @@ class FloatingSubtitleReader constructor(private val context: Context) {
             isShowing = true
             windowManager?.addView(mFloatingView, layoutParams)
         }
+    }
+
+    fun showWithoutDismiss() {
+        if (!isShowing)
+            show()
     }
 
     fun dismiss() {

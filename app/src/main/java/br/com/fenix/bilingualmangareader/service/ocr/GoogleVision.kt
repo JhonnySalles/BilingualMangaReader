@@ -1,22 +1,27 @@
 package br.com.fenix.bilingualmangareader.service.ocr
 
+import android.content.Context
 import android.graphics.Bitmap
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import br.com.fenix.bilingualmangareader.R
+import br.com.fenix.bilingualmangareader.model.enums.LoadFile
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import org.slf4j.LoggerFactory
 
-class GoogleVision {
+class GoogleVision(private var context: Context) {
 
     private val mLOGGER = LoggerFactory.getLogger(GoogleVision::class.java)
 
     companion object {
         private lateinit var INSTANCE: GoogleVision
 
-        fun getInstance(): GoogleVision {
+        fun getInstance(context: Context): GoogleVision {
             if (!::INSTANCE.isInitialized)
-                INSTANCE = GoogleVision()
+                INSTANCE = GoogleVision(context)
             return INSTANCE
         }
     }
@@ -54,10 +59,34 @@ class GoogleVision {
     fun process(image: Bitmap, setText: (ArrayList<String>) -> (Unit)) {
         val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
         val input = InputImage.fromBitmap(image, 0)
+
+        Toast.makeText(
+            context,
+            context.resources.getString(R.string.ocr_google_vision_get_request),
+            Toast.LENGTH_SHORT
+        ).show()
+
+        val teste = arrayListOf<String>("ねこちゃんホンポ: 猫", "との暮らしを応援する", "専門情報", "サイト", "teste")
+        setText(teste)
+        return
         recognizer.process(input)
             .addOnSuccessListener { visionText -> setText(getBlocks(visionText)) }
             .addOnFailureListener { e ->
                 mLOGGER.error("Error to process google vision ocr: " + e.message, e)
+
+                val msg = if (e.message != null && e.message!!.isNotEmpty())
+                    e.message
+                else
+                    context.getString(R.string.ocr_google_vision_error)
+
+                AlertDialog.Builder(context, R.style.AppCompatAlertDialogStyle)
+                    .setTitle(context.getString(R.string.alert_title))
+                    .setMessage(msg)
+                    .setPositiveButton(
+                        R.string.action_neutral
+                    ) { _, _ -> }
+                    .create()
+                    .show()
             }
     }
 }

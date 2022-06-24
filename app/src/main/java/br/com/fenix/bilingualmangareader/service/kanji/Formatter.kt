@@ -201,6 +201,14 @@ class Formatter {
             furigana(textBuilder)
         }
 
+        fun generateKanjiColor(context: Context, texts: ArrayList<String>): ArrayList<SpannableString> {
+            val array = arrayListOf<SpannableString>()
+            for (text in texts)
+                generateKanjiColor(context, text) { array.add(it) }
+
+            return array
+        }
+
         fun generateKanjiColor(
             context: Context,
             text: String,
