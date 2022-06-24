@@ -21,7 +21,7 @@ import kotlin.experimental.and
 import kotlin.math.roundToInt
 
 class Util {
-    companion object Storage {
+    companion object Utils {
         fun getScreenDpWidth(context: Context): Int {
             val displayMetrics = context.resources.displayMetrics
             return Math.round(displayMetrics.widthPixels / displayMetrics.density)

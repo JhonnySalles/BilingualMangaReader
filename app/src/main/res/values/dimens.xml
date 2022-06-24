@@ -45,6 +45,7 @@
     <dimen name="popup_reader_color_filter_padding">16dp</dimen>
     <dimen name="popup_reader_blue_light_padding">10dp</dimen>
 
+    <dimen name="floating_reader_min_size">100dp</dimen>
     <dimen name="floating_reader_height">230dp</dimen>
     <dimen name="floating_reader_width">340dp</dimen>
     <dimen name="floating_reader_title">15sp</dimen>
@@ -52,9 +53,14 @@
     <dimen name="floating_reader_button_width">25dp</dimen>
     <dimen name="floating_reader_button_close">25dp</dimen>
 
+    <dimen name="floating_ocr_min_size">50dp</dimen>
+    <dimen name="floating_ocr_height">100dp</dimen>
+    <dimen name="floating_ocr_width">100dp</dimen>
     <dimen name="floating_ocr_button_close">25dp</dimen>
     <dimen name="floating_ocr_language">25dp</dimen>
     <dimen name="floating_ocr_language_text_size">13sp</dimen>
+    <dimen name="floating_ocr_text">20sp</dimen>
+    <dimen name="floating_ocr_text_kanji_detail">15sp</dimen>
 
     <dimen name="history_card_image">70dp</dimen>
     <dimen name="history_title_size">18sp</dimen>

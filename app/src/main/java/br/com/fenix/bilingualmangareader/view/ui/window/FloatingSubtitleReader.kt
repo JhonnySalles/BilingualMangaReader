@@ -5,6 +5,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.PixelFormat
+import android.graphics.Point
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.provider.Settings
@@ -22,6 +23,7 @@ import br.com.fenix.bilingualmangareader.model.entity.Page
 import br.com.fenix.bilingualmangareader.model.entity.Text
 import br.com.fenix.bilingualmangareader.service.controller.SubTitleController
 import br.com.fenix.bilingualmangareader.service.kanji.Formatter
+import br.com.fenix.bilingualmangareader.view.components.ComponentsUtil
 import com.pedromassango.doubleclick.DoubleClick
 import com.pedromassango.doubleclick.DoubleClickListener
 import kotlin.math.abs
@@ -90,6 +92,7 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
         touchConsumedByMove
     }
 
+    private var mResizer: View
     private var mSubtitleContent: ConstraintLayout
     private var mOcrContent: LinearLayout
 
@@ -107,6 +110,7 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
     private var mGestureDetector: GestureDetector
 
     private var mOcrText: TextView
+    private var mOcrKanjiDetail: TextView
     private var mOcrItem = ArrayList<String>()
     private var mOcrListText: ListView
     private var mOcrScrollContent: ScrollView
@@ -147,6 +151,9 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
             this.findViewById<AppCompatImageButton>(R.id.nav_floating_subtitle_go_to_top).setOnClickListener {
                 mSubtitleScrollContent.smoothScrollTo(0, 0)
             }
+
+            mResizer = this.findViewById(R.id.floating_subtitle_resizer)
+            setResizer()
 
             mIconExpanded = AppCompatResources.getDrawable(context, R.drawable.ic_expanded)
             mIconRetracted = AppCompatResources.getDrawable(context, R.drawable.ic_retracted)
@@ -208,6 +215,7 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
             mOcrText = this.findViewById(R.id.floating_subtitle_ocr_text)
             mOcrText.movementMethod = LinkMovementMethod.getInstance()
             mOcrScrollContent = this.findViewById(R.id.floating_subtitle_ocr_scroll)
+            mOcrKanjiDetail = this.findViewById(R.id.floating_subtitle_ocr_kanji_detail)
 
             mOcrListText = this.findViewById(R.id.floating_subtitle_ocr_list)
             mOcrListText.adapter = ArrayAdapter(context, R.layout.list_item_vocabulary_small, mOcrItem)
@@ -238,6 +246,9 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
             this.findViewById<AppCompatImageButton>(R.id.floating_subtitle_ocr_clear_list).setOnClickListener {
                 mOcrItem.clear()
                 (mOcrListText.adapter as ArrayAdapter<*>).notifyDataSetChanged()
+                mOcrText.text = ""
+                mOcrKanjiDetail.text = ""
+                mOcrKanjiDetail.visibility = View.GONE
             }
 
         }
@@ -277,6 +288,71 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
             }
 
             return super.onFling(e1, e2, velocityX, velocityY)
+        }
+    }
+    private lateinit var mRealDisplaySize: Point
+    private var minSize = 0
+    private fun setResizer() {
+        minSize = context.resources.getDimension(R.dimen.floating_reader_min_size).toInt()
+        val displaySize = Point()
+        windowManager!!.defaultDisplay!!.getRealSize(displaySize)
+        mRealDisplaySize = displaySize
+
+        var dx = 0
+        var dy = 0
+        var updateTimer = System.currentTimeMillis()
+
+        mResizer.setOnTouchListener { _, me ->
+            when (me.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    dx = layoutParams.width - me.rawX.toInt()
+                    dy = layoutParams.height - me.rawY.toInt()
+                    return@setOnTouchListener true
+                }
+                MotionEvent.ACTION_UP -> {
+                    fixBoxBounds()
+                    windowManager?.updateViewLayout(mFloatingView, mFloatingView.layoutParams)
+                    return@setOnTouchListener true
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    layoutParams.width = dx + me.rawX.toInt()
+                    layoutParams.height = dy + me.rawY.toInt()
+
+                    fixBoxBounds()
+                    val currTime = System.currentTimeMillis()
+                    if (currTime - updateTimer > 50) {
+                        updateTimer = currTime
+                        windowManager?.updateViewLayout(mFloatingView, mFloatingView.layoutParams)
+                    }
+                    return@setOnTouchListener true
+                }
+                else -> return@setOnTouchListener true
+            }
+        }
+    }
+
+    private fun fixBoxBounds() {
+        if (layoutParams.x < 0) {
+            layoutParams.x = 0
+        } else if (layoutParams.x + layoutParams.width > mRealDisplaySize.x) {
+            layoutParams.x = mRealDisplaySize.x - layoutParams.width
+        }
+        if (layoutParams.y < 0) {
+            layoutParams.y = 0
+        } else if (layoutParams.y + layoutParams.height > mRealDisplaySize.y) {
+            layoutParams.y = mRealDisplaySize.y - layoutParams.height
+        }
+        if (layoutParams.width > mRealDisplaySize.x) {
+            layoutParams.width = mRealDisplaySize.x
+        }
+        if (layoutParams.height > mRealDisplaySize.y) {
+            layoutParams.height = mRealDisplaySize.y
+        }
+        if (layoutParams.width < minSize) {
+            layoutParams.width = minSize
+        }
+        if (layoutParams.height < minSize) {
+            layoutParams.height = minSize
         }
     }
 
@@ -369,15 +445,29 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
         changeLayout()
     }
 
+    private fun setKanjiDetail(kanji: SpannableString, detail: SpannableString) {
+        if (detail.isEmpty()) {
+            mOcrKanjiDetail.text = ""
+            mOcrKanjiDetail.visibility = View.GONE
+        } else {
+            mOcrKanjiDetail.text = String().plus(kanji).plus(": ").plus(detail)
+            mOcrKanjiDetail.visibility = View.VISIBLE
+            mOcrScrollContent.smoothScrollTo(0, mOcrKanjiDetail.top)
+        }
+    }
+
     fun updateTextOcr(text: String?, isNew: Boolean = true) {
-        if (isNew && text != null)
+        if (isNew && text != null && !mOcrItem.contains(text)) {
             mOcrItem.add(text)
+            (mOcrListText.adapter as ArrayAdapter<*>).notifyDataSetChanged()
+        }
 
         if (text != null) {
             changeLayout(false)
-            Formatter.generateKanjiColor(activity, text) { kanji ->
-                mOcrText.text = kanji
-            }
+            Formatter.generateKanjiColor(text,
+                { kanji -> mOcrText.text = kanji },
+                { kanji, detail ->  setKanjiDetail(kanji, detail) })
+            mOcrScrollContent.smoothScrollTo(0, 0)
         } else
             mOcrText.text = ""
     }

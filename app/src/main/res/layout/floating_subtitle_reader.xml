@@ -49,8 +49,22 @@
                         android:fontFamily="monospace"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                         android:textColor="@color/textPrimary"
-                        android:textSize="@dimen/floating_reader_text" />
+                        android:textSize="@dimen/floating_ocr_text" />
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/floating_subtitle_ocr_kanji_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:autoLink="all"
+                    android:fontFamily="monospace"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textColor="@color/textPrimary"
+                    android:textSize="@dimen/floating_ocr_text_kanji_detail"
+                    android:visibility="gone"/>
 
                 <ListView
                     android:id="@+id/floating_subtitle_ocr_list"
@@ -260,5 +274,11 @@
         android:background="@color/onPrimary"
         android:src="@drawable/ic_close"
         android:tint="@color/textPrimary" />
+
+    <View
+        android:id="@+id/floating_subtitle_resizer"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="bottom|end"/>
 
 </FrameLayout>

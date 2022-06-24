@@ -92,6 +92,8 @@
     <string name="open_app_kaku_not_founded">App Kaku não encontrado.</string>
 
     <!-- OCR -->
+    <string name="ocr_tesseract_copy_data">Copiando arquivos necessários, aguarde...</string>
+    <string name="ocr_tesseract_copy_data_done">Cópia de arquivos do Tesseract concluído.</string>
     <string name="ocr_tesseract_get_request">Processando a imagem, aguarde...</string>
     <string name="ocr_google_vision_get_request">Comunicando com a api do google vision, aguarde...</string>
     <string name="ocr_google_vision_error">Não foi possível realizar o processamento. Tente novamente mais tarde.</string>
