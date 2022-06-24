@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_popup_ocr_tesseract"
+        android:icon="@drawable/ic_ocr_google_vision"
+        android:title="Tesseract" />
+    <item android:id="@+id/menu_popup_ocr_google_vision"
+        android:icon="@drawable/ic_ocr_google_vision"
+        android:title="Google Vision OCR" />
+</menu>

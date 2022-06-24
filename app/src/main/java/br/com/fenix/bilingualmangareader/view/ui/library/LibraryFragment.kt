@@ -115,9 +115,9 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     override fun onResume() {
         super.onResume()
 
-        Scanner.getInstance().addUpdateHandler(mUpdateHandler)
+        Scanner.getInstance(requireContext()).addUpdateHandler(mUpdateHandler)
 
-        if (Scanner.getInstance().isRunning())
+        if (Scanner.getInstance(requireContext()).isRunning())
             setIsRefreshing(true)
 
         mViewModel.update()
@@ -131,7 +131,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     override fun onPause() {
-        Scanner.getInstance().removeUpdateHandler(mUpdateHandler)
+        Scanner.getInstance(requireContext()).removeUpdateHandler(mUpdateHandler)
         super.onPause()
     }
 
@@ -203,7 +203,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             Toast.LENGTH_SHORT
         ).show()
 
-        val sharedPreferences = GeneralConsts.getSharedPreferences()
+        val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
         with(sharedPreferences.edit()) {
             this!!.putString(GeneralConsts.KEYS.LIBRARY.ORDER, mOrderBy.toString())
             this.commit()
@@ -234,7 +234,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             else -> LibraryType.LINE
         }
 
-        val sharedPreferences = GeneralConsts.getSharedPreferences()
+        val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
         with(sharedPreferences.edit()) {
             this!!.putString(GeneralConsts.KEYS.LIBRARY.LIBRARY_TYPE, mGridType.toString())
             this.commit()
@@ -262,7 +262,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     ): View? {
         mViewModel = ViewModelProvider(this).get(LibraryViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_library, container, false)
-        val sharedPreferences = GeneralConsts.getSharedPreferences()
+        val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
         mGridType = LibraryType.valueOf(
             sharedPreferences.getString(GeneralConsts.KEYS.LIBRARY.LIBRARY_TYPE, "LINE")
                 .toString()
@@ -309,11 +309,11 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 mScrollUp.hide()
             }
 
-            if (yOld > 200) {
+            if (yOld > 180) {
                 mHandler.removeCallbacks(mDismissUpButton)
                 mHandler.postDelayed(mDismissUpButton, 3000)
                 mScrollUp.show()
-            } else if (yOld < -200) {
+            } else if (yOld < -180) {
                 mHandler.removeCallbacks(mDismissDownButton)
                 mHandler.postDelayed(mDismissDownButton, 3000)
                 mScrollDown.show()
@@ -395,13 +395,13 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         generateLayout()
         setIsRefreshing(true)
-        Scanner.getInstance().addUpdateHandler(mUpdateHandler)
-        Scanner.getInstance().scanLibrary()
+        Scanner.getInstance(requireContext()).addUpdateHandler(mUpdateHandler)
+        Scanner.getInstance(requireContext()).scanLibrary()
         return root
     }
 
     private fun loadConfig() {
-        val sharedPreferences = GeneralConsts.getSharedPreferences()
+        val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
         mLibraryPath =
             sharedPreferences.getString(GeneralConsts.KEYS.LIBRARY.FOLDER, "").toString()
         mOrderBy = Order.valueOf(
@@ -419,7 +419,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if (requestCode == 121 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+        if (requestCode == GeneralConsts.REQUEST.PERMISSION_FILES_ACCESS && grantResults[0] == PackageManager.PERMISSION_GRANTED)
             onRefresh()
     }
 
@@ -504,9 +504,9 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         mScrollUp.hide()
         mScrollDown.hide()
 
-        if (!Scanner.getInstance().isRunning()) {
+        if (!Scanner.getInstance(requireContext()).isRunning()) {
             setIsRefreshing(true)
-            Scanner.getInstance().scanLibrary()
+            Scanner.getInstance(requireContext()).scanLibrary()
         }
     }
 

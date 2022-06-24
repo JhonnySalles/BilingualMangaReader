@@ -15,6 +15,7 @@ import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.PageLink
 import br.com.fenix.bilingualmangareader.model.enums.Pages
 import br.com.fenix.bilingualmangareader.service.listener.PageLinkCardListener
+import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.constants.PageLinkConsts
 import com.google.android.material.card.MaterialCardView
 import kotlin.math.roundToInt
@@ -30,6 +31,7 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
         var mPageLinkCardWidth: Int = 0
         var mPageLinkCardWidthInDual: Int = 0
         var mPageLinkRightSelectStroke: Int = 0
+        var mUsePagePath = false
     }
 
     init {
@@ -49,6 +51,8 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
         }
 
         mPageLinkRightSelectStroke  = itemView.resources.getDimension(R.dimen.dual_page_link_card_selected_stroke).toInt()
+
+        mUsePagePath = GeneralConsts.getSharedPreferences(itemView.context).getBoolean(GeneralConsts.KEYS.PAGE_LINK.USE_PAGE_PATH_FOR_LINKED, false)
     }
 
     fun bind(page: PageLink, position: Int) {
@@ -76,7 +80,10 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
         pageRoot.setOnClickListener { listener.onClick(page) }
 
         mangaNumber.text = page.mangaPage.toString()
-        mangaName.text = page.mangaPageName
+        mangaName.text = if (mUsePagePath && page.mangaPage != PageLinkConsts.VALUES.PAGE_EMPTY)
+            page.mangaPagePath + "\\" + page.mangaPageName
+        else
+            page.mangaPageName
 
         if (page.imageMangaPage != null) {
             mangaImage.setImageBitmap(page.imageMangaPage)
@@ -88,7 +95,10 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
         }
 
         pageNumber.text = if (page.fileLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY) page.fileLinkPage.toString() else ""
-        pageName.text = page.fileLinkPageName
+        pageName.text = if (mUsePagePath && page.fileLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY)
+            page.fileLinkPagePath + "\\" + page.fileLinkPageName
+        else
+            page.fileLinkPageName
 
         if (page.imageLeftFileLinkPage != null) {
             pageImage.setImageBitmap(page.imageLeftFileLinkPage)
@@ -102,8 +112,12 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
         }
 
         dualPageNumber.text = if (page.fileRightLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY) page.fileRightLinkPage.toString() else ""
-        dualPageName.text = page.fileRightLinkPageName
         dualPageRoot.layoutParams.width = mPageLinkCardWidthInDual
+
+        dualPageName.text = if (mUsePagePath && page.fileRightLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY)
+            page.fileRightLinkPagePath + "\\" + page.fileRightLinkPageName
+        else
+            page.fileRightLinkPageName
 
         if (page.dualImage) {
             pageRoot.layoutParams.width = mPageLinkCardWidthInDual

@@ -11,8 +11,8 @@ import java.util.zip.ZipFile
 class ZipParse : Parse {
 
     private var mZipFile: ZipFile? = null
-    private var mEntries: ArrayList<ZipEntry>? = null
-    private var mSubtitles: ArrayList<ZipEntry>? = null
+    private var mEntries = ArrayList<ZipEntry>()
+    private var mSubtitles =  ArrayList<ZipEntry>()
 
     override fun parse(file: File?) {
         mZipFile = ZipFile(file?.absolutePath, StandardCharsets.UTF_8)
@@ -22,20 +22,20 @@ class ZipParse : Parse {
         while (e.hasMoreElements()) {
             val ze = e.nextElement()
             if (!ze.isDirectory && Util.isImage(ze.name))
-                mEntries!!.add(ze)
+                mEntries.add(ze)
             else if (!ze.isDirectory && Util.isJson(ze.name))
-                mSubtitles!!.add(ze)
+                mSubtitles.add(ze)
         }
-        mEntries!!.sortBy { it.name }
+        mEntries.sortBy { it.name }
     }
 
     override fun numPages(): Int {
-        return mEntries!!.size
+        return mEntries.size
     }
 
     override fun getSubtitles(): List<String> {
         val subtitles = arrayListOf<String>()
-        mSubtitles!!.forEach {
+        mSubtitles.forEach {
             val sub = mZipFile!!.getInputStream(it)
 
             val reader = BufferedReader(sub.reader())
@@ -52,14 +52,30 @@ class ZipParse : Parse {
         return subtitles
     }
 
+    private fun getName(entry: ZipEntry): String {
+        return entry.name
+    }
+
     override fun getPagePath(num: Int): String? {
-        if (mEntries!!.size < num)
+        if (mEntries.size < num)
             return null
-        return mEntries!![num].name
+        return getName(mEntries[num])
+    }
+
+    override fun getPagePaths(): Map<String, Int> {
+        val paths = mutableMapOf<String, Int>()
+
+        for((index, entry) in mEntries.withIndex()) {
+            val path = Util.getFolderFromPath(getName(entry))
+            if (path.isNotEmpty() && !paths.containsKey(path))
+                paths[path] = index
+        }
+
+        return paths
     }
 
     override fun getPage(num: Int): InputStream {
-        return mZipFile!!.getInputStream(mEntries!![num])
+        return mZipFile!!.getInputStream(mEntries[num])
     }
 
     override fun getType(): String {

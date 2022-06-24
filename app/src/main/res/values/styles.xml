@@ -25,6 +25,13 @@
         <item name="android:textColor">@color/textPrimary</item>
     </style>
 
+    <style name="SubToolbarTheme" parent="Widget.AppCompat.ActionBar">
+        <item name="android:textColorPrimary">@color/onSecondary</item>
+        <item name="colorControlNormal">@color/onSecondary</item>
+        <item name="android:textColor">@color/textPrimary</item>
+        <item name="android:background">@color/nightOnSecondary</item>
+    </style>
+
     <style name="MyDarkToolbarStyle" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:background">@color/primary</item>
         <item name="android:textColor">@color/textPrimary</item>

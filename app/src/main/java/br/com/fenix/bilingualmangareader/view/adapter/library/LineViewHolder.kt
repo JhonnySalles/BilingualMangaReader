@@ -44,8 +44,8 @@ class LineViewHolder(itemView: View, private val listener: MangaCardListener) :
             true
         }
 
-        mangaImage.setImageBitmap(GridViewHolder.mDefaultImageCover)
-        ImageCoverController.instance.setImageCoverAsync(manga, mangaImage)
+        mangaImage.setImageBitmap(mDefaultImageCover)
+        ImageCoverController.instance.setImageCoverAsync(itemView.context, manga, mangaImage)
 
         mangaTitle.text = manga.title
 
@@ -53,6 +53,7 @@ class LineViewHolder(itemView: View, private val listener: MangaCardListener) :
             val title = if (manga.lastAccess != null)
                 "${manga.bookMark} / ${manga.pages}  -  ${itemView.resources.getString(R.string.library_last_access)}: ${
                     GeneralConsts.formatterDate(
+                        itemView.context,
                         manga.lastAccess!!
                     )
                 }"

@@ -1,10 +1,10 @@
 package br.com.fenix.bilingualmangareader.service.controller
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.LruCache
 import android.widget.ImageView
-import br.com.fenix.bilingualmangareader.MainActivity
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.service.parses.Parse
 import br.com.fenix.bilingualmangareader.service.parses.ParseFactory
@@ -58,10 +58,10 @@ class ImageCoverController private constructor() {
         return null
     }
 
-    private fun saveBitmapToCache(key: String, bitmap: Bitmap) {
+    private fun saveBitmapToCache(context: Context, key: String, bitmap: Bitmap) {
         try {
             saveBitmapToLru(key, bitmap)
-            val cacheDir = File(MainActivity.getAppContext().externalCacheDir, GeneralConsts.CACHEFOLDER.COVERS)
+            val cacheDir = File(GeneralConsts.getCacheDir(context), GeneralConsts.CACHEFOLDER.COVERS)
             if (!cacheDir.exists())
                 cacheDir.mkdir()
 
@@ -73,12 +73,12 @@ class ImageCoverController private constructor() {
         }
     }
 
-    private fun retrieveBitmapFromCache(key: String): Bitmap? {
+    private fun retrieveBitmapFromCache(context: Context, key: String): Bitmap? {
         try {
             var image = retrieveBitmapFromLru(key)
             if (image != null) return image
 
-            val file = File(MainActivity.getAppContext().externalCacheDir,GeneralConsts.CACHEFOLDER.COVERS + '/' + key)
+            val file = File(GeneralConsts.getCacheDir(context), GeneralConsts.CACHEFOLDER.COVERS + '/' + key)
 
             if (file.exists()) {
                 image = BitmapFactory.decodeFile(file.absolutePath)
@@ -91,14 +91,14 @@ class ImageCoverController private constructor() {
         return null
     }
 
-    fun getCoverFromFile(file: File, parse: Parse): Bitmap? {
-        return getCoverFromFile(generateHash(file), parse)
+    fun getCoverFromFile(context: Context, file: File, parse: Parse): Bitmap? {
+        return getCoverFromFile(context, generateHash(file), parse)
     }
 
     private fun generateHash(file: File): String =
         Util.MD5(file.path + file.name)
 
-    private fun getCoverFromFile(hash: String, parse: Parse): Bitmap? {
+    private fun getCoverFromFile(context: Context, hash: String, parse: Parse): Bitmap? {
         var index = 0
         for (i in 0..parse.numPages()) {
             if (Util.isImage(parse.getPagePath(i)!!)) {
@@ -123,26 +123,26 @@ class ImageCoverController private constructor() {
         val result = BitmapFactory.decodeStream(stream, null, options)
 
         return if (result != null) {
-            saveBitmapToCache(hash, result)
+            saveBitmapToCache(context, hash, result)
             Util.closeInputStream(stream)
             result
         } else
             null
     }
 
-    private fun getMangaCover(manga: Manga): Bitmap? {
+    private fun getMangaCover(context: Context, manga: Manga): Bitmap? {
         val hash = generateHash(manga.file)
-        var image = retrieveBitmapFromCache(hash)
+        var image = retrieveBitmapFromCache(context, hash)
         if (image == null) {
             val parse = ParseFactory.create(manga.file) ?: return image
             try {
                 if (parse is RarParse) {
                     val folder = GeneralConsts.CACHEFOLDER.RAR + '/' + Util.normalizeNameCache(manga.file.nameWithoutExtension)
-                    val cacheDir = File(MainActivity.getAppContext().externalCacheDir, folder)
+                    val cacheDir = File(GeneralConsts.getCacheDir(context), folder)
                     (parse as RarParse?)!!.setCacheDirectory(cacheDir)
                 }
 
-                image = getCoverFromFile(hash, parse)
+                image = getCoverFromFile(context, hash, parse)
             } finally {
                 Util.destroyParse(parse)
             }
@@ -152,6 +152,7 @@ class ImageCoverController private constructor() {
     }
 
     fun setImageCoverAsync(
+        context: Context,
         manga: Manga,
         imageView: ImageView
     ) {
@@ -159,7 +160,7 @@ class ImageCoverController private constructor() {
             try {
                 var image: Bitmap? = null
                 val deferred = async {
-                    image = getMangaCover(manga)
+                    image = getMangaCover(context, manga)
                 }
                 deferred.await()
                 withContext(Dispatchers.Main) {

@@ -1,5 +1,7 @@
 package br.com.fenix.bilingualmangareader.view.ui.reader
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
@@ -20,7 +22,6 @@ import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
@@ -41,7 +42,10 @@ import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.constants.ReaderConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
+import br.com.fenix.bilingualmangareader.view.components.PageImageView
+import br.com.fenix.bilingualmangareader.view.components.PageViewPager
 import br.com.fenix.bilingualmangareader.view.managers.MangaHandler
+import com.google.android.material.button.MaterialButton
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Picasso.LoadedFrom
@@ -58,7 +62,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
     private val mViewModel: ReaderViewModel by activityViewModels()
 
     private lateinit var mRoot: CoordinatorLayout
-    private lateinit var mToolbar: Toolbar
+    private lateinit var mToolbarTop: LinearLayout
     private lateinit var mPageNavLayout: LinearLayout
     private lateinit var mPopupSubtitle: FrameLayout
     private lateinit var mPopupColor: FrameLayout
@@ -69,6 +73,8 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
     private lateinit var mPreferences: SharedPreferences
     private lateinit var mGestureDetector: GestureDetector
     private lateinit var mViewPager: PageViewPager
+    private lateinit var mPreviousButton: MaterialButton
+    private lateinit var mNextButton: MaterialButton
 
     private var mResourceViewMode: HashMap<Int, ReaderMode>? = null
     private var mIsFullscreen = false
@@ -206,7 +212,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
                     .setTitle(getString(R.string.manga_excluded))
                     .setMessage(getString(R.string.file_not_found))
-                    .setNeutralButton(
+                    .setPositiveButton(
                         R.string.action_neutral
                     ) { _, _ -> }
                     .create()
@@ -216,7 +222,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             mPagerAdapter = ComicPagerAdapter()
             mGestureDetector = GestureDetector(requireActivity(), MyTouchListener())
 
-            mPreferences = GeneralConsts.getSharedPreferences()
+            mPreferences = GeneralConsts.getSharedPreferences(requireContext())
             mReaderMode = ReaderMode.valueOf(
                 mPreferences.getString(
                     GeneralConsts.KEYS.READER.READER_MODE,
@@ -262,11 +268,14 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         }
 
         mRoot = requireActivity().findViewById(R.id.root_activity_reader)
-        mToolbar = requireActivity().findViewById(R.id.toolbar_reader)
+        mToolbarTop = requireActivity().findViewById(R.id.toolbar_reader_top)
         mPopupSubtitle = requireActivity().findViewById(R.id.menu_popup_translate)
         mPopupColor = requireActivity().findViewById(R.id.menu_popup_color)
         mPageNavLayout = requireActivity().findViewById(R.id.nav_reader)
         mToolbarBottom = requireActivity().findViewById(R.id.toolbar_reader_bottom)
+        mPreviousButton = requireActivity().findViewById(R.id.nav_previous_file)
+        mNextButton = requireActivity().findViewById(R.id.nav_next_file)
+
         (mPageNavLayout.findViewById<View>(R.id.nav_reader_progress) as SeekBar).also {
             mPageSeekBar = it
         }
@@ -431,7 +440,8 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
 
         if (mManga != null)
             mSubtitleController.changeSubtitleInReader(mManga!!, mCurrentPage)
-        ReaderActivity.setSubtitle(mParse?.getPagePath(mCurrentPage)!!)
+
+        (requireActivity() as ReaderActivity).setSubtitle(mParse?.getPagePath(mCurrentPage)!!)
     }
 
     inner class ComicPagerAdapter : PagerAdapter() {
@@ -647,7 +657,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                     it.hide(WindowInsets.Type.systemBars())
                     it.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
                 }
-                WindowCompat.setDecorFitsSystemWindows(w, false)
+                WindowCompat.setDecorFitsSystemWindows(w, true)
                 w.setDecorFitsSystemWindows(false)
             } else {
                 getActionBar()?.hide()
@@ -669,17 +679,13 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             }
 
             mRoot.fitsSystemWindows = false
-            mPageNavLayout.visibility = View.INVISIBLE
-            mPopupSubtitle.visibility = View.INVISIBLE
-            mPopupColor.visibility = View.INVISIBLE
-            mToolbarBottom.visibility = View.INVISIBLE
-            mToolbar.visibility = View.INVISIBLE
+            changeContentsVisibility(fullscreen)
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 windowInsetsController.let {
                     it.show(WindowInsets.Type.systemBars())
                 }
-                WindowCompat.setDecorFitsSystemWindows(w, true)
+                WindowCompat.setDecorFitsSystemWindows(w, false)
                 w.setDecorFitsSystemWindows(true)
             } else {
                 getActionBar()?.show()
@@ -696,11 +702,72 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 }, 300)
             }
 
+            mPopupSubtitle.visibility = View.GONE
+            mPopupColor.visibility = View.GONE
             mRoot.fitsSystemWindows = true
-            mPageNavLayout.visibility = View.VISIBLE
-            mToolbar.visibility = View.VISIBLE
-            mToolbarBottom.visibility = View.VISIBLE
+            changeContentsVisibility(fullscreen)
         }
+    }
+
+    private val duration = 300L
+    private fun changeContentsVisibility(isFullScreen: Boolean) {
+        val visibility = if (isFullScreen) View.GONE else View.VISIBLE
+        val finalAlpha = if (isFullScreen) 0.0f else 1.0f
+        val initialAlpha = if (isFullScreen) 1.0f else 0.0f
+
+        if (!isFullScreen) {
+            mPageNavLayout.visibility = visibility
+            mToolbarBottom.visibility = visibility
+            mToolbarTop.visibility = visibility
+            mNextButton.visibility = visibility
+            mPreviousButton.visibility = visibility
+
+            mPageNavLayout.alpha = initialAlpha
+            mToolbarBottom.alpha = initialAlpha
+            mToolbarTop.alpha = initialAlpha
+            mNextButton.alpha = initialAlpha
+            mPreviousButton.alpha = initialAlpha
+        }
+
+        mPageNavLayout.animate().alpha(finalAlpha).setDuration(duration)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    super.onAnimationEnd(animation)
+                    mPageNavLayout.visibility = visibility
+                }
+            })
+
+        mToolbarBottom.animate().alpha(finalAlpha).setDuration(duration)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    super.onAnimationEnd(animation)
+                    mToolbarBottom.visibility = visibility
+                }
+            })
+
+        mToolbarTop.animate().alpha(finalAlpha).setDuration(duration)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    super.onAnimationEnd(animation)
+                    mToolbarTop.visibility = visibility
+                }
+            })
+
+        mNextButton.animate().alpha(finalAlpha).setDuration(duration)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    super.onAnimationEnd(animation)
+                    mNextButton.visibility = visibility
+                }
+            })
+
+        mPreviousButton.animate().alpha(finalAlpha).setDuration(duration)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    super.onAnimationEnd(animation)
+                    mPreviousButton.visibility = visibility
+                }
+            })
     }
 
     fun isFullscreen(): Boolean = mIsFullscreen
@@ -731,9 +798,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                     R.string.switch_action_positive
                 ) { _, _ ->
                     val activity = requireActivity() as ReaderActivity
-                    activity.setTitles(mNewManga!!.title, mNewManga!!.bookMark.toString())
-                    activity.setManga(mNewManga!!)
-                    activity.setFragment(create(mNewManga!!))
+                    activity.changeManga(mNewManga!!)
                 }
                 .setNegativeButton(
                     R.string.switch_action_negative

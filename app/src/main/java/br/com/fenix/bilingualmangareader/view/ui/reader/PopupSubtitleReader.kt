@@ -102,7 +102,7 @@ class PopupSubtitleReader : Fragment() {
     }
 
     private fun observer() {
-        mSubTitleController.pagesKeys.observe(viewLifecycleOwner, {
+        mSubTitleController.pagesKeys.observe(viewLifecycleOwner) {
             mSubtitlePageAutoComplete.setAdapter(
                 ArrayAdapter(
                     requireContext(),
@@ -110,17 +110,17 @@ class PopupSubtitleReader : Fragment() {
                     it.sorted()
                 )
             )
-        })
+        }
 
-        mSubTitleController.pageSelected.observe(viewLifecycleOwner, {
+        mSubTitleController.pageSelected.observe(viewLifecycleOwner) {
             var key = ""
             if (it != null)
                 key = mSubTitleController.getPageKey(it)
 
             mSubtitlePageAutoComplete.setText(key, false)
-        })
+        }
 
-        mSubTitleController.textSelected.observe(viewLifecycleOwner, {
+        mSubTitleController.textSelected.observe(viewLifecycleOwner) {
             var title = ""
             mSubtitleContent.text = ""
             if (it != null) {
@@ -138,7 +138,7 @@ class PopupSubtitleReader : Fragment() {
                     "$mLabelChapter ${mSubTitleController.chapterSelected.value?.chapter.toString()} - $mLabelText 0/${if (mSubTitleController.pageSelected.value?.texts == null) 0 else mSubTitleController.pageSelected.value?.texts?.size}"
 
             mSubtitleTitle.text = title
-        })
+        }
     }
 
 }

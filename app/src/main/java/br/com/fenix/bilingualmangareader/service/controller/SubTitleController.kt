@@ -23,7 +23,7 @@ import br.com.fenix.bilingualmangareader.service.repository.SubTitleRepository
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.constants.ReaderConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
-import br.com.fenix.bilingualmangareader.view.ui.reader.PageImageView
+import br.com.fenix.bilingualmangareader.view.components.PageImageView
 import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderFragment
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
@@ -87,7 +87,7 @@ class SubTitleController private constructor(private val context: Context) {
         if (isSelected) mComboListSelected else mComboListInternal
 
     init {
-        val sharedPreferences = GeneralConsts.getSharedPreferences()
+        val sharedPreferences = GeneralConsts.getSharedPreferences(context)
         try {
             mSubtitleLang = Languages.valueOf(
                 sharedPreferences.getString(
@@ -101,6 +101,7 @@ class SubTitleController private constructor(private val context: Context) {
                     Languages.PORTUGUESE.toString()
                 )!!
             )
+            mSelectedSubTitle.value = SubTitle(language = mSubtitleLang)
             mUseFileLink = sharedPreferences.getBoolean(GeneralConsts.KEYS.PAGE_LINK.USE_IN_SEARCH_TRANSLATE, false)
         } catch (e: Exception) {
             mLOGGER.error("Preferences languages not loaded: " + e.message, e)
@@ -378,7 +379,7 @@ class SubTitleController private constructor(private val context: Context) {
                         if ((isMangaLanguage && mFileLink!!.parseManga == null) || (!isMangaLanguage && mFileLink!!.parseFileLink == null)) {
                             if (parse is RarParse) {
                                 val folder = GeneralConsts.CACHEFOLDER.LINKED + '/' + Util.normalizeNameCache(fileName)
-                                val cacheDir = File(context.externalCacheDir, folder)
+                                val cacheDir = File(GeneralConsts.getCacheDir(context), folder)
                                 (parse as RarParse?)!!.setCacheDirectory(cacheDir)
                             }
                             
@@ -699,7 +700,7 @@ class SubTitleController private constructor(private val context: Context) {
 
     ///////////////////////// LANGUAGE ///////////////
     fun clearLanguage() {
-        val sharedPreferences = GeneralConsts.getSharedPreferences()
+        val sharedPreferences = GeneralConsts.getSharedPreferences(context)
         mTranslateLang = Languages.valueOf(
             sharedPreferences.getString(
                 GeneralConsts.KEYS.SUBTITLE.TRANSLATE,
@@ -830,7 +831,7 @@ class SubTitleController private constructor(private val context: Context) {
     }
 
     fun getNextText(): Boolean {
-        if (pageSelected.value == null)
+        if (pageSelected.value == null || selectedSubtitle.value == null)
             return true
 
         val index: Int =
@@ -849,7 +850,7 @@ class SubTitleController private constructor(private val context: Context) {
     }
 
     fun getBeforeText(): Boolean {
-        if (pageSelected.value == null)
+        if (pageSelected.value == null || selectedSubtitle.value == null)
             return true
 
         val index: Int =
