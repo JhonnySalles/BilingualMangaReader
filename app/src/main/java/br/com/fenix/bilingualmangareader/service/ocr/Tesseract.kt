@@ -134,7 +134,7 @@ class Tesseract(private val context: Context) {
                         val grayScale = ImageProcess.processGrayscale(image)
                         tesseract!!.setImage(grayScale)
                         val msg = Message()
-                        msg.obj = tesseract!!.utF8Text
+                        msg.obj = tesseract!!.utF8Text.replace("\n", " ")
                         msg.what = 1
                         setText.sendMessage(msg)
                     }
