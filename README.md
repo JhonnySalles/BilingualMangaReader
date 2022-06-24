@@ -38,7 +38,12 @@ Também irá salvar algumas preferências e o progresso e tem suporte a furigana
   <li> Room - Uma biblioteca nativa com vários recusos para gerenciar banco de dados SQLite. </li>
   <li> PageView - Implementado a estrutura de apresentação de imagens em carrocel. </li>
   <li><a href="https://github.com/junrar/junrar">Junrar</a> - Biblioteca para leitura e extração de arquivos rar e cbr. </li>
-  <li><a href="https://github.com/0xbad1d3a5/Kaku]">Kaku</a> - Leitor OCR para android. <i>"Apenas chamada por dentro aplicativo, necessário estar instalado."</i> </li>	
+  <li><a href="https://github.com/0xbad1d3a5/Kaku]">Kaku</a> - Leitor OCR para android. <i>"Apenas chamada por dentro aplicativo, necessário estar instalado."</i> </li>
+  <li><a href="https://www.atilika.org/">Kuromoji</a> - Analizador morfológico japonês. </li>
+  <li><a href="https://github.com/WorksApplications/Sudachi">Sudachi</a> - Sudachi é um analisador morfológico japonês.</li>
+  <li><a href="https://github.com/lofe90/FuriganaTextView">FuriganaTextView</a> - TextView personalizado para Android que renderiza texto em japonês com furigana. </li>
+  <li><a href="https://github.com/adaptech-cz/Tesseract4Android">Tesseract4Android</a> - Poderosa biblioteca que faz a comunicação com o Tesseract OCR.</li>
+  <li><a href="https://github.com/tony19/logback-android">LogBack</a> - Biblioteca que traz o poderoso logback para o android.</li>
 </ul>
 
 
@@ -168,6 +173,11 @@ O aplicativo é também compatível com legendas extraidas e pré processadas co
 - [X] Implementar ordenação de páginas automática, utilizando o tamanho da imagem para identificar se é página dupla.
 - [X] Implementar exclusão do vinculo do arquivo.
 - [X] Ajustar o carregamento das imagens de capa, realizar otimização no aplicativo e menor consumo de memória.
+- [X] Implementar o Tesseract OCR ao projeto e realizar identificação de palavras em imagens.
+- [X] Ajustar o painel flutuante para receber palavras que foram reconhecidas pelo Tesseract.
+- [ ] Implementar a api Google Vision para reconhecimento de palavras em imagens.
+- [ ] Ajustar para ser guardado em banco a linguagem do arquivo.
+- [ ] Ajustar para ser guardado no banco reconhecimento da página retornada pelo Google Vision.
 - [ ] Favoritar vocabulário para estudo posterior
 - [ ] Adição de dicionarios japonês
 - [ ] Exportar vocabularios ao Anki
