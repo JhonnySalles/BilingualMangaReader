@@ -175,9 +175,8 @@ O aplicativo é também compatível com legendas extraidas e pré processadas co
 - [X] Ajustar o carregamento das imagens de capa, realizar otimização no aplicativo e menor consumo de memória.
 - [X] Implementar o Tesseract OCR ao projeto e realizar identificação de palavras em imagens.
 - [X] Ajustar o painel flutuante para receber palavras que foram reconhecidas pelo Tesseract.
-- [ ] Implementar a api Google Vision para reconhecimento de palavras em imagens.
+- [X] Implementar a api Google Vision para reconhecimento de palavras em imagens.
 - [ ] Ajustar para ser guardado em banco a linguagem do arquivo.
-- [ ] Ajustar para ser guardado no banco reconhecimento da página retornada pelo Google Vision.
 - [ ] Favoritar vocabulário para estudo posterior
 - [ ] Adição de dicionarios japonês
 - [ ] Exportar vocabularios ao Anki
