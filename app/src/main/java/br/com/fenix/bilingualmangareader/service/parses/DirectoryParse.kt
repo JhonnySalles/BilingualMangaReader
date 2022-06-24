@@ -1,15 +1,12 @@
 package br.com.fenix.bilingualmangareader.service.parses
 
 import br.com.fenix.bilingualmangareader.util.helpers.Util
-import java.io.File
-import java.io.FileInputStream
-import java.io.IOException
-import java.io.InputStream
-import java.util.ArrayList
+import java.io.*
 
 class DirectoryParse : Parse {
 
     private val mFiles = ArrayList<File>()
+    private val mSubtitles = ArrayList<File>()
 
     override fun parse(file: File?) {
         if (file == null)
@@ -25,6 +22,8 @@ class DirectoryParse : Parse {
 
                 if (Util.isImage(f.absolutePath))
                     mFiles.add(f)
+                else if (Util.isJson(f.absolutePath))
+                    mSubtitles.add(f)
             }
         }
         mFiles.sortBy { it.name }
@@ -35,11 +34,44 @@ class DirectoryParse : Parse {
     }
 
     override fun getSubtitles(): List<String> {
-        TODO("Not yet implemented")
+        val subtitles = arrayListOf<String>()
+        mSubtitles.forEach {
+            val sub = FileInputStream(it)
+
+            val reader = BufferedReader(sub.reader())
+            val content = StringBuilder()
+            reader.use { rd ->
+                var line = rd.readLine()
+                while (line != null) {
+                    content.append(line)
+                    line = rd.readLine()
+                }
+            }
+            subtitles.add(content.toString())
+        }
+        return subtitles
+    }
+
+    private fun getName(file: File): String {
+        return file.name
     }
 
     override fun getPagePath(num: Int): String? {
-        TODO("Not yet implemented")
+        if (mFiles.size < num)
+            return null
+        return getName(mFiles[num])
+    }
+
+    override fun getPagePaths(): Map<String, Int> {
+        val paths = mutableMapOf<String, Int>()
+
+        for((index, header) in mFiles.withIndex()) {
+            val path = Util.getFolderFromPath(getName(header))
+            if (path.isNotEmpty() && !paths.containsKey(path))
+                paths[path] = index
+        }
+
+        return paths
     }
 
     override fun getPage(num: Int): InputStream {

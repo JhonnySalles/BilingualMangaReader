@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/window_ocr_close"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:layout_width="@dimen/floating_ocr_button_close"
+        android:layout_height="@dimen/floating_ocr_button_close"
+        android:src="@drawable/ic_close"
+        android:tint="@color/textPrimary"
+        android:layout_gravity="end"
+        android:layout_marginBottom="2dp"
+        android:background="@color/onPrimary"/>
+
+    <br.com.fenix.bilingualmangareader.view.components.ResizeView
+        android:id="@+id/window_ocr_resize"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/window_ocr_border"
+        android:hardwareAccelerated="true">
+        <br.com.fenix.bilingualmangareader.view.components.WindowView
+            android:id="@+id/window_ocr_clickable"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:hardwareAccelerated="true"/>
+    </br.com.fenix.bilingualmangareader.view.components.ResizeView>
+</LinearLayout>

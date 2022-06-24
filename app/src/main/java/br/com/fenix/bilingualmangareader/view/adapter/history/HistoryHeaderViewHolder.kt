@@ -22,6 +22,7 @@ class HistoryHeaderViewHolder(itemView: View, private val listener: MangaCardLis
                 itemView.context.getString(R.string.history_today)
             else
                 GeneralConsts.formatterDate(
+                    itemView.context,
                     manga.lastAccess!!
                 )
         } else

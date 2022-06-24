@@ -68,11 +68,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .commit()
     }
 
-    override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
-        mContext = context
-        return super.onCreateView(name, context, attrs)
-    }
-
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         mMenu = mNavigationView.menu
@@ -95,11 +90,5 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
         drawer.closeDrawer(GravityCompat.START)
         return true
-    }
-
-    companion object {
-        private lateinit var mContext: Context
-        fun getAppContext() =
-            mContext
     }
 }

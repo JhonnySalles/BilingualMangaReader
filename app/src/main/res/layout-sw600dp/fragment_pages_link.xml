@@ -148,6 +148,26 @@
             app:layout_constraintBottom_toTopOf="@+id/pages_link_buttons_content">
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/pages_link_pages_index"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/textPrimary"
+                android:contentDescription="@string/page_link_page_index"
+                android:text="@string/page_link_page_index"
+                android:layout_gravity="start"
+                android:gravity="center"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:textAllCaps="false"
+                app:rippleColor="@color/secondary"
+                app:strokeWidth="0dp"
+                app:backgroundTint="@color/fileLinkButtons"
+                app:icon="@drawable/ic_file_link_pages_index"
+                app:iconTint="@color/textPrimary"
+                app:iconSize="20dp"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/pages_link_auto_process_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

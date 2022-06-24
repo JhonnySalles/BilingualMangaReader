@@ -11,16 +11,18 @@ class FileUtil(val context: Context) {
      * Will be copied to path <prefix> + <assetName> in files directory
      * Returns true if copied, false otherwise (including if file already exists)
      */
-    fun copyAssetToFilesIfNotExist(prefix: String, assetName: String): Boolean {
-        val file = File(context.filesDir.absolutePath, prefix + assetName)
+    fun copyAssetToFilesIfNotExist(prefix: String, assetName: String, dir: String = ""): Boolean {
+        val directory = dir.ifEmpty { context.filesDir.absolutePath }
+        val file = File(directory, prefix + assetName)
         if (file.exists())
             return false
 
         val inputStream: InputStream = context.assets.open(assetName)
-        File(context.filesDir.absolutePath, prefix).mkdirs()
+        File(directory, prefix).mkdirs()
         // Copy in 10mb chunks to avoid going oom for larger files
         inputStream.copyTo(file.outputStream(), 10000)
         inputStream.close()
         return true
     }
+
 }

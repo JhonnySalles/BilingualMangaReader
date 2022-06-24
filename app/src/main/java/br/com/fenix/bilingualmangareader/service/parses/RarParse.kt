@@ -66,6 +66,18 @@ class RarParse : Parse {
         return getName(mHeaders[num])
     }
 
+    override fun getPagePaths(): Map<String, Int> {
+        val paths = mutableMapOf<String, Int>()
+
+        for((index, header) in mHeaders.withIndex()) {
+            val path = Util.getFolderFromPath(getName(header))
+            if (path.isNotEmpty() && !paths.containsKey(path))
+                paths[path] = index
+        }
+
+        return paths
+    }
+
     override fun getPage(num: Int): InputStream {
         if (mArchive!!.mainHeader.isSolid) {
             synchronized(this) {
@@ -118,6 +130,7 @@ class RarParse : Parse {
 
             mCacheDir!!.delete()
         }
+        mHeaders.clear()
         mArchive!!.close()
         mArchive = null
     }

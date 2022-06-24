@@ -9,22 +9,22 @@ import java.time.format.DateTimeFormatter
 
 class GeneralConsts private constructor() {
     companion object {
-        fun getCacheDir(): File? {
-            return MainActivity.getAppContext().externalCacheDir
+        fun getCacheDir(context: Context): File? {
+            return context.externalCacheDir
         }
 
-        fun getSharedPreferences(): SharedPreferences {
-            return MainActivity.getAppContext().getSharedPreferences(KEYS.PREFERENCE_NAME, Context.MODE_PRIVATE)
+        fun getSharedPreferences(context: Context): SharedPreferences {
+            return context.getSharedPreferences(KEYS.PREFERENCE_NAME, Context.MODE_PRIVATE)
         }
 
-        fun formatterDate(dateTime: LocalDateTime): String {
-            val preferences = getSharedPreferences()
+        fun formatterDate(context: Context, dateTime: LocalDateTime): String {
+            val preferences = getSharedPreferences(context)
             val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, "yyyy-MM-dd")
             return dateTime.format(DateTimeFormatter.ofPattern(pattern))
         }
 
-        fun formatterDateTime(dateTime: LocalDateTime): String {
-            val preferences = getSharedPreferences()
+        fun formatterDateTime(context: Context, dateTime: LocalDateTime): String {
+            val preferences = getSharedPreferences(context)
             val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, "yyyy-MM-dd") + " hh:mm:ss a"
             return dateTime.format(DateTimeFormatter.ofPattern(pattern))
         }
@@ -84,6 +84,7 @@ class GeneralConsts private constructor() {
         object PAGE_LINK {
             const val USE_IN_SEARCH_TRANSLATE = "USE_PAGE_LINK_IN_SEARCH_TRANSLATE"
             const val USE_DUAL_PAGE_CALCULATE = "USE_DUAL_PAGE_CALCULATE"
+            const val USE_PAGE_PATH_FOR_LINKED = "USE_PAGE_PATH_FOR_LINKED"
         }
     }
 
@@ -104,6 +105,7 @@ class GeneralConsts private constructor() {
     }
 
     object CACHEFOLDER {
+        const val TESSERACT = "tesseract"
         const val RAR = "RarTemp"
         const val COVERS = "Covers"
         const val LINKED = "Linked"
@@ -125,6 +127,7 @@ class GeneralConsts private constructor() {
         const val OPEN_JSON = 205
         const val OPEN_PAGE_LINK = 206
         const val OPEN_MANGA_FOLDER = 105
+        const val PERMISSION_FILES_ACCESS = 101
     }
 
 }

@@ -8,6 +8,7 @@ import android.content.res.Configuration
 import android.graphics.Point
 import android.graphics.Rect
 import android.os.*
+import android.util.TypedValue
 import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,7 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.setPadding
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -38,6 +40,7 @@ import br.com.fenix.bilingualmangareader.view.adapter.page_link.PageLinkCardAdap
 import br.com.fenix.bilingualmangareader.view.adapter.page_link.PageNotLinkCardAdapter
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.textfield.TextInputLayout
@@ -74,6 +77,7 @@ class PagesLinkFragment : Fragment() {
     private lateinit var mDualPages: MaterialButton
     private lateinit var mHelp: MaterialButton
     private lateinit var mDelete: MaterialButton
+    private lateinit var mPagesIndex: MaterialButton
 
     private lateinit var mMapLanguage: HashMap<String, Languages>
     private val mImageLoadHandler: Handler = ImageLoadHandler(this)
@@ -127,6 +131,8 @@ class PagesLinkFragment : Fragment() {
         mDualPages = root.findViewById(R.id.pages_link_dual_page_button)
         mHelp = root.findViewById(R.id.pages_link_help_button)
         mDelete = root.findViewById(R.id.file_link_delete_button)
+        mPagesIndex = root.findViewById(R.id.pages_link_pages_index)
+
         mButtonsGroupSize = mButtonsGroup.layoutParams
 
         mScrollUp.visibility = View.GONE
@@ -139,24 +145,28 @@ class PagesLinkFragment : Fragment() {
 
         mRecyclePageLink.setOnScrollChangeListener { _, _, _, _, yOld ->
             if (mShowScrollButton) {
-                if (yOld > 20 && mScrollDown.visibility == View.VISIBLE) {
+                if (yOld > 20) {
                     if (mHandler.hasCallbacks(mDismissDownButton))
                         mHandler.removeCallbacks(mDismissDownButton)
 
                     mScrollDown.hide()
-                } else if (yOld < -20 && mScrollUp.visibility == View.VISIBLE) {
+                } else if (yOld < -20) {
                     if (mHandler.hasCallbacks(mDismissUpButton))
                         mHandler.removeCallbacks(mDismissUpButton)
 
                     mScrollUp.hide()
                 }
 
-                if (yOld > 200) {
-                    mHandler.removeCallbacks(mDismissUpButton)
+                if (yOld > 150) {
+                    if (mHandler.hasCallbacks(mDismissUpButton))
+                        mHandler.removeCallbacks(mDismissUpButton)
+
                     mHandler.postDelayed(mDismissUpButton, 3000)
                     mScrollUp.show()
-                } else if (yOld < -200) {
-                    mHandler.removeCallbacks(mDismissDownButton)
+                } else if (yOld < -150) {
+                    if (mHandler.hasCallbacks(mDismissDownButton))
+                        mHandler.removeCallbacks(mDismissDownButton)
+
                     mHandler.postDelayed(mDismissDownButton, 3000)
                     mScrollDown.show()
                 }
@@ -205,7 +215,7 @@ class PagesLinkFragment : Fragment() {
                 mViewModel.setLanguage(language)
             }
 
-        mUseDualPageCalculate = GeneralConsts.getSharedPreferences().getBoolean(GeneralConsts.KEYS.PAGE_LINK.USE_DUAL_PAGE_CALCULATE, false)
+        mUseDualPageCalculate = GeneralConsts.getSharedPreferences(requireContext()).getBoolean(GeneralConsts.KEYS.PAGE_LINK.USE_DUAL_PAGE_CALCULATE, false)
 
         mSave.setOnClickListener { save() }
         mRefresh.setOnClickListener { refresh() }
@@ -232,7 +242,7 @@ class PagesLinkFragment : Fragment() {
         mHelp.setOnClickListener {
             if (mHandler.hasCallbacks(mReduceSizeGroupButton))
                 mHandler.removeCallbacks(mReduceSizeGroupButton)
-            mHandler.postDelayed(mReduceSizeGroupButton, 2000)
+            mHandler.postDelayed(mReduceSizeGroupButton, 3000)
 
             mButtonsGroup.layoutParams = ConstraintLayout.LayoutParams(
                 LayoutParams.WRAP_CONTENT,
@@ -267,6 +277,8 @@ class PagesLinkFragment : Fragment() {
             }
             mFullScreen.icon = ContextCompat.getDrawable(context!!, image)
         }
+
+        mPagesIndex.setOnClickListener { openMenuIndexes() }
 
         mListener = object : PageLinkCardListener {
             override fun onClick(page: PageLink) { }
@@ -428,7 +440,7 @@ class PagesLinkFragment : Fragment() {
                             AlertDialog.Builder(requireContext(), R.style.AppCompatAlertDialogStyle)
                                 .setTitle(msg)
                                 .setMessage(path)
-                                .setNeutralButton(
+                                .setPositiveButton(
                                     R.string.action_neutral
                                 ) { _, _ -> }
                                 .create()
@@ -581,8 +593,69 @@ class PagesLinkFragment : Fragment() {
             mHandler.removeCallbacks(mDismissUpButton)
         if (mHandler.hasCallbacks(mDismissDownButton))
             mHandler.removeCallbacks(mDismissDownButton)
+        if (mHandler.hasCallbacks(mReduceSizeGroupButton))
+            mHandler.removeCallbacks(mReduceSizeGroupButton)
 
         super.onDestroy()
+    }
+
+    private fun openMenuIndexes() {
+        val fileLinkLoaded =  mViewModel.fileLink.value?.path?.isNotEmpty() ?: false
+        if (!fileLinkLoaded)
+            openMenuIndexes(true)
+        else {
+            val (manga, linked) = mViewModel.getFilesNames()
+            val items = arrayOf(manga, linked)
+            MaterialAlertDialogBuilder(requireActivity(), R.style.AppCompatAlertDialogStyleFileChoice)
+                .setTitle(resources.getString(R.string.page_link_select_file_page_index))
+                .setItems(items) { _, selected ->
+                    val itemSelected = items[selected]
+                    openMenuIndexes(itemSelected == manga)
+                }
+                .show()
+        }
+    }
+
+    private fun openMenuIndexes(isMangaIndexes: Boolean) {
+        val paths = mViewModel.getPagesIndex(isMangaIndexes)
+
+        if (paths.isEmpty()) {
+            AlertDialog.Builder(requireContext(), R.style.AppCompatAlertDialogStyle)
+                .setTitle(resources.getString(R.string.reading_page_index))
+                .setMessage(resources.getString(R.string.reading_page_empty))
+                .setPositiveButton(
+                    R.string.action_neutral
+                ) { _, _ -> }
+                .create()
+                .show()
+            return
+        }
+
+        val items = paths.keys.toTypedArray()
+
+        val title = LinearLayout(requireContext())
+        title.orientation = LinearLayout.VERTICAL
+        title.setPadding(resources.getDimensionPixelOffset(R.dimen.page_link_page_index_title_padding))
+        val (manga, file) = mViewModel.getFilesNames()
+        val name = TextView(requireContext())
+        name.text = if (isMangaIndexes) manga else file
+        name.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.title_index_dialog_size))
+        name.setTextColor(ContextCompat.getColor(requireContext(), R.color.textPrimary))
+        title.addView(name)
+        val index = TextView(requireContext())
+        index.text = resources.getString(R.string.reading_page_index)
+        index.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.title_small_index_dialog_size))
+        index.setTextColor(ContextCompat.getColor(requireContext(), R.color.onSecondary))
+        title.addView(index)
+
+        MaterialAlertDialogBuilder(requireActivity(), R.style.AppCompatAlertDialogStyle)
+            .setCustomTitle(title)
+            .setItems(items) { _, selected ->
+                val pageIndex = paths[items[selected]]
+                if (pageIndex != null)
+                    mRecyclePageLink.smoothScrollToPosition(pageIndex)
+            }
+            .show()
     }
 
     private fun processImageLoading(isInitial: Boolean = false, isEnding: Boolean = false, isVerify: Boolean = false) {

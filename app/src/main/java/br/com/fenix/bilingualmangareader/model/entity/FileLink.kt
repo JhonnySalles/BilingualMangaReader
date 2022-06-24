@@ -20,8 +20,14 @@ class FileLink(id: Long?, idManga: Long, pages: Int, path: String, name: String,
     ) : this(id, idManga, pages, path, name, type, folder, language, LocalDateTime.now(), LocalDateTime.now())
 
     constructor(
-        manga: Manga, parseManga : Parse?, pages: Int, path: String, name: String, type: String, folder: String
+        manga: Manga, parseManga: Parse?, pages: Int, path: String, name: String, type: String, folder: String
     ) : this(null, manga.id!!, pages, path, name, type, folder, Languages.PORTUGUESE, LocalDateTime.now(), LocalDateTime.now()) {
+        this.manga = manga
+        this.parseManga = parseManga
+    }
+
+    constructor( manga: Manga, parseManga: Parse? ) : this(null, manga.id!!, 0, "", "", "", "", Languages.PORTUGUESE,
+        LocalDateTime.now(), LocalDateTime.now()) {
         this.manga = manga
         this.parseManga = parseManga
     }
