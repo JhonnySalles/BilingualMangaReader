@@ -6,6 +6,7 @@ import android.graphics.Point
 import android.os.Build
 import android.provider.Settings
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.view.GestureDetectorCompat
@@ -255,6 +256,12 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
     }
 
     fun processTesseractAsync() {
+        Toast.makeText(
+            context,
+            context.resources.getString(R.string.ocr_tesseract_get_request),
+            Toast.LENGTH_SHORT
+        ).show()
+
         try {
             val language = (activity as OcrProcess).getLanguage()
             val location = IntArray(2)

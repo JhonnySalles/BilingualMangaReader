@@ -5,6 +5,8 @@ import android.graphics.Bitmap
 import android.os.Handler
 import android.os.Message
 import android.os.Process
+import android.widget.Toast
+import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.FileUtil
@@ -13,7 +15,7 @@ import com.googlecode.tesseract.android.TessBaseAPI
 import org.slf4j.LoggerFactory
 import java.io.File
 
-class Tesseract(context: Context) {
+class Tesseract(private val context: Context) {
 
     private val mLOGGER = LoggerFactory.getLogger(GoogleVision::class.java)
 
