@@ -240,7 +240,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             // workaround: extract rar archive
             if (mParse is RarParse) {
                 val child = mCacheFolder[mCacheFolderIndex]
-                val cacheDir = File(requireActivity().externalCacheDir, child)
+                val cacheDir = File(GeneralConsts.getCacheDir(requireContext()), child)
                 if (!cacheDir.exists()) {
                     cacheDir.mkdir()
                 } else {

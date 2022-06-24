@@ -981,11 +981,9 @@ class SubTitleController private constructor(private val context: Context) {
             }
         }
 
-        val cacheDir = File(context.externalCacheDir, GeneralConsts.CACHEFOLDER.IMAGE)
+        val cacheDir = File(GeneralConsts.getCacheDir(context), GeneralConsts.CACHEFOLDER.IMAGE)
         if (!cacheDir.exists())
             cacheDir.mkdir()
-        else for (f in cacheDir.listFiles()!!)
-                f.delete()
 
         var name = parse.getPagePath(index) ?: index.toString()
         name = Util.getNameFromPath(name)
@@ -1011,7 +1009,7 @@ class SubTitleController private constructor(private val context: Context) {
         val parse = ParseFactory.create(path)
         if (parse is RarParse) {
             val folder = GeneralConsts.CACHEFOLDER.IMAGE
-            val cacheDir = File(context.externalCacheDir, folder)
+            val cacheDir = File(GeneralConsts.getCacheDir(context), folder)
             (parse as RarParse?)!!.setCacheDirectory(cacheDir)
         }
 
