@@ -185,7 +185,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         mPopupSubtitleVocabularyFragment = PopupSubtitleVocabulary()
         mPopupSubtitleVocabularyFragment.setBackground(R.color.onPrimary)
 
-        mFloatingSubtitleReader = FloatingSubtitleReader(applicationContext)
+        mFloatingSubtitleReader = FloatingSubtitleReader(applicationContext, this)
         mFloatingWindowOcr = FloatingWindowOcr(applicationContext, this)
 
         mPopupTranslateTab.setupWithViewPager(mPopupTranslateView)
@@ -706,9 +706,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
 
     private fun openGoogleVisionOcr() {
         val image = getImage() ?: return
-        GoogleVision.getInstance().process(image) {
-
-        }
+        GoogleVision.getInstance(this).process(image) { setText(it) }
     }
 
     override fun getImage(): Bitmap? {
@@ -736,15 +734,15 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         if (::mFloatingSubtitleReader.isInitialized) {
             mIsAlertSubtitle = true
             mFloatingSubtitleReader.updateTextOcr(text)
-            mFloatingSubtitleReader.show()
+            mFloatingSubtitleReader.showWithoutDismiss()
         }
     }
 
-    override fun setText(text: Array<String>) {
+    override fun setText(text: ArrayList<String>) {
         if (::mFloatingSubtitleReader.isInitialized) {
             mIsAlertSubtitle = true
             mFloatingSubtitleReader.updateTextOcr(text)
-            mFloatingSubtitleReader.show()
+            mFloatingSubtitleReader.showWithoutDismiss()
         }
     }
 

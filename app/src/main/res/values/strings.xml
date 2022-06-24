@@ -95,6 +95,10 @@
 
     <string name="open_app_kaku_not_founded">App Kaku not found.</string>
 
+    <!-- OCR -->
+    <string name="ocr_google_vision_get_request">Communicating with google vision api, please wait...</string>
+    <string name="ocr_google_vision_error">Processing could not be performed. Try again later.</string>
+
     <!-- READER POPUP TITLES -->
     <string name="popup_reading_open">Open</string>
     <string name="popup_reading_close">Close</string>
@@ -150,6 +154,7 @@
     <string name="floating_reading_not_permission">Permission is not granted!</string>
 
     <!-- ALERT -->
+    <string name="alert_title">Alert</string>
     <string name="manga_excluded">Manga not found or excluded</string>
     <string name="action_neutral">Ok</string>
     <string name="switch_action_positive">Yes</string>

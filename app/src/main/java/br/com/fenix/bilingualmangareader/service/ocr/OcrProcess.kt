@@ -8,5 +8,5 @@ interface OcrProcess {
     fun getImage(x: Int, y: Int, width: Int, height: Int): Bitmap?
     fun getLanguage(): Languages
     fun setText(text: String?)
-    fun setText(text: Array<String>)
+    fun setText(text: ArrayList<String>)
 }

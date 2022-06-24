@@ -10,13 +10,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.view.GestureDetectorCompat
 import br.com.fenix.bilingualmangareader.R
-import br.com.fenix.bilingualmangareader.model.entity.PageLink
 import br.com.fenix.bilingualmangareader.model.enums.Languages
-import br.com.fenix.bilingualmangareader.model.enums.Pages
-import br.com.fenix.bilingualmangareader.service.ocr.Tesseract
-import br.com.fenix.bilingualmangareader.service.parses.Parse
-import br.com.fenix.bilingualmangareader.util.helpers.Util
 import br.com.fenix.bilingualmangareader.service.ocr.OcrProcess
+import br.com.fenix.bilingualmangareader.service.ocr.Tesseract
+import br.com.fenix.bilingualmangareader.util.helpers.Util
 import br.com.fenix.bilingualmangareader.view.components.ResizeView
 import br.com.fenix.bilingualmangareader.view.components.WindowListener
 import br.com.fenix.bilingualmangareader.view.components.WindowView

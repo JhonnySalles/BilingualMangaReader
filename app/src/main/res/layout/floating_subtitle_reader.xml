@@ -10,37 +10,53 @@
         android:id="@+id/floating_subtitle_ocr_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
         android:layout_marginTop="30dp"
         android:visibility="gone">
         <ScrollView
             android:id="@+id/floating_subtitle_ocr_scroll"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="10dp">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/floating_subtitle_ocr_text"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:autoLink="all"
-                    android:fontFamily="monospace"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                    android:textColor="@color/textPrimary"
-                    android:textSize="@dimen/floating_reader_text" />
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatImageButton
+                        android:id="@+id/floating_subtitle_ocr_clear_list"
+                        style="@style/Base.Widget.AppCompat.Button.Borderless"
+                        android:layout_width="@dimen/floating_reader_button_width"
+                        android:layout_height="@dimen/floating_reader_button_width"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/floatingButton"
+                        android:src="@drawable/ic_ocr_clear_list"
+                        android:tint="@color/textPrimary"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <TextView
+                        android:id="@+id/floating_subtitle_ocr_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:autoLink="all"
+                        android:fontFamily="monospace"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        android:textColor="@color/textPrimary"
+                        android:textSize="@dimen/floating_reader_text" />
+                </LinearLayout>
 
                 <ListView
                     android:id="@+id/floating_subtitle_ocr_list"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginBottom="20dp"
                     android:listSelector="@color/itemSelectedSemiTransparent"
                     android:nestedScrollingEnabled="true" />
@@ -49,17 +65,45 @@
         </ScrollView>
     </LinearLayout>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/floating_subtitle_subtitle_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="30dp">
 
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/nav_floating_subtitle_before_text"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="@dimen/floating_reader_button_width"
+            android:layout_height="@dimen/floating_reader_button_width"
+            android:layout_marginTop="5dp"
+            android:background="@color/floatingButton"
+            android:src="@drawable/ic_navigate_before"
+            android:tint="@color/textPrimary"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/nav_floating_subtitle_next_text"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="@dimen/floating_reader_button_width"
+            android:layout_height="@dimen/floating_reader_button_width"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="5dp"
+            android:background="@color/floatingButton"
+            android:src="@drawable/ic_navigate_next"
+            android:tint="@color/textPrimary"
+            app:layout_constraintLeft_toRightOf="@+id/nav_floating_subtitle_before_text"
+            app:layout_constraintTop_toTopOf="parent"/>
+
         <LinearLayout
+            android:id="@+id/nav_floating_subtitle_buttons_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:orientation="vertical">
+            android:layout_marginTop="55dp"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/nav_floating_subtitle_go_to_top"
@@ -108,9 +152,13 @@
 
         <ScrollView
             android:id="@+id/floating_subtitle_scroll"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="10dp">
+            android:layout_marginStart="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/nav_floating_subtitle_buttons_container"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -121,6 +169,7 @@
                     android:id="@+id/floating_subtitle_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginBottom="10dp"
                     android:fontFamily="monospace"
@@ -146,14 +195,13 @@
                     android:id="@+id/floating_subtitle_list_page_vocabulary"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:layout_marginEnd="10dp"
                     android:layout_marginBottom="20dp"
                     android:listSelector="@color/itemSelectedSemiTransparent"
                     android:nestedScrollingEnabled="true" />
 
             </LinearLayout>
         </ScrollView>
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -168,26 +216,6 @@
             android:src="@drawable/ic_retracted"
             android:tint="@color/textPrimary"
             tools:layout_editor_absoluteY="0dp" />
-
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/nav_floating_subtitle_before_text"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"
-            android:layout_width="@dimen/floating_reader_button_width"
-            android:layout_height="@dimen/floating_reader_button_width"
-            android:layout_marginStart="25dp"
-            android:background="@color/floatingButton"
-            android:src="@drawable/ic_navigate_before"
-            android:tint="@color/textPrimary" />
-
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/nav_floating_subtitle_next_text"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"
-            android:layout_width="@dimen/floating_reader_button_width"
-            android:layout_height="@dimen/floating_reader_button_width"
-            android:layout_marginStart="5dp"
-            android:background="@color/floatingButton"
-            android:src="@drawable/ic_navigate_next"
-            android:tint="@color/textPrimary" />
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/nav_floating_subtitle_page_linked"

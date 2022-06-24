@@ -17,14 +17,14 @@ class GeneralConsts private constructor() {
             return context.getSharedPreferences(KEYS.PREFERENCE_NAME, Context.MODE_PRIVATE)
         }
 
-        fun formatterDate(dateTime: LocalDateTime): String {
-            val preferences = getSharedPreferences()
+        fun formatterDate(context: Context, dateTime: LocalDateTime): String {
+            val preferences = getSharedPreferences(context)
             val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, "yyyy-MM-dd")
             return dateTime.format(DateTimeFormatter.ofPattern(pattern))
         }
 
-        fun formatterDateTime(dateTime: LocalDateTime): String {
-            val preferences = getSharedPreferences()
+        fun formatterDateTime(context: Context, dateTime: LocalDateTime): String {
+            val preferences = getSharedPreferences(context)
             val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, "yyyy-MM-dd") + " hh:mm:ss a"
             return dateTime.format(DateTimeFormatter.ofPattern(pattern))
         }
