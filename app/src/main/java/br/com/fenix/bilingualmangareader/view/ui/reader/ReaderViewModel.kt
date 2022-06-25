@@ -6,6 +6,7 @@ import android.graphics.Color
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import com.squareup.picasso.Transformation
 import jp.wasabeef.picasso.transformations.ColorFilterTransformation
@@ -46,6 +47,9 @@ class ReaderViewModel(application: Application) : AndroidViewModel(application) 
 
     private var mOcrItem: MutableLiveData<ArrayList<String>> =  MutableLiveData(arrayListOf())
     var ocrItem: LiveData<ArrayList<String>> = mOcrItem
+
+    var mLanguageOcr: Languages? = null
+    var mIsAlertSubtitle = false
 
     private var mBlueLightColor = Color.argb(mBlueLightAlpha.value!!, 255, 50, 0)
 
