@@ -270,9 +270,11 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
             format = PixelFormat.TRANSLUCENT
             flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
             type = layoutType
-            gravity = Gravity.TOP
+            gravity = Gravity.TOP or Gravity.LEFT
             width = context.resources.getDimension(R.dimen.floating_reader_width).toInt()
             height = context.resources.getDimension(R.dimen.floating_reader_height).toInt()
+            x = (mRealDisplaySize.x / 2) - (width / 2)
+            y = context.resources.getDimension(R.dimen.floating_reader_initial_top_padding).toInt()
         }
     }
 
@@ -495,6 +497,11 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
 
     fun showWithoutDismiss() {
         if (!isShowing)
+            show()
+    }
+
+    fun forceZIndex() {
+        if (isShowing)
             show()
     }
 

@@ -1,9 +1,13 @@
 package br.com.fenix.bilingualmangareader.view.ui.window
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.graphics.PixelFormat
 import android.graphics.Point
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.view.*
 import android.widget.Toast
@@ -15,6 +19,7 @@ import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.service.ocr.OcrProcess
 import br.com.fenix.bilingualmangareader.service.ocr.Tesseract
 import br.com.fenix.bilingualmangareader.util.helpers.Util
+import br.com.fenix.bilingualmangareader.view.components.ComponentsUtil
 import br.com.fenix.bilingualmangareader.view.components.ResizeView
 import br.com.fenix.bilingualmangareader.view.components.WindowListener
 import br.com.fenix.bilingualmangareader.view.components.WindowView
@@ -43,6 +48,9 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
     private val mViewHeight = 0
     private val mViewWidth = 0
     private var minSize = 0
+    private lateinit var mCloseButton: AppCompatImageButton
+    private val mDismissCloseButton = Runnable { ComponentsUtil.changeAnimateVisibility(mCloseButton, false) }
+    private var mHandler = Handler(Looper.getMainLooper())
 
     private var mParamUpdateTimer = System.currentTimeMillis()
 
@@ -52,7 +60,8 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
             this@FloatingWindowOcr.minSize = context.resources.getDimension(R.dimen.floating_ocr_min_size).toInt()
             this@FloatingWindowOcr.layoutParams = getDefaultParams()
 
-            this.findViewById<AppCompatImageButton>(R.id.window_ocr_close).setOnClickListener { dismiss() }
+            mCloseButton = this.findViewById(R.id.window_ocr_close)
+            mCloseButton.setOnClickListener { dismiss() }
 
             val windowView: WindowView = this.findViewById(R.id.window_ocr_clickable)
             val resizeView: ResizeView = this.findViewById(R.id.window_ocr_resize)
@@ -76,8 +85,8 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
         params.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
         params.format = PixelFormat.TRANSLUCENT
         params.gravity = Gravity.TOP or Gravity.LEFT
-        params.x = mRealDisplaySize.x / 2
-        params.y = mRealDisplaySize.y / 2
+        params.x = (mRealDisplaySize.x / 2) - (params.width / 2)
+        params.y = (mRealDisplaySize.y / 2) - (params.height / 2)
         return params
     }
 
@@ -147,7 +156,13 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
         return false
     }
 
-    override fun onLongPress(e: MotionEvent?) {}
+    override fun onLongPress(e: MotionEvent?) {
+        if (mHandler.hasCallbacks(mDismissCloseButton))
+            mHandler.removeCallbacks(mDismissCloseButton)
+
+        mHandler.postDelayed(mDismissCloseButton, 3000)
+        ComponentsUtil.changeAnimateVisibility(mCloseButton, true)
+    }
 
     override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
         return false
@@ -252,6 +267,9 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
     }
 
     fun destroy() {
+        if (mHandler.hasCallbacks(mDismissCloseButton))
+            mHandler.removeCallbacks(mDismissCloseButton)
+
         dismiss()
     }
 

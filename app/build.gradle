@@ -10,6 +10,8 @@ android {
     defaultConfig {
         applicationId "br.com.fenix.bilingualmangareader"
         minSdk 24
+        minSdkVersion 24
+        maxSdkVersion 25
         targetSdk 24
         versionCode 10
         versionName "2.10 (Nougat)"
