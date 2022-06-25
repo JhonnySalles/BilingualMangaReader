@@ -1,5 +1,7 @@
 package br.com.fenix.bilingualmangareader.view.ui.window
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.graphics.*
 import android.os.Build
@@ -7,6 +9,7 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.view.*
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageButton
@@ -15,6 +18,7 @@ import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.service.ocr.OcrProcess
 import br.com.fenix.bilingualmangareader.service.ocr.Tesseract
+import br.com.fenix.bilingualmangareader.util.helpers.Util
 import br.com.fenix.bilingualmangareader.view.components.ComponentsUtil
 import br.com.fenix.bilingualmangareader.view.components.ResizeView
 import br.com.fenix.bilingualmangareader.view.components.WindowListener
@@ -23,7 +27,8 @@ import org.slf4j.LoggerFactory
 import kotlin.math.abs
 
 
-class FloatingWindowOcr constructor(private val context: Context, private val activity: AppCompatActivity) : WindowListener, GestureDetector.OnDoubleTapListener {
+class FloatingWindowOcr constructor(private val context: Context, private val activity: AppCompatActivity) : WindowListener,
+    GestureDetector.OnDoubleTapListener {
 
     private val mLOGGER = LoggerFactory.getLogger(FloatingWindowOcr::class.java)
     private var windowManager: WindowManager? = null
@@ -36,7 +41,7 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
     private var mFloatingView: View =
         LayoutInflater.from(context).inflate(R.layout.floating_window_ocr, null)
 
-    private var layoutParams: WindowManager.LayoutParams
+    private lateinit var layoutParams: WindowManager.LayoutParams
 
     var isShowing = false
     private var mRealDisplaySize: Point
@@ -46,7 +51,20 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
     private val mViewWidth = 0
     private var minSize = 0
     private lateinit var mCloseButton: AppCompatImageButton
-    private val mDismissCloseButton = Runnable { ComponentsUtil.changeAnimateVisibility(mCloseButton, false) }
+    private val mDismissCloseButton = Runnable {
+        if (mCloseButton.visibility == View.VISIBLE) {
+            mCloseButton.animate().alpha(0.0f).setDuration(300L)
+                .setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator?) {
+                        super.onAnimationEnd(animation)
+                        mCloseButton.visibility = View.GONE
+                        layoutParams.width -= context.resources.getDimension(R.dimen.floating_ocr_button_close_size)
+                            .toInt() + context.resources.getDimension(R.dimen.floating_ocr_button_close_margin).toInt()
+                        windowManager?.updateViewLayout(mFloatingView, layoutParams)
+                    }
+                })
+        }
+    }
     private var mHandler = Handler(Looper.getMainLooper())
 
     private var mTouchParamUpdateTimer = System.currentTimeMillis()
@@ -141,7 +159,21 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
             mHandler.removeCallbacks(mDismissCloseButton)
 
         mHandler.postDelayed(mDismissCloseButton, 3000)
-        ComponentsUtil.changeAnimateVisibility(mCloseButton, true)
+
+        if (mCloseButton.visibility != View.VISIBLE) {
+            mCloseButton.visibility = View.VISIBLE
+            mCloseButton.alpha = 0.0f
+            mCloseButton.animate().alpha(1.0f).setDuration(300L).setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    super.onAnimationEnd(animation)
+                    mCloseButton.visibility = View.VISIBLE
+                }
+            })
+
+            layoutParams.width += context.resources.getDimension(R.dimen.floating_ocr_button_close_size)
+                .toInt() + context.resources.getDimension(R.dimen.floating_ocr_button_close_margin).toInt()
+            windowManager?.updateViewLayout(mFloatingView, layoutParams)
+        }
     }
 
     override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
@@ -304,7 +336,8 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
         return try {
             val location = IntArray(2)
             mFloatingView.getLocationOnScreen(location)
-            val image = (activity as OcrProcess).getImage(location[0], location[1], mFloatingView.width, mFloatingView.height) ?: return null
+            val image = (activity as OcrProcess).getImage(location[0], location[1], mFloatingView.width, mFloatingView.height)
+                ?: return null
 
             val tess = Tesseract.getInstance(context)
             tess.process(languages, image)

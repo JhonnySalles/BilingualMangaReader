@@ -57,7 +57,8 @@
     <dimen name="floating_ocr_min_size">50dp</dimen>
     <dimen name="floating_ocr_height">100dp</dimen>
     <dimen name="floating_ocr_width">100dp</dimen>
-    <dimen name="floating_ocr_button_close">25dp</dimen>
+    <dimen name="floating_ocr_button_close_size">25dp</dimen>
+    <dimen name="floating_ocr_button_close_margin">5dp</dimen>
     <dimen name="floating_ocr_language">25dp</dimen>
     <dimen name="floating_ocr_language_text_size">13sp</dimen>
     <dimen name="floating_ocr_text">20sp</dimen>
