@@ -53,7 +53,22 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
     var isShowing = false
     private var touchConsumedByMove = false
 
+    private val mOnFlingListener = object : GestureDetector.SimpleOnGestureListener() {
+        override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
+            if (e1 != null && e2 != null)
+                if (abs(velocityX) > 200 && (e1.x - e2.x > 100 || e2.x - e1.x > 100)) {
+                    dismiss()
+                    return false
+                }
+
+            return super.onFling(e1, e2, velocityX, velocityY)
+        }
+    }
+
+    private val mOnFlingDetector = GestureDetector(context, mOnFlingListener)
+
     private val onTouchListener = View.OnTouchListener { view, event ->
+        mOnFlingDetector.onTouchEvent(event)
         val totalDeltaX = lastX - firstX
         val totalDeltaY = lastY - firstY
 
