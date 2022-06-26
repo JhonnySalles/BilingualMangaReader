@@ -94,7 +94,7 @@
         android:adjustViewBounds="true"
         android:background="@drawable/ic_favorite_mark_border"
         android:backgroundTint="@color/on_primary"
-        android:padding="2dp"
+        android:padding="1dp"
         android:src="@drawable/ic_favorite_mark"
         android:visibility="gone"
         app:tint="@color/secondary" />

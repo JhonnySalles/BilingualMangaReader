@@ -1,9 +1,11 @@
 package br.com.fenix.bilingualmangareader
 
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.WindowManager
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -73,8 +75,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // content_fragment use for receive fragments layout
         mFragmentManager.beginTransaction().replace(R.id.main_content_root, LibraryFragment())
             .commit()
-
-        ComponentsUtil.setSystemUITransparency(window)
     }
 
     private fun clearCache() {

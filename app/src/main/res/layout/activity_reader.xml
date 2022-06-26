@@ -5,7 +5,7 @@
     android:id="@+id/root_activity_reader"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primary"
+    android:background="@color/on_primary"
     android:fitsSystemWindows="true"
     tools:context=".view.ui.reader.ReaderActivity">
 
@@ -31,7 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/default_navigator_header_size"
                 android:paddingTop="@dimen/default_navigator_header_padding"
-                android:background="@color/primary_semitransparent"
+                android:background="@drawable/main_toolbar_background"
                 app:popupTheme="@style/MyDarkToolbarStyle"
                 app:theme="@style/ToolbarTheme">
 
@@ -178,7 +178,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:background="@color/primary_semitransparent"
+            android:background="@drawable/main_toolbar_background_inverse"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -196,8 +196,8 @@
                 android:paddingLeft="@dimen/popup_reader_button_padding"
                 android:paddingRight="@dimen/popup_reader_button_padding"
                 app:icon="@drawable/ic_screen_rotation"
-                app:iconTint="@color/text_primary"
                 app:iconSize="28dp"
+                app:iconTint="@color/text_primary"
                 app:rippleColor="@color/on_secondary" />
 
             <Button
@@ -214,8 +214,8 @@
                 android:paddingLeft="@dimen/popup_reader_button_padding"
                 android:paddingRight="@dimen/popup_reader_button_padding"
                 app:icon="@drawable/ic_reader_ocr"
-                app:iconTint="@color/text_primary"
                 app:iconSize="28dp"
+                app:iconTint="@color/text_primary"
                 app:rippleColor="@color/on_secondary" />
 
             <Button
@@ -232,8 +232,8 @@
                 android:paddingLeft="@dimen/popup_reader_button_padding"
                 android:paddingRight="@dimen/popup_reader_button_padding"
                 app:icon="@drawable/ic_change_language"
-                app:iconTint="@color/text_primary"
                 app:iconSize="28dp"
+                app:iconTint="@color/text_primary"
                 app:rippleColor="@color/on_secondary" />
 
             <Button
@@ -250,8 +250,8 @@
                 android:paddingLeft="@dimen/popup_reader_button_padding"
                 android:paddingRight="@dimen/popup_reader_button_padding"
                 app:icon="@drawable/ic_color_settings"
-                app:iconTint="@color/text_primary"
                 app:iconSize="30dp"
+                app:iconTint="@color/text_primary"
                 app:rippleColor="@color/on_secondary" />
 
             <Button
@@ -268,8 +268,8 @@
                 android:paddingLeft="@dimen/popup_reader_button_padding"
                 android:paddingRight="@dimen/popup_reader_button_padding"
                 app:icon="@drawable/ic_page_linked"
-                app:iconTint="@color/text_primary"
                 app:iconSize="30dp"
+                app:iconTint="@color/text_primary"
                 app:rippleColor="@color/on_secondary" />
 
             <Button
@@ -286,8 +286,8 @@
                 android:paddingLeft="@dimen/popup_reader_button_padding"
                 android:paddingRight="@dimen/popup_reader_button_padding"
                 app:icon="@drawable/ic_file_link"
-                app:iconTint="@color/text_primary"
                 app:iconSize="30dp"
+                app:iconTint="@color/text_primary"
                 app:rippleColor="@color/on_secondary" />
 
             <Button
@@ -304,8 +304,8 @@
                 android:paddingLeft="@dimen/popup_reader_button_padding"
                 android:paddingRight="@dimen/popup_reader_button_padding"
                 app:icon="@drawable/ic_floating_window"
-                app:iconTint="@color/text_primary"
                 app:iconSize="30dp"
+                app:iconTint="@color/text_primary"
                 app:rippleColor="@color/on_secondary" />
 
         </LinearLayout>

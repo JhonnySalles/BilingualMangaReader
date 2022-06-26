@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingTop="@dimen/default_navigator_header_margin_top"
     android:clipToPadding="false"
     android:clipChildren="false"
     android:fillViewport="false"
@@ -27,6 +26,7 @@
             android:clipToPadding="false"
             android:clipChildren="false"
             android:fillViewport="false"
+            android:paddingTop="70dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -42,8 +42,7 @@
                 android:layoutAnimation="@anim/layout_animation_library_line"
                 android:clipToPadding="false"
                 android:fillViewport="false"
-                android:paddingTop="5dp"
-                android:paddingBottom="@dimen/default_navigator_header_padding_tablet_button"/>
+                android:paddingBottom="70dp"/>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
@@ -53,6 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top|center"
             android:layout_margin="@dimen/page_link_scrolling_button_margin"
+            android:paddingTop="70dp"
             android:backgroundTint="@color/white"
             android:contentDescription="@string/action_scroll_up"
             android:visibility="gone"

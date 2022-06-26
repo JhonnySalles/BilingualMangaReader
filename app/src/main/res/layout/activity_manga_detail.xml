@@ -23,8 +23,7 @@
         android:layout_height="@dimen/default_navigator_header_size"
         android:background="@color/transparent"
         android:gravity="start|center"
-        android:layout_marginTop="20dp"
         app:popupTheme="@style/MyDarkToolbarStyle"
-        app:theme="@style/ToolbarBorderTheme"/>
+        app:theme="@style/ToolbarTheme"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

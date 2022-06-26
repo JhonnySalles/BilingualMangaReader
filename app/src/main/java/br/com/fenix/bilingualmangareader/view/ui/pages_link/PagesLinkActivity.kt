@@ -36,8 +36,6 @@ class PagesLinkActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-
-        ComponentsUtil.setSystemUITransparency(window)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

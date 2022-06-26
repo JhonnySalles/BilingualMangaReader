@@ -55,7 +55,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
         .getBoolean(GeneralConsts.KEYS.PAGE_LINK.USE_PAGE_PATH_FOR_LINKED, false)
 
     fun getMangaName(): String {
-        return mManga?.name?: ""
+        return mManga?.fileName?: ""
     }
 
     private fun getParse(path: String): Parse? =

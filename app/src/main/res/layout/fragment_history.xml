@@ -19,6 +19,6 @@
         android:clipToPadding="false"
         android:fillViewport="false"
         android:paddingTop="5dp"
-        android:paddingBottom="@dimen/default_navigator_header_padding_tablet_button"/>
+        android:paddingBottom="70dp"/>
 
 </FrameLayout>
