@@ -36,9 +36,12 @@
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:background="@drawable/main_header_background"
-        android:layout_marginTop="55dp"/>
+        android:layout_marginTop="@dimen/default_navigator_header_padding"/>
 
     <!-- fragment dynamic content -->
-    <include layout="@layout/activity_main_content" />
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/activity_main_content" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

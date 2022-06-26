@@ -282,7 +282,18 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         else
             mStorage.getPrevManga(mManga!!)
 
-        if (changeManga == null) return
+        if (changeManga == null) {
+            val content = if (isNext) R.string.switch_next_comic_last_comic else R.string.switch_prev_comic_first_comic
+            AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+                .setTitle(getString(R.string.switch_next_comic_not_found))
+                .setMessage(content)
+                .setPositiveButton(
+                    R.string.action_neutral
+                ) { _, _ ->
+                }
+                .create().show()
+            return
+        }
 
         val title = if (isNext) R.string.switch_next_comic else R.string.switch_prev_comic
 

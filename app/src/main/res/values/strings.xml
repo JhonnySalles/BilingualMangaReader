@@ -164,6 +164,9 @@
     <string name="switch_action_negative">No</string>
     <string name="switch_next_comic">Would you like to switch to the next comic?</string>
     <string name="switch_prev_comic">Would you like to switch to the previous comic?</string>
+    <string name="switch_next_comic_not_found">Next file not found</string>
+    <string name="switch_prev_comic_first_comic">This is the first file.</string>
+    <string name="switch_next_comic_last_comic">This is the last file.</string>
 
     <!-- LIBRARY -->
     <string name="library_last_access">Last_access</string>

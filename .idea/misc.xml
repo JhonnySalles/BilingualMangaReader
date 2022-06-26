@@ -31,6 +31,8 @@
         <entry key="..\:/Projeto/MangaReader/app/src/main/res/menu/main_menu_drawer.xml" value="0.1" />
         <entry key="..\:/Projeto/MangaReader/app/src/main/res/menu/menu_reader.xml" value="0.20416666666666666" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/drawable-v21/custom_ripple.xml" value="0.203" />
+        <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/drawable-v21/history_custom_ripple.xml" value="0.3455" />
+        <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/drawable-v21/history_custom_ripple_item_deleted.xml" value="0.3455" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.38333333333333336" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/drawable/dual_page_link_page_name.xml" value="0.367" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/drawable/dual_page_link_page_name_background.xml" value="0.1995" />
@@ -160,6 +162,7 @@
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/manga_line_card.xml" value="0.1408514492753623" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/manga_page_link_grid_card.xml" value="0.16944444444444445" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/nav_header_main.xml" value="0.20208333333333334" />
+        <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/navigator_header_main.xml" value="0.3263888888888889" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/order_manga_page_grid_card.xml" value="0.24537037037037038" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/page_link_card.xml" value="0.16944444444444445" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/page_not_link_card.xml" value="0.16944444444444445" />
