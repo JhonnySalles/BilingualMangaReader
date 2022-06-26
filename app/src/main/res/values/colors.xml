@@ -56,6 +56,9 @@
     <color name="file_link_drag_selected">#79b700</color>
     <color name="file_not_link_drag">#558000</color>
 
+    <color name="floating_buttons_close">#77000000</color>
+    <color name="floating_buttons">#22000000</color>
+
     <color name="manga_detail_title_background_top">#000000</color>
     <color name="manga_detail_title_background_center">#DD000000</color>
     <color name="manga_detail_title_background_bottom">#00000000</color>

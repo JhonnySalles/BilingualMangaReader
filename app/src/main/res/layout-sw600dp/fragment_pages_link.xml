@@ -13,7 +13,8 @@
         android:id="@+id/pages_link_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/margin_small">
+        android:layout_margin="@dimen/margin_small"
+        android:paddingTop="@dimen/default_navigator_header_padding_tablet">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/pages_link_pages_linked_recycler"
@@ -29,7 +30,7 @@
             app:layout_constrainedHeight="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/pages_link_content_pages_not_linked"
-            app:layout_constraintTop_toBottomOf="@+id/pages_link_file_link_text"
+            app:layout_constraintTop_toBottomOf="@+id/pages_link_name_manga"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintVertical_bias="0"/>
 
@@ -45,7 +46,7 @@
             android:layout_marginEnd="@dimen/page_link_list_not_link_margin_land_or_tablet"
             app:layout_constrainedHeight="true"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pages_link_file_link_text"
+            app:layout_constraintTop_toBottomOf="@+id/pages_link_name_manga"
             app:layout_constraintEnd_toStartOf="@+id/pages_link_pages_linked_recycler"
             app:layout_constraintBottom_toBottomOf="parent">
 
@@ -91,7 +92,7 @@
             android:layout_marginEnd="@dimen/page_link_language_margin"
             android:hint="@string/page_link_file"
             android:textColorHint="@color/text_primary"
-            android:layout_marginStart="@dimen/page_link_toolbar_size"
+            android:layout_marginStart="@dimen/pages_link_file_link_margin_toolbar"
             app:boxBackgroundColor="@color/primary"
             app:boxStrokeColor="@color/on_secondary"
             app:startIconTint="@color/on_secondary"
@@ -99,7 +100,7 @@
             app:placeholderTextColor="@color/text_primary"
             app:hintTextColor="@color/on_secondary"
             app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintHorizontal_weight="1.9"
+            app:layout_constraintHorizontal_weight="1.8"
             app:layout_constraintEnd_toStartOf="@+id/pages_link_language_combo"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -137,6 +138,21 @@
                 android:inputType="none"
                 android:textColor="@color/text_primary" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/pages_link_name_manga"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:textColor="@color/white"
+            android:textSize="@dimen/page_link_card_page_number_size"
+            android:layout_marginTop="@dimen/page_link_card_page_name_margin"
+            android:background="@color/primary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pages_link_language_combo"/>
 
         <com.google.android.material.button.MaterialButtonToggleGroup
             android:id="@+id/page_link_buttons_group"
@@ -294,6 +310,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_alignParentBottom="true"
+            android:paddingBottom="@dimen/default_navigator_header_padding_tablet_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:gravity="end">

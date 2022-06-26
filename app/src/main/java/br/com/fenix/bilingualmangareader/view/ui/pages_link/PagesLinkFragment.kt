@@ -79,6 +79,8 @@ class PagesLinkFragment : Fragment() {
     private lateinit var mHelp: MaterialButton
     private lateinit var mDelete: MaterialButton
     private lateinit var mPagesIndex: MaterialButton
+    private lateinit var mToolbar: androidx.appcompat.widget.Toolbar
+    private lateinit var mMangaName: TextView
 
     private lateinit var mMapLanguage: HashMap<String, Languages>
     private val mImageLoadHandler: Handler = ImageLoadHandler(this)
@@ -133,6 +135,8 @@ class PagesLinkFragment : Fragment() {
         mHelp = root.findViewById(R.id.pages_link_help_button)
         mDelete = root.findViewById(R.id.file_link_delete_button)
         mPagesIndex = root.findViewById(R.id.pages_link_pages_index)
+        mMangaName = root.findViewById(R.id.pages_link_name_manga)
+        mToolbar = requireActivity().findViewById(R.id.toolbar_manga_pages_link)
 
         mButtonsGroupSize = mButtonsGroup.layoutParams
 
@@ -270,7 +274,7 @@ class PagesLinkFragment : Fragment() {
                 ComponentsUtil.changeAnimateVisibility(mHelp, visible)
 
             ComponentsUtil.changeAnimateVisibility(
-                arrayListOf(mFileLink, mFileLinkLanguage, mSave, mRefresh, mButtonsGroup),
+                arrayListOf(mFileLink, mFileLinkLanguage, mSave, mRefresh, mButtonsGroup, mPagesIndex, mToolbar, mMangaName),
                 visible
             )
 
@@ -438,10 +442,12 @@ class PagesLinkFragment : Fragment() {
                 mViewModel.reload(fileLink as FileLink) { index, type -> notifyItemChanged(type, index) }
             else
                 mViewModel.reLoadImages(Pages.ALL, true, isCloseThreads = true)
+            mMangaName.text = mViewModel.getMangaName()
         } else {
             val bundle = this.arguments
             if (bundle != null && bundle.containsKey(GeneralConsts.KEYS.OBJECT.MANGA)) {
                 mViewModel.loadManga(bundle[GeneralConsts.KEYS.OBJECT.MANGA] as Manga) { index, type -> notifyItemChanged(type, index) }
+                mMangaName.text = mViewModel.getMangaName()
                 mPageSelected = bundle.getInt(GeneralConsts.KEYS.MANGA.PAGE_NUMBER, 0)
             }
         }
@@ -566,6 +572,7 @@ class PagesLinkFragment : Fragment() {
         mSave.isEnabled = enabled
         mRefresh.isEnabled = enabled
         mButtonsGroup.isEnabled = enabled
+        mPagesIndex.isEnabled = enabled
     }
 
     private fun changColorButton(color: Int) {

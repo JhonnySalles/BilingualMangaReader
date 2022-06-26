@@ -309,7 +309,7 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
     private lateinit var mRealDisplaySize: Point
     private var minSize = 0
     private fun setResizer() {
-        minSize = context.resources.getDimension(R.dimen.floating_reader_min_size).toInt()
+        minSize = context.resources.getDimension(R.dimen.floating_reader_button_close).toInt()
         val displaySize = Point()
         windowManager!!.defaultDisplay!!.getRealSize(displaySize)
         mRealDisplaySize = displaySize

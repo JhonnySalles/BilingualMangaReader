@@ -37,6 +37,7 @@ import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.service.repository.SubTitleRepository
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
+import br.com.fenix.bilingualmangareader.view.components.ComponentsUtil
 import br.com.fenix.bilingualmangareader.view.ui.pages_link.PagesLinkActivity
 import br.com.fenix.bilingualmangareader.view.ui.pages_link.PagesLinkViewModel
 import br.com.fenix.bilingualmangareader.view.ui.window.FloatingSubtitleReader
@@ -272,6 +273,8 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
                 setFragment(fragment)
             }
         }
+
+        //ComponentsUtil.setSystemUITransparency(window)
     }
 
     private fun switchManga(isNext: Boolean = true) {

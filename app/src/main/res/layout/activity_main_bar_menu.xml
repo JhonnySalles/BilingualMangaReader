@@ -17,8 +17,9 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/main_toolbar"
+            android:paddingTop="@dimen/default_navigator_header_padding"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="@dimen/default_navigator_header_size"
             app:popupTheme="@style/Widget.AppCompat.Light.PopupMenu.Overflow" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -36,7 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:background="@drawable/main_header_background"
-        android:layout_marginTop="@dimen/default_navigator_header_padding"/>
+        android:layout_marginTop="@dimen/default_navigator_header_margin_top"/>
 
     <!-- fragment dynamic content -->
     <include

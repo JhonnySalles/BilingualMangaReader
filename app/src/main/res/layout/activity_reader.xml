@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primary"
+    android:fitsSystemWindows="true"
     tools:context=".view.ui.reader.ReaderActivity">
 
     <FrameLayout
@@ -28,7 +29,8 @@
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar_reader"
                 android:layout_width="match_parent"
-                android:layout_height="?android:attr/actionBarSize"
+                android:layout_height="@dimen/default_navigator_header_size"
+                android:paddingTop="@dimen/default_navigator_header_padding"
                 android:background="@color/primary_semitransparent"
                 app:popupTheme="@style/MyDarkToolbarStyle"
                 app:theme="@style/ToolbarTheme">
