@@ -2,48 +2,66 @@
 <resources>
     <!-- Primary color -->
     <color name="primary">#212121</color>
-    <color name="primaryVariant">#484848</color>
-    <color name="onPrimary">#000000</color>
-    <color name="primarySemitransparent">#ce212121</color>
-    <color name="onPrimarySemitransparent">#DD000000</color>
+    <color name="primary_variant">#484848</color>
+    <color name="on_primary">#000000</color>
+    <color name="primary_semitransparent">#ce212121</color>
+    <color name="on_primary_semitransparent">#DD000000</color>
     <!-- Secondary color -->
     <color name="secondary">#aeea00</color>
-    <color name="secondaryVariant">#e4ff54</color>
-    <color name="onSecondary">#79b700</color>
+    <color name="secondary_variant">#e4ff54</color>
+    <color name="on_secondary">#79b700</color>
 
     <!-- Night background color -->
 
     <!-- Night primary color -->
-    <color name="nightPrimary">#212121</color>
-    <color name="nightPrimaryVariant">#484848</color>
-    <color name="nightOnPrimary">#000000</color>
+    <color name="night_primary">#212121</color>
+    <color name="night_primary_variant">#484848</color>
+    <color name="night_on_primary">#000000</color>
     <!-- Night secondary color -->
-    <color name="nightSecondary">#546e7a</color>
-    <color name="nightSecondaryVariant">#819ca9</color>
-    <color name="nightOnSecondary">#29434e</color>
+    <color name="night_secondary">#546e7a</color>
+    <color name="night_secondary_variant">#819ca9</color>
+    <color name="night_on_secondary">#29434e</color>
 
     <!-- Night background color -->
-    <color name="menuPrimary">#111111</color>
+    <color name="menu_primary">#111111</color>
 
-    <color name="textPrimary">#FFFFFFFF</color>
-    <color name="textSecondary">#000000</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#000000</color>
 
-    <color name="white">#FFFFFFFF</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="red">#ff3300</color>
 
     <color name="transparent">#00000000</color>
-    <color name="semiTransparent">#DD000000</color>
-    <color name="floatingSemiTransparent">#BF000000</color>
-    <color name="itemSelectedSemiTransparent">#6600ff00</color>
-    <color name="translucent_status">#6F000000</color>
-    <color name="floatingButton">#546e7a</color>
-    <color name="fileLinkFullScreen">#99212121</color>
-    <color name="fileLinkButtons">#55000000</color>
-    <color name="fileLinkButtonsExpanded">#AA000000</color>
-    <color name="floatingListDivider">#66000000</color>
+    <color name="semi_transparent">#DD000000</color>
 
-    <color name="fileLinkBackground">#000000</color>
-    <color name="fileLinkDragSelected">#79b700</color>
-    <color name="fileNotLinkDrag">#558000</color>
+    <color name="translucent_status">#6F000000</color>
+
+    <color name="main_header_background_top">#000000</color>
+    <color name="main_header_background_bottom">#55000000</color>
+
+    <color name="history_item_background">#77000000</color>
+    <color name="history_item_deleted">#77cc0000</color>
+
+    <color name="item_selected_semi_transparent">#6600ff00</color>
+    <color name="floating_semi_transparent">#BF000000</color>
+    <color name="floating_button">#546e7a</color>
+    <color name="floating_list_divider">#66000000</color>
+
+    <color name="file_link_full_screen">#99212121</color>
+    <color name="file_link_buttons">#55000000</color>
+    <color name="file_link_buttons_expanded">#AA000000</color>
+
+    <color name="file_link_background">#000000</color>
+    <color name="file_link_drag_selected">#79b700</color>
+    <color name="file_not_link_drag">#558000</color>
+
+    <color name="manga_detail_title_background_top">#000000</color>
+    <color name="manga_detail_title_background_center">#DD000000</color>
+    <color name="manga_detail_title_background_bottom">#00000000</color>
+    <color name="manga_detail_list_background">#212121</color>
+    <color name="manga_detail_list_divider">#484848</color>
+    <color name="manga_detail_list_text">#FFFFFFFF</color>
 
     <color name="JLPT0">#b3b3b3</color>
     <color name="JLPT1">#ff4d4d</color>

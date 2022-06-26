@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/on_primary"
     tools:context=".MainActivity">
 
     <!-- action bar -->
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/primary_semitransparent"
         android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
         <androidx.appcompat.widget.Toolbar
@@ -20,7 +23,22 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_gravity="top|center"
+        android:contentDescription="@string/about_app_name"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/main_header_cut" />
+
+    <View
+        android:id="@+id/manga_detail_manga_content"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@drawable/main_header_background"
+        android:layout_marginTop="55dp"/>
+
     <!-- fragment dynamic content -->
-    <include layout="@layout/content_main" />
+    <include layout="@layout/activity_main_content" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

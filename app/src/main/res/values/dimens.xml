@@ -25,12 +25,23 @@
     <dimen name="manga_line_sub_title">10sp</dimen>
     <dimen name="manga_line_favorite">10dp</dimen>
 
+    <dimen name="manga_detail_card_layout_width">150dp</dimen>
+    <dimen name="manga_detail_card_layout_height">200dp</dimen>
+    <dimen name="manga_detail_title_size">30sp</dimen>
+    <dimen name="manga_detail_folder_size">16sp</dimen>
+    <dimen name="manga_detail_last_access">12sp</dimen>
+    <dimen name="manga_detail_book_mark">12sp</dimen>
+    <dimen name="manga_detail_deleted">10sp</dimen>
+    <dimen name="manga_detail_icon_size">20dp</dimen>
+    <dimen name="manga_detail_icon_rounded">10dp</dimen>
+    <dimen name="manga_detail_icon_padding">10dp</dimen>
+
     <dimen name="manga_page_link_layout_width">200dp</dimen>
     <dimen name="manga_page_link_layout_height">250dp</dimen>
     <dimen name="manga_page_link_number_size">12sp</dimen>
 
-    <dimen name="title_size">20sp</dimen>
-    <dimen name="title_small_size">14sp</dimen>
+    <dimen name="title_size">18sp</dimen>
+    <dimen name="title_small_size">12sp</dimen>
     <dimen name="title_index_dialog_size">20sp</dimen>
     <dimen name="title_small_index_dialog_size">16sp</dimen>
 
@@ -89,6 +100,7 @@
     <dimen name="help_content_size">12sp</dimen>
     <dimen name="help_image_width">200dp</dimen>
 
+    <dimen name="page_link_toolbar_size">25dp</dimen>
     <dimen name="page_link_page_index_title_padding">15dp</dimen>
     <dimen name="page_link_language_margin">3dp</dimen>
     <dimen name="page_link_fullscreen_size">50dp</dimen>

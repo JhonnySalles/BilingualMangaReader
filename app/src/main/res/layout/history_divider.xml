@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:textAppearance="?attr/textAppearanceTitleMedium"
-        android:textColor="@color/onSecondary"
+        android:textColor="@color/on_secondary"
         android:textSize="@dimen/history_divider_title" />
 
 </LinearLayout>

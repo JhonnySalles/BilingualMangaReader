@@ -89,7 +89,7 @@ class PagesLinkFragment : Fragment() {
     private val mDismissDownButton = Runnable { mScrollDown.hide() }
     private val mReduceSizeGroupButton = Runnable {
         mButtonsGroup.layoutParams = mButtonsGroupSize
-        changColorButton(requireContext().getColor(R.color.fileLinkButtons))
+        changColorButton(requireContext().getColor(R.color.file_link_buttons))
     }
 
     private var mUseDualPageCalculate = false
@@ -260,7 +260,7 @@ class PagesLinkFragment : Fragment() {
                 bottomToTop = mContentButton.id
             }
 
-            changColorButton(requireContext().getColor(R.color.fileLinkButtonsExpanded))
+            changColorButton(requireContext().getColor(R.color.file_link_buttons_expanded))
         }
 
         mFullScreen.setOnClickListener {
@@ -675,12 +675,12 @@ class PagesLinkFragment : Fragment() {
         val name = TextView(requireContext())
         name.text = if (isMangaIndexes) manga else file
         name.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.title_index_dialog_size))
-        name.setTextColor(ContextCompat.getColor(requireContext(), R.color.textPrimary))
+        name.setTextColor(ContextCompat.getColor(requireContext(), R.color.text_primary))
         title.addView(name)
         val index = TextView(requireContext())
         index.text = resources.getString(R.string.reading_page_index)
         index.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.title_small_index_dialog_size))
-        index.setTextColor(ContextCompat.getColor(requireContext(), R.color.onSecondary))
+        index.setTextColor(ContextCompat.getColor(requireContext(), R.color.on_secondary))
         title.addView(index)
 
         MaterialAlertDialogBuilder(requireActivity(), R.style.AppCompatAlertDialogStyle)

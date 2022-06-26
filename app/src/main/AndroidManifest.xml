@@ -39,11 +39,18 @@
         <activity
             android:name="br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity"
             android:exported="true"
-            android:theme="@style/AppTheme.FullScreen"/>
+            android:theme="@style/AppTheme.FullScreen"
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name="br.com.fenix.bilingualmangareader.view.ui.pages_link.PagesLinkActivity"
             android:exported="true"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".view.ui.reader.ReaderActivity"/>
+        <activity
+            android:name="br.com.fenix.bilingualmangareader.view.ui.manga_detail.MangaDetailActivity"
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".MainActivity"/>
 
         <meta-data
             android:name="com.google.android.gms.version"

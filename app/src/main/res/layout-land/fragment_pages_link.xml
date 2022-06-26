@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/onPrimary"
+    android:background="@color/on_primary"
     android:fitsSystemWindows="true"
     tools:context=".view.ui.pages_link.PagesLinkFragment">
 
@@ -91,13 +91,14 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/page_link_language_margin"
             android:hint="@string/page_link_file"
-            android:textColorHint="@color/textPrimary"
+            android:textColorHint="@color/text_primary"
+            android:layout_marginStart="@dimen/page_link_toolbar_size"
             app:boxBackgroundColor="@color/primary"
-            app:boxStrokeColor="@color/onSecondary"
-            app:startIconTint="@color/onSecondary"
+            app:boxStrokeColor="@color/on_secondary"
+            app:startIconTint="@color/on_secondary"
             app:startIconDrawable="@drawable/ic_file"
-            app:placeholderTextColor="@color/textPrimary"
-            app:hintTextColor="@color/onSecondary"
+            app:placeholderTextColor="@color/text_primary"
+            app:hintTextColor="@color/on_secondary"
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintHorizontal_weight="1.6"
             app:layout_constraintEnd_toStartOf="@+id/pages_link_top_content"
@@ -109,8 +110,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="none"
-                android:textColor="@color/textPrimary"
-                />
+                android:textColor="@color/text_primary" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
@@ -133,27 +133,27 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="@string/page_link_file_language"
-                android:textColorHint="@color/textPrimary"
+                android:textColorHint="@color/text_primary"
                 android:layout_marginRight="5dp"
                 app:boxBackgroundColor="@color/primary"
-                app:boxStrokeColor="@color/onSecondary"
-                app:hintTextColor="@color/onSecondary"
+                app:boxStrokeColor="@color/on_secondary"
+                app:hintTextColor="@color/on_secondary"
                 app:startIconDrawable="@drawable/ic_translate"
-                app:startIconTint="@color/onSecondary">
+                app:startIconTint="@color/on_secondary">
 
                 <AutoCompleteTextView
                     android:id="@+id/pages_link_language_autocomplete"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="none"
-                    android:textColor="@color/textPrimary" />
+                    android:textColor="@color/text_primary" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/pages_link_pages_index"
                 android:layout_width="@dimen/page_link_pages_index"
                 android:layout_height="match_parent"
-                android:textColor="@color/textPrimary"
+                android:textColor="@color/text_primary"
                 android:contentDescription="@string/page_link_page_index"
                 android:layout_gravity="top"
                 android:gravity="top"
@@ -169,7 +169,7 @@
                 app:strokeWidth="0dp"
                 app:backgroundTint="@color/primary"
                 app:icon="@drawable/ic_file_link_pages_index"
-                app:iconTint="@color/textPrimary"
+                app:iconTint="@color/text_primary"
                 app:iconSize="28dp"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
         </LinearLayout>
@@ -188,7 +188,7 @@
                 android:id="@+id/pages_link_help_button"
                 android:layout_width="@dimen/page_link_help_size"
                 android:layout_height="match_parent"
-                android:textColor="@color/textPrimary"
+                android:textColor="@color/text_primary"
                 android:contentDescription="@string/page_link_help"
                 android:layout_gravity="center"
                 android:gravity="center"
@@ -197,9 +197,9 @@
                 android:visibility="gone"
                 app:rippleColor="@color/secondary"
                 app:strokeWidth="0dp"
-                app:backgroundTint="@color/fileLinkFullScreen"
+                app:backgroundTint="@color/file_link_full_screen"
                 app:icon="@drawable/ic_help"
-                app:iconTint="@color/textPrimary"
+                app:iconTint="@color/text_primary"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
 
             <com.google.android.material.button.MaterialButtonToggleGroup
@@ -216,7 +216,7 @@
                     android:id="@+id/pages_link_auto_process_button"
                     android:layout_width="@dimen/page_link_buttons_size_land"
                     android:layout_height="match_parent"
-                    android:textColor="@color/textPrimary"
+                    android:textColor="@color/text_primary"
                     android:contentDescription="@string/page_link_reorder_auto"
                     android:text="@string/page_link_reorder_auto"
                     android:layout_gravity="start"
@@ -225,9 +225,9 @@
                     android:insetBottom="0dp"
                     app:rippleColor="@color/secondary"
                     app:strokeWidth="0dp"
-                    app:backgroundTint="@color/fileLinkButtons"
+                    app:backgroundTint="@color/file_link_buttons"
                     app:icon="@drawable/ic_file_link_auto_process"
-                    app:iconTint="@color/textPrimary"
+                    app:iconTint="@color/text_primary"
                     app:iconSize="20dp"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
 
@@ -235,7 +235,7 @@
                     android:id="@+id/pages_link_dual_page_button"
                     android:layout_width="@dimen/page_link_buttons_size_land"
                     android:layout_height="match_parent"
-                    android:textColor="@color/textPrimary"
+                    android:textColor="@color/text_primary"
                     android:contentDescription="@string/page_link_reorder_dual_page"
                     android:text="@string/page_link_reorder_dual_page"
                     android:layout_gravity="start"
@@ -244,9 +244,9 @@
                     android:insetBottom="0dp"
                     app:rippleColor="@color/secondary"
                     app:strokeWidth="0dp"
-                    app:backgroundTint="@color/fileLinkButtons"
+                    app:backgroundTint="@color/file_link_buttons"
                     app:icon="@drawable/ic_file_link_dual_page"
-                    app:iconTint="@color/textPrimary"
+                    app:iconTint="@color/text_primary"
                     app:iconSize="20dp"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
 
@@ -254,7 +254,7 @@
                     android:id="@+id/pages_link_single_page_button"
                     android:layout_width="@dimen/page_link_buttons_size_land"
                     android:layout_height="match_parent"
-                    android:textColor="@color/textPrimary"
+                    android:textColor="@color/text_primary"
                     android:contentDescription="@string/page_link_reorder_single_page"
                     android:text="@string/page_link_reorder_single_page"
                     android:layout_gravity="start"
@@ -263,9 +263,9 @@
                     android:insetBottom="0dp"
                     app:rippleColor="@color/secondary"
                     app:strokeWidth="0dp"
-                    app:backgroundTint="@color/fileLinkButtons"
+                    app:backgroundTint="@color/file_link_buttons"
                     app:icon="@drawable/ic_file_link_single_page"
-                    app:iconTint="@color/textPrimary"
+                    app:iconTint="@color/text_primary"
                     app:iconSize="20dp"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
 
@@ -273,7 +273,7 @@
                     android:id="@+id/pages_link_reorder_button"
                     android:layout_width="@dimen/page_link_buttons_size_land"
                     android:layout_height="match_parent"
-                    android:textColor="@color/textPrimary"
+                    android:textColor="@color/text_primary"
                     android:contentDescription="@string/page_link_reorder_sorted_page"
                     android:text="@string/page_link_reorder_sorted_page"
                     android:layout_gravity="start"
@@ -282,9 +282,9 @@
                     android:insetBottom="0dp"
                     app:rippleColor="@color/secondary"
                     app:strokeWidth="0dp"
-                    app:backgroundTint="@color/fileLinkButtons"
+                    app:backgroundTint="@color/file_link_buttons"
                     app:icon="@drawable/ic_file_link_reorder"
-                    app:iconTint="@color/textPrimary"
+                    app:iconTint="@color/text_primary"
                     app:iconSize="20dp"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
 
@@ -292,7 +292,7 @@
                     android:id="@+id/file_link_delete_button"
                     android:layout_width="@dimen/page_link_buttons_size_land"
                     android:layout_height="match_parent"
-                    android:textColor="@color/textPrimary"
+                    android:textColor="@color/text_primary"
                     android:contentDescription="@string/page_link_delete_file_link"
                     android:text="@string/page_link_delete_file_link"
                     android:layout_gravity="start"
@@ -302,9 +302,9 @@
                     android:textAllCaps="false"
                     app:rippleColor="@color/secondary"
                     app:strokeWidth="0dp"
-                    app:backgroundTint="@color/fileLinkButtons"
+                    app:backgroundTint="@color/file_link_buttons"
                     app:icon="@drawable/ic_file_link_delete"
-                    app:iconTint="@color/textPrimary"
+                    app:iconTint="@color/text_primary"
                     app:iconSize="20dp"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
 
@@ -312,7 +312,7 @@
                     android:id="@+id/pages_link_refresh_button"
                     android:layout_width="@dimen/page_link_buttons_size_land"
                     android:layout_height="match_parent"
-                    android:textColor="@color/textPrimary"
+                    android:textColor="@color/text_primary"
                     android:contentDescription="@string/page_link_refresh_file_link"
                     android:text="@string/page_link_refresh_file_link"
                     android:layout_gravity="start"
@@ -321,9 +321,9 @@
                     android:insetBottom="0dp"
                     app:rippleColor="@color/secondary"
                     app:strokeWidth="0dp"
-                    app:backgroundTint="@color/fileLinkButtons"
+                    app:backgroundTint="@color/file_link_buttons"
                     app:icon="@drawable/ic_file_link_refresh"
-                    app:iconTint="@color/textPrimary"
+                    app:iconTint="@color/text_primary"
                     app:iconSize="20dp"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
             </com.google.android.material.button.MaterialButtonToggleGroup>
@@ -333,7 +333,7 @@
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:textColor="@color/textPrimary"
+                android:textColor="@color/text_primary"
                 android:text="@string/page_link_save"
                 android:textAllCaps="false"
                 android:layout_margin="@dimen/page_link_button_margin"
@@ -362,7 +362,7 @@
                     android:visibility="invisible"
                     app:rippleColor="@color/secondary"
                     app:indicatorSize="@dimen/page_link_loading_progress_size"
-                    app:indicatorColor="@color/onSecondary"
+                    app:indicatorColor="@color/on_secondary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -372,7 +372,7 @@
                     android:id="@+id/pages_link_full_screen_button"
                     android:layout_height="@dimen/page_link_fullscreen_size"
                     android:layout_width="@dimen/page_link_fullscreen_size"
-                    android:textColor="@color/textPrimary"
+                    android:textColor="@color/text_primary"
                     android:contentDescription="@string/page_link_full_screen"
                     android:layout_gravity="center"
                     android:gravity="center"
@@ -382,9 +382,9 @@
                     android:insetLeft="0dp"
                     app:rippleColor="@color/secondary"
                     app:strokeWidth="0dp"
-                    app:backgroundTint="@color/fileLinkFullScreen"
+                    app:backgroundTint="@color/file_link_full_screen"
                     app:icon="@drawable/ic_fullscreen"
-                    app:iconTint="@color/textPrimary"
+                    app:iconTint="@color/text_primary"
                     app:iconSize="28dp"
                     app:cornerRadius="100dp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -406,13 +406,13 @@
             android:backgroundTint="@color/white"
             android:contentDescription="@string/action_scroll_up"
             android:src="@drawable/ic_up_arrow"
-            app:backgroundTint="@color/onSecondary"
+            app:backgroundTint="@color/on_secondary"
             app:borderWidth="@dimen/page_link_up_border"
             app:fabCustomSize="@dimen/page_link_up_width"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pages_link_file_link_text"
             app:maxImageSize="@dimen/page_link_up_image_width"
-            app:tint="@color/onSecondary" />
+            app:tint="@color/on_secondary" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/pages_link_scroll_down"
@@ -423,13 +423,13 @@
             android:backgroundTint="@color/white"
             android:contentDescription="@string/action_scroll_down"
             android:src="@drawable/ic_down_arrow"
-            app:backgroundTint="@color/onSecondary"
+            app:backgroundTint="@color/on_secondary"
             app:borderWidth="@dimen/page_link_down_border"
             app:fabCustomSize="@dimen/page_link_down_width"
             app:layout_constraintBottom_toTopOf="@+id/pages_link_buttons_content"
             app:layout_constraintRight_toRightOf="parent"
             app:maxImageSize="@dimen/page_link_down_image_width"
-            app:tint="@color/onSecondary" />
+            app:tint="@color/on_secondary" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

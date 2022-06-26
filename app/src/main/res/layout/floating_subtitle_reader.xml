@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/floating_reader_width"
     android:layout_height="@dimen/floating_reader_height"
-    android:background="@color/floatingSemiTransparent">
+    android:background="@color/floating_semi_transparent">
 
     <LinearLayout
         android:id="@+id/floating_subtitle_ocr_content"
@@ -32,9 +32,9 @@
                         android:layout_width="@dimen/floating_reader_button_width"
                         android:layout_height="@dimen/floating_reader_button_width"
                         android:layout_marginTop="5dp"
-                        android:background="@color/floatingButton"
+                        android:background="@color/floating_button"
                         android:src="@drawable/ic_ocr_clear_list"
-                        android:tint="@color/textPrimary"
+                        android:tint="@color/text_primary"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent"/>
 
@@ -48,7 +48,7 @@
                         android:autoLink="all"
                         android:fontFamily="monospace"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                        android:textColor="@color/textPrimary"
+                        android:textColor="@color/text_primary"
                         android:textSize="@dimen/floating_ocr_text" />
                 </LinearLayout>
 
@@ -62,7 +62,7 @@
                     android:autoLink="all"
                     android:fontFamily="monospace"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                    android:textColor="@color/textPrimary"
+                    android:textColor="@color/text_primary"
                     android:textSize="@dimen/floating_ocr_text_kanji_detail"
                     android:visibility="gone"/>
 
@@ -72,9 +72,9 @@
                     android:layout_height="200dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="5dp"
-                    android:listSelector="@color/itemSelectedSemiTransparent"
+                    android:listSelector="@color/item_selected_semi_transparent"
                     android:nestedScrollingEnabled="true"
-                    android:divider="@color/floatingListDivider"
+                    android:divider="@color/floating_list_divider"
                     android:dividerHeight="2dip"/>
 
             </LinearLayout>
@@ -93,9 +93,9 @@
             android:layout_width="@dimen/floating_reader_button_width"
             android:layout_height="@dimen/floating_reader_button_width"
             android:layout_marginTop="5dp"
-            android:background="@color/floatingButton"
+            android:background="@color/floating_button"
             android:src="@drawable/ic_navigate_before"
-            android:tint="@color/textPrimary"
+            android:tint="@color/text_primary"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
@@ -106,9 +106,9 @@
             android:layout_height="@dimen/floating_reader_button_width"
             android:layout_marginTop="5dp"
             android:layout_marginStart="5dp"
-            android:background="@color/floatingButton"
+            android:background="@color/floating_button"
             android:src="@drawable/ic_navigate_next"
-            android:tint="@color/textPrimary"
+            android:tint="@color/text_primary"
             app:layout_constraintLeft_toRightOf="@+id/nav_floating_subtitle_before_text"
             app:layout_constraintTop_toTopOf="parent"/>
 
@@ -126,9 +126,9 @@
                 style="@style/Base.Widget.AppCompat.Button.Borderless"
                 android:layout_width="@dimen/floating_reader_button_width"
                 android:layout_height="@dimen/floating_reader_button_width"
-                android:background="@color/floatingButton"
+                android:background="@color/floating_button"
                 android:src="@drawable/ic_go_to_top"
-                android:tint="@color/textPrimary"
+                android:tint="@color/text_primary"
                 tools:layout_editor_absoluteY="0dp" />
 
             <androidx.appcompat.widget.AppCompatImageButton
@@ -137,9 +137,9 @@
                 android:layout_width="@dimen/floating_reader_button_width"
                 android:layout_height="@dimen/floating_reader_button_width"
                 android:layout_marginTop="10dp"
-                android:background="@color/floatingButton"
+                android:background="@color/floating_button"
                 android:src="@drawable/ic_translate"
-                android:tint="@color/textPrimary"
+                android:tint="@color/text_primary"
                 tools:layout_editor_absoluteY="0dp" />
 
             <androidx.appcompat.widget.AppCompatImageButton
@@ -148,9 +148,9 @@
                 android:layout_width="@dimen/floating_reader_button_width"
                 android:layout_height="@dimen/floating_reader_button_width"
                 android:layout_marginTop="10dp"
-                android:background="@color/floatingButton"
+                android:background="@color/floating_button"
                 android:src="@drawable/ic_refresh"
-                android:tint="@color/textPrimary"
+                android:tint="@color/text_primary"
                 tools:layout_editor_absoluteY="0dp" />
 
             <androidx.appcompat.widget.AppCompatImageButton
@@ -160,10 +160,10 @@
                 android:layout_height="@dimen/floating_reader_button_width"
                 android:layout_gravity="top|start"
                 android:layout_marginTop="10dp"
-                android:background="@color/floatingButton"
+                android:background="@color/floating_button"
                 android:src="@drawable/ic_draw_text"
-                android:tint="@color/textPrimary"
-                app:rippleColor="@color/onSecondary" />
+                android:tint="@color/text_primary"
+                app:rippleColor="@color/on_secondary" />
         </LinearLayout>
 
         <androidx.core.widget.NestedScrollView
@@ -191,7 +191,7 @@
                     android:fontFamily="monospace"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@color/onSecondary"
+                    android:textColor="@color/on_secondary"
                     android:textSize="@dimen/floating_reader_title" />
 
                 <TextView
@@ -204,7 +204,7 @@
                     android:fontFamily="monospace"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                    android:textColor="@color/textPrimary"
+                    android:textColor="@color/text_primary"
                     android:textSize="@dimen/floating_reader_text" />
 
                 <ListView
@@ -212,9 +212,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:layout_marginBottom="5dp"
-                    android:listSelector="@color/itemSelectedSemiTransparent"
+                    android:listSelector="@color/item_selected_semi_transparent"
                     android:nestedScrollingEnabled="true"
-                    android:divider="@color/floatingListDivider"
+                    android:divider="@color/floating_list_divider"
                     android:dividerHeight="2dip"/>
 
             </LinearLayout>
@@ -230,9 +230,9 @@
             style="@style/Base.Widget.AppCompat.Button.Borderless"
             android:layout_width="@dimen/floating_reader_button_width"
             android:layout_height="@dimen/floating_reader_button_width"
-            android:background="@color/floatingButton"
+            android:background="@color/floating_button"
             android:src="@drawable/ic_retracted"
-            android:tint="@color/textPrimary"
+            android:tint="@color/text_primary"
             tools:layout_editor_absoluteY="0dp" />
 
         <androidx.appcompat.widget.AppCompatImageButton
@@ -241,10 +241,10 @@
             android:layout_width="@dimen/floating_reader_button_width"
             android:layout_height="@dimen/floating_reader_button_width"
             android:layout_marginStart="40dp"
-            android:background="@color/floatingButton"
+            android:background="@color/floating_button"
             android:src="@drawable/ic_page_linked"
-            android:tint="@color/textPrimary"
-            app:rippleColor="@color/onSecondary" />
+            android:tint="@color/text_primary"
+            app:rippleColor="@color/on_secondary" />
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/nav_floating_subtitle_change_subtitle"
@@ -252,10 +252,10 @@
             android:layout_width="@dimen/floating_reader_button_width"
             android:layout_height="@dimen/floating_reader_button_width"
             android:layout_marginStart="10dp"
-            android:background="@color/floatingButton"
+            android:background="@color/floating_button"
             android:src="@drawable/ic_subtitle"
-            android:tint="@color/textPrimary"
-            app:rippleColor="@color/onSecondary" />
+            android:tint="@color/text_primary"
+            app:rippleColor="@color/on_secondary" />
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/nav_floating_subtitle_change_ocr"
@@ -263,10 +263,10 @@
             android:layout_width="@dimen/floating_reader_button_width"
             android:layout_height="@dimen/floating_reader_button_width"
             android:layout_marginStart="10dp"
-            android:background="@color/floatingButton"
+            android:background="@color/floating_button"
             android:src="@drawable/ic_reader_ocr"
-            android:tint="@color/textPrimary"
-            app:rippleColor="@color/onSecondary" />
+            android:tint="@color/text_primary"
+            app:rippleColor="@color/on_secondary" />
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatImageButton
@@ -275,9 +275,9 @@
         android:layout_width="@dimen/floating_reader_button_close"
         android:layout_height="@dimen/floating_reader_button_close"
         android:layout_gravity="top|end"
-        android:background="@color/onPrimary"
+        android:background="@color/on_primary"
         android:src="@drawable/ic_close"
-        android:tint="@color/textPrimary" />
+        android:tint="@color/text_primary" />
 
     <View
         android:id="@+id/floating_subtitle_resizer"

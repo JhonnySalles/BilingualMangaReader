@@ -170,9 +170,19 @@
     <string name="library_menu_delete_description">Do you really want to delete the file?</string>
     <string name="library_menu_clear">Clear history</string>
 
+    <!-- MANGA DETAIL -->
+    <string name="manga_detail_favorite">Favorite</string>
+    <string name="manga_detail_clear_history">Clear history</string>
+    <string name="manga_detail_delete">Delete</string>
+    <string name="manga_detail_chapters_title">Chapters</string>
+    <string name="manga_detail_subtitles_title">Subtitles</string>
+    <string name="manga_detail_file_links_title">Files links</string>
+    <string name="manga_detail_manga_deleted">File deleted</string>
+
     <!-- HISTORY -->
-    <string name="history_last_acess">Last access</string>
+    <string name="history_last_access">Last access</string>
     <string name="history_today">Today</string>
+    <string name="history_delete_description">Do you really want to delete the history?</string>
 
     <!-- PAGE LINK -->
     <string name="page_link_manga_empty">Manga not found</string>

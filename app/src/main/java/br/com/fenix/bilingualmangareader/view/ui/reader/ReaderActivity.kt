@@ -52,6 +52,7 @@ import java.io.File
 class ReaderActivity : AppCompatActivity(), OcrProcess {
 
     private val mViewModel: ReaderViewModel by viewModels()
+
     private lateinit var mReaderTitle: TextView
     private lateinit var mReaderProgress: SeekBar
     private lateinit var mNavReader: LinearLayout
@@ -108,7 +109,8 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         mLanguageOcrDescription.setOnClickListener { choiceLanguage { mViewModel.mLanguageOcr = it } }
 
         setSupportActionBar(mToolbar)
-        supportActionBar!!.setDisplayShowTitleEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(true)
 
         mReaderTitle = findViewById(R.id.nav_reader_title)
         mReaderProgress = findViewById(R.id.nav_reader_progress)
@@ -182,7 +184,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         mPopupSubtitleConfigurationFragment = PopupSubtitleConfiguration()
         mPopupSubtitleReaderFragment = PopupSubtitleReader()
         mPopupSubtitleVocabularyFragment = PopupSubtitleVocabulary()
-        mPopupSubtitleVocabularyFragment.setBackground(R.color.onPrimary)
+        mPopupSubtitleVocabularyFragment.setBackground(R.color.on_primary)
 
         mFloatingSubtitleReader = FloatingSubtitleReader(applicationContext, this)
         mFloatingWindowOcr = FloatingWindowOcr(applicationContext, this)
@@ -238,8 +240,12 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
 
         val bundle = intent.extras
         if (bundle != null) {
-            mToolbarTitle.text = bundle.getString(GeneralConsts.KEYS.MANGA.NAME)
-            mBookMark = bundle.getInt(GeneralConsts.KEYS.MANGA.MARK)
+            val name = bundle.getString(GeneralConsts.KEYS.MANGA.NAME) ?: ""
+            val bookMark = if (bundle.containsKey(GeneralConsts.KEYS.MANGA.PAGE_NUMBER))
+                bundle.getInt(GeneralConsts.KEYS.MANGA.PAGE_NUMBER).toString()
+            else
+                bundle.getInt(GeneralConsts.KEYS.MANGA.MARK).toString()
+            setTitles(name, bookMark)
         }
 
         if (savedInstanceState == null) {
@@ -251,22 +257,21 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
                 setFragment(fragment)
             } else {
                 val extras = intent.extras
-                val manga = (extras!!.getSerializable(GeneralConsts.KEYS.OBJECT.MANGA) as Manga?)
+                val manga = if (extras != null) (extras.getSerializable(GeneralConsts.KEYS.OBJECT.MANGA) as Manga?) else null
+                val page = extras?.getInt(GeneralConsts.KEYS.MANGA.MARK) ?: 0
+
                 val fragment: ReaderFragment = if (manga != null) {
                     mManga = manga
-                    setTitles(manga.title, manga.bookMark.toString())
+                    setTitles(manga.title, page.toString())
                     ReaderFragment.create(manga)
                 } else
                     ReaderFragment.create()
 
                 val fileLink: PagesLinkViewModel by viewModels()
                 mSubtitleController.setFileLink(fileLink.getFileLink(manga))
-
                 setFragment(fragment)
             }
         }
-
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     private fun switchManga(isNext: Boolean = true) {
@@ -352,12 +357,12 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         val name = TextView(this)
         name.text = mToolbarTitle.text
         name.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.title_index_dialog_size))
-        name.setTextColor(ContextCompat.getColor(this, R.color.textPrimary))
+        name.setTextColor(ContextCompat.getColor(this, R.color.text_primary))
         title.addView(name)
         val index = TextView(this)
         index.text = resources.getString(R.string.reading_page_index)
         index.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.title_small_index_dialog_size))
-        index.setTextColor(ContextCompat.getColor(this, R.color.onSecondary))
+        index.setTextColor(ContextCompat.getColor(this, R.color.on_secondary))
         title.addView(index)
 
         MaterialAlertDialogBuilder(this, R.style.AppCompatMaterialAlertDialogStyle)
@@ -514,7 +519,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
             ContextCompat.getDrawable(this, R.drawable.ic_favorite_mark)
         else
             ContextCompat.getDrawable(this, R.drawable.ic_favorite_unmark)
-        icon?.setTint(getColor(R.color.onSecondary))
+        icon?.setTint(getColor(R.color.on_secondary))
         favoriteItem.icon = icon
         return super.onPrepareOptionsMenu(menu)
     }
@@ -529,7 +534,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
             ContextCompat.getDrawable(this, R.drawable.ic_favorite_mark)
         else
             ContextCompat.getDrawable(this, R.drawable.ic_favorite_unmark)
-        icon?.setTint(getColor(R.color.onSecondary))
+        icon?.setTint(getColor(R.color.on_secondary))
         item.icon = icon
         mRepository.update(mManga!!)
     }

@@ -2,7 +2,6 @@ package br.com.fenix.bilingualmangareader.view.adapter.history
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -13,7 +12,6 @@ import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.service.controller.ImageCoverController
 import br.com.fenix.bilingualmangareader.service.listener.MangaCardListener
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
-import br.com.fenix.bilingualmangareader.view.adapter.library.GridViewHolder
 
 class HistoryViewHolder(itemView: View, private val listener: MangaCardListener) :
     RecyclerView.ViewHolder(itemView) {
@@ -23,7 +21,7 @@ class HistoryViewHolder(itemView: View, private val listener: MangaCardListener)
     }
 
     init {
-        mDefaultImageCover = BitmapFactory.decodeResource(itemView.resources, R.mipmap.book_icon)
+        mDefaultImageCover = BitmapFactory.decodeResource(itemView.resources, R.mipmap.book_cover_2)
     }
 
     fun bind(manga: Manga) {
@@ -33,7 +31,7 @@ class HistoryViewHolder(itemView: View, private val listener: MangaCardListener)
         val cardView = itemView.findViewById<LinearLayout>(R.id.history_card)
         cardView.setOnClickListener { listener.onClick(manga) }
 
-        mangaImage.setImageBitmap(GridViewHolder.mDefaultImageCover)
+        mangaImage.setImageBitmap(mDefaultImageCover)
         ImageCoverController.instance.setImageCoverAsync(itemView.context, manga, mangaImage)
 
         mangaTitle.text = manga.title
@@ -42,7 +40,7 @@ class HistoryViewHolder(itemView: View, private val listener: MangaCardListener)
             val title = if (manga.lastAccess != null)
                 "${manga.bookMark} / ${manga.pages}  -  ${itemView.resources.getString(R.string.library_last_access)}: ${
                     GeneralConsts.formatterDateTime(
-                        itemView.context, 
+                        itemView.context,
                         manga.lastAccess!!
                     )
                 }"
@@ -54,9 +52,9 @@ class HistoryViewHolder(itemView: View, private val listener: MangaCardListener)
             mangaSubTitle.text = manga.subTitle
 
         if (manga.excluded)
-            cardView.setBackgroundColor(Color.parseColor("#8b0000"))
+            cardView.setBackgroundResource(R.drawable.history_item_deleted_background)
         else
-            cardView.setBackgroundColor(Color.TRANSPARENT)
+            cardView.setBackgroundResource(R.drawable.history_item_background)
 
     }
 

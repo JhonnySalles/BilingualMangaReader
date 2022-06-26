@@ -10,6 +10,7 @@ interface Parse {
     fun getPage(num: Int): InputStream
     fun numPages(): Int
     fun getSubtitles(): List<String>
+    fun getSubtitlesNames(): Map<String, Int>
     fun getPagePath(num: Int): String?
     fun getPagePaths(): Map<String, Int>
 }
