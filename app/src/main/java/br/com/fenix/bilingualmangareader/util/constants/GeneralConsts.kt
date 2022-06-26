@@ -104,7 +104,7 @@ class GeneralConsts private constructor() {
         val DATA_FORMAT = listOf("dd/MM/yyyy", "MM/dd/yy", "dd/MM/yy", "yyyy-MM-dd")
     }
 
-    object CACHEFOLDER {
+    object CACHE_FOLDER {
         const val TESSERACT = "tesseract"
         const val RAR = "RarTemp"
         const val COVERS = "Covers"
@@ -119,7 +119,12 @@ class GeneralConsts private constructor() {
     object SCANNER {
         const val POSITION = "POSITION"
         const val MESSAGE_MANGA_UPDATE_FINISHED = 0
-        const val MESSAGE_MANGA_UPDATED = 1
+        const val MESSAGE_MANGA_UPDATED_ADD = 1
+        const val MESSAGE_MANGA_UPDATED_REMOVE = 2
+    }
+
+    object MANGA_DETAIL {
+        const val REQUEST_ENDED = 999
     }
 
     object REQUEST {

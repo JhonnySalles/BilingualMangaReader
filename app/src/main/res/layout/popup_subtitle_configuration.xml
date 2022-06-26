@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/onPrimary"
+    android:background="@color/on_primary"
     tools:context=".view.ui.reader.PopupSubtitleConfiguration">
 
     <LinearLayout
@@ -22,8 +22,8 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:text="@string/popup_reading_use_page_linked_in_search"
-            android:textColor="@color/textPrimary"
-            app:thumbTint="@color/onSecondary" />
+            android:textColor="@color/text_primary"
+            app:thumbTint="@color/on_secondary" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/txt_external_subtitle_select_path"
@@ -35,23 +35,23 @@
             android:layout_marginTop="32dp"
             android:layout_marginEnd="32dp"
             android:hint="@string/popup_reading_import_subtitle_file"
-            android:textColorHint="@color/textPrimary"
+            android:textColorHint="@color/text_primary"
             app:endIconMode="clear_text"
             app:boxBackgroundColor="@color/primary"
-            app:boxStrokeColor="@color/onSecondary"
-            app:hintTextColor="@color/onSecondary"
+            app:boxStrokeColor="@color/on_secondary"
+            app:hintTextColor="@color/on_secondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:startIconDrawable="@drawable/ic_sd_storage"
-            app:startIconTint="@color/onSecondary">
+            app:startIconTint="@color/on_secondary">
 
             <AutoCompleteTextView
                 android:id="@+id/menu_autocomplete_external_subtitle_select_path"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="none"
-                android:textColor="@color/textPrimary" />
+                android:textColor="@color/text_primary" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -61,19 +61,19 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_small"
             android:hint="@string/popup_reading_import_subtitle_selected"
-            android:textColorHint="@color/textPrimary"
+            android:textColorHint="@color/text_primary"
             app:boxBackgroundColor="@color/primary"
-            app:boxStrokeColor="@color/onSecondary"
-            app:hintTextColor="@color/onSecondary"
+            app:boxStrokeColor="@color/on_secondary"
+            app:hintTextColor="@color/on_secondary"
             app:startIconDrawable="@drawable/ic_language"
-            app:startIconTint="@color/onSecondary">
+            app:startIconTint="@color/on_secondary">
 
             <AutoCompleteTextView
                 android:id="@+id/menu_autocomplete_subtitle_selected"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="none"
-                android:textColor="@color/textPrimary" />
+                android:textColor="@color/text_primary" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -83,19 +83,19 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_small"
             android:hint="@string/popup_reading_import_subtitle_translate"
-            android:textColorHint="@color/textPrimary"
+            android:textColorHint="@color/text_primary"
             app:boxBackgroundColor="@color/primary"
-            app:boxStrokeColor="@color/onSecondary"
-            app:hintTextColor="@color/onSecondary"
+            app:boxStrokeColor="@color/on_secondary"
+            app:hintTextColor="@color/on_secondary"
             app:startIconDrawable="@drawable/ic_translate"
-            app:startIconTint="@color/onSecondary">
+            app:startIconTint="@color/on_secondary">
 
             <AutoCompleteTextView
                 android:id="@+id/menu_autocomplete_subtitle_language"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="none"
-                android:textColor="@color/textPrimary" />
+                android:textColor="@color/text_primary" />
         </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>

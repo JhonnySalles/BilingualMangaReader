@@ -77,9 +77,14 @@ class Scanner(private val context: Context) {
         mUpdateHandler!!.remove(handler)
     }
 
-    private fun notifyMediaUpdated() {
+    private fun notifyMediaUpdatedAdd() {
         for (h in mUpdateHandler!!)
-            h.sendEmptyMessage(GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATED)
+            h.sendEmptyMessage(GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATED_ADD)
+    }
+
+    private fun notifyMediaUpdatedRemove() {
+        for (h in mUpdateHandler!!)
+            h.sendEmptyMessage(GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATED_REMOVE)
     }
 
     private fun notifyLibraryUpdateFinished() {
@@ -125,7 +130,7 @@ class Scanner(private val context: Context) {
                                 val parse: Parse? = ParseFactory.create(it)
                                 try {
                                     if (parse is RarParse) {
-                                        val cacheDir = File(GeneralConsts.getCacheDir(context), GeneralConsts.CACHEFOLDER.RAR)
+                                        val cacheDir = File(GeneralConsts.getCacheDir(context), GeneralConsts.CACHE_FOLDER.RAR)
                                         (parse as RarParse?)!!.setCacheDirectory(cacheDir)
                                     }
 
@@ -147,7 +152,7 @@ class Scanner(private val context: Context) {
                                             manga.excluded = false
                                             generateCover(parse, manga)
                                             storage.save(manga)
-                                            notifyMediaUpdated()
+                                            notifyMediaUpdatedAdd()
                                         }
                                 } finally {
                                     Util.destroyParse(parse)
@@ -157,8 +162,10 @@ class Scanner(private val context: Context) {
                     }
 
                 // delete missing comics
-                for (missing in storageFiles.values)
+                for (missing in storageFiles.values) {
                     storage.delete(missing)
+                    notifyMediaUpdatedRemove()
+                }
             } finally {
                 mIsStopped = false
                 if (mIsRestarted) {

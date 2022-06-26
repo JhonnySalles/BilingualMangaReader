@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/onPrimary"
     tools:context=".view.ui.configuration.ConfigFragment">
 
     <ScrollView
@@ -33,7 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_marginStart="@dimen/margin"
                 android:layout_marginBottom="@dimen/margin_small"
-                android:textColor="@color/onSecondary"
+                android:textColor="@color/on_secondary"
                 android:text="@string/config_title_library"/>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -43,20 +42,20 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_small"
                 android:hint="@string/config_text_library_order"
-                android:textColorHint="@color/textPrimary"
+                android:textColorHint="@color/text_primary"
                 app:boxBackgroundColor="@color/primary"
-                app:boxStrokeColor="@color/onSecondary"
-                app:startIconTint="@color/onSecondary"
+                app:boxStrokeColor="@color/on_secondary"
+                app:startIconTint="@color/on_secondary"
                 app:startIconDrawable="@drawable/ic_order"
-                app:placeholderTextColor="@color/textPrimary"
-                app:hintTextColor="@color/onSecondary">
+                app:placeholderTextColor="@color/text_primary"
+                app:hintTextColor="@color/on_secondary">
 
                 <AutoCompleteTextView
                     android:id="@+id/menu_autocomplete_library_order"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
-                    android:textColor="@color/textPrimary"/>
+                    android:textColor="@color/text_primary"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -69,14 +68,14 @@
                 android:layout_marginEnd="32dp"
                 android:layout_marginTop="32dp"
                 android:hint="@string/config_text_library_folder"
-                android:textColorHint="@color/textPrimary"
+                android:textColorHint="@color/text_primary"
                 app:endIconMode="clear_text"
                 app:boxBackgroundColor="@color/primary"
-                app:boxStrokeColor="@color/onSecondary"
-                app:placeholderTextColor="@color/textPrimary"
-                app:hintTextColor="@color/onSecondary"
+                app:boxStrokeColor="@color/on_secondary"
+                app:placeholderTextColor="@color/text_primary"
+                app:hintTextColor="@color/on_secondary"
                 app:startIconDrawable="@drawable/ic_sd_storage"
-                app:startIconTint="@color/onSecondary"
+                app:startIconTint="@color/on_secondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -85,7 +84,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
-                    android:textColor="@color/textPrimary"/>
+                    android:textColor="@color/text_primary"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.divider.MaterialDivider
@@ -104,7 +103,7 @@
                 android:layout_width="wrap_content"
                 android:layout_marginStart="@dimen/margin"
                 android:layout_marginBottom="@dimen/margin_small"
-                android:textColor="@color/onSecondary"
+                android:textColor="@color/on_secondary"
                 android:text="@string/config_title_sub_title"/>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -114,20 +113,20 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_small"
                 android:hint="@string/config_text_default_subtitle_language"
-                android:textColorHint="@color/textPrimary"
+                android:textColorHint="@color/text_primary"
                 app:boxBackgroundColor="@color/primary"
-                app:boxStrokeColor="@color/onSecondary"
-                app:startIconTint="@color/onSecondary"
+                app:boxStrokeColor="@color/on_secondary"
+                app:startIconTint="@color/on_secondary"
                 app:startIconDrawable="@drawable/ic_language"
-                app:placeholderTextColor="@color/textPrimary"
-                app:hintTextColor="@color/onSecondary">
+                app:placeholderTextColor="@color/text_primary"
+                app:hintTextColor="@color/on_secondary">
 
                 <AutoCompleteTextView
                     android:id="@+id/menu_autocomplete_default_subtitle_language"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
-                    android:textColor="@color/textPrimary"/>
+                    android:textColor="@color/text_primary"/>
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -138,20 +137,20 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_small"
                 android:hint="@string/config_text_default_subtitle_translate"
-                android:textColorHint="@color/textPrimary"
+                android:textColorHint="@color/text_primary"
                 app:boxBackgroundColor="@color/primary"
-                app:boxStrokeColor="@color/onSecondary"
-                app:startIconTint="@color/onSecondary"
+                app:boxStrokeColor="@color/on_secondary"
+                app:startIconTint="@color/on_secondary"
                 app:startIconDrawable="@drawable/ic_translate"
-                app:placeholderTextColor="@color/textPrimary"
-                app:hintTextColor="@color/onSecondary">
+                app:placeholderTextColor="@color/text_primary"
+                app:hintTextColor="@color/on_secondary">
 
                 <AutoCompleteTextView
                     android:id="@+id/menu_autocomplete_default_subtitle_translate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
-                    android:textColor="@color/textPrimary"/>
+                    android:textColor="@color/text_primary"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.divider.MaterialDivider
@@ -170,7 +169,7 @@
                 android:layout_width="wrap_content"
                 android:layout_marginStart="@dimen/margin"
                 android:layout_marginBottom="@dimen/margin_small"
-                android:textColor="@color/onSecondary"
+                android:textColor="@color/on_secondary"
                 android:text="@string/config_title_reader"/>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -180,20 +179,20 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_small"
                 android:hint="@string/menu_view_mode"
-                android:textColorHint="@color/textPrimary"
+                android:textColorHint="@color/text_primary"
                 app:boxBackgroundColor="@color/primary"
-                app:boxStrokeColor="@color/onSecondary"
-                app:startIconTint="@color/onSecondary"
+                app:boxStrokeColor="@color/on_secondary"
+                app:startIconTint="@color/on_secondary"
                 app:startIconDrawable="@drawable/ic_book_open"
-                app:placeholderTextColor="@color/textPrimary"
-                app:hintTextColor="@color/onSecondary">
+                app:placeholderTextColor="@color/text_primary"
+                app:hintTextColor="@color/on_secondary">
 
                 <AutoCompleteTextView
                     android:id="@+id/menu_autocomplete_reader_comic_mode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
-                    android:textColor="@color/textPrimary"/>
+                    android:textColor="@color/text_primary"/>
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -204,20 +203,20 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_small"
                 android:hint="@string/menu_reading_mode"
-                android:textColorHint="@color/textPrimary"
+                android:textColorHint="@color/text_primary"
                 app:boxBackgroundColor="@color/primary"
-                app:boxStrokeColor="@color/onSecondary"
-                app:startIconTint="@color/onSecondary"
+                app:boxStrokeColor="@color/on_secondary"
+                app:startIconTint="@color/on_secondary"
                 app:startIconDrawable="@drawable/ic_reader_mode"
-                app:placeholderTextColor="@color/textPrimary"
-                app:hintTextColor="@color/onSecondary">
+                app:placeholderTextColor="@color/text_primary"
+                app:hintTextColor="@color/on_secondary">
 
                 <AutoCompleteTextView
                     android:id="@+id/menu_autocomplete_page_mode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
-                    android:textColor="@color/textPrimary"/>
+                    android:textColor="@color/text_primary"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.divider.MaterialDivider
@@ -236,7 +235,7 @@
                 android:layout_width="wrap_content"
                 android:layout_marginStart="@dimen/margin"
                 android:layout_marginBottom="@dimen/margin_small"
-                android:textColor="@color/onSecondary"
+                android:textColor="@color/on_secondary"
                 android:text="@string/config_title_system"/>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -246,20 +245,20 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_small"
                 android:hint="@string/config_system_format_date"
-                android:textColorHint="@color/textPrimary"
+                android:textColorHint="@color/text_primary"
                 app:boxBackgroundColor="@color/primary"
-                app:boxStrokeColor="@color/onSecondary"
-                app:startIconTint="@color/onSecondary"
+                app:boxStrokeColor="@color/on_secondary"
+                app:startIconTint="@color/on_secondary"
                 app:startIconDrawable="@drawable/ic_format_date"
-                app:placeholderTextColor="@color/textPrimary"
-                app:hintTextColor="@color/onSecondary">
+                app:placeholderTextColor="@color/text_primary"
+                app:hintTextColor="@color/on_secondary">
 
                 <AutoCompleteTextView
                     android:id="@+id/menu_autocomplete_system_format_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
-                    android:textColor="@color/textPrimary"/>
+                    android:textColor="@color/text_primary"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.divider.MaterialDivider
@@ -278,7 +277,7 @@
                 android:layout_width="wrap_content"
                 android:layout_marginStart="@dimen/margin"
                 android:layout_marginBottom="@dimen/margin_small"
-                android:textColor="@color/onSecondary"
+                android:textColor="@color/on_secondary"
                 android:text="@string/config_title_file_link"/>
 
             <com.google.android.material.switchmaterial.SwitchMaterial
@@ -289,8 +288,8 @@
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:text="@string/config_switch_use_path_name_for_linked"
-                android:textColor="@color/textPrimary"
-                app:thumbTint="@color/onSecondary" />
+                android:textColor="@color/text_primary"
+                app:thumbTint="@color/on_secondary" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/switch_use_dual_page_calculate"
@@ -300,8 +299,8 @@
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:text="@string/config_switch_use_dual_page_calculate"
-                android:textColor="@color/textPrimary"
-                app:thumbTint="@color/onSecondary" />
+                android:textColor="@color/text_primary"
+                app:thumbTint="@color/on_secondary" />
 
         </LinearLayout>
     </ScrollView>

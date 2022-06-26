@@ -12,7 +12,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
     private val mMangaRepository: MangaRepository = MangaRepository(application.applicationContext)
 
     private var mListMangas = MutableLiveData<ArrayList<Manga>>(ArrayList())
-    val save: LiveData<ArrayList<Manga>> = mListMangas
+    val listMangas: LiveData<ArrayList<Manga>> = mListMangas
 
     fun save(obj: Manga): Manga {
         if (obj.id == 0L)
@@ -36,7 +36,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun get(position: Int): Manga? {
-        return if (mListMangas.value != null) mListMangas.value!!.removeAt(position) else  null
+        return if (mListMangas.value != null) mListMangas.value!!.removeAt(position) else null
     }
 
     fun remove(manga: Manga) {
@@ -69,14 +69,29 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    fun updateList() : ArrayList<Int> {
+    fun updateListAdd(): ArrayList<Int> {
         val indexes = arrayListOf<Int>()
         val list = mMangaRepository.list() ?: return indexes
         if (list.isNotEmpty()) {
             for (manga in list) {
                 if (!mListMangas.value!!.contains(manga)) {
                     mListMangas.value!!.add(manga)
-                    indexes.add(mListMangas.value!!.size -1)
+                    indexes.add(mListMangas.value!!.size - 1)
+                }
+            }
+        }
+
+        return indexes
+    }
+
+    fun updateListRem(): ArrayList<Int> {
+        val indexes = arrayListOf<Int>()
+        val list = mMangaRepository.listDeleted() ?: return indexes
+        if (list.isNotEmpty()) {
+            for (manga in list) {
+                if (mListMangas.value!!.contains(manga)) {
+                    indexes.add(mListMangas.value!!.indexOf(manga))
+                    mListMangas.value!!.remove(manga)
                 }
             }
         }
@@ -96,5 +111,9 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         refreshComplete()
     }
 
-    fun isEmpty() : Boolean = mListMangas.value == null || mListMangas.value!!.isEmpty()
+    fun isEmpty(): Boolean =
+        mListMangas.value == null || mListMangas.value!!.isEmpty()
+
+    fun getLastIndex(): Int =
+        if (mListMangas.value == null) 0 else mListMangas.value!!.size - 1
 }

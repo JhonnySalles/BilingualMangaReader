@@ -34,7 +34,7 @@ class Tesseract(private val context: Context) {
                     val tessData = Util.normalizeFilePath(
                         File(
                             GeneralConsts.getCacheDir(context),
-                            GeneralConsts.CACHEFOLDER.TESSERACT
+                            GeneralConsts.CACHE_FOLDER.TESSERACT
                         ).absolutePath
                     )
                     // Load language files from asset packs
@@ -71,7 +71,7 @@ class Tesseract(private val context: Context) {
         copyTessData(context)
     }
 
-    private val TESSERACT_DATA_PATH = File(GeneralConsts.getCacheDir(context), GeneralConsts.CACHEFOLDER.TESSERACT).absolutePath
+    private val TESSERACT_DATA_PATH = File(GeneralConsts.getCacheDir(context), GeneralConsts.CACHE_FOLDER.TESSERACT).absolutePath
     private var tesseract: TessBaseAPI? = null
 
     fun process(language: Languages, image: Bitmap): String? {
@@ -85,7 +85,7 @@ class Tesseract(private val context: Context) {
         }
 
         tesseract = TessBaseAPI()
-        val isInit =  when(language) {
+        val isInit = when (language) {
             Languages.PORTUGUESE -> tesseract!!.init(TESSERACT_DATA_PATH, "por")
             Languages.ENGLISH -> tesseract!!.init(TESSERACT_DATA_PATH, "eng")
             Languages.JAPANESE -> tesseract!!.init(TESSERACT_DATA_PATH, "jpn")
@@ -117,12 +117,13 @@ class Tesseract(private val context: Context) {
         }
     }
 
-    private inner class ImageProcessRunnable(private var language: Languages, private var image: Bitmap, private var setText: Handler) : Runnable {
+    private inner class ImageProcessRunnable(private var language: Languages, private var image: Bitmap, private var setText: Handler) :
+        Runnable {
         private var tesseract: TessBaseAPI? = null
         override fun run() {
             try {
                 tesseract = TessBaseAPI()
-                val isInit =  when(language) {
+                val isInit = when (language) {
                     Languages.PORTUGUESE -> tesseract!!.init(TESSERACT_DATA_PATH, "por")
                     Languages.ENGLISH -> tesseract!!.init(TESSERACT_DATA_PATH, "eng")
                     Languages.JAPANESE -> tesseract!!.init(TESSERACT_DATA_PATH, "jpn")

@@ -103,7 +103,12 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
     companion object {
         var mCurrentPage = 0
         private var mCacheFolderIndex = 0
-        private val mCacheFolder = arrayOf(GeneralConsts.CACHEFOLDER.A, GeneralConsts.CACHEFOLDER.B, GeneralConsts.CACHEFOLDER.C, GeneralConsts.CACHEFOLDER.D)
+        private val mCacheFolder = arrayOf(
+            GeneralConsts.CACHE_FOLDER.A,
+            GeneralConsts.CACHE_FOLDER.B,
+            GeneralConsts.CACHE_FOLDER.C,
+            GeneralConsts.CACHE_FOLDER.D
+        )
 
         fun create(): ReaderFragment {
             if (mCacheFolderIndex >= 2)
@@ -770,7 +775,8 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             })
     }
 
-    fun isFullscreen(): Boolean = mIsFullscreen
+    fun isFullscreen(): Boolean =
+        mIsFullscreen
 
     fun hitBeginning() {
         if (mManga != null) {

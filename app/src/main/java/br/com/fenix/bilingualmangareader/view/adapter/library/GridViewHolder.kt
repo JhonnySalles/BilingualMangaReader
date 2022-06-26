@@ -31,7 +31,11 @@ class GridViewHolder(itemView: View, private val listener: MangaCardListener) :
         var mMangaCardHeightSmall: Int = 0
         var mMangaImage: Int = 0
         var mMangaImageSmall: Int = 0
-        lateinit var mDefaultImageCover: Bitmap
+        lateinit var mDefaultImageCover1: Bitmap
+        lateinit var mDefaultImageCover2: Bitmap
+        lateinit var mDefaultImageCover3: Bitmap
+        lateinit var mDefaultImageCover4: Bitmap
+        lateinit var mDefaultImageCover5: Bitmap
     }
 
     init {
@@ -44,7 +48,11 @@ class GridViewHolder(itemView: View, private val listener: MangaCardListener) :
         mMangaCardHeightSmall = itemView.resources.getDimension(R.dimen.manga_grid_card_layout_height_small).toInt()
         mMangaImageSmall = itemView.resources.getDimension(R.dimen.manga_grid_card_image_small).toInt()
         mMangaImage = itemView.resources.getDimension(R.dimen.manga_grid_card_image).toInt()
-        mDefaultImageCover = BitmapFactory.decodeResource(itemView.resources, R.mipmap.book)
+        mDefaultImageCover1 = BitmapFactory.decodeResource(itemView.resources, R.mipmap.book_cover_1)
+        mDefaultImageCover2 = BitmapFactory.decodeResource(itemView.resources, R.mipmap.book_cover_2)
+        mDefaultImageCover3 = BitmapFactory.decodeResource(itemView.resources, R.mipmap.book_cover_3)
+        mDefaultImageCover4 = BitmapFactory.decodeResource(itemView.resources, R.mipmap.book_cover_4)
+        mDefaultImageCover5 = BitmapFactory.decodeResource(itemView.resources, R.mipmap.book_cover_5)
     }
 
     fun bind(manga: Manga) {
@@ -82,7 +90,15 @@ class GridViewHolder(itemView: View, private val listener: MangaCardListener) :
             true
         }
 
-        mangaImage.setImageBitmap(mDefaultImageCover)
+        val image = when ((1..5).random()) {
+            1 -> mDefaultImageCover1
+            2 -> mDefaultImageCover2
+            3 -> mDefaultImageCover3
+            4 -> mDefaultImageCover4
+            else -> mDefaultImageCover5
+        }
+
+        mangaImage.setImageBitmap(image)
         ImageCoverController.instance.setImageCoverAsync(itemView.context, manga, mangaImage)
 
         mangaTitle.text = manga.title

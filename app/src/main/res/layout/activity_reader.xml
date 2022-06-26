@@ -12,7 +12,7 @@
         android:id="@+id/root_frame_reader"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/onPrimary"
+        android:background="@color/on_primary"
         android:fitsSystemWindows="false"/>
 
     <RelativeLayout
@@ -29,7 +29,7 @@
                 android:id="@+id/toolbar_reader"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/actionBarSize"
-                android:background="@color/primarySemitransparent"
+                android:background="@color/primary_semitransparent"
                 app:popupTheme="@style/MyDarkToolbarStyle"
                 app:theme="@style/ToolbarTheme">
 
@@ -48,7 +48,7 @@
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:textColor="@color/onSecondary"
+                        android:textColor="@color/on_secondary"
                         android:textSize="@dimen/title_size" />
 
                     <TextView
@@ -58,7 +58,7 @@
                         android:ellipsize="start"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:textColor="@color/onSecondary"
+                        android:textColor="@color/on_secondary"
                         android:textSize="@dimen/title_small_size" />
                 </LinearLayout>
             </androidx.appcompat.widget.Toolbar>
@@ -78,7 +78,7 @@
                     android:layout_weight="1"
                     android:autoLink="all"
                     android:gravity="center_vertical"
-                    android:textColor="@color/textPrimary"
+                    android:textColor="@color/text_primary"
                     android:textSize="@dimen/floating_ocr_language_text_size" />
             </LinearLayout>
         </LinearLayout>
@@ -102,7 +102,7 @@
                 android:id="@+id/nav_reader_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/onSecondary"
+                android:textColor="@color/on_secondary"
                 android:textSize="@dimen/title_small_size" />
 
             <SeekBar
@@ -122,7 +122,7 @@
             android:id="@+id/nav_previous_file"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:textColor="@color/textPrimary"
+            android:textColor="@color/text_primary"
             android:contentDescription="@string/reading_button_previous_file"
             android:insetLeft="0dp"
             android:insetTop="0dp"
@@ -137,9 +137,9 @@
             app:iconGravity="textStart"
             app:rippleColor="@color/secondary"
             app:strokeWidth="0dp"
-            app:backgroundTint="@color/onPrimarySemitransparent"
+            app:backgroundTint="@color/on_primary_semitransparent"
             app:icon="@drawable/ic_previous_file"
-            app:iconTint="@color/textPrimary"
+            app:iconTint="@color/text_primary"
             app:iconSize="28dp"
             app:cornerRadius="100dp"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
@@ -148,7 +148,7 @@
             android:id="@+id/nav_next_file"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:textColor="@color/textPrimary"
+            android:textColor="@color/text_primary"
             android:contentDescription="@string/reading_button_next_file"
              android:insetLeft="0dp"
             android:insetTop="0dp"
@@ -164,9 +164,9 @@
             app:iconGravity="textStart"
             app:rippleColor="@color/secondary"
             app:strokeWidth="0dp"
-            app:backgroundTint="@color/onPrimarySemitransparent"
+            app:backgroundTint="@color/on_primary_semitransparent"
             app:icon="@drawable/ic_next_file"
-            app:iconTint="@color/textPrimary"
+            app:iconTint="@color/text_primary"
             app:iconSize="28dp"
             app:cornerRadius="100dp"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
@@ -176,7 +176,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:background="@color/primarySemitransparent"
+            android:background="@color/primary_semitransparent"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -186,7 +186,7 @@
                 android:layout_width="@dimen/popup_reader_button_width"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="5dp"
-                android:background="@color/primarySemitransparent"
+                android:background="@color/primary_semitransparent"
                 android:contentDescription="@string/reading_button_screen_rotate"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
@@ -194,9 +194,9 @@
                 android:paddingLeft="@dimen/popup_reader_button_padding"
                 android:paddingRight="@dimen/popup_reader_button_padding"
                 app:icon="@drawable/ic_screen_rotation"
-                app:iconTint="@color/textPrimary"
+                app:iconTint="@color/text_primary"
                 app:iconSize="28dp"
-                app:rippleColor="@color/onSecondary" />
+                app:rippleColor="@color/on_secondary" />
 
             <Button
                 android:id="@+id/btn_menu_ocr"
@@ -204,7 +204,7 @@
                 android:layout_width="@dimen/popup_reader_button_width"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="5dp"
-                android:background="@color/primarySemitransparent"
+                android:background="@color/primary_semitransparent"
                 android:contentDescription="@string/reading_button_menu_ocr"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
@@ -212,9 +212,9 @@
                 android:paddingLeft="@dimen/popup_reader_button_padding"
                 android:paddingRight="@dimen/popup_reader_button_padding"
                 app:icon="@drawable/ic_reader_ocr"
-                app:iconTint="@color/textPrimary"
+                app:iconTint="@color/text_primary"
                 app:iconSize="28dp"
-                app:rippleColor="@color/onSecondary" />
+                app:rippleColor="@color/on_secondary" />
 
             <Button
                 android:id="@+id/btn_popup_subtitle"
@@ -222,7 +222,7 @@
                 android:layout_width="@dimen/popup_reader_button_width"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="5dp"
-                android:background="@color/primarySemitransparent"
+                android:background="@color/primary_semitransparent"
                 android:contentDescription="@string/reading_button_subtitle"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
@@ -230,9 +230,9 @@
                 android:paddingLeft="@dimen/popup_reader_button_padding"
                 android:paddingRight="@dimen/popup_reader_button_padding"
                 app:icon="@drawable/ic_change_language"
-                app:iconTint="@color/textPrimary"
+                app:iconTint="@color/text_primary"
                 app:iconSize="28dp"
-                app:rippleColor="@color/onSecondary" />
+                app:rippleColor="@color/on_secondary" />
 
             <Button
                 android:id="@+id/btn_popup_color"
@@ -240,7 +240,7 @@
                 android:layout_width="@dimen/popup_reader_button_width"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="5dp"
-                android:background="@color/primarySemitransparent"
+                android:background="@color/primary_semitransparent"
                 android:contentDescription="@string/reading_button_color"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
@@ -248,9 +248,9 @@
                 android:paddingLeft="@dimen/popup_reader_button_padding"
                 android:paddingRight="@dimen/popup_reader_button_padding"
                 app:icon="@drawable/ic_color_settings"
-                app:iconTint="@color/textPrimary"
+                app:iconTint="@color/text_primary"
                 app:iconSize="30dp"
-                app:rippleColor="@color/onSecondary" />
+                app:rippleColor="@color/on_secondary" />
 
             <Button
                 android:id="@+id/btn_menu_page_linked"
@@ -258,7 +258,7 @@
                 android:layout_width="@dimen/popup_reader_button_width"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="5dp"
-                android:background="@color/primarySemitransparent"
+                android:background="@color/primary_semitransparent"
                 android:contentDescription="@string/reading_button_page_linked"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
@@ -266,9 +266,9 @@
                 android:paddingLeft="@dimen/popup_reader_button_padding"
                 android:paddingRight="@dimen/popup_reader_button_padding"
                 app:icon="@drawable/ic_page_linked"
-                app:iconTint="@color/textPrimary"
+                app:iconTint="@color/text_primary"
                 app:iconSize="30dp"
-                app:rippleColor="@color/onSecondary" />
+                app:rippleColor="@color/on_secondary" />
 
             <Button
                 android:id="@+id/btn_menu_file_link"
@@ -276,7 +276,7 @@
                 android:layout_width="@dimen/popup_reader_button_width"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="5dp"
-                android:background="@color/primarySemitransparent"
+                android:background="@color/primary_semitransparent"
                 android:contentDescription="@string/reading_button_file_link"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
@@ -284,9 +284,9 @@
                 android:paddingLeft="@dimen/popup_reader_button_padding"
                 android:paddingRight="@dimen/popup_reader_button_padding"
                 app:icon="@drawable/ic_file_link"
-                app:iconTint="@color/textPrimary"
+                app:iconTint="@color/text_primary"
                 app:iconSize="30dp"
-                app:rippleColor="@color/onSecondary" />
+                app:rippleColor="@color/on_secondary" />
 
             <Button
                 android:id="@+id/btn_popup_open_floating"
@@ -294,7 +294,7 @@
                 android:layout_width="@dimen/popup_reader_button_width"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="20dp"
-                android:background="@color/primarySemitransparent"
+                android:background="@color/primary_semitransparent"
                 android:contentDescription="@string/reading_button_popup_floating"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
@@ -302,9 +302,9 @@
                 android:paddingLeft="@dimen/popup_reader_button_padding"
                 android:paddingRight="@dimen/popup_reader_button_padding"
                 app:icon="@drawable/ic_floating_window"
-                app:iconTint="@color/textPrimary"
+                app:iconTint="@color/text_primary"
                 app:iconSize="30dp"
-                app:rippleColor="@color/onSecondary" />
+                app:rippleColor="@color/on_secondary" />
 
         </LinearLayout>
     </RelativeLayout>
@@ -330,7 +330,7 @@
             android:contentDescription="@string/popup_reading_open"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_line_popup"
-            app:tint="@color/onSecondary" />
+            app:tint="@color/on_secondary" />
 
         <ImageView
             android:id="@+id/menu_translate_close"
@@ -341,7 +341,7 @@
             android:contentDescription="@string/popup_reading_close"
             android:scaleType="center"
             android:src="@drawable/ic_close"
-            app:tint="@color/onSecondary" />
+            app:tint="@color/on_secondary" />
 
         <ImageView
             android:id="@+id/menu_translate_floating_touch"
@@ -352,7 +352,7 @@
             android:contentDescription="@string/popup_reading_floating_popup"
             android:scaleType="center"
             android:src="@drawable/ic_floating_window"
-            app:tint="@color/onSecondary" />
+            app:tint="@color/on_secondary" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -373,7 +373,7 @@
                 app:tabPaddingTop="0dp"
                 app:tabSelectedTextColor="@color/secondary"
                 app:tabTextAppearance="@style/PopupTab"
-                app:tabTextColor="@color/onSecondary">
+                app:tabTextColor="@color/on_secondary">
 
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/tab_item_subtitle"
@@ -425,7 +425,7 @@
             android:contentDescription="@string/popup_reading_open"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_line_popup"
-            app:tint="@color/onSecondary" />
+            app:tint="@color/on_secondary" />
 
         <ImageView
             android:id="@+id/menu_color_close"
@@ -436,7 +436,7 @@
             android:contentDescription="@string/popup_reading_close"
             android:scaleType="center"
             android:src="@drawable/ic_close"
-            app:tint="@color/onSecondary" />
+            app:tint="@color/on_secondary" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -457,7 +457,7 @@
                 app:tabPaddingTop="0dp"
                 app:tabSelectedTextColor="@color/secondary"
                 app:tabTextAppearance="@style/PopupTab"
-                app:tabTextColor="@color/onSecondary">
+                app:tabTextColor="@color/on_secondary">
 
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/tab_item_brightness"

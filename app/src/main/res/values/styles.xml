@@ -2,13 +2,16 @@
     <style name="AppTheme" parent="Theme.MaterialComponents">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/onPrimary</item>
-        <item name="colorAccent">@color/textPrimary</item>
+        <item name="colorPrimaryDark">@color/on_primary</item>
+        <item name="colorAccent">@color/text_primary</item>
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
     <style name="AppTheme.FullScreen">
@@ -20,21 +23,21 @@
     </style>
 
     <style name="ToolbarTheme" parent="Widget.AppCompat.ActionBar">
-        <item name="android:textColorPrimary">@color/onSecondary</item>
-        <item name="colorControlNormal">@color/onSecondary</item>
-        <item name="android:textColor">@color/textPrimary</item>
+        <item name="android:textColorPrimary">@color/on_secondary</item>
+        <item name="colorControlNormal">@color/on_secondary</item>
+        <item name="android:textColor">@color/text_primary</item>
     </style>
 
     <style name="SubToolbarTheme" parent="Widget.AppCompat.ActionBar">
-        <item name="android:textColorPrimary">@color/onSecondary</item>
-        <item name="colorControlNormal">@color/onSecondary</item>
-        <item name="android:textColor">@color/textPrimary</item>
-        <item name="android:background">@color/nightOnSecondary</item>
+        <item name="android:textColorPrimary">@color/on_secondary</item>
+        <item name="colorControlNormal">@color/on_secondary</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:background">@color/night_on_secondary</item>
     </style>
 
     <style name="MyDarkToolbarStyle" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:background">@color/primary</item>
-        <item name="android:textColor">@color/textPrimary</item>
+        <item name="android:textColor">@color/text_primary</item>
     </style>
 
     <style name="backgroundComboOutline"  parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
@@ -42,8 +45,8 @@
     </style>
 
     <style name="PopupMenu" parent="Widget.AppCompat.PopupMenu">
-        <item name="android:background">@color/onPrimary</item>
-        <item name="android:textColor">@color/textPrimary</item>
+        <item name="android:background">@color/on_primary</item>
+        <item name="android:textColor">@color/text_primary</item>
     </style>
 
     <style name="FloatingPopup" parent="Theme.MaterialComponents"/>
@@ -55,6 +58,10 @@
     <style name="Divider.Vertical" parent="Divider">
         <item name="android:layout_width">1dp</item>
         <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="ListFont" parent="@android:style/Widget.ListView">
+        <item name="android:textColor">#ffffff</item>
     </style>
 
 </resources>
