@@ -82,7 +82,7 @@ class HistoryFragment : Fragment() {
                             mRecycleView.adapter?.notifyItemChanged(position)
                         }
                         R.id.menu_book_clear -> {
-                            manga.lastAccess = LocalDateTime.MIN
+                            manga.lastAccess = null
                             manga.bookMark = 0
                             mViewModel.clear(manga)
                             mRecycleView.adapter?.notifyItemChanged(position)
@@ -124,9 +124,8 @@ class HistoryFragment : Fragment() {
         }
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-            val manga = mViewModel.get(viewHolder.adapterPosition) ?: return
+            val manga = mViewModel.getAndRemove(viewHolder.adapterPosition) ?: return
             val position = viewHolder.adapterPosition
-            mViewModel.remove(manga)
             var excluded = false
             val dialog: AlertDialog =
                 AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
@@ -141,7 +140,7 @@ class HistoryFragment : Fragment() {
                     }.setOnDismissListener {
                         if (!excluded) {
                             mViewModel.add(manga, position)
-                            mRecycleView.adapter?.notifyItemInserted(position)
+                            mRecycleView.adapter?.notifyItemChanged(position)
                         }
                     }
                     .create()

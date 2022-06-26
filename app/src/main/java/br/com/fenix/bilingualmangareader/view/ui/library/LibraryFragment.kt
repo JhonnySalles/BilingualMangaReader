@@ -508,9 +508,8 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         }
 
         override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
-            val manga = mViewModel.get(viewHolder.adapterPosition) ?: return
+            val manga = mViewModel.getAndRemove(viewHolder.adapterPosition) ?: return
             val position = viewHolder.adapterPosition
-            mViewModel.remove(manga)
             var excluded = false
             val dialog: AlertDialog =
                 AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)

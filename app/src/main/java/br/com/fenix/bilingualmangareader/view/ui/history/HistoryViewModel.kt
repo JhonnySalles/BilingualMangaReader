@@ -58,7 +58,7 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
 
     fun deletePermanent(manga: Manga?) {
         if (manga != null)
-            mMangaRepository.delete(manga)
+            mMangaRepository.deletePermanent(manga)
     }
 
     fun save(manga: Manga?) {
@@ -80,7 +80,7 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
             mListMangas.value!!.add(index, manga)
     }
 
-    fun get(position: Int): Manga? {
+    fun getAndRemove(position: Int): Manga? {
         return if (mListMangas.value != null) mListMangas.value!!.removeAt(position) else null
     }
 
