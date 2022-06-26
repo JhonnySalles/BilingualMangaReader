@@ -3,5 +3,6 @@
     android:color="@color/secondary">
     <item
         android:id="@android:id/mask"
-        android:drawable="@android:color/white" />
+        android:drawable="@android:color/white"/>
+    <item android:drawable="@drawable/history_item_background" />
 </ripple>

@@ -6,17 +6,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:paddingTop="@dimen/default_navigator_header_padding"
+    android:clipToPadding="false"
+    android:clipChildren="false"
+    android:fillViewport="false"
     tools:context=".view.ui.library.LibraryFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/library_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:clipChildren="false"
+        android:fillViewport="false">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/library_refresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:clipChildren="false"
+            android:fillViewport="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -29,7 +39,9 @@
                 android:scrollbars="vertical"
                 android:layout_centerHorizontal="true"
                 android:columnCount="3"
-                android:layoutAnimation="@anim/layout_animation_library_line"/>
+                android:layoutAnimation="@anim/layout_animation_library_line"
+                android:clipToPadding="false"
+                android:fillViewport="false"/>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

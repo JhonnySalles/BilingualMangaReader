@@ -5,12 +5,18 @@
     android:id="@+id/manga_detail_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingTop="@dimen/default_navigator_header_padding"
+    android:clipToPadding="false"
+    android:clipChildren="false"
+    android:fillViewport="false"
     tools:context=".view.ui.manga_detail.MangaDetailFragment">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/on_primary">
+        android:background="@color/on_primary"
+        android:clipToPadding="false"
+        android:fillViewport="false">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

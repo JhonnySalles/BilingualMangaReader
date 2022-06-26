@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingTop="@dimen/default_navigator_header_padding"
+    android:clipToPadding="false"
+    android:clipChildren="false"
+    android:fillViewport="false"
     tools:context=".view.ui.history.HistoryFragment">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -11,6 +15,8 @@
         android:layout_height="match_parent"
         android:scrollbars="vertical"
         android:layout_centerHorizontal="true"
-        android:layoutAnimation="@anim/layout_animation_library_line"/>
+        android:layoutAnimation="@anim/layout_animation_library_line"
+        android:clipToPadding="false"
+        android:fillViewport="false"/>
 
 </FrameLayout>
