@@ -1,32 +1,19 @@
 package br.com.fenix.bilingualmangareader.view.components
 
+import android.R
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.content.Context
-import android.graphics.Color
-import android.os.Build
+import android.app.Activity
+import android.content.res.TypedArray
 import android.view.View
-import android.view.Window
 import android.view.WindowManager
-import androidx.core.view.WindowCompat
-import br.com.fenix.bilingualmangareader.R
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 
 
 class ComponentsUtil {
 
     companion object ComponentsUtils {
-
-        fun setSystemUITransparency(window: Window) {
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-            )
-
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
-                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED
-            )
-        }
 
         private const val duration = 300L
         fun changeAnimateVisibility(component: View, visible: Boolean) {

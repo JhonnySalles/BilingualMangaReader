@@ -32,8 +32,6 @@ class MangaDetailActivity : AppCompatActivity() {
             .beginTransaction()
             .replace(R.id.root_frame_manga_detail, MangaDetailFragment(manga))
             .commit()
-
-        ComponentsUtil.setSystemUITransparency(window)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

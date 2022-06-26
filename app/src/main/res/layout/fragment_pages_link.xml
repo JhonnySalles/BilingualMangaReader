@@ -13,8 +13,7 @@
         android:id="@+id/pages_link_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/margin_small"
-        android:paddingTop="@dimen/default_navigator_header_padding">
+        android:layout_margin="@dimen/margin_small">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/pages_link_pages_linked_recycler"

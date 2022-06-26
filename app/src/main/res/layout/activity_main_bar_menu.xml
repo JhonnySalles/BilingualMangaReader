@@ -12,15 +12,15 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/primary_semitransparent"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark">
+        android:background="@drawable/main_toolbar_background"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark" >
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/main_toolbar"
-            android:paddingTop="@dimen/default_navigator_header_padding"
             android:layout_width="match_parent"
             android:layout_height="@dimen/default_navigator_header_size"
-            app:popupTheme="@style/Widget.AppCompat.Light.PopupMenu.Overflow" />
+            app:popupTheme="@style/Widget.AppCompat.Light.PopupMenu.Overflow"
+            app:theme="@style/ToolbarTheme"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -35,9 +35,8 @@
     <View
         android:id="@+id/manga_detail_manga_content"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="@drawable/main_header_background"
-        android:layout_marginTop="@dimen/default_navigator_header_margin_top"/>
+        android:layout_height="120dp"
+        android:background="@drawable/main_header_background"/>
 
     <!-- fragment dynamic content -->
     <include
