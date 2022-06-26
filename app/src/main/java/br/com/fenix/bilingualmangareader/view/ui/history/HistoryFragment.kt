@@ -82,7 +82,7 @@ class HistoryFragment : Fragment() {
                             mRecycleView.adapter?.notifyItemChanged(position)
                         }
                         R.id.menu_book_clear -> {
-                            manga.lastAccess = null
+                            manga.lastAccess = LocalDateTime.MIN
                             manga.bookMark = 0
                             mViewModel.clear(manga)
                             mRecycleView.adapter?.notifyItemChanged(position)

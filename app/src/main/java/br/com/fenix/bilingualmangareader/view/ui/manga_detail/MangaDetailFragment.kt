@@ -196,7 +196,7 @@ class MangaDetailFragment(private var mManga: Manga?) : Fragment() {
 
     private fun clearHistory() {
         val manga = mViewModel.manga.value ?: return
-        manga.lastAccess = null
+        manga.lastAccess = LocalDateTime.MIN
         manga.bookMark = 0
         mViewModel.save(manga)
     }
