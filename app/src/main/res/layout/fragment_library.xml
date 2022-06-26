@@ -41,7 +41,9 @@
                 android:columnCount="3"
                 android:layoutAnimation="@anim/layout_animation_library_line"
                 android:clipToPadding="false"
-                android:fillViewport="false"/>
+                android:fillViewport="false"
+                android:paddingTop="5dp"
+                android:paddingBottom="@dimen/default_navigator_header_padding_tablet_button"/>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

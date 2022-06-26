@@ -25,6 +25,6 @@
         android:gravity="start|center"
         android:layout_marginTop="20dp"
         app:popupTheme="@style/MyDarkToolbarStyle"
-        app:theme="@style/ToolbarTheme"/>
+        app:theme="@style/ToolbarBorderTheme"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -2,25 +2,25 @@ package br.com.fenix.bilingualmangareader.view.components
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.content.Context
+import android.graphics.Color
 import android.os.Build
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import androidx.core.view.WindowCompat
+import br.com.fenix.bilingualmangareader.R
+
 
 class ComponentsUtil {
 
     companion object ComponentsUtils {
 
         fun setSystemUITransparency(window: Window) {
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-
-            } else {
-                window.setFlags(
-                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-                )
-            }
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            )
 
             window.setFlags(
                 WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,

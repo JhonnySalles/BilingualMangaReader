@@ -6,7 +6,7 @@
     <dimen name="default_navigator_header_margin_top">60dp</dimen>
     <dimen name="default_navigator_header_padding">10dp</dimen>
     <dimen name="default_navigator_header_padding_tablet">20dp</dimen>
-    <dimen name="default_navigator_header_padding_tablet_button">30dp</dimen>
+    <dimen name="default_navigator_header_padding_tablet_button">40dp</dimen>
     <dimen name="default_navigator_header_size">60dp</dimen>
 
     <dimen name="margin">10dp</dimen>
