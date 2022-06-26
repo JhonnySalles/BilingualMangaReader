@@ -11,6 +11,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import br.com.fenix.bilingualmangareader.view.components.ComponentsUtil
 import br.com.fenix.bilingualmangareader.view.ui.configuration.ConfigFragment
 import br.com.fenix.bilingualmangareader.view.ui.help.AboutFragment
 import br.com.fenix.bilingualmangareader.view.ui.help.HelpFragment
@@ -72,6 +73,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // content_fragment use for receive fragments layout
         mFragmentManager.beginTransaction().replace(R.id.main_content_root, LibraryFragment())
             .commit()
+
+        ComponentsUtil.setSystemUITransparency(window)
     }
 
     private fun clearCache() {

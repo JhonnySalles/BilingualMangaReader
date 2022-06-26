@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import br.com.fenix.bilingualmangareader.view.components.ComponentsUtil
 
 
 class PagesLinkActivity : AppCompatActivity() {
@@ -35,6 +36,8 @@ class PagesLinkActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        ComponentsUtil.setSystemUITransparency(window)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

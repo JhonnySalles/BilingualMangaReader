@@ -42,7 +42,7 @@
             android:gravity="center"
             android:background="@drawable/file_linked_background"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pages_link_top_content"
+            app:layout_constraintTop_toBottomOf="@+id/pages_link_name_manga"
             app:layout_constraintEnd_toEndOf="parent">
 
             <ImageView
@@ -162,6 +162,21 @@
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/pages_link_name_manga"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:textColor="@color/white"
+            android:textSize="@dimen/page_link_card_page_number_size"
+            android:layout_marginTop="@dimen/page_link_card_page_name_margin"
+            android:background="@color/primary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pages_link_top_content"/>
 
         <com.google.android.material.button.MaterialButtonToggleGroup
             android:id="@+id/page_link_buttons_group"

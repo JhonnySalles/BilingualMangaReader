@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primary"
+    android:fitsSystemWindows="true"
     tools:context=".view.ui.manga_detail.MangaDetailActivity">
 
     <FrameLayout
@@ -17,9 +18,11 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_manga_detail"
+        android:paddingTop="@dimen/default_navigator_header_padding"
         android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
+        android:layout_height="@dimen/default_navigator_header_size"
         android:background="@color/transparent"
+        android:gravity="start|center"
         android:layout_marginTop="20dp"
         app:popupTheme="@style/MyDarkToolbarStyle"
         app:theme="@style/ToolbarTheme"/>

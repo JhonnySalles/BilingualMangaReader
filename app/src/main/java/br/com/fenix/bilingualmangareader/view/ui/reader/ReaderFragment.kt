@@ -667,7 +667,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             } else {
                 getActionBar()?.hide()
                 @Suppress("DEPRECATION")
-                var flag = (View.SYSTEM_UI_FLAG_FULLSCREEN // Hide top iu
+                val flag = (View.SYSTEM_UI_FLAG_FULLSCREEN // Hide top iu
                         or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // Hide navigator
                         or View.SYSTEM_UI_FLAG_IMMERSIVE // Force navigator hide
                         or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY // Force top iu hide

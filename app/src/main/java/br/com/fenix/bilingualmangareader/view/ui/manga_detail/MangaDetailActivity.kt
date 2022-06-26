@@ -8,6 +8,7 @@ import androidx.appcompat.widget.Toolbar
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import br.com.fenix.bilingualmangareader.view.components.ComponentsUtil
 
 
 class MangaDetailActivity : AppCompatActivity() {
@@ -31,6 +32,8 @@ class MangaDetailActivity : AppCompatActivity() {
             .beginTransaction()
             .replace(R.id.root_frame_manga_detail, MangaDetailFragment(manga))
             .commit()
+
+        ComponentsUtil.setSystemUITransparency(window)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

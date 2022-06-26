@@ -269,6 +269,12 @@
             app:rippleColor="@color/on_secondary" />
     </LinearLayout>
 
+    <View
+        android:id="@+id/floating_subtitle_resizer"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="bottom|end"/>
+
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/nav_floating_subtitle_close"
         style="@style/Base.Widget.AppCompat.Button.Borderless"
@@ -278,11 +284,5 @@
         android:background="@color/on_primary"
         android:src="@drawable/ic_close"
         android:tint="@color/text_primary" />
-
-    <View
-        android:id="@+id/floating_subtitle_resizer"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_gravity="bottom|end"/>
 
 </FrameLayout>

@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primary"
+    android:fitsSystemWindows="false"
     tools:context=".view.ui.pages_link.PagesLinkActivity">
 
     <FrameLayout
@@ -18,9 +19,11 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_manga_pages_link"
         android:layout_width="@dimen/page_link_toolbar_size"
-        android:layout_height="?android:attr/actionBarSize"
+        android:layout_height="@dimen/default_navigator_header_size"
+        android:gravity="top"
         android:background="@color/transparent"
         android:layout_marginTop="20dp"
+        android:layout_marginStart="5dp"
         app:popupTheme="@style/MyDarkToolbarStyle"
         app:theme="@style/ToolbarTheme"/>
 
