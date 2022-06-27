@@ -43,8 +43,6 @@ import br.com.fenix.bilingualmangareader.view.ui.manga_detail.MangaDetailActivit
 import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.slf4j.LoggerFactory
-import java.lang.ref.WeakReference
-import java.util.*
 import kotlin.math.max
 
 
