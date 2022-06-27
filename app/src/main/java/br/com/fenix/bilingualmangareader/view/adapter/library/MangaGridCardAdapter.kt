@@ -2,7 +2,6 @@ package br.com.fenix.bilingualmangareader.view.adapter.library
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Filter
 import android.widget.Filterable
@@ -11,14 +10,12 @@ import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.service.listener.MangaCardListener
 import java.util.*
-import kotlin.collections.MutableList
 
 class MangaGridCardAdapter : RecyclerView.Adapter<GridViewHolder>(), Filterable {
 
     private lateinit var mListener: MangaCardListener
     private var mMangaList: MutableList<Manga> = mutableListOf()
     private var mMangaListFull: MutableList<Manga> = mutableListOf()
-    var animation: Animation? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GridViewHolder {
         val item =
@@ -28,9 +25,13 @@ class MangaGridCardAdapter : RecyclerView.Adapter<GridViewHolder>(), Filterable 
 
     override fun onBindViewHolder(holder: GridViewHolder, position: Int) {
         holder.bind(mMangaList[position])
-        holder.itemView.startAnimation(animation)
+        holder.itemView.animation = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.animation_library_grid)
     }
 
+    override fun onViewDetachedFromWindow(holder: GridViewHolder) {
+        holder.itemView.clearAnimation()
+        super.onViewDetachedFromWindow(holder)
+    }
 
     override fun getItemCount(): Int {
         return mMangaList.size

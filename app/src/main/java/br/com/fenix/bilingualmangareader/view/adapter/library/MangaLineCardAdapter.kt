@@ -2,7 +2,7 @@ package br.com.fenix.bilingualmangareader.view.adapter.library
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
@@ -10,7 +10,6 @@ import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.service.listener.MangaCardListener
 import java.util.*
-import kotlin.collections.MutableList
 
 
 class MangaLineCardAdapter : RecyclerView.Adapter<LineViewHolder>(), Filterable {
@@ -18,16 +17,20 @@ class MangaLineCardAdapter : RecyclerView.Adapter<LineViewHolder>(), Filterable 
     private lateinit var mListener: MangaCardListener
     private var mMangaList: MutableList<Manga> = mutableListOf()
     private var mMangaListFull: MutableList<Manga> = mutableListOf()
-    var animation: Animation? = null
 
     override fun onBindViewHolder(holder: LineViewHolder, position: Int) {
         holder.bind(mMangaList[position])
-        holder.itemView.startAnimation(animation)
+        holder.itemView.animation = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.animation_library_line)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LineViewHolder {
         val item = LayoutInflater.from(parent.context).inflate(R.layout.manga_line_card, parent, false)
         return LineViewHolder(item, mListener)
+    }
+
+    override fun onViewDetachedFromWindow(holder: LineViewHolder) {
+        holder.itemView.clearAnimation()
+        super.onViewDetachedFromWindow(holder)
     }
 
     override fun getItemCount(): Int {
