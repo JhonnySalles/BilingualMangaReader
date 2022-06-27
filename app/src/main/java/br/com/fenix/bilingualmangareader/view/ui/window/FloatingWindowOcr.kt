@@ -8,7 +8,6 @@ import android.graphics.Point
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import android.provider.Settings
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +17,7 @@ import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.service.ocr.OcrProcess
 import br.com.fenix.bilingualmangareader.service.ocr.Tesseract
+import br.com.fenix.bilingualmangareader.view.components.ComponentsUtil
 import br.com.fenix.bilingualmangareader.view.components.ResizeView
 import br.com.fenix.bilingualmangareader.view.components.WindowListener
 import br.com.fenix.bilingualmangareader.view.components.WindowView
@@ -286,7 +286,7 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
 
     fun show() {
         synchronized(this) {
-            if (canDrawOverlays(context)) {
+            if (ComponentsUtil.canDrawOverlays(context)) {
                 dismiss()
                 isShowing = true
                 windowManager?.addView(mFloatingView, layoutParams)
@@ -345,8 +345,4 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
         }
     }
 
-    companion object {
-        fun canDrawOverlays(context: Context): Boolean =
-            Settings.canDrawOverlays(context)
-    }
 }

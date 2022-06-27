@@ -242,7 +242,7 @@
                     app:strokeWidth="0dp"
                     app:backgroundTint="@color/file_link_buttons"
                     app:icon="@drawable/ic_file_link_auto_process"
-                    app:iconTint="@color/text_primary"
+                    app:iconTint="@color/secondary"
                     app:iconSize="20dp"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
 
@@ -261,7 +261,7 @@
                     app:strokeWidth="0dp"
                     app:backgroundTint="@color/file_link_buttons"
                     app:icon="@drawable/ic_file_link_dual_page"
-                    app:iconTint="@color/text_primary"
+                    app:iconTint="@color/secondary"
                     app:iconSize="20dp"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
 
@@ -280,7 +280,7 @@
                     app:strokeWidth="0dp"
                     app:backgroundTint="@color/file_link_buttons"
                     app:icon="@drawable/ic_file_link_single_page"
-                    app:iconTint="@color/text_primary"
+                    app:iconTint="@color/secondary"
                     app:iconSize="20dp"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
 
@@ -299,7 +299,7 @@
                     app:strokeWidth="0dp"
                     app:backgroundTint="@color/file_link_buttons"
                     app:icon="@drawable/ic_file_link_reorder"
-                    app:iconTint="@color/text_primary"
+                    app:iconTint="@color/secondary"
                     app:iconSize="20dp"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
 
@@ -319,7 +319,7 @@
                     app:strokeWidth="0dp"
                     app:backgroundTint="@color/file_link_buttons"
                     app:icon="@drawable/ic_file_link_delete"
-                    app:iconTint="@color/text_primary"
+                    app:iconTint="@color/secondary"
                     app:iconSize="20dp"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
 
@@ -338,7 +338,7 @@
                     app:strokeWidth="0dp"
                     app:backgroundTint="@color/file_link_buttons"
                     app:icon="@drawable/ic_file_link_refresh"
-                    app:iconTint="@color/text_primary"
+                    app:iconTint="@color/secondary"
                     app:iconSize="20dp"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
             </com.google.android.material.button.MaterialButtonToggleGroup>

@@ -40,8 +40,8 @@ import br.com.fenix.bilingualmangareader.util.helpers.Util
 import br.com.fenix.bilingualmangareader.view.components.ComponentsUtil
 import br.com.fenix.bilingualmangareader.view.ui.pages_link.PagesLinkActivity
 import br.com.fenix.bilingualmangareader.view.ui.pages_link.PagesLinkViewModel
+import br.com.fenix.bilingualmangareader.view.ui.window.FloatingButtons
 import br.com.fenix.bilingualmangareader.view.ui.window.FloatingSubtitleReader
-import br.com.fenix.bilingualmangareader.view.ui.window.FloatingSubtitleReader.Companion.canDrawOverlays
 import br.com.fenix.bilingualmangareader.view.ui.window.FloatingWindowOcr
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.button.MaterialButton
@@ -78,6 +78,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
 
     private lateinit var mFloatingSubtitleReader: FloatingSubtitleReader
     private lateinit var mFloatingWindowOcr: FloatingWindowOcr
+    private lateinit var mFloatingButtons: FloatingButtons
 
     private lateinit var mStorage: Storage
     private lateinit var mRepository: MangaRepository
@@ -187,6 +188,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         mPopupSubtitleVocabularyFragment = PopupSubtitleVocabulary()
         mPopupSubtitleVocabularyFragment.setBackground(R.color.on_primary)
 
+        mFloatingButtons = FloatingButtons(applicationContext, this)
         mFloatingSubtitleReader = FloatingSubtitleReader(applicationContext, this)
         mFloatingWindowOcr = FloatingWindowOcr(applicationContext, this)
         prepareFloatingSubtitle()
@@ -427,6 +429,9 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
                 mFloatingWindowOcr.dismiss()
         }
 
+        if (::mFloatingButtons.isInitialized && mFloatingButtons.isShowing)
+            mFloatingButtons.dismiss()
+
         super.onStop()
     }
 
@@ -436,6 +441,9 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
 
         if (::mFloatingWindowOcr.isInitialized)
             mFloatingWindowOcr.destroy()
+
+        if (::mFloatingButtons.isInitialized)
+            mFloatingButtons.destroy()
 
         super.onDestroy()
     }
@@ -499,6 +507,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
                     Toast.LENGTH_SHORT
                 ).show()
             }
+            R.id.menu_item_floating_buttons -> openFloatingButtons()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -579,7 +588,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         }
     }
 
-    private fun openFileLink() {
+    fun openFileLink() {
         if (mManga != null) {
             val intent = Intent(applicationContext, PagesLinkActivity::class.java)
             val bundle = Bundle()
@@ -617,28 +626,60 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         }
     }
 
-    private fun openFloatingSubtitle() {
+    fun openFloatingSubtitle() {
         mMenuPopupTranslate.visibility = View.INVISIBLE
         mMenuPopupColor.visibility = View.INVISIBLE
 
         if (mFloatingSubtitleReader.isShowing)
             mFloatingSubtitleReader.dismiss()
         else {
-            if (canDrawOverlays(applicationContext)) {
+            if (ComponentsUtil.canDrawOverlays(applicationContext)) {
                 verifySubtitle()
                 mFloatingSubtitleReader.show()
             } else
-                startManageDrawOverlaysPermission()
+                startManageDrawOverlaysPermission(GeneralConsts.REQUEST.PERMISSION_DRAW_OVERLAYS_FLOATING_SUBTITLE)
+        }
+    }
+
+    fun openFloatingButtons() {
+        if (mFloatingButtons.isShowing)
+            mFloatingButtons.dismiss()
+        else {
+            if (ComponentsUtil.canDrawOverlays(applicationContext))
+                mFloatingButtons.show()
+            else
+                startManageDrawOverlaysPermission(GeneralConsts.REQUEST.PERMISSION_DRAW_OVERLAYS_FLOATING_BUTTONS)
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            GeneralConsts.REQUEST.PERMISSION_DRAW_OVERLAYS -> {
-                if (canDrawOverlays(applicationContext)) {
+            GeneralConsts.REQUEST.PERMISSION_DRAW_OVERLAYS_FLOATING_SUBTITLE -> {
+                if (ComponentsUtil.canDrawOverlays(applicationContext)) {
                     verifySubtitle()
                     mFloatingSubtitleReader.show()
+                } else
+                    Toast.makeText(
+                        application,
+                        getString(R.string.floating_reading_not_permission),
+                        Toast.LENGTH_SHORT
+                    ).show()
+            }
+            GeneralConsts.REQUEST.PERMISSION_DRAW_OVERLAYS_FLOATING_BUTTONS -> {
+                if (ComponentsUtil.canDrawOverlays(applicationContext))
+                    mFloatingButtons.show()
+                else
+                    Toast.makeText(
+                        application,
+                        getString(R.string.floating_reading_not_permission),
+                        Toast.LENGTH_SHORT
+                    ).show()
+            }
+            GeneralConsts.REQUEST.PERMISSION_DRAW_OVERLAYS_FLOATING_OCR -> {
+                if (ComponentsUtil.canDrawOverlays(applicationContext)) {
+                    mFloatingWindowOcr.show()
+                    mFloatingSubtitleReader.forceZIndex()
                 } else
                     Toast.makeText(
                         application,
@@ -649,12 +690,12 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         }
     }
 
-    private fun startManageDrawOverlaysPermission() {
+    private fun startManageDrawOverlaysPermission(requestCode: Int) {
         Intent(
             Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
             Uri.parse("package:${applicationContext.packageName}")
         ).let {
-            startActivityForResult(it, GeneralConsts.REQUEST.PERMISSION_DRAW_OVERLAYS)
+            startActivityForResult(it, requestCode)
         }
     }
 
@@ -712,8 +753,11 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
 
     //Force floating subtitle aways on top
     private fun openFloatingWindow() {
-        mFloatingWindowOcr.show()
-        mFloatingSubtitleReader.forceZIndex()
+        if (ComponentsUtil.canDrawOverlays(applicationContext)) {
+            mFloatingWindowOcr.show()
+            mFloatingSubtitleReader.forceZIndex()
+        } else
+            startManageDrawOverlaysPermission(GeneralConsts.REQUEST.PERMISSION_DRAW_OVERLAYS_FLOATING_OCR)
     }
 
     private fun openGoogleVisionOcr() {

@@ -11,8 +11,8 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
 
     private val mMangaRepository: MangaRepository = MangaRepository(application.applicationContext)
 
-    private var mListMangas = MutableLiveData<ArrayList<Manga>>(ArrayList())
-    val listMangas: LiveData<ArrayList<Manga>> = mListMangas
+    private var mListMangas = MutableLiveData<MutableList<Manga>>(mutableListOf())
+    val listMangas: LiveData<MutableList<Manga>> = mListMangas
 
     fun save(obj: Manga): Manga {
         if (obj.id == 0L)
@@ -99,16 +99,42 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         return indexes
     }
 
-    fun list(refreshComplete: () -> (Unit)) {
+    fun setList(list: ArrayList<Manga>) {
+        mListMangas.value = list
+    }
+
+    fun addList(manga: Manga): Int {
+        var index = -1
+        if (!mListMangas.value!!.contains(manga)) {
+            index = mListMangas.value!!.size
+            mListMangas.value!!.add(manga)
+        }
+
+        return index
+    }
+
+    fun remList(manga: Manga): Int {
+        var index = -1
+
+        if (mListMangas.value!!.contains(manga)) {
+            index = mListMangas.value!!.indexOf(manga)
+            mListMangas.value!!.remove(manga)
+        }
+
+        return index
+    }
+
+    fun list(refreshComplete: (Boolean) -> (Unit)) {
         val list = mMangaRepository.list()
         if (list != null) {
             if (mListMangas.value == null || mListMangas.value!!.isEmpty())
-                mListMangas.value = ArrayList(list)
+                mListMangas.value = list.toMutableList()
             else
                 update(list)
         } else
-            mListMangas.value = ArrayList()
-        refreshComplete()
+            mListMangas.value = mutableListOf()
+
+        refreshComplete(mListMangas.value!!.isNotEmpty())
     }
 
     fun isEmpty(): Boolean =
@@ -116,4 +142,8 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
 
     fun getLastIndex(): Int =
         if (mListMangas.value == null) 0 else mListMangas.value!!.size - 1
+
+    fun sorted(list: MutableList<Manga>) {
+        mListMangas.value = list
+    }
 }

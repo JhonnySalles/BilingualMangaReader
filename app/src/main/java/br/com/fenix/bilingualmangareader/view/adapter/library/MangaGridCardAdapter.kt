@@ -9,13 +9,13 @@ import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.service.listener.MangaCardListener
 import java.util.*
-import kotlin.collections.ArrayList
+import kotlin.collections.MutableList
 
 class MangaGridCardAdapter : RecyclerView.Adapter<GridViewHolder>(), Filterable {
 
     private lateinit var mListener: MangaCardListener
-    private var mMangaList: ArrayList<Manga> = arrayListOf()
-    private var mMangaListFull: ArrayList<Manga> = arrayListOf()
+    private var mMangaList: MutableList<Manga> = mutableListOf()
+    private var mMangaListFull: MutableList<Manga> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GridViewHolder {
         val item =
@@ -36,9 +36,9 @@ class MangaGridCardAdapter : RecyclerView.Adapter<GridViewHolder>(), Filterable 
         mListener = listener
     }
 
-    fun updateList(list: ArrayList<Manga>) {
+    fun updateList(list: MutableList<Manga>) {
         mMangaList = list
-        mMangaListFull = ArrayList(list)
+        mMangaListFull = list.toMutableList()
         notifyDataSetChanged()
     }
 
@@ -48,7 +48,7 @@ class MangaGridCardAdapter : RecyclerView.Adapter<GridViewHolder>(), Filterable 
 
     private val mMangaFilter = object : Filter() {
         override fun performFiltering(constraint: CharSequence?): FilterResults {
-            val filteredList: MutableList<Manga> = ArrayList()
+            val filteredList: MutableList<Manga> = mutableListOf()
 
             if (constraint == null || constraint.length === 0) {
                 filteredList.addAll(mMangaListFull)
