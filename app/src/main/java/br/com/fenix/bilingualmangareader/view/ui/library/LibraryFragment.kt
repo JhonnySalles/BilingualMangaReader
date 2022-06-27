@@ -412,7 +412,6 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private fun generateLayout() {
         if (mGridType != LibraryType.LINE) {
             val gridAdapter = MangaGridCardAdapter()
-            gridAdapter.animation = AnimationUtils.loadAnimation(requireContext(), R.anim.animation_library_grid)
             mRecycleView.adapter = gridAdapter
 
             val isLandscape =
@@ -438,7 +437,6 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             mRecycleView.layoutAnimation = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_library_grid)
         } else {
             val lineAdapter = MangaLineCardAdapter()
-            lineAdapter.animation = AnimationUtils.loadAnimation(requireContext(), R.anim.animation_library_line)
             mRecycleView.adapter = lineAdapter
             mRecycleView.layoutManager = GridLayoutManager(requireContext(), 1)
             lineAdapter.attachListener(mListener)
