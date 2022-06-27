@@ -13,12 +13,15 @@ import br.com.fenix.bilingualmangareader.service.parses.RarParse
 import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.lang.ref.WeakReference
 
 class Scanner(private val context: Context) {
 
-    private var mUpdateHandler: MutableList<Handler>? = ArrayList()
+    private val mLOGGER = LoggerFactory.getLogger(Scanner::class.java)
+
+    private var mUpdateHandler: MutableList<Handler> = ArrayList()
     private var mUpdateThread: Thread? = null
 
     private var mIsStopped = false
@@ -70,39 +73,56 @@ class Scanner(private val context: Context) {
     }
 
     fun addUpdateHandler(handler: Handler) {
-        mUpdateHandler!!.add(handler)
+        if (mUpdateHandler.contains(handler))
+            removeUpdateHandler(handler)
+
+        mUpdateHandler.add(handler)
     }
 
     fun removeUpdateHandler(handler: Handler) {
-        mUpdateHandler!!.remove(handler)
+        mUpdateHandler.remove(handler)
     }
 
     private fun notifyMediaUpdatedAdd(manga: Manga) {
         val msg = Message()
         msg.obj = manga
         msg.what = GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATED_ADD
-        for (h in mUpdateHandler!!)
-            h.sendMessage(msg)
+        notifyHandlers(msg)
     }
 
     private fun notifyMediaUpdatedRemove(manga: Manga) {
         val msg = Message()
         msg.obj = manga
         msg.what = GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATED_REMOVE
-        for (h in mUpdateHandler!!)
-            h.sendMessage(msg)
+        notifyHandlers(msg)
     }
 
-    private fun notifyLibraryUpdateFinished(isItemProcess: Boolean) {
+    private fun notifyLibraryUpdateFinished(isProcessed: Boolean) {
         val msg = Message()
-        msg.obj = isItemProcess
+        msg.obj = isProcessed
         msg.what = GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATE_FINISHED
-        for (h in mUpdateHandler!!)
-            if (!h.hasMessages(msg.what))
-                h.sendMessage(msg)
+        notifyHandlers(msg, 200)
     }
 
-    private fun generateCover(parse: Parse, manga: Manga) = ImageCoverController.instance.getCoverFromFile(context, manga.file, parse)
+    private fun notifyHandlers(msg: Message, delay: Int = -1) {
+        for (h in mUpdateHandler) {
+            try {
+                if (h.hasMessages(msg.what, msg.obj))
+                    h.removeMessages(msg.what, msg.obj)
+
+                if (delay > -1)
+                    h.sendMessageDelayed(msg, 200)
+                else
+                    h.sendMessage(msg)
+
+            } catch (e: Exception) {
+                mLOGGER.error("Error when notify handlers", e)
+            }
+        }
+    }
+
+    private fun generateCover(parse: Parse, manga: Manga) =
+        ImageCoverController.instance.getCoverFromFile(context, manga.file, parse)
 
     private inner class LibraryUpdateRunnable : Runnable {
         override fun run() {
@@ -124,12 +144,13 @@ class Scanner(private val context: Context) {
                 for (c in storage.listDeleted()!!)
                     storageDeletes[c.title] = c
 
+                var walked = false
                 // search and add comics if necessary
                 val file = File(libraryPath)
-                file.walk()
+                file.walk().onFail { _, ioException -> mLOGGER.warn("File walk error", ioException) }
                     .filterNot { it.isDirectory }.forEach {
+                        walked = true
                         if (mIsStopped) return
-
                         if (it.name.endsWith(".rar") ||
                             it.name.endsWith(".zip") ||
                             it.name.endsWith(".cbr") ||
@@ -148,9 +169,10 @@ class Scanner(private val context: Context) {
 
                                     if (parse != null)
                                         if (parse.numPages() > 0) {
-                                            val manga = if (storageDeletes.containsKey(it.name))
+                                            val manga = if (storageDeletes.containsKey(it.name)) {
+                                                storageFiles.remove(it.name)
                                                 storageDeletes.getValue(it.name)
-                                            else Manga(
+                                            } else Manga(
                                                 null,
                                                 it.name,
                                                 "",
@@ -174,11 +196,12 @@ class Scanner(private val context: Context) {
                     }
 
                 // delete missing comics
-                for (missing in storageFiles.values) {
-                    isProcess = true
-                    storage.delete(missing)
-                    notifyMediaUpdatedRemove(missing)
-                }
+                if (!mIsStopped && !mIsRestarted && walked)
+                    for (missing in storageFiles.values) {
+                        isProcess = true
+                        storage.delete(missing)
+                        notifyMediaUpdatedRemove(missing)
+                    }
             } finally {
                 mIsStopped = false
                 if (mIsRestarted) {
