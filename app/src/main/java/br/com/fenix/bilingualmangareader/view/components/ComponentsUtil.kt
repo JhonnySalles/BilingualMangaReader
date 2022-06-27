@@ -1,19 +1,17 @@
 package br.com.fenix.bilingualmangareader.view.components
 
-import android.R
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.app.Activity
-import android.content.res.TypedArray
+import android.content.Context
+import android.provider.Settings
 import android.view.View
-import android.view.WindowManager
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 
 
 class ComponentsUtil {
 
     companion object ComponentsUtils {
+        fun canDrawOverlays(context: Context): Boolean =
+            Settings.canDrawOverlays(context)
 
         private const val duration = 300L
         fun changeAnimateVisibility(component: View, visible: Boolean) {

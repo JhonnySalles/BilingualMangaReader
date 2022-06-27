@@ -177,7 +177,7 @@
                 app:strokeWidth="0dp"
                 app:backgroundTint="@color/file_link_buttons"
                 app:icon="@drawable/ic_file_link_pages_index"
-                app:iconTint="@color/text_primary"
+                app:iconTint="@color/secondary"
                 app:iconSize="20dp"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
 
@@ -197,7 +197,7 @@
                 app:strokeWidth="0dp"
                 app:backgroundTint="@color/file_link_buttons"
                 app:icon="@drawable/ic_file_link_auto_process"
-                app:iconTint="@color/text_primary"
+                app:iconTint="@color/secondary"
                 app:iconSize="20dp"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
 
@@ -217,7 +217,7 @@
                 app:strokeWidth="0dp"
                 app:backgroundTint="@color/file_link_buttons"
                 app:icon="@drawable/ic_file_link_dual_page"
-                app:iconTint="@color/text_primary"
+                app:iconTint="@color/secondary"
                 app:iconSize="20dp"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
 
@@ -237,7 +237,7 @@
                 app:strokeWidth="0dp"
                 app:backgroundTint="@color/file_link_buttons"
                 app:icon="@drawable/ic_file_link_single_page"
-                app:iconTint="@color/text_primary"
+                app:iconTint="@color/secondary"
                 app:iconSize="20dp"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
 
@@ -257,7 +257,7 @@
                 app:strokeWidth="0dp"
                 app:backgroundTint="@color/file_link_buttons"
                 app:icon="@drawable/ic_file_link_reorder"
-                app:iconTint="@color/text_primary"
+                app:iconTint="@color/secondary"
                 app:iconSize="20dp"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
 
@@ -277,7 +277,7 @@
                 app:strokeWidth="0dp"
                 app:backgroundTint="@color/file_link_buttons"
                 app:icon="@drawable/ic_file_link_delete"
-                app:iconTint="@color/text_primary"
+                app:iconTint="@color/secondary"
                 app:iconSize="20dp"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
 
@@ -297,7 +297,7 @@
                 app:strokeWidth="0dp"
                 app:backgroundTint="@color/file_link_buttons"
                 app:icon="@drawable/ic_file_link_refresh"
-                app:iconTint="@color/text_primary"
+                app:iconTint="@color/secondary"
                 app:iconSize="20dp"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
 
@@ -309,7 +309,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_alignParentBottom="true"
-            android:paddingBottom="@dimen/default_navigator_header_padding_tablet_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:gravity="end">

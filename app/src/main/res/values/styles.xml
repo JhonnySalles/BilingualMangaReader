@@ -27,6 +27,7 @@
 
     <style name="ToolbarTheme" parent="Widget.AppCompat.ActionBar">
         <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/on_secondary</item>
         <item name="colorControlNormal">@color/on_secondary</item>
         <item name="android:textColor">@color/text_primary</item>
         <item name="android:shadowColor">@color/black</item>
@@ -37,12 +38,13 @@
 
     <style name="SubToolbarTheme" parent="Widget.AppCompat.ActionBar">
         <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/on_secondary</item>
         <item name="colorControlNormal">@color/on_secondary</item>
         <item name="android:textColor">@color/text_primary</item>
         <item name="android:background">@color/night_on_secondary</item>
     </style>
 
-    <style name="MyDarkToolbarStyle" parent="ThemeOverlay.AppCompat.Light">
+    <style name="MyDarkToolbarStyle" parent="ThemeOverlay.AppCompat.Dark">
         <item name="android:background">@color/primary</item>
         <item name="android:textColor">@color/text_primary</item>
     </style>

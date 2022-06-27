@@ -24,6 +24,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -124,10 +125,8 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         if (mViewModel.isEmpty())
             onRefresh()
-        else if (mViewModel.listMangas.value != null) {
+        else if (mViewModel.listMangas.value != null)
             sortList(mViewModel.listMangas.value!!)
-            notifyDataSet(0, mViewModel.getLastIndex())
-        }
     }
 
     override fun onDestroy() {
@@ -139,14 +138,15 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         private val mOwner: WeakReference<LibraryFragment> = WeakReference(fragment)
         override fun handleMessage(msg: Message) {
             val fragment = mOwner.get() ?: return
+            val obj = msg.obj
             when (msg.what) {
-                GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATED_ADD -> fragment.refreshLibraryAddDelayed()
-                GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATED_REMOVE -> fragment.refreshLibraryRemoveDelayed()
+                GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATED_ADD -> fragment.refreshLibraryAddDelayed(obj as Manga)
+                GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATED_REMOVE -> fragment.refreshLibraryRemoveDelayed(obj as Manga)
                 GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATE_FINISHED -> {
-                    mViewModel.list {
-                        setIsRefreshing(false)
+                    setIsRefreshing(false)
+                    if (obj as Boolean) {
+                        mViewModel.updateListAdd()
                         sortList(mViewModel.listMangas.value!!)
-                        notifyDataSet(0, mViewModel.getLastIndex())
                     }
                 }
             }
@@ -164,15 +164,15 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             mRecycleView.adapter?.notifyItemChanged(index)
     }
 
-    private fun refreshLibraryAddDelayed() {
-        val indexes = mViewModel.updateListAdd()
-        for (index in indexes)
+    private fun refreshLibraryAddDelayed(manga: Manga) {
+        val index = mViewModel.addList(manga)
+        if (index > -1)
             mRecycleView.adapter?.notifyItemInserted(index)
     }
 
-    private fun refreshLibraryRemoveDelayed() {
-        val indexes = mViewModel.updateListRem()
-        for (index in indexes)
+    private fun refreshLibraryRemoveDelayed(manga: Manga) {
+        val index = mViewModel.remList(manga)
+        if (index > -1)
             mRecycleView.adapter?.notifyItemRemoved(index)
     }
 
@@ -207,19 +207,19 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             this.commit()
         }
 
-        if (mViewModel.listMangas.value != null) {
+        if (mViewModel.listMangas.value != null)
             sortList(mViewModel.listMangas.value!!)
-            notifyDataSet(0, mViewModel.getLastIndex())
-        }
+
     }
 
-    private fun sortList(list: ArrayList<Manga>) {
-        when (mOrderBy) {
-            Order.Date -> list.sortBy { it.dateCreate }
-            Order.LastAccess -> list.sortWith(compareByDescending<Manga> { it.lastAccess }.thenBy { it.name })
-            Order.Favorite -> list.sortWith(compareByDescending<Manga> { it.favorite }.thenBy { it.name })
-            else -> list.sortBy { it.name }
+    private fun sortList(list: MutableList<Manga>) {
+        val sorted = when (mOrderBy) {
+            Order.Date -> list.sortedBy { it.dateCreate }
+            Order.LastAccess -> list.sortedWith(compareByDescending<Manga> { it.lastAccess }.thenBy { it.name })
+            Order.Favorite -> list.sortedWith(compareByDescending<Manga> { it.favorite }.thenBy { it.name })
+            else -> list.sortedBy { it.name }
         }
+        mViewModel.sorted(sorted.toMutableList())
     }
 
     private fun onChangeLayout() {
@@ -342,7 +342,10 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         }
         observer()
-
+        mViewModel.list {
+            if (it)
+                sortList(mViewModel.listMangas.value!!)
+        }
         if (!Storage.isPermissionGranted(requireContext()))
             Storage.takePermission(requireContext(), requireActivity())
 
@@ -444,8 +447,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         }
     }
 
-    private fun updateList(list: ArrayList<Manga>) {
-        sortList(list)
+    private fun updateList(list: MutableList<Manga>) {
         if (mGridType != LibraryType.LINE)
             (mRecycleView.adapter as MangaGridCardAdapter).updateList(list)
         else

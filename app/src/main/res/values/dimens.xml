@@ -62,6 +62,7 @@
     <dimen name="popup_reader_color_filter_padding">16dp</dimen>
     <dimen name="popup_reader_blue_light_padding">10dp</dimen>
 
+    <dimen name="floating_reader_min_size">100dp</dimen>
     <dimen name="floating_reader_initial_top_padding">25dp</dimen>
     <dimen name="floating_reader_height">230dp</dimen>
     <dimen name="floating_reader_width">340dp</dimen>

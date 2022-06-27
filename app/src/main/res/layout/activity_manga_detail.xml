@@ -18,10 +18,9 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_manga_detail"
-        android:paddingTop="@dimen/default_navigator_header_padding"
         android:layout_width="match_parent"
         android:layout_height="@dimen/default_navigator_header_size"
-        android:background="@color/transparent"
+        android:background="@drawable/main_toolbar_background"
         android:gravity="start|center"
         app:popupTheme="@style/MyDarkToolbarStyle"
         app:theme="@style/ToolbarTheme"/>

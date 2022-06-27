@@ -8,7 +8,6 @@ import android.graphics.PixelFormat
 import android.graphics.Point
 import android.graphics.drawable.Drawable
 import android.os.Build
-import android.provider.Settings
 import android.text.SpannableString
 import android.text.method.LinkMovementMethod
 import android.view.*
@@ -25,6 +24,7 @@ import br.com.fenix.bilingualmangareader.model.entity.Text
 import br.com.fenix.bilingualmangareader.service.controller.SubTitleController
 import br.com.fenix.bilingualmangareader.service.kanji.Formatter
 import br.com.fenix.bilingualmangareader.service.ocr.OcrProcess
+import br.com.fenix.bilingualmangareader.view.components.ComponentsUtil
 import com.pedromassango.doubleclick.DoubleClick
 import com.pedromassango.doubleclick.DoubleClickListener
 import kotlin.math.abs
@@ -309,7 +309,7 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
     private lateinit var mRealDisplaySize: Point
     private var minSize = 0
     private fun setResizer() {
-        minSize = context.resources.getDimension(R.dimen.floating_reader_button_close).toInt()
+        minSize = context.resources.getDimension(R.dimen.floating_reader_min_size).toInt()
         val displaySize = Point()
         windowManager!!.defaultDisplay!!.getRealSize(displaySize)
         mRealDisplaySize = displaySize
@@ -364,12 +364,16 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
         if (layoutParams.height > mRealDisplaySize.y) {
             layoutParams.height = mRealDisplaySize.y
         }
-        if (layoutParams.width < minSize) {
-            layoutParams.width = minSize
+        if (isExpanded) {
+            if (layoutParams.width < minSize)
+                layoutParams.width = minSize
+        } else {
+            if (layoutParams.width < mMinimisedSize)
+                layoutParams.width = mMinimisedSize
         }
-        if (layoutParams.height < minSize) {
+        if (layoutParams.height < minSize)
             layoutParams.height = minSize
-        }
+
     }
 
     fun updatePage(page: Page?) {
@@ -413,20 +417,25 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
         }
     }
 
+    private var mMinimisedSize = context.resources.getDimension(R.dimen.floating_reader_button_close).toInt()
+    private var isExpanded = true
     fun expanded(expand : Boolean = false) {
-        if (mOriginalHeight == 0)
+        if (expand || isExpanded) {
             mOriginalHeight = mFloatingView.height
+            if (mOriginalHeight < minSize)
+                mOriginalHeight = minSize
 
-        if (expand || mFloatingView.height != mOriginalHeight) {
             val params = mFloatingView.layoutParams as WindowManager.LayoutParams
             params.height = mOriginalHeight
             mFloatingView.layoutParams = params
             mBtnExpanded.setImageDrawable(mIconRetracted)
+            isExpanded = false
         } else {
             val params = mFloatingView.layoutParams as WindowManager.LayoutParams
-            params.height = context.resources.getDimension(R.dimen.floating_reader_button_close).toInt()
+            params.height = mMinimisedSize
             mFloatingView.layoutParams = params
             mBtnExpanded.setImageDrawable(mIconExpanded)
+            isExpanded = true
         }
 
         windowManager?.apply {
@@ -503,7 +512,7 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
     }
 
     fun show() {
-        if (canDrawOverlays(context)) {
+        if (ComponentsUtil.canDrawOverlays(context)) {
             dismiss()
             isShowing = true
             windowManager?.addView(mFloatingView, layoutParams)
@@ -531,8 +540,4 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
         dismiss()
     }
 
-    companion object {
-        fun canDrawOverlays(context: Context): Boolean =
-            Settings.canDrawOverlays(context)
-    }
 }

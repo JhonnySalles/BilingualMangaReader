@@ -77,25 +77,36 @@ class Scanner(private val context: Context) {
         mUpdateHandler!!.remove(handler)
     }
 
-    private fun notifyMediaUpdatedAdd() {
+    private fun notifyMediaUpdatedAdd(manga: Manga) {
+        val msg = Message()
+        msg.obj = manga
+        msg.what = GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATED_ADD
         for (h in mUpdateHandler!!)
-            h.sendEmptyMessage(GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATED_ADD)
+            h.sendMessage(msg)
     }
 
-    private fun notifyMediaUpdatedRemove() {
+    private fun notifyMediaUpdatedRemove(manga: Manga) {
+        val msg = Message()
+        msg.obj = manga
+        msg.what = GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATED_REMOVE
         for (h in mUpdateHandler!!)
-            h.sendEmptyMessage(GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATED_REMOVE)
+            h.sendMessage(msg)
     }
 
-    private fun notifyLibraryUpdateFinished() {
+    private fun notifyLibraryUpdateFinished(isItemProcess: Boolean) {
+        val msg = Message()
+        msg.obj = isItemProcess
+        msg.what = GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATE_FINISHED
         for (h in mUpdateHandler!!)
-            h.sendEmptyMessage(GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATE_FINISHED)
+            if (!h.hasMessages(msg.what))
+                h.sendMessage(msg)
     }
 
     private fun generateCover(parse: Parse, manga: Manga) = ImageCoverController.instance.getCoverFromFile(context, manga.file, parse)
 
     private inner class LibraryUpdateRunnable : Runnable {
         override fun run() {
+            var isProcess = false
             try {
                 val preference: SharedPreferences = GeneralConsts.getSharedPreferences(context)
                 val libraryPath = preference.getString(GeneralConsts.KEYS.LIBRARY.FOLDER, "")
@@ -127,6 +138,7 @@ class Scanner(private val context: Context) {
                             if (storageFiles.containsKey(it.name))
                                 storageFiles.remove(it.name)
                             else {
+                                isProcess = true
                                 val parse: Parse? = ParseFactory.create(it)
                                 try {
                                     if (parse is RarParse) {
@@ -152,7 +164,7 @@ class Scanner(private val context: Context) {
                                             manga.excluded = false
                                             generateCover(parse, manga)
                                             storage.save(manga)
-                                            notifyMediaUpdatedAdd()
+                                            notifyMediaUpdatedAdd(manga)
                                         }
                                 } finally {
                                     Util.destroyParse(parse)
@@ -163,8 +175,9 @@ class Scanner(private val context: Context) {
 
                 // delete missing comics
                 for (missing in storageFiles.values) {
+                    isProcess = true
                     storage.delete(missing)
-                    notifyMediaUpdatedRemove()
+                    notifyMediaUpdatedRemove(missing)
                 }
             } finally {
                 mIsStopped = false
@@ -172,7 +185,7 @@ class Scanner(private val context: Context) {
                     mIsRestarted = false
                     mRestartHandler.sendEmptyMessageDelayed(1, 200)
                 } else
-                    notifyLibraryUpdateFinished()
+                    notifyLibraryUpdateFinished(isProcess)
             }
         }
     }
