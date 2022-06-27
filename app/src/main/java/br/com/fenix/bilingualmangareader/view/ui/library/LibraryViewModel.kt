@@ -53,9 +53,11 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         if (mListMangas.value != null) {
             for (manga in mListMangas.value!!) {
                 val item = mMangaRepository.get(manga.id!!)
-                manga.bookMark = item?.bookMark!!
-                manga.favorite = item.favorite
-                manga.lastAccess = item.lastAccess
+                if (item != null) {
+                    manga.bookMark = item.bookMark
+                    manga.favorite = item.favorite
+                    manga.lastAccess = item.lastAccess
+                }
             }
         }
     }

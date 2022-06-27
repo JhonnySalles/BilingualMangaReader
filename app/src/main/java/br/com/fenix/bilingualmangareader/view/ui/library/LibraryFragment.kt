@@ -24,7 +24,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -76,13 +75,12 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         var mGridType: LibraryType = LibraryType.GRID_BIG
     }
 
-    private val mUpdateHandler: Handler = UpdateHandler(this)
+    private val mUpdateHandler: Handler = UpdateHandler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loadConfig()
         setHasOptionsMenu(true)
-        Scanner.getInstance(requireContext()).addUpdateHandler(mUpdateHandler)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -119,35 +117,34 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     override fun onResume() {
         super.onResume()
 
+        Scanner.getInstance(requireContext()).addUpdateHandler(mUpdateHandler)
         if (Scanner.getInstance(requireContext()).isRunning())
             setIsRefreshing(true)
 
         mViewModel.update()
+        mRecycleView
 
         if (mViewModel.isEmpty())
             onRefresh()
-        else if (mViewModel.listMangas.value != null)
-            sortList(mViewModel.listMangas.value!!)
     }
 
-    override fun onDestroy() {
+    override fun onStop() {
         Scanner.getInstance(requireContext()).removeUpdateHandler(mUpdateHandler)
-        super.onDestroy()
+        super.onStop()
     }
 
-    private inner class UpdateHandler(fragment: LibraryFragment) : Handler() {
-        private val mOwner: WeakReference<LibraryFragment> = WeakReference(fragment)
+    private inner class UpdateHandler : Handler() {
         override fun handleMessage(msg: Message) {
-            val fragment = mOwner.get() ?: return
             val obj = msg.obj
             when (msg.what) {
-                GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATED_ADD -> fragment.refreshLibraryAddDelayed(obj as Manga)
-                GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATED_REMOVE -> fragment.refreshLibraryRemoveDelayed(obj as Manga)
+                GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATED_ADD -> refreshLibraryAddDelayed(obj as Manga)
+                GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATED_REMOVE -> refreshLibraryRemoveDelayed(obj as Manga)
                 GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATE_FINISHED -> {
                     setIsRefreshing(false)
                     if (obj as Boolean) {
                         mViewModel.updateListAdd()
-                        sortList(mViewModel.listMangas.value!!)
+                        if (!mViewModel.isEmpty())
+                            sortList(mViewModel.listMangas.value!!)
                     }
                 }
             }
@@ -347,6 +344,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             if (it)
                 sortList(mViewModel.listMangas.value!!)
         }
+
         if (!Storage.isPermissionGranted(requireContext()))
             Storage.takePermission(requireContext(), requireActivity())
 
@@ -416,6 +414,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private fun generateLayout() {
         if (mGridType != LibraryType.LINE) {
             val gridAdapter = MangaGridCardAdapter()
+            gridAdapter.animation = AnimationUtils.loadAnimation(requireContext(), R.anim.animation_library_grid)
             mRecycleView.adapter = gridAdapter
 
             val isLandscape =
@@ -441,6 +440,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             mRecycleView.layoutAnimation = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_library_grid)
         } else {
             val lineAdapter = MangaLineCardAdapter()
+            lineAdapter.animation = AnimationUtils.loadAnimation(requireContext(), R.anim.animation_library_line)
             mRecycleView.adapter = lineAdapter
             mRecycleView.layoutManager = GridLayoutManager(requireContext(), 1)
             lineAdapter.attachListener(mListener)
@@ -487,6 +487,9 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     override fun onRefresh() {
+        if (mViewModel.isEmpty())
+            mViewModel.list { }
+
         if (mHandler.hasCallbacks(mDismissUpButton))
             mHandler.removeCallbacks(mDismissUpButton)
         if (mHandler.hasCallbacks(mDismissDownButton))

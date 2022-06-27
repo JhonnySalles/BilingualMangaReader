@@ -84,7 +84,6 @@ class FloatingButtons constructor(private val context: Context, private val acti
                         }
                     }
 
-                    println("Inleft " + inLeft + "-" + layoutParams.x + "|" + mMiddle)
                     if (layoutParams.x > mMiddle && inLeft) {
                         inLeft = false
                         mMoveWindow.setImageDrawable(mIconToLeft)
