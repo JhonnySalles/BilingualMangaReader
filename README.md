@@ -131,6 +131,18 @@ O aplicativo é também compatível com legendas extraidas e pré processadas co
     * Implementado a utilização da biblioteca LruCache para as imagens.
     * Implementação de novas funcionalidades de ordenação na tela de vinculo de arquivo.
 * 0.2.10
+    * Implementado nova funcionalidade de OCR, utilizando-se da tecnologia do Tesseract e Google Vision.
+    * Adicionado nova funcionalidade e painel flutuante que irá recortar um pedaço da imagem para ser feito o reconhecimento de caractere no Tesseract.
+    * Adicionado novo layout na janela flutuante para receber as informações do texto reconhecido, como também irá manter uma lista do que foi capturado em tempo de execução.
+    * Adicionado para o Tesseract os data de treinamento nos idiomas Protuguês, Inglês e Japonês.
+    * Implementado a possibilidade de ajustar a janela flutuante.
+* 0.2.11
+    * Otimização na biblioteca, tanto no carregamento dos itens quando na funcionalidade.
+    * Refeito o layout para melhor aparência.
+    * Adicionado nova tela com informações adicionais sobre o arquivo, com informações de capítulos e outros arquivos vinculados.
+    * Adicionado animações nas transições de tela e nos arquivos da biblioteca.
+    * Implementado um novo painel flutuante com botões essenciais para leitura, não sendo necessário sair da tela cheia para executar algum comando.
+* 0.2.12
     * Em progresso. 
 
 ### Features
