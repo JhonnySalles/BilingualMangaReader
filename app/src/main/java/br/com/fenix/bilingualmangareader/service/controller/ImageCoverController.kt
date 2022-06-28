@@ -91,6 +91,10 @@ class ImageCoverController private constructor() {
         return null
     }
 
+    fun saveCoverToCache(context: Context, manga: Manga, bitmap: Bitmap) {
+        saveBitmapToCache(context, generateHash(manga.file), bitmap)
+    }
+
     fun getCoverFromFile(context: Context, file: File, parse: Parse): Bitmap? {
         return getCoverFromFile(context, generateHash(file), parse)
     }
@@ -98,7 +102,7 @@ class ImageCoverController private constructor() {
     private fun generateHash(file: File): String =
         Util.MD5(file.path + file.name)
 
-    private fun getCoverFromFile(context: Context, hash: String, parse: Parse): Bitmap? {
+    private fun getCoverFromFile(context: Context, hash: String, parse: Parse, isCoverSize: Boolean = true): Bitmap? {
         var index = 0
         for (i in 0..parse.numPages()) {
             if (Util.isImage(parse.getPagePath(i)!!)) {
@@ -108,31 +112,42 @@ class ImageCoverController private constructor() {
         }
         var stream: InputStream? = parse.getPage(index)
 
-        val options = BitmapFactory.Options()
-        options.inJustDecodeBounds = true
-        BitmapFactory.decodeStream(stream, null, options)
-        options.inSampleSize = Util.calculateInSampleSize(
-            options,
-            ReaderConsts.COVER.COVER_THUMBNAIL_WIDTH,
-            ReaderConsts.COVER.COVER_THUMBNAIL_HEIGHT
-        )
+        val cover: Bitmap?
 
-        options.inJustDecodeBounds = false
-        Util.closeInputStream(stream)
-        stream = parse.getPage(index)
-        val result = BitmapFactory.decodeStream(stream, null, options)
+        if (isCoverSize) {
+            val option = BitmapFactory.Options()
+            option.inJustDecodeBounds = true
+            BitmapFactory.decodeStream(stream, null, option)
+            option.inSampleSize = Util.calculateInSampleSize(
+                option,
+                ReaderConsts.COVER.COVER_THUMBNAIL_WIDTH,
+                ReaderConsts.COVER.COVER_THUMBNAIL_HEIGHT
+            )
+            option.inJustDecodeBounds = false
 
-        return if (result != null) {
-            saveBitmapToCache(context, hash, result)
             Util.closeInputStream(stream)
-            result
-        } else
-            null
+            stream = parse.getPage(index)
+            cover = BitmapFactory.decodeStream(stream, null, option)
+            if (cover != null)
+                saveBitmapToCache(context, hash, cover)
+
+            Util.closeInputStream(stream)
+        } else {
+            stream = parse.getPage(index)
+            cover = BitmapFactory.decodeStream(stream)
+            Util.closeInputStream(stream)
+        }
+        
+        return cover
     }
 
-    private fun getMangaCover(context: Context, manga: Manga): Bitmap? {
+    private fun getMangaCover(context: Context, manga: Manga, isCoverSize: Boolean): Bitmap? {
         val hash = generateHash(manga.file)
-        var image = retrieveBitmapFromCache(context, hash)
+        var image: Bitmap? = null
+
+        if (isCoverSize)
+            image = retrieveBitmapFromCache(context, hash)
+
         if (image == null) {
             val parse = ParseFactory.create(manga.file) ?: return image
             try {
@@ -142,7 +157,7 @@ class ImageCoverController private constructor() {
                     (parse as RarParse?)!!.setCacheDirectory(cacheDir)
                 }
 
-                image = getCoverFromFile(context, hash, parse)
+                image = getCoverFromFile(context, hash, parse, isCoverSize)
             } finally {
                 Util.destroyParse(parse)
             }
@@ -154,13 +169,14 @@ class ImageCoverController private constructor() {
     fun setImageCoverAsync(
         context: Context,
         manga: Manga,
-        imageView: ImageView
+        imageView: ImageView,
+        isCoverSize: Boolean = true
     ) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 var image: Bitmap? = null
                 val deferred = async {
-                    image = getMangaCover(context, manga)
+                    image = getMangaCover(context, manga, isCoverSize)
                 }
                 deferred.await()
                 withContext(Dispatchers.Main) {
@@ -174,7 +190,34 @@ class ImageCoverController private constructor() {
                 mLOGGER.error("Memory full, cleaning", m)
             }
         }
+    }
 
+    fun setImageCoverAsync(
+        context: Context,
+        manga: Manga,
+        imagesView: ArrayList<ImageView>,
+        isCoverSize: Boolean = true
+    ) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                var image: Bitmap? = null
+                val deferred = async {
+                    image = getMangaCover(context, manga, isCoverSize)
+                }
+                deferred.await()
+                withContext(Dispatchers.Main) {
+                    if (image != null) {
+                        for (imageView in imagesView)
+                            imageView.setImageBitmap(image)
+                    }
+                }
+            } catch (e: Exception) {
+                mLOGGER.error("Error to load image array async", e)
+            } catch (m: OutOfMemoryError) {
+                System.gc()
+                mLOGGER.error("Memory full, cleaning", m)
+            }
+        }
     }
 
 }

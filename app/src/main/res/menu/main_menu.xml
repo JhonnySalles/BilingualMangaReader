@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/search"
+        android:id="@+id/menu_library_search"
         android:icon="@drawable/ic_search"
         android:iconTint="#FFFFFF"
         android:orderInCategory="100"
@@ -11,7 +11,7 @@
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="always" />
 
-    <item android:id="@+id/list_order"
+    <item android:id="@+id/menu_library_list_order"
         android:title="@string/menu_reading_order"
         android:icon="@drawable/ic_order_by_last_acess"
         android:iconTint="#FFFFFF"
@@ -20,7 +20,7 @@
     </item>
 
     <item
-        android:id="@+id/grid_type"
+        android:id="@+id/menu_library_grid_type"
         android:icon="@drawable/ic_type_grid_big"
         android:iconTint="#FFFFFF"
         android:orderInCategory="110"

@@ -103,8 +103,7 @@ class MangaDetailFragment(private var mManga: Manga?) : Fragment() {
     private fun observer() {
         mViewModel.manga.observe(viewLifecycleOwner) {
             if (it != null) {
-                ImageCoverController.instance.setImageCoverAsync(requireContext(), it, mBackgroundImage)
-                ImageCoverController.instance.setImageCoverAsync(requireContext(), it, mImage)
+                ImageCoverController.instance.setImageCoverAsync(requireContext(), it, arrayListOf(mBackgroundImage, mImage), false)
                 mTitle.text = it.name
                 mFolder.text = it.path
                 mBookMark.text = "${it.bookMark} / ${it.pages}"
