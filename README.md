@@ -1,5 +1,5 @@
 # BilingualMangaReader
-> Leitor de mangas offline, no qual possui compatibilidade com textos extraido e processado através do programa [MangaExtractor](https://github.com/JhonnySalles/MangaExtractor)
+> Leitor de mangas offline, no qual possui compatibilidade com Tesseract e Google Vision para utilização de OCR, vínculo de dois arquivos em idiomas diferentes com facilidade na troca entre as páginas de ambos e compatibilidade com textos extraido e processado através do programa [MangaExtractor](https://github.com/JhonnySalles/MangaExtractor)
 
 <h4 align="center"> 
 	🚧  BilingualMangaReader 🚀 Em construção...  🚧
@@ -24,9 +24,13 @@
 
 Programa foi criado em Kotlin, onde foi utilizado algumas bibliotecas que estarão listadas mais abaixo para carregamento das imagens e leitura de arquivos jsons.
 
-O aplicativo foi projetado para reconhecer arquivos cbr/rar e cbz/zip em uma pasta de biblioteca, onde irá listar todas os arquivos encontrados.
+O aplicativo foi projetado para reconhecer arquivos cbr/rar e cbz/zip em uma pasta de biblioteca, onde irá listar todas os arquivos encontrados na pasta informada.
 
 Também irá salvar algumas preferências e o progresso e tem suporte a furigana e nivel jlpt do kanji em cores.
+
+Possui compatibilidade com o Tesseract e Google Vision para reconhecimento de caracteres em imagens, no qual comparado a versão de computador e em teste realizado é bem limitado, o que apenas faz jus o reconhecimento para kanjis e não palavras inteiras.
+
+Vinculo entre dois arquivos diferentes para realizar a troca de página entre os arquivos de forma fácil com apenas um clique de botão, no qual pode auxiliar na leitura e aprendizado de um novo idioma.
 
 
 ### Bibliotecas utilizadas
