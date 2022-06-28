@@ -17,9 +17,11 @@
         android:adjustViewBounds="true"
         android:background="@color/primary"
         android:scaleType="centerCrop"
-        app:srcCompat="@mipmap/book_icon" />
+        android:transitionName="transition_manga_cover"
+        app:srcCompat="@mipmap/app_icon" />
 
     <LinearLayout
+        android:id="@+id/manga_line_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -39,11 +41,10 @@
                 android:layout_width="@dimen/manga_grid_favorite"
                 android:layout_height="@dimen/manga_grid_favorite"
                 android:adjustViewBounds="true"
-                android:layout_marginStart="5dp"
                 android:gravity="center"
                 android:src="@drawable/ic_favorite_mark"
                 android:visibility="gone"
-                app:tint="@color/onSecondary" />
+                app:tint="@color/on_secondary" />
 
             <!-- Title, secondary and supporting text -->
             <TextView
@@ -51,8 +52,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?attr/textAppearanceHeadline6"
-                android:textColor="@color/textPrimary"
-                android:textSize="@dimen/manga_line_title_size" />
+                android:textColor="@color/text_primary"
+                android:textSize="@dimen/manga_line_title_size"
+                android:transitionName="transition_manga_title"/>
         </LinearLayout>
 
         <TextView
@@ -61,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
             android:textAppearance="?attr/textAppearanceSubtitle2"
-            android:textColor="@color/textPrimary"
+            android:textColor="@color/text_primary"
             android:textSize="@dimen/manga_line_sub_title" />
 
         <ProgressBar

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<transitionSet
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:transitionOrdering="together">
+
+    <changeBounds
+        android:duration="5000"
+        android:interpolator="@android:interpolator/linear">
+    </changeBounds>
+
+    <fade
+        android:duration="5000"
+        android:startDelay="400"
+        android:fadingMode="fade_in">
+
+        <targets>
+            <target android:targetId="@id/manga_detail_card"/>
+        </targets>
+    </fade>
+
+</transitionSet>

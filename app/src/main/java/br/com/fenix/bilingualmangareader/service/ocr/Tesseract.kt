@@ -12,6 +12,10 @@ import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.FileUtil
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import com.googlecode.tesseract.android.TessBaseAPI
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
 import java.io.File
 
@@ -20,14 +24,38 @@ class Tesseract(private val context: Context) {
     private val mLOGGER = LoggerFactory.getLogger(GoogleVision::class.java)
 
     companion object {
+        var inCopy = false
+        var exist = false
         fun copyTessData(context: Context) {
-            val mFileUtil = FileUtil(context)
-            val tessData = Util.normalizeFilePath(File(GeneralConsts.getCacheDir(context), GeneralConsts.CACHEFOLDER.TESSERACT).absolutePath)
-            // Load language files from asset packs
-            mFileUtil.copyAssetToFilesIfNotExist("tessdata/", "eng.traineddata", tessData)
-            mFileUtil.copyAssetToFilesIfNotExist("tessdata/", "jpn.traineddata", tessData)
-            mFileUtil.copyAssetToFilesIfNotExist("tessdata/", "jpn_vert.traineddata", tessData)
-            mFileUtil.copyAssetToFilesIfNotExist("tessdata/", "por.traineddata", tessData)
+            CoroutineScope(Dispatchers.IO).launch {
+                inCopy = true
+                val deferredOne = async {
+                    val mFileUtil = FileUtil(context)
+                    val tessData = Util.normalizeFilePath(
+                        File(
+                            GeneralConsts.getCacheDir(context),
+                            GeneralConsts.CACHE_FOLDER.TESSERACT
+                        ).absolutePath
+                    )
+                    // Load language files from asset packs
+                    exist = mFileUtil.copyAssetToFilesIfNotExist("tessdata/", "eng.traineddata", tessData)
+                    exist = mFileUtil.copyAssetToFilesIfNotExist("tessdata/", "jpn.traineddata", tessData)
+                    exist = mFileUtil.copyAssetToFilesIfNotExist("tessdata/", "jpn_vert.traineddata", tessData)
+                    exist = mFileUtil.copyAssetToFilesIfNotExist("tessdata/", "por.traineddata", tessData)
+                }
+                deferredOne.invokeOnCompletion {
+                    inCopy = false
+                    if (exist)
+                        CoroutineScope(Dispatchers.Main).launch {
+                            Toast.makeText(
+                                context,
+                                context.resources.getString(R.string.ocr_tesseract_copy_data_done),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+                }
+            }
         }
 
         private lateinit var INSTANCE: Tesseract
@@ -43,12 +71,21 @@ class Tesseract(private val context: Context) {
         copyTessData(context)
     }
 
-    private val TESSERACT_DATA_PATH = File(GeneralConsts.getCacheDir(context), GeneralConsts.CACHEFOLDER.TESSERACT).absolutePath
+    private val TESSERACT_DATA_PATH = File(GeneralConsts.getCacheDir(context), GeneralConsts.CACHE_FOLDER.TESSERACT).absolutePath
     private var tesseract: TessBaseAPI? = null
 
     fun process(language: Languages, image: Bitmap): String? {
+        if (inCopy) {
+            Toast.makeText(
+                context,
+                context.resources.getString(R.string.ocr_tesseract_copy_data),
+                Toast.LENGTH_SHORT
+            ).show()
+            return null
+        }
+
         tesseract = TessBaseAPI()
-        val isInit =  when(language) {
+        val isInit = when (language) {
             Languages.PORTUGUESE -> tesseract!!.init(TESSERACT_DATA_PATH, "por")
             Languages.ENGLISH -> tesseract!!.init(TESSERACT_DATA_PATH, "eng")
             Languages.JAPANESE -> tesseract!!.init(TESSERACT_DATA_PATH, "jpn")
@@ -80,12 +117,13 @@ class Tesseract(private val context: Context) {
         }
     }
 
-    private inner class ImageProcessRunnable(private var language: Languages, private var image: Bitmap, private var setText: Handler) : Runnable {
+    private inner class ImageProcessRunnable(private var language: Languages, private var image: Bitmap, private var setText: Handler) :
+        Runnable {
         private var tesseract: TessBaseAPI? = null
         override fun run() {
             try {
                 tesseract = TessBaseAPI()
-                val isInit =  when(language) {
+                val isInit = when (language) {
                     Languages.PORTUGUESE -> tesseract!!.init(TESSERACT_DATA_PATH, "por")
                     Languages.ENGLISH -> tesseract!!.init(TESSERACT_DATA_PATH, "eng")
                     Languages.JAPANESE -> tesseract!!.init(TESSERACT_DATA_PATH, "jpn")
@@ -97,7 +135,7 @@ class Tesseract(private val context: Context) {
                         val grayScale = ImageProcess.processGrayscale(image)
                         tesseract!!.setImage(grayScale)
                         val msg = Message()
-                        msg.obj = tesseract!!.utF8Text
+                        msg.obj = tesseract!!.utF8Text.replace("\n", " ")
                         msg.what = 1
                         setText.sendMessage(msg)
                     }

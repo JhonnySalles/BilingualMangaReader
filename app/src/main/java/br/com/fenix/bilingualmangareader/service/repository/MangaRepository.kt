@@ -13,7 +13,8 @@ class MangaRepository(context: Context) {
         return mDataBase.save(obj)
     }
 
-    fun update(obj: Manga) = mDataBase.update(obj)
+    fun update(obj: Manga) =
+        mDataBase.update(obj)
 
     fun updateBookMark(obj: Manga) {
         if (obj.id != null)
@@ -28,6 +29,11 @@ class MangaRepository(context: Context) {
     fun delete(obj: Manga) {
         if (obj.id != null)
             mDataBase.delete(obj.id!!)
+    }
+
+    fun deletePermanent(obj: Manga) {
+        if (obj.id != null)
+            mDataBase.delete(obj)
     }
 
     fun list(): List<Manga>? {
@@ -57,13 +63,13 @@ class MangaRepository(context: Context) {
         }
     }
 
-    fun clearHistory(obj : Manga?) {
+    fun clearHistory(obj: Manga?) {
         try {
             if (obj != null)
                 if (obj.id != null)
                     mDataBase.clearHistory(obj.id!!)
-            else
-                mDataBase.clearHistory()
+                else
+                    mDataBase.clearHistory()
         } catch (e: Exception) {
             mLOGGER.error("Error when clear Manga History: " + e.message, e)
         }

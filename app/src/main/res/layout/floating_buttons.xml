@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/floating_buttons_content"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/floating_button_content"
+    android:paddingBottom="30dp">
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/floating_buttons_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_primary"
+        android:contentDescription="@string/page_link_reorder_auto"
+        android:text="@string/page_link_reorder_auto"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:src="@drawable/ic_close"
+        android:tint="@color/text_primary"
+        android:background="@drawable/floating_button_close"
+        android:padding="5dp"
+        app:rippleColor="@color/on_secondary" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/floating_buttons_page_linked"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_primary"
+        android:contentDescription="@string/page_link_reorder_auto"
+        android:text="@string/page_link_reorder_auto"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:src="@drawable/ic_page_linked"
+        android:tint="@color/text_primary"
+        android:background="@drawable/floating_button"
+        android:padding="5dp"
+        app:rippleColor="@color/on_secondary" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/floating_buttons_draw_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_primary"
+        android:contentDescription="@string/page_link_reorder_auto"
+        android:text="@string/page_link_reorder_auto"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:src="@drawable/ic_draw_text"
+        android:tint="@color/text_primary"
+        android:background="@drawable/floating_button"
+        android:padding="5dp"
+        app:rippleColor="@color/on_secondary" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/floating_buttons_floating_window"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_primary"
+        android:contentDescription="@string/page_link_reorder_auto"
+        android:text="@string/page_link_reorder_auto"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:src="@drawable/ic_floating_window"
+        android:tint="@color/text_primary"
+        android:background="@drawable/floating_button"
+        android:padding="5dp"
+        app:rippleColor="@color/on_secondary" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/floating_buttons_file_link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_primary"
+        android:contentDescription="@string/page_link_reorder_auto"
+        android:text="@string/page_link_reorder_auto"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:src="@drawable/ic_file_link"
+        android:tint="@color/text_primary"
+        android:background="@drawable/floating_button"
+        android:padding="5dp"
+        app:rippleColor="@color/on_secondary" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/floating_buttons_move_window"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_primary"
+        android:contentDescription="@string/page_link_reorder_auto"
+        android:text="@string/page_link_reorder_auto"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:src="@drawable/ic_floating_button_change_right"
+        android:tint="@color/text_primary"
+        android:background="@drawable/floating_button"
+        android:padding="5dp"
+        app:rippleColor="@color/on_secondary" />
+
+</LinearLayout>

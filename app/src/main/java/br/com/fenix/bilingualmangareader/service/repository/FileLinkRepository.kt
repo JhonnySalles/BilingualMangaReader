@@ -22,7 +22,7 @@ class FileLinkRepository(context: Context) {
         return id
     }
 
-    private fun save(idFile : Long, pages : List<PageLink>) {
+    private fun save(idFile: Long, pages: List<PageLink>) {
         for (page in pages) {
             page.idFile = idFile
             page.id = mDataBasePage.save(page)
@@ -52,7 +52,7 @@ class FileLinkRepository(context: Context) {
         }
     }
 
-    fun get(obj: Manga) : FileLink? {
+    fun get(obj: Manga): FileLink? {
         val fileLink = if (obj.id != null && obj.id != 0L) mDataBase.getLastAccess(obj.id!!) else null
         if (fileLink != null) {
             fileLink.manga = obj
@@ -78,5 +78,8 @@ class FileLinkRepository(context: Context) {
     private fun findPagesNotLink(idFileLink: Long): List<PageLink> {
         return mDataBasePage.getPageNotLink(idFileLink)
     }
+
+    fun findAllByManga(idManga: Long): List<FileLink>? =
+        mDataBase.get(idManga)
 
 }

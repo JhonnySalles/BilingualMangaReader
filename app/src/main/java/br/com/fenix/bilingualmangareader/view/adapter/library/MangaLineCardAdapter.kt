@@ -2,6 +2,7 @@ package br.com.fenix.bilingualmangareader.view.adapter.library
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
@@ -9,17 +10,17 @@ import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.service.listener.MangaCardListener
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class MangaLineCardAdapter : RecyclerView.Adapter<LineViewHolder>(), Filterable {
 
     private lateinit var mListener: MangaCardListener
-    private var mMangaList: ArrayList<Manga> = arrayListOf()
-    private var mMangaListFull: ArrayList<Manga> = arrayListOf()
+    private var mMangaList: MutableList<Manga> = mutableListOf()
+    private var mMangaListFull: MutableList<Manga> = mutableListOf()
 
     override fun onBindViewHolder(holder: LineViewHolder, position: Int) {
         holder.bind(mMangaList[position])
+        holder.itemView.animation = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.animation_library_line)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LineViewHolder {
@@ -27,13 +28,18 @@ class MangaLineCardAdapter : RecyclerView.Adapter<LineViewHolder>(), Filterable 
         return LineViewHolder(item, mListener)
     }
 
+    override fun onViewDetachedFromWindow(holder: LineViewHolder) {
+        holder.itemView.clearAnimation()
+        super.onViewDetachedFromWindow(holder)
+    }
+
     override fun getItemCount(): Int {
         return mMangaList.size
     }
 
-    fun updateList(list: ArrayList<Manga>) {
+    fun updateList(list: MutableList<Manga>) {
         mMangaList = list
-        mMangaListFull = ArrayList(list)
+        mMangaListFull = list.toMutableList()
         notifyDataSetChanged()
     }
 
@@ -47,7 +53,7 @@ class MangaLineCardAdapter : RecyclerView.Adapter<LineViewHolder>(), Filterable 
 
     private val mMangaFilter = object : Filter() {
         override fun performFiltering(constraint: CharSequence?): FilterResults {
-            val filteredList: MutableList<Manga> = ArrayList()
+            val filteredList: MutableList<Manga> = mutableListOf()
 
             if (constraint == null || constraint.length === 0) {
                 filteredList.addAll(mMangaListFull)

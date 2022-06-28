@@ -378,7 +378,7 @@ class SubTitleController private constructor(private val context: Context) {
 
                         if ((isMangaLanguage && mFileLink!!.parseManga == null) || (!isMangaLanguage && mFileLink!!.parseFileLink == null)) {
                             if (parse is RarParse) {
-                                val folder = GeneralConsts.CACHEFOLDER.LINKED + '/' + Util.normalizeNameCache(fileName)
+                                val folder = GeneralConsts.CACHE_FOLDER.LINKED + '/' + Util.normalizeNameCache(fileName)
                                 val cacheDir = File(GeneralConsts.getCacheDir(context), folder)
                                 (parse as RarParse?)!!.setCacheDirectory(cacheDir)
                             }
@@ -981,11 +981,9 @@ class SubTitleController private constructor(private val context: Context) {
             }
         }
 
-        val cacheDir = File(context.externalCacheDir, GeneralConsts.CACHEFOLDER.IMAGE)
+        val cacheDir = File(GeneralConsts.getCacheDir(context), GeneralConsts.CACHE_FOLDER.IMAGE)
         if (!cacheDir.exists())
             cacheDir.mkdir()
-        else for (f in cacheDir.listFiles()!!)
-                f.delete()
 
         var name = parse.getPagePath(index) ?: index.toString()
         name = Util.getNameFromPath(name)
@@ -1010,8 +1008,8 @@ class SubTitleController private constructor(private val context: Context) {
 
         val parse = ParseFactory.create(path)
         if (parse is RarParse) {
-            val folder = GeneralConsts.CACHEFOLDER.IMAGE
-            val cacheDir = File(context.externalCacheDir, folder)
+            val folder = GeneralConsts.CACHE_FOLDER.IMAGE
+            val cacheDir = File(GeneralConsts.getCacheDir(context), folder)
             (parse as RarParse?)!!.setCacheDirectory(cacheDir)
         }
 
