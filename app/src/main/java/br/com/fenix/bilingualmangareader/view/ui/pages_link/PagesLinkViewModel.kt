@@ -55,7 +55,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
         .getBoolean(GeneralConsts.KEYS.PAGE_LINK.USE_PAGE_PATH_FOR_LINKED, false)
 
     fun getMangaName(): String {
-        return mManga?.fileName?: ""
+        return mManga?.fileName ?: ""
     }
 
     private fun getParse(path: String): Parse? =
@@ -546,7 +546,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                 val originIndex = mPagesLink.value!!.indexOf(origin)
                 val destinyIndex = mPagesLink.value!!.indexOf(destiny)
 
-                destiny.addRightFileLinkImage(origin)
+                destiny.addRightFromLeftFileLinkImage(origin)
                 origin.clearRightFileLink()
 
                 notifyMessages(originType, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_ITEM_CHANGE, originIndex)
@@ -559,7 +559,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                     val originIndex = mPagesNotLinked.value!!.indexOf(origin)
                     val destinyIndex = mPagesLink.value!!.indexOf(destiny)
 
-                    destiny.addRightFileLinkImage(origin)
+                    destiny.addRightFromLeftFileLinkImage(origin)
                     mPagesNotLinked.value!!.remove(origin)
 
                     notifyMessages(originType, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_REMOVED, originIndex)
@@ -576,9 +576,9 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
 
                 when {
                     originType != Pages.DUAL_PAGE && destinyType == Pages.LINKED -> destiny.addLeftFileLinkImage(origin)
-                    originType != Pages.DUAL_PAGE && destinyType != Pages.LINKED -> destiny.addRightFileLinkImage(origin)
+                    originType != Pages.DUAL_PAGE && destinyType != Pages.LINKED -> destiny.addRightFromLeftFileLinkImage(origin)
                     originType == Pages.DUAL_PAGE && destinyType == Pages.LINKED -> destiny.addLeftFileLinkImage(origin)
-                    originType == Pages.DUAL_PAGE && destinyType != Pages.LINKED -> destiny.addRightFileLinkImage(origin)
+                    originType == Pages.DUAL_PAGE && destinyType != Pages.LINKED -> destiny.addRightFromLeftFileLinkImage(origin)
                 }
 
                 notifyMessages(destinyType, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_ITEM_CHANGE, destinyIndex)
@@ -771,17 +771,22 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                 if (page.dualImage || (isUseDualPageCalculate && page.isFileLeftDualPage))
                     continue
 
+                println("" + index + "||" + padding)
+
+                if ((index + padding) >= pagesLink.size)
+                    break
+
                 var next = pagesLink[index + padding]
                 if (next.fileLinkPage == PageLinkConsts.VALUES.PAGE_EMPTY) {
                     do {
                         padding++
-                        if ((index + padding) > pagesLink.size - 1)
+                        if ((index + padding) >= pagesLink.size)
                             break
                         next = pagesLink[index + padding]
                     } while (next.fileLinkPage == PageLinkConsts.VALUES.PAGE_EMPTY)
                 }
 
-                if ((index + padding) > pagesLink.size - 1)
+                if ((index + padding) >= pagesLink.size)
                     break
 
                 if (next.dualImage || (isUseDualPageCalculate && page.isFileLeftDualPage)) {
@@ -806,7 +811,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                                     padding++
                                     next = pagesLink[index + padding]
                                     if (next.fileLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY && !next.dualImage && !next.isFileLeftDualPage) {
-                                        page.addRightFileLinkImage(next)
+                                        page.addRightFromLeftFileLinkImage(next)
                                         next.clearLeftFileLink()
                                         indexChanges.add(index + padding)
                                     } else
@@ -817,7 +822,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                             if (next.isFileLeftDualPage)
                                 continue
                             else {
-                                page.addRightFileLinkImage(next)
+                                page.addRightFromLeftFileLinkImage(next)
                                 next.clearLeftFileLink()
                                 indexChanges.addAll(arrayOf(index, index + padding))
                             }
@@ -830,13 +835,13 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                             indexChanges.addAll(arrayOf(index, index + padding))
 
                             if (next.fileRightLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY) {
-                                page.addRightFileLinkImage(next)
+                                page.addRightFromLeftFileLinkImage(next)
                                 next.clearRightFileLink()
                             } else {
                                 padding++
                                 next = pagesLink[index + padding]
                                 if (!next.dualImage && next.fileLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY) {
-                                    page.addRightFileLinkImage(next)
+                                    page.addRightFromLeftFileLinkImage(next)
                                     next.clearLeftFileLink()
                                     indexChanges.add(index + padding)
                                 } else
@@ -849,6 +854,8 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                         }
                     }
                 }
+
+                println("Right: image " + page.fileRightLinkPageName)
             }
 
             for (index in indexChanges)
@@ -932,7 +939,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                         continue
 
                     indexChanges.addAll(arrayOf(index, index + 1))
-                    page.addRightFileLinkImage(nextPage)
+                    page.addRightFromLeftFileLinkImage(nextPage)
                     nextPage.clearFileLink()
 
                     for ((idxNext, next) in pagesLink.withIndex()) {
