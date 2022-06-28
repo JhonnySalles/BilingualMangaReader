@@ -220,6 +220,29 @@ class Util {
                 path
         }
 
+        fun getNameWithoutExtensionFromPath(path: String): String {
+            var name =  if (path.contains('/'))
+                path.substringAfterLast("/")
+            else if (path.contains('\\'))
+                path.substringAfterLast('\\')
+            else
+                path
+
+            name = if (name.contains('.'))
+                name.substringBefore(".")
+            else
+                name
+
+            return name
+        }
+
+        fun getExtensionFromPath(path: String): String {
+            return if (path.contains('.'))
+                path.substringAfterLast(".")
+            else
+                path
+        }
+
         fun normalizeNameCache(name: String): String {
             val normalize = if (name.contains("-"))
                 name.substringBefore("-")

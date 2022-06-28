@@ -85,9 +85,9 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         inflater.inflate(R.menu.main_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
 
-        miGridType = menu.findItem(R.id.grid_type)
-        miGridOrder = menu.findItem(R.id.list_order)
-        miSearch = menu.findItem(R.id.search)
+        miGridType = menu.findItem(R.id.menu_library_grid_type)
+        miGridOrder = menu.findItem(R.id.menu_library_list_order)
+        miSearch = menu.findItem(R.id.menu_library_search)
         searchView = miSearch.actionView as SearchView
         searchView.imeOptions = EditorInfo.IME_ACTION_DONE
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -174,8 +174,8 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
-            R.id.grid_type -> onChangeLayout()
-            R.id.list_order -> onChangeSort()
+            R.id.menu_library_grid_type -> onChangeLayout()
+            R.id.menu_library_list_order -> onChangeSort()
         }
         return super.onOptionsItemSelected(menuItem)
     }
@@ -268,7 +268,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             Order.LastAccess to getString(R.string.config_option_order_access),
             Order.Favorite to getString(R.string.config_option_order_favorite)
         )
-        mRoot = root.findViewById(R.id.library_root)
+        mRoot = root.findViewById(R.id.frame_library_root)
         mRecycleView = root.findViewById(R.id.library_recycler_view)
         mRefreshLayout = root.findViewById(R.id.library_refresh)
         mScrollUp = root.findViewById(R.id.library_scroll_up)

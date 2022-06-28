@@ -1,4 +1,4 @@
-package br.com.fenix.bilingualmangareader.view.ui.help
+package br.com.fenix.bilingualmangareader.view.ui.about
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
