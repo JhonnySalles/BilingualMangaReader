@@ -61,7 +61,7 @@ class ImageCoverController private constructor() {
     private fun saveBitmapToCache(context: Context, key: String, bitmap: Bitmap) {
         try {
             saveBitmapToLru(key, bitmap)
-            val cacheDir = File(GeneralConsts.getCacheDir(context), GeneralConsts.CACHEFOLDER.COVERS)
+            val cacheDir = File(GeneralConsts.getCacheDir(context), GeneralConsts.CACHE_FOLDER.COVERS)
             if (!cacheDir.exists())
                 cacheDir.mkdir()
 
@@ -78,7 +78,7 @@ class ImageCoverController private constructor() {
             var image = retrieveBitmapFromLru(key)
             if (image != null) return image
 
-            val file = File(GeneralConsts.getCacheDir(context), GeneralConsts.CACHEFOLDER.COVERS + '/' + key)
+            val file = File(GeneralConsts.getCacheDir(context), GeneralConsts.CACHE_FOLDER.COVERS + '/' + key)
 
             if (file.exists()) {
                 image = BitmapFactory.decodeFile(file.absolutePath)
@@ -137,7 +137,7 @@ class ImageCoverController private constructor() {
             val parse = ParseFactory.create(manga.file) ?: return image
             try {
                 if (parse is RarParse) {
-                    val folder = GeneralConsts.CACHEFOLDER.RAR + '/' + Util.normalizeNameCache(manga.file.nameWithoutExtension)
+                    val folder = GeneralConsts.CACHE_FOLDER.RAR + '/' + Util.normalizeNameCache(manga.file.nameWithoutExtension)
                     val cacheDir = File(GeneralConsts.getCacheDir(context), folder)
                     (parse as RarParse?)!!.setCacheDirectory(cacheDir)
                 }

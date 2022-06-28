@@ -1,10 +1,13 @@
 package br.com.fenix.bilingualmangareader.view.ui.pages_link
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import br.com.fenix.bilingualmangareader.view.components.ComponentsUtil
 
 
 class PagesLinkActivity : AppCompatActivity() {
@@ -28,11 +31,26 @@ class PagesLinkActivity : AppCompatActivity() {
             .beginTransaction()
             .replace(R.id.root_frame_pages_link, newFragment)
             .commit()
+
+        val toolbar = findViewById<Toolbar>(R.id.toolbar_manga_pages_link)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                supportFinishAfterTransition()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
-        finish()
+        supportFinishAfterTransition()
     }
 
 }

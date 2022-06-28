@@ -108,7 +108,7 @@ class GeneralConsts private constructor() {
         val DATA_FORMAT = listOf("dd/MM/yyyy", "MM/dd/yy", "dd/MM/yy", "yyyy-MM-dd")
     }
 
-    object CACHEFOLDER {
+    object CACHE_FOLDER {
         const val TESSERACT = "tesseract"
         const val RAR = "RarTemp"
         const val COVERS = "Covers"
@@ -123,11 +123,19 @@ class GeneralConsts private constructor() {
     object SCANNER {
         const val POSITION = "POSITION"
         const val MESSAGE_MANGA_UPDATE_FINISHED = 0
-        const val MESSAGE_MANGA_UPDATED = 1
+        const val MESSAGE_MANGA_UPDATED_ADD = 1
+        const val MESSAGE_MANGA_UPDATED_REMOVE = 2
+    }
+
+    object MANGA_DETAIL {
+        const val REQUEST_ENDED = 999
     }
 
     object REQUEST {
         const val PERMISSION_DRAW_OVERLAYS = 505
+        const val PERMISSION_DRAW_OVERLAYS_FLOATING_OCR = 506
+        const val PERMISSION_DRAW_OVERLAYS_FLOATING_SUBTITLE = 507
+        const val PERMISSION_DRAW_OVERLAYS_FLOATING_BUTTONS = 508
         const val OPEN_JSON = 205
         const val OPEN_PAGE_LINK = 206
         const val OPEN_MANGA_FOLDER = 105

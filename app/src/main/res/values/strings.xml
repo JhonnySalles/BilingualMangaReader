@@ -79,6 +79,7 @@
     <string name="menu_reading_file_link">File in another language</string>
     <string name="menu_reading_floating">Floating popup</string>
     <string name="menu_reading_open_kaku">Open Kaku App</string>
+    <string name="menu_reading_floating_buttons">Floating buttons</string>
 
     <string name="reading_button_screen_rotate">Screen rotate</string>
     <string name="reading_button_page_linked">Page linked</string>
@@ -96,6 +97,8 @@
     <string name="open_app_kaku_not_founded">App Kaku not found.</string>
 
     <!-- OCR -->
+    <string name="ocr_tesseract_copy_data">Copying necessary data files, please wait...</string>
+    <string name="ocr_tesseract_copy_data_done">Copy of Tesseract data completed.</string>
     <string name="ocr_tesseract_get_request">Processing image, please wait...</string>
     <string name="ocr_google_vision_get_request">Communicating with google vision api, please wait...</string>
     <string name="ocr_google_vision_error">Processing could not be performed. Try again later.</string>
@@ -162,6 +165,9 @@
     <string name="switch_action_negative">No</string>
     <string name="switch_next_comic">Would you like to switch to the next comic?</string>
     <string name="switch_prev_comic">Would you like to switch to the previous comic?</string>
+    <string name="switch_next_comic_not_found">Next file not found</string>
+    <string name="switch_prev_comic_first_comic">This is the first file.</string>
+    <string name="switch_next_comic_last_comic">This is the last file.</string>
 
     <!-- LIBRARY -->
     <string name="library_last_access">Last_access</string>
@@ -171,9 +177,19 @@
     <string name="library_menu_delete_description">Do you really want to delete the file?</string>
     <string name="library_menu_clear">Clear history</string>
 
+    <!-- MANGA DETAIL -->
+    <string name="manga_detail_favorite">Favorite</string>
+    <string name="manga_detail_clear_history">Clear history</string>
+    <string name="manga_detail_delete">Delete</string>
+    <string name="manga_detail_chapters_title">Chapters</string>
+    <string name="manga_detail_subtitles_title">Subtitles</string>
+    <string name="manga_detail_file_links_title">Files links</string>
+    <string name="manga_detail_manga_deleted">File deleted</string>
+
     <!-- HISTORY -->
-    <string name="history_last_acess">Last access</string>
+    <string name="history_last_access">Last access</string>
     <string name="history_today">Today</string>
+    <string name="history_delete_description">Do you really want to delete the history?</string>
 
     <!-- PAGE LINK -->
     <string name="page_link_manga_empty">Manga not found</string>

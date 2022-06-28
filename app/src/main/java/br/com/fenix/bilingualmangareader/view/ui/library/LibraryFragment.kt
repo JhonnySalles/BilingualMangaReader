@@ -2,6 +2,7 @@ package br.com.fenix.bilingualmangareader.view.ui.library
 
 import android.Manifest
 import android.app.Activity
+import android.app.ActivityOptions
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
@@ -11,12 +12,15 @@ import android.os.Looper
 import android.os.Message
 import android.util.DisplayMetrics
 import android.util.Log
+import android.util.Pair
 import android.view.*
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
+import android.widget.FrameLayout
 import android.widget.SearchView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -29,20 +33,16 @@ import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.enums.LibraryType
 import br.com.fenix.bilingualmangareader.model.enums.Order
-import br.com.fenix.bilingualmangareader.service.controller.ImageCoverController
 import br.com.fenix.bilingualmangareader.service.listener.MangaCardListener
 import br.com.fenix.bilingualmangareader.service.repository.Storage
-import br.com.fenix.bilingualmangareader.service.repository.SubTitleRepository
 import br.com.fenix.bilingualmangareader.service.scanner.Scanner
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.view.adapter.library.MangaGridCardAdapter
 import br.com.fenix.bilingualmangareader.view.adapter.library.MangaLineCardAdapter
+import br.com.fenix.bilingualmangareader.view.ui.manga_detail.MangaDetailActivity
 import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity
-import ch.qos.logback.core.net.SocketConnector
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.slf4j.LoggerFactory
-import java.lang.ref.WeakReference
-import java.util.*
 import kotlin.math.max
 
 
@@ -54,6 +54,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private var mOrderBy: Order = Order.Name
     private lateinit var mMapOrder: HashMap<Order, String>
 
+    private lateinit var mRoot: FrameLayout
     private lateinit var mRefreshLayout: SwipeRefreshLayout
     private lateinit var mRecycleView: RecyclerView
     private lateinit var miGridType: MenuItem
@@ -67,13 +68,12 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private var mHandler = Handler(Looper.getMainLooper())
     private val mDismissUpButton = Runnable { mScrollUp.hide() }
     private val mDismissDownButton = Runnable { mScrollDown.hide() }
-    private var mIsRefreshPlanned = false
 
     companion object {
         var mGridType: LibraryType = LibraryType.GRID_BIG
     }
 
-    private val mUpdateHandler: Handler = UpdateHandler(this)
+    private val mUpdateHandler: Handler = UpdateHandler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -116,66 +116,60 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         super.onResume()
 
         Scanner.getInstance(requireContext()).addUpdateHandler(mUpdateHandler)
-
         if (Scanner.getInstance(requireContext()).isRunning())
             setIsRefreshing(true)
 
         mViewModel.update()
+        mRecycleView
 
         if (mViewModel.isEmpty())
             onRefresh()
-        else if (mViewModel.save.value != null)
-            sortList(mViewModel.save.value!!)
-
-        notifyDataSet()
     }
 
-    override fun onPause() {
+    override fun onStop() {
         Scanner.getInstance(requireContext()).removeUpdateHandler(mUpdateHandler)
-        super.onPause()
+        super.onStop()
     }
 
-    private inner class UpdateHandler(fragment: LibraryFragment) : Handler() {
-        private val mOwner: WeakReference<LibraryFragment> = WeakReference(fragment)
+    private inner class UpdateHandler : Handler() {
         override fun handleMessage(msg: Message) {
-            val fragment = mOwner.get() ?: return
+            val obj = msg.obj
             when (msg.what) {
-                GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATED -> {
-                    fragment.refreshLibraryDelayed()
-                }
+                GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATED_ADD -> refreshLibraryAddDelayed(obj as Manga)
+                GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATED_REMOVE -> refreshLibraryRemoveDelayed(obj as Manga)
                 GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATE_FINISHED -> {
-                    mViewModel.list {
-                        setIsRefreshing(false)
-                        sortList(mViewModel.save.value!!)
-                        notifyDataSet()
+                    setIsRefreshing(false)
+                    if (obj as Boolean) {
+                        mViewModel.updateListAdd()
+                        if (!mViewModel.isEmpty())
+                            sortList(mViewModel.listMangas.value!!)
                     }
                 }
             }
         }
     }
 
-    private fun notifyDataSet(idItem: Int? = null, insert: Boolean = false, removed : Boolean = false) {
-        if (idItem != null) {
-            if (insert)
-                mRecycleView.adapter?.notifyItemInserted(idItem)
-            else if (removed)
-                mRecycleView.adapter?.notifyItemRemoved(idItem)
-            else
-                mRecycleView.adapter?.notifyItemChanged(idItem)
-        } else
-            mRecycleView.adapter?.notifyDataSetChanged()
+    private fun notifyDataSet(index: Int, range: Int = 1, insert: Boolean = false, removed: Boolean = false) {
+        if (insert)
+            mRecycleView.adapter?.notifyItemInserted(index)
+        else if (removed)
+            mRecycleView.adapter?.notifyItemRemoved(index)
+        else if (range > 1)
+            mRecycleView.adapter?.notifyItemRangeChanged(index, range)
+        else
+            mRecycleView.adapter?.notifyItemChanged(index)
     }
 
-    private fun refreshLibraryDelayed() {
-        if (!mIsRefreshPlanned) {
-            val updateRunnable = Runnable {
-                mViewModel.updateList()
-                mRecycleView.adapter?.notifyDataSetChanged()
-                mIsRefreshPlanned = false
-            }
-            mIsRefreshPlanned = true
-            mRecycleView.postDelayed(updateRunnable, 100)
-        }
+    private fun refreshLibraryAddDelayed(manga: Manga) {
+        val index = mViewModel.addList(manga)
+        if (index > -1)
+            mRecycleView.adapter?.notifyItemInserted(index)
+    }
+
+    private fun refreshLibraryRemoveDelayed(manga: Manga) {
+        val index = mViewModel.remList(manga)
+        if (index > -1)
+            mRecycleView.adapter?.notifyItemRemoved(index)
     }
 
     override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
@@ -209,19 +203,19 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             this.commit()
         }
 
-        if (mViewModel.save.value != null) {
-            sortList(mViewModel.save.value!!)
-            notifyDataSet()
-        }
+        if (mViewModel.listMangas.value != null)
+            sortList(mViewModel.listMangas.value!!)
+
     }
 
-    private fun sortList(list: ArrayList<Manga>) {
-        when (mOrderBy) {
-            Order.Date -> list.sortBy { it.dateCreate }
-            Order.LastAccess -> list.sortWith(compareByDescending<Manga> { it.lastAccess }.thenBy { it.name })
-            Order.Favorite -> list.sortWith(compareByDescending<Manga> { it.favorite }.thenBy { it.name })
-            else -> list.sortBy { it.name }
+    private fun sortList(list: MutableList<Manga>) {
+        val sorted = when (mOrderBy) {
+            Order.Date -> list.sortedBy { it.dateCreate }
+            Order.LastAccess -> list.sortedWith(compareByDescending<Manga> { it.lastAccess }.thenBy { it.name })
+            Order.Favorite -> list.sortedWith(compareByDescending<Manga> { it.favorite }.thenBy { it.name })
+            else -> list.sortedBy { it.name }
         }
+        mViewModel.sorted(sorted.toMutableList())
     }
 
     private fun onChangeLayout() {
@@ -242,7 +236,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         onChangeIconLayout()
         generateLayout()
-        updateList(mViewModel.save.value!!)
+        updateList(mViewModel.listMangas.value!!)
     }
 
     private fun onChangeIconLayout() {
@@ -274,16 +268,17 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             Order.LastAccess to getString(R.string.config_option_order_access),
             Order.Favorite to getString(R.string.config_option_order_favorite)
         )
-
+        mRoot = root.findViewById(R.id.library_root)
         mRecycleView = root.findViewById(R.id.library_recycler_view)
         mRefreshLayout = root.findViewById(R.id.library_refresh)
         mScrollUp = root.findViewById(R.id.library_scroll_up)
         mScrollDown = root.findViewById(R.id.library_scroll_down)
 
         mRefreshLayout.setColorSchemeResources(
-            R.color.onSecondary,
-            R.color.onSecondary,
-            R.color.white)
+            R.color.on_secondary,
+            R.color.on_secondary,
+            R.color.white
+        )
 
         mRefreshLayout.setOnRefreshListener(this)
         mRefreshLayout.isEnabled = true
@@ -331,73 +326,64 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, manga)
                 intent.putExtras(bundle)
                 context?.startActivity(intent)
+                requireActivity().overridePendingTransition(R.anim.fade_in_fragment_add_enter, R.anim.fade_out_fragment_remove_exit)
             }
 
             override fun onClickLong(manga: Manga, view: View, position: Int) {
                 if (mRefreshLayout.isRefreshing)
                     return
 
-                val wrapper = ContextThemeWrapper(requireContext(), R.style.PopupMenu)
-                val popup = PopupMenu(wrapper, view)
-                popup.menuInflater.inflate(R.menu.menu_book, popup.menu)
-
-                if (manga.favorite)
-                    popup.menu.findItem(R.id.menu_book_favorite).title = getString(R.string.library_menu_favorite_remove)
-                else
-                    popup.menu.findItem(R.id.menu_book_favorite).title = getString(R.string.library_menu_favorite_add)
-
-                popup.setOnMenuItemClickListener { item ->
-                    when (item.itemId) {
-                        R.id.menu_book_favorite -> {
-                            manga.favorite = !manga.favorite
-                            mViewModel.save(manga)
-                            notifyDataSet(position)
-                        }
-                        R.id.menu_book_clear -> {
-                            manga.lastAccess = Date()
-                            manga.bookMark = 0
-                            mViewModel.save(manga)
-                            notifyDataSet(position)
-                        }
-                        R.id.menu_book_delete -> {
-                            val dialog: AlertDialog =
-                                AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
-                                    .setTitle(getString(R.string.library_menu_delete))
-                                    .setMessage(getString(R.string.library_menu_delete_description) + "\n" + manga.file.name)
-                                    .setPositiveButton(
-                                        R.string.action_positive
-                                    ) { _, _ ->
-                                        deleteFile(manga)
-                                        notifyDataSet(position, removed = true)
-                                    }
-                                    .setNegativeButton(
-                                        R.string.action_negative
-                                    ) { _, _ -> }
-                                    .create()
-                            dialog.show()
-                        }
-                    }
-                    true
-                }
-
-                popup.show()
+                goMangaDetail(manga, view, position)
             }
 
         }
         observer()
+        mViewModel.list {
+            if (it)
+                sortList(mViewModel.listMangas.value!!)
+        }
 
         if (!Storage.isPermissionGranted(requireContext()))
             Storage.takePermission(requireContext(), requireActivity())
 
-        ActivityCompat.requestPermissions(requireActivity(),
+        ActivityCompat.requestPermissions(
+            requireActivity(),
             arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE),
-            PackageManager.PERMISSION_GRANTED)
+            PackageManager.PERMISSION_GRANTED
+        )
 
         generateLayout()
         setIsRefreshing(true)
-        Scanner.getInstance(requireContext()).addUpdateHandler(mUpdateHandler)
         Scanner.getInstance(requireContext()).scanLibrary()
         return root
+    }
+
+    private var itemRefresh: Int? = null
+    private fun goMangaDetail(manga: Manga, view: View, position: Int) {
+        itemRefresh = position
+        val intent = Intent(requireContext(), MangaDetailActivity::class.java)
+        val bundle = Bundle()
+        bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, manga)
+        intent.putExtras(bundle)
+        val idText = if (mGridType != LibraryType.LINE)
+            R.id.manga_grid_text_title
+        else
+            R.id.manga_line_text_title
+
+        val title = view.findViewById<TextView>(idText)
+        val pImageCover: Pair<View, String> = Pair(view, "transition_manga_cover")
+        val pTitleCover: Pair<View, String> = Pair(title, "transition_manga_title")
+
+        val options = ActivityOptions
+            .makeSceneTransitionAnimation(requireActivity(), *arrayOf(pImageCover, pTitleCover))
+        requireActivity().overridePendingTransition(R.anim.fade_in_fragment_add_enter, R.anim.fade_out_fragment_remove_exit)
+        startActivityForResult(intent, GeneralConsts.MANGA_DETAIL.REQUEST_ENDED, options.toBundle())
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == GeneralConsts.MANGA_DETAIL.REQUEST_ENDED)
+            notifyDataSet(itemRefresh!!)
     }
 
     private fun loadConfig() {
@@ -448,16 +434,17 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             val spaceCount: Int = max(1, displayMetrics.widthPixels / columnWidth)
             mRecycleView.layoutManager = GridLayoutManager(requireContext(), spaceCount)
             gridAdapter.attachListener(mListener)
+            mRecycleView.layoutAnimation = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_library_grid)
         } else {
             val lineAdapter = MangaLineCardAdapter()
             mRecycleView.adapter = lineAdapter
             mRecycleView.layoutManager = GridLayoutManager(requireContext(), 1)
             lineAdapter.attachListener(mListener)
+            mRecycleView.layoutAnimation = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_library_line)
         }
     }
 
-    private fun updateList(list: ArrayList<Manga>) {
-        sortList(list)
+    private fun updateList(list: MutableList<Manga>) {
         if (mGridType != LibraryType.LINE)
             (mRecycleView.adapter as MangaGridCardAdapter).updateList(list)
         else
@@ -465,7 +452,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun observer() {
-        mViewModel.save.observe(viewLifecycleOwner) {
+        mViewModel.listMangas.observe(viewLifecycleOwner) {
             updateList(it)
         }
     }
@@ -496,6 +483,9 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     override fun onRefresh() {
+        if (mViewModel.isEmpty())
+            mViewModel.list { }
+
         if (mHandler.hasCallbacks(mDismissUpButton))
             mHandler.removeCallbacks(mDismissUpButton)
         if (mHandler.hasCallbacks(mDismissDownButton))
@@ -519,9 +509,8 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         }
 
         override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
-            val manga = mViewModel.get(viewHolder.adapterPosition) ?: return
+            val manga = mViewModel.getAndRemove(viewHolder.adapterPosition) ?: return
             val position = viewHolder.adapterPosition
-            mViewModel.remove(manga)
             var excluded = false
             val dialog: AlertDialog =
                 AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
@@ -544,8 +533,8 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         }
     }
 
-    private fun deleteFile(manga : Manga?) {
-        if (manga?.file != null ) {
+    private fun deleteFile(manga: Manga?) {
+        if (manga?.file != null) {
             mViewModel.delete(manga)
             if (manga.file.exists()) {
                 val isDeleted = manga.file.delete()

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
-    android:background="@mipmap/header_image"
+    android:background="@mipmap/navigator_header_image"
     android:gravity="bottom"
     android:orientation="vertical"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
@@ -12,9 +12,11 @@
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:paddingBottom="@dimen/margin"
+        android:paddingStart="@dimen/margin"
         android:text="@string/app_name"
         android:textSize="@dimen/title_size"
         android:textStyle="bold"
-        android:background="@color/semiTransparent"
+        android:textColor="@color/secondary"
+        android:background="@color/semi_transparent"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 </LinearLayout>

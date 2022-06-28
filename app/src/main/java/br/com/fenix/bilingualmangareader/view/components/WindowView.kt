@@ -3,6 +3,7 @@ package br.com.fenix.bilingualmangareader.view.components
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
+import android.view.ScaleGestureDetector
 import android.widget.RelativeLayout
 import androidx.core.view.GestureDetectorCompat
 
@@ -20,9 +21,7 @@ class WindowView @JvmOverloads constructor(context: Context, attrs:AttributeSet?
     }
 
     override fun onTouchEvent(e: MotionEvent): Boolean {
-        return if (mDetector == null) true
-        else if (mDetector!!.onTouchEvent(e)) true
-        else if (mWindowListener == null) true
-        else mWindowListener!!.onTouch(e)
+        mDetector?.onTouchEvent(e)
+        return mWindowListener?.onTouch(e)?: false
     }
 }

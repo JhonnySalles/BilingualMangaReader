@@ -22,7 +22,7 @@ class LineViewHolder(itemView: View, private val listener: MangaCardListener) :
     }
 
     init {
-        mDefaultImageCover = BitmapFactory.decodeResource(itemView.resources, R.mipmap.book_icon)
+        mDefaultImageCover = BitmapFactory.decodeResource(itemView.resources, R.mipmap.app_icon)
     }
 
     fun bind(manga: Manga) {

@@ -7,6 +7,6 @@
     android:maxLines="1"
     android:padding="16dp"
     android:textAppearance="?attr/textAppearanceSubtitle1"
-    android:textColor="@color/textPrimary"
-    android:background="@color/onPrimary"
+    android:textColor="@color/text_primary"
+    android:background="@color/on_primary"
     tools:text="List " />

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/onPrimary"
+    android:background="@color/on_primary"
     android:paddingBottom="@dimen/margin_bottom"
     tools:context=".view.ui.reader.PopupReaderColorFilterFragment">
 
@@ -22,11 +22,11 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:text="@string/popup_reading_custom_color_filter"
-            android:textColor="@color/textPrimary"
+            android:textColor="@color/text_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:thumbTint="@color/onSecondary" />
+            app:thumbTint="@color/on_secondary" />
 
         <!-- Red filter -->
 
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/popup_reader_color_filter_padding"
             android:text="@string/color_filter_r_value"
-            android:textColor="@color/textPrimary"
+            android:textColor="@color/text_primary"
             app:layout_constraintBottom_toBottomOf="@id/seekbar_color_filter_red"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/seekbar_color_filter_red" />
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="16dp"
-            android:textColor="@color/textPrimary"
+            android:textColor="@color/text_primary"
             app:layout_constraintBottom_toBottomOf="@id/seekbar_color_filter_red"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/seekbar_color_filter_red"
@@ -75,7 +75,7 @@
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/popup_reader_color_filter_padding"
             android:text="@string/color_filter_g_value"
-            android:textColor="@color/textPrimary"
+            android:textColor="@color/text_primary"
             app:layout_constraintBottom_toBottomOf="@id/seekbar_color_filter_green"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/seekbar_color_filter_green" />
@@ -100,7 +100,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="16dp"
-            android:textColor="@color/textPrimary"
+            android:textColor="@color/text_primary"
             app:layout_constraintBottom_toBottomOf="@id/seekbar_color_filter_green"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/seekbar_color_filter_green"
@@ -114,7 +114,7 @@
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/popup_reader_color_filter_padding"
             android:text="@string/color_filter_b_value"
-            android:textColor="@color/textPrimary"
+            android:textColor="@color/text_primary"
             app:layout_constraintBottom_toBottomOf="@id/seekbar_color_filter_blue"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/seekbar_color_filter_blue" />
@@ -139,7 +139,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="16dp"
-            android:textColor="@color/textPrimary"
+            android:textColor="@color/text_primary"
             app:layout_constraintBottom_toBottomOf="@id/seekbar_color_filter_blue"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/seekbar_color_filter_blue"
@@ -152,7 +152,7 @@
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/popup_reader_color_filter_padding"
             android:text="@string/color_filter_a_value"
-            android:textColor="@color/textPrimary"
+            android:textColor="@color/text_primary"
             app:layout_constraintBottom_toBottomOf="@id/seekbar_color_filter_alpha"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/seekbar_color_filter_alpha" />
@@ -177,7 +177,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="16dp"
-            android:textColor="@color/textPrimary"
+            android:textColor="@color/text_primary"
             app:layout_constraintBottom_toBottomOf="@id/seekbar_color_filter_alpha"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/seekbar_color_filter_alpha"
@@ -198,9 +198,9 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:text="@string/popup_reading_blue_light"
-            android:textColor="@color/textPrimary"
+            android:textColor="@color/text_primary"
             app:layout_constraintTop_toBottomOf="@id/seekbar_color_filter_alpha"
-            app:thumbTint="@color/onSecondary" />
+            app:thumbTint="@color/on_secondary" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/txt_blue_light_alpha_symbol"
@@ -208,7 +208,7 @@
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/popup_reader_blue_light_padding"
             android:textAppearance="?attr/textAppearanceTitleSmall"
-            android:tint="@color/textPrimary"
+            android:tint="@color/text_primary"
             app:layout_constraintBottom_toBottomOf="@id/seekbar_blue_light_alpha"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/seekbar_blue_light_alpha"
@@ -234,7 +234,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="16dp"
-            android:textColor="@color/textPrimary"
+            android:textColor="@color/text_primary"
             app:layout_constraintBottom_toBottomOf="@id/seekbar_blue_light_alpha"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/seekbar_blue_light_alpha"
@@ -248,9 +248,9 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:text="@string/popup_reading_grayscale"
-            android:textColor="@color/textPrimary"
+            android:textColor="@color/text_primary"
             app:layout_constraintTop_toBottomOf="@id/seekbar_blue_light_alpha"
-            app:thumbTint="@color/onSecondary" />
+            app:thumbTint="@color/on_secondary" />
 
         <!-- Invert Color -->
 
@@ -261,9 +261,9 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:text="@string/popup_reading_invert_color"
-            android:textColor="@color/textPrimary"
+            android:textColor="@color/text_primary"
             app:layout_constraintTop_toBottomOf="@id/switch_grayscale"
-            app:thumbTint="@color/onSecondary" />
+            app:thumbTint="@color/on_secondary" />
 
         <!-- Sepia -->
         <com.google.android.material.switchmaterial.SwitchMaterial
@@ -273,9 +273,9 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:text="@string/popup_reading_sepia"
-            android:textColor="@color/textPrimary"
+            android:textColor="@color/text_primary"
             app:layout_constraintTop_toBottomOf="@id/switch_invert_color"
-            app:thumbTint="@color/onSecondary" />
+            app:thumbTint="@color/on_secondary" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

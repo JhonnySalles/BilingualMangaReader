@@ -63,6 +63,35 @@ class Formatter {
                 }
             }
 
+        private fun getPopupKanjiAlert(kanji: String, setContentAlert: (SpannableString, SpannableString) -> (Unit)) {
+            val kanjax = mRepository?.get(kanji)
+            val title = SpannableString(kanji)
+            title.setSpan(RelativeSizeSpan(3f), 0, kanji.length, 0)
+
+            var middle = ""
+            var bottom = ""
+            var description = SpannableString(middle + bottom)
+            if (kanjax != null) {
+                middle = kanjax.keyword + "  -  " + kanjax.keywordPt + "\n\n" +
+                        kanjax.meaning + " | " + kanjax.meaningPt + "\n"
+
+                middle += "onYomi: " + kanjax.onYomi + " | nKunYomi: " + kanjax.kunYomi + "\n"
+
+                bottom =
+                    "jlpt: " + kanjax.jlpt + " grade: " + kanjax.grade + " frequency: " + kanjax.frequence + "\n"
+
+                description = SpannableString(middle + bottom)
+                description.setSpan(RelativeSizeSpan(1.2f), 0, middle.length, 0)
+                description.setSpan(
+                    RelativeSizeSpan(0.8f),
+                    middle.length,
+                    middle.length + bottom.length,
+                    0
+                )
+            }
+            setContentAlert(title, description)
+        }
+
         private fun getPopupKanji(context: Context, kanji: String) {
             val kanjax = mRepository?.get(kanji)
             val title = SpannableString(kanji)
@@ -94,7 +123,7 @@ class Formatter {
                 .setTitle(title)
                 .setDescription(description)
                 .setStyle(Style.HEADER_WITH_TITLE)
-                .setHeaderColor(R.color.onSecondary)
+                .setHeaderColor(R.color.on_secondary)
                 .setScrollable(true)
                 .show()
         }
@@ -207,6 +236,47 @@ class Formatter {
                 generateKanjiColor(context, text) { array.add(it) }
 
             return array
+        }
+
+        fun generateKanjiColor(
+            text: String,
+            function: (SpannableString) -> (Unit),
+            callAlert: (SpannableString, SpannableString) -> (Unit)
+        ) {
+            if (text.isEmpty()) {
+                function(SpannableString(text))
+                return
+            }
+
+            val ss = SpannableString(text)
+            ss.forEachIndexed { index, element ->
+                val kanji = element.toString()
+                if (kanji.matches(mPattern)) {
+                    val color = when (JLPT?.get(kanji)) {
+                        1 -> N1
+                        2 -> N2
+                        3 -> N3
+                        4 -> N4
+                        5 -> N5
+                        else -> ANOTHER
+                    }
+
+                    val cs = object : ClickableSpan() {
+                        override fun onClick(p0: View) {
+                            getPopupKanjiAlert(kanji, callAlert)
+                        }
+
+                        override fun updateDrawState(ds: TextPaint) {
+                            super.updateDrawState(ds)
+                            ds.isUnderlineText = false
+                            ds.color = color
+                        }
+                    }
+                    ss.setSpan(cs, index, index + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+            }
+
+            function(ss)
         }
 
         fun generateKanjiColor(

@@ -2,14 +2,14 @@
     <!-- Base application theme. -->
     <style name="Theme.MangaReader" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/nightPrimary</item>
-        <item name="colorPrimaryVariant">@color/nightPrimaryVariant</item>
-        <item name="colorOnPrimary">@color/nightOnPrimary</item>
+        <item name="colorPrimary">@color/night_primary</item>
+        <item name="colorPrimaryVariant">@color/night_primary_variant</item>
+        <item name="colorOnPrimary">@color/night_on_primary</item>
 
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/nightSecondary</item>
-        <item name="colorSecondaryVariant">@color/nightSecondaryVariant</item>
-        <item name="colorOnSecondary">@color/nightOnSecondary</item>
+        <item name="colorSecondary">@color/night_secondary</item>
+        <item name="colorSecondaryVariant">@color/night_secondary_variant</item>
+        <item name="colorOnSecondary">@color/night_on_secondary</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
     </style>

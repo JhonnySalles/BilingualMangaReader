@@ -9,4 +9,5 @@ interface OcrProcess {
     fun getLanguage(): Languages
     fun setText(text: String?)
     fun setText(text: ArrayList<String>)
+    fun clearList()
 }

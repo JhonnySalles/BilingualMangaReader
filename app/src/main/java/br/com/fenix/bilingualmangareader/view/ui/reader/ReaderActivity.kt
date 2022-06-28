@@ -31,16 +31,17 @@ import br.com.fenix.bilingualmangareader.model.enums.ReaderMode
 import br.com.fenix.bilingualmangareader.service.controller.SubTitleController
 import br.com.fenix.bilingualmangareader.service.kanji.Formatter
 import br.com.fenix.bilingualmangareader.service.ocr.GoogleVision
+import br.com.fenix.bilingualmangareader.service.ocr.OcrProcess
 import br.com.fenix.bilingualmangareader.service.repository.MangaRepository
 import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.service.repository.SubTitleRepository
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
-import br.com.fenix.bilingualmangareader.service.ocr.OcrProcess
+import br.com.fenix.bilingualmangareader.view.components.ComponentsUtil
 import br.com.fenix.bilingualmangareader.view.ui.pages_link.PagesLinkActivity
 import br.com.fenix.bilingualmangareader.view.ui.pages_link.PagesLinkViewModel
+import br.com.fenix.bilingualmangareader.view.ui.window.FloatingButtons
 import br.com.fenix.bilingualmangareader.view.ui.window.FloatingSubtitleReader
-import br.com.fenix.bilingualmangareader.view.ui.window.FloatingSubtitleReader.Companion.canDrawOverlays
 import br.com.fenix.bilingualmangareader.view.ui.window.FloatingWindowOcr
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.button.MaterialButton
@@ -52,6 +53,7 @@ import java.io.File
 class ReaderActivity : AppCompatActivity(), OcrProcess {
 
     private val mViewModel: ReaderViewModel by viewModels()
+
     private lateinit var mReaderTitle: TextView
     private lateinit var mReaderProgress: SeekBar
     private lateinit var mNavReader: LinearLayout
@@ -76,14 +78,14 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
 
     private lateinit var mFloatingSubtitleReader: FloatingSubtitleReader
     private lateinit var mFloatingWindowOcr: FloatingWindowOcr
+    private lateinit var mFloatingButtons: FloatingButtons
 
     private lateinit var mStorage: Storage
     private lateinit var mRepository: MangaRepository
+    private lateinit var mSubtitleController: SubTitleController
     private var mManga: Manga? = null
     private var mBookMark: Int = 0
     private var mMenuPopupBottomSheet: Boolean = false
-    private var mLanguageOcr: Languages? = null
-    private var mIsAlertSubtitle = false
 
     companion object {
         private lateinit var mPopupTranslateTab: TabLayout
@@ -97,19 +99,20 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
 
         Formatter.initializeAsync(applicationContext)
 
-        val subtitle = SubTitleController.getInstance(applicationContext)
-        subtitle.clearExternalSubtitlesSelected()
+        mSubtitleController = SubTitleController.getInstance(applicationContext)
+        mSubtitleController.clearExternalSubtitlesSelected()
 
         mToolbar = findViewById(R.id.toolbar_reader)
         mToolbarTitle = findViewById(R.id.toolbar_title_custom)
         mToolbarSubTitle = findViewById(R.id.toolbar_subtitle_custom)
         mToolbarTitleContent = findViewById(R.id.toolbar_title_content)
         mSubToolbar = findViewById(R.id.sub_toolbar)
-        mLanguageOcrDescription  = findViewById(R.id.ocr_language)
-        mLanguageOcrDescription.setOnClickListener { choiceLanguage { mLanguageOcr = it } }
+        mLanguageOcrDescription = findViewById(R.id.ocr_language)
+        mLanguageOcrDescription.setOnClickListener { choiceLanguage { mViewModel.mLanguageOcr = it } }
 
         setSupportActionBar(mToolbar)
-        supportActionBar!!.setDisplayShowTitleEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(true)
 
         mReaderTitle = findViewById(R.id.nav_reader_title)
         mReaderProgress = findViewById(R.id.nav_reader_progress)
@@ -168,7 +171,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
             showMenuFromButton(buttonOCR, it)
         }
 
-        findViewById<Button>(R.id.btn_menu_page_linked).setOnClickListener { subtitle.drawPageLinked() }
+        findViewById<Button>(R.id.btn_menu_page_linked).setOnClickListener { mSubtitleController.drawPageLinked() }
 
         mStorage = Storage(applicationContext)
         findViewById<MaterialButton>(R.id.nav_previous_file).setOnClickListener { switchManga(false) }
@@ -183,10 +186,12 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         mPopupSubtitleConfigurationFragment = PopupSubtitleConfiguration()
         mPopupSubtitleReaderFragment = PopupSubtitleReader()
         mPopupSubtitleVocabularyFragment = PopupSubtitleVocabulary()
-        mPopupSubtitleVocabularyFragment.setBackground(R.color.onPrimary)
+        mPopupSubtitleVocabularyFragment.setBackground(R.color.on_primary)
 
+        mFloatingButtons = FloatingButtons(applicationContext, this)
         mFloatingSubtitleReader = FloatingSubtitleReader(applicationContext, this)
         mFloatingWindowOcr = FloatingWindowOcr(applicationContext, this)
+        prepareFloatingSubtitle()
 
         mPopupTranslateTab.setupWithViewPager(mPopupTranslateView)
 
@@ -238,8 +243,12 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
 
         val bundle = intent.extras
         if (bundle != null) {
-            mToolbarTitle.text = bundle.getString(GeneralConsts.KEYS.MANGA.NAME)
-            mBookMark = bundle.getInt(GeneralConsts.KEYS.MANGA.MARK)
+            val name = bundle.getString(GeneralConsts.KEYS.MANGA.NAME) ?: ""
+            val bookMark = if (bundle.containsKey(GeneralConsts.KEYS.MANGA.PAGE_NUMBER))
+                bundle.getInt(GeneralConsts.KEYS.MANGA.PAGE_NUMBER).toString()
+            else
+                bundle.getInt(GeneralConsts.KEYS.MANGA.MARK).toString()
+            setTitles(name, bookMark)
         }
 
         if (savedInstanceState == null) {
@@ -247,26 +256,27 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
                 val file = File(intent.data!!.path!!)
                 val fragment: ReaderFragment = ReaderFragment.create(file)
                 setTitles(file.name, "")
-                SubTitleController.getInstance(applicationContext).setFileLink(null)
+                mSubtitleController.setFileLink(null)
                 setFragment(fragment)
             } else {
                 val extras = intent.extras
-                val manga = (extras!!.getSerializable(GeneralConsts.KEYS.OBJECT.MANGA) as Manga?)
+                val manga = if (extras != null) (extras.getSerializable(GeneralConsts.KEYS.OBJECT.MANGA) as Manga?) else null
+                val page = extras?.getInt(GeneralConsts.KEYS.MANGA.MARK) ?: 0
+
                 val fragment: ReaderFragment = if (manga != null) {
                     mManga = manga
-                    setTitles(manga.title, manga.bookMark.toString())
+                    setTitles(manga.title, page.toString())
                     ReaderFragment.create(manga)
                 } else
                     ReaderFragment.create()
 
                 val fileLink: PagesLinkViewModel by viewModels()
-                SubTitleController.getInstance(applicationContext).setFileLink(fileLink.getFileLink(manga))
-
+                mSubtitleController.setFileLink(fileLink.getFileLink(manga))
                 setFragment(fragment)
             }
         }
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        //ComponentsUtil.setSystemUITransparency(window)
     }
 
     private fun switchManga(isNext: Boolean = true) {
@@ -277,7 +287,18 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         else
             mStorage.getPrevManga(mManga!!)
 
-        if (changeManga == null) return
+        if (changeManga == null) {
+            val content = if (isNext) R.string.switch_next_comic_last_comic else R.string.switch_prev_comic_first_comic
+            AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+                .setTitle(getString(R.string.switch_next_comic_not_found))
+                .setMessage(content)
+                .setPositiveButton(
+                    R.string.action_neutral
+                ) { _, _ ->
+                }
+                .create().show()
+            return
+        }
 
         val title = if (isNext) R.string.switch_next_comic else R.string.switch_prev_comic
 
@@ -302,7 +323,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         setManga(manga)
 
         val fileLink: PagesLinkViewModel by viewModels()
-        SubTitleController.getInstance(applicationContext).setFileLink(fileLink.getFileLink(manga))
+        mSubtitleController.setFileLink(fileLink.getFileLink(manga))
 
         setFragment(ReaderFragment.create(manga))
     }
@@ -313,7 +334,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     }
 
     fun setLanguage(language: Languages) {
-        mLanguageOcr = language
+        mViewModel.mLanguageOcr = language
         mLanguageOcrDescription.text = getString(R.string.languages_description) + ": " + Util.languageToString(this, language)
         mSubToolbar.visibility = View.VISIBLE
     }
@@ -352,12 +373,12 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         val name = TextView(this)
         name.text = mToolbarTitle.text
         name.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.title_index_dialog_size))
-        name.setTextColor(ContextCompat.getColor(this, R.color.textPrimary))
+        name.setTextColor(ContextCompat.getColor(this, R.color.text_primary))
         title.addView(name)
         val index = TextView(this)
         index.text = resources.getString(R.string.reading_page_index)
         index.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.title_small_index_dialog_size))
-        index.setTextColor(ContextCompat.getColor(this, R.color.onSecondary))
+        index.setTextColor(ContextCompat.getColor(this, R.color.on_secondary))
         title.addView(index)
 
         MaterialAlertDialogBuilder(this, R.style.AppCompatMaterialAlertDialogStyle)
@@ -388,11 +409,11 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     private var mLastFloatingShowing = false
     override fun onResume() {
         super.onResume()
-        if (mLastFloatingShowing)
-            mFloatingSubtitleReader.show()
-
         if (mLastFloatingWindowOcr)
             mFloatingWindowOcr.show()
+
+        if (mLastFloatingShowing)
+            mFloatingSubtitleReader.show()
     }
 
     override fun onStop() {
@@ -408,6 +429,9 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
                 mFloatingWindowOcr.dismiss()
         }
 
+        if (::mFloatingButtons.isInitialized && mFloatingButtons.isShowing)
+            mFloatingButtons.dismiss()
+
         super.onStop()
     }
 
@@ -417,6 +441,9 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
 
         if (::mFloatingWindowOcr.isInitialized)
             mFloatingWindowOcr.destroy()
+
+        if (::mFloatingButtons.isInitialized)
+            mFloatingButtons.destroy()
 
         super.onDestroy()
     }
@@ -480,6 +507,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
                     Toast.LENGTH_SHORT
                 ).show()
             }
+            R.id.menu_item_floating_buttons -> openFloatingButtons()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -514,7 +542,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
             ContextCompat.getDrawable(this, R.drawable.ic_favorite_mark)
         else
             ContextCompat.getDrawable(this, R.drawable.ic_favorite_unmark)
-        icon?.setTint(getColor(R.color.onSecondary))
+        icon?.setTint(getColor(R.color.on_secondary))
         favoriteItem.icon = icon
         return super.onPrepareOptionsMenu(menu)
     }
@@ -529,39 +557,38 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
             ContextCompat.getDrawable(this, R.drawable.ic_favorite_mark)
         else
             ContextCompat.getDrawable(this, R.drawable.ic_favorite_unmark)
-        icon?.setTint(getColor(R.color.onSecondary))
+        icon?.setTint(getColor(R.color.on_secondary))
         item.icon = icon
         mRepository.update(mManga!!)
     }
 
-    private var mSubtitleSelected: Boolean = false
-    private fun prepareFloatingSubtitle(): Boolean {
-        val mSubTitleController = SubTitleController.getInstance(applicationContext)
-
-        mSubTitleController.pageSelected.observe(this) {
+    private fun prepareFloatingSubtitle() {
+        mSubtitleController.pageSelected.observe(this) {
             mFloatingSubtitleReader.updatePage(it)
         }
-        mSubTitleController.textSelected.observe(this) {
+
+        mSubtitleController.textSelected.observe(this) {
             mFloatingSubtitleReader.updateText(it)
         }
 
-        mSubTitleController.forceExpandFloatingPopup.observe(this) {
+        mSubtitleController.forceExpandFloatingPopup.observe(this) {
             if (mFloatingSubtitleReader.isShowing)
                 mFloatingSubtitleReader.expanded(true)
         }
 
-        if (mSubTitleController.mManga != null && mSubTitleController.mManga!!.id != null && mSubTitleController.textSelected.value == null) {
-            val mSubtitleRepository = SubTitleRepository(applicationContext)
-            val lastSubtitle = mSubtitleRepository.findByIdManga(mSubTitleController.mManga!!.id!!)
-            if (lastSubtitle != null)
-                mSubTitleController.initialize(lastSubtitle.chapterKey, lastSubtitle.pageKey)
+        mViewModel.ocrItem.observe(this) {
+            mFloatingSubtitleReader.updateOcrList(it)
         }
 
-        mSubtitleSelected = mSubTitleController.isSelected
-        return mSubTitleController.isNotEmpty
+        if (mSubtitleController.mManga != null && mSubtitleController.mManga!!.id != null && mSubtitleController.textSelected.value == null) {
+            val mSubtitleRepository = SubTitleRepository(applicationContext)
+            val lastSubtitle = mSubtitleRepository.findByIdManga(mSubtitleController.mManga!!.id!!)
+            if (lastSubtitle != null)
+                mSubtitleController.initialize(lastSubtitle.chapterKey, lastSubtitle.pageKey)
+        }
     }
 
-    private fun openFileLink() {
+    fun openFileLink() {
         if (mManga != null) {
             val intent = Intent(applicationContext, PagesLinkActivity::class.java)
             val bundle = Bundle()
@@ -580,59 +607,79 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
                 .show()
     }
 
-    private fun openFloatingSubtitle() {
+    private fun verifySubtitle() {
+        if (!mViewModel.mIsAlertSubtitle && !mSubtitleController.isNotEmpty) {
+            mViewModel.mIsAlertSubtitle = true
+            val message = getString(
+                if (mSubtitleController.isSelected) R.string.popup_reading_subtitle_selected_empty
+                else R.string.popup_reading_subtitle_embedded_empty
+            )
+
+            AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+                .setTitle(getString(R.string.popup_reading_subtitle_empty))
+                .setMessage(message)
+                .setPositiveButton(
+                    R.string.action_neutral
+                ) { _, _ -> }
+                .create()
+                .show()
+        }
+    }
+
+    fun openFloatingSubtitle() {
         mMenuPopupTranslate.visibility = View.INVISIBLE
         mMenuPopupColor.visibility = View.INVISIBLE
 
         if (mFloatingSubtitleReader.isShowing)
             mFloatingSubtitleReader.dismiss()
         else {
-            if (canDrawOverlays(applicationContext)) {
-                if (!prepareFloatingSubtitle() && !mIsAlertSubtitle) {
-                    mIsAlertSubtitle = true
-                    val message = getString(
-                        if (mSubtitleSelected) R.string.popup_reading_subtitle_selected_empty
-                        else R.string.popup_reading_subtitle_embedded_empty
-                    )
-
-                    AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
-                        .setTitle(getString(R.string.popup_reading_subtitle_empty))
-                        .setMessage(message)
-                        .setPositiveButton(
-                            R.string.action_neutral
-                        ) { _, _ -> }
-                        .create()
-                        .show()
-                }
-
+            if (ComponentsUtil.canDrawOverlays(applicationContext)) {
+                verifySubtitle()
                 mFloatingSubtitleReader.show()
             } else
-                startManageDrawOverlaysPermission()
+                startManageDrawOverlaysPermission(GeneralConsts.REQUEST.PERMISSION_DRAW_OVERLAYS_FLOATING_SUBTITLE)
+        }
+    }
+
+    fun openFloatingButtons() {
+        if (mFloatingButtons.isShowing)
+            mFloatingButtons.dismiss()
+        else {
+            if (ComponentsUtil.canDrawOverlays(applicationContext))
+                mFloatingButtons.show()
+            else
+                startManageDrawOverlaysPermission(GeneralConsts.REQUEST.PERMISSION_DRAW_OVERLAYS_FLOATING_BUTTONS)
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            GeneralConsts.REQUEST.PERMISSION_DRAW_OVERLAYS -> {
-                if (canDrawOverlays(applicationContext)) {
-                    if (prepareFloatingSubtitle())
-                        mFloatingSubtitleReader.show()
-                    else {
-                        val message = getString(
-                            if (mSubtitleSelected) R.string.popup_reading_subtitle_selected_empty
-                            else R.string.popup_reading_subtitle_embedded_empty
-                        )
-
-                        AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
-                            .setTitle(getString(R.string.popup_reading_subtitle_empty))
-                            .setMessage(message)
-                            .setPositiveButton(
-                                R.string.action_neutral
-                            ) { _, _ -> }
-                            .create()
-                            .show()
-                    }
+            GeneralConsts.REQUEST.PERMISSION_DRAW_OVERLAYS_FLOATING_SUBTITLE -> {
+                if (ComponentsUtil.canDrawOverlays(applicationContext)) {
+                    verifySubtitle()
+                    mFloatingSubtitleReader.show()
+                } else
+                    Toast.makeText(
+                        application,
+                        getString(R.string.floating_reading_not_permission),
+                        Toast.LENGTH_SHORT
+                    ).show()
+            }
+            GeneralConsts.REQUEST.PERMISSION_DRAW_OVERLAYS_FLOATING_BUTTONS -> {
+                if (ComponentsUtil.canDrawOverlays(applicationContext))
+                    mFloatingButtons.show()
+                else
+                    Toast.makeText(
+                        application,
+                        getString(R.string.floating_reading_not_permission),
+                        Toast.LENGTH_SHORT
+                    ).show()
+            }
+            GeneralConsts.REQUEST.PERMISSION_DRAW_OVERLAYS_FLOATING_OCR -> {
+                if (ComponentsUtil.canDrawOverlays(applicationContext)) {
+                    mFloatingWindowOcr.show()
+                    mFloatingSubtitleReader.forceZIndex()
                 } else
                     Toast.makeText(
                         application,
@@ -643,12 +690,12 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         }
     }
 
-    private fun startManageDrawOverlaysPermission() {
+    private fun startManageDrawOverlaysPermission(requestCode: Int) {
         Intent(
             Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
             Uri.parse("package:${applicationContext.packageName}")
         ).let {
-            startActivityForResult(it, GeneralConsts.REQUEST.PERMISSION_DRAW_OVERLAYS)
+            startActivityForResult(it, requestCode)
         }
     }
 
@@ -694,14 +741,23 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         if (mFloatingWindowOcr.isShowing)
             mFloatingWindowOcr.dismiss()
         else {
-            if (mLanguageOcr == null)
+            if (mViewModel.mLanguageOcr == null)
                 choiceLanguage {
-                    mLanguageOcr = it
-                    mFloatingWindowOcr.show()
+                    mViewModel.mLanguageOcr = it
+                    openFloatingWindow()
                 }
             else
-                mFloatingWindowOcr.show()
+                openFloatingWindow()
         }
+    }
+
+    //Force floating subtitle aways on top
+    private fun openFloatingWindow() {
+        if (ComponentsUtil.canDrawOverlays(applicationContext)) {
+            mFloatingWindowOcr.show()
+            mFloatingSubtitleReader.forceZIndex()
+        } else
+            startManageDrawOverlaysPermission(GeneralConsts.REQUEST.PERMISSION_DRAW_OVERLAYS_FLOATING_OCR)
     }
 
     private fun openGoogleVisionOcr() {
@@ -727,23 +783,29 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     }
 
     override fun getLanguage(): Languages {
-        return mLanguageOcr ?: Languages.JAPANESE
+        return mViewModel.mLanguageOcr ?: Languages.JAPANESE
     }
 
     override fun setText(text: String?) {
         if (::mFloatingSubtitleReader.isInitialized) {
-            mIsAlertSubtitle = true
+            mViewModel.mIsAlertSubtitle = true
+            mViewModel.addOcrItem(text)
             mFloatingSubtitleReader.updateTextOcr(text)
             mFloatingSubtitleReader.showWithoutDismiss()
         }
     }
 
-    override fun setText(text: ArrayList<String>) {
+    override fun setText(texts: ArrayList<String>) {
         if (::mFloatingSubtitleReader.isInitialized) {
-            mIsAlertSubtitle = true
-            mFloatingSubtitleReader.updateTextOcr(text)
+            mViewModel.mIsAlertSubtitle = true
+            mViewModel.addOcrItem(texts)
             mFloatingSubtitleReader.showWithoutDismiss()
+            mFloatingSubtitleReader.changeLayout(false)
         }
+    }
+
+    override fun clearList() {
+        mViewModel.clearOcrItem()
     }
 
 }

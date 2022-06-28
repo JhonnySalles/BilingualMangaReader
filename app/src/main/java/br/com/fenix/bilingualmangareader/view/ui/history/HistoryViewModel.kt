@@ -12,7 +12,7 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
     private val mMangaRepository: MangaRepository = MangaRepository(application.applicationContext)
 
     private var mListMangas = MutableLiveData<ArrayList<Manga>>(ArrayList())
-    val save: LiveData<ArrayList<Manga>> = mListMangas
+    val listMangas: LiveData<ArrayList<Manga>> = mListMangas
 
     fun list() {
         val list = mMangaRepository.listHistory()
@@ -22,7 +22,7 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
             mListMangas.value = ArrayList()
     }
 
-    fun list(refreshComplete: () -> (Unit)) {
+    fun list(refreshComplete: (Int) -> (Unit)) {
         val list = mMangaRepository.listHistory()
         if (list != null) {
             if (mListMangas.value == null || mListMangas.value!!.isEmpty())
@@ -31,7 +31,8 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
                 update(list)
         } else
             mListMangas.value = ArrayList()
-        refreshComplete()
+
+        refreshComplete(mListMangas.value!!.size - 1)
     }
 
     fun update(list: List<Manga>) {
@@ -45,6 +46,42 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
 
     fun updateLastAccess(manga: Manga) {
         mMangaRepository.update(manga)
+    }
+
+    fun clear(manga: Manga?) {
+        if (manga != null) {
+            save(manga)
+            if (mListMangas.value!!.contains(manga))
+                mListMangas.value!!.remove(manga)
+        }
+    }
+
+    fun deletePermanent(manga: Manga?) {
+        if (manga != null)
+            mMangaRepository.deletePermanent(manga)
+    }
+
+    fun save(manga: Manga?) {
+        manga ?: return
+
+        if (manga.id == 0L)
+            manga.id = mMangaRepository.save(manga)
+        else
+            mMangaRepository.update(manga)
+    }
+
+    fun remove(manga: Manga) {
+        if (mListMangas.value != null && mListMangas.value!!.contains(manga))
+            mListMangas.value!!.remove(manga)
+    }
+
+    fun add(manga: Manga, index: Int) {
+        if (mListMangas.value != null)
+            mListMangas.value!!.add(index, manga)
+    }
+
+    fun getAndRemove(position: Int): Manga? {
+        return if (mListMangas.value != null) mListMangas.value!!.removeAt(position) else null
     }
 
 }

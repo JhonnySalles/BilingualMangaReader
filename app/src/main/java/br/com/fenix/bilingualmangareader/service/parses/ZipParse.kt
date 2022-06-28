@@ -52,6 +52,18 @@ class ZipParse : Parse {
         return subtitles
     }
 
+    override fun getSubtitlesNames(): Map<String, Int> {
+        val paths = mutableMapOf<String, Int>()
+
+        for((index, header) in mSubtitles.withIndex()) {
+            val path = Util.getNameFromPath(getName(header))
+            if (path.isNotEmpty() && !paths.containsKey(path))
+                paths[path] = index
+        }
+
+        return paths
+    }
+
     private fun getName(entry: ZipEntry): String {
         return entry.name
     }
