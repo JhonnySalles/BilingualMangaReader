@@ -30,7 +30,7 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
         id: Long?, title: String, subTitle: String,
         path: String, folder: String, name: String, type: String,
         pages: Int, bookMark: Int, favorite: Boolean,
-        dateCreate: LocalDateTime?, lastAccess: LocalDateTime?,
+        dateCreate: Date?, lastAccess: Date?,
         excluded: Boolean = false
     ) : this(id, title, subTitle, path, folder, name, type, pages) {
         this.bookMark = bookMark

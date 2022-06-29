@@ -10,7 +10,8 @@ import br.com.fenix.bilingualmangareader.service.parses.RarParse
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import java.io.File
-import java.time.LocalDateTime
+import java.text.SimpleDateFormat
+import java.util.*
 
 class TestUtils {
 
@@ -55,8 +56,8 @@ class TestUtils {
                 10,
                 5,
                 (1..2).random() > 1,
-                LocalDateTime.parse("2022-06-28T14:15:50.63"),
-                LocalDateTime.now(),
+                SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault()).parse("29/06/2022 00:41:00"),
+                Date(),
                 (1..5).random() > 2
             )
 
@@ -82,9 +83,19 @@ class TestUtils {
 
         fun getManga(): Manga {
             return Manga(
-                1, Util.getNameFromPath(TEST_FILE_PATH), "", TEST_FILE_PATH, Util.getFolderFromPath(TEST_FILE_PATH),
-                Util.getNameWithoutExtensionFromPath(TEST_FILE_PATH), Util.getExtensionFromPath(TEST_FILE_PATH), 10, 5,
-                (1..2).random() > 1, LocalDateTime.parse("2022-06-28T14:15:50.63"), LocalDateTime.now(), (1..5).random() > 2
+                1,
+                Util.getNameFromPath(TEST_FILE_PATH),
+                "",
+                TEST_FILE_PATH,
+                Util.getFolderFromPath(TEST_FILE_PATH),
+                Util.getNameWithoutExtensionFromPath(TEST_FILE_PATH),
+                Util.getExtensionFromPath(TEST_FILE_PATH),
+                10,
+                5,
+                (1..2).random() > 1,
+                SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault()).parse("29/06/2022 00:41:00"),
+                Date(),
+                (1..5).random() > 2
             )
         }
 
@@ -100,9 +111,18 @@ class TestUtils {
             for (i in 0 until 10)
                 array.add(
                     Manga(
-                        i.toLong(), Util.getNameFromPath(TEST_FILE_PATH), "", TEST_FILE_PATH, Util.getFolderFromPath(TEST_FILE_PATH),
-                        Util.getNameWithoutExtensionFromPath(TEST_FILE_PATH), Util.getExtensionFromPath(TEST_FILE_PATH), 125,
-                        (0..100).random(), i in 2..5, LocalDateTime.parse("2022-06-28T14:15:50.63"), LocalDateTime.now(),
+                        i.toLong(),
+                        Util.getNameFromPath(TEST_FILE_PATH),
+                        "",
+                        TEST_FILE_PATH,
+                        Util.getFolderFromPath(TEST_FILE_PATH),
+                        Util.getNameWithoutExtensionFromPath(TEST_FILE_PATH),
+                        Util.getExtensionFromPath(TEST_FILE_PATH),
+                        125,
+                        (0..100).random(),
+                        i in 2..5,
+                        SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault()).parse("29/06/2022 00:41:00"),
+                        Date(),
                         i in 4..6
                     )
                 )

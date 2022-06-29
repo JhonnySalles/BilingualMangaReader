@@ -11,7 +11,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import br.com.fenix.bilingualmangareader.model.entity.FileLink
 import br.com.fenix.bilingualmangareader.model.entity.Manga
-import br.com.fenix.bilingualmangareader.model.entity.Page
 import br.com.fenix.bilingualmangareader.model.entity.PageLink
 import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.model.enums.LoadFile
@@ -29,9 +28,7 @@ import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.InputStream
 import java.io.InterruptedIOException
-import java.time.LocalDateTime
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class PagesLinkViewModel(application: Application) : AndroidViewModel(application) {
@@ -927,7 +924,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
             val indexChanges = mutableSetOf<Int>()
             val pagesLink = mPagesLink.value!!
             var amount = 0
-            pagesLink.forEach { if (it.dualImage) amount += 1  }
+            pagesLink.forEach { if (it.dualImage) amount += 1 }
             var amountNotLink = (amount * 2) - pagesLink.size
 
             if (amountNotLink > 0) {
@@ -960,7 +957,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
             var padding = 0
             for (i in (pagesLink.size - 1) downTo 0) {
                 if (pagesLink[i].fileLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY) {
-                    padding = i +1
+                    padding = i + 1
                     break
                 }
             }

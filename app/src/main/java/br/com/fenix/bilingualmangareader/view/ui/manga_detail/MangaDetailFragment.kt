@@ -16,7 +16,6 @@ import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity
 import com.google.android.material.button.MaterialButton
 import org.slf4j.LoggerFactory
-import java.time.LocalDateTime
 
 
 class MangaDetailFragment(private var mManga: Manga?) : Fragment() {
