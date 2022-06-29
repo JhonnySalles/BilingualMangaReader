@@ -18,6 +18,7 @@ class TestUtils {
     companion object TestUtils {
 
         private val TEST_FILE_PATH = "storage/emulated/0/Manga/Manga of test.cbr"
+        private val DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss"
 
         private fun getCoverMipmap(index: Int = 0): Int {
             return if (index > 5 || index < 0)
@@ -56,7 +57,7 @@ class TestUtils {
                 10,
                 5,
                 (1..2).random() > 1,
-                SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault()).parse("29/06/2022 00:41:00"),
+                SimpleDateFormat(DATE_TIME_PATTERN, Locale.getDefault()).parse("29/06/2022 00:41:00"),
                 Date(),
                 (1..5).random() > 2
             )
@@ -93,7 +94,7 @@ class TestUtils {
                 10,
                 5,
                 (1..2).random() > 1,
-                SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault()).parse("29/06/2022 00:41:00"),
+                SimpleDateFormat(DATE_TIME_PATTERN, Locale.getDefault()).parse("29/06/2022 00:41:00"),
                 Date(),
                 (1..5).random() > 2
             )
@@ -121,7 +122,7 @@ class TestUtils {
                         125,
                         (0..100).random(),
                         i in 2..5,
-                        SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault()).parse("29/06/2022 00:41:00"),
+                        SimpleDateFormat(DATE_TIME_PATTERN, Locale.getDefault()).parse("29/06/2022 00:41:00"),
                         Date(),
                         i in 4..6
                     )
