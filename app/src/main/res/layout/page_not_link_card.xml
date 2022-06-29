@@ -9,7 +9,7 @@
     android:layout_height="@dimen/page_not_link_card_layout_height"
     android:layout_margin="@dimen/page_link_card_layout_margin"
     android:tag="page_not_link"
-    app:rippleColor="@color/secondary">
+    app:rippleColor="@color/ripple_color">
 
     <ImageView
         android:id="@+id/page_not_link_image"

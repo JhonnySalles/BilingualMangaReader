@@ -4,12 +4,19 @@
     <color name="primary">#212121</color>
     <color name="primary_variant">#484848</color>
     <color name="on_primary">#000000</color>
-    <color name="primary_semitransparent">#ce212121</color>
+    <color name="primary_semitransparent">#CE212121</color>
     <color name="on_primary_semitransparent">#DD000000</color>
+    <color name="primary_variant_semitransparent">#CE484848</color>
+
     <!-- Secondary color -->
     <color name="secondary">#aeea00</color>
     <color name="secondary_variant">#e4ff54</color>
     <color name="on_secondary">#79b700</color>
+    <color name="on_secondary_variant">#275201</color>
+    <color name="secondary_variant_semitransparent">#CE275201</color>
+    <color name="on_secondary_variant_semitransparent">#DD195201</color>
+
+    <color name="ripple_color">#1d9902</color>
 
     <!-- Night background color -->
 
@@ -45,7 +52,7 @@
 
     <color name="item_selected_semi_transparent">#6600ff00</color>
     <color name="floating_semi_transparent">#BF000000</color>
-    <color name="floating_button">#546e7a</color>
+    <color name="floating_button">#275201</color>
     <color name="floating_list_divider">#66000000</color>
 
     <color name="file_link_full_screen">#99212121</color>

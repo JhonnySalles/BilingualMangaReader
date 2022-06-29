@@ -24,6 +24,7 @@
         android:background="@color/transparent"
         android:layout_marginTop="20dp"
         android:layout_marginStart="5dp"
+        android:paddingTop="10dp"
         app:popupTheme="@style/MyDarkToolbarStyle"
         app:theme="@style/ToolbarTheme"/>
 
