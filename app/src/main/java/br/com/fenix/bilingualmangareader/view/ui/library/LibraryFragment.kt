@@ -119,11 +119,10 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         if (Scanner.getInstance(requireContext()).isRunning())
             setIsRefreshing(true)
 
-        mViewModel.update()
-        mRecycleView
-
         if (mViewModel.isEmpty())
             onRefresh()
+        else
+            mViewModel.updateList { if (it) sortList(mViewModel.listMangas.value!!) }
     }
 
     override fun onStop() {
@@ -483,8 +482,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     override fun onRefresh() {
-        if (mViewModel.isEmpty())
-            mViewModel.list { }
+        mViewModel.updateList { if (it) sortList(mViewModel.listMangas.value!!) }
 
         if (mHandler.hasCallbacks(mDismissUpButton))
             mHandler.removeCallbacks(mDismissUpButton)
