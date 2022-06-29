@@ -276,7 +276,6 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
             }
         }
 
-        //ComponentsUtil.setSystemUITransparency(window)
     }
 
     private fun switchManga(isNext: Boolean = true) {
