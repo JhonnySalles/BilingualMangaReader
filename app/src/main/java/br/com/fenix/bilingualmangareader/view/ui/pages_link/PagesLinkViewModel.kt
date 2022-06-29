@@ -11,6 +11,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import br.com.fenix.bilingualmangareader.model.entity.FileLink
 import br.com.fenix.bilingualmangareader.model.entity.Manga
+import br.com.fenix.bilingualmangareader.model.entity.Page
 import br.com.fenix.bilingualmangareader.model.entity.PageLink
 import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.model.enums.LoadFile
@@ -262,6 +263,9 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                 fileLink.parseManga = mFileLink.value!!.parseManga
 
                 for ((index, page) in fileLink.pagesLink!!.withIndex()) {
+                    if (index >= mPagesLink.value!!.size)
+                        break
+
                     page.imageMangaPage = mPagesLink.value!![index].imageMangaPage
 
                     if (page.fileLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY) {
@@ -773,8 +777,6 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                 if (page.dualImage || (isUseDualPageCalculate && page.isFileLeftDualPage))
                     continue
 
-                println("" + index + "||" + padding)
-
                 if ((index + padding) >= pagesLink.size)
                     break
 
@@ -811,6 +813,11 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                                     next.clearRightFileLink()
                                 } else {
                                     padding++
+                                    if ((index + padding) >= pagesLink.size) {
+                                        padding--
+                                        continue
+                                    }
+
                                     next = pagesLink[index + padding]
                                     if (next.fileLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY && !next.dualImage && !next.isFileLeftDualPage) {
                                         page.addRightFromLeftFileLinkImage(next)
@@ -837,10 +844,15 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                             indexChanges.addAll(arrayOf(index, index + padding))
 
                             if (next.fileRightLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY) {
-                                page.addRightFromLeftFileLinkImage(next)
+                                page.addRightFileLinkImage(next)
                                 next.clearRightFileLink()
                             } else {
                                 padding++
+                                if ((index + padding) >= pagesLink.size) {
+                                    padding--
+                                    continue
+                                }
+
                                 next = pagesLink[index + padding]
                                 if (!next.dualImage && next.fileLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY) {
                                     page.addRightFromLeftFileLinkImage(next)
@@ -850,14 +862,50 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                                     padding--
                             }
                         } else {
-                            page.addRightFileLinkImage(next)
+                            page.addRightFromLeftFileLinkImage(next)
                             next.clearLeftFileLink()
                             indexChanges.addAll(arrayOf(index, index + padding))
                         }
                     }
                 }
+            }
 
-                println("Right: image " + page.fileRightLinkPageName)
+            if (mPagesNotLinked.value!!.isNotEmpty()) {
+                val pagesNotLinked = mPagesNotLinked.value!!.sortedBy { it.fileLinkPage }.toMutableList()
+
+                for (page in pagesLink) {
+                    if (pagesNotLinked.isEmpty())
+                        break
+
+                    if (page.dualImage || (isUseDualPageCalculate && page.isFileRightDualPage))
+                        continue
+
+                    if (page.fileLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY)
+                        page.addRightFromLeftFileLinkImage(pagesNotLinked.removeAt(0))
+                    else if (isUseDualPageCalculate) {
+                        val notLinked = pagesNotLinked.removeAt(0)
+                        page.addLeftFileLinkImage(notLinked)
+
+                        if (notLinked.isFileLeftDualPage)
+                            continue
+
+                        if (pagesNotLinked.isEmpty())
+                            break
+                        page.addRightFromLeftFileLinkImage(pagesNotLinked.removeAt(0))
+                    } else {
+                        page.addLeftFileLinkImage(pagesNotLinked.removeAt(0))
+                        if (pagesNotLinked.isEmpty())
+                            break
+
+                        page.addRightFromLeftFileLinkImage(pagesNotLinked.removeAt(0))
+                    }
+                }
+
+                mPagesNotLinked.value!!.clear()
+                if (pagesNotLinked.isNotEmpty())
+                    mPagesNotLinked.value!!.addAll(pagesNotLinked)
+
+                notifyMessages(Pages.NOT_LINKED, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_ITEM_CHANGE)
             }
 
             for (index in indexChanges)
@@ -879,28 +927,66 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
             val indexChanges = mutableSetOf<Int>()
             val pagesLink = mPagesLink.value!!
             var amount = 0
-            pagesLink.forEach { if (it.dualImage) amount += 1 }
+            pagesLink.forEach { if (it.dualImage) amount += 1  }
+            var amountNotLink = (amount * 2) - pagesLink.size
 
-            for (i in pagesLink.size - 1 downTo (pagesLink.size - 1) - amount)
-                addNotLinked(pagesLink[i])
+            if (amountNotLink > 0) {
+                for (i in (pagesLink.size - 1) downTo 0) {
+                    val item = pagesLink[i]
+                    if (item.fileLinkPage == PageLinkConsts.VALUES.PAGE_EMPTY)
+                        continue
 
-            if (isNotify)
-                notifyMessages(Pages.NOT_LINKED, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_ITEM_CHANGE)
+                    val page = pagesLink[i]
+                    if (item.dualImage) {
+                        addNotLinked(page)
+                        amountNotLink -= 2
+                        page.clearFileLink()
+                    } else if (item.fileLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY) {
+                        addNotLinked(page)
+                        amountNotLink--
+                        page.clearLeftFileLink()
+                    }
 
-            var process = amount
-            for (i in pagesLink.size - 1 downTo 0) {
-                val page = pagesLink[i - process]
-                if (page.dualImage) {
-                    pagesLink[i].addLeftFileLinkImage(page)
-                    page.clearRightFileLink()
-                    process -= 1
-                } else
-                    pagesLink[i].addLeftFileLinkImage(page)
+                    if (amountNotLink < 1)
+                        break
+                }
 
-                indexChanges.addAll(arrayOf(i, i - process))
-                if (process <= 0)
-                    break
+                mPagesNotLinked.value!!.sortBy { it.fileLinkPage }
+
+                if (isNotify)
+                    notifyMessages(Pages.NOT_LINKED, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_ITEM_CHANGE)
             }
+
+            var padding = 0
+            for (i in (pagesLink.size - 1) downTo 0) {
+                if (pagesLink[i].fileLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY) {
+                    padding = i +1
+                    break
+                }
+            }
+
+            val pagesLinkTemp = mutableListOf<PageLink>()
+
+            for (i in pagesLink.size - 1 downTo 0) {
+                val newPage = PageLink(pagesLink[i])
+                pagesLinkTemp.add(newPage)
+
+                if (i - padding >= 0) {
+                    val page = pagesLink[i - padding]
+
+                    if (page.dualImage) {
+                        newPage.addLeftFromRightFileLinkImage(page)
+                        page.clearRightFileLink()
+                        padding--
+                    } else
+                        newPage.addLeftFileLinkImage(page)
+                }
+
+                indexChanges.addAll(arrayOf(i, i - padding))
+            }
+
+            pagesLinkTemp.sortBy { it.mangaPage }
+            mPagesLink.value = ArrayList(pagesLinkTemp)
 
             if (isNotify) {
                 for (index in indexChanges)
@@ -993,8 +1079,8 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
 
         val pagesNotLink = mPagesNotLinked.value!!
         val pagesLink = mPagesLink.value!!
-        val pagesLinkTemp = pagesLink.toMutableList()
-        val pagesNotLinkTemp = ArrayList<PageLink>()
+        val pagesLinkTemp = mutableListOf<PageLink>()
+        val pagesNotLinkTemp = arrayListOf<PageLink>()
         var maxNumPage = 0
 
         for (page in pagesLink) {
@@ -1010,29 +1096,25 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                 maxNumPage = page.fileLinkPage
         }
 
-        pagesLinkTemp.removeAll { it.mangaPage == PageLinkConsts.VALUES.PAGE_EMPTY }
-
-        for (page in pagesLinkTemp) {
-            if (page.mangaPage == PageLinkConsts.VALUES.PAGE_EMPTY) {
-                page.clearFileLink()
+        for (page in pagesLink) {
+            if (page.mangaPage == PageLinkConsts.VALUES.PAGE_EMPTY)
                 continue
-            }
 
             if (page.mangaPage > maxNumPage)
-                page.clearFileLink()
+                break
             else {
-                val pageLink = pagesLink.find { it.fileLinkPage == page.mangaPage || it.fileRightLinkPage == page.mangaPage }
+                val pageLink = PageLink(page)
+                pagesLinkTemp.add(pageLink)
+
+                val findPageLink = pagesLink.find { it.fileLinkPage == page.mangaPage || it.fileRightLinkPage == page.mangaPage }
                     ?: pagesNotLink.find { it.fileLinkPage == page.mangaPage }
 
-                if (pageLink != null) {
-                    if (pageLink.fileLinkPage == page.mangaPage)
-                        page.addLeftFileLinkImage(pageLink)
+                if (findPageLink != null) {
+                    if (pageLink.fileRightLinkPage == page.mangaPage)
+                        pageLink.addLeftFromRightFileLinkImage(findPageLink)
                     else
-                        page.addLeftFileLinkImage(pageLink)
-
-                    page.clearRightFileLink()
-                } else
-                    page.clearFileLink()
+                        pageLink.addLeftFileLinkImage(findPageLink)
+                }
             }
         }
 
@@ -1062,6 +1144,9 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
 
         pagesLink.clear()
         pagesNotLink.clear()
+        pagesLinkTemp.sortBy { it.mangaPage }
+        pagesNotLinkTemp.sortBy { it.fileLinkPage }
+
         mPagesLink.value = ArrayList(pagesLinkTemp)
         mPagesNotLinked.value = pagesNotLinkTemp
 

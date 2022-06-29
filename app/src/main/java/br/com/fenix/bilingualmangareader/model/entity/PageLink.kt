@@ -174,6 +174,11 @@ class PageLink(
         this.isFileLeftDualPage = isFileLeftDualPage
     }
 
+    constructor(pageLink: PageLink) : this(
+        pageLink.id, pageLink.mangaPage, pageLink.mangaPages, pageLink.mangaPageName,
+        pageLink.mangaPagePath, pageLink.isMangaDualPage, pageLink.imageMangaPage
+    )
+
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = DataBaseConsts.PAGESLINK.COLUMNS.ID)
     var id: Long? = id
