@@ -45,6 +45,15 @@ class MangaRepository(context: Context) {
         }
     }
 
+    fun listRecentChange(): List<Manga>? {
+        return try {
+            mDataBase.listRecentChange()
+        } catch (e: Exception) {
+            mLOGGER.error("Error when list Manga: " + e.message, e)
+            null
+        }
+    }
+
     fun listDeleted(): List<Manga>? {
         return try {
             mDataBase.listDeleted()

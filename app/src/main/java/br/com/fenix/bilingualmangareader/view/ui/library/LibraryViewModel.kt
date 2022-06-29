@@ -49,19 +49,6 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
             mListMangas.value!!.removeAt(position)
     }
 
-    fun update() {
-        if (mListMangas.value != null) {
-            for (manga in mListMangas.value!!) {
-                val item = mMangaRepository.get(manga.id!!)
-                if (item != null) {
-                    manga.bookMark = item.bookMark
-                    manga.favorite = item.favorite
-                    manga.lastAccess = item.lastAccess
-                }
-            }
-        }
-    }
-
     fun update(list: List<Manga>) {
         if (list.isNotEmpty()) {
             for (manga in list) {
@@ -124,6 +111,34 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         }
 
         return index
+    }
+
+    fun updateList(refreshComplete: (Boolean) -> (Unit)) {
+        var change = false
+        if (mListMangas.value != null && mListMangas.value!!.isNotEmpty()) {
+            val list = mMangaRepository.listRecentChange()
+            if (list != null && list.isNotEmpty()) {
+                change = true
+                for (manga in list) {
+                    if (mListMangas.value!!.contains(manga)) {
+                        val index = mListMangas.value!!.indexOf(manga)
+                        mListMangas.value!![index].bookMark = manga.bookMark
+                        mListMangas.value!![index].favorite = manga.favorite
+                        mListMangas.value!![index].lastAccess = manga.lastAccess
+                    } else
+                        mListMangas.value!!.add(manga)
+                }
+            }
+        } else {
+            val list = mMangaRepository.list()
+            if (list != null)
+                mListMangas.value = list.toMutableList()
+            else
+                mListMangas.value = mutableListOf()
+            change = true
+        }
+
+        refreshComplete(change)
     }
 
     fun list(refreshComplete: (Boolean) -> (Unit)) {
