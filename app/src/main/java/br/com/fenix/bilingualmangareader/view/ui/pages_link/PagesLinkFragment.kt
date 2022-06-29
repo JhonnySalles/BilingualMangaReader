@@ -13,7 +13,6 @@ import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -90,7 +89,7 @@ class PagesLinkFragment : Fragment() {
     private val mDismissUpButton = Runnable { mScrollUp.hide() }
     private val mDismissDownButton = Runnable { mScrollDown.hide() }
     private val mReduceSizeGroupButton = Runnable {
-        mButtonsGroup.layoutParams = mButtonsGroupSize
+        ComponentsUtil.changeWidthAnimateSize(mButtonsGroup, mCollapseButtonsGroupSize, true)
         changColorButton(requireContext().getColor(R.color.file_link_buttons))
     }
 
@@ -99,7 +98,8 @@ class PagesLinkFragment : Fragment() {
     private var mInDrag: Boolean = false
     private var mIsTabletOrLandscape: Boolean = false
     private var mPageSelected: Int = 0
-    private lateinit var mButtonsGroupSize: LayoutParams
+    private lateinit var mCollapseButtonsGroupSize: ConstraintLayout.LayoutParams
+    private lateinit var mExpandedButtonsGroupSize: ConstraintLayout.LayoutParams
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -138,7 +138,10 @@ class PagesLinkFragment : Fragment() {
         mMangaName = root.findViewById(R.id.pages_link_name_manga)
         mToolbar = requireActivity().findViewById(R.id.toolbar_manga_pages_link)
 
-        mButtonsGroupSize = mButtonsGroup.layoutParams
+        mExpandedButtonsGroupSize = mButtonsGroup.layoutParams as ConstraintLayout.LayoutParams
+        mButtonsGroup.layoutParams = ConstraintLayout.LayoutParams(mButtonsGroup.layoutParams as ConstraintLayout.LayoutParams)
+        mButtonsGroup.layoutParams.width = resources.getDimension(R.dimen.page_link_buttons_size).toInt()
+        mCollapseButtonsGroupSize = mButtonsGroup.layoutParams as ConstraintLayout.LayoutParams
 
         mScrollUp.visibility = View.GONE
         mScrollDown.visibility = View.GONE
@@ -252,18 +255,9 @@ class PagesLinkFragment : Fragment() {
         mHelp.setOnClickListener {
             if (mHandler.hasCallbacks(mReduceSizeGroupButton))
                 mHandler.removeCallbacks(mReduceSizeGroupButton)
-            mHandler.postDelayed(mReduceSizeGroupButton, 3000)
+            mHandler.postDelayed(mReduceSizeGroupButton, 5000)
 
-            mButtonsGroup.layoutParams = ConstraintLayout.LayoutParams(
-                LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT
-            )
-
-            mButtonsGroup.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                startToStart = mRoot.id
-                bottomToTop = mContentButton.id
-            }
-
+            ComponentsUtil.changeWidthAnimateSize(mButtonsGroup, mExpandedButtonsGroupSize, false)
             changColorButton(requireContext().getColor(R.color.file_link_buttons_expanded))
         }
 

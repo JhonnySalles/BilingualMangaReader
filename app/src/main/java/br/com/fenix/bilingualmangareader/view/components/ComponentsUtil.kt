@@ -5,6 +5,10 @@ import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.provider.Settings
 import android.view.View
+import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.Transformation
+import androidx.constraintlayout.widget.ConstraintLayout
 
 
 class ComponentsUtil {
@@ -59,6 +63,35 @@ class ComponentsUtil {
                         }
                     })
             }
+        }
+
+        fun changeWidthAnimateSize(view: View, finalLayout: ConstraintLayout.LayoutParams, isExpanded:Boolean? = null) {
+            val isInitialExpanded = isExpanded ?: (view.width >= finalLayout.width)
+            view.layoutParams = ConstraintLayout.LayoutParams(view.layoutParams as ConstraintLayout.LayoutParams)
+
+            val finalWidth = finalLayout.width
+            val initialWidth = if (isInitialExpanded) view.width - finalLayout.width else view.width
+            
+            val animation: Animation = object : Animation() {
+                override fun applyTransformation(interpolatedTime: Float, t: Transformation?) {
+                    if (interpolatedTime >= 1f)
+                        view.layoutParams = finalLayout
+                    else {
+                         view.layoutParams.width = if (isInitialExpanded)
+                             finalWidth + (initialWidth - (initialWidth * interpolatedTime).toInt())
+                        else
+                             initialWidth + (finalWidth * interpolatedTime).toInt()
+                    }
+                    view.requestLayout()
+                }
+
+                override fun willChangeBounds(): Boolean {
+                    return true
+                }
+            }
+
+            animation.duration = duration/2
+            view.startAnimation(animation)
         }
 
     }
