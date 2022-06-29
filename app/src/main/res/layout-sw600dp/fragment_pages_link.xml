@@ -156,7 +156,7 @@
 
         <com.google.android.material.button.MaterialButtonToggleGroup
             android:id="@+id/page_link_buttons_group"
-            android:layout_width="@dimen/page_link_buttons_size"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
