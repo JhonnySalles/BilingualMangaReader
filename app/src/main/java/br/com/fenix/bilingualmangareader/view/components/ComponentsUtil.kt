@@ -71,7 +71,7 @@ class ComponentsUtil {
 
             val finalWidth = finalLayout.width
             val initialWidth = if (isInitialExpanded) view.width - finalLayout.width else view.width
-            
+
             val animation: Animation = object : Animation() {
                 override fun applyTransformation(interpolatedTime: Float, t: Transformation?) {
                     if (interpolatedTime >= 1f)

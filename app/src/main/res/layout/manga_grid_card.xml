@@ -6,7 +6,7 @@
     android:layout_width="@dimen/manga_grid_card_layout_width"
     android:layout_height="@dimen/manga_grid_card_layout_height"
     android:layout_margin="8dp"
-    app:rippleColor="@color/secondary">
+    app:rippleColor="@color/ripple_color">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

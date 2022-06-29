@@ -13,13 +13,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/main_toolbar_background"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark" >
+        android:theme="@style/ToolbarContentTheme" >
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/main_toolbar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/default_navigator_header_size"
-            app:popupTheme="@style/Widget.AppCompat.Light.PopupMenu.Overflow"
+            app:popupTheme="@style/MyDarkToolbarStyle"
             app:theme="@style/ToolbarTheme"/>
 
     </com.google.android.material.appbar.AppBarLayout>

@@ -45,6 +45,7 @@ import br.com.fenix.bilingualmangareader.util.helpers.Util
 import br.com.fenix.bilingualmangareader.view.components.PageImageView
 import br.com.fenix.bilingualmangareader.view.components.PageViewPager
 import br.com.fenix.bilingualmangareader.view.managers.MangaHandler
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.button.MaterialButton
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
@@ -62,7 +63,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
     private val mViewModel: ReaderViewModel by activityViewModels()
 
     private lateinit var mRoot: CoordinatorLayout
-    private lateinit var mToolbarTop: LinearLayout
+    private lateinit var mToolbarTop: AppBarLayout
     private lateinit var mPageNavLayout: LinearLayout
     private lateinit var mPopupSubtitle: FrameLayout
     private lateinit var mPopupColor: FrameLayout

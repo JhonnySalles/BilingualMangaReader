@@ -4,7 +4,7 @@
         <item name="colorAccent">@color/secondary</item>
         <item name="android:textColorPrimary">@color/text_primary</item>
         <item name="android:background">@color/primary_material_dark</item>
-        <item name="colorControlHighlight">@color/ripple_material_dark</item>
+        <item name="colorControlHighlight">@color/ripple_color</item>
         <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
         <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
     </style>

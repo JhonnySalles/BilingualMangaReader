@@ -54,7 +54,7 @@
                     android:layout_height="@dimen/manga_detail_card_layout_height"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
-                    app:rippleColor="@color/secondary">
+                    app:rippleColor="@color/ripple_color">
 
                     <ImageView
                         android:id="@+id/manga_detail_manga_image"
@@ -178,7 +178,7 @@
                     android:textAllCaps="false"
                     app:iconPadding="@dimen/manga_detail_icon_padding"
                     app:iconGravity="textTop"
-                    app:rippleColor="@color/secondary"
+                    app:rippleColor="@color/ripple_color"
                     app:backgroundTint="@color/on_primary_semitransparent"
                     app:icon="@drawable/ic_favorite_unmark"
                     app:iconTint="@color/text_primary"
@@ -199,7 +199,7 @@
                     android:textAllCaps="false"
                     app:iconPadding="@dimen/manga_detail_icon_padding"
                     app:iconGravity="textTop"
-                    app:rippleColor="@color/secondary"
+                    app:rippleColor="@color/ripple_color"
                     app:backgroundTint="@color/on_primary_semitransparent"
                     app:icon="@drawable/ic_clear"
                     app:iconTint="@color/text_primary"
@@ -219,7 +219,7 @@
                     android:textAllCaps="false"
                     app:iconPadding="@dimen/manga_detail_icon_padding"
                     app:iconGravity="textTop"
-                    app:rippleColor="@color/secondary"
+                    app:rippleColor="@color/ripple_color"
                     app:backgroundTint="@color/on_primary_semitransparent"
                     app:icon="@drawable/ic_delete"
                     app:iconTint="@color/text_primary"
