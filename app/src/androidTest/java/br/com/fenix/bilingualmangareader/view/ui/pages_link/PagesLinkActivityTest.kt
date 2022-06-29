@@ -33,6 +33,7 @@ class PagesLinkActivityTest {
 
     // Inform a file test here
     private val filePath = "" // "storage/emulated/0/Manga/Manga of test.cbr"
+    private val filePathLink = filePath
     private val manga: Manga = TestUtils.getManga(ApplicationProvider.getApplicationContext(), filePath)
     private var intent: Intent? = null
 
@@ -70,7 +71,7 @@ class PagesLinkActivityTest {
             val fragment = it.supportFragmentManager.findFragmentById(R.id.root_frame_pages_link) as PagesLinkFragment
 
             val resultData = Intent()
-            resultData.data = filePath.toUri()
+            resultData.data = filePathLink.toUri()
             fragment.onActivityResult(GeneralConsts.REQUEST.OPEN_PAGE_LINK, Activity.RESULT_OK, resultData)
             progress = it.findViewById(R.id.pages_link_loading_progress)
         }
@@ -115,7 +116,7 @@ class PagesLinkActivityTest {
             val fragment = it.supportFragmentManager.findFragmentById(R.id.root_frame_pages_link) as PagesLinkFragment
 
             val resultData = Intent()
-            resultData.data = filePath.toUri()
+            resultData.data = filePathLink.toUri()
             fragment.onActivityResult(GeneralConsts.REQUEST.OPEN_PAGE_LINK, Activity.RESULT_OK, resultData)
         }
 
