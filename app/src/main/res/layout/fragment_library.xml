@@ -9,6 +9,7 @@
     android:clipToPadding="false"
     android:clipChildren="false"
     android:fillViewport="false"
+    android:fitsSystemWindows="true"
     tools:context=".view.ui.library.LibraryFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout

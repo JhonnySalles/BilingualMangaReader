@@ -41,6 +41,7 @@
 
     <color name="transparent">#00000000</color>
     <color name="semi_transparent">#DD000000</color>
+    <color name="toolbar_transparent">#55000000</color>
 
     <color name="translucent_status">#6F000000</color>
 
