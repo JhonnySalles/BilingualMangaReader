@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit
 class PagesLinkActivityTest {
 
     // Inform a file test here
-    private val filePath = "/storage/1D01-1E06/Mangas/Akame ga Kill! - Volume 01.cbr" // "storage/emulated/0/Manga/Manga of test.cbr"
+    private val filePath = "" // "storage/emulated/0/Manga/Manga of test.cbr"
     private val filePathLink = filePath
     private val manga: Manga = TestUtils.getManga(ApplicationProvider.getApplicationContext(), filePath)
     private var intent: Intent? = null
@@ -66,8 +66,6 @@ class PagesLinkActivityTest {
         }
 
         var progress: CircularProgressIndicator? = null
-
-        waiter.await(6000, TimeUnit.SECONDS)
 
         scenario.onActivity {
             val fragment = it.supportFragmentManager.findFragmentById(R.id.root_frame_pages_link) as PagesLinkFragment
