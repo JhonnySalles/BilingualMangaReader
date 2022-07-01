@@ -40,7 +40,7 @@
     <View
         android:id="@+id/manga_detail_title_content"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="300dp"
         android:background="@drawable/main_header_background"/>
 
     <!-- fragment dynamic content -->
