@@ -69,6 +69,10 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
 
     private val onTouchListener = View.OnTouchListener { view, event ->
         mOnFlingDetector.onTouchEvent(event)
+        onMove(view, event)
+    }
+
+    private fun onMove(view: View, event: MotionEvent): Boolean {
         val totalDeltaX = lastX - firstX
         val totalDeltaY = lastY - firstY
 
@@ -102,10 +106,9 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
                     touchConsumedByMove = false
                 }
             }
-            else -> {
-            }
+            else -> { touchConsumedByMove = false }
         }
-        touchConsumedByMove
+        return touchConsumedByMove
     }
 
     private var mResizer: View
@@ -185,18 +188,8 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
             mListPageVocabulary.choiceMode = ListView.CHOICE_MODE_SINGLE
             mListPageVocabulary.isLongClickable = true
             mListPageVocabulary.onItemLongClickListener = OnItemLongClickListener { _, _, index, _ ->
-                if (index >= 0 && mVocabularyItem.size > index) {
-                    val text = mVocabularyItem[index]
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.action_copy) + " $text",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
-                    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    val clip = ClipData.newPlainText("Copied Text", text)
-                    clipboard.setPrimaryClip(clip)
-                }
+                if (index >= 0 && mVocabularyItem.size > index)
+                    makeCopyText(mVocabularyItem[index])
                 true
             }
 
@@ -211,17 +204,7 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
 
             mSubtitleText.setOnLongClickListener {
                 val text = mSubTitleController.textSelected.value?.text ?: ""
-                if (text.isNotEmpty()) {
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.action_copy) + " $text",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
-                    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    val clip = ClipData.newPlainText("Copied Text", text)
-                    clipboard.setPrimaryClip(clip)
-                }
+                makeCopyText(text)
                 true
             }
 
@@ -233,6 +216,11 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
             mOcrScrollContent = this.findViewById(R.id.floating_subtitle_ocr_scroll)
             mOcrKanjiDetail = this.findViewById(R.id.floating_subtitle_ocr_kanji_detail)
 
+            mOcrText.setOnLongClickListener {
+                makeCopyText(mOcrText.text)
+                true
+            }
+
             mOcrListText = this.findViewById(R.id.floating_subtitle_ocr_list)
             mOcrListText.adapter = ArrayAdapter(context, R.layout.list_item_vocabulary_small, mOcrItem)
             mOcrListText.choiceMode = ListView.CHOICE_MODE_SINGLE
@@ -243,18 +231,8 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
             }
 
             mOcrListText.onItemLongClickListener = OnItemLongClickListener { _, _, index, _ ->
-                if (index >= 0 && mOcrItem.size > index) {
-                    val text = mOcrItem[index]
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.action_copy) + " $text",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
-                    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    val clip = ClipData.newPlainText("Copied Text", text)
-                    clipboard.setPrimaryClip(clip)
-                }
+                if (index >= 0 && mOcrItem.size > index)
+                    makeCopyText(mOcrItem[index])
                 true
             }
 
@@ -268,12 +246,15 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
         }
 
         mGestureDetector = GestureDetector(context, ChangeTextTouchListener())
-        mSubtitleText.setOnTouchListener { _, motionEvent ->
+        mSubtitleTitle.setOnTouchListener { view, motionEvent ->
             mGestureDetector.onTouchEvent(motionEvent)
+            onMove(view, motionEvent)
+        }
+        mSubtitleText.setOnTouchListener { view, motionEvent ->
+            mGestureDetector.onTouchEvent(motionEvent)
+            onMove(view, motionEvent)
         }
         mListPageVocabulary.setOnTouchListener { _, motionEvent -> mGestureDetector.onTouchEvent(motionEvent) }
-
-        mSubtitleTitle.setOnTouchListener(onTouchListener)
         mFloatingView.setOnTouchListener(onTouchListener)
 
         val layoutType = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O)
@@ -306,6 +287,7 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
             return super.onFling(e1, e2, velocityX, velocityY)
         }
     }
+
     private lateinit var mRealDisplaySize: Point
     private var minSize = 0
     private fun setResizer() {
@@ -376,6 +358,20 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
 
     }
 
+    private fun makeCopyText(text: CharSequence) {
+        if (text.isNotEmpty()) {
+            Toast.makeText(
+                context,
+                context.getString(R.string.action_copy) + " $text",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("Copied Text", text)
+            clipboard.setPrimaryClip(clip)
+        }
+    }
+
     fun updatePage(page: Page?) {
         if (page != null) {
             if (page.vocabulary != null && page.vocabulary.isNotEmpty()) {
@@ -420,8 +416,7 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
     private var mMinimisedSize = context.resources.getDimension(R.dimen.floating_reader_button_close).toInt()
     private var isExpanded = true
     fun expanded(expand : Boolean = false) {
-        if (expand || isExpanded) {
-            mOriginalHeight = mFloatingView.height
+        if (expand || !isExpanded) {
             if (mOriginalHeight < minSize)
                 mOriginalHeight = minSize
 
@@ -429,13 +424,14 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
             params.height = mOriginalHeight
             mFloatingView.layoutParams = params
             mBtnExpanded.setImageDrawable(mIconRetracted)
-            isExpanded = false
+            isExpanded = true
         } else {
+            mOriginalHeight = mFloatingView.height
             val params = mFloatingView.layoutParams as WindowManager.LayoutParams
             params.height = mMinimisedSize
             mFloatingView.layoutParams = params
             mBtnExpanded.setImageDrawable(mIconExpanded)
-            isExpanded = true
+            isExpanded = false
         }
 
         windowManager?.apply {
