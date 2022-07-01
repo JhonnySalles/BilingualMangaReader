@@ -8,7 +8,6 @@
     android:fitsSystemWindows="true"
     android:clipToPadding="false"
     android:clipChildren="false"
-    android:fillViewport="false"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".MainActivity"
     tools:showIn="@layout/activity_main_bar_menu">
@@ -21,7 +20,6 @@
         android:fitsSystemWindows="true"
         android:clipToPadding="false"
         android:clipChildren="false"
-        android:fillViewport="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

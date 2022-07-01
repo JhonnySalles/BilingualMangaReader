@@ -9,7 +9,7 @@
     android:fitsSystemWindows="true"
     android:clipToPadding="false"
     android:clipChildren="false"
-    android:fillViewport="false"
+    android:theme="@style/AppTheme.NoActionBar"
     tools:context=".MainActivity">
 
     <!-- action bar -->

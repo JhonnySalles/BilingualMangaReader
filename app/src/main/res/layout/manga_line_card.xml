@@ -78,6 +78,7 @@
             android:min="0"
             android:progress="50"
             android:progressBackgroundTint="@color/primary"
-            android:progressTint="@color/secondary" />
+            android:progressTint="@color/secondary"
+            android:transitionName="transition_progress_bar"/>
     </LinearLayout>
 </LinearLayout>

@@ -9,7 +9,7 @@
     android:fitsSystemWindows="true"
     android:clipToPadding="false"
     android:clipChildren="false"
-    android:fillViewport="false"
+    android:theme="@style/AppTheme.NoActionBar"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".view.ui.manga_detail.MangaDetailActivity">
 
@@ -21,7 +21,6 @@
         android:fitsSystemWindows="true"
         android:clipToPadding="false"
         android:clipChildren="false"
-        android:fillViewport="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

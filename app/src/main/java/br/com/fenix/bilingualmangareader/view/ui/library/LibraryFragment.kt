@@ -16,10 +16,7 @@ import android.util.Pair
 import android.view.*
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
-import android.widget.FrameLayout
-import android.widget.SearchView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
@@ -369,12 +366,19 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         else
             R.id.manga_line_text_title
 
+        val idProgress = if (mGridType != LibraryType.LINE)
+            R.id.manga_grid_progress
+        else
+            R.id.manga_line_progress
+
         val title = view.findViewById<TextView>(idText)
+        val progress = view.findViewById<ProgressBar>(idProgress)
         val pImageCover: Pair<View, String> = Pair(view, "transition_manga_cover")
         val pTitleCover: Pair<View, String> = Pair(title, "transition_manga_title")
+        val pProgress: Pair<View, String> = Pair(progress, "transition_progress_bar")
 
         val options = ActivityOptions
-            .makeSceneTransitionAnimation(requireActivity(), *arrayOf(pImageCover, pTitleCover))
+            .makeSceneTransitionAnimation(requireActivity(), *arrayOf(pImageCover, pTitleCover, pProgress))
         requireActivity().overridePendingTransition(R.anim.fade_in_fragment_add_enter, R.anim.fade_out_fragment_remove_exit)
         startActivityForResult(intent, GeneralConsts.MANGA_DETAIL.REQUEST_ENDED, options.toBundle())
     }

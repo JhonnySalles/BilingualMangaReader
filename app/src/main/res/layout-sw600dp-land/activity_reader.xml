@@ -26,6 +26,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/main_toolbar_background"
             android:theme="@style/ToolbarContentTheme" >
+
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar_reader"
                 android:layout_width="match_parent"

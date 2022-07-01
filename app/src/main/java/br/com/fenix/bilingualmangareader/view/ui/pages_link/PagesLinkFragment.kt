@@ -61,6 +61,7 @@ class PagesLinkFragment : Fragment() {
     private lateinit var mRecyclePageNotLink: RecyclerView
     private lateinit var mPageNotLinkContent: ConstraintLayout
     private lateinit var mPageNotLinkIcon: ImageView
+    private lateinit var mContent: LinearLayout
     private lateinit var mFileLink: TextInputLayout
     private lateinit var mFileLinkAutoComplete: AutoCompleteTextView
     private lateinit var mFileLinkLanguage: TextInputLayout
@@ -114,6 +115,7 @@ class PagesLinkFragment : Fragment() {
         mPageNotLinkContent = root.findViewById(R.id.pages_link_content_pages_not_linked)
         mPageNotLinkIcon = root.findViewById(R.id.pages_link_icon_pages_not_linked)
 
+        mContent = root.findViewById(R.id.pages_link_content)
         mFileLink = root.findViewById(R.id.pages_link_file_link_text)
         mFileLinkAutoComplete = root.findViewById(R.id.pages_link_file_link_autocomplete)
         mFileLinkLanguage = root.findViewById(R.id.pages_link_language_combo)
@@ -262,13 +264,13 @@ class PagesLinkFragment : Fragment() {
         }
 
         mFullScreen.setOnClickListener {
-            val visible = mFileLink.visibility == View.GONE
+            val visible = mContent.visibility == View.GONE
 
             if (mHelp.tag.toString().compareTo("not_used", true) != 0)
                 ComponentsUtil.changeAnimateVisibility(mHelp, visible)
 
             ComponentsUtil.changeAnimateVisibility(
-                arrayListOf(mFileLink, mFileLinkLanguage, mSave, mRefresh, mButtonsGroup, mPagesIndex, mToolbar, mMangaName),
+                arrayListOf(mContent, mSave, mRefresh, mButtonsGroup, mToolbar),
                 visible
             )
 

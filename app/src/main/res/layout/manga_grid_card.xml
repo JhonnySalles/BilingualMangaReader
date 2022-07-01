@@ -76,6 +76,7 @@
                 android:layout_height="5dp"
                 android:background="@color/on_primary"
                 android:indeterminateTint="@color/secondary"
+                android:transitionName="transition_progress_bar"
                 android:max="100"
                 android:min="0"
                 android:progressBackgroundTint="@color/on_primary"

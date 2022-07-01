@@ -9,15 +9,13 @@
     android:paddingTop="@dimen/default_navigator_header_margin_top"
     android:clipToPadding="false"
     android:clipChildren="false"
-    android:fillViewport="false"
     tools:context=".view.ui.help.HelpFragment">
 
     <ScrollView
         android:id="@+id/help_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:fillViewport="false">
+        android:clipToPadding="false">
 
         <LinearLayout
             android:layout_width="match_parent"
