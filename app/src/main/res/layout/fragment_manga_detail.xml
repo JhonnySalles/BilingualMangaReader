@@ -156,9 +156,8 @@
                     android:min="0"
                     android:progressBackgroundTint="@color/on_primary"
                     android:progressTint="@color/secondary"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginTop="5dp"  />
+                    android:layout_margin="5dp"
+                    android:transitionName="transition_progress_bar"/>
 
                 <LinearLayout
                     android:id="@+id/manga_detail_buttons"

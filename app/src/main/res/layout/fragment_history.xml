@@ -7,7 +7,6 @@
     android:paddingTop="@dimen/default_navigator_header_margin_top"
     android:clipToPadding="false"
     android:clipChildren="false"
-    android:fillViewport="false"
     tools:context=".view.ui.history.HistoryFragment">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -18,7 +17,6 @@
         android:layout_centerHorizontal="true"
         android:layoutAnimation="@anim/layout_animation_library_line"
         android:clipToPadding="false"
-        android:fillViewport="false"
         android:paddingTop="5dp"
         android:paddingBottom="70dp"/>
 

@@ -60,7 +60,8 @@
     <color name="file_link_buttons">#55000000</color>
     <color name="file_link_buttons_expanded">#AA000000</color>
 
-    <color name="file_link_background">#000000</color>
+    <color name="file_link_line">#000000</color>
+    <color name="file_link_background">#99000000</color>
     <color name="file_link_drag_selected">#79b700</color>
     <color name="file_not_link_drag">#558000</color>
 

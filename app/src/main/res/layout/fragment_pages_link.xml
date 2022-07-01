@@ -7,6 +7,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/on_primary"
+    android:clipToPadding="false"
+    android:clipChildren="false"
     android:fitsSystemWindows="true"
     tools:context=".view.ui.pages_link.PagesLinkFragment">
 
@@ -14,6 +16,8 @@
         android:id="@+id/pages_link_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:clipChildren="false"
         android:layout_margin="@dimen/margin_small">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -43,7 +47,7 @@
             android:gravity="center"
             android:background="@drawable/file_linked_background"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pages_link_name_manga"
+            app:layout_constraintTop_toBottomOf="@+id/pages_link_content"
             app:layout_constraintEnd_toEndOf="parent">
 
             <ImageView
@@ -78,106 +82,119 @@
                 app:layout_constraintHorizontal_bias="0"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/pages_link_file_link_text"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:translationY="-40dp"
+            android:background="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <LinearLayout
+            android:id="@+id/pages_link_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/page_link_file"
-            android:textColorHint="@color/text_primary"
-            android:layout_marginStart="@dimen/page_link_toolbar_size"
-            app:boxBackgroundColor="@color/primary"
-            app:boxStrokeColor="@color/on_secondary"
-            app:startIconTint="@color/on_secondary"
-            app:startIconDrawable="@drawable/ic_file"
-            app:placeholderTextColor="@color/text_primary"
-            app:hintTextColor="@color/on_secondary"
+            android:orientation="vertical"
+            android:background="@color/on_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <AutoCompleteTextView
-                android:id="@+id/pages_link_file_link_autocomplete"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/pages_link_file_link_text"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="none"
-                android:textColor="@color/text_primary" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <LinearLayout
-            android:id="@+id/pages_link_top_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="@dimen/page_link_language_margin"
-            android:gravity="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pages_link_file_link_text">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/pages_link_pages_index"
-                android:layout_width="@dimen/page_link_pages_index"
-                android:layout_height="match_parent"
-                android:textColor="@color/text_primary"
-                android:contentDescription="@string/page_link_page_index"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:insetTop="0dp"
-                android:insetRight="0dp"
-                android:insetBottom="0dp"
-                android:insetLeft="0dp"
-                android:textAllCaps="false"
-                android:padding="0dp"
-                android:layout_marginRight="5dp"
-                app:iconPadding="0dp"
-                app:iconGravity="textStart"
-                app:rippleColor="@color/ripple_color"
-                app:strokeWidth="0dp"
-                app:backgroundTint="@color/primary"
-                app:icon="@drawable/ic_file_link_pages_index"
-                app:iconTint="@color/text_primary"
-                app:iconSize="28dp"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/pages_link_language_combo"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/page_link_file_language"
+                android:hint="@string/page_link_file"
                 android:textColorHint="@color/text_primary"
+                android:layout_marginStart="@dimen/page_link_toolbar_size"
                 app:boxBackgroundColor="@color/primary"
                 app:boxStrokeColor="@color/on_secondary"
-                app:hintTextColor="@color/secondary"
-                app:startIconDrawable="@drawable/ic_translate"
-                app:startIconTint="@color/on_secondary"  >
+                app:startIconTint="@color/on_secondary"
+                app:startIconDrawable="@drawable/ic_file"
+                app:placeholderTextColor="@color/text_primary"
+                app:hintTextColor="@color/on_secondary">
 
                 <AutoCompleteTextView
-                    android:id="@+id/pages_link_language_autocomplete"
+                    android:id="@+id/pages_link_file_link_autocomplete"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:inputType="none"
                     android:textColor="@color/text_primary" />
             </com.google.android.material.textfield.TextInputLayout>
 
-        </LinearLayout>
+            <LinearLayout
+                android:id="@+id/pages_link_top_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/page_link_language_margin"
+                android:gravity="center">
 
-        <TextView
-            android:id="@+id/pages_link_name_manga"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textAppearance="?attr/textAppearanceHeadline6"
-            android:textColor="@color/white"
-            android:textSize="@dimen/page_link_card_page_number_size"
-            android:layout_marginTop="@dimen/page_link_card_page_name_margin"
-            android:background="@color/primary"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pages_link_top_content"/>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/pages_link_pages_index"
+                    android:layout_width="@dimen/page_link_pages_index"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/text_primary"
+                    android:contentDescription="@string/page_link_page_index"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:insetTop="0dp"
+                    android:insetRight="0dp"
+                    android:insetBottom="0dp"
+                    android:insetLeft="0dp"
+                    android:textAllCaps="false"
+                    android:padding="0dp"
+                    android:layout_marginRight="5dp"
+                    app:iconPadding="0dp"
+                    app:iconGravity="textStart"
+                    app:rippleColor="@color/ripple_color"
+                    app:strokeWidth="0dp"
+                    app:backgroundTint="@color/primary"
+                    app:icon="@drawable/ic_file_link_pages_index"
+                    app:iconTint="@color/text_primary"
+                    app:iconSize="28dp"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/pages_link_language_combo"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/page_link_file_language"
+                    android:textColorHint="@color/text_primary"
+                    app:boxBackgroundColor="@color/primary"
+                    app:boxStrokeColor="@color/on_secondary"
+                    app:hintTextColor="@color/secondary"
+                    app:startIconDrawable="@drawable/ic_translate"
+                    app:startIconTint="@color/on_secondary"  >
+
+                    <AutoCompleteTextView
+                        android:id="@+id/pages_link_language_autocomplete"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="none"
+                        android:textColor="@color/text_primary" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/pages_link_name_manga"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textColor="@color/white"
+                android:textSize="@dimen/page_link_card_page_number_size"
+                android:layout_marginTop="@dimen/page_link_card_page_name_margin"
+                android:paddingStart="2dp"
+                android:paddingEnd="2dp"
+                android:background="@color/primary"/>
+        </LinearLayout>
 
         <com.google.android.material.button.MaterialButtonToggleGroup
             android:id="@+id/page_link_buttons_group"
@@ -435,7 +452,7 @@
             app:borderWidth="@dimen/page_link_up_border"
             app:fabCustomSize="@dimen/page_link_up_width"
             app:maxImageSize="@dimen/page_link_up_image_width"
-            app:layout_constraintTop_toBottomOf="@+id/pages_link_top_content"
+            app:layout_constraintTop_toBottomOf="@+id/pages_link_content"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"/>
 
