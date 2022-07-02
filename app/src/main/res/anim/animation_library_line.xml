@@ -4,13 +4,12 @@
     <translate
         android:fromYDelta="100%"
         android:toYDelta="0%"
-        android:duration="400"
-        />
+        android:duration="200"/>
 
     <alpha
         android:fromAlpha="0.0"
         android:toAlpha="1.0"
-        android:duration="400"/>
+        android:duration="200"/>
 
     <scale
         android:pivotX="50%"
@@ -19,7 +18,5 @@
         android:fromYScale="0.5"
         android:toXScale="1"
         android:toYScale="1"
-        android:duration="400"
-
-        />
+        android:duration="200"/>
 </set>
