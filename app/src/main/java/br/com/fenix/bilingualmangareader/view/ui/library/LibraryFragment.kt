@@ -282,10 +282,23 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         mScrollUp.visibility = View.GONE
         mScrollDown.visibility = View.GONE
 
-        mScrollUp.setOnClickListener { mRecycleView.smoothScrollToPosition(0) }
+        mScrollUp.setOnClickListener {
+            setAnimationRecycler(false)
+            mRecycleView.smoothScrollToPosition(0)
+        }
         mScrollDown.setOnClickListener {
+            setAnimationRecycler(false)
             mRecycleView.smoothScrollToPosition((mRecycleView.adapter as RecyclerView.Adapter).itemCount)
         }
+
+        mRecycleView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState != AbsListView.OnScrollListener.SCROLL_STATE_FLING)
+                    setAnimationRecycler(true)
+            }
+        })
+
 
         mRecycleView.setOnScrollChangeListener { _, _, _, _, yOld ->
             if (yOld > 20 && mScrollDown.visibility == View.VISIBLE) {
@@ -445,6 +458,13 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             lineAdapter.attachListener(mListener)
             mRecycleView.layoutAnimation = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_library_line)
         }
+    }
+
+    private fun setAnimationRecycler(isAnimate: Boolean) {
+        if (mGridType != LibraryType.LINE)
+            (mRecycleView.adapter as MangaGridCardAdapter).isAnimation = isAnimate
+        else
+            (mRecycleView.adapter as MangaLineCardAdapter).isAnimation = isAnimate
     }
 
     private fun updateList(list: MutableList<Manga>) {
