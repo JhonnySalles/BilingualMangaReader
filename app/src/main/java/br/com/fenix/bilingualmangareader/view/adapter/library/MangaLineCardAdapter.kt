@@ -17,10 +17,12 @@ class MangaLineCardAdapter : RecyclerView.Adapter<LineViewHolder>(), Filterable 
     private lateinit var mListener: MangaCardListener
     private var mMangaList: MutableList<Manga> = mutableListOf()
     private var mMangaListFull: MutableList<Manga> = mutableListOf()
+    var isAnimation: Boolean = true
 
     override fun onBindViewHolder(holder: LineViewHolder, position: Int) {
         holder.bind(mMangaList[position])
-        holder.itemView.animation = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.animation_library_line)
+        if (isAnimation)
+            holder.itemView.animation = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.animation_library_line)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LineViewHolder {
