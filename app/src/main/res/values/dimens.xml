@@ -42,6 +42,16 @@
     <dimen name="manga_detail_icon_rounded">10dp</dimen>
     <dimen name="manga_detail_icon_padding">10dp</dimen>
 
+    <dimen name="manga_detail_information_title_size">14sp</dimen>
+    <dimen name="manga_detail_information_synopsis_size">12sp</dimen>
+    <dimen name="manga_detail_information_texts_size">10sp</dimen>
+    <dimen name="manga_detail_information_origin_size">8sp</dimen>
+    <dimen name="manga_detail_information_related_image_max_size">200dp</dimen>
+    <dimen name="manga_detail_information_related_image_size">100dp</dimen>
+    <dimen name="manga_detail_information_related_title_size">14sp</dimen>
+    <dimen name="manga_detail_information_related_synopsis_size">12sp</dimen>
+    <dimen name="manga_detail_information_related_texts_size">10sp</dimen>
+
     <dimen name="manga_page_link_layout_width">200dp</dimen>
     <dimen name="manga_page_link_layout_height">250dp</dimen>
     <dimen name="manga_page_link_number_size">12sp</dimen>

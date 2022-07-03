@@ -80,6 +80,9 @@ dependencies {
     implementation 'cz.adaptech:tesseract4android:4.1.1'
     implementation 'com.google.android.gms:play-services-mlkit-text-recognition:18.0.0'
 
+    // MANGA INFO
+    implementation 'com.kttdevelopment:mal4j:2.8.1'
+
     // TEST
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation "androidx.test:core:1.4.0"
