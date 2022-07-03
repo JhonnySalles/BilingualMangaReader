@@ -50,23 +50,23 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun remove(manga: Manga) {
-        if (mListMangas.value != null) {
+        if (mListMangasFull.value != null) {
             mListMangas.value!!.remove(manga)
             mListMangasFull.value!!.remove(manga)
         }
     }
 
     fun remove(position: Int) {
-        if (mListMangas.value != null) {
-            mListMangas.value!!.removeAt(position)
-            mListMangasFull.value!!.removeAt(position)
+        if (mListMangasFull.value != null) {
+            val manga = mListMangas.value!!.removeAt(position)
+            mListMangasFull.value!!.remove(manga)
         }
     }
 
     fun update(list: List<Manga>) {
         if (list.isNotEmpty()) {
             for (manga in list) {
-                if (!mListMangas.value!!.contains(manga)) {
+                if (!mListMangasFull.value!!.contains(manga)) {
                     mListMangas.value!!.add(manga)
                     mListMangasFull.value!!.add(manga)
                 }
@@ -79,8 +79,9 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         val list = mMangaRepository.list() ?: return indexes
         if (list.isNotEmpty()) {
             for (manga in list) {
-                if (!mListMangas.value!!.contains(manga)) {
+                if (!mListMangasFull.value!!.contains(manga)) {
                     mListMangas.value!!.add(manga)
+                    mListMangasFull.value!!.add(manga)
                     indexes.add(mListMangas.value!!.size - 1)
                 }
             }
@@ -94,7 +95,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         val list = mMangaRepository.listDeleted() ?: return indexes
         if (list.isNotEmpty()) {
             for (manga in list) {
-                if (mListMangas.value!!.contains(manga)) {
+                if (mListMangasFull.value!!.contains(manga)) {
                     indexes.add(mListMangas.value!!.indexOf(manga))
                     mListMangas.value!!.remove(manga)
                     mListMangasFull.value!!.remove(manga)
@@ -112,7 +113,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
 
     fun addList(manga: Manga): Int {
         var index = -1
-        if (!mListMangas.value!!.contains(manga)) {
+        if (!mListMangasFull.value!!.contains(manga)) {
             index = mListMangas.value!!.size
             mListMangas.value!!.add(manga)
             mListMangasFull.value!!.add(manga)
@@ -124,7 +125,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
     fun remList(manga: Manga): Int {
         var index = -1
 
-        if (mListMangas.value!!.contains(manga)) {
+        if (mListMangasFull.value!!.contains(manga)) {
             index = mListMangas.value!!.indexOf(manga)
             mListMangas.value!!.remove(manga)
             mListMangasFull.value!!.remove(manga)
@@ -135,16 +136,16 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
 
     fun updateList(refreshComplete: (Boolean) -> (Unit)) {
         var change = false
-        if (mListMangas.value != null && mListMangas.value!!.isNotEmpty()) {
+        if (mListMangasFull.value != null && mListMangasFull.value!!.isNotEmpty()) {
             val list = mMangaRepository.listRecentChange()
             if (list != null && list.isNotEmpty()) {
                 change = true
                 for (manga in list) {
-                    if (mListMangas.value!!.contains(manga)) {
-                        val index = mListMangas.value!!.indexOf(manga)
-                        mListMangas.value!![index].bookMark = manga.bookMark
-                        mListMangas.value!![index].favorite = manga.favorite
-                        mListMangas.value!![index].lastAccess = manga.lastAccess
+                    if (mListMangasFull.value!!.contains(manga)) {
+                        val index = mListMangasFull.value!!.indexOf(manga)
+                        mListMangasFull.value!![index].bookMark = manga.bookMark
+                        mListMangasFull.value!![index].favorite = manga.favorite
+                        mListMangasFull.value!![index].lastAccess = manga.lastAccess
                     } else {
                         mListMangas.value!!.add(manga)
                         mListMangasFull.value!!.add(manga)
@@ -170,7 +171,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
     fun list(refreshComplete: (Boolean) -> (Unit)) {
         val list = mMangaRepository.list()
         if (list != null) {
-            if (mListMangas.value == null || mListMangas.value!!.isEmpty()) {
+            if (mListMangasFull.value == null || mListMangasFull.value!!.isEmpty()) {
                 mListMangas.value = list.toMutableList()
                 mListMangasFull.value = list.toMutableList()
             } else
