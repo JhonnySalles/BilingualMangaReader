@@ -39,6 +39,11 @@ class MangaLineCardAdapter : RecyclerView.Adapter<LineViewHolder>(), Filterable 
         return mMangaList.size
     }
 
+    fun removeList(manga: Manga) {
+        mMangaList.remove(manga)
+        mMangaListFull.remove(manga)
+    }
+
     fun updateList(list: MutableList<Manga>) {
         mMangaList = list
         mMangaListFull = list.toMutableList()
