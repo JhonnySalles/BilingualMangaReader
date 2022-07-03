@@ -191,22 +191,22 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         if (mListMangas.value == null) 0 else mListMangas.value!!.size - 1
 
     fun sorted(order: Order) {
-        when (order) {
+        mListMangas.value = when (order) {
             Order.Date -> {
-                mListMangas.value!!.sortBy { it.dateCreate }
                 mListMangasFull.value!!.sortBy { it.dateCreate }
+                mListMangas.value!!.sortedBy { it.dateCreate }.toMutableList()
             }
             Order.LastAccess -> {
-                mListMangas.value!!.sortWith(compareByDescending<Manga> { it.lastAccess }.thenBy { it.name })
                 mListMangasFull.value!!.sortWith(compareByDescending<Manga> { it.lastAccess }.thenBy { it.name })
+                mListMangas.value!!.sortedWith(compareByDescending<Manga> { it.lastAccess }.thenBy { it.name }).toMutableList()
             }
             Order.Favorite -> {
-                mListMangas.value!!.sortWith(compareByDescending<Manga> { it.favorite }.thenBy { it.name })
                 mListMangasFull.value!!.sortWith(compareByDescending<Manga> { it.favorite }.thenBy { it.name })
+                mListMangas.value!!.sortedWith(compareByDescending<Manga> { it.favorite }.thenBy { it.name }).toMutableList()
             }
             else -> {
-                mListMangas.value!!.sortBy { it.name }
                 mListMangasFull.value!!.sortBy { it.name }
+                mListMangas.value!!.sortedBy { it.name }.toMutableList()
             }
         }
     }
