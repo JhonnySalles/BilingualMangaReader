@@ -467,6 +467,13 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             (mRecycleView.adapter as MangaLineCardAdapter).isAnimation = isAnimate
     }
 
+    private fun removeList(manga: Manga) {
+        if (mGridType != LibraryType.LINE)
+            (mRecycleView.adapter as MangaGridCardAdapter).removeList(manga)
+        else
+            (mRecycleView.adapter as MangaLineCardAdapter).removeList(manga)
+    }
+
     private fun updateList(list: MutableList<Manga>) {
         if (mGridType != LibraryType.LINE)
             (mRecycleView.adapter as MangaGridCardAdapter).updateList(list)
@@ -558,6 +565,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private fun deleteFile(manga: Manga?) {
         if (manga?.file != null) {
             mViewModel.delete(manga)
+            removeList(manga)
             if (manga.file.exists()) {
                 val isDeleted = manga.file.delete()
                 mLOGGER.info("File deleted ${manga.name}: $isDeleted")

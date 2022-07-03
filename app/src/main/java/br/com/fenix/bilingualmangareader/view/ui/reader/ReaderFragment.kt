@@ -307,7 +307,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         mPageNavTextView = mPageNavLayout.findViewById<View>(R.id.nav_reader_title) as TextView
         mViewPager = view.findViewById<View>(R.id.fragment_reader) as PageViewPager
         mViewPager.adapter = mPagerAdapter
-        mViewPager.offscreenPageLimit = 4
+        mViewPager.offscreenPageLimit = 6
         mViewPager.setOnTouchListener(this)
         mViewPager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
             override fun onPageSelected(position: Int) {
