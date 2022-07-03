@@ -15,6 +15,7 @@ import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import com.kttdevelopment.mal4j.manga.MangaPreview
 import java.io.File
+import java.time.LocalDateTime
 
 class MangaDetailViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -108,6 +109,7 @@ class MangaDetailViewModel(application: Application) : AndroidViewModel(applicat
 
     fun save(manga: Manga?) {
         manga ?: return
+        manga.lastAccess = LocalDateTime.now()
 
         if (manga.id == 0L)
             manga.id = mMangaRepository.save(manga)
