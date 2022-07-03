@@ -1,20 +1,36 @@
 package br.com.fenix.bilingualmangareader.view.ui.manga_detail
 
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.substring
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.bilingualmangareader.R
+import br.com.fenix.bilingualmangareader.model.entity.Information
 import br.com.fenix.bilingualmangareader.model.entity.Manga
+import br.com.fenix.bilingualmangareader.service.controller.ImageController
 import br.com.fenix.bilingualmangareader.service.controller.ImageCoverController
+import br.com.fenix.bilingualmangareader.service.listener.InformationCardListener
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import br.com.fenix.bilingualmangareader.util.helpers.Util
+import br.com.fenix.bilingualmangareader.util.secrets.Secrets
+import br.com.fenix.bilingualmangareader.view.adapter.manga_detail.InformationRelatedCardAdapter
 import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity
 import com.google.android.material.button.MaterialButton
+import com.kttdevelopment.mal4j.MyAnimeList
+import com.kttdevelopment.mal4j.manga.MangaPreview
+import kotlinx.coroutines.*
 import org.slf4j.LoggerFactory
 
 
@@ -42,6 +58,21 @@ class MangaDetailFragment(private var mManga: Manga?) : Fragment() {
     private lateinit var mSubtitlesContent: LinearLayout
     private lateinit var mSubtitlesList: ListView
 
+    private lateinit var mInformationContent: LinearLayout
+    private lateinit var mInformationImage: ImageView
+    private lateinit var mInformationSynopsis: TextView
+    private lateinit var mInformationAlternativeTitles: TextView
+    private lateinit var mInformationStatus: TextView
+    private lateinit var mInformationPublish: TextView
+    private lateinit var mInformationVolumes: TextView
+    private lateinit var mInformationAuthors: TextView
+    private lateinit var mInformationGenres: TextView
+    private lateinit var mInformationOrigin: TextView
+    private lateinit var mRelatedContent: LinearLayout
+    private lateinit var mRelatedRelatedList: RecyclerView
+    private lateinit var mRelatedOrigin: TextView
+    private lateinit var mListener: InformationCardListener
+
     private var mSubtitles: MutableList<String> = mutableListOf()
     private var mChapters: MutableList<String> = mutableListOf()
     private var mFileLinks: MutableList<String> = mutableListOf()
@@ -67,6 +98,20 @@ class MangaDetailFragment(private var mManga: Manga?) : Fragment() {
         mSubtitlesContent = root.findViewById(R.id.manga_detail_subtitle_content)
         mSubtitlesList = root.findViewById(R.id.manga_detail_subtitles_list)
 
+        mInformationContent = root.findViewById(R.id.manga_detail_information)
+        mInformationImage = root.findViewById(R.id.manga_detail_information_image)
+        mInformationSynopsis = root.findViewById(R.id.manga_detail_information_synopsis)
+        mInformationAlternativeTitles = root.findViewById(R.id.manga_detail_information_alternative_titles)
+        mInformationStatus = root.findViewById(R.id.manga_detail_information_status)
+        mInformationPublish = root.findViewById(R.id.manga_detail_information_publish)
+        mInformationVolumes = root.findViewById(R.id.manga_detail_information_volumes_chapters)
+        mInformationAuthors = root.findViewById(R.id.manga_detail_information_author)
+        mInformationGenres = root.findViewById(R.id.manga_detail_information_genres)
+        mInformationOrigin = root.findViewById(R.id.manga_detail_information_origin)
+        mRelatedContent = root.findViewById(R.id.manga_detail_information_relations)
+        mRelatedRelatedList = root.findViewById(R.id.manga_detail_relations_lists)
+        mRelatedOrigin = root.findViewById(R.id.manga_detail_relations_origin)
+
         mDeleteButton.setOnClickListener { deleteFile() }
         mFavoriteButton.setOnClickListener { favorite() }
         mClearHistoryButton.setOnClickListener { clearHistory() }
@@ -74,6 +119,9 @@ class MangaDetailFragment(private var mManga: Manga?) : Fragment() {
         mSubtitlesList.adapter = ArrayAdapter(requireContext(), R.layout.list_item_all_text, mSubtitles)
         mFileLinksList.adapter = ArrayAdapter(requireContext(), R.layout.list_item_all_text, mFileLinks)
         mChaptersList.adapter = ArrayAdapter(requireContext(), R.layout.list_item_all_text, mChapters)
+
+        mRelatedRelatedList.adapter = InformationRelatedCardAdapter()
+        mRelatedRelatedList.layoutManager = LinearLayoutManager(requireContext())
 
         mChaptersList.setOnItemClickListener { _, _, index, _ ->
             if (mManga != null && index >= 0 && mChapters.size > index) {
@@ -91,12 +139,32 @@ class MangaDetailFragment(private var mManga: Manga?) : Fragment() {
             }
         }
 
+        mInformationContent.setOnLongClickListener {
+            if (mViewModel.information.value != null)
+                openUrl(mViewModel.information.value!!.link)
+            true
+        }
+
+        mListener = object : InformationCardListener {
+            override fun onClickLong(url: String) {
+                openUrl(url)
+            }
+        }
+
+        (mRelatedRelatedList.adapter as InformationRelatedCardAdapter).attachListener(mListener)
+
         observer()
 
         if (mManga != null)
             mViewModel.setManga(mManga!!)
 
         return root
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        getInformation()
     }
 
     private fun observer() {
@@ -169,6 +237,94 @@ class MangaDetailFragment(private var mManga: Manga?) : Fragment() {
                 View.GONE
         }
 
+        mViewModel.information.observe(viewLifecycleOwner) {
+            if (it != null) {
+                mInformationContent.visibility = View.VISIBLE
+                mInformationSynopsis.text = it.synopsis.replace("\\n", "\n")
+
+                mInformationImage.visibility = View.GONE
+                mInformationImage.setImageBitmap(null)
+
+                if (it.imageLink != null)
+                    ImageController.instance.setImageAsync(requireContext(), it.imageLink!!, mInformationImage)
+
+                mInformationAlternativeTitles.text = Html.fromHtml(Util.setBold(requireContext().getString(R.string.manga_detail_information_alternative_titles)) + " " + it.alternativeTitles)
+                mInformationStatus.text = Html.fromHtml(Util.setBold(requireContext().getString(R.string.manga_detail_information_status)) + " " + it.status)
+                mInformationPublish.text = Html.fromHtml(
+                    Util.setBold(requireContext().getString(R.string.manga_detail_information_publish)) + " " + Util.formatterDate(
+                        requireContext(),
+                        it.startDate
+                    ) + " " + requireContext().getString(R.string.manga_detail_information_publish_to) + " " + Util.formatterDate(
+                        requireContext(),
+                        it.endDate
+                    )
+                )
+                mInformationVolumes.text = Html.fromHtml(
+                    Util.setBold(requireContext().getString(R.string.manga_detail_information_volumes)) + " " + it.volumes + ", " + Util.setBold(
+                        requireContext().getString(R.string.manga_detail_information_chapters)
+                    ) + " " + it.chapters
+                )
+                mInformationAuthors.text = Html.fromHtml(Util.setBold(requireContext().getString(R.string.manga_detail_information_authors)) + " " + it.authors)
+                mInformationGenres.text = Html.fromHtml(Util.setBold(requireContext().getString(R.string.manga_detail_information_genre)) + " " + it.genres)
+                mInformationOrigin.text = it.origin
+            } else {
+                mInformationContent.visibility = View.GONE
+                mInformationImage.visibility = View.GONE
+
+                mInformationSynopsis.text = ""
+                mInformationAlternativeTitles.text = ""
+                mInformationStatus.text = ""
+                mInformationPublish.text = ""
+                mInformationVolumes.text = ""
+                mInformationAuthors.text = ""
+                mInformationGenres.text = ""
+                mInformationOrigin.text = ""
+            }
+        }
+
+        mViewModel.informationRelations.observe(viewLifecycleOwner) {
+            mRelatedContent.visibility = if (it != null && it.isNotEmpty()) View.VISIBLE else View.GONE
+            updateRelatedList(it)
+        }
+
+    }
+
+    private fun getInformation() {
+        //MyAnimeList does not run on older versions
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O)
+            return
+
+        var name = mViewModel.manga.value?.title ?: ""
+
+        if (name.isNotEmpty()) {
+            name = Util.getNameFromMangaTitle(name).replace(" ", "%")
+
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    var search: List<MangaPreview>? = null
+                    val deferred = async {
+                        try {
+                            val mal: MyAnimeList = MyAnimeList.withClientID(Secrets.getSecrets(requireContext()).getAnimeListClientId())
+                            search = mal.manga
+                                .withQuery(name)
+                                .includeNSFW(false)
+                                .search()
+
+                        } catch (e: Exception) {
+                            mLOGGER.error("Error to search manga info", e)
+                        }
+                    }
+                    deferred.await()
+                    withContext(Dispatchers.Main) {
+                        if (!search.isNullOrEmpty())
+                            mViewModel.setInformation(search!!)
+                    }
+                } catch (e: Exception) {
+                    mLOGGER.error("Error to load manga info", e)
+                }
+            }
+        }
+
     }
 
     private fun deleteFile() {
@@ -203,6 +359,22 @@ class MangaDetailFragment(private var mManga: Manga?) : Fragment() {
         val manga = mViewModel.manga.value ?: return
         manga.favorite = !manga.favorite
         mViewModel.save(manga)
+    }
+
+    private fun updateRelatedList(list: MutableList<Information>?) {
+        (mRelatedRelatedList.adapter as InformationRelatedCardAdapter).updateList(list)
+        mRelatedOrigin.text = if (list.isNullOrEmpty()) "" else list[0].origin
+    }
+
+    private fun openUrl(url: String) {
+        if (url.isEmpty()) return
+
+        startActivity(
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse(url)
+            )
+        )
     }
 
 }

@@ -183,11 +183,11 @@ class ImageCoverController private constructor() {
                     if (image != null)
                         imageView.setImageBitmap(image)
                 }
-            } catch (e: Exception) {
-                mLOGGER.error("Error to load image async", e)
             } catch (m: OutOfMemoryError) {
                 System.gc()
                 mLOGGER.error("Memory full, cleaning", m)
+            } catch (e: Exception) {
+                mLOGGER.error("Error to load image async", e)
             }
         }
     }
@@ -211,11 +211,11 @@ class ImageCoverController private constructor() {
                             imageView.setImageBitmap(image)
                     }
                 }
-            } catch (e: Exception) {
-                mLOGGER.error("Error to load image array async", e)
             } catch (m: OutOfMemoryError) {
                 System.gc()
                 mLOGGER.error("Memory full, cleaning", m)
+            } catch (e: Exception) {
+                mLOGGER.error("Error to load image array async", e)
             }
         }
     }

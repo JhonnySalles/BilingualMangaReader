@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import br.com.fenix.bilingualmangareader.model.entity.FileLink
+import br.com.fenix.bilingualmangareader.model.entity.Information
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.service.parses.ParseFactory
 import br.com.fenix.bilingualmangareader.service.parses.RarParse
@@ -12,6 +13,7 @@ import br.com.fenix.bilingualmangareader.service.repository.FileLinkRepository
 import br.com.fenix.bilingualmangareader.service.repository.MangaRepository
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
+import com.kttdevelopment.mal4j.manga.MangaPreview
 import java.io.File
 
 class MangaDetailViewModel(application: Application) : AndroidViewModel(application) {
@@ -34,9 +36,17 @@ class MangaDetailViewModel(application: Application) : AndroidViewModel(applicat
     private var mListSubtitles = MutableLiveData<MutableList<String>>(mutableListOf())
     val listSubtitles: LiveData<MutableList<String>> = mListSubtitles
 
+    private var mInformation = MutableLiveData<Information>(null)
+    val information: LiveData<Information> = mInformation
+
+    private var mInformationRelations = MutableLiveData<MutableList<Information>>(mutableListOf())
+    val informationRelations: LiveData<MutableList<Information>> = mInformationRelations
+
     fun setManga(manga: Manga) {
         mManga.value = manga
         mListFileLinks.value = mFileLinkRepository.findAllByManga(manga.id!!)?.toMutableList()
+        mInformation.value = null
+        mInformationRelations.value = mutableListOf()
 
         val parse = ParseFactory.create(manga.file) ?: return
         try {
@@ -52,6 +62,32 @@ class MangaDetailViewModel(application: Application) : AndroidViewModel(applicat
         } finally {
             Util.destroyParse(parse)
         }
+    }
+
+
+    private val PATTERN = Regex("[^\\w\\s]")
+    fun setInformation(mangas: List<MangaPreview>) {
+        var information: Information? = null
+        val name = Util.getNameFromMangaTitle(mManga.value?.title ?: "").replace(PATTERN, "")
+        val manga = mangas.find {
+            it.title.replace(PATTERN, "").trim().equals(name, true) ||
+                    it.alternativeTitles.japanese.trim().equals(name, true) ||
+                    it.alternativeTitles.english.trim().equals(name, true) ||
+                    it.alternativeTitles.synonyms.any { sy -> sy.trim().equals(name, true) }
+        }
+
+        if (manga != null)
+            information = Information(manga)
+
+        mInformation.value = information
+
+        val relations: MutableList<Information> = mutableListOf()
+        for (aux in mangas) {
+            if (aux != manga)
+                relations.add(Information(aux))
+        }
+
+        mInformationRelations.value = relations
     }
 
     fun getPage(folder: String): Int {
