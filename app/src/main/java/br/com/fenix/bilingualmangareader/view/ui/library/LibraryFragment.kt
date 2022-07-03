@@ -102,11 +102,8 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         onChangeIconLayout()
     }
 
-    private fun filter(newText: String?) {
-        if (mGridType != LibraryType.LINE)
-            (mRecycleView.adapter as MangaGridCardAdapter).filter.filter(newText)
-        else
-            (mRecycleView.adapter as MangaLineCardAdapter).filter.filter(newText)
+    private fun filter(text: String?) {
+        mViewModel.filter.filter(text)
     }
 
     override fun onResume() {
@@ -119,7 +116,9 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         if (mViewModel.isEmpty())
             onRefresh()
         else
-            mViewModel.updateList { if (it) sortList(mViewModel.listMangas.value!!) }
+            mViewModel.updateList { if (it) sortList() }
+
+        setIsRefreshing(false)
     }
 
     override fun onStop() {
@@ -138,7 +137,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     if (obj as Boolean) {
                         mViewModel.updateListAdd()
                         if (!mViewModel.isEmpty())
-                            sortList(mViewModel.listMangas.value!!)
+                            sortList()
                     }
                 }
             }
@@ -200,18 +199,12 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         }
 
         if (mViewModel.listMangas.value != null)
-            sortList(mViewModel.listMangas.value!!)
+            sortList()
 
     }
 
-    private fun sortList(list: MutableList<Manga>) {
-        val sorted = when (mOrderBy) {
-            Order.Date -> list.sortedBy { it.dateCreate }
-            Order.LastAccess -> list.sortedWith(compareByDescending<Manga> { it.lastAccess }.thenBy { it.name })
-            Order.Favorite -> list.sortedWith(compareByDescending<Manga> { it.favorite }.thenBy { it.name })
-            else -> list.sortedBy { it.name }
-        }
-        mViewModel.sorted(sorted.toMutableList())
+    private fun sortList() {
+        mViewModel.sorted(mOrderBy)
     }
 
     private fun onChangeLayout() {
@@ -349,7 +342,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         observer()
         mViewModel.list {
             if (it)
-                sortList(mViewModel.listMangas.value!!)
+                sortList()
         }
 
         if (!Storage.isPermissionGranted(requireContext()))
@@ -513,7 +506,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     override fun onRefresh() {
-        mViewModel.updateList { if (it) sortList(mViewModel.listMangas.value!!) }
+        mViewModel.updateList { if (it) sortList() }
 
         if (mHandler.hasCallbacks(mDismissUpButton))
             mHandler.removeCallbacks(mDismissUpButton)

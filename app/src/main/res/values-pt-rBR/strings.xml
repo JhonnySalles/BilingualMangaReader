@@ -178,6 +178,7 @@
     <!-- MANGA DETAIL -->
     <string name="manga_detail_favorite">Favorito</string>
     <string name="manga_detail_clear_history">Limpar histórico</string>
+    <string name="manga_detail_mark_read">Marcar lido</string>
     <string name="manga_detail_delete">Deletar</string>
     <string name="manga_detail_chapters_title">Capítulos</string>
     <string name="manga_detail_subtitles_title">Legendas</string>

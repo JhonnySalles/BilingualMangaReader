@@ -179,6 +179,7 @@
     <!-- MANGA DETAIL -->
     <string name="manga_detail_favorite">Favorite</string>
     <string name="manga_detail_clear_history">Clear history</string>
+    <string name="manga_detail_mark_read">Mark as read</string>
     <string name="manga_detail_delete">Delete</string>
     <string name="manga_detail_chapters_title">Chapters</string>
     <string name="manga_detail_subtitles_title">Subtitles</string>

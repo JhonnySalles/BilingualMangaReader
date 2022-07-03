@@ -50,6 +50,7 @@ class MangaDetailFragment(private var mManga: Manga?) : Fragment() {
     private lateinit var mProgress: ProgressBar
     private lateinit var mButtonsContent: LinearLayout
     private lateinit var mFavoriteButton: MaterialButton
+    private lateinit var mMakReadButton: MaterialButton
     private lateinit var mClearHistoryButton: MaterialButton
     private lateinit var mDeleteButton: MaterialButton
     private lateinit var mChaptersList: ListView
@@ -91,6 +92,7 @@ class MangaDetailFragment(private var mManga: Manga?) : Fragment() {
         mButtonsContent = root.findViewById(R.id.manga_detail_buttons)
         mFavoriteButton = root.findViewById(R.id.manga_detail_button_favorite)
         mClearHistoryButton = root.findViewById(R.id.manga_detail_button_clear_history)
+        mMakReadButton = root.findViewById(R.id.manga_detail_button_mark_read)
         mDeleteButton = root.findViewById(R.id.manga_detail_button_delete)
         mChaptersList = root.findViewById(R.id.manga_detail_chapters_list)
         mFileLinkContent = root.findViewById(R.id.manga_detail_files_link_detail)
@@ -112,6 +114,7 @@ class MangaDetailFragment(private var mManga: Manga?) : Fragment() {
         mRelatedRelatedList = root.findViewById(R.id.manga_detail_relations_lists)
         mRelatedOrigin = root.findViewById(R.id.manga_detail_relations_origin)
 
+        mMakReadButton.setOnClickListener { markRead() }
         mDeleteButton.setOnClickListener { deleteFile() }
         mFavoriteButton.setOnClickListener { favorite() }
         mClearHistoryButton.setOnClickListener { clearHistory() }
@@ -352,6 +355,12 @@ class MangaDetailFragment(private var mManga: Manga?) : Fragment() {
         val manga = mViewModel.manga.value ?: return
         manga.lastAccess = null
         manga.bookMark = 0
+        mViewModel.save(manga)
+    }
+
+    private fun markRead() {
+        val manga = mViewModel.manga.value ?: return
+        manga.bookMark = manga.pages
         mViewModel.save(manga)
     }
 
