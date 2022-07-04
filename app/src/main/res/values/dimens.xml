@@ -33,8 +33,10 @@
 
     <dimen name="manga_detail_card_layout_width">150dp</dimen>
     <dimen name="manga_detail_card_layout_height">200dp</dimen>
+    <dimen name="manga_detail_card_layout_width_tablet">200dp</dimen>
+    <dimen name="manga_detail_card_layout_height_tablet">250dp</dimen>
     <dimen name="manga_detail_title_size">30sp</dimen>
-    <dimen name="manga_detail_folder_size">16sp</dimen>
+    <dimen name="manga_detail_folder_size">14sp</dimen>
     <dimen name="manga_detail_last_access">12sp</dimen>
     <dimen name="manga_detail_book_mark">12sp</dimen>
     <dimen name="manga_detail_deleted">10sp</dimen>

@@ -50,8 +50,8 @@
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/manga_detail_card"
-                    android:layout_width="@dimen/manga_detail_card_layout_width"
-                    android:layout_height="@dimen/manga_detail_card_layout_height"
+                    android:layout_width="@dimen/manga_detail_card_layout_width_tablet"
+                    android:layout_height="@dimen/manga_detail_card_layout_height_tablet"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     app:rippleColor="@color/ripple_color">

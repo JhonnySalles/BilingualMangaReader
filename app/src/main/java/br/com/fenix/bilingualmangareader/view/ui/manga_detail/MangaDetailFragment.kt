@@ -176,7 +176,8 @@ class MangaDetailFragment(private var mManga: Manga?) : Fragment() {
                 ImageCoverController.instance.setImageCoverAsync(requireContext(), it, arrayListOf(mBackgroundImage, mImage), false)
                 mTitle.text = it.name
                 mFolder.text = it.path
-                mBookMark.text = "${it.bookMark} / ${it.pages}"
+                val folder = mViewModel.getChapterFolder(it.bookMark)
+                mBookMark.text = "${it.bookMark} / ${it.pages}" + if (folder.isNotEmpty()) " - $folder" else ""
                 mLastAccess.text = if (it.lastAccess == null) "" else GeneralConsts.formatterDate(requireContext(), it.lastAccess!!)
                 mProgress.max = it.pages
                 mProgress.setProgress(it.bookMark, false)
@@ -217,6 +218,10 @@ class MangaDetailFragment(private var mManga: Manga?) : Fragment() {
             mChapters.clear()
             mChapters.addAll(it)
             (mChaptersList.adapter as ArrayAdapter<*>).notifyDataSetChanged()
+
+            val manga = mViewModel.manga.value
+            if (manga != null)
+                mBookMark.text = "${manga.bookMark} / ${manga.pages} - " + mViewModel.getChapterFolder(manga.bookMark)
         }
 
         mViewModel.listSubtitles.observe(viewLifecycleOwner) {

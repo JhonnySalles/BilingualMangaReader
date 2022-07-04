@@ -92,7 +92,7 @@ class MangaDetailViewModel(application: Application) : AndroidViewModel(applicat
     }
 
     fun getPage(folder: String): Int {
-        return mPaths[folder] ?: mManga.value?.bookMark ?: 0
+        return mPaths[folder]?.plus(1) ?: mManga.value?.bookMark ?: 1
     }
 
     fun clear() {
@@ -117,6 +117,17 @@ class MangaDetailViewModel(application: Application) : AndroidViewModel(applicat
             mMangaRepository.update(manga)
 
         mManga.value = manga
+    }
+
+    fun getChapterFolder(chapter: Int): String {
+        var folder = ""
+        if (mPaths.isNotEmpty())
+            for (path in mPaths) {
+                if (chapter >= path.value) {
+                    folder = path.key
+                }
+            }
+        return folder
     }
 
 }

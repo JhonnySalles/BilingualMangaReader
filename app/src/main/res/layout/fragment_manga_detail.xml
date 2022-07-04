@@ -43,7 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/manga_detail_content_background"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:paddingLeft="5dp"
                 android:paddingTop="100dp"
                 android:paddingRight="5dp"
@@ -52,31 +52,30 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent">
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/manga_detail_card"
-                    android:layout_width="@dimen/manga_detail_card_layout_width"
-                    android:layout_height="@dimen/manga_detail_card_layout_height"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    app:rippleColor="@color/ripple_color">
-
-                    <ImageView
-                        android:id="@+id/manga_detail_manga_image"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:adjustViewBounds="true"
-                        android:background="@color/primary_variant"
-                        android:scaleType="centerCrop"
-                        android:transitionName="transition_manga_cover"/>
-
-                </com.google.android.material.card.MaterialCardView>
-
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_gravity="center"
-                    android:gravity="center_vertical">
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/manga_detail_card"
+                        android:layout_width="@dimen/manga_detail_card_layout_width"
+                        android:layout_height="@dimen/manga_detail_card_layout_height"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        app:rippleColor="@color/ripple_color">
+
+                        <ImageView
+                            android:id="@+id/manga_detail_manga_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:adjustViewBounds="true"
+                            android:background="@color/primary_variant"
+                            android:scaleType="centerCrop"
+                            android:transitionName="transition_manga_cover"/>
+
+                    </com.google.android.material.card.MaterialCardView>
+
 
                     <TextView
                         android:id="@+id/manga_detail_title"
@@ -87,7 +86,16 @@
                         android:textAppearance="?attr/textAppearanceHeadline6"
                         android:textColor="@color/text_primary"
                         android:textSize="@dimen/manga_detail_title_size"
-                        android:transitionName="transition_manga_title"/>
+                        android:transitionName="transition_manga_title"
+                        android:layout_gravity="bottom"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_gravity="center"
+                    android:gravity="center_vertical">
 
                     <TextView
                         android:id="@+id/manga_detail_folder"
@@ -135,6 +143,7 @@
                         android:visibility="gone"/>
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/manga_detail_information_root"
                 android:layout_width="match_parent"
