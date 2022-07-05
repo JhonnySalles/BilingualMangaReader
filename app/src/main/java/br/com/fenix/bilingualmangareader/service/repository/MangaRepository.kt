@@ -4,6 +4,7 @@ import android.content.Context
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
+import java.util.*
 
 class MangaRepository(context: Context) {
 
@@ -11,35 +12,35 @@ class MangaRepository(context: Context) {
     private var mDataBase = DataBase.getDataBase(context).getMangaDao()
 
     fun save(obj: Manga): Long {
-        obj.lastAlteration = LocalDateTime.now()
+        obj.lastAlteration = Date()
         return mDataBase.save(obj)
     }
 
     fun update(obj: Manga) {
-        obj.lastAlteration = LocalDateTime.now()
+        obj.lastAlteration = Date()
         mDataBase.update(obj)
     }
 
     fun updateBookMark(obj: Manga) {
-        obj.lastAlteration = LocalDateTime.now()
+        obj.lastAlteration = Date()
         if (obj.id != null)
             mDataBase.updateBookMark(obj.id!!, obj.bookMark)
     }
 
     fun updateLastAcess(obj: Manga) {
-        obj.lastAlteration = LocalDateTime.now()
+        obj.lastAlteration = Date()
         if (obj.id != null)
             mDataBase.update(obj)
     }
 
     fun delete(obj: Manga) {
-        obj.lastAlteration = LocalDateTime.now()
+        obj.lastAlteration = Date()
         if (obj.id != null)
             mDataBase.delete(obj.id!!)
     }
 
     fun deletePermanent(obj: Manga) {
-        obj.lastAlteration = LocalDateTime.now()
+        obj.lastAlteration = Date()
         if (obj.id != null)
             mDataBase.delete(obj)
     }
@@ -92,8 +93,8 @@ class MangaRepository(context: Context) {
     fun markRead(obj: Manga?) {
         try {
             if (obj != null) {
-                obj.lastAlteration = LocalDateTime.now()
-                obj.lastAccess = LocalDateTime.now()
+                obj.lastAlteration = Date()
+                obj.lastAccess = Date()
                 obj.bookMark = obj.pages
                 if (obj.id != null)
                     mDataBase.update(obj)
@@ -106,7 +107,7 @@ class MangaRepository(context: Context) {
     fun clearHistory(obj: Manga?) {
         try {
             if (obj != null) {
-                obj.lastAlteration = LocalDateTime.now()
+                obj.lastAlteration = Date()
                 obj.lastAccess = null
                 obj.bookMark = 0
                 obj.favorite = false

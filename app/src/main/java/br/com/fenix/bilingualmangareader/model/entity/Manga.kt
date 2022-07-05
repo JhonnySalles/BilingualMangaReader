@@ -16,8 +16,8 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
         id: Long?, title: String, subTitle: String,
         path: String, folder: String, name: String, type: String,
         pages: Int, bookMark: Int, favorite: Boolean,
-        dateCreate: LocalDateTime?, lastAccess: LocalDateTime?,
-        lastAlteration : LocalDateTime?, sort: LocalDateTime? = null
+        dateCreate: Date?, lastAccess: Date?,
+        lastAlteration : Date?, sort: Date? = null
     ) : this(id, title, subTitle, path, folder, name, type, pages) {
         this.bookMark = bookMark
         this.favorite = favorite
@@ -31,8 +31,8 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
         id: Long?, title: String, subTitle: String,
         path: String, folder: String, name: String, type: String,
         pages: Int, bookMark: Int, favorite: Boolean,
-        dateCreate: LocalDateTime?, lastAccess: LocalDateTime?,
-        lastAlteration: LocalDateTime?, excluded: Boolean = false
+        dateCreate: Date?, lastAccess: Date?,
+        lastAlteration: Date?, excluded: Boolean = false
     ) : this(id, title, subTitle, path, folder, name, type, pages) {
         this.bookMark = bookMark
         this.favorite = favorite
@@ -86,7 +86,7 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
     var lastAccess: Date? = null
 
     @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.LAST_ALTERATION)
-    var lastAlteration: LocalDateTime? = LocalDateTime.now()
+    var lastAlteration: Date? = Date()
 
     @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.EXCLUDED)
     var excluded: Boolean = false

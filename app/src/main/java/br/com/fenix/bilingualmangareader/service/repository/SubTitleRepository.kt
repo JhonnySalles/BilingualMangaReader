@@ -3,7 +3,7 @@ package br.com.fenix.bilingualmangareader.service.repository
 import android.content.Context
 import br.com.fenix.bilingualmangareader.model.entity.SubTitle
 import org.slf4j.LoggerFactory
-import java.time.LocalDateTime
+import java.util.*
 
 class SubTitleRepository(context: Context) {
 
@@ -12,7 +12,7 @@ class SubTitleRepository(context: Context) {
 
     fun save(obj: SubTitle): Long {
         deleteAll(obj.id_manga)
-        obj.lastAlteration = LocalDateTime.now()
+        obj.lastAlteration = Date()
         return mDataBase.save(obj)
     }
 

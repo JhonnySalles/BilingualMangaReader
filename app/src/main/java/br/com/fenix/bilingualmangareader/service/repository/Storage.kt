@@ -58,17 +58,17 @@ class Storage(context: Context) {
     fun listDeleted(): List<Manga>? = mRepository.listDeleted()
 
     fun delete(manga: Manga) {
-        manga.lastAlteration = LocalDateTime.now()
+        manga.lastAlteration = Date()
         mRepository.delete(manga)
     }
 
     fun updateBookMark(manga: Manga) {
-        manga.lastAlteration = LocalDateTime.now()
+        manga.lastAlteration = Date()
         mRepository.updateBookMark(manga)
     }
 
     fun save(manga: Manga): Long {
-        manga.lastAlteration = LocalDateTime.now()
+        manga.lastAlteration = Date()
         return if (manga.id != null) {
             mRepository.update(manga)
             manga.id!!
@@ -121,8 +121,8 @@ class Storage(context: Context) {
     }
 
     fun updateLastAccess(manga: Manga) {
-        manga.lastAlteration = LocalDateTime.now()
-        manga.lastAccess = LocalDateTime.now()
+        manga.lastAlteration = Date()
+        manga.lastAccess = Date()
         mRepository.updateLastAcess(manga)
     }
 }
