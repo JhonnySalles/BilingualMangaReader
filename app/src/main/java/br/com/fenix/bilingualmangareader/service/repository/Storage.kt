@@ -20,15 +20,31 @@ class Storage(context: Context) {
     private val mRepository = MangaRepository(context)
 
     fun getPrevManga(manga: Manga): Manga? {
-        val mangas: List<Manga>? = mRepository.findByFileFolder(manga.file.parent ?: "")
-        val idx = mangas!!.indexOf(manga)
-        return if (idx > 0) mangas[idx - 1] else null
+        var mangas = mRepository.findByFileFolder(manga.file.parent ?: "")
+        var idx = mangas!!.indexOf(manga)
+        var prev = if (idx > 0) mangas[idx - 1] else null
+
+        if (prev == null) {
+            mangas = mRepository.listOrderByTitle()
+            idx = mangas!!.indexOf(manga)
+            prev = if (idx > 0) mangas[idx - 1] else null
+        }
+
+        return prev
     }
 
     fun getNextManga(manga: Manga): Manga? {
-        val mangas: List<Manga>? = mRepository.findByFileFolder(manga.file.parent ?: "")
-        val idx = mangas!!.indexOf(manga)
-        return if (idx != mangas.size - 1) mangas[idx + 1] else null
+        var mangas = mRepository.findByFileFolder(manga.file.parent ?: "")
+        var idx = mangas!!.indexOf(manga)
+        var next = if (idx != mangas.size - 1) mangas[idx + 1] else null
+
+        if (next == null) {
+            mangas = mRepository.listOrderByTitle()
+            idx = mangas!!.indexOf(manga)
+            next = if (idx != mangas.size - 1) mangas[idx + 1] else null
+        }
+
+        return next
     }
 
     fun get(idManga: Long): Manga? =
@@ -41,13 +57,18 @@ class Storage(context: Context) {
 
     fun listDeleted(): List<Manga>? = mRepository.listDeleted()
 
-    fun delete(manga: Manga) = mRepository.delete(manga)
+    fun delete(manga: Manga) {
+        manga.lastAlteration = LocalDateTime.now()
+        mRepository.delete(manga)
+    }
 
     fun updateBookMark(manga: Manga) {
+        manga.lastAlteration = LocalDateTime.now()
         mRepository.updateBookMark(manga)
     }
 
     fun save(manga: Manga): Long {
+        manga.lastAlteration = LocalDateTime.now()
         return if (manga.id != null) {
             mRepository.update(manga)
             manga.id!!
@@ -100,7 +121,8 @@ class Storage(context: Context) {
     }
 
     fun updateLastAccess(manga: Manga) {
-        manga.lastAccess = Date()
+        manga.lastAlteration = LocalDateTime.now()
+        manga.lastAccess = LocalDateTime.now()
         mRepository.updateLastAcess(manga)
     }
 }

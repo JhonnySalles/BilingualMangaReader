@@ -45,7 +45,8 @@ class MangaDetailViewModel(application: Application) : AndroidViewModel(applicat
 
     fun setManga(manga: Manga) {
         mManga.value = manga
-        mListFileLinks.value = mFileLinkRepository.findAllByManga(manga.id!!)?.toMutableList()
+
+        mListFileLinks.value = if (manga.id != null) mFileLinkRepository.findAllByManga(manga.id!!)?.toMutableList() else mutableListOf()
         mInformation.value = null
         mInformationRelations.value = mutableListOf()
 
@@ -109,14 +110,20 @@ class MangaDetailViewModel(application: Application) : AndroidViewModel(applicat
 
     fun save(manga: Manga?) {
         manga ?: return
-        manga.lastAccess = Date()
-
-        if (manga.id == 0L)
-            manga.id = mMangaRepository.save(manga)
-        else
-            mMangaRepository.update(manga)
-
+        mMangaRepository.update(manga)
         mManga.value = manga
+    }
+
+    fun markRead() {
+        mManga.value ?: return
+        mMangaRepository.markRead(mManga.value)
+        mManga.value = mManga.value
+    }
+
+    fun clearHistory() {
+        mManga.value ?: return
+        mMangaRepository.clearHistory(mManga.value)
+        mManga.value = mManga.value
     }
 
     fun getChapterFolder(chapter: Int): String {

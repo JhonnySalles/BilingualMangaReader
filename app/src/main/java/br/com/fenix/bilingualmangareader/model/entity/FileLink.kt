@@ -12,28 +12,46 @@ import java.util.*
     tableName = DataBaseConsts.FILELINK.TABLE_NAME,
     indices = [Index(value = [DataBaseConsts.FILELINK.COLUMNS.FK_ID_MANGA, DataBaseConsts.FILELINK.COLUMNS.FILE_NAME])]
 )
-class FileLink(id: Long?, idManga: Long, pages: Int, path: String, name: String, type: String, folder: String,
-               language: Languages, dateCreate: Date?, lastAccess: Date?) : Serializable {
+class FileLink(
+    id: Long?, idManga: Long, pages: Int, path: String, name: String, type: String, folder: String,
+    language: Languages, dateCreate: LocalDateTime?, lastAccess: LocalDateTime?, lastAlteration: LocalDateTime?
+) : Serializable {
 
     constructor(
         id: Long?, idManga: Long, pages: Int, path: String, name: String, type: String, folder: String, language: Languages
-    ) : this(id, idManga, pages, path, name, type, folder, language, Date(), Date())
+    ) : this(id, idManga, pages, path, name, type, folder, language, LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now())
 
     constructor(
         manga: Manga, parseManga: Parse?, pages: Int, path: String, name: String, type: String, folder: String
-    ) : this(null, manga.id!!, pages, path, name, type, folder, Languages.PORTUGUESE, Date(), Date()) {
+    ) : this(
+        null,
+        manga.id!!,
+        pages,
+        path,
+        name,
+        type,
+        folder,
+        Languages.PORTUGUESE,
+        LocalDateTime.now(),
+        LocalDateTime.now(),
+        LocalDateTime.now()
+    ) {
         this.manga = manga
         this.parseManga = parseManga
     }
 
-    constructor( manga: Manga, parseManga: Parse? ) : this(null, manga.id!!, 0, "", "", "", "", Languages.PORTUGUESE,
-        Date(), Date()) {
+    constructor(manga: Manga, parseManga: Parse?) : this(
+        null, manga.id!!, 0, "", "", "", "", Languages.PORTUGUESE,
+        LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now()
+    ) {
         this.manga = manga
         this.parseManga = parseManga
     }
 
-    constructor( manga: Manga ) : this(null, manga.id!!, 0, "", "", "", "", Languages.PORTUGUESE,
-        Date(), Date()) {
+    constructor(manga: Manga) : this(
+        null, manga.id!!, 0, "", "", "", "", Languages.PORTUGUESE,
+        LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now()
+    ) {
         this.manga = manga
     }
 
@@ -65,6 +83,9 @@ class FileLink(id: Long?, idManga: Long, pages: Int, path: String, name: String,
 
     @ColumnInfo(name = DataBaseConsts.FILELINK.COLUMNS.LAST_ACCESS)
     var lastAccess: Date? = lastAccess
+
+    @ColumnInfo(name = DataBaseConsts.FILELINK.COLUMNS.LAST_ALTERATION)
+    var lastAlteration: LocalDateTime? = lastAlteration
 
     @ColumnInfo(name = DataBaseConsts.FILELINK.COLUMNS.LANGUAGE)
     var language: Languages = language
@@ -119,9 +140,9 @@ class FileLink(id: Long?, idManga: Long, pages: Int, path: String, name: String,
         return result
     }
 
-    fun addManga(manga : Manga) {
-        idManga = manga.id?: 0
-        lastAccess = Date()
+    fun addManga(manga: Manga) {
+        idManga = manga.id ?: 0
+        lastAccess = LocalDateTime.now()
         this.manga = manga
     }
 

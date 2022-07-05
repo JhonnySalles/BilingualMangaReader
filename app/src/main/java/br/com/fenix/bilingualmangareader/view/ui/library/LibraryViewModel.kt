@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import br.com.fenix.bilingualmangareader.model.entity.Manga
+import br.com.fenix.bilingualmangareader.model.enums.ListMod
 import br.com.fenix.bilingualmangareader.model.enums.Order
 import br.com.fenix.bilingualmangareader.service.repository.MangaRepository
 import java.util.*
@@ -74,38 +75,6 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    fun updateListAdd(): ArrayList<Int> {
-        val indexes = arrayListOf<Int>()
-        val list = mMangaRepository.list() ?: return indexes
-        if (list.isNotEmpty()) {
-            for (manga in list) {
-                if (!mListMangasFull.value!!.contains(manga)) {
-                    mListMangas.value!!.add(manga)
-                    mListMangasFull.value!!.add(manga)
-                    indexes.add(mListMangas.value!!.size - 1)
-                }
-            }
-        }
-
-        return indexes
-    }
-
-    fun updateListRem(): ArrayList<Int> {
-        val indexes = arrayListOf<Int>()
-        val list = mMangaRepository.listDeleted() ?: return indexes
-        if (list.isNotEmpty()) {
-            for (manga in list) {
-                if (mListMangasFull.value!!.contains(manga)) {
-                    indexes.add(mListMangas.value!!.indexOf(manga))
-                    mListMangas.value!!.remove(manga)
-                    mListMangasFull.value!!.remove(manga)
-                }
-            }
-        }
-
-        return indexes
-    }
-
     fun setList(list: ArrayList<Manga>) {
         mListMangas.value = list
         mListMangasFull.value = list.toMutableList()
@@ -134,38 +103,57 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         return index
     }
 
-    fun updateList(refreshComplete: (Boolean) -> (Unit)) {
+    fun updateList(refreshComplete: (Boolean, indexes: MutableList<Pair<ListMod, Int>>) -> (Unit)) {
         var change = false
+        val indexes = mutableListOf<Pair<ListMod, Int>>()
         if (mListMangasFull.value != null && mListMangasFull.value!!.isNotEmpty()) {
             val list = mMangaRepository.listRecentChange()
             if (list != null && list.isNotEmpty()) {
                 change = true
                 for (manga in list) {
                     if (mListMangasFull.value!!.contains(manga)) {
-                        val index = mListMangasFull.value!!.indexOf(manga)
-                        mListMangasFull.value!![index].bookMark = manga.bookMark
-                        mListMangasFull.value!![index].favorite = manga.favorite
-                        mListMangasFull.value!![index].lastAccess = manga.lastAccess
+                        val alter = mListMangasFull.value!![mListMangasFull.value!!.indexOf(manga)]
+                        alter.bookMark = manga.bookMark
+                        alter.favorite = manga.favorite
+                        alter.lastAccess = manga.lastAccess
+                        val index = mListMangas.value!!.indexOf(manga)
+                        if (index > -1)
+                            indexes.add(Pair(ListMod.MOD, index))
                     } else {
                         mListMangas.value!!.add(manga)
                         mListMangasFull.value!!.add(manga)
+                        indexes.add(Pair(ListMod.ADD, mListMangas.value!!.size -1))
+                    }
+                }
+            }
+            val listDel = mMangaRepository.listRecentDeleted()
+            if (listDel != null && listDel.isNotEmpty()) {
+                change = true
+                for (manga in listDel) {
+                    if (mListMangasFull.value!!.contains(manga)) {
+                        val index = mListMangas.value!!.indexOf(manga)
+                        mListMangas.value!!.remove(manga)
+                        mListMangasFull.value!!.remove(manga)
+                        indexes.add(Pair(ListMod.REM, index))
                     }
                 }
             }
         } else {
             val list = mMangaRepository.list()
             if (list != null) {
+                indexes.add(Pair(ListMod.FULL, list.size-1))
                 mListMangas.value = list.toMutableList()
                 mListMangasFull.value = list.toMutableList()
             } else {
                 mListMangas.value = mutableListOf()
                 mListMangasFull.value = mutableListOf()
+                indexes.add(Pair(ListMod.FULL, 0))
             }
 
             change = true
         }
 
-        refreshComplete(change)
+        refreshComplete(change, indexes)
     }
 
     fun list(refreshComplete: (Boolean) -> (Unit)) {
@@ -195,18 +183,22 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
             Order.Date -> {
                 mListMangas.value!!.sortBy { it.dateCreate }
                 mListMangasFull.value!!.sortBy { it.dateCreate }
+                mListMangas.value!!.sortBy { it.dateCreate }
             }
             Order.LastAccess -> {
                 mListMangas.value!!.sortWith(compareByDescending<Manga> { it.lastAccess }.thenBy { it.name })
                 mListMangasFull.value!!.sortWith(compareByDescending<Manga> { it.lastAccess }.thenBy { it.name })
+                mListMangas.value!!.sortWith(compareByDescending<Manga> { it.lastAccess }.thenBy { it.name })
             }
             Order.Favorite -> {
                 mListMangas.value!!.sortWith(compareByDescending<Manga> { it.favorite }.thenBy { it.name })
                 mListMangasFull.value!!.sortWith(compareByDescending<Manga> { it.favorite }.thenBy { it.name })
+                mListMangas.value!!.sortWith(compareByDescending<Manga> { it.favorite }.thenBy { it.name })
             }
             else -> {
                 mListMangas.value!!.sortBy { it.name }
                 mListMangasFull.value!!.sortBy { it.name }
+                mListMangas.value!!.sortBy { it.name }
             }
         }
     }

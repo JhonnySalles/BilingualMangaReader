@@ -29,6 +29,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.enums.LibraryType
+import br.com.fenix.bilingualmangareader.model.enums.ListMod
 import br.com.fenix.bilingualmangareader.model.enums.Order
 import br.com.fenix.bilingualmangareader.service.listener.MangaCardListener
 import br.com.fenix.bilingualmangareader.service.repository.Storage
@@ -116,7 +117,10 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         if (mViewModel.isEmpty())
             onRefresh()
         else
-            mViewModel.updateList { if (it) sortList() }
+            mViewModel.updateList { change, indexes ->
+                if (change)
+                    notifyDataSet(indexes)
+            }
 
         setIsRefreshing(false)
     }
@@ -135,12 +139,27 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATE_FINISHED -> {
                     setIsRefreshing(false)
                     if (obj as Boolean) {
-                        mViewModel.updateListAdd()
-                        if (!mViewModel.isEmpty())
-                            sortList()
+                        mViewModel.updateList { change, _ ->
+                            if (change)
+                                sortList()
+                        }
                     }
                 }
             }
+        }
+    }
+
+    private fun notifyDataSet(indexes: MutableList<kotlin.Pair<ListMod, Int>>) {
+        if (indexes.any { it.first == ListMod.FULL })
+            notifyDataSet(0, (mViewModel.listMangas.value?.size ?: 2) - 1)
+        else {
+            for (index in indexes)
+                when (index.first) {
+                    ListMod.ADD -> notifyDataSet(index.second, insert = true)
+                    ListMod.REM -> notifyDataSet(index.second, removed = true)
+                    ListMod.MOD -> notifyDataSet(index.second)
+                    else -> notifyDataSet(index.second)
+                }
         }
     }
 
@@ -205,6 +224,8 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun sortList() {
         mViewModel.sorted(mOrderBy)
+        val range = (mViewModel.listMangas.value?.size ?: 2) - 1
+        notifyDataSet(0, range)
     }
 
     private fun onChangeLayout() {
@@ -506,7 +527,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     override fun onRefresh() {
-        mViewModel.updateList { if (it) sortList() }
+        mViewModel.updateList { change, _ -> if (change) sortList() }
 
         if (mHandler.hasCallbacks(mDismissUpButton))
             mHandler.removeCallbacks(mDismissUpButton)
