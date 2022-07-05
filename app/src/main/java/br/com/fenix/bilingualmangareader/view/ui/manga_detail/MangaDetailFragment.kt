@@ -358,16 +358,11 @@ class MangaDetailFragment(private var mManga: Manga?) : Fragment() {
     }
 
     private fun clearHistory() {
-        val manga = mViewModel.manga.value ?: return
-        manga.lastAccess = LocalDateTime.MIN
-        manga.bookMark = 0
-        mViewModel.save(manga)
+        mViewModel.clearHistory()
     }
 
     private fun markRead() {
-        val manga = mViewModel.manga.value ?: return
-        manga.bookMark = manga.pages
-        mViewModel.save(manga)
+        mViewModel.markRead()
     }
 
     private fun favorite() {

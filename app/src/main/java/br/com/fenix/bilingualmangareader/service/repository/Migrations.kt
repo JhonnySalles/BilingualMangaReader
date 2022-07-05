@@ -131,5 +131,18 @@ class Migrations {
                 mLOGGER.info("Completed migration 6 - 7.")
             }
         }
+
+        // Migration version 8.
+        val MIGRATION_7_8 = object : Migration(7, 8) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                mLOGGER.info("Start migration 7 - 8...")
+
+                database.execSQL("ALTER TABLE " + DataBaseConsts.MANGA.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.MANGA.COLUMNS.LAST_ALTERATION + " TEXT")
+                database.execSQL("ALTER TABLE " + DataBaseConsts.FILELINK.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.FILELINK.COLUMNS.LAST_ALTERATION + " TEXT")
+                database.execSQL("ALTER TABLE " + DataBaseConsts.SUBTITLES.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.SUBTITLES.COLUMNS.LAST_ALTERATION + " TEXT")
+
+                mLOGGER.info("Completed migration 7 - 8.")
+            }
+        }
     }
 }

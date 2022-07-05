@@ -17,12 +17,13 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
         path: String, folder: String, name: String, type: String,
         pages: Int, bookMark: Int, favorite: Boolean,
         dateCreate: LocalDateTime?, lastAccess: LocalDateTime?,
-        sort: LocalDateTime? = null
+        lastAlteration : LocalDateTime?, sort: LocalDateTime? = null
     ) : this(id, title, subTitle, path, folder, name, type, pages) {
         this.bookMark = bookMark
         this.favorite = favorite
         this.dateCreate = dateCreate
         this.lastAccess = lastAccess
+        this.lastAccess = lastAlteration
         this.sort = sort
     }
 
@@ -31,12 +32,13 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
         path: String, folder: String, name: String, type: String,
         pages: Int, bookMark: Int, favorite: Boolean,
         dateCreate: LocalDateTime?, lastAccess: LocalDateTime?,
-        excluded: Boolean = false
+        lastAlteration: LocalDateTime?, excluded: Boolean = false
     ) : this(id, title, subTitle, path, folder, name, type, pages) {
         this.bookMark = bookMark
         this.favorite = favorite
         this.dateCreate = dateCreate
         this.lastAccess = lastAccess
+        this.lastAlteration = lastAlteration
         this.excluded = excluded
     }
 
@@ -82,6 +84,9 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
 
     @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS)
     var lastAccess: LocalDateTime? = null
+
+    @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.LAST_ALTERATION)
+    var lastAlteration: LocalDateTime? = LocalDateTime.now()
 
     @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.EXCLUDED)
     var excluded: Boolean = false
