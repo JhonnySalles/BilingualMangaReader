@@ -18,7 +18,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.setPadding
-import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -291,7 +290,7 @@ class PagesLinkFragment : Fragment() {
                 mAutoReorderPages = false
                 val pageLink = if (origin == Pages.NOT_LINKED) mViewModel.getPageNotLink(page) else mViewModel.getPageLink(page)
                 val item = ClipData.Item(pageLink)
-                val name = if (origin == Pages.DUAL_PAGE) page.fileRightLinkPageName else page.fileLinkPageName
+                val name = if (origin == Pages.DUAL_PAGE) page.fileLinkRightPageName else page.fileLinkLeftPageName
                 val dragData = ClipData(position.toString(), arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN), item)
                 dragData.addItem(ClipData.Item(origin.name))
                 dragData.addItem(ClipData.Item(name))
