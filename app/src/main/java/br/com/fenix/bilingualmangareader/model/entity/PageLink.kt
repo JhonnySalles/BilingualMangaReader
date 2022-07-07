@@ -259,21 +259,21 @@ class PageLink(
         this.isFileRightDualPage = another.isFileRightDualPage
     }
 
-    fun addLeftFileLinkImage(another: PageLink) {
-        this.addLeftFileLinkImage(
+    fun addLeftPageLink(another: PageLink) {
+        this.addLeftPageLink(
             another.fileLinkPage, another.fileLinkPages, another.fileLinkPageName,
             another.fileLinkPagePath, another.isFileLeftDualPage, another.imageLeftFileLinkPage
         )
     }
 
-    fun addLeftFromRightFileLinkImage(another: PageLink) {
-        this.addLeftFileLinkImage(
+    fun addLeftFromRightPageLink(another: PageLink) {
+        this.addLeftPageLink(
             another.fileRightLinkPage, another.fileLinkPages, another.fileRightLinkPageName,
             another.fileRightLinkPagePath, another.isFileRightDualPage, another.imageRightFileLinkPage
         )
     }
 
-    fun addLeftFileLinkImage(page: Int, pages: Int, pageName: String, pagePath: String, isFileLeftDualPage: Boolean, image: Bitmap?) {
+    fun addLeftPageLink(page: Int, pages: Int, pageName: String, pagePath: String, isFileLeftDualPage: Boolean, image: Bitmap?) {
         this.fileLinkPage = page
         this.fileLinkPages = pages
         this.fileLinkPageName = pageName
@@ -282,21 +282,21 @@ class PageLink(
         this.isFileLeftDualPage = isFileLeftDualPage
     }
 
-    fun addRightFromLeftFileLinkImage(another: PageLink) {
-        this.addRightFileLinkImage(
+    fun addRightFromLeftPageLink(another: PageLink) {
+        this.addRightPageLink(
             another.fileLinkPage, another.fileLinkPageName, another.fileLinkPagePath,
             another.isFileLeftDualPage, another.imageLeftFileLinkPage
         )
     }
 
-    fun addRightFileLinkImage(another: PageLink) {
-        this.addRightFileLinkImage(
+    fun addRightPageLink(another: PageLink) {
+        this.addRightPageLink(
             another.fileRightLinkPage, another.fileRightLinkPageName, another.fileRightLinkPagePath,
             another.isFileRightDualPage, another.imageRightFileLinkPage
         )
     }
 
-    fun addRightFileLinkImage(page: Int, pageName: String, pagePath: String, isFileRightDualPage: Boolean, image: Bitmap?) {
+    fun addRightPageLink(page: Int, pageName: String, pagePath: String, isFileRightDualPage: Boolean, image: Bitmap?) {
         if (this.fileLinkPage == PageLinkConsts.VALUES.PAGE_EMPTY) {
             this.fileLinkPage = page
             this.fileLinkPageName = pageName
@@ -313,16 +313,16 @@ class PageLink(
         this.dualImage = this.fileRightLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY
     }
 
-    fun moveFileLinkRightToLeft() {
+    fun movePageLinkRightToLeft() {
         this.fileLinkPage = this.fileRightLinkPage
         this.fileLinkPageName = this.fileRightLinkPageName
         this.fileLinkPagePath = this.fileRightLinkPagePath
         this.imageLeftFileLinkPage = this.imageRightFileLinkPage
         this.isFileLeftDualPage = this.isFileRightDualPage
-        this.clearRightFileLink()
+        this.clearRightPageLink()
     }
 
-    fun clearFileLink() {
+    fun clearPageLink() {
         this.fileLinkPage = PageLinkConsts.VALUES.PAGE_EMPTY
         this.fileLinkPages = 0
         this.fileLinkPageName = ""
@@ -338,14 +338,14 @@ class PageLink(
         this.dualImage = false
     }
 
-    fun clearLeftFileLink(canMoved: Boolean = false): Boolean {
+    fun clearLeftPageLink(canMoved: Boolean = false): Boolean {
         val moved = if (canMoved && this.fileRightLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY) {
             this.fileLinkPage = this.fileRightLinkPage
             this.fileLinkPageName = this.fileRightLinkPageName
             this.fileLinkPagePath = this.fileRightLinkPagePath
             this.imageLeftFileLinkPage = this.imageRightFileLinkPage
             this.isFileLeftDualPage = this.isFileRightDualPage
-            this.clearRightFileLink()
+            this.clearRightPageLink()
             true
         } else {
             this.fileLinkPage = PageLinkConsts.VALUES.PAGE_EMPTY
@@ -359,7 +359,7 @@ class PageLink(
         return moved
     }
 
-    fun clearRightFileLink() {
+    fun clearRightPageLink() {
         this.fileRightLinkPage = PageLinkConsts.VALUES.PAGE_EMPTY
         this.fileRightLinkPageName = ""
         this.fileRightLinkPagePath = ""
