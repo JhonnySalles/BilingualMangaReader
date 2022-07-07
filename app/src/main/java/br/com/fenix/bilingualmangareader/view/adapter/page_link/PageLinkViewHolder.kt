@@ -95,11 +95,11 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
             mangaProgress.visibility = if (page.mangaPage != PageLinkConsts.VALUES.PAGE_EMPTY) View.VISIBLE else View.GONE
         }
 
-        pageNumber.text = if (page.fileLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY) page.fileLinkPage.toString() else ""
-        pageName.text = if (mUsePagePath && page.fileLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY)
-            page.fileLinkPagePath + "\\" + page.fileLinkPageName
+        pageNumber.text = if (page.fileLinkLeftPage != PageLinkConsts.VALUES.PAGE_EMPTY) page.fileLinkLeftPage.toString() else ""
+        pageName.text = if (mUsePagePath && page.fileLinkLeftPage != PageLinkConsts.VALUES.PAGE_EMPTY)
+            page.fileLinkLeftPagePath + "\\" + page.fileLinkLeftPageName
         else
-            page.fileLinkPageName
+            page.fileLinkLeftPageName
 
         if (page.imageLeftFileLinkPage != null) {
             pageImage.setImageBitmap(page.imageLeftFileLinkPage)
@@ -108,19 +108,19 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
             pageRoot.setOnLongClickListener { listener.onClickLong(it, page, Pages.LINKED, position) }
         } else {
             pageImage.visibility = View.GONE
-            pageProgress.visibility = if (page.fileLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY) View.VISIBLE else View.GONE
+            pageProgress.visibility = if (page.fileLinkLeftPage != PageLinkConsts.VALUES.PAGE_EMPTY) View.VISIBLE else View.GONE
             pageRoot.setOnLongClickListener(null)
         }
 
-        dualPageNumber.text = if (page.fileRightLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY) page.fileRightLinkPage.toString() else ""
+        dualPageNumber.text = if (page.fileLinkRightPage != PageLinkConsts.VALUES.PAGE_EMPTY) page.fileLinkRightPage.toString() else ""
         dualPageRoot.layoutParams.width = mPageLinkCardWidthInDual
 
-        dualPageName.text = if (mUsePagePath && page.fileRightLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY)
-            page.fileRightLinkPagePath + "\\" + page.fileRightLinkPageName
+        dualPageName.text = if (mUsePagePath && page.fileLinkRightPage != PageLinkConsts.VALUES.PAGE_EMPTY)
+            page.fileLinkRightPagePath + "\\" + page.fileLinkRightPageName
         else
-            page.fileRightLinkPageName
+            page.fileLinkRightPageName
 
-        if (page.dualImage) {
+        if (page.isDualImage) {
             pageRoot.layoutParams.width = mPageLinkCardWidthInDual
             dualPageRoot.visibility = View.VISIBLE
             dualPageImage.setImageBitmap(page.imageRightFileLinkPage)
@@ -131,7 +131,7 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
                 dualProgress.visibility = View.GONE
             } else {
                 dualPageImage.visibility = View.GONE
-                dualProgress.visibility = if (page.fileRightLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY) View.VISIBLE else View.GONE
+                dualProgress.visibility = if (page.fileLinkRightPage != PageLinkConsts.VALUES.PAGE_EMPTY) View.VISIBLE else View.GONE
             }
         } else {
             pageRoot.layoutParams.width = mPageLinkCardWidth
@@ -239,7 +239,7 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
                 DragEvent.ACTION_DRAG_EXITED -> {
                     setSelectedPageLink(page, pageRoot, dualPageRoot, isClear = true, isDualPageDrop = true)
                     pageRoot.layoutParams.width = mPageLinkCardWidth
-                    if (!page.dualImage) dualPageRoot.visibility = View.GONE
+                    if (!page.isDualImage) dualPageRoot.visibility = View.GONE
                     true
                 }
 
@@ -267,9 +267,9 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
 
     private fun setSelectedPageLink(page: PageLink, pageRoot: MaterialCardView, dualPageRoot: MaterialCardView, itemPosition: Int = -1,
                                     dragPosition : Int = 0, isClear: Boolean = false, isDualPageDrop: Boolean = false) {
-        if(isClear || (itemPosition != -1 && itemPosition.compareTo(dragPosition) == 0 && !page.dualImage && page.fileLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY)) {
+        if(isClear || (itemPosition != -1 && itemPosition.compareTo(dragPosition) == 0 && !page.isDualImage && page.fileLinkLeftPage != PageLinkConsts.VALUES.PAGE_EMPTY)) {
             dualPageRoot.strokeWidth = 0
-            pageRoot.layoutParams.width = if (page.dualImage)
+            pageRoot.layoutParams.width = if (page.isDualImage)
                 mPageLinkCardWidthInDual
             else {
                 dualPageRoot.visibility = View.GONE
@@ -279,10 +279,10 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
             if(isDualPageDrop)
                 dualPageRoot.strokeWidth = mPageLinkRightSelectStroke
 
-            pageRoot.layoutParams.width = if (!page.dualImage && page.fileLinkPage != PageLinkConsts.VALUES.PAGE_EMPTY) {
+            pageRoot.layoutParams.width = if (!page.isDualImage && page.fileLinkLeftPage != PageLinkConsts.VALUES.PAGE_EMPTY) {
                 dualPageRoot.visibility = View.VISIBLE
                 mPageLinkCardWidthInDual
-            } else if (page.dualImage)
+            } else if (page.isDualImage)
                 mPageLinkCardWidthInDual
             else
                 mPageLinkCardWidth
