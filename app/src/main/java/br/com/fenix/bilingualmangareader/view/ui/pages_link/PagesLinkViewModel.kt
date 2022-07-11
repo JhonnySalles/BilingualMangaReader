@@ -1086,7 +1086,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                 maxNumPage = page.fileLinkLeftPage
 
             if (page.fileLinkRightPage > maxNumPage)
-                maxNumPage = page.fileLinkLeftPage
+                maxNumPage = page.fileLinkRightPage
         }
 
         for (page in pagesNotLink) {
