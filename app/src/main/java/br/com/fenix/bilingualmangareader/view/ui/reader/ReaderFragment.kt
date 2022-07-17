@@ -684,6 +684,8 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 }, 300)
             }
 
+            mPopupSubtitle.visibility = View.GONE
+            mPopupColor.visibility = View.GONE
             mRoot.fitsSystemWindows = false
             changeContentsVisibility(fullscreen)
         } else {
@@ -708,8 +710,6 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 }, 300)
             }
 
-            mPopupSubtitle.visibility = View.GONE
-            mPopupColor.visibility = View.GONE
             mRoot.fitsSystemWindows = true
             changeContentsVisibility(fullscreen)
         }
