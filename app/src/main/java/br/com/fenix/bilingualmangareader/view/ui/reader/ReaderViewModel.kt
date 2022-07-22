@@ -87,17 +87,13 @@ class ReaderViewModel(application: Application) : AndroidViewModel(application) 
         mColorGreen.value = green
         mColorBlue.value = blue
         mColorAlpha.value = alpha
-
-        if (mCustomFilter.value!!)
-            generateFilters()
+        generateFilters()
     }
 
     fun changeBlueLightAlpha(value: Int) {
         mBlueLightAlpha.value = value
         mBlueLightColor = Color.argb(mBlueLightAlpha.value!!, 255, 50, 0)
-
-        if (mBlueLight.value!!)
-            generateFilters()
+        generateFilters()
     }
 
     fun clearOcrItem() {
