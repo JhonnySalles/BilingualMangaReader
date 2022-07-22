@@ -341,7 +341,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         requireActivity().title = mFileName
         updateSeekBar()
 
-        mViewModel.filters.observe(viewLifecycleOwner, { onRefresh() })
+        mViewModel.filters.observe(viewLifecycleOwner) { onRefresh() }
 
         return view
     }

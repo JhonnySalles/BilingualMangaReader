@@ -17,6 +17,7 @@ import android.view.*
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.widget.*
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
@@ -138,7 +139,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATED_REMOVE -> refreshLibraryRemoveDelayed(obj as Manga)
                 GeneralConsts.SCANNER.MESSAGE_MANGA_UPDATE_FINISHED -> {
                     setIsRefreshing(false)
-                    if (obj as Boolean) {
+                    if (obj as Boolean && ::mViewModel.isInitialized) { // Bug when rotate is necessary verify is initialized
                         mViewModel.updateList { change, _ ->
                             if (change)
                                 sortList()
@@ -378,6 +379,23 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         generateLayout()
         setIsRefreshing(true)
         Scanner.getInstance(requireContext()).scanLibrary()
+
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+            // Prevent backpress if query is actived
+            override fun handleOnBackPressed() {
+                if (searchView.query.isNotEmpty())
+                    searchView.setQuery("", true)
+                else if (!searchView.isIconified)
+                    searchView.isIconified = true
+                else{
+                    isEnabled = false
+                    requireActivity().onBackPressed()
+                }
+            }
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+
         return root
     }
 
@@ -543,7 +561,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         }
     }
 
-    private var itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+    private var itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
         override fun onMove(
             recyclerView: RecyclerView,
             viewHolder: ViewHolder, target: ViewHolder
