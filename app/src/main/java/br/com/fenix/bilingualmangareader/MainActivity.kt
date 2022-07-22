@@ -1,11 +1,9 @@
 package br.com.fenix.bilingualmangareader
 
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.WindowManager
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -13,9 +11,8 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
-import br.com.fenix.bilingualmangareader.view.components.ComponentsUtil
 import br.com.fenix.bilingualmangareader.view.ui.configuration.ConfigFragment
-import br.com.fenix.bilingualmangareader.view.ui.help.AboutFragment
+import br.com.fenix.bilingualmangareader.view.ui.about.AboutFragment
 import br.com.fenix.bilingualmangareader.view.ui.help.HelpFragment
 import br.com.fenix.bilingualmangareader.view.ui.history.HistoryFragment
 import br.com.fenix.bilingualmangareader.view.ui.library.LibraryFragment

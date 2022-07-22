@@ -20,18 +20,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/toolbar_reader_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:background="@drawable/main_toolbar_background"
+            android:theme="@style/ToolbarContentTheme" >
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar_reader"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/default_navigator_header_size"
-                android:paddingTop="@dimen/default_navigator_header_padding"
-                android:background="@drawable/main_toolbar_background_reading"
                 app:popupTheme="@style/MyDarkToolbarStyle"
                 app:theme="@style/ToolbarTheme">
 
@@ -72,7 +71,7 @@
                 android:layout_height="20dp"
                 android:orientation="vertical"
                 android:visibility="gone"
-                app:theme="@style/SubToolbarTheme">
+                android:background="@color/secondary_variant_semitransparent">
                 <TextView
                     android:id="@+id/ocr_language"
                     android:layout_marginStart="5dp"
@@ -84,7 +83,7 @@
                     android:textColor="@color/text_primary"
                     android:textSize="@dimen/floating_ocr_language_text_size" />
             </LinearLayout>
-        </LinearLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
         <LinearLayout
             android:id="@+id/nav_reader"
@@ -144,7 +143,7 @@
             app:iconPadding="0dp"
             app:iconSize="28dp"
             app:iconTint="@color/text_primary"
-            app:rippleColor="@color/secondary"
+            app:rippleColor="@color/ripple_color"
             app:strokeWidth="0dp" />
 
         <com.google.android.material.button.MaterialButton
@@ -171,7 +170,7 @@
             app:iconPadding="0dp"
             app:iconSize="28dp"
             app:iconTint="@color/text_primary"
-            app:rippleColor="@color/secondary"
+            app:rippleColor="@color/ripple_color"
             app:strokeWidth="0dp" />
 
         <LinearLayout
@@ -199,7 +198,7 @@
                 app:icon="@drawable/ic_screen_rotation"
                 app:iconSize="28dp"
                 app:iconTint="@color/text_primary"
-                app:rippleColor="@color/on_secondary" />
+                app:rippleColor="@color/ripple_color" />
 
             <Button
                 android:id="@+id/btn_menu_ocr"
@@ -217,7 +216,7 @@
                 app:icon="@drawable/ic_reader_ocr"
                 app:iconSize="28dp"
                 app:iconTint="@color/text_primary"
-                app:rippleColor="@color/on_secondary" />
+                app:rippleColor="@color/ripple_color" />
 
             <Button
                 android:id="@+id/btn_popup_subtitle"
@@ -235,7 +234,7 @@
                 app:icon="@drawable/ic_change_language"
                 app:iconSize="28dp"
                 app:iconTint="@color/text_primary"
-                app:rippleColor="@color/on_secondary" />
+                app:rippleColor="@color/ripple_color" />
 
             <Button
                 android:id="@+id/btn_popup_color"
@@ -253,7 +252,7 @@
                 app:icon="@drawable/ic_color_settings"
                 app:iconSize="30dp"
                 app:iconTint="@color/text_primary"
-                app:rippleColor="@color/on_secondary" />
+                app:rippleColor="@color/ripple_color" />
 
             <Button
                 android:id="@+id/btn_menu_page_linked"
@@ -271,7 +270,7 @@
                 app:icon="@drawable/ic_page_linked"
                 app:iconSize="30dp"
                 app:iconTint="@color/text_primary"
-                app:rippleColor="@color/on_secondary" />
+                app:rippleColor="@color/ripple_color" />
 
             <Button
                 android:id="@+id/btn_menu_file_link"
@@ -289,7 +288,7 @@
                 app:icon="@drawable/ic_file_link"
                 app:iconSize="30dp"
                 app:iconTint="@color/text_primary"
-                app:rippleColor="@color/on_secondary" />
+                app:rippleColor="@color/ripple_color" />
 
             <Button
                 android:id="@+id/btn_popup_open_floating"
@@ -307,7 +306,7 @@
                 app:icon="@drawable/ic_floating_window"
                 app:iconSize="30dp"
                 app:iconTint="@color/text_primary"
-                app:rippleColor="@color/on_secondary" />
+                app:rippleColor="@color/ripple_color" />
 
         </LinearLayout>
     </RelativeLayout>

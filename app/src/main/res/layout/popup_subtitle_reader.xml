@@ -67,7 +67,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/nav_draw"
             app:layout_constraintTop_toBottomOf="@+id/cb_subtitle_page"
-            app:rippleColor="@color/on_secondary" />
+            app:rippleColor="@color/ripple_color" />
 
         <Button
             android:id="@+id/nav_draw"
@@ -89,7 +89,7 @@
             app:layout_constraintLeft_toRightOf="@+id/nav_change_language"
             app:layout_constraintRight_toLeftOf="@+id/nav_refresh"
             app:layout_constraintTop_toBottomOf="@+id/cb_subtitle_page"
-            app:rippleColor="@color/on_secondary" />
+            app:rippleColor="@color/ripple_color" />
 
         <Button
             android:id="@+id/nav_refresh"
@@ -110,7 +110,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/nav_draw"
             app:layout_constraintRight_toLeftOf="@+id/nav_before_text"
-            app:rippleColor="@color/on_secondary" />
+            app:rippleColor="@color/ripple_color" />
 
         <Button
             android:id="@+id/nav_before_text"
@@ -132,7 +132,7 @@
             app:layout_constraintLeft_toRightOf="@+id/nav_refresh"
             app:layout_constraintRight_toLeftOf="@+id/nav_next_text"
             app:layout_constraintTop_toBottomOf="@+id/cb_subtitle_page"
-            app:rippleColor="@color/on_secondary" />
+            app:rippleColor="@color/ripple_color" />
 
         <Button
             android:id="@+id/nav_next_text"
@@ -154,7 +154,7 @@
             app:layout_constraintLeft_toRightOf="@+id/nav_before_text"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cb_subtitle_page"
-            app:rippleColor="@color/on_secondary" />
+            app:rippleColor="@color/ripple_color" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

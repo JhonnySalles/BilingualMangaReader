@@ -3,6 +3,7 @@ package br.com.fenix.bilingualmangareader.service.repository
 import android.content.Context
 import br.com.fenix.bilingualmangareader.model.entity.SubTitle
 import org.slf4j.LoggerFactory
+import java.util.*
 
 class SubTitleRepository(context: Context) {
 
@@ -11,15 +12,15 @@ class SubTitleRepository(context: Context) {
 
     fun save(obj: SubTitle): Long {
         deleteAll(obj.id_manga)
+        obj.lastAlteration = Date()
         return mDataBase.save(obj)
     }
-    fun delete(obj: SubTitle) {
-        mDataBase.delete(obj)
-    }
 
-    private fun deleteAll(idManga: Long) {
+    fun delete(obj: SubTitle) =
+        mDataBase.delete(obj)
+
+    private fun deleteAll(idManga: Long) =
         mDataBase.deleteAll(idManga)
-    }
 
     fun get(idManga: Long, id: Long): SubTitle? {
         return try {

@@ -185,7 +185,7 @@ class Scanner(private val context: Context) {
 
                                             manga.excluded = false
                                             generateCover(parse, manga)
-                                            storage.save(manga)
+                                            manga.id = storage.save(manga)
                                             notifyMediaUpdatedAdd(manga)
                                         }
                                 } finally {

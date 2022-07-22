@@ -153,14 +153,14 @@ class PopupReaderColorFilterFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.popup_reader_color_filter, container, false)
 
-        mViewModel.colorRed.observe(viewLifecycleOwner, { mFilterRed.text = it.toString() })
-        mViewModel.colorGreen.observe(viewLifecycleOwner, { mFilterGreen.text = it.toString() })
-        mViewModel.colorBlue.observe(viewLifecycleOwner, { mFilterBlue.text = it.toString() })
-        mViewModel.colorAlpha.observe(viewLifecycleOwner, { mFilterAlpha.text = it.toString() })
-        mViewModel.blueLightAlpha.observe(viewLifecycleOwner, {
+        mViewModel.colorRed.observe(viewLifecycleOwner) { mFilterRed.text = it.toString() }
+        mViewModel.colorGreen.observe(viewLifecycleOwner) { mFilterGreen.text = it.toString() }
+        mViewModel.colorBlue.observe(viewLifecycleOwner) { mFilterBlue.text = it.toString() }
+        mViewModel.colorAlpha.observe(viewLifecycleOwner) { mFilterAlpha.text = it.toString() }
+        mViewModel.blueLightAlpha.observe(viewLifecycleOwner) {
             val value = if (it > 0) (it * 100 / 200) else 0
             mFilterBlueLightAlpha.text = "$value %"
-        })
+        }
 
         return root
     }

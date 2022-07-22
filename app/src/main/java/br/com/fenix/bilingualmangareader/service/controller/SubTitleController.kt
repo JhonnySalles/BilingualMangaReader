@@ -359,7 +359,7 @@ class SubTitleController private constructor(private val context: Context) {
             }
 
             if (currentPage != null) {
-                if (isMangaLanguage || currentPage.fileLinkPage > -1) {
+                if (isMangaLanguage || currentPage.fileLinkLeftPage > -1) {
                     var keyChapter = ""
                     var keyPage = ""
                     var pageName = ""
@@ -392,7 +392,7 @@ class SubTitleController private constructor(private val context: Context) {
                         val pageNumber = if (isMangaLanguage)
                             currentPage.mangaPage
                         else
-                            currentPage.fileLinkPage
+                            currentPage.fileLinkLeftPage
                         val image: InputStream = parse!!.getPage(pageNumber)
                         val hash = String(Hex.encodeHex(DigestUtils.md5(image)))
                         Util.closeInputStream(image)
@@ -419,7 +419,7 @@ class SubTitleController private constructor(private val context: Context) {
                             pageName = if (isMangaLanguage)
                                 currentPage.mangaPageName
                             else
-                                currentPage.fileLinkPageName
+                                currentPage.fileLinkLeftPageName
                             for (chapters in subtitles) {
                                 if (chapter > -1f && chapters.value.chapter.compareTo(chapter) != 0)
                                     continue
@@ -922,11 +922,11 @@ class SubTitleController private constructor(private val context: Context) {
             return
 
         mFileLink!!.pagesLink!!.first { it.mangaPageName.compareTo(pageName, true) == 0 }.let {
-            if (it.fileLinkPage > -1) {
-                val uri = if (it.dualImage)
-                    saveImageFolder(mFileLink!!, it.fileLinkPage, it.fileRightLinkPage)
+            if (it.fileLinkLeftPage > -1) {
+                val uri = if (it.isDualImage)
+                    saveImageFolder(mFileLink!!, it.fileLinkLeftPage, it.fileLinkRightPage)
                 else
-                    saveImageFolder(mFileLink!!, it.fileLinkPage)
+                    saveImageFolder(mFileLink!!, it.fileLinkLeftPage)
                 drawPageLinked(uri)
             }
         }
@@ -936,11 +936,11 @@ class SubTitleController private constructor(private val context: Context) {
         if (mFileLink == null) return
 
         mFileLink!!.pagesLink!!.first { it.mangaPage.compareTo(page) == 0 }.let {
-            if (it.fileLinkPage > -1) {
-                val uri = if (it.dualImage)
-                    saveImageFolder(mFileLink!!, it.fileLinkPage, it.fileRightLinkPage)
+            if (it.fileLinkLeftPage > -1) {
+                val uri = if (it.isDualImage)
+                    saveImageFolder(mFileLink!!, it.fileLinkLeftPage, it.fileLinkRightPage)
                 else
-                    saveImageFolder(mFileLink!!, it.fileLinkPage)
+                    saveImageFolder(mFileLink!!, it.fileLinkLeftPage)
                 drawPageLinked(uri)
             }
         }

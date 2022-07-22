@@ -31,7 +31,7 @@ class GeneralConsts private constructor() {
     }
 
     object DATE {
-        const val DATE_TIME_PATTERN = "yyyy-MM-dd hh:mm:ss"
+        const val DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss"
     }
 
     object KEYS {

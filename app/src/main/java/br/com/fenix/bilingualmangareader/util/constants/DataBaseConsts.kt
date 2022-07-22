@@ -18,6 +18,7 @@ class DataBaseConsts private constructor() {
             const val DATE_CREATE = "dateCreate"
             const val LAST_ACCESS = "lastAccess"
             const val EXCLUDED = "excluded"
+            const val LAST_ALTERATION = "lastAlteration"
         }
     }
 
@@ -46,6 +47,7 @@ class DataBaseConsts private constructor() {
             const val PAGE = "pageCount"
             const val FILE_PATH = "path"
             const val DATE_CREATE = "dateCreate"
+            const val LAST_ALTERATION = "lastAlteration"
         }
     }
 
@@ -101,6 +103,7 @@ class DataBaseConsts private constructor() {
             const val LANGUAGE = "language"
             const val DATE_CREATE = "dateCreate"
             const val LAST_ACCESS = "lastAccess"
+            const val LAST_ALTERATION = "lastAlteration"
         }
     }
 

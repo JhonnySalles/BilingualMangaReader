@@ -45,6 +45,7 @@ import br.com.fenix.bilingualmangareader.util.helpers.Util
 import br.com.fenix.bilingualmangareader.view.components.PageImageView
 import br.com.fenix.bilingualmangareader.view.components.PageViewPager
 import br.com.fenix.bilingualmangareader.view.managers.MangaHandler
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.button.MaterialButton
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
@@ -62,7 +63,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
     private val mViewModel: ReaderViewModel by activityViewModels()
 
     private lateinit var mRoot: CoordinatorLayout
-    private lateinit var mToolbarTop: LinearLayout
+    private lateinit var mToolbarTop: AppBarLayout
     private lateinit var mPageNavLayout: LinearLayout
     private lateinit var mPopupSubtitle: FrameLayout
     private lateinit var mPopupColor: FrameLayout
@@ -170,8 +171,8 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
     }
 
     override fun onResume() {
-        setFullscreen(fullscreen = true)
         super.onResume()
+        setFullscreen(fullscreen = true)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -306,7 +307,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         mPageNavTextView = mPageNavLayout.findViewById<View>(R.id.nav_reader_title) as TextView
         mViewPager = view.findViewById<View>(R.id.fragment_reader) as PageViewPager
         mViewPager.adapter = mPagerAdapter
-        mViewPager.offscreenPageLimit = 4
+        mViewPager.offscreenPageLimit = 6
         mViewPager.setOnTouchListener(this)
         mViewPager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
             override fun onPageSelected(position: Int) {
@@ -340,7 +341,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         requireActivity().title = mFileName
         updateSeekBar()
 
-        mViewModel.filters.observe(viewLifecycleOwner, { onRefresh() })
+        mViewModel.filters.observe(viewLifecycleOwner) { onRefresh() }
 
         return view
     }
@@ -683,6 +684,8 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 }, 300)
             }
 
+            mPopupSubtitle.visibility = View.GONE
+            mPopupColor.visibility = View.GONE
             mRoot.fitsSystemWindows = false
             changeContentsVisibility(fullscreen)
         } else {
@@ -707,8 +710,6 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 }, 300)
             }
 
-            mPopupSubtitle.visibility = View.GONE
-            mPopupColor.visibility = View.GONE
             mRoot.fitsSystemWindows = true
             changeContentsVisibility(fullscreen)
         }

@@ -12,7 +12,7 @@ import br.com.fenix.bilingualmangareader.util.helpers.Converters
 import org.slf4j.LoggerFactory
 import java.io.BufferedReader
 
-@Database(version = 7, entities = [Manga::class, SubTitle::class, KanjiJLPT::class, Kanjax::class, FileLink::class, PageLink::class])
+@Database(version = 8, entities = [Manga::class, SubTitle::class, KanjiJLPT::class, Kanjax::class, FileLink::class, PageLink::class])
 @TypeConverters(Converters::class)
 abstract class DataBase : RoomDatabase() {
 
@@ -37,7 +37,7 @@ abstract class DataBase : RoomDatabase() {
                 INSTANCE = Room.databaseBuilder(context, DataBase::class.java, DATABASE_NAME)
                     .addCallback(rdc)
                     .addMigrations(Migrations.MIGRATION_1_2, Migrations.MIGRATION_2_3, Migrations.MIGRATION_3_4, Migrations.MIGRATION_4_5,
-                        Migrations.MIGRATION_5_6, Migrations.MIGRATION_6_7)
+                        Migrations.MIGRATION_5_6, Migrations.MIGRATION_6_7, Migrations.MIGRATION_7_8)
                     .allowMainThreadQueries()
                     .build() // MainThread uses another thread in db conection
             }

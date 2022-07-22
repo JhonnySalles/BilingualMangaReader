@@ -9,6 +9,7 @@ import android.util.DisplayMetrics
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.service.parses.Parse
+import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -16,6 +17,7 @@ import java.io.InputStream
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.experimental.and
 import kotlin.math.roundToInt
@@ -220,6 +222,29 @@ class Util {
                 path
         }
 
+        fun getNameWithoutExtensionFromPath(path: String): String {
+            var name =  if (path.contains('/'))
+                path.substringAfterLast("/")
+            else if (path.contains('\\'))
+                path.substringAfterLast('\\')
+            else
+                path
+
+            name = if (name.contains('.'))
+                name.substringBefore(".")
+            else
+                name
+
+            return name
+        }
+
+        fun getExtensionFromPath(path: String): String {
+            return if (path.contains('.'))
+                path.substringAfterLast(".")
+            else
+                path
+        }
+
         fun normalizeNameCache(name: String): String {
             val normalize = if (name.contains("-"))
                 name.substringBefore("-")
@@ -332,5 +357,36 @@ class Util {
                 .show()
         }
 
+        fun getNameFromMangaTitle(text: String): String {
+            return text.substringBeforeLast("Volume").replace(" - ", "").trim()
+        }
+
+        fun formatterDate(context: Context, date: Date?): String {
+            if (date == null)
+                return context.getString(R.string.date_format_unknown)
+            val preferences = GeneralConsts.getSharedPreferences(context)
+            val pattern = preferences.getString(GeneralConsts.KEYS.SYSTEM.FORMAT_DATA, "yyyy-MM-dd")
+            return SimpleDateFormat(pattern, Locale.getDefault()).format(date)
+        }
+
+        fun setBold(text: String): String = "<b>$text</b>"
+
+        fun getDivideStrings(text: String, delimiter: Char = '\n', occurrences: Int = 10) : Pair<String, String> {
+            var postion = text.length
+            var occurence = 0
+            for ((i, c) in text.withIndex()) {
+                if (c == delimiter) {
+                    occurence++
+                    postion = i
+                }
+                if (occurence >= occurrences)
+                    break
+            }
+
+            val string1 = text.substring(0, postion)
+            val string2 = if (postion >= text.length) "" else text.substring(postion, text.length)
+
+            return Pair(string1, string2)
+        }
     }
 }

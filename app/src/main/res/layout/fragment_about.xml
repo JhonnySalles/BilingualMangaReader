@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frame_about_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -111,7 +112,7 @@
                     android:textSize="@dimen/about_content_size" />
 
                 <GridLayout
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:orientation="horizontal"
@@ -183,7 +184,7 @@
                     <Button
                         android:id="@+id/about_btn_suggestion"
                         style="@style/Widget.MaterialComponents.Button.Icon"
-                        android:layout_width="@dimen/about_button_width"
+                        android:layout_width="@dimen/about_button_width_big"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:text="@string/about_app_suggestion"
@@ -197,7 +198,7 @@
                     <Button
                         android:id="@+id/about_btn_email"
                         style="@style/Widget.MaterialComponents.Button.Icon"
-                        android:layout_width="@dimen/about_button_width"
+                        android:layout_width="@dimen/about_button_width_big"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:text="@string/about_app_mail"
@@ -210,7 +211,7 @@
                     <Button
                         android:id="@+id/about_btn_github"
                         style="@style/Widget.MaterialComponents.Button.Icon"
-                        android:layout_width="@dimen/about_button_width"
+                        android:layout_width="@dimen/about_button_width_big"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:text="@string/about_app_github"

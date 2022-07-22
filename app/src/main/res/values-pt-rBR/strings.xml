@@ -13,6 +13,8 @@
     <string name="alert_permission_files_access_denied_title">Acesso negado</string>
     <string name="alert_permission_files_access_denied">Não foi possível obter a permissão de acesso a pasta informada, por favor libere o acesso na configuração do android.</string>
 
+    <string name="date_format_unknown">desconhecido</string>
+
     <!-- MENU -->
     <string name="menu_search">Procurar</string>
     <string name="menu_help">Ajuda</string>
@@ -176,11 +178,25 @@
     <!-- MANGA DETAIL -->
     <string name="manga_detail_favorite">Favorito</string>
     <string name="manga_detail_clear_history">Limpar histórico</string>
+    <string name="manga_detail_mark_read">Marcar lido</string>
     <string name="manga_detail_delete">Deletar</string>
     <string name="manga_detail_chapters_title">Capítulos</string>
     <string name="manga_detail_subtitles_title">Legendas</string>
     <string name="manga_detail_file_links_title">Arquivos vinculados</string>
     <string name="manga_detail_manga_deleted">Arquivo apagado</string>
+
+    <string name="manga_detail_information">Informações</string>
+    <string name="manga_detail_related">Relacionados</string>
+
+    <string name="manga_detail_information_alternative_titles">Títulos alternativos:</string>
+    <string name="manga_detail_information_status">Estatus:</string>
+    <string name="manga_detail_information_volumes">Volumes:</string>
+    <string name="manga_detail_information_chapters">Capítulos:</string>
+    <string name="manga_detail_information_publish">Publicação:</string>
+    <string name="manga_detail_information_publish_to"> até </string>
+    <string name="manga_detail_information_publish_in_publication">em publicação</string>
+    <string name="manga_detail_information_authors">Autores:</string>
+    <string name="manga_detail_information_genre">Gêneros:</string>
 
     <!-- HISTORY -->
     <string name="history_last_access">Último acesso</string>
