@@ -276,7 +276,6 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
             }
         }
 
-        //ComponentsUtil.setSystemUITransparency(window)
     }
 
     private fun switchManga(isNext: Boolean = true) {
@@ -386,7 +385,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
             .setItems(items) { _, selected ->
                 val pageNumber = paths[items[selected]]
                 if (pageNumber != null)
-                    currentFragment.setCurrentPage(pageNumber)
+                    currentFragment.setCurrentPage(pageNumber + 1)
             }
             .show()
     }

@@ -36,6 +36,9 @@ data class SubTitle(
     @ColumnInfo(name = DataBaseConsts.SUBTITLES.COLUMNS.DATE_CREATE)
     var dateCreate: LocalDateTime? = LocalDateTime.now(),
 
+    @ColumnInfo(name = DataBaseConsts.SUBTITLES.COLUMNS.LAST_ALTERATION)
+    var lastAlteration: LocalDateTime? = LocalDateTime.now(),
+
     @Ignore
     var file: File = File(path),
 
@@ -55,10 +58,8 @@ data class SubTitle(
         pageCount: Int = 0,
         path: String = "",
         dateCreate: LocalDateTime? = LocalDateTime.now(),
-    ) : this(
-        id, id_manga, language, chapterKey, pageKey, pageCount, path, dateCreate,
-        File(path)
-    )
+        lastAlteration: LocalDateTime? = LocalDateTime.now(),
+    ) : this( id, id_manga, language, chapterKey, pageKey, pageCount, path, dateCreate, lastAlteration, File(path) )
 
     constructor(
         id_manga: Long = 0,
@@ -69,8 +70,7 @@ data class SubTitle(
         path: String = "",
         chapter: Chapter?
     ) : this(
-        null, id_manga, language, chapterKey, pageKey, pageCount, path, LocalDateTime.now(),
-        File(path)
+        null, id_manga, language, chapterKey, pageKey, pageCount, path, LocalDateTime.now(), LocalDateTime.now(), File(path)
     ) {
         this.chapter = chapter
     }

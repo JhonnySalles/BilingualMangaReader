@@ -4,6 +4,7 @@ import android.content.Context
 import br.com.fenix.bilingualmangareader.model.entity.FileLink
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.entity.PageLink
+import java.time.LocalDateTime
 
 class FileLinkRepository(context: Context) {
 
@@ -12,6 +13,7 @@ class FileLinkRepository(context: Context) {
 
     fun save(obj: FileLink): Long {
         delete(obj.manga!!)
+        obj.lastAlteration = LocalDateTime.now()
         val id = mDataBase.save(obj)
         if (obj.pagesLink != null) {
             mDataBasePage.deleteAll(id)
@@ -30,6 +32,7 @@ class FileLinkRepository(context: Context) {
     }
 
     fun update(obj: FileLink) {
+        obj.lastAlteration = LocalDateTime.now()
         mDataBase.update(obj)
         if (obj.pagesLink != null) {
             mDataBasePage.deleteAll(obj.id!!)

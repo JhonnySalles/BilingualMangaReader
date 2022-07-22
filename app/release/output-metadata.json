@@ -11,9 +11,9 @@
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 11,
-      "versionName": "2.11",
-      "outputFile": "BilingualManga_2.11-release.apk"
+      "versionCode": 13,
+      "versionName": "2.13",
+      "outputFile": "BilingualManga_2.13-release.apk"
     }
   ],
   "elementType": "File"

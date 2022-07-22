@@ -13,13 +13,11 @@ import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.setPadding
-import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -62,6 +60,7 @@ class PagesLinkFragment : Fragment() {
     private lateinit var mRecyclePageNotLink: RecyclerView
     private lateinit var mPageNotLinkContent: ConstraintLayout
     private lateinit var mPageNotLinkIcon: ImageView
+    private lateinit var mContent: LinearLayout
     private lateinit var mFileLink: TextInputLayout
     private lateinit var mFileLinkAutoComplete: AutoCompleteTextView
     private lateinit var mFileLinkLanguage: TextInputLayout
@@ -90,7 +89,7 @@ class PagesLinkFragment : Fragment() {
     private val mDismissUpButton = Runnable { mScrollUp.hide() }
     private val mDismissDownButton = Runnable { mScrollDown.hide() }
     private val mReduceSizeGroupButton = Runnable {
-        mButtonsGroup.layoutParams = mButtonsGroupSize
+        ComponentsUtil.changeWidthAnimateSize(mButtonsGroup, mCollapseButtonsGroupSize, true)
         changColorButton(requireContext().getColor(R.color.file_link_buttons))
     }
 
@@ -99,7 +98,8 @@ class PagesLinkFragment : Fragment() {
     private var mInDrag: Boolean = false
     private var mIsTabletOrLandscape: Boolean = false
     private var mPageSelected: Int = 0
-    private lateinit var mButtonsGroupSize: LayoutParams
+    private lateinit var mCollapseButtonsGroupSize: ConstraintLayout.LayoutParams
+    private lateinit var mExpandedButtonsGroupSize: ConstraintLayout.LayoutParams
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -114,6 +114,7 @@ class PagesLinkFragment : Fragment() {
         mPageNotLinkContent = root.findViewById(R.id.pages_link_content_pages_not_linked)
         mPageNotLinkIcon = root.findViewById(R.id.pages_link_icon_pages_not_linked)
 
+        mContent = root.findViewById(R.id.pages_link_content)
         mFileLink = root.findViewById(R.id.pages_link_file_link_text)
         mFileLinkAutoComplete = root.findViewById(R.id.pages_link_file_link_autocomplete)
         mFileLinkLanguage = root.findViewById(R.id.pages_link_language_combo)
@@ -138,7 +139,10 @@ class PagesLinkFragment : Fragment() {
         mMangaName = root.findViewById(R.id.pages_link_name_manga)
         mToolbar = requireActivity().findViewById(R.id.toolbar_manga_pages_link)
 
-        mButtonsGroupSize = mButtonsGroup.layoutParams
+        mExpandedButtonsGroupSize = mButtonsGroup.layoutParams as ConstraintLayout.LayoutParams
+        mButtonsGroup.layoutParams = ConstraintLayout.LayoutParams(mButtonsGroup.layoutParams as ConstraintLayout.LayoutParams)
+        mButtonsGroup.layoutParams.width = resources.getDimension(R.dimen.page_link_buttons_size).toInt()
+        mCollapseButtonsGroupSize = mButtonsGroup.layoutParams as ConstraintLayout.LayoutParams
 
         mScrollUp.visibility = View.GONE
         mScrollDown.visibility = View.GONE
@@ -252,29 +256,20 @@ class PagesLinkFragment : Fragment() {
         mHelp.setOnClickListener {
             if (mHandler.hasCallbacks(mReduceSizeGroupButton))
                 mHandler.removeCallbacks(mReduceSizeGroupButton)
-            mHandler.postDelayed(mReduceSizeGroupButton, 3000)
+            mHandler.postDelayed(mReduceSizeGroupButton, 5000)
 
-            mButtonsGroup.layoutParams = ConstraintLayout.LayoutParams(
-                LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT
-            )
-
-            mButtonsGroup.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                startToStart = mRoot.id
-                bottomToTop = mContentButton.id
-            }
-
+            ComponentsUtil.changeWidthAnimateSize(mButtonsGroup, mExpandedButtonsGroupSize, false)
             changColorButton(requireContext().getColor(R.color.file_link_buttons_expanded))
         }
 
         mFullScreen.setOnClickListener {
-            val visible = mFileLink.visibility == View.GONE
+            val visible = mContent.visibility == View.GONE
 
             if (mHelp.tag.toString().compareTo("not_used", true) != 0)
                 ComponentsUtil.changeAnimateVisibility(mHelp, visible)
 
             ComponentsUtil.changeAnimateVisibility(
-                arrayListOf(mFileLink, mFileLinkLanguage, mSave, mRefresh, mButtonsGroup, mPagesIndex, mToolbar, mMangaName),
+                arrayListOf(mContent, mSave, mRefresh, mButtonsGroup, mToolbar),
                 visible
             )
 
@@ -295,7 +290,7 @@ class PagesLinkFragment : Fragment() {
                 mAutoReorderPages = false
                 val pageLink = if (origin == Pages.NOT_LINKED) mViewModel.getPageNotLink(page) else mViewModel.getPageLink(page)
                 val item = ClipData.Item(pageLink)
-                val name = if (origin == Pages.DUAL_PAGE) page.fileRightLinkPageName else page.fileLinkPageName
+                val name = if (origin == Pages.DUAL_PAGE) page.fileLinkRightPageName else page.fileLinkLeftPageName
                 val dragData = ClipData(position.toString(), arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN), item)
                 dragData.addItem(ClipData.Item(origin.name))
                 dragData.addItem(ClipData.Item(name))

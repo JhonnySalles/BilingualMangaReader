@@ -17,13 +17,29 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
         path: String, folder: String, name: String, type: String,
         pages: Int, bookMark: Int, favorite: Boolean,
         dateCreate: LocalDateTime?, lastAccess: LocalDateTime?,
-        sort: LocalDateTime? = null
+        lastAlteration : LocalDateTime?, sort: LocalDateTime? = null
     ) : this(id, title, subTitle, path, folder, name, type, pages) {
         this.bookMark = bookMark
         this.favorite = favorite
         this.dateCreate = dateCreate
         this.lastAccess = lastAccess
+        this.lastAccess = lastAlteration
         this.sort = sort
+    }
+
+    constructor(
+        id: Long?, title: String, subTitle: String,
+        path: String, folder: String, name: String, type: String,
+        pages: Int, bookMark: Int, favorite: Boolean,
+        dateCreate: LocalDateTime?, lastAccess: LocalDateTime?,
+        lastAlteration: LocalDateTime?, excluded: Boolean = false
+    ) : this(id, title, subTitle, path, folder, name, type, pages) {
+        this.bookMark = bookMark
+        this.favorite = favorite
+        this.dateCreate = dateCreate
+        this.lastAccess = lastAccess
+        this.lastAlteration = lastAlteration
+        this.excluded = excluded
     }
 
     @PrimaryKey(autoGenerate = true)
@@ -69,6 +85,9 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
     @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS)
     var lastAccess: LocalDateTime? = null
 
+    @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.LAST_ALTERATION)
+    var lastAlteration: LocalDateTime? = LocalDateTime.now()
+
     @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.EXCLUDED)
     var excluded: Boolean = false
 
@@ -92,6 +111,7 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
         other as Manga
 
         if (id != other.id) return false
+        if (path != other.path) return false
         if (name != other.name) return false
         if (type != other.type) return false
 
@@ -100,6 +120,7 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
 
     override fun hashCode(): Int {
         var result = id?.hashCode() ?: 0
+        result = 31 * result + path.hashCode()
         result = 31 * result + name.hashCode()
         result = 31 * result + type.hashCode()
         return result

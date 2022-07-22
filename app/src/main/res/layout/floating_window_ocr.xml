@@ -11,12 +11,14 @@
         android:layout_weight="1"
         android:background="@drawable/window_ocr_border"
         android:hardwareAccelerated="true">
+
         <br.com.fenix.bilingualmangareader.view.components.WindowView
             android:id="@+id/window_ocr_clickable"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
             android:hardwareAccelerated="true"/>
+
     </br.com.fenix.bilingualmangareader.view.components.ResizeView>
 
     <androidx.appcompat.widget.AppCompatImageButton
@@ -29,4 +31,5 @@
         android:layout_marginStart="@dimen/floating_ocr_button_close_margin"
         android:background="@drawable/floating_windows_close_button"
         android:visibility="gone"/>
+
 </LinearLayout>

@@ -7,14 +7,24 @@
         <item name="android:windowContentTransitions">true</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:windowDrawsSystemBarBackgrounds">false</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowContentTransitions">true</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="AppTheme.NoNavigationBar">
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowContentOverlay">@null</item>
     </style>
 
     <style name="AppTheme.FullScreen">
@@ -25,11 +35,21 @@
         <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
+    <style name="ToolbarContentTheme" parent="ThemeOverlay.AppCompat.Dark">
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/on_secondary</item>
+        <item name="colorControlNormal">@color/on_secondary</item>
+        <item name="android:drawableTint">@color/on_secondary</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="colorControlHighlight">@color/ripple_color</item>
+    </style>
+
     <style name="ToolbarTheme" parent="Widget.AppCompat.ActionBar">
         <item name="android:textColorPrimary">@color/text_primary</item>
         <item name="android:textColorSecondary">@color/on_secondary</item>
         <item name="colorControlNormal">@color/on_secondary</item>
         <item name="android:textColor">@color/text_primary</item>
+        <item name="colorControlHighlight">@color/ripple_color</item>
         <item name="android:shadowColor">@color/black</item>
         <item name="android:shadowDx">1.5</item>
         <item name="android:shadowDy">1.3</item>
@@ -41,7 +61,7 @@
         <item name="android:textColorSecondary">@color/on_secondary</item>
         <item name="colorControlNormal">@color/on_secondary</item>
         <item name="android:textColor">@color/text_primary</item>
-        <item name="android:background">@color/night_on_secondary</item>
+        <item name="colorControlHighlight">@color/ripple_color</item>
     </style>
 
     <style name="MyDarkToolbarStyle" parent="ThemeOverlay.AppCompat.Dark">
