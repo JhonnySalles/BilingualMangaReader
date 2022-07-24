@@ -330,31 +330,34 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
     }
 
     private fun fixBoxBounds() {
-        if (layoutParams.x < 0) {
-            layoutParams.x = 0
-        } else if (layoutParams.x + layoutParams.width > mRealDisplaySize.x) {
-            layoutParams.x = mRealDisplaySize.x - layoutParams.width
+        with(layoutParams) {
+            if (x < 0)
+                x = 0
+            else if (x + width > mRealDisplaySize.x)
+                x = mRealDisplaySize.x - width
+
+            if (y < 0)
+                y = 0
+            else if (y + height > mRealDisplaySize.y)
+                y = mRealDisplaySize.y - height
+
+            if (width > mRealDisplaySize.x)
+                width = mRealDisplaySize.x
+
+            if (height > mRealDisplaySize.y)
+                height = mRealDisplaySize.y
+
+            if (isExpanded) {
+                if (width < minSize)
+                    width = minSize
+            } else {
+                if (width < mMinimisedSize)
+                    width = mMinimisedSize
+            }
+
+            if (height < minSize)
+                height = minSize
         }
-        if (layoutParams.y < 0) {
-            layoutParams.y = 0
-        } else if (layoutParams.y + layoutParams.height > mRealDisplaySize.y) {
-            layoutParams.y = mRealDisplaySize.y - layoutParams.height
-        }
-        if (layoutParams.width > mRealDisplaySize.x) {
-            layoutParams.width = mRealDisplaySize.x
-        }
-        if (layoutParams.height > mRealDisplaySize.y) {
-            layoutParams.height = mRealDisplaySize.y
-        }
-        if (isExpanded) {
-            if (layoutParams.width < minSize)
-                layoutParams.width = minSize
-        } else {
-            if (layoutParams.width < mMinimisedSize)
-                layoutParams.width = mMinimisedSize
-        }
-        if (layoutParams.height < minSize)
-            layoutParams.height = minSize
 
     }
 
