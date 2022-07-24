@@ -9,6 +9,7 @@
     <string name="action_app_not_installed">O App necessário não está instalado</string>
     <string name="action_scroll_up">Subir</string>
     <string name="action_scroll_down">Descer</string>
+    <string name="action_disconnect">Desconectar</string>
 
     <string name="alert_permission_files_access_denied_title">Acesso negado</string>
     <string name="alert_permission_files_access_denied">Não foi possível obter a permissão de acesso a pasta informada, por favor libere o acesso na configuração do android.</string>
@@ -31,6 +32,9 @@
     <string name="config_title_system">Sistema</string>
     <string name="config_title_reader">Leitor</string>
     <string name="config_title_file_link">Arquivo vinculado</string>
+    <string name="config_title_monitoring">Monitoramento</string>
+    <string name="config_title_monitoring_disconnect">Deseja desconectar do %1$s\?</string>
+    <string name="config_title_monitoring_mal">My Anime List</string>
 
     <string name="config_switch_use_path_name_for_linked">Utilizar o caminho da página para vincular as páginas?</string>
     <string name="config_switch_use_dual_page_calculate">Considerar página dupla pelo calculo das dimensões?</string>

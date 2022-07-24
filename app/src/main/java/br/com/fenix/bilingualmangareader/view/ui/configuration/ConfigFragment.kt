@@ -7,9 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import br.com.fenix.bilingualmangareader.R
@@ -51,6 +49,9 @@ class ConfigFragment : Fragment() {
     private lateinit var mUseDualPageCalculate: SwitchMaterial
     private lateinit var mUsePathNameForLinked: SwitchMaterial
 
+    private lateinit var mMalMonitoring: LinearLayout
+    private lateinit var mMalMonitoringChecked: ImageView
+
     private var mDateSelect: String = GeneralConsts.CONFIG.DATA_FORMAT[0]
     private val mDatePattern = GeneralConsts.CONFIG.DATA_FORMAT
     private var mPageModeSelect: PageMode = PageMode.Comics
@@ -90,6 +91,9 @@ class ConfigFragment : Fragment() {
 
         mUseDualPageCalculate = view.findViewById(R.id.switch_use_dual_page_calculate)
         mUsePathNameForLinked = view.findViewById(R.id.switch_use_path_name_for_linked)
+
+        mMalMonitoring = view.findViewById(R.id.tracker_my_anime_list)
+        mMalMonitoringChecked = view.findViewById(R.id.tracker_checked)
 
         mLibraryPathAutoComplete.setOnClickListener {
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
@@ -203,6 +207,8 @@ class ConfigFragment : Fragment() {
                     GeneralConsts.CONFIG.DATA_FORMAT[0]
             }
 
+        mMalMonitoring.setOnClickListener { changeMonitoring() }
+
         loadConfig()
     }
 
@@ -294,14 +300,21 @@ class ConfigFragment : Fragment() {
                 mUsePathNameForLinked.isChecked
             )
 
+            this.putBoolean(
+                GeneralConsts.KEYS.MONITORING.MY_ANIME_LIST,
+                mMalMonitoringChecked.visibility == View.VISIBLE
+            )
+
             this.commit()
         }
 
-        mLOGGER.info("Save prefer CONFIG:" + "\n[Library] Path " + mLibraryPath.editText?.text +
-                " - Order " + mLibraryOrder.editText?.text +
-                "\n[SubTitle] Language " + mDefaultSubtitleLanguage.editText?.text +
-                " - Translate " + mDefaultSubtitleTranslate.editText?.text +
-                "\n[System] Format Data " + mSystemFormatDate.editText?.text)
+        mLOGGER.info(
+            "Save prefer CONFIG:" + "\n[Library] Path " + mLibraryPath.editText?.text +
+                    " - Order " + mLibraryOrder.editText?.text +
+                    "\n[SubTitle] Language " + mDefaultSubtitleLanguage.editText?.text +
+                    " - Translate " + mDefaultSubtitleTranslate.editText?.text +
+                    "\n[System] Format Data " + mSystemFormatDate.editText?.text
+        )
 
     }
 
@@ -380,14 +393,37 @@ class ConfigFragment : Fragment() {
         )
 
         mUseDualPageCalculate.isChecked = sharedPreferences.getBoolean(
-                GeneralConsts.KEYS.PAGE_LINK.USE_DUAL_PAGE_CALCULATE,
-                false
-            )
+            GeneralConsts.KEYS.PAGE_LINK.USE_DUAL_PAGE_CALCULATE,
+            false
+        )
 
         mUsePathNameForLinked.isChecked = sharedPreferences.getBoolean(
             GeneralConsts.KEYS.PAGE_LINK.USE_PAGE_PATH_FOR_LINKED,
             false
         )
 
+        mMalMonitoringChecked.visibility = if (sharedPreferences.getBoolean(
+                GeneralConsts.KEYS.MONITORING.MY_ANIME_LIST,
+                false
+            )
+        ) View.VISIBLE else View.GONE
+
+    }
+
+    private fun changeMonitoring() {
+        if (mMalMonitoringChecked.visibility == View.GONE) {
+
+        } else {
+            val dialog: AlertDialog =
+                AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
+                    .setTitle(getString(R.string.library_menu_delete))
+                    .setMessage(getString(R.string.config_title_monitoring_disconnect,getString(R.string.config_title_monitoring_mal)))
+                    .setPositiveButton(
+                        R.string.action_disconnect
+                    ) { _, _ ->
+                        mMalMonitoringChecked.visibility = View.GONE
+                    }.create()
+            dialog.show()
+        }
     }
 }

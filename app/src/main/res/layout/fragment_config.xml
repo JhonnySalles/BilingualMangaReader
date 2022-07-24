@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="@dimen/default_navigator_header_margin_top"
+    android:background="@color/black"
     tools:context=".view.ui.configuration.ConfigFragment">
 
     <ScrollView
@@ -304,6 +305,69 @@
                 android:textColor="@color/text_primary"
                 app:thumbTint="@color/on_secondary" />
 
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/secondary"
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginLeft="@dimen/margin"
+                android:layout_marginRight="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin_small"
+                app:dividerInsetStart="16dp"
+                app:dividerInsetEnd="16dp"/>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:textColor="@color/on_secondary"
+                android:text="@string/config_title_monitoring"/>
+
+            <LinearLayout
+                android:id="@+id/tracker_my_anime_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin_bottom"
+                android:layout_marginStart="@dimen/config_tracker_margin"
+                android:layout_marginEnd="@dimen/config_tracker_margin">
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="@dimen/config_tracker_ico_size"
+                    android:layout_height="@dimen/config_tracker_ico_size"
+                    app:cardBackgroundColor="#2E51A2"
+                    app:cardElevation="0dp">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:importantForAccessibility="no"
+                        android:padding="4dp"
+                        android:adjustViewBounds="true"
+                        android:src="@mipmap/ic_MyAnimeList" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_margin="@dimen/margin"
+                    android:textColor="@color/text_primary"
+                    android:text="@string/config_title_monitoring_mal"
+                    android:gravity="center|start"/>
+
+                <ImageView
+                    android:id="@+id/tracker_checked"
+                    android:layout_width="@dimen/config_tracker_ico_size"
+                    android:layout_height="@dimen/config_tracker_ico_size"
+                    android:adjustViewBounds="true"
+                    android:padding="2dp"
+                    android:src="@drawable/ic_tracker_checked"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    app:tint="@color/secondary" />
+
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </FrameLayout>
