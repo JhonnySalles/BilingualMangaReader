@@ -90,6 +90,10 @@ class GeneralConsts private constructor() {
             const val USE_DUAL_PAGE_CALCULATE = "USE_DUAL_PAGE_CALCULATE"
             const val USE_PAGE_PATH_FOR_LINKED = "USE_PAGE_PATH_FOR_LINKED"
         }
+
+        object MONITORING {
+            const val MY_ANIME_LIST = "MONITORING_MY_ANIME_LIST"
+        }
     }
 
     object TAG {
