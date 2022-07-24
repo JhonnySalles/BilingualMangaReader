@@ -39,7 +39,6 @@ class FloatingButtons constructor(private val context: Context, private val acti
     private var firstY: Int = 0
 
     var isShowing = false
-    private var touchConsumedByMove = false
 
     private val mOnFlingListener = object : GestureDetector.SimpleOnGestureListener() {
         override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
