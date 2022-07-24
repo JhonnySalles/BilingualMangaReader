@@ -2,7 +2,6 @@ package br.com.fenix.bilingualmangareader.view.ui.manga_detail
 
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
@@ -10,8 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.substring
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,13 +21,9 @@ import br.com.fenix.bilingualmangareader.service.controller.ImageCoverController
 import br.com.fenix.bilingualmangareader.service.listener.InformationCardListener
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
-import br.com.fenix.bilingualmangareader.util.secrets.Secrets
 import br.com.fenix.bilingualmangareader.view.adapter.manga_detail.InformationRelatedCardAdapter
 import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity
 import com.google.android.material.button.MaterialButton
-import com.kttdevelopment.mal4j.MyAnimeList
-import com.kttdevelopment.mal4j.manga.MangaPreview
-import kotlinx.coroutines.*
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 
