@@ -3,6 +3,7 @@ package br.com.fenix.bilingualmangareader.service.tracker
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 class RetrofitClient private constructor() {
     companion object {
@@ -14,6 +15,8 @@ class RetrofitClient private constructor() {
             if (!::INSTANCE.isInitialized) {
                 synchronized(RetrofitClient::class) {
                     val httpClient = OkHttpClient.Builder()
+                    httpClient.readTimeout(20, TimeUnit.SECONDS)
+                    httpClient.connectTimeout(20, TimeUnit.SECONDS)
                     INSTANCE = Retrofit.Builder()
                         .baseUrl(BASE_API_URL)
                         .client(httpClient.build())
