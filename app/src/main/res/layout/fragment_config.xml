@@ -344,7 +344,7 @@
                         android:importantForAccessibility="no"
                         android:padding="4dp"
                         android:adjustViewBounds="true"
-                        android:src="@mipmap/ic_MyAnimeList" />
+                        android:src="@mipmap/ic_myanimelist" />
                 </com.google.android.material.card.MaterialCardView>
 
                 <TextView
