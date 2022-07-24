@@ -167,7 +167,7 @@ class MangaDetailFragment(private var mManga: Manga?) : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        getInformation()
+        mViewModel.getInformation()
     }
 
     private fun observer() {
@@ -293,44 +293,6 @@ class MangaDetailFragment(private var mManga: Manga?) : Fragment() {
         mViewModel.informationRelations.observe(viewLifecycleOwner) {
             mRelatedContent.visibility = if (it != null && it.isNotEmpty()) View.VISIBLE else View.GONE
             updateRelatedList(it)
-        }
-
-    }
-
-    private fun getInformation() {
-        //MyAnimeList does not run on older versions
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O)
-            return
-
-        var name = mViewModel.manga.value?.title ?: ""
-
-        if (name.isNotEmpty()) {
-            name = Util.getNameFromMangaTitle(name).replace(" ", "%")
-
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    var search: List<MangaPreview>? = null
-                    val deferred = async {
-                        try {
-                            val mal: MyAnimeList = MyAnimeList.withClientID(Secrets.getSecrets(requireContext()).getAnimeListClientId())
-                            search = mal.manga
-                                .withQuery(name)
-                                .includeNSFW(false)
-                                .search()
-
-                        } catch (e: Exception) {
-                            mLOGGER.error("Error to search manga info", e)
-                        }
-                    }
-                    deferred.await()
-                    withContext(Dispatchers.Main) {
-                        if (!search.isNullOrEmpty())
-                            mViewModel.setInformation(search!!)
-                    }
-                } catch (e: Exception) {
-                    mLOGGER.error("Error to load manga info", e)
-                }
-            }
         }
 
     }
