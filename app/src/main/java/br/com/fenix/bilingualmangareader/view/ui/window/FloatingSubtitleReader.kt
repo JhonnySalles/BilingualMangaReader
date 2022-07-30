@@ -272,6 +272,8 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
             x = (mRealDisplaySize.x / 2) - (width / 2)
             y = context.resources.getDimension(R.dimen.floating_reader_initial_top_padding).toInt()
         }
+
+        mOriginalHeight = mFloatingView.height
     }
 
     inner class ChangeTextTouchListener : GestureDetector.SimpleOnGestureListener() {

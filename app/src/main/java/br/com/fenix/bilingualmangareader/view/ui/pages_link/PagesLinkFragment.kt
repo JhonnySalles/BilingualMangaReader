@@ -139,10 +139,12 @@ class PagesLinkFragment : Fragment() {
         mMangaName = root.findViewById(R.id.pages_link_name_manga)
         mToolbar = requireActivity().findViewById(R.id.toolbar_manga_pages_link)
 
-        mExpandedButtonsGroupSize = mButtonsGroup.layoutParams as ConstraintLayout.LayoutParams
-        mButtonsGroup.layoutParams = ConstraintLayout.LayoutParams(mButtonsGroup.layoutParams as ConstraintLayout.LayoutParams)
-        mButtonsGroup.layoutParams.width = resources.getDimension(R.dimen.page_link_buttons_size).toInt()
-        mCollapseButtonsGroupSize = mButtonsGroup.layoutParams as ConstraintLayout.LayoutParams
+        if (mHelp.tag.toString().compareTo("not_used", true) != 0) {
+            mExpandedButtonsGroupSize = mButtonsGroup.layoutParams as ConstraintLayout.LayoutParams
+            mButtonsGroup.layoutParams = ConstraintLayout.LayoutParams(mButtonsGroup.layoutParams as ConstraintLayout.LayoutParams)
+            mButtonsGroup.layoutParams.width = resources.getDimension(R.dimen.page_link_buttons_size).toInt()
+            mCollapseButtonsGroupSize = mButtonsGroup.layoutParams as ConstraintLayout.LayoutParams
+        }
 
         mScrollUp.visibility = View.GONE
         mScrollDown.visibility = View.GONE

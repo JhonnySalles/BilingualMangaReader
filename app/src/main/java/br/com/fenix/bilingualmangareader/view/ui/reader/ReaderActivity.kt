@@ -400,8 +400,10 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         val manga = (savedInstanceState.getSerializable(GeneralConsts.KEYS.OBJECT.MANGA) as Manga?)
-        if (manga != null)
+        if (manga != null) {
             mManga = manga
+            setTitles(manga.title, manga.bookMark.toString())
+        }
     }
 
     private var mLastFloatingWindowOcr = false
