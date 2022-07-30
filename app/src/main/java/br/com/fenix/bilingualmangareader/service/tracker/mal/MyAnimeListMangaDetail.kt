@@ -76,14 +76,19 @@ data class MalGenres(
 )
 
 data class MalAuthors(
+    @SerializedName("node")
+    val author: Author,
+    @SerializedName("role")
+    val role: String
+)
+
+data class Author(
     @SerializedName("id")
     val id: Int,
     @SerializedName("first_name")
     val firstName: String,
     @SerializedName("last_name")
     val lastName: String,
-    @SerializedName("role")
-    val role: String
 )
 
 data class MalStatus(

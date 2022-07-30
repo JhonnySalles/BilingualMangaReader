@@ -61,7 +61,7 @@ class Information(
         manga.endDate?.let { if (it.isNotEmpty()) this.endDate = MalTransform.getDate(it) }
 
         this.genres = manga.genres?.joinToString { it.name } ?: ""
-        this.authors = manga.authors?.joinToString { it.firstName + " " + it.lastName + "(" + it.role + ")" } ?: ""
+        this.authors = manga.authors?.joinToString { it.author.firstName + " " + it.author.lastName + "(" + it.role + ")" } ?: ""
         this.origin = MY_ANIME_LIST
     }
 }

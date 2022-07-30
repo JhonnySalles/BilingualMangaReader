@@ -64,6 +64,10 @@
         <item name="colorControlHighlight">@color/ripple_color</item>
     </style>
 
+    <style name="SwitchMaterial" >
+        <item name="colorSecondary">@color/on_secondary</item>
+    </style>
+
     <style name="MyDarkToolbarStyle" parent="ThemeOverlay.AppCompat.Dark">
         <item name="android:background">@color/primary</item>
         <item name="android:textColor">@color/text_primary</item>
