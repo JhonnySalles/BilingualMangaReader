@@ -61,7 +61,7 @@ class ConfigLibrariesViewModel(application: Application) : AndroidViewModel(appl
 
     fun load() {
         val libraries = mRepository.list()
-        mListLibraries.value = libraries?.toMutableList() ?: mutableListOf()
+        mListLibraries.value = libraries.toMutableList()
     }
 
     fun getAndRemove(position: Int): Library? {

@@ -90,7 +90,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
     private lateinit var mComicHandler: MangaHandler
     var mTargets = SparseArray<Target>()
 
-    private var mLibrary: Library = LibraryUtil.getDefault(requireContext())
+    private lateinit var mLibrary: Library
     private var mManga: Manga? = null
     private var mNewManga: Manga? = null
     private var mNewMangaTitle = 0
@@ -126,7 +126,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             return fragment
         }
 
-        fun create(path: File): ReaderFragment {
+        fun create(library: Library, path: File): ReaderFragment {
             if (mCacheFolderIndex >= 2)
                 mCacheFolderIndex = 0
             else
@@ -134,12 +134,13 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
 
             val fragment = ReaderFragment()
             val args = Bundle()
+            args.putSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY, library)
             args.putSerializable(GeneralConsts.KEYS.OBJECT.FILE, path)
             fragment.arguments = args
             return fragment
         }
 
-        fun create(manga: Manga): ReaderFragment {
+        fun create(library: Library, manga: Manga): ReaderFragment {
             if (mCacheFolderIndex >= 2)
                 mCacheFolderIndex = 0
             else
@@ -147,6 +148,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
 
             val fragment = ReaderFragment()
             val args = Bundle()
+            args.putSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY, library)
             args.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, manga)
             fragment.arguments = args
             return fragment
@@ -182,6 +184,8 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         super.onCreate(savedInstanceState)
         mCurrentPage = 0
         mStorage = Storage(requireContext())
+        mLibrary = LibraryUtil.getDefault(requireContext())
+
         val bundle: Bundle? = arguments
         if (bundle != null) {
             mLibrary = bundle.getSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY) as Library

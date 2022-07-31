@@ -111,6 +111,7 @@ class GeneralConsts private constructor() {
 
     object CONFIG {
         val DATA_FORMAT = listOf("dd/MM/yyyy", "MM/dd/yy", "dd/MM/yy", "yyyy-MM-dd")
+        const val REQUEST_ENDED = 999
     }
 
     object CACHE_FOLDER {

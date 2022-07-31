@@ -151,8 +151,8 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
                 mListMangasFull.value = mutableListOf()
                 indexes.add(Pair(ListMod.FULL, 0))
             }
-
-            change = true
+            //Receive value force refresh, not necessary notify
+            change = false
         }
 
         refreshComplete(change, indexes)

@@ -312,8 +312,7 @@
                 android:paddingEnd="16dp"
                 android:text="@string/config_switch_use_path_name_for_linked"
                 android:textColor="@color/text_primary"
-                android:theme="@style/SwitchMaterial"
-                app:theme="@style/SwitchMaterial" />
+                android:theme="@style/SwitchMaterial" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/switch_use_dual_page_calculate"
@@ -324,8 +323,7 @@
                 android:paddingEnd="16dp"
                 android:text="@string/config_switch_use_dual_page_calculate"
                 android:textColor="@color/text_primary"
-                android:theme="@style/SwitchMaterial"
-                app:theme="@style/SwitchMaterial" />
+                android:theme="@style/SwitchMaterial" />
 
             <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"

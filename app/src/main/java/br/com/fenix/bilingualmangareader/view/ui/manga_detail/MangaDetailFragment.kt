@@ -15,11 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Information
+import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.service.controller.ImageController
 import br.com.fenix.bilingualmangareader.service.controller.ImageCoverController
 import br.com.fenix.bilingualmangareader.service.listener.InformationCardListener
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import br.com.fenix.bilingualmangareader.util.helpers.LibraryUtil
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import br.com.fenix.bilingualmangareader.view.adapter.manga_detail.InformationRelatedCardAdapter
 import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity
@@ -28,7 +30,7 @@ import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 
 
-class MangaDetailFragment(private var mManga: Manga?) : Fragment() {
+class MangaDetailFragment(private val mLibrary: Library, private var mManga: Manga?) : Fragment() {
 
     private val mLOGGER = LoggerFactory.getLogger(MangaDetailFragment::class.java)
 
@@ -128,6 +130,7 @@ class MangaDetailFragment(private var mManga: Manga?) : Fragment() {
                 mViewModel.save(mManga)
                 val intent = Intent(context, ReaderActivity::class.java)
                 val bundle = Bundle()
+                bundle.putSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY, mLibrary)
                 bundle.putString(GeneralConsts.KEYS.MANGA.NAME, mManga!!.title)
                 bundle.putInt(GeneralConsts.KEYS.MANGA.MARK, mManga!!.bookMark)
                 bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, mManga!!)

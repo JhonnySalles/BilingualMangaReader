@@ -6,8 +6,10 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import br.com.fenix.bilingualmangareader.R
+import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import br.com.fenix.bilingualmangareader.util.helpers.LibraryUtil
 
 
 class MangaDetailActivity : AppCompatActivity() {
@@ -27,9 +29,14 @@ class MangaDetailActivity : AppCompatActivity() {
         else
             null
 
+        val library = if (bundle != null && bundle.containsKey(GeneralConsts.KEYS.OBJECT.LIBRARY))
+            bundle[GeneralConsts.KEYS.OBJECT.LIBRARY] as Library
+        else
+            LibraryUtil.getDefault(this)
+
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.root_frame_manga_detail, MangaDetailFragment(manga))
+            .replace(R.id.root_frame_manga_detail, MangaDetailFragment(library, manga))
             .commit()
     }
 

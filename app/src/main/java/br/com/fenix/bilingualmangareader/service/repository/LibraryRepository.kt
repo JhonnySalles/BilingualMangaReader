@@ -22,21 +22,21 @@ class LibraryRepository(context: Context) {
             mDataBase.delete(obj.id!!)
     }
 
-    fun list(): List<Library>? {
+    fun list(): List<Library> {
         return try {
             mDataBase.list()
         } catch (e: Exception) {
             mLOGGER.error("Error when list Library: " + e.message, e)
-            null
+            listOf()
         }
     }
 
-    fun listEnabled(): List<Library>? {
+    fun listEnabled(): List<Library> {
         return try {
             mDataBase.listEnabled()
         } catch (e: Exception) {
             mLOGGER.error("Error when list Library: " + e.message, e)
-            null
+            listOf()
         }
     }
 

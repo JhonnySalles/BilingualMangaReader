@@ -17,6 +17,7 @@ import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.service.listener.MangaCardListener
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import br.com.fenix.bilingualmangareader.util.helpers.LibraryUtil
 import br.com.fenix.bilingualmangareader.view.adapter.history.HistoryCardAdapter
 import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity
 import java.time.LocalDateTime
@@ -47,6 +48,7 @@ class HistoryFragment : Fragment() {
                     val intent = Intent(context, ReaderActivity::class.java)
                     val bundle = Bundle()
                     manga.lastAccess = LocalDateTime.now()
+                    bundle.putSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY, LibraryUtil.getDefault(requireContext()))
                     bundle.putString(GeneralConsts.KEYS.MANGA.NAME, manga.title)
                     bundle.putInt(GeneralConsts.KEYS.MANGA.MARK, manga.bookMark)
                     bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, manga)

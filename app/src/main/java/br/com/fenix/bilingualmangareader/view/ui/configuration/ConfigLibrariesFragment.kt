@@ -43,8 +43,6 @@ class ConfigLibrariesFragment : Fragment() {
 
     private val mViewModel: ConfigLibrariesViewModel by viewModels()
 
-    private lateinit var mainFunctions: MainListener
-
     private lateinit var mRecycleView: RecyclerView
     private lateinit var mAddButton: FloatingActionButton
     private lateinit var mListener: LibrariesCardListener
@@ -75,8 +73,6 @@ class ConfigLibrariesFragment : Fragment() {
         observer()
 
         mViewModel.load()
-
-        mainFunctions.showUpButton()
     }
 
     override fun onCreateView(
@@ -85,12 +81,6 @@ class ConfigLibrariesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_config_libraries, container, false)
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is MainListener)
-            mainFunctions = context
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -102,12 +92,6 @@ class ConfigLibrariesFragment : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    override fun onDestroyView() {
-        mainFunctions.hideUpButton()
-        (requireActivity() as MainActivity).setLibraries(mViewModel.getList())
-        super.onDestroyView()
     }
 
     private var itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {

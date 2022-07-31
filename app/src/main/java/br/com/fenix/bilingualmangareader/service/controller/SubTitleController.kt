@@ -20,6 +20,7 @@ import br.com.fenix.bilingualmangareader.service.parses.Parse
 import br.com.fenix.bilingualmangareader.service.parses.ParseFactory
 import br.com.fenix.bilingualmangareader.service.parses.RarParse
 import br.com.fenix.bilingualmangareader.service.repository.SubTitleRepository
+import br.com.fenix.bilingualmangareader.service.repository.VocabularyRepository
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.constants.ReaderConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
@@ -44,7 +45,10 @@ class SubTitleController private constructor(private val context: Context) {
     private val mLOGGER = LoggerFactory.getLogger(SubTitleController::class.java)
 
     var mReaderFragment: ReaderFragment? = null
+
     private val mSubtitleRepository: SubTitleRepository = SubTitleRepository(context)
+    private val mVocabularyRepository = VocabularyRepository(context)
+
     private lateinit var mParse: Parse
     var mManga: Manga? = null
     private var mLanguages: MutableSet<Languages> = arraySetOf()
@@ -175,6 +179,8 @@ class SubTitleController private constructor(private val context: Context) {
                     }
                 }
             }
+
+            mVocabularyRepository.processVocabulary(mManga?.id, listChapter)
             setListChapter(listChapter)
         }
     }
