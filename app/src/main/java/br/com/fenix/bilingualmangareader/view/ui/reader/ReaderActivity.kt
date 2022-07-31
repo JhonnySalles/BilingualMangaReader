@@ -257,7 +257,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         if (savedInstanceState == null) {
             if (Intent.ACTION_VIEW == intent.action) {
                 val file = File(intent.data!!.path!!)
-                val fragment: ReaderFragment = ReaderFragment.create(file)
+                val fragment: ReaderFragment = ReaderFragment.create(mLibrary, file)
                 setTitles(file.name, "")
                 mSubtitleController.setFileLink(null)
                 setFragment(fragment)
@@ -273,7 +273,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
                 val fragment: ReaderFragment = if (manga != null) {
                     mManga = manga
                     setTitles(manga.title, page.toString())
-                    ReaderFragment.create(manga)
+                    ReaderFragment.create(mLibrary, manga)
                 } else
                     ReaderFragment.create()
 
@@ -331,7 +331,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         val fileLink: PagesLinkViewModel by viewModels()
         mSubtitleController.setFileLink(fileLink.getFileLink(manga))
 
-        setFragment(ReaderFragment.create(manga))
+        setFragment(ReaderFragment.create(mLibrary, manga))
     }
 
     fun setTitles(title: String, page: String) {
@@ -606,6 +606,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         if (mManga != null) {
             val intent = Intent(applicationContext, PagesLinkActivity::class.java)
             val bundle = Bundle()
+            bundle.putSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY, mLibrary)
             bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, mManga)
             bundle.putInt(GeneralConsts.KEYS.MANGA.PAGE_NUMBER, mReaderProgress.progress)
             intent.putExtras(bundle)

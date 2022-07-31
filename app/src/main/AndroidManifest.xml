@@ -52,6 +52,11 @@
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".MainActivity"/>
+        <activity
+            android:name="br.com.fenix.bilingualmangareader.view.ui.configuration.ConfigLibrariesActivity"
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".MainActivity"/>
 
         <meta-data
             android:name="com.google.android.gms.version"

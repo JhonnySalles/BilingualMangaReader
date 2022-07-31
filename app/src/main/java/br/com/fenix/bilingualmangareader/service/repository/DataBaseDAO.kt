@@ -1,6 +1,7 @@
 package br.com.fenix.bilingualmangareader.service.repository
 
 import androidx.room.*
+import androidx.sqlite.db.SupportSQLiteOpenHelper
 import br.com.fenix.bilingualmangareader.model.entity.*
 import br.com.fenix.bilingualmangareader.util.constants.DataBaseConsts
 
@@ -117,6 +118,7 @@ abstract class KanjiJLPTDAO : DataBaseDAO<KanjiJLPT> {
 
 }
 
+
 @Dao
 abstract class KanjaxDAO : DataBaseDAO<Kanjax> {
 
@@ -130,6 +132,7 @@ abstract class KanjaxDAO : DataBaseDAO<Kanjax> {
     abstract fun list(): List<Kanjax>
 
 }
+
 
 @Dao
 abstract class FileLinkDAO : DataBaseDAO<FileLink> {
@@ -154,6 +157,7 @@ abstract class FileLinkDAO : DataBaseDAO<FileLink> {
 
 }
 
+
 @Dao
 abstract class PageLinkDAO : DataBaseDAO<PageLink> {
 
@@ -171,19 +175,38 @@ abstract class PageLinkDAO : DataBaseDAO<PageLink> {
 
 }
 
+
 @Dao
-abstract class VocabularyDAO : DataBaseDAO<SubTitle> {
+abstract class VocabularyDAO : DataBaseDAO<Vocabulary> {
+
+    @Query("SELECT * FROM " + DataBaseConsts.VOCABULARY.TABLE_NAME)
+    abstract fun list(): List<Vocabulary>
+
+    @Query("SELECT * FROM " + DataBaseConsts.VOCABULARY.TABLE_NAME + " WHERE " + DataBaseConsts.VOCABULARY.COLUMNS.ID + " = :id")
+    abstract fun get(id: Long): Vocabulary
+
+    @Query("SELECT * FROM " + DataBaseConsts.VOCABULARY.TABLE_NAME + " WHERE " + DataBaseConsts.VOCABULARY.COLUMNS.WORD + " = :vocabulary AND " + DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM + " = :basicForm LIMIT 1")
+    abstract fun find(vocabulary: String, basicForm: String): Vocabulary?
 
     @Query("SELECT * FROM " + DataBaseConsts.VOCABULARY.TABLE_NAME + " WHERE " + DataBaseConsts.VOCABULARY.COLUMNS.WORD + " = :vocabulary OR " + DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM + " = :vocabulary LIMIT 1")
-    abstract fun find(vocabulary: String): Vocabulary
+    abstract fun find(vocabulary: String): Vocabulary?
 
     @Query("SELECT * FROM " + DataBaseConsts.VOCABULARY.TABLE_NAME + " WHERE " + DataBaseConsts.VOCABULARY.COLUMNS.WORD + " = :vocabulary OR " + DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM + " = :vocabulary")
     abstract fun findAll(vocabulary: String): List<Vocabulary>
 
-    @Query("SELECT * FROM " + DataBaseConsts.VOCABULARY.TABLE_NAME + " WHERE " + DataBaseConsts.VOCABULARY.COLUMNS.ID + " = :idManga LIMIT 1")
-    abstract fun findByIdManga(idManga: Long): Vocabulary
+    @Query("SELECT * FROM " + DataBaseConsts.VOCABULARY.TABLE_NAME + " WHERE " + DataBaseConsts.VOCABULARY.COLUMNS.ID + " = :idManga ")
+    abstract fun find(idManga: Long): List<Vocabulary>
+
+    @Query("SELECT * FROM " + DataBaseConsts.VOCABULARY.TABLE_NAME + " WHERE " + DataBaseConsts.VOCABULARY.COLUMNS.WORD + " = :vocabulary AND " + DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM + " = :basicForm LIMIT 1")
+    abstract fun exists(vocabulary: String, basicForm: String): Vocabulary?
+
+    fun insert(dbHelper: SupportSQLiteOpenHelper, idManga: Long, idVocabulary: Long) {
+        val database = dbHelper.readableDatabase
+        database.execSQL("INSERT OR IGNORE INTO " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + " (" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + "," + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY +") VALUES ($idManga, $idVocabulary)")
+    }
 
 }
+
 
 @Dao
 abstract class LibrariesDAO : DataBaseDAO<Library> {

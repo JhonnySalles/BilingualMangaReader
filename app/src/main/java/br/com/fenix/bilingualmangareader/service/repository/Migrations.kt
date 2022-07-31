@@ -184,8 +184,8 @@ class Migrations {
 
                 database.execSQL(
                     "CREATE TABLE " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + " (" +
-                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + " INTEGER, " +
-                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY + " INTEGER," +
+                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + " INTEGER UNIQUE, " +
+                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY + " INTEGER UNIQUE," +
                             " FOREIGN KEY(" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA +") REFERENCES " + DataBaseConsts.MANGA.TABLE_NAME + "(" + DataBaseConsts.MANGA.COLUMNS.ID + ")," +
                             " FOREIGN KEY(" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY +") REFERENCES " + DataBaseConsts.LIBRARIES.TABLE_NAME + "(" + DataBaseConsts.LIBRARIES.COLUMNS.ID + "))"
                 )

@@ -188,28 +188,30 @@ class Formatter {
         private fun sudachiTokenizer(text: String, vocabularyClick: (String) -> (Unit)): SpannableStringBuilder {
             val textBuilder = SpannableStringBuilder()
             textBuilder.append(text)
-            for (t in mSudachiTokenizer!!.tokenize(com.worksap.nlp.sudachi.Tokenizer.SplitMode.C, text)) {
-                if (t.readingForm().isNotEmpty() && t.surface().matches(mPattern)
-                ) {
-                    var furigana = ""
-                    for (c in t.readingForm())
-                        furigana += JapaneseCharacter.toHiragana(c)
+            if (mSudachiTokenizer != null) {
+                for (t in mSudachiTokenizer!!.tokenize(com.worksap.nlp.sudachi.Tokenizer.SplitMode.C, text)) {
+                    if (t.readingForm().isNotEmpty() && t.surface().matches(mPattern)
+                    ) {
+                        var furigana = ""
+                        for (c in t.readingForm())
+                            furigana += JapaneseCharacter.toHiragana(c)
 
-                    textBuilder.setSpan(
-                        SuperRubySpan(
-                            generateFurigana(furigana),
-                            SuperReplacementSpan.Alignment.CENTER,
-                            SuperReplacementSpan.Alignment.CENTER
-                        ),
-                        t.begin(), t.end(),
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                    )
+                        textBuilder.setSpan(
+                            SuperRubySpan(
+                                generateFurigana(furigana),
+                                SuperReplacementSpan.Alignment.CENTER,
+                                SuperReplacementSpan.Alignment.CENTER
+                            ),
+                            t.begin(), t.end(),
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
 
-                    textBuilder.setSpan(
-                        generateClick(t.dictionaryForm(), vocabularyClick),
-                        t.begin(), t.end(),
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                    )
+                        textBuilder.setSpan(
+                            generateClick(t.dictionaryForm(), vocabularyClick),
+                            t.begin(), t.end(),
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+                    }
                 }
             }
 

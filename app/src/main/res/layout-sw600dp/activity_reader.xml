@@ -33,7 +33,7 @@
                 android:layout_height="@dimen/default_navigator_header_size"
                 android:background="@drawable/main_toolbar_background_reading"
                 app:popupTheme="@style/MyDarkToolbarStyle"
-                app:theme="@style/ToolbarTheme">
+                android:theme="@style/ToolbarTheme">
 
                 <LinearLayout
                     android:id="@+id/toolbar_title_content"

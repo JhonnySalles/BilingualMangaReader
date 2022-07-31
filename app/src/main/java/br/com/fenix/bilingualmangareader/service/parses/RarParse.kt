@@ -73,7 +73,7 @@ class RarParse : Parse {
     }
 
     override fun getPagePath(num: Int): String? {
-        if (mHeaders.size < num)
+        if (mHeaders.isEmpty() || mHeaders.size < num)
             return null
         return getName(mHeaders[num])
     }

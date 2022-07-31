@@ -49,7 +49,7 @@ import org.slf4j.LoggerFactory
 import kotlin.math.max
 
 
-class LibraryFragment(val library: Library) : Fragment(), SwipeRefreshLayout.OnRefreshListener {
+class LibraryFragment(val mLibrary: Library) : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private val mLOGGER = LoggerFactory.getLogger(LibraryFragment::class.java)
 
@@ -173,7 +173,7 @@ class LibraryFragment(val library: Library) : Fragment(), SwipeRefreshLayout.OnR
         }
     }
 
-    private fun notifyDataSet(index: Int, range: Int = 1, insert: Boolean = false, removed: Boolean = false) {
+    private fun notifyDataSet(index: Int, range: Int = 0, insert: Boolean = false, removed: Boolean = false) {
         if (insert)
             mRecycleView.adapter?.notifyItemInserted(index)
         else if (removed)
@@ -275,7 +275,7 @@ class LibraryFragment(val library: Library) : Fragment(), SwipeRefreshLayout.OnR
         savedInstanceState: Bundle?
     ): View? {
         mViewModel = ViewModelProvider(this).get(LibraryViewModel::class.java)
-        mViewModel.library = library
+        mViewModel.library = mLibrary
 
         val root = inflater.inflate(R.layout.fragment_library, container, false)
         val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
@@ -355,6 +355,7 @@ class LibraryFragment(val library: Library) : Fragment(), SwipeRefreshLayout.OnR
             override fun onClick(manga: Manga) {
                 val intent = Intent(context, ReaderActivity::class.java)
                 val bundle = Bundle()
+                bundle.putSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY, mLibrary)
                 bundle.putString(GeneralConsts.KEYS.MANGA.NAME, manga.title)
                 bundle.putInt(GeneralConsts.KEYS.MANGA.MARK, manga.bookMark)
                 bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, manga)
@@ -372,10 +373,7 @@ class LibraryFragment(val library: Library) : Fragment(), SwipeRefreshLayout.OnR
 
         }
         observer()
-        mViewModel.list {
-            if (it)
-                sortList()
-        }
+        mViewModel.list{ }
 
         if (!Storage.isPermissionGranted(requireContext()))
             Storage.takePermission(requireContext(), requireActivity())
@@ -388,7 +386,7 @@ class LibraryFragment(val library: Library) : Fragment(), SwipeRefreshLayout.OnR
 
         generateLayout()
         setIsRefreshing(true)
-        Scanner.getInstance(requireContext()).scanLibrary(library)
+        Scanner.getInstance(requireContext()).scanLibrary(mLibrary)
 
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             // Prevent backpress if query is actived
@@ -406,10 +404,10 @@ class LibraryFragment(val library: Library) : Fragment(), SwipeRefreshLayout.OnR
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
-        if (library.type == Libraries.DEFAULT)
+        if (mLibrary.type == Libraries.DEFAULT)
             mainFunctions.clearLibraryTitle()
         else
-            mainFunctions.changeLibraryTitle(library.title)
+            mainFunctions.changeLibraryTitle(mLibrary.title)
 
         return root
     }
@@ -425,6 +423,7 @@ class LibraryFragment(val library: Library) : Fragment(), SwipeRefreshLayout.OnR
         itemRefresh = position
         val intent = Intent(requireContext(), MangaDetailActivity::class.java)
         val bundle = Bundle()
+        bundle.putSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY, mLibrary)
         bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, manga)
         intent.putExtras(bundle)
         val idText = if (mGridType != LibraryType.LINE)
@@ -578,7 +577,7 @@ class LibraryFragment(val library: Library) : Fragment(), SwipeRefreshLayout.OnR
 
         if (!Scanner.getInstance(requireContext()).isRunning()) {
             setIsRefreshing(true)
-            Scanner.getInstance(requireContext()).scanLibrary(library)
+            Scanner.getInstance(requireContext()).scanLibrary(mLibrary)
         }
     }
 

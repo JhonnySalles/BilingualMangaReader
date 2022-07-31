@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- JLPT Colors -->
+    <color name="JLPT0">#b3b3b3</color>
+    <color name="JLPT1">#ff4d4d</color>
+    <color name="JLPT2">#ffc266</color>
+    <color name="JLPT3">#66ff66</color>
+    <color name="JLPT4">#668cff</color>
+    <color name="JLPT5">#b366ff</color>
+    <color name="VOCABULARY">#00ff00</color>
+
     <!-- Primary color -->
     <color name="primary">#212121</color>
     <color name="primary_variant">#484848</color>
@@ -76,11 +85,4 @@
     <color name="manga_detail_list_divider">#484848</color>
     <color name="manga_detail_list_text">#FFFFFFFF</color>
 
-    <color name="JLPT0">#b3b3b3</color>
-    <color name="JLPT1">#ff4d4d</color>
-    <color name="JLPT2">#ffc266</color>
-    <color name="JLPT3">#66ff66</color>
-    <color name="JLPT4">#668cff</color>
-    <color name="JLPT5">#b366ff</color>
-    <color name="VOCABULARY">#00ff00</color>
 </resources>

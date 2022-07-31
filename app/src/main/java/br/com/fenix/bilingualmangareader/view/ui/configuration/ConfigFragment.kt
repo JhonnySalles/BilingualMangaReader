@@ -20,6 +20,7 @@ import br.com.fenix.bilingualmangareader.model.enums.ReaderMode
 import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
+import br.com.fenix.bilingualmangareader.view.ui.manga_detail.MangaDetailActivity
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputLayout
 import org.slf4j.LoggerFactory
@@ -247,6 +248,11 @@ class ConfigFragment : Fragment() {
 
                 mLibraryPathAutoComplete.setText(folder)
             }
+
+            GeneralConsts.CONFIG.REQUEST_ENDED -> {
+                mViewModel.load()
+                (requireActivity() as MainActivity).setLibraries(mViewModel.getList())
+            }
         }
     }
 
@@ -443,7 +449,9 @@ class ConfigFragment : Fragment() {
     }
 
     private fun openLibraries() {
-        val main = requireActivity() as MainActivity
-        main.openFragment(ConfigLibrariesFragment())
+        val intent = Intent(requireContext(), ConfigLibrariesActivity::class.java)
+        requireActivity().overridePendingTransition(R.anim.fade_in_fragment_add_enter, R.anim.fade_out_fragment_remove_exit)
+        startActivityForResult(intent, GeneralConsts.CONFIG.REQUEST_ENDED, null)
     }
+
 }

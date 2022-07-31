@@ -31,6 +31,6 @@
         android:layout_marginStart="5dp"
         android:paddingTop="10dp"
         app:popupTheme="@style/MyDarkToolbarStyle"
-        app:theme="@style/ToolbarTheme"/>
+        android:theme="@style/ToolbarTheme"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
