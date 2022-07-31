@@ -32,6 +32,7 @@ import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Manga
+import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.enums.PageMode
 import br.com.fenix.bilingualmangareader.model.enums.ReaderMode
 import br.com.fenix.bilingualmangareader.service.controller.SubTitleController
@@ -41,6 +42,7 @@ import br.com.fenix.bilingualmangareader.service.parses.RarParse
 import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.constants.ReaderConsts
+import br.com.fenix.bilingualmangareader.util.helpers.LibraryUtil
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import br.com.fenix.bilingualmangareader.view.components.PageImageView
 import br.com.fenix.bilingualmangareader.view.components.PageViewPager
@@ -88,6 +90,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
     private lateinit var mComicHandler: MangaHandler
     var mTargets = SparseArray<Target>()
 
+    private var mLibrary: Library = LibraryUtil.getDefault(requireContext())
     private var mManga: Manga? = null
     private var mNewManga: Manga? = null
     private var mNewMangaTitle = 0
@@ -95,7 +98,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
     private lateinit var mSubtitleController: SubTitleController
 
     init {
-        mResourceViewMode = HashMap<Int, ReaderMode>()
+        mResourceViewMode = HashMap()
         mResourceViewMode!![R.id.view_mode_aspect_fill] = ReaderMode.ASPECT_FILL
         mResourceViewMode!![R.id.view_mode_aspect_fit] = ReaderMode.ASPECT_FIT
         mResourceViewMode!![R.id.view_mode_fit_width] = ReaderMode.FIT_WIDTH
@@ -181,6 +184,8 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         mStorage = Storage(requireContext())
         val bundle: Bundle? = arguments
         if (bundle != null) {
+            mLibrary = bundle.getSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY) as Library
+
             mManga = bundle.getSerializable(GeneralConsts.KEYS.OBJECT.MANGA) as Manga?
             val file: File? = if (mManga != null) {
                 mManga?.file
@@ -781,14 +786,14 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
 
     fun hitBeginning() {
         if (mManga != null) {
-            val c: Manga? = mStorage.getPrevManga(mManga!!)
+            val c: Manga? = mStorage.getPrevManga(mLibrary, mManga!!)
             confirmSwitch(c, R.string.switch_prev_comic)
         }
     }
 
     fun hitEnding() {
         if (mManga != null) {
-            val c: Manga? = mStorage.getNextManga(mManga!!)
+            val c: Manga? = mStorage.getNextManga(mLibrary, mManga!!)
             confirmSwitch(c, R.string.switch_next_comic)
         }
     }

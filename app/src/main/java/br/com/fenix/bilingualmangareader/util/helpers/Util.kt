@@ -2,17 +2,22 @@ package br.com.fenix.bilingualmangareader.util.helpers
 
 import android.app.ActivityManager
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.pm.ApplicationInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.DisplayMetrics
 import br.com.fenix.bilingualmangareader.R
+import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.enums.Languages
+import br.com.fenix.bilingualmangareader.model.enums.Libraries
 import br.com.fenix.bilingualmangareader.service.parses.Parse
+import br.com.fenix.bilingualmangareader.util.constants.DataBaseConsts
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.InputStream
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -21,6 +26,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.experimental.and
 import kotlin.math.roundToInt
+
 
 class Util {
     companion object Utils {
@@ -223,7 +229,7 @@ class Util {
         }
 
         fun getNameWithoutExtensionFromPath(path: String): String {
-            var name =  if (path.contains('/'))
+            var name = if (path.contains('/'))
                 path.substringAfterLast("/")
             else if (path.contains('\\'))
                 path.substringAfterLast('\\')
@@ -369,9 +375,10 @@ class Util {
             return SimpleDateFormat(pattern, Locale.getDefault()).format(date)
         }
 
-        fun setBold(text: String): String = "<b>$text</b>"
+        fun setBold(text: String): String =
+            "<b>$text</b>"
 
-        fun getDivideStrings(text: String, delimiter: Char = '\n', occurrences: Int = 10) : Pair<String, String> {
+        fun getDivideStrings(text: String, delimiter: Char = '\n', occurrences: Int = 10): Pair<String, String> {
             var postion = text.length
             var occurence = 0
             for ((i, c) in text.withIndex()) {
@@ -387,6 +394,39 @@ class Util {
             val string2 = if (postion >= text.length) "" else text.substring(postion, text.length)
 
             return Pair(string1, string2)
+        }
+    }
+}
+
+class FileUtil(val context: Context) {
+
+    /**
+     * Copies an asset file from assets to phone internal storage, if it doesn't already exist
+     * Will be copied to path <prefix> + <assetName> in files directory
+     * Returns true if copied, false otherwise (including if file already exists)
+     */
+    fun copyAssetToFilesIfNotExist(prefix: String, assetName: String, dir: String = ""): Boolean {
+        val directory = dir.ifEmpty { context.filesDir.absolutePath }
+        val file = File(directory, prefix + assetName)
+        if (file.exists())
+            return false
+
+        val inputStream: InputStream = context.assets.open(assetName)
+        File(directory, prefix).mkdirs()
+        // Copy in 10mb chunks to avoid going oom for larger files
+        inputStream.copyTo(file.outputStream(), 10000)
+        inputStream.close()
+        return true
+    }
+
+}
+
+class LibraryUtil {
+    companion object LibraryUtils {
+        fun getDefault(context: Context): Library {
+            val preference: SharedPreferences = GeneralConsts.getSharedPreferences(context)
+            val path = preference.getString(GeneralConsts.KEYS.LIBRARY.FOLDER, "") ?: ""
+            return Library(-1, Libraries.DEFAULT.name, path)
         }
     }
 }

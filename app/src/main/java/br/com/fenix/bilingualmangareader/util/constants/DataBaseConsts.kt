@@ -19,6 +19,7 @@ class DataBaseConsts private constructor() {
             const val LAST_ACCESS = "lastAccess"
             const val EXCLUDED = "excluded"
             const val LAST_ALTERATION = "lastAlteration"
+            const val FK_ID_LIBRARY = "id_library"
         }
     }
 
@@ -132,6 +133,40 @@ class DataBaseConsts private constructor() {
         }
     }
 
+    object VOCABULARY {
+        const val TABLE_NAME = "Vocabulary"
 
+        object COLUMNS {
+            const val ID = "id"
+            const val WORD = "word"
+            const val BASIC_FORM = "basic_form"
+            const val MEANING = "meaning"
+            const val READING = "reading"
+            const val REVISED = "revised"
+        }
+    }
+
+    object MANGA_VOCABULARY {
+        const val TABLE_NAME = "MangaVocabulary"
+
+        object COLUMNS {
+            const val ID_MANGA = "id_manga"
+            const val ID_VOCABULARY = "id_vocabulary"
+        }
+    }
+
+    object LIBRARIES {
+        const val TABLE_NAME = "Libraries"
+
+        object COLUMNS {
+            const val ID = "id"
+            const val TITLE = "title"
+            const val PATH = "path"
+            const val TYPE = "type"
+            const val ENABLED = "enabled"
+            const val EXCLUDED = "excluded"
+        }
+
+    }
 
 }

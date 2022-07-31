@@ -108,7 +108,7 @@ class MainActivityTest {
             .perform(DrawerActions.open())
 
         onView(withId(R.id.nav_view))
-            .perform(NavigationViewActions.navigateTo(R.id.menu_library))
+            .perform(NavigationViewActions.navigateTo(R.id.menu_library_default))
 
         waiter.await(animationTimer, TimeUnit.MILLISECONDS)
 

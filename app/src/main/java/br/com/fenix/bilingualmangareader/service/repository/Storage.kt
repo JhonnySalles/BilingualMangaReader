@@ -11,6 +11,7 @@ import android.os.Environment
 import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import java.time.LocalDateTime
@@ -19,13 +20,13 @@ class Storage(context: Context) {
 
     private val mRepository = MangaRepository(context)
 
-    fun getPrevManga(manga: Manga): Manga? {
+    fun getPrevManga(library: Library, manga: Manga): Manga? {
         var mangas = mRepository.findByFileFolder(manga.file.parent ?: "")
         var idx = mangas!!.indexOf(manga)
         var prev = if (idx > 0) mangas[idx - 1] else null
 
         if (prev == null) {
-            mangas = mRepository.listOrderByTitle()
+            mangas = mRepository.listOrderByTitle(library)
             idx = mangas!!.indexOf(manga)
             prev = if (idx > 0) mangas[idx - 1] else null
         }
@@ -33,13 +34,13 @@ class Storage(context: Context) {
         return prev
     }
 
-    fun getNextManga(manga: Manga): Manga? {
+    fun getNextManga(library: Library, manga: Manga): Manga? {
         var mangas = mRepository.findByFileFolder(manga.file.parent ?: "")
         var idx = mangas!!.indexOf(manga)
         var next = if (idx != mangas.size - 1) mangas[idx + 1] else null
 
         if (next == null) {
-            mangas = mRepository.listOrderByTitle()
+            mangas = mRepository.listOrderByTitle(library)
             idx = mangas!!.indexOf(manga)
             next = if (idx != mangas.size - 1) mangas[idx + 1] else null
         }
@@ -53,9 +54,9 @@ class Storage(context: Context) {
     fun findByName(name: String): Manga? =
         mRepository.findByFileName(name)
 
-    fun listMangas(): List<Manga>? = mRepository.list()
+    fun listMangas(library: Library): List<Manga>? = mRepository.list(library)
 
-    fun listDeleted(): List<Manga>? = mRepository.listDeleted()
+    fun listDeleted(library: Library): List<Manga>? = mRepository.listDeleted(library)
 
     fun delete(manga: Manga) {
         manga.lastAlteration = LocalDateTime.now()
@@ -123,6 +124,6 @@ class Storage(context: Context) {
     fun updateLastAccess(manga: Manga) {
         manga.lastAlteration = LocalDateTime.now()
         manga.lastAccess = LocalDateTime.now()
-        mRepository.updateLastAcess(manga)
+        mRepository.updateLastAccess(manga)
     }
 }

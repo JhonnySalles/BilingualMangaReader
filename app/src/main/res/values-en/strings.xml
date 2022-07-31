@@ -19,6 +19,7 @@
 
     <!-- MENU -->
     <string name="menu_search">Search</string>
+    <string name="menu_libraries">Libraries</string>
     <string name="menu_help">Help</string>
     <string name="menu_about">About</string>
     <string name="menu_config">Configuration</string>
@@ -28,6 +29,7 @@
 
     <!-- CONFIG -->
     <string name="config_title_library">Library</string>
+    <string name="config_title_libraries">Libraries</string>
     <string name="config_title_sub_title">SubTitle</string>
     <string name="config_title_system">System</string>
     <string name="config_title_reader">Reader</string>
@@ -51,6 +53,20 @@
     <string name="config_system_language">System language</string>
 
     <string name="config_option_date_time_format_0">Default (%s)</string>
+
+    <!-- CONFIG LIBRARIES -->
+    <string name="config_libraries_title_libraries">Libraries</string>
+    <string name="config_libraries_add_library">Add Library</string>
+    <string name="config_libraries_delete_library">Delete Library</string>
+    <string name="config_libraries_confirm_delete_library">Library</string>
+
+    <string name="config_libraries_title_library">Library title</string>
+    <string name="config_libraries_title_language">Library language</string>
+    <string name="config_libraries_title_path">Library folder</string>
+
+    <string name="config_libraries_title_library_required">Title required</string>
+    <string name="config_libraries_title_path_required">Folder required</string>
+    <string name="config_libraries_title_path_default">The folder has already been set as the default</string>
 
     <!-- LANGUAGE -->
     <string name="languages_choice">Select language</string>

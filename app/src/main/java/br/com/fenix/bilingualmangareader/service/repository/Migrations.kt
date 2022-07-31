@@ -5,6 +5,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.util.constants.DataBaseConsts
 import org.slf4j.LoggerFactory
+import java.io.BufferedReader
 
 class Migrations {
     object SQLINITIAL {
@@ -24,6 +25,10 @@ class Migrations {
                 DataBaseConsts.KANJAX.COLUMNS.SJIS + ", " + DataBaseConsts.KANJAX.COLUMNS.KEYWORDS_PT + ", " +
                 DataBaseConsts.KANJAX.COLUMNS.MEANING_PT + ") VALUES "
 
+        const val VOCABULARY: String = "INSERT INTO " + DataBaseConsts.VOCABULARY.TABLE_NAME +
+                " (" + DataBaseConsts.VOCABULARY.COLUMNS.WORD + ", " + DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM + ", " +
+                DataBaseConsts.VOCABULARY.COLUMNS.READING + ", " + DataBaseConsts.VOCABULARY.COLUMNS.MEANING + ") VALUES "
+
     }
 
     companion object {
@@ -36,38 +41,46 @@ class Migrations {
 
                 database.execSQL("ALTER TABLE " + DataBaseConsts.MANGA.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.MANGA.COLUMNS.EXCLUDED + " INTEGER DEFAULT 0 NOT NULL")
 
-                database.execSQL( "CREATE TABLE " + DataBaseConsts.FILELINK.TABLE_NAME + " (" +
-                        DataBaseConsts.FILELINK.COLUMNS.ID + " INTEGER PRIMARY KEY, " +
-                        DataBaseConsts.FILELINK.COLUMNS.FK_ID_MANGA + " INTEGER NOT NULL, " +
-                        DataBaseConsts.FILELINK.COLUMNS.PAGES + " INTEGER NOT NULL, " +
-                        DataBaseConsts.FILELINK.COLUMNS.FILE_PATH + " TEXT NOT NULL, " +
-                        DataBaseConsts.FILELINK.COLUMNS.FILE_NAME + " TEXT NOT NULL, " +
-                        DataBaseConsts.FILELINK.COLUMNS.FILE_TYPE + " TEXT NOT NULL, " +
-                        DataBaseConsts.FILELINK.COLUMNS.FILE_FOLDER + " TEXT NOT NULL," +
-                        DataBaseConsts.FILELINK.COLUMNS.DATE_CREATE + " TEXT, " +
-                        DataBaseConsts.FILELINK.COLUMNS.LAST_ACCESS + " TEXT)")
+                database.execSQL(
+                    "CREATE TABLE " + DataBaseConsts.FILELINK.TABLE_NAME + " (" +
+                            DataBaseConsts.FILELINK.COLUMNS.ID + " INTEGER PRIMARY KEY, " +
+                            DataBaseConsts.FILELINK.COLUMNS.FK_ID_MANGA + " INTEGER NOT NULL, " +
+                            DataBaseConsts.FILELINK.COLUMNS.PAGES + " INTEGER NOT NULL, " +
+                            DataBaseConsts.FILELINK.COLUMNS.FILE_PATH + " TEXT NOT NULL, " +
+                            DataBaseConsts.FILELINK.COLUMNS.FILE_NAME + " TEXT NOT NULL, " +
+                            DataBaseConsts.FILELINK.COLUMNS.FILE_TYPE + " TEXT NOT NULL, " +
+                            DataBaseConsts.FILELINK.COLUMNS.FILE_FOLDER + " TEXT NOT NULL," +
+                            DataBaseConsts.FILELINK.COLUMNS.DATE_CREATE + " TEXT, " +
+                            DataBaseConsts.FILELINK.COLUMNS.LAST_ACCESS + " TEXT)"
+                )
 
-                database.execSQL( "CREATE INDEX index_" + DataBaseConsts.FILELINK.TABLE_NAME
-                        + "_" + DataBaseConsts.FILELINK.COLUMNS.FK_ID_MANGA + "_" + DataBaseConsts.FILELINK.COLUMNS.FILE_NAME
-                        + " ON " +  DataBaseConsts.FILELINK.TABLE_NAME +
-                        "(" + DataBaseConsts.FILELINK.COLUMNS.FK_ID_MANGA + ", " + DataBaseConsts.FILELINK.COLUMNS.FILE_NAME + ")")
+                database.execSQL(
+                    "CREATE INDEX index_" + DataBaseConsts.FILELINK.TABLE_NAME
+                            + "_" + DataBaseConsts.FILELINK.COLUMNS.FK_ID_MANGA + "_" + DataBaseConsts.FILELINK.COLUMNS.FILE_NAME
+                            + " ON " + DataBaseConsts.FILELINK.TABLE_NAME +
+                            "(" + DataBaseConsts.FILELINK.COLUMNS.FK_ID_MANGA + ", " + DataBaseConsts.FILELINK.COLUMNS.FILE_NAME + ")"
+                )
 
-                database.execSQL( "CREATE TABLE " + DataBaseConsts.PAGESLINK.TABLE_NAME + " (" +
-                        DataBaseConsts.PAGESLINK.COLUMNS.ID + " INTEGER PRIMARY KEY, " +
-                        DataBaseConsts.PAGESLINK.COLUMNS.FK_ID_FILE + " INTEGER, " +
-                        DataBaseConsts.PAGESLINK.COLUMNS.MANGA_PAGE + " INTEGER NOT NULL, " +
-                        DataBaseConsts.PAGESLINK.COLUMNS.MANGA_PAGES + " INTEGER NOT NULL, " +
-                        DataBaseConsts.PAGESLINK.COLUMNS.FILE_LINK_PAGE + " INTEGER NOT NULL, " +
-                        DataBaseConsts.PAGESLINK.COLUMNS.FILE_LINK_PAGES + " INTEGER NOT NULL, " +
-                        DataBaseConsts.PAGESLINK.COLUMNS.MANGA_PAGE_NAME + " TEXT NOT NULL, " +
-                        DataBaseConsts.PAGESLINK.COLUMNS.FILE_LINK_PAGE_NAME + " TEXT NOT NULL, " +
-                        DataBaseConsts.PAGESLINK.COLUMNS.NOT_LINKED + " INTEGER DEFAULT 0 NOT NULL)")
+                database.execSQL(
+                    "CREATE TABLE " + DataBaseConsts.PAGESLINK.TABLE_NAME + " (" +
+                            DataBaseConsts.PAGESLINK.COLUMNS.ID + " INTEGER PRIMARY KEY, " +
+                            DataBaseConsts.PAGESLINK.COLUMNS.FK_ID_FILE + " INTEGER, " +
+                            DataBaseConsts.PAGESLINK.COLUMNS.MANGA_PAGE + " INTEGER NOT NULL, " +
+                            DataBaseConsts.PAGESLINK.COLUMNS.MANGA_PAGES + " INTEGER NOT NULL, " +
+                            DataBaseConsts.PAGESLINK.COLUMNS.FILE_LINK_PAGE + " INTEGER NOT NULL, " +
+                            DataBaseConsts.PAGESLINK.COLUMNS.FILE_LINK_PAGES + " INTEGER NOT NULL, " +
+                            DataBaseConsts.PAGESLINK.COLUMNS.MANGA_PAGE_NAME + " TEXT NOT NULL, " +
+                            DataBaseConsts.PAGESLINK.COLUMNS.FILE_LINK_PAGE_NAME + " TEXT NOT NULL, " +
+                            DataBaseConsts.PAGESLINK.COLUMNS.NOT_LINKED + " INTEGER DEFAULT 0 NOT NULL)"
+                )
 
-                database.execSQL( "CREATE INDEX index_" + DataBaseConsts.PAGESLINK.TABLE_NAME
-                        + "_" + DataBaseConsts.PAGESLINK.COLUMNS.FK_ID_FILE + " ON " +  DataBaseConsts.PAGESLINK.TABLE_NAME +
-                        "(" + DataBaseConsts.PAGESLINK.COLUMNS.FK_ID_FILE + ")")
+                database.execSQL(
+                    "CREATE INDEX index_" + DataBaseConsts.PAGESLINK.TABLE_NAME
+                            + "_" + DataBaseConsts.PAGESLINK.COLUMNS.FK_ID_FILE + " ON " + DataBaseConsts.PAGESLINK.TABLE_NAME +
+                            "(" + DataBaseConsts.PAGESLINK.COLUMNS.FK_ID_FILE + ")"
+                )
 
-                mLOGGER.info("Completed migration 1 - 2." )
+                mLOGGER.info("Completed migration 1 - 2.")
             }
         }
 
@@ -142,6 +155,64 @@ class Migrations {
                 database.execSQL("ALTER TABLE " + DataBaseConsts.SUBTITLES.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.SUBTITLES.COLUMNS.LAST_ALTERATION + " TEXT")
 
                 mLOGGER.info("Completed migration 7 - 8.")
+            }
+        }
+
+        // Migration version 9.
+        val MIGRATION_8_9 = object : Migration(8, 9) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                mLOGGER.info("Start migration 8 - 9...")
+
+                database.execSQL("ALTER TABLE " + DataBaseConsts.MANGA.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.MANGA.COLUMNS.FK_ID_LIBRARY + " INTEGER")
+
+                database.execSQL(
+                    "CREATE TABLE " + DataBaseConsts.VOCABULARY.TABLE_NAME + " (" +
+                            DataBaseConsts.VOCABULARY.COLUMNS.ID + " INTEGER PRIMARY KEY, " +
+                            DataBaseConsts.VOCABULARY.COLUMNS.WORD + " TEXT NOT NULL, " +
+                            DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM + " TEXT, " +
+                            DataBaseConsts.VOCABULARY.COLUMNS.READING + " TEXT NOT NULL, " +
+                            DataBaseConsts.VOCABULARY.COLUMNS.MEANING + " TEXT NOT NULL, " +
+                            DataBaseConsts.VOCABULARY.COLUMNS.REVISED + " INTEGER DEFAULT 0 NOT NULL)"
+                )
+
+                database.execSQL(
+                    "CREATE INDEX index_" + DataBaseConsts.VOCABULARY.TABLE_NAME
+                            + "_" + DataBaseConsts.VOCABULARY.COLUMNS.WORD + "_" + DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM
+                            + " ON " + DataBaseConsts.VOCABULARY.TABLE_NAME +
+                            "(" + DataBaseConsts.VOCABULARY.COLUMNS.WORD + ", " + DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM + ")"
+                )
+
+                database.execSQL(
+                    "CREATE TABLE " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + " (" +
+                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + " INTEGER, " +
+                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY + " INTEGER," +
+                            " FOREIGN KEY(" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA +") REFERENCES " + DataBaseConsts.MANGA.TABLE_NAME + "(" + DataBaseConsts.MANGA.COLUMNS.ID + ")," +
+                            " FOREIGN KEY(" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY +") REFERENCES " + DataBaseConsts.LIBRARIES.TABLE_NAME + "(" + DataBaseConsts.LIBRARIES.COLUMNS.ID + "))"
+                )
+
+                database.execSQL(
+                    "CREATE TABLE " + DataBaseConsts.LIBRARIES.TABLE_NAME + " (" +
+                            DataBaseConsts.LIBRARIES.COLUMNS.ID + " INTEGER PRIMARY KEY, " +
+                            DataBaseConsts.LIBRARIES.COLUMNS.TITLE + " TEXT NOT NULL, " +
+                            DataBaseConsts.LIBRARIES.COLUMNS.PATH + " TEXT NOT NULL, " +
+                            DataBaseConsts.LIBRARIES.COLUMNS.TYPE + " TEXT NOT NULL, " +
+                            DataBaseConsts.LIBRARIES.COLUMNS.ENABLED + " INTEGER DEFAULT 0 NOT NULL, " +
+                            DataBaseConsts.LIBRARIES.COLUMNS.EXCLUDED + " INTEGER DEFAULT 0 NOT NULL)"
+                )
+
+                database.execSQL(
+                    "CREATE INDEX index_" + DataBaseConsts.LIBRARIES.TABLE_NAME
+                            + "_" + DataBaseConsts.LIBRARIES.COLUMNS.TITLE + " ON " + DataBaseConsts.LIBRARIES.TABLE_NAME +
+                            "(" + DataBaseConsts.LIBRARIES.COLUMNS.TITLE + ")"
+                )
+
+                mLOGGER.info("Insert initial vocabulary data...")
+
+                val kanji = DataBase.mAssets.open("vocabulary.sql").bufferedReader().use(BufferedReader::readText)
+                database.execSQL(SQLINITIAL.VOCABULARY + kanji)
+                database.execSQL( "UPDATE " + DataBaseConsts.VOCABULARY.TABLE_NAME + " SET " + DataBaseConsts.VOCABULARY.COLUMNS.REVISED + " = 1"  )
+
+                mLOGGER.info("Completed migration 8 - 9.")
             }
         }
     }

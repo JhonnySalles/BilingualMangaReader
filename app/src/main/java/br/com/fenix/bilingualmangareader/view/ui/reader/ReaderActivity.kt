@@ -24,6 +24,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import br.com.fenix.bilingualmangareader.R
+import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.model.enums.PageMode
@@ -36,6 +37,7 @@ import br.com.fenix.bilingualmangareader.service.repository.MangaRepository
 import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.service.repository.SubTitleRepository
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import br.com.fenix.bilingualmangareader.util.helpers.LibraryUtil
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import br.com.fenix.bilingualmangareader.view.components.ComponentsUtil
 import br.com.fenix.bilingualmangareader.view.ui.pages_link.PagesLinkActivity
@@ -83,8 +85,8 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     private lateinit var mStorage: Storage
     private lateinit var mRepository: MangaRepository
     private lateinit var mSubtitleController: SubTitleController
+    private lateinit var mLibrary: Library
     private var mManga: Manga? = null
-    private var mBookMark: Int = 0
     private var mMenuPopupBottomSheet: Boolean = false
 
     companion object {
@@ -173,6 +175,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
 
         findViewById<Button>(R.id.btn_menu_page_linked).setOnClickListener { mSubtitleController.drawPageLinked() }
 
+        mLibrary = LibraryUtil.getDefault(this)
         mStorage = Storage(applicationContext)
         findViewById<MaterialButton>(R.id.nav_previous_file).setOnClickListener { switchManga(false) }
         findViewById<MaterialButton>(R.id.nav_next_file).setOnClickListener { switchManga(true) }
@@ -260,6 +263,10 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
                 setFragment(fragment)
             } else {
                 val extras = intent.extras
+
+                if (extras != null)
+                    mLibrary = extras.getSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY) as Library
+
                 val manga = if (extras != null) (extras.getSerializable(GeneralConsts.KEYS.OBJECT.MANGA) as Manga?) else null
                 val page = extras?.getInt(GeneralConsts.KEYS.MANGA.MARK) ?: 0
 
@@ -282,9 +289,9 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         if (mManga == null) return
 
         val changeManga = if (isNext)
-            mStorage.getNextManga(mManga!!)
+            mStorage.getNextManga(mLibrary, mManga!!)
         else
-            mStorage.getPrevManga(mManga!!)
+            mStorage.getPrevManga(mLibrary, mManga!!)
 
         if (changeManga == null) {
             val content = if (isNext) R.string.switch_next_comic_last_comic else R.string.switch_prev_comic_first_comic
@@ -391,6 +398,9 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     }
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
+
+        savedInstanceState.putSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY, mLibrary)
+
         if (mManga != null)
             savedInstanceState.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, mManga)
 
@@ -399,6 +409,9 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
+
+        mLibrary = savedInstanceState.getSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY) as Library
+
         val manga = (savedInstanceState.getSerializable(GeneralConsts.KEYS.OBJECT.MANGA) as Manga?)
         if (manga != null) {
             mManga = manga
