@@ -373,7 +373,10 @@ class LibraryFragment(val mLibrary: Library) : Fragment(), SwipeRefreshLayout.On
 
         }
         observer()
-        mViewModel.list{ }
+        mViewModel.list {
+            if (it)
+                sortList()
+        }
 
         if (!Storage.isPermissionGranted(requireContext()))
             Storage.takePermission(requireContext(), requireActivity())
