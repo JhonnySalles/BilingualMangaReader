@@ -115,7 +115,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         try {
             val repository = LibraryRepository(this)
             val libraries = repository.listEnabled()
-            if (libraries != null) {
+            if (libraries.isNotEmpty()) {
                 setLibraries(libraries)
                 Scanner(this).scanLibrariesSilent(libraries)
             }
@@ -191,7 +191,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (!::mLibraries.isInitialized)
             mLibraries = libraries
 
-        for ((index, library) in mLibraries.withIndex())
+        for ((index, _) in mLibraries.withIndex())
             submenu.removeItem(GeneralConsts.KEYS.LIBRARIES.INDEX_LIBRARIES + index)
 
         for ((index, library) in libraries.withIndex())
