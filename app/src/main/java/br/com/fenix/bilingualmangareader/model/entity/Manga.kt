@@ -19,7 +19,7 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
         dateCreate: Date?, lastAccess: Date?,
         lastAlteration : Date?, fkLibrary: Long?,
         sort: Date? = null
-    ) : this(id, title, subTitle, path, folder, name, type, pages) {
+    ) : this(id, title, subTitle, path, folder, name, type, pages, fkLibrary) {
         this.bookMark = bookMark
         this.favorite = favorite
         this.dateCreate = dateCreate
@@ -35,7 +35,7 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
         dateCreate: Date?, lastAccess: Date?,
         lastAlteration: Date?, fkLibrary: Long?,
         excluded: Boolean = false
-    ) : this(id, title, subTitle, path, folder, name, type, pages) {
+    ) : this(id, title, subTitle, path, folder, name, type, pages, fkLibrary) {
         this.bookMark = bookMark
         this.favorite = favorite
         this.dateCreate = dateCreate
