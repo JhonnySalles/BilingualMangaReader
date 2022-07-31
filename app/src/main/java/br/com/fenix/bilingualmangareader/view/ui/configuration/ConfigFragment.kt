@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import br.com.fenix.bilingualmangareader.MainActivity
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.model.enums.Order
@@ -28,10 +30,14 @@ import java.util.*
 class ConfigFragment : Fragment() {
 
     private val mLOGGER = LoggerFactory.getLogger(ConfigFragment::class.java)
+
+    private val mViewModel: ConfigLibrariesViewModel by viewModels()
+
     private lateinit var mLibraryPath: TextInputLayout
     private lateinit var mLibraryPathAutoComplete: AutoCompleteTextView
     private lateinit var mLibraryOrder: TextInputLayout
     private lateinit var mLibraryOrderAutoComplete: AutoCompleteTextView
+    private lateinit var mLibrariesButton: Button
 
     private lateinit var mDefaultSubtitleLanguage: TextInputLayout
     private lateinit var mDefaultSubtitleLanguageAutoComplete: AutoCompleteTextView
@@ -73,6 +79,7 @@ class ConfigFragment : Fragment() {
         mLibraryPathAutoComplete = view.findViewById(R.id.menu_autocomplete_library_path)
         mLibraryOrder = view.findViewById(R.id.txt_library_order)
         mLibraryOrderAutoComplete = view.findViewById(R.id.menu_autocomplete_library_order)
+        mLibrariesButton = view.findViewById(R.id.btn_libraries)
 
         mDefaultSubtitleLanguage = view.findViewById(R.id.txt_default_subtitle_language)
         mDefaultSubtitleLanguageAutoComplete =
@@ -100,6 +107,8 @@ class ConfigFragment : Fragment() {
             intent.addCategory(Intent.CATEGORY_DEFAULT)
             startActivityForResult(intent, GeneralConsts.REQUEST.OPEN_MANGA_FOLDER)
         }
+
+        mLibrariesButton.setOnClickListener { openLibraries() }
 
         mMapLanguage = Util.getLanguages(requireContext())
 
@@ -210,10 +219,16 @@ class ConfigFragment : Fragment() {
         mMalMonitoring.setOnClickListener { changeMonitoring() }
 
         loadConfig()
+
+        mViewModel.load()
     }
 
     override fun onDestroyView() {
         saveConfig()
+
+        mViewModel.removeDefault(mLibraryPath.editText?.text.toString())
+        (requireActivity() as MainActivity).setLibraries(mViewModel.getList())
+
         super.onDestroyView()
     }
 
@@ -417,7 +432,7 @@ class ConfigFragment : Fragment() {
             val dialog: AlertDialog =
                 AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
                     .setTitle(getString(R.string.library_menu_delete))
-                    .setMessage(getString(R.string.config_title_monitoring_disconnect,getString(R.string.config_title_monitoring_mal)))
+                    .setMessage(getString(R.string.config_title_monitoring_disconnect, getString(R.string.config_title_monitoring_mal)))
                     .setPositiveButton(
                         R.string.action_disconnect
                     ) { _, _ ->
@@ -425,5 +440,10 @@ class ConfigFragment : Fragment() {
                     }.create()
             dialog.show()
         }
+    }
+
+    private fun openLibraries() {
+        val main = requireActivity() as MainActivity
+        main.openFragment(ConfigLibrariesFragment())
     }
 }

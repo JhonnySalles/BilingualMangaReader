@@ -5,13 +5,16 @@ import android.content.SharedPreferences
 import android.os.Handler
 import android.os.Message
 import android.os.Process
+import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.service.controller.ImageCoverController
 import br.com.fenix.bilingualmangareader.service.parses.Parse
 import br.com.fenix.bilingualmangareader.service.parses.ParseFactory
 import br.com.fenix.bilingualmangareader.service.parses.RarParse
 import br.com.fenix.bilingualmangareader.service.repository.Storage
+import br.com.fenix.bilingualmangareader.util.constants.DataBaseConsts
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import br.com.fenix.bilingualmangareader.util.helpers.LibraryUtil
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -24,6 +27,7 @@ class Scanner(private val context: Context) {
     private var mUpdateHandler: MutableList<Handler> = ArrayList()
     private var mUpdateThread: Thread? = null
 
+    private var mLibrary: Library = LibraryUtil.getDefault(context)
     private var mIsStopped = false
     private var mIsRestarted = false
 
@@ -33,7 +37,7 @@ class Scanner(private val context: Context) {
         Handler() {
         private val mScannerRef: WeakReference<Scanner> = WeakReference<Scanner>(scanner)
         override fun handleMessage(msg: Message) {
-            mScannerRef.get()?.scanLibrary()
+            mScannerRef.get()?.scanLibrary(mLibrary)
         }
     }
 
@@ -54,16 +58,17 @@ class Scanner(private val context: Context) {
                 mUpdateThread!!.isAlive && mUpdateThread!!.state != Thread.State.TERMINATED && mUpdateThread!!.state != Thread.State.NEW
     }
 
-    fun forceScanLibrary() {
+    fun forceScanLibrary(library: Library) {
         if (isRunning()) {
             mIsStopped = true
             mIsRestarted = true
         } else
-            scanLibrary()
+            scanLibrary(library)
     }
 
-    fun scanLibrary() {
+    fun scanLibrary(library: Library) {
         if (mUpdateThread == null || mUpdateThread!!.state == Thread.State.TERMINATED) {
+            mLibrary = library
             val runnable = LibraryUpdateRunnable()
             mUpdateThread = Thread(runnable)
             mUpdateThread!!.priority =
@@ -71,6 +76,17 @@ class Scanner(private val context: Context) {
             mUpdateThread!!.start()
         }
     }
+
+    fun scanLibrariesSilent(libraries: List<Library>?) {
+        if (libraries == null || libraries.isEmpty())
+            return
+
+        val runnable = LibrariesUpdateRunnable(libraries)
+        val thread = Thread(runnable)
+        thread.priority = Process.THREAD_PRIORITY_DEFAULT + Process.THREAD_PRIORITY_LESS_FAVORABLE
+        thread.start()
+    }
+
 
     fun addUpdateHandler(handler: Handler) {
         if (mUpdateHandler.contains(handler))
@@ -128,9 +144,8 @@ class Scanner(private val context: Context) {
         override fun run() {
             var isProcess = false
             try {
-                val preference: SharedPreferences = GeneralConsts.getSharedPreferences(context)
-                val libraryPath = preference.getString(GeneralConsts.KEYS.LIBRARY.FOLDER, "")
-
+                val library = mLibrary
+                val libraryPath = library.path
                 if (libraryPath == "" || !File(libraryPath).exists()) return
 
                 val storage = Storage(context)
@@ -138,10 +153,10 @@ class Scanner(private val context: Context) {
                 val storageDeletes: MutableMap<String, Manga> = HashMap()
 
                 // create list of files available in storage
-                for (c in storage.listMangas()!!)
+                for (c in storage.listMangas(library)!!)
                     storageFiles[c.title] = c
 
-                for (c in storage.listDeleted()!!)
+                for (c in storage.listDeleted(library)!!)
                     storageDeletes[c.title] = c
 
                 var walked = false
@@ -180,7 +195,8 @@ class Scanner(private val context: Context) {
                                                 it.parent,
                                                 it.nameWithoutExtension,
                                                 it.extension,
-                                                parse.numPages()
+                                                parse.numPages(),
+                                                library.id
                                             )
 
                                             manga.excluded = false
@@ -209,6 +225,79 @@ class Scanner(private val context: Context) {
                     mRestartHandler.sendEmptyMessageDelayed(1, 200)
                 } else
                     notifyLibraryUpdateFinished(isProcess)
+            }
+        }
+    }
+
+
+    private inner class LibrariesUpdateRunnable(val libraries: List<Library>) : Runnable {
+        override fun run() {
+            try {
+                val storage = Storage(context)
+
+                for (library in libraries) {
+                    val libraryPath = library.path
+                    if (libraryPath == "" || !File(libraryPath).exists())
+                        continue
+
+                    val storageFiles: MutableMap<String, Manga> = HashMap()
+                    val storageDeletes: MutableMap<String, Manga> = HashMap()
+
+                    // create list of files available in storage
+                    for (c in storage.listMangas(library)!!)
+                        storageFiles[c.title] = c
+
+                    for (c in storage.listDeleted(library)!!)
+                        storageDeletes[c.title] = c
+
+                    val file = File(libraryPath)
+                    file.walk().onFail { _, ioException -> mLOGGER.warn("File walk libraries error", ioException) }
+                        .filterNot { it.isDirectory }.forEach {
+                            if (it.name.endsWith(".rar") ||
+                                it.name.endsWith(".zip") ||
+                                it.name.endsWith(".cbr") ||
+                                it.name.endsWith(".cbz")
+                            ) {
+                                if (storageFiles.containsKey(it.name))
+                                    storageFiles.remove(it.name)
+                                else {
+                                    val parse: Parse? = ParseFactory.create(it)
+                                    try {
+                                        if (parse is RarParse) {
+                                            val cacheDir = File(GeneralConsts.getCacheDir(context), GeneralConsts.CACHE_FOLDER.THREAD)
+                                            (parse as RarParse?)!!.setCacheDirectory(cacheDir)
+                                        }
+
+                                        if (parse != null)
+                                            if (parse.numPages() > 0) {
+                                                val manga = if (storageDeletes.containsKey(it.name)) {
+                                                    storageFiles.remove(it.name)
+                                                    storageDeletes.getValue(it.name)
+                                                } else Manga(
+                                                    null,
+                                                    it.name,
+                                                    "",
+                                                    it.path,
+                                                    it.parent,
+                                                    it.nameWithoutExtension,
+                                                    it.extension,
+                                                    parse.numPages(),
+                                                    library.id
+                                                )
+
+                                                manga.excluded = false
+                                                generateCover(parse, manga)
+                                                manga.id = storage.save(manga)
+                                            }
+                                    } finally {
+                                        Util.destroyParse(parse)
+                                    }
+                                }
+                            }
+                        }
+                }
+            } catch (e: Exception) {
+                mLOGGER.error("Error thread libraries", e)
             }
         }
     }

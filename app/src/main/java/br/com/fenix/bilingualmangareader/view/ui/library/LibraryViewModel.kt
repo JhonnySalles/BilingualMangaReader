@@ -6,6 +6,7 @@ import android.widget.Filterable
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.enums.ListMod
 import br.com.fenix.bilingualmangareader.model.enums.Order
@@ -14,6 +15,7 @@ import java.util.*
 
 class LibraryViewModel(application: Application) : AndroidViewModel(application), Filterable {
 
+    var library: Library = Library(null)
     private val mMangaRepository: MangaRepository = MangaRepository(application.applicationContext)
 
     private var mListMangasFull = MutableLiveData<MutableList<Manga>>(mutableListOf())
@@ -107,7 +109,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         var change = false
         val indexes = mutableListOf<Pair<ListMod, Int>>()
         if (mListMangasFull.value != null && mListMangasFull.value!!.isNotEmpty()) {
-            val list = mMangaRepository.listRecentChange()
+            val list = mMangaRepository.listRecentChange(library)
             if (list != null && list.isNotEmpty()) {
                 change = true
                 for (manga in list) {
@@ -126,7 +128,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
                     }
                 }
             }
-            val listDel = mMangaRepository.listRecentDeleted()
+            val listDel = mMangaRepository.listRecentDeleted(library)
             if (listDel != null && listDel.isNotEmpty()) {
                 change = true
                 for (manga in listDel) {
@@ -139,7 +141,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
                 }
             }
         } else {
-            val list = mMangaRepository.list()
+            val list = mMangaRepository.list(library)
             if (list != null) {
                 indexes.add(Pair(ListMod.FULL, list.size-1))
                 mListMangas.value = list.toMutableList()
@@ -157,7 +159,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun list(refreshComplete: (Boolean) -> (Unit)) {
-        val list = mMangaRepository.list()
+        val list = mMangaRepository.list(library)
         if (list != null) {
             if (mListMangasFull.value == null || mListMangasFull.value!!.isEmpty()) {
                 mListMangas.value = list.toMutableList()

@@ -44,6 +44,10 @@ class GeneralConsts private constructor() {
             const val LIBRARY_TYPE = "LAST_LIBRARY_TYPE"
         }
 
+        object LIBRARIES {
+            const val INDEX_LIBRARIES = 1000
+        }
+
         object SUBTITLE {
             const val FOLDER = "SUBTITLE_FOLDER"
             const val LANGUAGE = "SUBTITLE_LANGUAGE"
@@ -69,7 +73,8 @@ class GeneralConsts private constructor() {
         object OBJECT {
             const val MANGA = "MANGA_OBJECT"
             const val FILE = "FILE_OBJECT"
-            const val PAGELINK = "PAGE_LINK"
+            const val PAGE_LINK = "PAGE_LINK"
+            const val LIBRARY = "LIBRARY"
         }
 
         object COLOR_FILTER {
@@ -118,6 +123,7 @@ class GeneralConsts private constructor() {
         const val COVERS = "Covers"
         const val LINKED = "Linked"
         const val IMAGE = "Image"
+        const val THREAD = "thread"
         const val A = "a"
         const val B = "b"
         const val C = "c"

@@ -65,7 +65,7 @@
     </style>
 
     <style name="SwitchMaterial" >
-        <item name="colorSecondary">@color/on_secondary</item>
+        <item name="colorSecondary">@color/secondary</item>
     </style>
 
     <style name="MyDarkToolbarStyle" parent="ThemeOverlay.AppCompat.Dark">

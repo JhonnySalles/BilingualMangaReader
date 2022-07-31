@@ -434,7 +434,7 @@ class PagesLinkFragment : Fragment() {
         adapterPageNotLink.attachListener(mListener)
 
         if (savedInstanceState != null) {
-            val fileLink = savedInstanceState.getSerializable(GeneralConsts.KEYS.OBJECT.PAGELINK)
+            val fileLink = savedInstanceState.getSerializable(GeneralConsts.KEYS.OBJECT.PAGE_LINK)
             if (fileLink != null)
                 mViewModel.reload(fileLink as FileLink) { index, type -> notifyItemChanged(type, index) }
             else

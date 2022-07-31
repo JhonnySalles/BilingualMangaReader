@@ -3,6 +3,7 @@ package br.com.fenix.bilingualmangareader.view.ui.library
 import android.Manifest
 import android.app.Activity
 import android.app.ActivityOptions
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
@@ -28,10 +29,13 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import br.com.fenix.bilingualmangareader.R
+import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.entity.Manga
+import br.com.fenix.bilingualmangareader.model.enums.Libraries
 import br.com.fenix.bilingualmangareader.model.enums.LibraryType
 import br.com.fenix.bilingualmangareader.model.enums.ListMod
 import br.com.fenix.bilingualmangareader.model.enums.Order
+import br.com.fenix.bilingualmangareader.service.listener.MainListener
 import br.com.fenix.bilingualmangareader.service.listener.MangaCardListener
 import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.service.scanner.Scanner
@@ -45,10 +49,14 @@ import org.slf4j.LoggerFactory
 import kotlin.math.max
 
 
-class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
+class LibraryFragment(val library: Library) : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private val mLOGGER = LoggerFactory.getLogger(LibraryFragment::class.java)
+
     private lateinit var mViewModel: LibraryViewModel
+
+    private lateinit var mainFunctions: MainListener
+
     private var mLibraryPath: String = ""
     private var mOrderBy: Order = Order.Name
     private lateinit var mMapOrder: HashMap<Order, String>
@@ -78,6 +86,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         super.onCreate(savedInstanceState)
         loadConfig()
         setHasOptionsMenu(true)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -266,6 +275,8 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         savedInstanceState: Bundle?
     ): View? {
         mViewModel = ViewModelProvider(this).get(LibraryViewModel::class.java)
+        mViewModel.library = library
+
         val root = inflater.inflate(R.layout.fragment_library, container, false)
         val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
         mGridType = LibraryType.valueOf(
@@ -313,7 +324,6 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     setAnimationRecycler(true)
             }
         })
-
 
         mRecycleView.setOnScrollChangeListener { _, _, _, _, yOld ->
             if (yOld > 20 && mScrollDown.visibility == View.VISIBLE) {
@@ -378,7 +388,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         generateLayout()
         setIsRefreshing(true)
-        Scanner.getInstance(requireContext()).scanLibrary()
+        Scanner.getInstance(requireContext()).scanLibrary(library)
 
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             // Prevent backpress if query is actived
@@ -387,7 +397,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     searchView.setQuery("", true)
                 else if (!searchView.isIconified)
                     searchView.isIconified = true
-                else{
+                else {
                     isEnabled = false
                     requireActivity().onBackPressed()
                 }
@@ -396,7 +406,18 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
+        if (library.type == Libraries.DEFAULT)
+            mainFunctions.clearLibraryTitle()
+        else
+            mainFunctions.changeLibraryTitle(library.title)
+
         return root
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is MainListener)
+            mainFunctions = context
     }
 
     private var itemRefresh: Int? = null
@@ -557,7 +578,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         if (!Scanner.getInstance(requireContext()).isRunning()) {
             setIsRefreshing(true)
-            Scanner.getInstance(requireContext()).scanLibrary()
+            Scanner.getInstance(requireContext()).scanLibrary(library)
         }
     }
 

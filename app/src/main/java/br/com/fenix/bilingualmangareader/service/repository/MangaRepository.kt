@@ -1,6 +1,7 @@
 package br.com.fenix.bilingualmangareader.service.repository
 
 import android.content.Context
+import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
@@ -45,36 +46,36 @@ class MangaRepository(context: Context) {
             mDataBase.delete(obj)
     }
 
-    fun list(): List<Manga>? {
+    fun list(library: Library): List<Manga>? {
         return try {
-            mDataBase.list()
+            mDataBase.list(library.id)
         } catch (e: Exception) {
             mLOGGER.error("Error when list Manga: " + e.message, e)
             null
         }
     }
 
-    fun listRecentChange(): List<Manga>? {
+    fun listRecentChange(library: Library): List<Manga>? {
         return try {
-            mDataBase.listRecentChange()
+            mDataBase.listRecentChange(library.id)
         } catch (e: Exception) {
             mLOGGER.error("Error when list Manga: " + e.message, e)
             null
         }
     }
 
-    fun listRecentDeleted(): List<Manga>? {
+    fun listRecentDeleted(library: Library): List<Manga>? {
         return try {
-            mDataBase.listRecentDeleted()
+            mDataBase.listRecentDeleted(library.id)
         } catch (e: Exception) {
             mLOGGER.error("Error when list Manga: " + e.message, e)
             null
         }
     }
 
-    fun listDeleted(): List<Manga>? {
+    fun listDeleted(library: Library): List<Manga>? {
         return try {
-            mDataBase.listDeleted()
+            mDataBase.listDeleted(library.id)
         } catch (e: Exception) {
             mLOGGER.error("Error when list Manga: " + e.message, e)
             null
@@ -146,12 +147,13 @@ class MangaRepository(context: Context) {
         }
     }
 
-    fun listOrderByTitle(): List<Manga>? {
+    fun listOrderByTitle(library: Library): List<Manga>? {
         return try {
-            mDataBase.listOrderByTitle()
+            mDataBase.listOrderByTitle(library.id)
         } catch (e: Exception) {
             mLOGGER.error("Error when find Manga by file folder: " + e.message, e)
             null
         }
     }
+
 }
