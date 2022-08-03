@@ -21,13 +21,13 @@ class GeneralConsts private constructor() {
 
         fun formatterDate(context: Context, dateTime: LocalDateTime): String {
             val preferences = getSharedPreferences(context)
-            val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, "yyyy-MM-dd")
+            val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, DATE_PATTERN)
             return dateTime.format(DateTimeFormatter.ofPattern(pattern))
         }
 
         fun formatterDateTime(context: Context, dateTime: LocalDateTime): String {
             val preferences = getSharedPreferences(context)
-            val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, "yyyy-MM-dd") + " hh:mm:ss a"
+            val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, DATE_PATTERN) + TIME_PATTERN
             return dateTime.format(DateTimeFormatter.ofPattern(pattern))
         }
     }
