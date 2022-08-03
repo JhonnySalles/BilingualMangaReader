@@ -242,6 +242,17 @@
                     android:textColor="@color/text_primary"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/switch_show_clock_and_battery"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/config_reading_show_clock_and_battery"
+                android:textColor="@color/text_primary"
+                android:theme="@style/SwitchMaterial" />
+
             <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

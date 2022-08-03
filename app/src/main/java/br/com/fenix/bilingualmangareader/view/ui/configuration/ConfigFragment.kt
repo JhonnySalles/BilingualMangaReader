@@ -53,6 +53,7 @@ class ConfigFragment : Fragment() {
     private lateinit var mReaderComicModeAutoComplete: AutoCompleteTextView
     private lateinit var mReaderPageMode: TextInputLayout
     private lateinit var mPageModeAutoComplete: AutoCompleteTextView
+    private lateinit var mShowClockAndBattery: SwitchMaterial
 
     private lateinit var mSystemFormatDate: TextInputLayout
     private lateinit var mSystemFormatDateAutoComplete: AutoCompleteTextView
@@ -101,6 +102,7 @@ class ConfigFragment : Fragment() {
         mReaderComicModeAutoComplete = view.findViewById(R.id.menu_autocomplete_reader_comic_mode)
         mReaderPageMode = view.findViewById(R.id.txt_reader_page_mode)
         mPageModeAutoComplete = view.findViewById(R.id.menu_autocomplete_page_mode)
+        mShowClockAndBattery = view.findViewById(R.id.switch_show_clock_and_battery)
 
         mSystemFormatDate = view.findViewById(R.id.txt_system_format_date)
         mSystemFormatDateAutoComplete = view.findViewById(R.id.menu_autocomplete_system_format_date)
@@ -396,26 +398,37 @@ class ConfigFragment : Fragment() {
                 GeneralConsts.KEYS.LIBRARY.FOLDER,
                 mLibraryPath.editText?.text.toString()
             )
+
             this.putString(
                 GeneralConsts.KEYS.LIBRARY.ORDER,
                 mOrderSelect.toString()
             )
+
             this.putString(
                 GeneralConsts.KEYS.SUBTITLE.LANGUAGE,
                 mDefaultSubtitleLanguageSelect.toString()
             )
+
             this.putString(
                 GeneralConsts.KEYS.SUBTITLE.TRANSLATE,
                 mDefaultSubtitleTranslateSelect.toString()
             )
+
             this.putString(
                 GeneralConsts.KEYS.READER.PAGE_MODE,
                 mPageModeSelect.toString()
             )
+
             this.putString(
                 GeneralConsts.KEYS.READER.READER_MODE,
                 mReaderModeSelect.toString()
             )
+
+            this.putBoolean(
+                GeneralConsts.KEYS.READER.SHOW_CLOCK_AND_BATTERY,
+                mShowClockAndBattery.isChecked
+            )
+
             this.putString(
                 GeneralConsts.KEYS.SYSTEM.FORMAT_DATA,
                 mDateSelect
@@ -520,6 +533,11 @@ class ConfigFragment : Fragment() {
         )
         mPageModeAutoComplete.setText(
             mMapPageMode.filterValues { it == mPageModeSelect }.keys.first(),
+            false
+        )
+
+        mShowClockAndBattery.isChecked = sharedPreferences.getBoolean(
+            GeneralConsts.KEYS.READER.SHOW_CLOCK_AND_BATTERY,
             false
         )
 
