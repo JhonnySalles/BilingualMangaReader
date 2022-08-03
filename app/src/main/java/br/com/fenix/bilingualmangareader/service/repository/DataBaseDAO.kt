@@ -27,6 +27,9 @@ interface DataBaseDAO<T> {
 
 @Dao
 abstract class MangaDAO : DataBaseDAO<Manga> {
+    @Query("SELECT count(*) FROM " + DataBaseConsts.MANGA.TABLE_NAME)
+    abstract fun getMangaCount(): Int
+
     @Query("SELECT * FROM " + DataBaseConsts.MANGA.TABLE_NAME + " WHERE " + DataBaseConsts.MANGA.COLUMNS.FK_ID_LIBRARY + " = :library AND " + DataBaseConsts.MANGA.COLUMNS.EXCLUDED + " = 0")
     abstract fun list(library: Long?): List<Manga>
 

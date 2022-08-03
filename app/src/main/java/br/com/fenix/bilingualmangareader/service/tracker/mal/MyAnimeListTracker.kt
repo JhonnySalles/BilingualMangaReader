@@ -82,7 +82,7 @@ class MyAnimeListTracker(var mContext: Context) {
                 if (response.code() == 200)
                     response.body()?.let { listener.onSuccess(MalTransform.getList(it.data)) }
                 else
-                    listener.onFailure(response.raw().toString())
+                    listener.onFailure(response.toString())
             }
 
             override fun onFailure(call: Call<MalMangaList>, t: Throwable) {

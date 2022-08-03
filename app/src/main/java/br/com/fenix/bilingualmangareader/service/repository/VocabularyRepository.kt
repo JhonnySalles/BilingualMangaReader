@@ -88,10 +88,11 @@ class VocabularyRepository(context: Context) {
             async {
                 try {
                     for (chapter in list)
-                        for (vocabulary in chapter.vocabulary) {
-                            vocabulary.id = save(vocabulary)
-                            insert(idManga, vocabulary.id!!)
-                        }
+                        if (chapter.vocabulary.isNotEmpty())
+                            for (vocabulary in chapter.vocabulary) {
+                                vocabulary.id = save(vocabulary)
+                                vocabulary.id?.let { insert(idManga, it) }
+                            }
                 } catch (e: Exception) {
                     mLOGGER.error("Error process vocabulary.", e)
                 }

@@ -342,6 +342,76 @@
                 android:layout_marginStart="@dimen/margin"
                 android:layout_marginBottom="@dimen/margin_small"
                 android:textColor="@color/on_secondary"
+                android:text="@string/config_title_database"/>
+
+            <Button
+                android:id="@+id/btn_backup"
+                style="@style/Widget.MaterialComponents.Button.Icon"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:text="@string/config_database_backup"
+                android:textColor="@color/text_primary"
+                android:singleLine="true"
+                android:gravity="center_vertical"
+                android:fontFamily="sans-serif"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                app:icon="@drawable/ic_database_backup"
+                app:iconSize="28dp"
+                app:iconTint="@color/on_secondary"
+                app:iconPadding="15dp"
+                app:rippleColor="@color/ripple_color"/>
+
+            <Button
+                android:id="@+id/btn_restore"
+                style="@style/Widget.MaterialComponents.Button.Icon"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:text="@string/config_database_restore"
+                android:textColor="@color/text_primary"
+                android:singleLine="true"
+                android:gravity="center_vertical"
+                android:fontFamily="sans-serif"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                app:icon="@drawable/ic_database_restore"
+                app:iconSize="28dp"
+                app:iconTint="@color/on_secondary"
+                app:iconPadding="15dp"
+                app:rippleColor="@color/ripple_color"/>
+
+            <TextView
+                android:id="@+id/txt_last_backup"
+                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:textColor="@color/text_primary"
+                android:gravity="center|start"/>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/secondary"
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginLeft="@dimen/margin"
+                android:layout_marginRight="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin_small"
+                app:dividerInsetStart="16dp"
+                app:dividerInsetEnd="16dp"/>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:textColor="@color/on_secondary"
                 android:text="@string/config_title_monitoring"/>
 
             <LinearLayout
@@ -373,7 +443,7 @@
                     android:layout_weight="1"
                     android:layout_margin="@dimen/margin"
                     android:textColor="@color/text_primary"
-                    android:text="@string/config_title_monitoring_mal"
+                    android:text="@string/config_monitoring_mal"
                     android:gravity="center|start"/>
 
                 <ImageView
@@ -388,6 +458,7 @@
                     app:tint="@color/secondary" />
 
             </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

@@ -3,6 +3,8 @@ package br.com.fenix.bilingualmangareader.util.constants
 import android.content.Context
 import android.content.SharedPreferences
 import br.com.fenix.bilingualmangareader.MainActivity
+import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts.PATTERNS.DATE_PATTERN
+import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts.PATTERNS.TIME_PATTERN
 import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -28,6 +30,13 @@ class GeneralConsts private constructor() {
             val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, "yyyy-MM-dd") + " hh:mm:ss a"
             return dateTime.format(DateTimeFormatter.ofPattern(pattern))
         }
+    }
+
+    object PATTERNS {
+        const val DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss"
+        const val BACKUP_DATE_PATTERN = "yyyy-MM-dd_HH-mm-ss"
+        const val DATE_PATTERN = "yyyy-MM-dd"
+        const val TIME_PATTERN = "hh:mm:ss a"
     }
 
     object KEYS {
@@ -95,6 +104,12 @@ class GeneralConsts private constructor() {
         object MONITORING {
             const val MY_ANIME_LIST = "MONITORING_MY_ANIME_LIST"
         }
+
+        object DATABASE {
+            const val LAST_BACKUP = "LAST_BACKUP"
+            const val BACKUP_RESTORE_ROLLBACK_FILE_NAME = "BilingualMangaReaderBackup.db"
+            const val RESTORE_DATABASE = "RESTORE_DATABASE"
+        }
     }
 
     object TAG {
@@ -111,7 +126,7 @@ class GeneralConsts private constructor() {
 
     object CONFIG {
         val DATA_FORMAT = listOf("dd/MM/yyyy", "MM/dd/yy", "dd/MM/yy", "yyyy-MM-dd")
-        const val REQUEST_ENDED = 999
+        const val RETURN = 999
     }
 
     object CACHE_FOLDER {
@@ -147,6 +162,8 @@ class GeneralConsts private constructor() {
         const val OPEN_PAGE_LINK = 206
         const val OPEN_MANGA_FOLDER = 105
         const val PERMISSION_FILES_ACCESS = 101
+        const val GENERATE_BACKUP = 500
+        const val RESTORE_BACKUP = 501
     }
 
 }

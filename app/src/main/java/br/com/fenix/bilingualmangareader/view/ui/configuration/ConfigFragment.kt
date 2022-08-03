@@ -3,6 +3,7 @@ package br.com.fenix.bilingualmangareader.view.ui.configuration
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,13 +18,16 @@ import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.model.enums.Order
 import br.com.fenix.bilingualmangareader.model.enums.PageMode
 import br.com.fenix.bilingualmangareader.model.enums.ReaderMode
+import br.com.fenix.bilingualmangareader.service.repository.DataBase
 import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
-import br.com.fenix.bilingualmangareader.util.helpers.Util
-import br.com.fenix.bilingualmangareader.view.ui.manga_detail.MangaDetailActivity
+import br.com.fenix.bilingualmangareader.util.helpers.*
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputLayout
 import org.slf4j.LoggerFactory
+import java.io.File
+import java.io.IOException
+import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -55,6 +59,10 @@ class ConfigFragment : Fragment() {
 
     private lateinit var mUseDualPageCalculate: SwitchMaterial
     private lateinit var mUsePathNameForLinked: SwitchMaterial
+
+    private lateinit var mBackup: Button
+    private lateinit var mRestore: Button
+    private lateinit var mLastBackup: TextView
 
     private lateinit var mMalMonitoring: LinearLayout
     private lateinit var mMalMonitoringChecked: ImageView
@@ -99,6 +107,10 @@ class ConfigFragment : Fragment() {
 
         mUseDualPageCalculate = view.findViewById(R.id.switch_use_dual_page_calculate)
         mUsePathNameForLinked = view.findViewById(R.id.switch_use_path_name_for_linked)
+
+        mBackup = view.findViewById(R.id.btn_backup)
+        mRestore = view.findViewById(R.id.btn_restore)
+        mLastBackup = view.findViewById(R.id.txt_last_backup)
 
         mMalMonitoring = view.findViewById(R.id.tracker_my_anime_list)
         mMalMonitoringChecked = view.findViewById(R.id.tracker_checked)
@@ -217,6 +229,36 @@ class ConfigFragment : Fragment() {
                     GeneralConsts.CONFIG.DATA_FORMAT[0]
             }
 
+        mBackup.setOnClickListener {
+            val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+                addCategory(Intent.CATEGORY_OPENABLE)
+                type = "application/*"
+                putExtra(
+                    Intent.EXTRA_MIME_TYPES, arrayOf(
+                        "application/db"
+                    )
+                )
+
+                val fileName: String = "BilingualManga_" + SimpleDateFormat(
+                    GeneralConsts.PATTERNS.BACKUP_DATE_PATTERN,
+                    Locale.getDefault()
+                ).format(
+                    Date()
+                ) + ".db"
+                putExtra(Intent.EXTRA_TITLE, fileName)
+            }
+            startActivityForResult(intent, GeneralConsts.REQUEST.GENERATE_BACKUP)
+        }
+
+        mRestore.setOnClickListener {
+            val i = Intent(Intent.ACTION_GET_CONTENT)
+            i.type = "*/*"
+            startActivityForResult(
+                Intent.createChooser(i, getString(R.string.config_database_select_file)),
+                GeneralConsts.REQUEST.RESTORE_BACKUP
+            )
+        }
+
         mMalMonitoring.setOnClickListener { changeMonitoring() }
 
         loadConfig()
@@ -249,9 +291,77 @@ class ConfigFragment : Fragment() {
                 mLibraryPathAutoComplete.setText(folder)
             }
 
-            GeneralConsts.CONFIG.REQUEST_ENDED -> {
+            GeneralConsts.CONFIG.RETURN -> {
                 mViewModel.load()
                 (requireActivity() as MainActivity).setLibraries(mViewModel.getList())
+            }
+
+            GeneralConsts.REQUEST.GENERATE_BACKUP -> {
+                val fileUri: Uri? = data?.data
+                try {
+                    fileUri?.let {
+                        DataBase.backupDatabase(requireContext(), File(Util.normalizeFilePath(fileUri.path.toString())))
+                    }
+                } catch (e: BackupError) {
+                    MsgUtil.error(
+                        requireContext(),
+                        getString(R.string.config_database_restore),
+                        getString(R.string.config_database_error_backup)
+                    ) { _, _ -> }
+                } catch (e: Exception) {
+                    mLOGGER.warn("Backup Generate Failed.", e)
+                    MsgUtil.error(
+                        requireContext(),
+                        getString(R.string.config_database_restore),
+                        getString(R.string.config_database_error_backup)
+                    ) { _, _ -> }
+                }
+            }
+
+            GeneralConsts.REQUEST.RESTORE_BACKUP -> {
+                val fileUri: Uri? = data?.data
+                try {
+                    fileUri?.let {
+                        val inputStream: InputStream? = requireContext().contentResolver.openInputStream(fileUri)
+                        inputStream?.let {
+                            if (DataBase.validDatabaseFile(requireContext(), fileUri))
+                                DataBase.restoreDatabase(requireContext(), inputStream)
+                            else
+                                MsgUtil.alert(
+                                    requireContext(),
+                                    getString(R.string.config_database_restore),
+                                    getString(R.string.config_database_invalid_file)
+                                ) { _, _ -> }
+
+                        }
+                        inputStream?.close()
+                    }
+                } catch (e: InvalidDatabase) {
+                    MsgUtil.error(
+                        requireContext(),
+                        getString(R.string.config_database_restore),
+                        getString(R.string.config_database_invalid_file)
+                    ) { _, _ -> }
+                } catch (e: RestoredNewDatabase) {
+                    MsgUtil.error(
+                        requireContext(),
+                        getString(R.string.config_database_restore),
+                        getString(R.string.config_database_error_new_database)
+                    ) { _, _ -> }
+                } catch (e: ErrorRestoreDatabase) {
+                    MsgUtil.error(
+                        requireContext(),
+                        getString(R.string.config_database_restore),
+                        getString(R.string.config_database_error_restore)
+                    ) { _, _ -> }
+                } catch (e: IOException) {
+                    mLOGGER.warn("Backup Restore Failed.", e)
+                    MsgUtil.error(
+                        requireContext(),
+                        getString(R.string.config_database_restore),
+                        getString(R.string.config_database_error_read_file)
+                    ) { _, _ -> }
+                }
             }
         }
     }
@@ -423,6 +533,25 @@ class ConfigFragment : Fragment() {
             false
         )
 
+        if (sharedPreferences.contains(GeneralConsts.KEYS.DATABASE.LAST_BACKUP)) {
+            val backup = sharedPreferences.getString(
+                GeneralConsts.KEYS.DATABASE.LAST_BACKUP,
+                Date().toString()
+            )?.let {
+                SimpleDateFormat(GeneralConsts.PATTERNS.DATE_TIME_PATTERN, Locale.getDefault()).parse(
+                    it
+                )
+            }
+            mLastBackup.text = getString(
+                R.string.config_database_last_backup,
+                backup?.let {
+                    SimpleDateFormat(mDateSelect + " " + GeneralConsts.PATTERNS.TIME_PATTERN, Locale.getDefault()).format(
+                        it
+                    )
+                }
+            )
+        }
+
         mMalMonitoringChecked.visibility = if (sharedPreferences.getBoolean(
                 GeneralConsts.KEYS.MONITORING.MY_ANIME_LIST,
                 false
@@ -438,7 +567,7 @@ class ConfigFragment : Fragment() {
             val dialog: AlertDialog =
                 AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
                     .setTitle(getString(R.string.library_menu_delete))
-                    .setMessage(getString(R.string.config_title_monitoring_disconnect, getString(R.string.config_title_monitoring_mal)))
+                    .setMessage(getString(R.string.config_monitoring_disconnect, getString(R.string.config_monitoring_mal)))
                     .setPositiveButton(
                         R.string.action_disconnect
                     ) { _, _ ->
@@ -451,7 +580,7 @@ class ConfigFragment : Fragment() {
     private fun openLibraries() {
         val intent = Intent(requireContext(), ConfigLibrariesActivity::class.java)
         requireActivity().overridePendingTransition(R.anim.fade_in_fragment_add_enter, R.anim.fade_out_fragment_remove_exit)
-        startActivityForResult(intent, GeneralConsts.CONFIG.REQUEST_ENDED, null)
+        startActivityForResult(intent, GeneralConsts.CONFIG.RETURN, null)
     }
 
 }

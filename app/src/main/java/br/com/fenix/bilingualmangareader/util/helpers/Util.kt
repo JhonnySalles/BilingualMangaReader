@@ -2,6 +2,7 @@ package br.com.fenix.bilingualmangareader.util.helpers
 
 import android.app.ActivityManager
 import android.content.Context
+import android.content.DialogInterface
 import android.content.SharedPreferences
 import android.content.pm.ApplicationInfo
 import android.graphics.Bitmap
@@ -12,14 +13,11 @@ import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.model.enums.Libraries
 import br.com.fenix.bilingualmangareader.service.parses.Parse
-import br.com.fenix.bilingualmangareader.util.constants.DataBaseConsts
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.InputStream
+import java.io.*
 import java.math.BigInteger
+import java.nio.channels.FileChannel
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.text.SimpleDateFormat
@@ -419,6 +417,81 @@ class FileUtil(val context: Context) {
         return true
     }
 
+    fun copyFile(fromFile: FileInputStream, toFile: FileOutputStream) {
+        var fromChannel: FileChannel? = null
+        var toChannel: FileChannel? = null
+        try {
+            fromChannel = fromFile.channel
+            toChannel = toFile.channel
+            fromChannel.transferTo(0, fromChannel.size(), toChannel)
+        } finally {
+            try {
+                fromChannel?.close()
+            } finally {
+                toChannel?.close()
+            }
+        }
+    }
+
+}
+
+class MsgUtil {
+    companion object MsgUtil {
+        inline fun alert(
+            context: Context,
+            title: String,
+            message: String,
+            theme: Int = R.style.AppCompatMaterialAlertDialogStyle,
+            crossinline action: (dialog: DialogInterface, which: Int) -> Unit
+        ) {
+            MaterialAlertDialogBuilder(context, theme)
+                .setTitle(title).setMessage(message)
+                .setPositiveButton(
+                    R.string.action_positive
+                ) { dialog, which ->
+                    action(dialog, which)
+                }
+                .create().show()
+        }
+
+        inline fun alert(
+            context: Context,
+            title: String,
+            message: String,
+            theme: Int = R.style.AppCompatMaterialAlertDialogStyle,
+            crossinline positiveAction: (dialog: DialogInterface, which: Int) -> Unit,
+            crossinline negativeAction: (dialog: DialogInterface, which: Int) -> Unit
+        ) {
+            MaterialAlertDialogBuilder(context, theme)
+                .setTitle(title).setMessage(message)
+                .setPositiveButton(
+                    R.string.action_positive
+                ) { dialog, which ->
+                    positiveAction(dialog, which)
+                }
+                .setNegativeButton(
+                    R.string.action_negative
+                ) { dialog, which ->
+                    negativeAction(dialog, which)
+                }
+                .create().show()
+        }
+
+        inline fun error(context: Context,
+                         title: String,
+                         message: String,
+                         theme: Int = R.style.AppCompatMaterialErrorDialogStyle,
+                         crossinline action: (dialog: DialogInterface, which: Int) -> Unit) {
+            MaterialAlertDialogBuilder(context, theme)
+                .setTitle(title).setMessage(message)
+                .setPositiveButton(
+                    R.string.action_positive
+                ) { dialog, which ->
+                    action(dialog, which)
+                }
+                .create().show()
+        }
+    }
 }
 
 class LibraryUtil {
