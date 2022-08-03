@@ -62,6 +62,7 @@ class GeneralConsts private constructor() {
         object READER {
             const val READER_MODE = "READER_MODE"
             const val PAGE_MODE = "READER_PAGE_MODE"
+            const val SHOW_CLOCK_AND_BATTERY = "SHOW_CLOCK_AND_BATTERY"
         }
 
         object SYSTEM {
