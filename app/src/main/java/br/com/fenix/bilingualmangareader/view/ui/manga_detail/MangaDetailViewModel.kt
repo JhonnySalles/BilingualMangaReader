@@ -86,7 +86,7 @@ class MangaDetailViewModel(application: Application) : AndroidViewModel(applicat
             }
 
             override fun onFailure(message: String) {
-                mLOGGER.error("Error to search manga info", message)
+                mLOGGER.warn("Error to search manga info", message)
             }
         })
 

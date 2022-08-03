@@ -3,6 +3,7 @@ package br.com.fenix.bilingualmangareader.service.parses
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import org.slf4j.LoggerFactory
 import java.io.File
+import java.io.IOException
 import java.util.*
 
 class ParseFactory {
@@ -36,6 +37,12 @@ class ParseFactory {
             try {
                 parser.parse(file)
             } catch (e: Exception) {
+                mLOGGER.warn("Error when parse: " + e.message + " - File: " + file.name, e)
+                return null
+            } catch (e: IllegalArgumentException) {
+                mLOGGER.warn("Error when parse: " + e.message + " - File: " + file.name, e)
+                return null
+            } catch (e: IOException) {
                 mLOGGER.warn("Error when parse: " + e.message + " - File: " + file.name, e)
                 return null
             }

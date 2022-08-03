@@ -215,5 +215,32 @@ class Migrations {
                 mLOGGER.info("Completed migration 8 - 9.")
             }
         }
+
+        // Migration version 9.
+        val MIGRATION_9_10 = object : Migration(9, 10) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+
+                mLOGGER.info("Start migration 9 - 10...")
+
+                database.execSQL( "DELETE FROM " + DataBaseConsts.MANGA.TABLE_NAME + " WHERE " + DataBaseConsts.MANGA.COLUMNS.FK_ID_LIBRARY + " = " + DataBaseConsts.LIBRARIES.DEFAULT.ID  )
+                database.execSQL( "UPDATE " + DataBaseConsts.MANGA.TABLE_NAME + " SET " + DataBaseConsts.MANGA.COLUMNS.FK_ID_LIBRARY + " = " + DataBaseConsts.LIBRARIES.DEFAULT.ID +
+                        " WHERE " + DataBaseConsts.MANGA.COLUMNS.FK_ID_LIBRARY + " IS NULL " )
+
+                mLOGGER.info("Completed migration 9 - 10.")
+            }
+        }
+
+        // Migration version 10.
+        val MIGRATION_10_11 = object : Migration(10, 11) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+
+                mLOGGER.info("Start migration 10 - 11...")
+
+                mLOGGER.info("Completed migration 10 - 11.")
+
+            }
+        }
+
+
     }
 }

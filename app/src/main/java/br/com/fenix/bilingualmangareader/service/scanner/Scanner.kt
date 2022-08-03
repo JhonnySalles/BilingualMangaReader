@@ -1,7 +1,6 @@
 package br.com.fenix.bilingualmangareader.service.scanner
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Handler
 import android.os.Message
 import android.os.Process
@@ -12,12 +11,12 @@ import br.com.fenix.bilingualmangareader.service.parses.Parse
 import br.com.fenix.bilingualmangareader.service.parses.ParseFactory
 import br.com.fenix.bilingualmangareader.service.parses.RarParse
 import br.com.fenix.bilingualmangareader.service.repository.Storage
-import br.com.fenix.bilingualmangareader.util.constants.DataBaseConsts
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.LibraryUtil
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import org.slf4j.LoggerFactory
 import java.io.File
+import java.io.IOException
 import java.lang.ref.WeakReference
 
 class Scanner(private val context: Context) {
@@ -175,37 +174,43 @@ class Scanner(private val context: Context) {
                                 storageFiles.remove(it.name)
                             else {
                                 isProcess = true
-                                val parse: Parse? = ParseFactory.create(it)
                                 try {
-                                    if (parse is RarParse) {
-                                        val cacheDir = File(GeneralConsts.getCacheDir(context), GeneralConsts.CACHE_FOLDER.RAR)
-                                        (parse as RarParse?)!!.setCacheDirectory(cacheDir)
-                                    }
-
-                                    if (parse != null)
-                                        if (parse.numPages() > 0) {
-                                            val manga = if (storageDeletes.containsKey(it.name)) {
-                                                storageFiles.remove(it.name)
-                                                storageDeletes.getValue(it.name)
-                                            } else Manga(
-                                                null,
-                                                it.name,
-                                                "",
-                                                it.path,
-                                                it.parent,
-                                                it.nameWithoutExtension,
-                                                it.extension,
-                                                parse.numPages(),
-                                                library.id
-                                            )
-
-                                            manga.excluded = false
-                                            generateCover(parse, manga)
-                                            manga.id = storage.save(manga)
-                                            notifyMediaUpdatedAdd(manga)
+                                    val parse: Parse? = ParseFactory.create(it)
+                                    try {
+                                        if (parse is RarParse) {
+                                            val cacheDir = File(GeneralConsts.getCacheDir(context), GeneralConsts.CACHE_FOLDER.RAR)
+                                            (parse as RarParse?)!!.setCacheDirectory(cacheDir)
                                         }
-                                } finally {
-                                    Util.destroyParse(parse)
+
+                                        if (parse != null)
+                                            if (parse.numPages() > 0) {
+                                                val manga = if (storageDeletes.containsKey(it.name)) {
+                                                    storageFiles.remove(it.name)
+                                                    storageDeletes.getValue(it.name)
+                                                } else Manga(
+                                                    null,
+                                                    it.name,
+                                                    "",
+                                                    it.path,
+                                                    it.parent,
+                                                    it.nameWithoutExtension,
+                                                    it.extension,
+                                                    parse.numPages(),
+                                                    library.id
+                                                )
+
+                                                manga.excluded = false
+                                                generateCover(parse, manga)
+                                                manga.id = storage.save(manga)
+                                                notifyMediaUpdatedAdd(manga)
+                                            }
+                                    } finally {
+                                        Util.destroyParse(parse)
+                                    }
+                                } catch (e: Exception) {
+                                    mLOGGER.error("Error load manga " + it.name, e)
+                                } catch (e: IOException) {
+                                    mLOGGER.error("Error load manga " + it.name, e)
                                 }
                             }
                         }
@@ -261,36 +266,42 @@ class Scanner(private val context: Context) {
                                 if (storageFiles.containsKey(it.name))
                                     storageFiles.remove(it.name)
                                 else {
-                                    val parse: Parse? = ParseFactory.create(it)
                                     try {
-                                        if (parse is RarParse) {
-                                            val cacheDir = File(GeneralConsts.getCacheDir(context), GeneralConsts.CACHE_FOLDER.THREAD)
-                                            (parse as RarParse?)!!.setCacheDirectory(cacheDir)
-                                        }
-
-                                        if (parse != null)
-                                            if (parse.numPages() > 0) {
-                                                val manga = if (storageDeletes.containsKey(it.name)) {
-                                                    storageFiles.remove(it.name)
-                                                    storageDeletes.getValue(it.name)
-                                                } else Manga(
-                                                    null,
-                                                    it.name,
-                                                    "",
-                                                    it.path,
-                                                    it.parent,
-                                                    it.nameWithoutExtension,
-                                                    it.extension,
-                                                    parse.numPages(),
-                                                    library.id
-                                                )
-
-                                                manga.excluded = false
-                                                generateCover(parse, manga)
-                                                manga.id = storage.save(manga)
+                                        val parse: Parse? = ParseFactory.create(it)
+                                        try {
+                                            if (parse is RarParse) {
+                                                val cacheDir = File(GeneralConsts.getCacheDir(context), GeneralConsts.CACHE_FOLDER.THREAD)
+                                                (parse as RarParse?)!!.setCacheDirectory(cacheDir)
                                             }
-                                    } finally {
-                                        Util.destroyParse(parse)
+
+                                            if (parse != null)
+                                                if (parse.numPages() > 0) {
+                                                    val manga = if (storageDeletes.containsKey(it.name)) {
+                                                        storageFiles.remove(it.name)
+                                                        storageDeletes.getValue(it.name)
+                                                    } else Manga(
+                                                        null,
+                                                        it.name,
+                                                        "",
+                                                        it.path,
+                                                        it.parent,
+                                                        it.nameWithoutExtension,
+                                                        it.extension,
+                                                        parse.numPages(),
+                                                        library.id
+                                                    )
+
+                                                    manga.excluded = false
+                                                    generateCover(parse, manga)
+                                                    manga.id = storage.save(manga)
+                                                }
+                                        } finally {
+                                            Util.destroyParse(parse)
+                                        }
+                                    } catch (e: Exception) {
+                                        mLOGGER.error("Error load manga on library " + it.name, e)
+                                    } catch (e: IOException) {
+                                        mLOGGER.error("Error load manga on library " + it.name, e)
                                     }
                                 }
                             }

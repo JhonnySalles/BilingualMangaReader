@@ -167,6 +167,9 @@ class DataBaseConsts private constructor() {
             const val EXCLUDED = "excluded"
         }
 
+        object DEFAULT {
+            const val ID = -1
+        }
     }
 
 }
