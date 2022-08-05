@@ -499,7 +499,7 @@ class LibraryUtil {
         fun getDefault(context: Context): Library {
             val preference: SharedPreferences = GeneralConsts.getSharedPreferences(context)
             val path = preference.getString(GeneralConsts.KEYS.LIBRARY.FOLDER, "") ?: ""
-            return Library(-1, Libraries.DEFAULT.name, path)
+            return Library(GeneralConsts.KEYS.LIBRARY.DEFAULT, Libraries.DEFAULT.name, path)
         }
     }
 }
