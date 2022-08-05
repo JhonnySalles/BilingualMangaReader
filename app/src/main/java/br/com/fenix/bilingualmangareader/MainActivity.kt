@@ -10,6 +10,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.ViewModelProvider
 import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.service.listener.MainListener
 import br.com.fenix.bilingualmangareader.service.repository.LibraryRepository
@@ -21,6 +22,7 @@ import br.com.fenix.bilingualmangareader.view.ui.configuration.ConfigFragment
 import br.com.fenix.bilingualmangareader.view.ui.help.HelpFragment
 import br.com.fenix.bilingualmangareader.view.ui.history.HistoryFragment
 import br.com.fenix.bilingualmangareader.view.ui.library.LibraryFragment
+import br.com.fenix.bilingualmangareader.view.ui.library.LibraryViewModel
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -34,13 +36,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private val mLOGGER = LoggerFactory.getLogger(MainActivity::class.java)
 
+    private lateinit var mLibraryModel: LibraryViewModel
     private lateinit var mToolBar: Toolbar
     private lateinit var mFragmentManager: FragmentManager
     private lateinit var mNavigationView: NavigationView
     private lateinit var mMenu: Menu
     private lateinit var mToggle: ActionBarDrawerToggle
     private lateinit var mDrawer: DrawerLayout
-    private var mLibrary : Library? = null
 
     private val mDefaultUncaughtHandler = Thread.getDefaultUncaughtExceptionHandler()
 
@@ -75,28 +77,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mNavigationView = findViewById(R.id.nav_view)
         mNavigationView.setNavigationItemSelectedListener(this)
 
+        mLibraryModel = ViewModelProvider(this).get(LibraryViewModel::class.java)
+        mLibraryModel.setDefaultLibrary(LibraryUtil.getDefault(this))
+
         mFragmentManager = supportFragmentManager
 
-        val library = LibraryFragment()
-        if (savedInstanceState != null && savedInstanceState.containsKey(GeneralConsts.KEYS.OBJECT.LIBRARY)) {
-            mLibrary = savedInstanceState.getSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY) as Library
-            mLibrary?.let {
-                library.setLibrary(it)
-            }
-        }
-
         // content_fragment use for receive fragments layout
-        mFragmentManager.beginTransaction().replace(R.id.main_content_root, library)
+        mFragmentManager.beginTransaction().replace(R.id.main_content_root, LibraryFragment())
             .commit()
 
         libraries()
-    }
-
-    override fun onSaveInstanceState(savedInstanceState: Bundle) {
-        if (mLibrary != null)
-            savedInstanceState.putSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY, mLibrary)
-
-        super.onSaveInstanceState(savedInstanceState)
     }
 
     private fun clearCache() {
@@ -106,20 +96,27 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 try {
                     val rar = File(cacheDir, GeneralConsts.CACHE_FOLDER.RAR)
                     if (rar.exists())
-                        for (f in rar.listFiles()!!)
-                            f.delete()
+                        rar.listFiles()?.let {
+                            for (f in it)
+                                f.delete()
+                        }
 
                     val images = File(cacheDir, GeneralConsts.CACHE_FOLDER.IMAGE)
 
                     if (images.exists())
-                        for (f in rar.listFiles()!!)
-                            f.delete()
+                        rar.listFiles()?.let {
+                            for (f in it)
+                                f.delete()
+                        }
 
                     val linked = File(cacheDir, GeneralConsts.CACHE_FOLDER.LINKED)
 
                     if (linked.exists())
-                        for (f in rar.listFiles()!!)
-                            f.delete()
+                        rar.listFiles()?.let {
+                            for (f in it)
+                                f.delete()
+                        }
+
                 } catch (e: Exception) {
                     mLOGGER.error("Error clearing cache folders.", e)
                 }
@@ -143,20 +140,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         mMenu = mNavigationView.menu
-        mLibrary = null
 
         val fragment = supportFragmentManager.findFragmentById(item.itemId)
         val newFragment = fragment ?: when (item.itemId) {
-            R.id.menu_library_default -> LibraryFragment()
+            R.id.menu_library_default -> {
+                mLibraryModel.setLibrary(LibraryUtil.getDefault(this))
+                LibraryFragment()
+            }
             R.id.menu_configuration -> ConfigFragment()
             R.id.menu_help -> HelpFragment()
             R.id.menu_about -> AboutFragment()
             R.id.menu_history -> HistoryFragment()
             in GeneralConsts.KEYS.LIBRARIES.INDEX_LIBRARIES..(GeneralConsts.KEYS.LIBRARIES.INDEX_LIBRARIES + mLibraries.size) -> {
                 val index = item.itemId - GeneralConsts.KEYS.LIBRARIES.INDEX_LIBRARIES
-                mLibrary = mLibraries[index]
                 val library = LibraryFragment()
-                library.setLibrary(mLibraries[index])
+                mLibraryModel.setLibrary(mLibraries[index])
                 library
             }
             else -> null
