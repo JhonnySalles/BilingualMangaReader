@@ -47,6 +47,7 @@ class GeneralConsts private constructor() {
             const val ORDER = "LIBRARY_ORDER"
             const val ORIENTATION = "LAST_ORIENTATION"
             const val LIBRARY_TYPE = "LAST_LIBRARY_TYPE"
+            const val DEFAULT = -1L
         }
 
         object LIBRARIES {

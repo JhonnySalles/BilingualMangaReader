@@ -40,6 +40,7 @@ import br.com.fenix.bilingualmangareader.service.listener.MangaCardListener
 import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.service.scanner.Scanner
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import br.com.fenix.bilingualmangareader.util.helpers.LibraryUtil
 import br.com.fenix.bilingualmangareader.view.adapter.library.MangaGridCardAdapter
 import br.com.fenix.bilingualmangareader.view.adapter.library.MangaLineCardAdapter
 import br.com.fenix.bilingualmangareader.view.ui.manga_detail.MangaDetailActivity
@@ -49,18 +50,19 @@ import org.slf4j.LoggerFactory
 import kotlin.math.max
 
 
-class LibraryFragment(val mLibrary: Library) : Fragment(), SwipeRefreshLayout.OnRefreshListener {
+class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private val mLOGGER = LoggerFactory.getLogger(LibraryFragment::class.java)
 
     private lateinit var mViewModel: LibraryViewModel
-
     private lateinit var mainFunctions: MainListener
+
+    private var mLibrary: Library? = null
 
     private var mLibraryPath: String = ""
     private var mOrderBy: Order = Order.Name
-    private lateinit var mMapOrder: HashMap<Order, String>
 
+    private lateinit var mMapOrder: HashMap<Order, String>
     private lateinit var mRoot: FrameLayout
     private lateinit var mRefreshLayout: SwipeRefreshLayout
     private lateinit var mRecycleView: RecyclerView
@@ -86,7 +88,6 @@ class LibraryFragment(val mLibrary: Library) : Fragment(), SwipeRefreshLayout.On
         super.onCreate(savedInstanceState)
         loadConfig()
         setHasOptionsMenu(true)
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -112,6 +113,12 @@ class LibraryFragment(val mLibrary: Library) : Fragment(), SwipeRefreshLayout.On
         enableSearchView(searchView, !mRefreshLayout.isRefreshing)
         onChangeIconLayout()
     }
+
+    fun setLibrary(library: Library) {
+        mLibrary = library
+    }
+
+    fun getLibrary(): Library = mLibrary ?: LibraryUtil.getDefault(requireActivity())
 
     private fun filter(text: String?) {
         mViewModel.filter.filter(text)
@@ -275,7 +282,7 @@ class LibraryFragment(val mLibrary: Library) : Fragment(), SwipeRefreshLayout.On
         savedInstanceState: Bundle?
     ): View? {
         mViewModel = ViewModelProvider(this).get(LibraryViewModel::class.java)
-        mViewModel.library = mLibrary
+        mViewModel.library = getLibrary()
 
         val root = inflater.inflate(R.layout.fragment_library, container, false)
         val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
@@ -389,7 +396,7 @@ class LibraryFragment(val mLibrary: Library) : Fragment(), SwipeRefreshLayout.On
 
         generateLayout()
         setIsRefreshing(true)
-        Scanner.getInstance(requireContext()).scanLibrary(mLibrary)
+        Scanner.getInstance(requireContext()).scanLibrary(getLibrary())
 
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             // Prevent backpress if query is actived
@@ -407,10 +414,13 @@ class LibraryFragment(val mLibrary: Library) : Fragment(), SwipeRefreshLayout.On
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
-        if (mLibrary.type == Libraries.DEFAULT)
-            mainFunctions.clearLibraryTitle()
-        else
-            mainFunctions.changeLibraryTitle(mLibrary.title)
+        mainFunctions.clearLibraryTitle()
+        mLibrary?.let {
+            if (it.type == Libraries.DEFAULT)
+                mainFunctions.clearLibraryTitle()
+            else
+                mainFunctions.changeLibraryTitle(it.title)
+        }
 
         return root
     }
@@ -580,7 +590,7 @@ class LibraryFragment(val mLibrary: Library) : Fragment(), SwipeRefreshLayout.On
 
         if (!Scanner.getInstance(requireContext()).isRunning()) {
             setIsRefreshing(true)
-            Scanner.getInstance(requireContext()).scanLibrary(mLibrary)
+            Scanner.getInstance(requireContext()).scanLibrary(getLibrary())
         }
     }
 

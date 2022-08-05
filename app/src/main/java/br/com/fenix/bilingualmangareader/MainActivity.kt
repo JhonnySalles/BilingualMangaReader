@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mFragmentManager = supportFragmentManager
 
         // content_fragment use for receive fragments layout
-        mFragmentManager.beginTransaction().replace(R.id.main_content_root, LibraryFragment(LibraryUtil.getDefault(this)))
+        mFragmentManager.beginTransaction().replace(R.id.main_content_root, LibraryFragment())
             .commit()
 
         libraries()
@@ -130,15 +130,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val fragment = supportFragmentManager.findFragmentById(item.itemId)
         val newFragment = fragment ?: when (item.itemId) {
-            R.id.menu_library_default -> LibraryFragment(LibraryUtil.getDefault(this))
+            R.id.menu_library_default -> LibraryFragment()
             R.id.menu_configuration -> ConfigFragment()
             R.id.menu_help -> HelpFragment()
             R.id.menu_about -> AboutFragment()
             R.id.menu_history -> HistoryFragment()
             in GeneralConsts.KEYS.LIBRARIES.INDEX_LIBRARIES..(GeneralConsts.KEYS.LIBRARIES.INDEX_LIBRARIES + mLibraries.size) -> {
                 val index = item.itemId - GeneralConsts.KEYS.LIBRARIES.INDEX_LIBRARIES
-                val library = mLibraries[index]
-                LibraryFragment(library)
+                val library = LibraryFragment()
+                library.setLibrary(mLibraries[index])
+                library
             }
             else -> null
         }
