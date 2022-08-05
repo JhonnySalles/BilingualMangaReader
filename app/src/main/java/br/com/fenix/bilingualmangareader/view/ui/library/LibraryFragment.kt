@@ -57,8 +57,6 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var mViewModel: LibraryViewModel
     private lateinit var mainFunctions: MainListener
 
-    private var mLibrary: Library? = null
-    private var mLibraryPath: String = ""
     private var mOrderBy: Order = Order.Name
 
     private lateinit var mMapOrder: HashMap<Order, String>
@@ -85,6 +83,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mViewModel = ViewModelProvider(requireActivity()).get(LibraryViewModel::class.java)
         loadConfig()
         setHasOptionsMenu(true)
     }
@@ -113,18 +112,19 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         onChangeIconLayout()
     }
 
-    fun setLibrary(library: Library) {
-        mLibrary = library
-    }
-
-    fun getLibrary(): Library = mLibrary ?: LibraryUtil.getDefault(requireActivity())
-
     private fun filter(text: String?) {
         mViewModel.filter.filter(text)
     }
 
     override fun onResume() {
         super.onResume()
+
+        mViewModel.getLibrary().let {
+            if (it.type == Libraries.DEFAULT)
+                mainFunctions.clearLibraryTitle()
+            else
+                mainFunctions.changeLibraryTitle(it.title)
+        }
 
         Scanner.getInstance(requireContext()).addUpdateHandler(mUpdateHandler)
         if (Scanner.getInstance(requireContext()).isRunning())
@@ -280,9 +280,6 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mViewModel = ViewModelProvider(this).get(LibraryViewModel::class.java)
-        mViewModel.library = getLibrary()
-
         val root = inflater.inflate(R.layout.fragment_library, container, false)
         val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
         mGridType = LibraryType.valueOf(
@@ -332,6 +329,9 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         })
 
         mRecycleView.setOnScrollChangeListener { _, _, _, _, yOld ->
+            if (mRefreshLayout.isRefreshing)
+                return@setOnScrollChangeListener
+
             if (yOld > 20 && mScrollDown.visibility == View.VISIBLE) {
                 if (mHandler.hasCallbacks(mDismissDownButton))
                     mHandler.removeCallbacks(mDismissDownButton)
@@ -361,7 +361,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             override fun onClick(manga: Manga) {
                 val intent = Intent(context, ReaderActivity::class.java)
                 val bundle = Bundle()
-                bundle.putSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY, mLibrary)
+                bundle.putSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY, mViewModel.getLibrary())
                 bundle.putString(GeneralConsts.KEYS.MANGA.NAME, manga.title)
                 bundle.putInt(GeneralConsts.KEYS.MANGA.MARK, manga.bookMark)
                 bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, manga)
@@ -395,7 +395,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         generateLayout()
         setIsRefreshing(true)
-        Scanner.getInstance(requireContext()).scanLibrary(getLibrary())
+        Scanner.getInstance(requireContext()).scanLibrary(mViewModel.getLibrary())
 
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
             // Prevent backpress if query is actived
@@ -414,13 +414,6 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
         mainFunctions.clearLibraryTitle()
-        mLibrary?.let {
-            if (it.type == Libraries.DEFAULT)
-                mainFunctions.clearLibraryTitle()
-            else
-                mainFunctions.changeLibraryTitle(it.title)
-        }
-
         return root
     }
 
@@ -435,7 +428,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         itemRefresh = position
         val intent = Intent(requireContext(), MangaDetailActivity::class.java)
         val bundle = Bundle()
-        bundle.putSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY, mLibrary)
+        bundle.putSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY, mViewModel.getLibrary())
         bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, manga)
         intent.putExtras(bundle)
         val idText = if (mGridType != LibraryType.LINE)
@@ -468,8 +461,6 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun loadConfig() {
         val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
-        mLibraryPath =
-            sharedPreferences.getString(GeneralConsts.KEYS.LIBRARY.FOLDER, "").toString()
         mOrderBy = Order.valueOf(
             sharedPreferences.getString(
                 GeneralConsts.KEYS.LIBRARY.ORDER,
@@ -577,8 +568,6 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     override fun onRefresh() {
-        mViewModel.updateList { change, _ -> if (change) sortList() }
-
         if (mHandler.hasCallbacks(mDismissUpButton))
             mHandler.removeCallbacks(mDismissUpButton)
         if (mHandler.hasCallbacks(mDismissDownButton))
@@ -587,9 +576,11 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         mScrollUp.hide()
         mScrollDown.hide()
 
+        mViewModel.updateList { change, _ -> if (change) sortList() }
+
         if (!Scanner.getInstance(requireContext()).isRunning()) {
             setIsRefreshing(true)
-            Scanner.getInstance(requireContext()).scanLibrary(getLibrary())
+            Scanner.getInstance(requireContext()).scanLibrary(mViewModel.getLibrary())
         }
     }
 
