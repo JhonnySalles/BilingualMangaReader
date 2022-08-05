@@ -48,6 +48,8 @@
     <string name="config_option_order_access">Último acesso</string>
     <string name="config_option_order_favorite">Favoritos primeiro</string>
 
+    <string name="config_reading_show_clock_and_battery">Mostrar o relógio e o percentual bateria?</string>
+
     <string name="config_system_language">Linguagem do sistema</string>
     <string name="config_system_format_date">Formato de data</string>
     <string name="config_option_date_time_format_0">Padrão (%s)</string>
@@ -93,6 +95,7 @@
     <string name="reader_reload">Recarregar</string>
     <string name="reader_not_found">Não encontrado</string>
     <string name="file_not_found">Arquivo não encontrado</string>
+
     <string name="menu_view_mode">Modo de preenchimento</string>
     <string name="menu_view_mode_aspect_fill">Aspecto preencher</string>
     <string name="menu_view_mode_aspect_fit">Aspecto ajustar</string>
@@ -111,6 +114,7 @@
     <string name="menu_reading_floating">Popup flutuante</string>
     <string name="menu_reading_open_kaku">Abrir o app Kaku</string>
     <string name="menu_reading_floating_buttons">Botões flutuante</string>
+    <string name="menu_reading_view_touch">Funções touch</string>
 
     <string name="reading_button_screen_rotate">Rotação de tela</string>
     <string name="reading_button_page_linked">Página vinculada</string>
@@ -124,6 +128,14 @@
 
     <string name="reading_page_index">Índice</string>
     <string name="reading_page_empty">O arquivo não possui pastas</string>
+
+    <string name="reading_touch_demonstration_aspect_fit">Aspecto ajustar</string>
+    <string name="reading_touch_demonstration_fit_width">Ajustar à largura</string>
+    <string name="reading_touch_demonstration_chapters">Abrir lista de capítulos</string>
+    <string name="reading_touch_demonstration_next_file">Próximo arquivo</string>
+    <string name="reading_touch_demonstration_previous_file">Arquivo anterior</string>
+    <string name="reading_touch_demonstration_next_page">Próxima página</string>
+    <string name="reading_touch_demonstration_previous_page">Página anterior</string>
 
     <string name="open_app_kaku_not_founded">App Kaku não encontrado.</string>
 

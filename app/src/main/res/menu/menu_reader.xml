@@ -91,10 +91,19 @@
 
     <item
         android:id="@+id/menu_item_floating_buttons"
-        android:icon="@mipmap/app_kaku"
+        android:icon="@drawable/ic_item_floating_buttons"
         android:iconTint="#FFFFFF"
         android:orderInCategory="103"
         android:title="@string/menu_reading_floating_buttons"
         app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/menu_item_view_touch_screen"
+        android:icon="@drawable/ic_view_touch_screen"
+        android:iconTint="#FFFFFF"
+        android:orderInCategory="103"
+        android:title="@string/menu_reading_view_touch"
+        app:showAsAction="never"/>
+
 
 </menu>

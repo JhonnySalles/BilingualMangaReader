@@ -1,11 +1,16 @@
 package br.com.fenix.bilingualmangareader.view.ui.reader
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.BatteryManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.util.TypedValue
 import android.view.Menu
@@ -16,6 +21,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.setPadding
@@ -28,6 +34,7 @@ import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.model.enums.PageMode
+import br.com.fenix.bilingualmangareader.model.enums.Position
 import br.com.fenix.bilingualmangareader.model.enums.ReaderMode
 import br.com.fenix.bilingualmangareader.service.controller.SubTitleController
 import br.com.fenix.bilingualmangareader.service.kanji.Formatter
@@ -82,10 +89,19 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     private lateinit var mFloatingWindowOcr: FloatingWindowOcr
     private lateinit var mFloatingButtons: FloatingButtons
 
+    private lateinit var mClockAndBattery: LinearLayout
+    private lateinit var mBattery: TextView
+    private lateinit var mTouchView: ConstraintLayout
+
+    private var mHandler = Handler(Looper.getMainLooper())
+    private val mMonitoringBattery = Runnable { getBatteryPercent() }
+    private val mDismissTouchView = Runnable { closeViewTouch() }
+
     private lateinit var mStorage: Storage
     private lateinit var mRepository: MangaRepository
     private lateinit var mSubtitleController: SubTitleController
     private lateinit var mLibrary: Library
+    private var mFragment: ReaderFragment? = null
     private var mManga: Manga? = null
     private var mMenuPopupBottomSheet: Boolean = false
 
@@ -185,6 +201,10 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         mPopupTranslateTab = findViewById(R.id.popup_translate_tab)
         mPopupTranslateView = findViewById(R.id.popup_translate_view_pager)
 
+        mClockAndBattery = findViewById(R.id.container_clock_battery)
+        mBattery = findViewById(R.id.txt_battery)
+        mTouchView = findViewById(R.id.container_touch_demonstration)
+
         mPopupReaderColorFilterFragment = PopupReaderColorFilterFragment()
         mPopupSubtitleConfigurationFragment = PopupSubtitleConfiguration()
         mPopupSubtitleReaderFragment = PopupSubtitleReader()
@@ -243,6 +263,22 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         mPopupColorView.adapter = viewColorPagerAdapter
 
         mRepository = MangaRepository(applicationContext)
+
+        val sharedPreferences: SharedPreferences =
+            GeneralConsts.getSharedPreferences(this)
+
+        mClockAndBattery.visibility = if (sharedPreferences.getBoolean(GeneralConsts.KEYS.READER.SHOW_CLOCK_AND_BATTERY, false))
+            View.VISIBLE
+        else
+            View.GONE
+
+        getBatteryPercent()
+
+        mTouchView.setOnClickListener {
+            if (mHandler.hasCallbacks(mDismissTouchView))
+                mHandler.removeCallbacks(mDismissTouchView)
+            closeViewTouch()
+        }
 
         val bundle = intent.extras
         if (bundle != null) {
@@ -459,13 +495,20 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         if (::mFloatingButtons.isInitialized)
             mFloatingButtons.destroy()
 
+        if (mHandler.hasCallbacks(mMonitoringBattery))
+            mHandler.removeCallbacks(mMonitoringBattery)
+
+        if (mHandler.hasCallbacks(mDismissTouchView))
+            mHandler.removeCallbacks(mDismissTouchView)
+
         super.onDestroy()
     }
 
-    fun setFragment(fragment: Fragment?) {
+    fun setFragment(fragment: Fragment) {
+        mFragment = if (fragment is ReaderFragment) fragment else null
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.root_frame_reader, fragment!!)
+            .replace(R.id.root_frame_reader, fragment)
             .commit()
     }
 
@@ -522,6 +565,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
                 ).show()
             }
             R.id.menu_item_floating_buttons -> openFloatingButtons()
+            R.id.menu_item_view_touch_screen -> openViewTouch()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -656,7 +700,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         }
     }
 
-    fun openFloatingButtons() {
+    private fun openFloatingButtons() {
         if (mFloatingButtons.isShowing)
             mFloatingButtons.dismiss()
         else {
@@ -665,6 +709,58 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
             else
                 startManageDrawOverlaysPermission(GeneralConsts.REQUEST.PERMISSION_DRAW_OVERLAYS_FLOATING_BUTTONS)
         }
+    }
+
+    private fun openViewTouch() {
+        mFragment?.setFullscreen(true)
+
+        mTouchView.alpha = 0.0f
+        mTouchView.animate().alpha(1.0f).setDuration(300L)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    super.onAnimationEnd(animation)
+                    mTouchView.visibility = View.VISIBLE
+                }
+            })
+
+        mHandler.postDelayed(mDismissTouchView, 5000)
+    }
+
+    fun touchPosition(position: Position): Boolean {
+        return when (position) {
+            Position.CORNER_TOP_RIGHT -> {
+                mFragment?.changeAspect(mToolbar, ReaderMode.FIT_WIDTH)
+                true
+            }
+            Position.CORNER_TOP_LEFT -> {
+                mFragment?.changeAspect(mToolbar, ReaderMode.ASPECT_FIT)
+                true
+            }
+            Position.CORNER_BOTTOM_RIGHT -> {
+                mFragment?.hitEnding()
+                true
+            }
+            Position.CORNER_BOTTOM_LEFT -> {
+                mFragment?.hitBeginning()
+                true
+            }
+            Position.BOTTOM -> {
+
+                false
+            }
+            else -> false
+        }
+    }
+
+    private fun closeViewTouch() {
+        mTouchView.alpha = 1.0f
+        mTouchView.animate().alpha(0.0f).setDuration(300L)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    super.onAnimationEnd(animation)
+                    mTouchView.visibility = View.GONE
+                }
+            })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -821,6 +917,15 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
 
     override fun clearList() {
         mViewModel.clearOcrItem()
+    }
+
+    private fun getBatteryPercent() {
+        try {
+            val percent = (getSystemService(BATTERY_SERVICE) as BatteryManager).getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
+            mBattery.text = "$percent%"
+        } finally {
+            mHandler.postDelayed(mMonitoringBattery, 60000)
+        }
     }
 
 }
