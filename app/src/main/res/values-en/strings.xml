@@ -48,6 +48,8 @@
     <string name="config_option_order_access">Last access</string>
     <string name="config_option_order_favorite">Favorite first</string>
 
+    <string name="config_reading_show_clock_and_battery">Show clock and battery percent?</string>
+
     <string name="config_system_format_date">Date format</string>
     <string name="config_system_language">System language</string>
 
@@ -112,6 +114,7 @@
     <string name="menu_reading_floating">Floating popup</string>
     <string name="menu_reading_open_kaku">Open Kaku App</string>
     <string name="menu_reading_floating_buttons">Floating buttons</string>
+    <string name="menu_reading_view_touch">Touch functions</string>
 
     <string name="reading_button_screen_rotate">Screen rotate</string>
     <string name="reading_button_page_linked">Page linked</string>
@@ -125,6 +128,14 @@
 
     <string name="reading_page_index">Page index</string>
     <string name="reading_page_empty">File has no folders</string>
+
+    <string name="reading_touch_demonstration_aspect_fit">Aspect Fill</string>
+    <string name="reading_touch_demonstration_fit_width">Aspect Fit</string>
+    <string name="reading_touch_demonstration_chapters">Open chapters list</string>
+    <string name="reading_touch_demonstration_next_file">Next file</string>
+    <string name="reading_touch_demonstration_previous_file">Previous file</string>
+    <string name="reading_touch_demonstration_next_page">Next page</string>
+    <string name="reading_touch_demonstration_previous_page">Previous page</string>
 
     <string name="open_app_kaku_not_founded">App Kaku not found.</string>
 
