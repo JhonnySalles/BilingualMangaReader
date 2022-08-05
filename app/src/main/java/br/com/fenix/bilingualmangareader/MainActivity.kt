@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var mMenu: Menu
     private lateinit var mToggle: ActionBarDrawerToggle
     private lateinit var mDrawer: DrawerLayout
+    private var mLibrary : Library? = null
 
     private val mDefaultUncaughtHandler = Thread.getDefaultUncaughtExceptionHandler()
 
@@ -76,11 +77,26 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         mFragmentManager = supportFragmentManager
 
+        val library = LibraryFragment()
+        if (savedInstanceState != null && savedInstanceState.containsKey(GeneralConsts.KEYS.OBJECT.LIBRARY)) {
+            mLibrary = savedInstanceState.getSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY) as Library
+            mLibrary?.let {
+                library.setLibrary(it)
+            }
+        }
+
         // content_fragment use for receive fragments layout
-        mFragmentManager.beginTransaction().replace(R.id.main_content_root, LibraryFragment())
+        mFragmentManager.beginTransaction().replace(R.id.main_content_root, library)
             .commit()
 
         libraries()
+    }
+
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        if (mLibrary != null)
+            savedInstanceState.putSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY, mLibrary)
+
+        super.onSaveInstanceState(savedInstanceState)
     }
 
     private fun clearCache() {
@@ -127,6 +143,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         mMenu = mNavigationView.menu
+        mLibrary = null
 
         val fragment = supportFragmentManager.findFragmentById(item.itemId)
         val newFragment = fragment ?: when (item.itemId) {
@@ -137,6 +154,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.menu_history -> HistoryFragment()
             in GeneralConsts.KEYS.LIBRARIES.INDEX_LIBRARIES..(GeneralConsts.KEYS.LIBRARIES.INDEX_LIBRARIES + mLibraries.size) -> {
                 val index = item.itemId - GeneralConsts.KEYS.LIBRARIES.INDEX_LIBRARIES
+                mLibrary = mLibraries[index]
                 val library = LibraryFragment()
                 library.setLibrary(mLibraries[index])
                 library
@@ -172,7 +190,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mToolBar.title = getString(R.string.app_name)
     }
 
-    fun openFragment(fragment: Fragment) {
+    private fun openFragment(fragment: Fragment) {
         mFragmentManager.beginTransaction().setCustomAnimations(
             R.anim.slide_fragment_add_enter,
             R.anim.slide_fragment_add_exit,

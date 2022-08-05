@@ -58,7 +58,6 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var mainFunctions: MainListener
 
     private var mLibrary: Library? = null
-
     private var mLibraryPath: String = ""
     private var mOrderBy: Order = Order.Name
 
