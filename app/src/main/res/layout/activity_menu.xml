@@ -23,7 +23,7 @@
     <View
         android:id="@+id/manga_detail_title_content"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="350dp"
         android:translationY="-30dp"
         android:background="@drawable/main_header_background"/>
 
