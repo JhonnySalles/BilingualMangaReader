@@ -13,18 +13,18 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="280dp"
         android:layout_gravity="top|center"
         android:contentDescription="@string/about_app_name"
         android:scaleType="centerCrop"
-        android:translationY="-30dp"
-        android:src="@mipmap/select_manga_cut_semi"/>
+        android:translationY="-40dp"
+        android:src="@mipmap/select_manga_semi"/>
 
     <View
         android:id="@+id/manga_detail_title_content"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:translationY="-30dp"
+        android:layout_height="380dp"
+        android:translationY="-40dp"
         android:background="@drawable/main_header_background"/>
 
     <FrameLayout
