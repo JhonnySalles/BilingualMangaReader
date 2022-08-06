@@ -1,5 +1,6 @@
 package br.com.fenix.bilingualmangareader.view.ui.menu
 
+import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Bundle
 import android.os.Handler
@@ -18,9 +19,12 @@ import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.enums.Libraries
+import br.com.fenix.bilingualmangareader.model.enums.LibraryType
 import br.com.fenix.bilingualmangareader.service.listener.MangaCardListener
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.view.adapter.library.MangaGridCardAdapter
+import br.com.fenix.bilingualmangareader.view.adapter.library.MangaLineCardAdapter
+import br.com.fenix.bilingualmangareader.view.ui.library.LibraryFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.slf4j.LoggerFactory
 import kotlin.math.max
@@ -48,6 +52,10 @@ class SelectMangaFragment : Fragment() {
 
     private val mDismissUpButton = Runnable { mScrollUp.hide() }
     private val mDismissDownButton = Runnable { mScrollDown.hide() }
+
+    companion object {
+        var mGridType: LibraryType = LibraryType.GRID_BIG
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,6 +87,11 @@ class SelectMangaFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_select_manga, container, false)
+
+        mGridType = LibraryType.valueOf(
+            GeneralConsts.getSharedPreferences(requireContext()).getString(GeneralConsts.KEYS.LIBRARY.LIBRARY_TYPE, LibraryType.LINE.toString())
+                .toString()
+        )
 
         mRoot = root.findViewById(R.id.select_manga_root)
         mRecycler = root.findViewById(R.id.select_manga_recycler)
@@ -145,15 +158,39 @@ class SelectMangaFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        recyclerLayout()
+    }
 
-        val gridAdapter = MangaGridCardAdapter()
-        mRecycler.adapter = gridAdapter
-        val columnWidth: Int = resources.getDimension(R.dimen.manga_grid_card_layout_width_medium)
-            .toInt() + 1
-        val spaceCount: Int = max(1, Resources.getSystem().displayMetrics.widthPixels / columnWidth)
-        mRecycler.layoutManager = GridLayoutManager(requireContext(), spaceCount)
-        gridAdapter.attachListener(mListener)
-        mRecycler.layoutAnimation = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_library_grid)
+    private fun recyclerLayout() {
+        if (LibraryFragment.mGridType != LibraryType.LINE) {
+            val gridAdapter = MangaGridCardAdapter()
+            mRecycler.adapter = gridAdapter
+
+            val isLandscape =
+                resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+            val columnWidth: Int = when (LibraryFragment.mGridType) {
+                LibraryType.GRID_BIG -> resources.getDimension(R.dimen.manga_grid_card_layout_width)
+                    .toInt()
+                LibraryType.GRID_MEDIUM -> if (isLandscape) resources.getDimension(R.dimen.manga_grid_card_layout_width_landscape_medium)
+                    .toInt() else resources.getDimension(R.dimen.manga_grid_card_layout_width_medium)
+                    .toInt()
+                LibraryType.GRID_SMALL -> if (isLandscape) resources.getDimension(R.dimen.manga_grid_card_layout_width_small)
+                    .toInt()
+                else resources.getDimension(R.dimen.manga_grid_card_layout_width).toInt()
+                else -> resources.getDimension(R.dimen.manga_grid_card_layout_width).toInt()
+            } + 1
+
+            val spaceCount: Int = max(1, Resources.getSystem().displayMetrics.widthPixels / columnWidth)
+            mRecycler.layoutManager = GridLayoutManager(requireContext(), spaceCount)
+            gridAdapter.attachListener(mListener)
+            mRecycler.layoutAnimation = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_library_grid)
+        } else {
+            val lineAdapter = MangaLineCardAdapter()
+            mRecycler.adapter = lineAdapter
+            mRecycler.layoutManager = GridLayoutManager(requireContext(), 1)
+            lineAdapter.attachListener(mListener)
+            mRecycler.layoutAnimation = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_library_line)
+        }
     }
 
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
@@ -183,7 +220,10 @@ class SelectMangaFragment : Fragment() {
 
     private fun observer() {
         mViewModel.listMangas.observe(viewLifecycleOwner) {
-            (mRecycler.adapter as MangaGridCardAdapter).updateList(it)
+            if (mGridType != LibraryType.LINE)
+                (mRecycler.adapter as MangaGridCardAdapter).updateList(it)
+            else
+                (mRecycler.adapter as MangaLineCardAdapter).updateList(it)
         }
     }
 

@@ -282,7 +282,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         val root = inflater.inflate(R.layout.fragment_library, container, false)
         val sharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
         mGridType = LibraryType.valueOf(
-            sharedPreferences.getString(GeneralConsts.KEYS.LIBRARY.LIBRARY_TYPE, "LINE")
+            sharedPreferences.getString(GeneralConsts.KEYS.LIBRARY.LIBRARY_TYPE, LibraryType.LINE.toString())
                 .toString()
         )
 
@@ -292,6 +292,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             Order.LastAccess to getString(R.string.config_option_order_access),
             Order.Favorite to getString(R.string.config_option_order_favorite)
         )
+
         mRoot = root.findViewById(R.id.frame_library_root)
         mRecyclerView = root.findViewById(R.id.library_recycler_view)
         mRefreshLayout = root.findViewById(R.id.library_refresh)
