@@ -13,8 +13,8 @@ import br.com.fenix.bilingualmangareader.service.parses.RarParse
 import br.com.fenix.bilingualmangareader.service.repository.FileLinkRepository
 import br.com.fenix.bilingualmangareader.service.repository.MangaRepository
 import br.com.fenix.bilingualmangareader.service.tracker.ParseInformation
-import br.com.fenix.bilingualmangareader.service.tracker.mal.MyAnimeListTracker
 import br.com.fenix.bilingualmangareader.service.tracker.mal.MalMangaDetail
+import br.com.fenix.bilingualmangareader.service.tracker.mal.MyAnimeListTracker
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import org.slf4j.LoggerFactory
@@ -24,9 +24,9 @@ class MangaDetailViewModel(application: Application) : AndroidViewModel(applicat
 
     private val mLOGGER = LoggerFactory.getLogger(MangaDetailViewModel::class.java)
 
-    private val mContext = application.applicationContext
-    private val mMangaRepository: MangaRepository = MangaRepository(mContext)
-    private val mFileLinkRepository: FileLinkRepository = FileLinkRepository(mContext)
+    private val mMangaRepository: MangaRepository = MangaRepository(application.applicationContext)
+    private val mFileLinkRepository: FileLinkRepository = FileLinkRepository(application.applicationContext)
+    private val cache = GeneralConsts.getCacheDir(application.applicationContext)
 
     private var mManga = MutableLiveData<Manga>(null)
     val manga: LiveData<Manga> = mManga
@@ -48,7 +48,7 @@ class MangaDetailViewModel(application: Application) : AndroidViewModel(applicat
     private var mInformationRelations = MutableLiveData<MutableList<Information>>(mutableListOf())
     val informationRelations: LiveData<MutableList<Information>> = mInformationRelations
 
-    private val mTracker = MyAnimeListTracker(mContext)
+    private val mTracker = MyAnimeListTracker(application.applicationContext)
 
     fun setManga(manga: Manga) {
         mManga.value = manga
@@ -61,7 +61,7 @@ class MangaDetailViewModel(application: Application) : AndroidViewModel(applicat
         try {
             if (parse is RarParse) {
                 val folder = GeneralConsts.CACHE_FOLDER.RAR + '/' + Util.normalizeNameCache(manga.file.nameWithoutExtension)
-                val cacheDir = File(GeneralConsts.getCacheDir(mContext), folder)
+                val cacheDir = File(cache, folder)
                 (parse as RarParse?)!!.setCacheDirectory(cacheDir)
             }
 

@@ -3,6 +3,7 @@ package br.com.fenix.bilingualmangareader.view.ui.window
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.PixelFormat
 import android.graphics.Point
 import android.os.Build
@@ -108,9 +109,8 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
 
 
     private fun getRealDisplaySizeFromContext(): Point {
-        val displaySize = Point()
-        (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay.getRealSize(displaySize)
-        return displaySize
+        val metrics = Resources.getSystem().displayMetrics
+        return Point(metrics.widthPixels, metrics.heightPixels)
     }
 
     override fun onScroll(e1: MotionEvent?, e2: MotionEvent?, distanceX: Float, distanceY: Float): Boolean {

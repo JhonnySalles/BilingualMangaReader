@@ -53,7 +53,7 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".MainActivity"/>
         <activity
-            android:name="br.com.fenix.bilingualmangareader.view.ui.configuration.ConfigLibrariesActivity"
+            android:name="br.com.fenix.bilingualmangareader.view.ui.menu.MenuActivity"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".MainActivity"/>

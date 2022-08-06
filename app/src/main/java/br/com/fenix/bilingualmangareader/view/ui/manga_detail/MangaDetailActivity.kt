@@ -34,9 +34,13 @@ class MangaDetailActivity : AppCompatActivity() {
         else
             LibraryUtil.getDefault(this)
 
+        val fragment = MangaDetailFragment()
+        fragment.mLibrary = library
+        fragment.mManga = manga
+
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.root_frame_manga_detail, MangaDetailFragment(library, manga))
+            .replace(R.id.root_frame_manga_detail, fragment)
             .commit()
     }
 

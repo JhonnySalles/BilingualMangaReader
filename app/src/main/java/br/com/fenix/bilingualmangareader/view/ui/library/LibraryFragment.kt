@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -29,7 +30,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import br.com.fenix.bilingualmangareader.R
-import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.enums.Libraries
 import br.com.fenix.bilingualmangareader.model.enums.LibraryType
@@ -40,7 +40,6 @@ import br.com.fenix.bilingualmangareader.service.listener.MangaCardListener
 import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.service.scanner.Scanner
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
-import br.com.fenix.bilingualmangareader.util.helpers.LibraryUtil
 import br.com.fenix.bilingualmangareader.view.adapter.library.MangaGridCardAdapter
 import br.com.fenix.bilingualmangareader.view.adapter.library.MangaLineCardAdapter
 import br.com.fenix.bilingualmangareader.view.ui.manga_detail.MangaDetailActivity
@@ -62,7 +61,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var mMapOrder: HashMap<Order, String>
     private lateinit var mRoot: FrameLayout
     private lateinit var mRefreshLayout: SwipeRefreshLayout
-    private lateinit var mRecycleView: RecyclerView
+    private lateinit var mRecyclerView: RecyclerView
     private lateinit var miGridType: MenuItem
     private lateinit var miGridOrder: MenuItem
     private lateinit var miSearch: MenuItem
@@ -181,25 +180,25 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun notifyDataSet(index: Int, range: Int = 0, insert: Boolean = false, removed: Boolean = false) {
         if (insert)
-            mRecycleView.adapter?.notifyItemInserted(index)
+            mRecyclerView.adapter?.notifyItemInserted(index)
         else if (removed)
-            mRecycleView.adapter?.notifyItemRemoved(index)
+            mRecyclerView.adapter?.notifyItemRemoved(index)
         else if (range > 1)
-            mRecycleView.adapter?.notifyItemRangeChanged(index, range)
+            mRecyclerView.adapter?.notifyItemRangeChanged(index, range)
         else
-            mRecycleView.adapter?.notifyItemChanged(index)
+            mRecyclerView.adapter?.notifyItemChanged(index)
     }
 
     private fun refreshLibraryAddDelayed(manga: Manga) {
         val index = mViewModel.addList(manga)
         if (index > -1)
-            mRecycleView.adapter?.notifyItemInserted(index)
+            mRecyclerView.adapter?.notifyItemInserted(index)
     }
 
     private fun refreshLibraryRemoveDelayed(manga: Manga) {
         val index = mViewModel.remList(manga)
         if (index > -1)
-            mRecycleView.adapter?.notifyItemRemoved(index)
+            mRecyclerView.adapter?.notifyItemRemoved(index)
     }
 
     override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
@@ -294,7 +293,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             Order.Favorite to getString(R.string.config_option_order_favorite)
         )
         mRoot = root.findViewById(R.id.frame_library_root)
-        mRecycleView = root.findViewById(R.id.library_recycler_view)
+        mRecyclerView = root.findViewById(R.id.library_recycler_view)
         mRefreshLayout = root.findViewById(R.id.library_refresh)
         mScrollUp = root.findViewById(R.id.library_scroll_up)
         mScrollDown = root.findViewById(R.id.library_scroll_down)
@@ -313,14 +312,14 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         mScrollUp.setOnClickListener {
             setAnimationRecycler(false)
-            mRecycleView.smoothScrollToPosition(0)
+            mRecyclerView.smoothScrollToPosition(0)
         }
         mScrollDown.setOnClickListener {
             setAnimationRecycler(false)
-            mRecycleView.smoothScrollToPosition((mRecycleView.adapter as RecyclerView.Adapter).itemCount)
+            mRecyclerView.smoothScrollToPosition((mRecyclerView.adapter as RecyclerView.Adapter).itemCount)
         }
 
-        mRecycleView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        mRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (newState != AbsListView.OnScrollListener.SCROLL_STATE_FLING)
@@ -328,7 +327,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             }
         })
 
-        mRecycleView.setOnScrollChangeListener { _, _, _, _, yOld ->
+        mRecyclerView.setOnScrollChangeListener { _, _, _, _, yOld ->
             if (mRefreshLayout.isRefreshing)
                 return@setOnScrollChangeListener
 
@@ -355,7 +354,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             }
         }
 
-        ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(mRecycleView)
+        ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(mRecyclerView)
 
         mListener = object : MangaCardListener {
             override fun onClick(manga: Manga) {
@@ -450,12 +449,12 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         val options = ActivityOptions
             .makeSceneTransitionAnimation(requireActivity(), *arrayOf(pImageCover, pTitleCover, pProgress))
         requireActivity().overridePendingTransition(R.anim.fade_in_fragment_add_enter, R.anim.fade_out_fragment_remove_exit)
-        startActivityForResult(intent, GeneralConsts.MANGA_DETAIL.REQUEST_ENDED, options.toBundle())
+        startActivityForResult(intent, GeneralConsts.REQUEST.MANGA_DETAIL, options.toBundle())
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == GeneralConsts.MANGA_DETAIL.REQUEST_ENDED)
+        if (requestCode == GeneralConsts.REQUEST.MANGA_DETAIL)
             notifyDataSet(itemRefresh!!)
     }
 
@@ -483,7 +482,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private fun generateLayout() {
         if (mGridType != LibraryType.LINE) {
             val gridAdapter = MangaGridCardAdapter()
-            mRecycleView.adapter = gridAdapter
+            mRecyclerView.adapter = gridAdapter
 
             val isLandscape =
                 resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
@@ -499,41 +498,38 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 else -> resources.getDimension(R.dimen.manga_grid_card_layout_width).toInt()
             } + 1
 
-            val displayMetrics = DisplayMetrics()
-            (context as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)
-
-            val spaceCount: Int = max(1, displayMetrics.widthPixels / columnWidth)
-            mRecycleView.layoutManager = GridLayoutManager(requireContext(), spaceCount)
+            val spaceCount: Int = max(1, Resources.getSystem().displayMetrics.widthPixels / columnWidth)
+            mRecyclerView.layoutManager = GridLayoutManager(requireContext(), spaceCount)
             gridAdapter.attachListener(mListener)
-            mRecycleView.layoutAnimation = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_library_grid)
+            mRecyclerView.layoutAnimation = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_library_grid)
         } else {
             val lineAdapter = MangaLineCardAdapter()
-            mRecycleView.adapter = lineAdapter
-            mRecycleView.layoutManager = GridLayoutManager(requireContext(), 1)
+            mRecyclerView.adapter = lineAdapter
+            mRecyclerView.layoutManager = GridLayoutManager(requireContext(), 1)
             lineAdapter.attachListener(mListener)
-            mRecycleView.layoutAnimation = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_library_line)
+            mRecyclerView.layoutAnimation = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_library_line)
         }
     }
 
     private fun setAnimationRecycler(isAnimate: Boolean) {
         if (mGridType != LibraryType.LINE)
-            (mRecycleView.adapter as MangaGridCardAdapter).isAnimation = isAnimate
+            (mRecyclerView.adapter as MangaGridCardAdapter).isAnimation = isAnimate
         else
-            (mRecycleView.adapter as MangaLineCardAdapter).isAnimation = isAnimate
+            (mRecyclerView.adapter as MangaLineCardAdapter).isAnimation = isAnimate
     }
 
     private fun removeList(manga: Manga) {
         if (mGridType != LibraryType.LINE)
-            (mRecycleView.adapter as MangaGridCardAdapter).removeList(manga)
+            (mRecyclerView.adapter as MangaGridCardAdapter).removeList(manga)
         else
-            (mRecycleView.adapter as MangaLineCardAdapter).removeList(manga)
+            (mRecyclerView.adapter as MangaLineCardAdapter).removeList(manga)
     }
 
     private fun updateList(list: MutableList<Manga>) {
         if (mGridType != LibraryType.LINE)
-            (mRecycleView.adapter as MangaGridCardAdapter).updateList(list)
+            (mRecyclerView.adapter as MangaGridCardAdapter).updateList(list)
         else
-            (mRecycleView.adapter as MangaLineCardAdapter).updateList(list)
+            (mRecyclerView.adapter as MangaLineCardAdapter).updateList(list)
     }
 
     private fun observer() {
@@ -546,7 +542,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         try {
             mRefreshLayout.isRefreshing = enabled
 
-            if (!::searchView.isInitialized || !::mRecycleView.isInitialized)
+            if (!::searchView.isInitialized || !::mRecyclerView.isInitialized)
                 return
 
             if (enabled)

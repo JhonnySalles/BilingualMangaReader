@@ -15,7 +15,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.setPadding
@@ -38,6 +37,7 @@ import br.com.fenix.bilingualmangareader.util.helpers.Util
 import br.com.fenix.bilingualmangareader.view.adapter.page_link.PageLinkCardAdapter
 import br.com.fenix.bilingualmangareader.view.adapter.page_link.PageNotLinkCardAdapter
 import br.com.fenix.bilingualmangareader.view.components.ComponentsUtil
+import br.com.fenix.bilingualmangareader.view.ui.menu.MenuActivity
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -195,25 +195,7 @@ class PagesLinkFragment : Fragment() {
 
         mFileLinkAutoComplete.setOnClickListener {
             mFileLinkAutoComplete.setText("")
-            val intent = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O) {
-                Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                    addCategory(Intent.CATEGORY_OPENABLE)
-                    type = "application/zip|application/x-cbz|application/rar|application/x-cbr|application/x-rar-compressed|" +
-                            "application/x-zip-compressed|application/cbr|application/cbz|*/*"
-                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                }
-            } else
-                Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                    addCategory(Intent.CATEGORY_OPENABLE)
-                    type = "application/*"
-                    putExtra(
-                        Intent.EXTRA_MIME_TYPES, arrayOf(
-                            "application/zip", "application/x-cbz", "application/rar", "application/x-cbr",
-                            "application/x-rar-compressed", "application/x-zip-compressed", "application/cbr", "application/cbz"
-                        )
-                    )
-                }
-            startActivityForResult(intent, GeneralConsts.REQUEST.OPEN_PAGE_LINK)
+            choiceSelectManga()
         }
 
         val languages = resources.getStringArray(R.array.languages)
@@ -461,8 +443,8 @@ class PagesLinkFragment : Fragment() {
     override fun onActivityResult(
         requestCode: Int, resultCode: Int, resultData: Intent?
     ) {
-        if (requestCode == GeneralConsts.REQUEST.OPEN_PAGE_LINK) {
-            if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == GeneralConsts.REQUEST.OPEN_PAGE_LINK) {
                 resultData?.data?.also { uri ->
                     try {
                         mAutoReorderPages = true
@@ -485,9 +467,30 @@ class PagesLinkFragment : Fragment() {
                         mLOGGER.warn("Error when open file: " + e.message, e)
                     }
                 }
-            } else
-                mViewModel.clearFileLink { index, type -> notifyItemChanged(type, index) }
-        }
+
+            } else if (requestCode == GeneralConsts.REQUEST.SELECT_MANGA) {
+                resultData?.extras?.also {
+                    if (it.containsKey(GeneralConsts.KEYS.OBJECT.MANGA)) {
+                        val link = it.getSerializable(GeneralConsts.KEYS.OBJECT.MANGA) as Manga
+                        val loaded = mViewModel.readFileLink(link.path) { index, type -> notifyItemChanged(type, index) }
+                        if (loaded != LoadFile.LOADED) {
+                            val msg = if (loaded == LoadFile.ERROR_FILE_WRONG) getString(R.string.page_link_load_file_wrong) else getString(
+                                R.string.page_link_load_error
+                            )
+                            AlertDialog.Builder(requireContext(), R.style.AppCompatAlertDialogStyle)
+                                .setTitle(msg)
+                                .setMessage(link.path)
+                                .setPositiveButton(
+                                    R.string.action_neutral
+                                ) { _, _ -> }
+                                .create()
+                                .show()
+                        }
+                    }
+                }
+            }
+        } else
+            mViewModel.clearFileLink { index, type -> notifyItemChanged(type, index) }
     }
 
     private fun onPageLinkScrolling(point: Point) {
@@ -706,6 +709,51 @@ class PagesLinkFragment : Fragment() {
             .show()
     }
 
+    private fun choiceSelectManga() {
+        val origins = requireContext().resources.getStringArray(R.array.origin_manga)
+        MaterialAlertDialogBuilder(requireActivity(), R.style.AppCompatAlertDialogStyle)
+            .setTitle(R.string.page_link_select_origin_manga)
+            .setItems(origins) { _, selected ->
+                val origin = origins[selected]
+                if (origin == origins[0])
+                    openLibrarySelectManga()
+                else
+                    openIntentSelectManga()
+            }
+            .show()
+    }
+
+    private fun openLibrarySelectManga() {
+        val intent = Intent(requireContext(), MenuActivity::class.java)
+        val bundle = Bundle()
+        bundle.putInt(GeneralConsts.KEYS.FRAGMENT.ID, R.id.frame_select_manga)
+        intent.putExtras(bundle)
+        requireActivity().overridePendingTransition(R.anim.fade_in_fragment_add_enter, R.anim.fade_out_fragment_remove_exit)
+        startActivityForResult(intent, GeneralConsts.REQUEST.SELECT_MANGA, null)
+    }
+
+    private fun openIntentSelectManga() {
+        val intent = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O) {
+            Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                addCategory(Intent.CATEGORY_OPENABLE)
+                type = "application/zip|application/x-cbz|application/rar|application/x-cbr|application/x-rar-compressed|" +
+                        "application/x-zip-compressed|application/cbr|application/cbz|*/*"
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+        } else
+            Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                addCategory(Intent.CATEGORY_OPENABLE)
+                type = "application/*"
+                putExtra(
+                    Intent.EXTRA_MIME_TYPES, arrayOf(
+                        "application/zip", "application/x-cbz", "application/rar", "application/x-cbr",
+                        "application/x-rar-compressed", "application/x-zip-compressed", "application/cbr", "application/cbz"
+                    )
+                )
+            }
+        startActivityForResult(intent, GeneralConsts.REQUEST.OPEN_PAGE_LINK)
+    }
+
     private fun processImageLoading(isInitial: Boolean = false, isEnding: Boolean = false, isVerify: Boolean = false) {
         if (isInitial) {
             mImageLoading.isIndeterminate = true
@@ -757,7 +805,10 @@ class PagesLinkFragment : Fragment() {
                     processImageLoading()
                     notifyItemChanged(imageLoad.type, imageLoad.index)
                 }
-                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_LOAD_ERROR -> mHandler.postDelayed({mViewModel.reLoadImages(imageLoad.type)}, 300L)
+                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_LOAD_ERROR -> mHandler.postDelayed(
+                    { mViewModel.reLoadImages(imageLoad.type) },
+                    300L
+                )
                 PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_LOAD_ERROR_ENABLE_MANUAL -> mForceImageReload.visibility = View.VISIBLE
                 PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_ADDED -> notifyItemChanged(imageLoad.type, imageLoad.index, add = true)
                 PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_REMOVED -> notifyItemChanged(
@@ -775,7 +826,8 @@ class PagesLinkFragment : Fragment() {
                         mAutoReorderPages = false
                         mViewModel.autoReorderDoublePages(imageLoad.type, isNotify = false)
                     }
-                    mForceImageReload.visibility = View.GONE
+
+                    mForceImageReload.visibility = if (!mViewModel.allImagesLoaded()) View.VISIBLE else View.GONE
                 }
                 PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_ITEM_CHANGE -> notifyItemChanged(imageLoad.type, imageLoad.index)
                 PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_ITEM_ADD -> notifyItemChanged(imageLoad.type, imageLoad.index, add = true)

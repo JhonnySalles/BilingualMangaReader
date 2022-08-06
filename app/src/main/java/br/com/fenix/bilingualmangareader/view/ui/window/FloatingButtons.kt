@@ -2,6 +2,7 @@ package br.com.fenix.bilingualmangareader.view.ui.window
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.PixelFormat
 import android.graphics.Point
 import android.graphics.drawable.Drawable
@@ -131,8 +132,8 @@ class FloatingButtons constructor(private val context: Context, private val acti
 
         mFloatingView.setOnTouchListener(onTouchListener)
 
-        val displaySize = Point()
-        windowManager!!.defaultDisplay!!.getRealSize(displaySize)
+        val metrics = Resources.getSystem().displayMetrics
+        val displaySize = Point(metrics.widthPixels, metrics.heightPixels)
         mRealDisplaySize = displaySize
         mMiddle = mRealDisplaySize.x/2
         inLeft = true
