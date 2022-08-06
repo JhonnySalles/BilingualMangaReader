@@ -1,13 +1,15 @@
 package br.com.fenix.bilingualmangareader.util.constants
 
+import android.annotation.TargetApi
 import android.content.Context
 import android.content.SharedPreferences
-import br.com.fenix.bilingualmangareader.MainActivity
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts.PATTERNS.DATE_PATTERN
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts.PATTERNS.TIME_PATTERN
 import java.io.File
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 class GeneralConsts private constructor() {
     companion object {
@@ -19,12 +21,26 @@ class GeneralConsts private constructor() {
             return context.getSharedPreferences(KEYS.PREFERENCE_NAME, Context.MODE_PRIVATE)
         }
 
+        fun formatterDate(context: Context, dateTime: Date): String {
+            val preferences = getSharedPreferences(context)
+            val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, DATE_PATTERN)
+            return SimpleDateFormat(pattern, Locale.getDefault()).format(dateTime)
+        }
+
+        fun formatterDateTime(context: Context, dateTime: Date): String {
+            val preferences = getSharedPreferences(context)
+            val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, DATE_PATTERN) + TIME_PATTERN
+            return SimpleDateFormat(pattern, Locale.getDefault()).format(dateTime)
+        }
+
+        @TargetApi(26)
         fun formatterDate(context: Context, dateTime: LocalDateTime): String {
             val preferences = getSharedPreferences(context)
             val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, DATE_PATTERN)
             return dateTime.format(DateTimeFormatter.ofPattern(pattern))
         }
 
+        @TargetApi(26)
         fun formatterDateTime(context: Context, dateTime: LocalDateTime): String {
             val preferences = getSharedPreferences(context)
             val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, DATE_PATTERN) + TIME_PATTERN
