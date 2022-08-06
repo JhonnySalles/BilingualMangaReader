@@ -22,6 +22,8 @@ import br.com.fenix.bilingualmangareader.service.repository.DataBase
 import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.*
+import br.com.fenix.bilingualmangareader.view.ui.menu.ConfigLibrariesViewModel
+import br.com.fenix.bilingualmangareader.view.ui.menu.MenuActivity
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputLayout
 import org.slf4j.LoggerFactory
@@ -293,7 +295,7 @@ class ConfigFragment : Fragment() {
                 mLibraryPathAutoComplete.setText(folder)
             }
 
-            GeneralConsts.CONFIG.RETURN -> {
+            GeneralConsts.REQUEST.CONFIG_LIBRARIES -> {
                 mViewModel.load()
                 (requireActivity() as MainActivity).setLibraries(mViewModel.getList())
             }
@@ -596,9 +598,12 @@ class ConfigFragment : Fragment() {
     }
 
     private fun openLibraries() {
-        val intent = Intent(requireContext(), ConfigLibrariesActivity::class.java)
+        val intent = Intent(requireContext(), MenuActivity::class.java)
+        val bundle = Bundle()
+        bundle.putInt(GeneralConsts.KEYS.FRAGMENT.ID, R.id.frame_config_libraries)
+        intent.putExtras(bundle)
         requireActivity().overridePendingTransition(R.anim.fade_in_fragment_add_enter, R.anim.fade_out_fragment_remove_exit)
-        startActivityForResult(intent, GeneralConsts.CONFIG.RETURN, null)
+        startActivityForResult(intent, GeneralConsts.REQUEST.CONFIG_LIBRARIES, null)
     }
 
 }

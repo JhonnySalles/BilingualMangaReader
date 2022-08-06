@@ -1,7 +1,6 @@
-package br.com.fenix.bilingualmangareader.view.ui.configuration
+package br.com.fenix.bilingualmangareader.view.ui.menu
 
 import android.app.Activity.RESULT_OK
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
@@ -21,12 +20,10 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import br.com.fenix.bilingualmangareader.MainActivity
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.enums.Libraries
 import br.com.fenix.bilingualmangareader.service.listener.LibrariesCardListener
-import br.com.fenix.bilingualmangareader.service.listener.MainListener
 import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
@@ -46,6 +43,7 @@ class ConfigLibrariesFragment : Fragment() {
     private lateinit var mRecycleView: RecyclerView
     private lateinit var mAddButton: FloatingActionButton
     private lateinit var mListener: LibrariesCardListener
+    private lateinit var mToolbar: androidx.appcompat.widget.Toolbar
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,6 +55,10 @@ class ConfigLibrariesFragment : Fragment() {
         mRecycleView.adapter = LibrariesLineCardAdapter()
         mRecycleView.layoutManager = GridLayoutManager(context, 1)
         mRecycleView.layoutAnimation = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_library_line)
+
+        mToolbar = view.findViewById(R.id.toolbar_configuration_libraries)
+
+        (requireActivity() as MenuActivity).setActionBar(mToolbar)
 
         mListener = object : LibrariesCardListener {
             override fun onClickLong(library: Library) {
@@ -297,7 +299,7 @@ class ConfigLibrariesFragment : Fragment() {
             mLibraryPath.error = getString(R.string.config_libraries_title_path_required)
         } else {
             val preference: SharedPreferences = GeneralConsts.getSharedPreferences(requireContext())
-            val default = preference.getString(GeneralConsts.KEYS.LIBRARY.FOLDER, "")?: ""
+            val default = preference.getString(GeneralConsts.KEYS.LIBRARY.FOLDER, "") ?: ""
 
             if (default.isNotEmpty() && mLibraryPath.editText?.text?.toString()?.equals(default, true) == true) {
                 validated = false

@@ -30,11 +30,14 @@ import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 
 
-class MangaDetailFragment(private val mLibrary: Library, private var mManga: Manga?) : Fragment() {
+class MangaDetailFragment : Fragment() {
 
     private val mLOGGER = LoggerFactory.getLogger(MangaDetailFragment::class.java)
 
     private val mViewModel: MangaDetailViewModel by viewModels()
+
+    var mLibrary: Library? = null
+    var mManga: Manga? = null
 
     private lateinit var mBackgroundImage: ImageView
     private lateinit var mImage: ImageView

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.PixelFormat
 import android.graphics.Point
 import android.graphics.drawable.Drawable
@@ -294,9 +295,8 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
     private var minSize = 0
     private fun setResizer() {
         minSize = context.resources.getDimension(R.dimen.floating_reader_min_size).toInt()
-        val displaySize = Point()
-        windowManager!!.defaultDisplay!!.getRealSize(displaySize)
-        mRealDisplaySize = displaySize
+        val metrics = Resources.getSystem().displayMetrics
+        mRealDisplaySize = Point(metrics.widthPixels, metrics.heightPixels)
 
         var dx = 0
         var dy = 0

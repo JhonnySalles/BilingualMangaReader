@@ -1273,6 +1273,8 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
             getImage(null, parseFileLink, mPagesNotLinked.value!!, Pages.NOT_LINKED, true)
     }
 
+    fun allImagesLoaded(): Boolean = isAllImagesLoaded(Pages.ALL)
+
     private fun getImage(parseManga: Parse?, parsePageLink: Parse?, list: ArrayList<PageLink>, type: Pages, reload: Boolean = false) {
         if (!reload) mLoadVerify = 0
 

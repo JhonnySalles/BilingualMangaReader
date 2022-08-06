@@ -112,6 +112,10 @@ class GeneralConsts private constructor() {
             const val BACKUP_RESTORE_ROLLBACK_FILE_NAME = "BilingualMangaReaderBackup.db"
             const val RESTORE_DATABASE = "RESTORE_DATABASE"
         }
+
+        object FRAGMENT {
+            const val ID = "FRAGMENT_ID"
+        }
     }
 
     object TAG {
@@ -128,7 +132,6 @@ class GeneralConsts private constructor() {
 
     object CONFIG {
         val DATA_FORMAT = listOf("dd/MM/yyyy", "MM/dd/yy", "dd/MM/yy", "yyyy-MM-dd")
-        const val RETURN = 999
     }
 
     object CACHE_FOLDER {
@@ -151,10 +154,6 @@ class GeneralConsts private constructor() {
         const val MESSAGE_MANGA_UPDATED_REMOVE = 2
     }
 
-    object MANGA_DETAIL {
-        const val REQUEST_ENDED = 999
-    }
-
     object FILE_LINK {
         const val FOLDER_MANGA = "manga"
         const val FOLDER_LINK = "link"
@@ -171,6 +170,9 @@ class GeneralConsts private constructor() {
         const val PERMISSION_FILES_ACCESS = 101
         const val GENERATE_BACKUP = 500
         const val RESTORE_BACKUP = 501
+        const val CONFIG_LIBRARIES = 600
+        const val SELECT_MANGA = 601
+        const val MANGA_DETAIL = 602
     }
 
 }

@@ -219,6 +219,7 @@
     <string name="library_menu_delete">Deletar</string>
     <string name="library_menu_delete_description">Deseja excluir o arquivo?</string>
     <string name="library_menu_clear">Limpar histórico</string>
+    <string name="library_default">Padrão</string>
 
     <!-- MANGA DETAIL -->
     <string name="manga_detail_favorite">Favorito</string>
@@ -275,6 +276,12 @@
     <string name="page_link_process_reorder_single_page_done">Reordenação de páginas simples concluída.</string>
     <string name="page_link_process_reorder_sorted_page_done">Ordenação pela sequência da página concluída.</string>
     <string name="page_link_select_file_page_index">Selecione um arquivo</string>
+
+    <string name="page_link_select_origin_manga">Escolha a origem do arquivo</string>
+    <string-array name="origin_manga">
+        <item>Biblioteca</item>
+        <item>Explorador</item>
+    </string-array>
 
     <!-- HELP -->
     <string name="help_content">Conteúdo</string>

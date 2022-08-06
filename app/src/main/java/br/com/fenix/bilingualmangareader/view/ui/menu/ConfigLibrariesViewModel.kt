@@ -1,4 +1,4 @@
-package br.com.fenix.bilingualmangareader.view.ui.configuration
+package br.com.fenix.bilingualmangareader.view.ui.menu
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

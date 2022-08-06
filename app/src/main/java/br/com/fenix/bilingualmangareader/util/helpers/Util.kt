@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.SharedPreferences
 import android.content.pm.ApplicationInfo
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.DisplayMetrics
@@ -79,12 +80,12 @@ class Util {
         }
 
         fun getDeviceWidth(context: Context): Int {
-            val displayMetrics = context.resources.displayMetrics
+            val displayMetrics = Resources.getSystem().displayMetrics
             return Math.round(displayMetrics.widthPixels / displayMetrics.density)
         }
 
         fun getDeviceHeight(context: Context): Int {
-            val displayMetrics = context.resources.displayMetrics
+            val displayMetrics = Resources.getSystem().displayMetrics
             return Math.round(displayMetrics.heightPixels / displayMetrics.density)
         }
 
@@ -238,6 +239,23 @@ class Util {
                 name.substringBefore(".")
             else
                 name
+
+            return name
+        }
+
+        fun getNameWithoutVolumeAndChapter(manga: String): String {
+            if (manga.isEmpty()) return manga
+
+            var name = if (manga.contains("volume", true))
+                manga.replaceAfterLast("volume", "").replace("volume", "", true)
+            else if (manga.contains("capitulo", true))
+                manga.substringAfterLast("capitulo").replace("capitulo", "", true)
+            else if (manga.contains("capítulo", true))
+                manga.substringAfterLast("capítulo").replace("capítulo", "", true)
+            else manga
+
+            if (name.endsWith(" - "))
+                name = name.substringAfterLast(" - ")
 
             return name
         }
@@ -499,7 +517,7 @@ class LibraryUtil {
         fun getDefault(context: Context): Library {
             val preference: SharedPreferences = GeneralConsts.getSharedPreferences(context)
             val path = preference.getString(GeneralConsts.KEYS.LIBRARY.FOLDER, "") ?: ""
-            return Library(GeneralConsts.KEYS.LIBRARY.DEFAULT, Libraries.DEFAULT.name, path)
+            return Library(GeneralConsts.KEYS.LIBRARY.DEFAULT, context.getString(R.string.library_default), path)
         }
     }
 }
