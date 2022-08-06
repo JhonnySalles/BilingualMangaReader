@@ -15,6 +15,7 @@
         android:id="@+id/history_image_card"
         android:layout_width="@dimen/history_card_image"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         app:rippleColor="@color/ripple_color">
 
         <ImageView

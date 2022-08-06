@@ -4,6 +4,7 @@ import android.app.Application
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.os.Process
 import androidx.lifecycle.AndroidViewModel
@@ -59,13 +60,14 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
         return mManga?.fileName ?: ""
     }
 
-    private fun getParse(path: String): Parse? =
-        getParse(File(path))
+    private fun getParse(path: String, type: Pages): Parse? =
+        getParse(File(path), type)
 
-    private fun getParse(file: File): Parse? {
+    private fun getParse(file: File, type: Pages): Parse? {
         val parse = ParseFactory.create(file)
         if (parse is RarParse) {
-            val folder = GeneralConsts.CACHE_FOLDER.LINKED + '/' + Util.normalizeNameCache(file.nameWithoutExtension)
+            val prefix = (if (type == Pages.MANGA) GeneralConsts.FILE_LINK.FOLDER_MANGA else GeneralConsts.FILE_LINK.FOLDER_LINK) + "_"
+            val folder = GeneralConsts.CACHE_FOLDER.LINKED + '/' + Util.normalizeNameCache(file.nameWithoutExtension, prefix, false)
             val cacheDir = File(GeneralConsts.getCacheDir(mContext), folder)
             (parse as RarParse?)!!.setCacheDirectory(cacheDir)
         }
@@ -81,14 +83,15 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
         else this.get()
     }
 
+    // Keeps the data to quickly load the file. Cleaning takes place by the main activity
     fun onDestroy() {
         if (mFileLink.value?.parseManga == null) {
-            Util.destroyParse(mFileLink.value?.parseManga)
+            Util.destroyParse(mFileLink.value?.parseManga, false)
             mFileLink.value?.parseManga = null
         }
 
         if (mFileLink.value?.parseFileLink == null) {
-            Util.destroyParse(mFileLink.value?.parseManga)
+            Util.destroyParse(mFileLink.value?.parseFileLink, false)
             mFileLink.value?.parseFileLink = null
         }
     }
@@ -97,10 +100,10 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
         if (fileLink == null) return
 
         if (fileLink.parseManga == null)
-            fileLink.parseManga = getParse(fileLink.manga!!.path)
+            fileLink.parseManga = getParse(fileLink.manga!!.path, Pages.MANGA)
 
         if (fileLink.parseFileLink == null && fileLink.path.isNotEmpty())
-            fileLink.parseFileLink = getParse(fileLink.path)
+            fileLink.parseFileLink = getParse(fileLink.path, Pages.LINKED)
     }
 
     private fun reload(refresh: (index: Int?, type: Pages) -> (Unit)): Boolean {
@@ -158,8 +161,8 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
     fun set(obj: FileLink, refresh: (index: Int?, type: Pages) -> (Unit), isLoadManga: Boolean = false) {
         endThread(true)
 
-        Util.destroyParse(mFileLink.value?.parseManga)
-        Util.destroyParse(mFileLink.value?.parseFileLink)
+        Util.destroyParse(mFileLink.value?.parseManga, false)
+        Util.destroyParse(mFileLink.value?.parseFileLink, false)
 
         if (mPagesLink.value != null && mPagesLink.value!!.isNotEmpty())
             obj.pagesLink?.forEachIndexed { index, pageLink -> pageLink.imageMangaPage = mPagesLink.value!![index].imageMangaPage }
@@ -169,9 +172,9 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
         mPagesNotLinked.value?.clear()
         setLanguage(obj.language)
 
-        val mParseManga = getParse(mManga!!.file) ?: return
+        val mParseManga = getParse(mManga!!.file, Pages.MANGA) ?: return
         mFileLink.value?.parseManga = mParseManga
-        val mParseLink = getParse(obj.file) ?: return
+        val mParseLink = getParse(obj.file, Pages.LINKED) ?: return
         mFileLink.value?.parseFileLink = mParseLink
 
         verify(obj)
@@ -336,9 +339,9 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
         if (reload(refresh)) return
         if (find(true, refresh)) return
 
-        Util.destroyParse(mFileLink.value?.parseManga)
+        Util.destroyParse(mFileLink.value?.parseManga, false)
 
-        val parse = getParse(manga.file) ?: return
+        val parse = getParse(manga.file, Pages.MANGA) ?: return
         mFileLink.value = FileLink(manga)
         mFileLink.value!!.parseManga = parse
 
@@ -363,8 +366,8 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
             file.name.endsWith(".cbz")
         ) {
 
-            Util.destroyParse(mFileLink.value?.parseFileLink)
-            val parse = getParse(path)
+            Util.destroyParse(mFileLink.value?.parseFileLink, false)
+            val parse = getParse(path, Pages.LINKED)
             if (parse != null) {
                 loaded = LoadFile.LOADED
 
@@ -1244,16 +1247,21 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
     private var mLoadError: Int = 0
     fun reLoadImages(type: Pages = Pages.ALL, isVerifyImages: Boolean = false, isForced: Boolean = false, isCloseThreads: Boolean = false) {
         mLoadVerify += 1
-        if (!isForced && (mLoadError > 5 || (isVerifyImages && mLoadVerify > 3))) return
+        if (!isForced && (mLoadError > 3 || (isVerifyImages && mLoadVerify > 3))) {
+            if (mLoadError > 3)
+                notifyMessages(type, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_LOAD_ERROR_ENABLE_MANUAL)
+            return
+        }
+
         if (!isForced && isVerifyImages && isAllImagesLoaded(type)) return
 
         if (isCloseThreads) endThread()
 
-        Util.destroyParse(mFileLink.value?.parseManga)
-        Util.destroyParse(mFileLink.value?.parseFileLink)
+        Util.destroyParse(mFileLink.value?.parseManga, false)
+        Util.destroyParse(mFileLink.value?.parseFileLink, false)
 
-        val parseManga = getParse(mManga!!.file)
-        val parseFileLink = getParse(mFileLink.value!!.file)
+        val parseManga = getParse(mManga!!.file, Pages.MANGA)
+        val parseFileLink = getParse(mFileLink.value!!.file, Pages.LINKED)
 
         mFileLink.value!!.parseManga = parseManga
         mFileLink.value!!.parseFileLink = parseFileLink

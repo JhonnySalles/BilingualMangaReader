@@ -135,15 +135,18 @@ class RarParse : Parse {
         }
     }
 
-    override fun destroy() {
-        if (mCacheDir != null) {
-            for (f in mCacheDir?.listFiles()!!)
-                f.delete()
-
-            mCacheDir!!.delete()
+    override fun destroy(isClearCache: Boolean) {
+        if (isClearCache) {
+            if (mCacheDir != null) {
+                mCacheDir?.listFiles()?.let {
+                    for (f in it)
+                        f.delete()
+                }
+                mCacheDir?.delete()
+            }
         }
         mHeaders.clear()
-        mArchive!!.close()
+        mArchive?.close()
         mArchive = null
     }
 
@@ -153,13 +156,14 @@ class RarParse : Parse {
 
     fun setCacheDirectory(cacheDirectory: File?) {
         mCacheDir = cacheDirectory
-        if (!mCacheDir!!.exists())
-            mCacheDir!!.mkdirs()
+        mCacheDir?.let {
+            if (!it.exists())
+                it.mkdirs()
 
-        if (mCacheDir!!.listFiles() != null) {
-            for (f in mCacheDir?.listFiles()!!)
-                f.delete()
-
+            if (it.listFiles() != null) {
+                for (f in it.listFiles()!!)
+                    f.delete()
+            }
         }
     }
 }

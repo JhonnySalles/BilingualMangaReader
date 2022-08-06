@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.setPadding
@@ -78,6 +79,7 @@ class PagesLinkFragment : Fragment() {
     private lateinit var mHelp: MaterialButton
     private lateinit var mDelete: MaterialButton
     private lateinit var mPagesIndex: MaterialButton
+    private lateinit var mForceImageReload: MaterialButton
     private lateinit var mToolbar: androidx.appcompat.widget.Toolbar
     private lateinit var mMangaName: TextView
 
@@ -119,6 +121,9 @@ class PagesLinkFragment : Fragment() {
         mFileLinkAutoComplete = root.findViewById(R.id.pages_link_file_link_autocomplete)
         mFileLinkLanguage = root.findViewById(R.id.pages_link_language_combo)
         mFileLinkLanguageAutoComplete = root.findViewById(R.id.pages_link_language_autocomplete)
+        mPagesIndex = root.findViewById(R.id.pages_link_pages_index)
+        mMangaName = root.findViewById(R.id.pages_link_name_manga)
+
         mContentButton = root.findViewById(R.id.pages_link_buttons_content)
         mSave = root.findViewById(R.id.pages_link_save_button)
         mRefresh = root.findViewById(R.id.pages_link_refresh_button)
@@ -135,9 +140,10 @@ class PagesLinkFragment : Fragment() {
         mDualPages = root.findViewById(R.id.pages_link_dual_page_button)
         mHelp = root.findViewById(R.id.pages_link_help_button)
         mDelete = root.findViewById(R.id.file_link_delete_button)
-        mPagesIndex = root.findViewById(R.id.pages_link_pages_index)
-        mMangaName = root.findViewById(R.id.pages_link_name_manga)
-        mToolbar = requireActivity().findViewById(R.id.toolbar_manga_pages_link)
+        mForceImageReload = root.findViewById(R.id.pages_link_force_image_reload)
+        mToolbar = root.findViewById(R.id.toolbar_manga_pages_link)
+
+        (requireActivity() as PagesLinkActivity).setActionBar(mToolbar)
 
         if (mHelp.tag.toString().compareTo("not_used", true) != 0) {
             mExpandedButtonsGroupSize = mButtonsGroup.layoutParams as ConstraintLayout.LayoutParams
@@ -284,6 +290,8 @@ class PagesLinkFragment : Fragment() {
         }
 
         mPagesIndex.setOnClickListener { openMenuIndexes() }
+
+        mForceImageReload.setOnClickListener { mViewModel.reLoadImages() }
 
         mListener = object : PageLinkCardListener {
             override fun onClick(page: PageLink) {}
@@ -635,6 +643,7 @@ class PagesLinkFragment : Fragment() {
         if (mHandler.hasCallbacks(mReduceSizeGroupButton))
             mHandler.removeCallbacks(mReduceSizeGroupButton)
 
+        mViewModel.onDestroy()
         super.onDestroy()
     }
 
@@ -748,7 +757,8 @@ class PagesLinkFragment : Fragment() {
                     processImageLoading()
                     notifyItemChanged(imageLoad.type, imageLoad.index)
                 }
-                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_LOAD_ERROR -> mViewModel.reLoadImages(imageLoad.type)
+                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_LOAD_ERROR -> mHandler.postDelayed({mViewModel.reLoadImages(imageLoad.type)}, 300L)
+                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_LOAD_ERROR_ENABLE_MANUAL -> mForceImageReload.visibility = View.VISIBLE
                 PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_ADDED -> notifyItemChanged(imageLoad.type, imageLoad.index, add = true)
                 PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_REMOVED -> notifyItemChanged(
                     imageLoad.type,
@@ -765,6 +775,7 @@ class PagesLinkFragment : Fragment() {
                         mAutoReorderPages = false
                         mViewModel.autoReorderDoublePages(imageLoad.type, isNotify = false)
                     }
+                    mForceImageReload.visibility = View.GONE
                 }
                 PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_ITEM_CHANGE -> notifyItemChanged(imageLoad.type, imageLoad.index)
                 PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_ITEM_ADD -> notifyItemChanged(imageLoad.type, imageLoad.index, add = true)

@@ -155,6 +155,11 @@ class GeneralConsts private constructor() {
         const val REQUEST_ENDED = 999
     }
 
+    object FILE_LINK {
+        const val FOLDER_MANGA = "manga"
+        const val FOLDER_LINK = "link"
+    }
+
     object REQUEST {
         const val PERMISSION_DRAW_OVERLAYS = 505
         const val PERMISSION_DRAW_OVERLAYS_FLOATING_OCR = 506
