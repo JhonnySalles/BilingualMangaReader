@@ -94,7 +94,7 @@ class ZipParse : Parse {
         return "zip"
     }
 
-    override fun destroy() {
-        mZipFile!!.close()
+    override fun destroy(isClearCache: Boolean) {
+        mZipFile?.close()
     }
 }

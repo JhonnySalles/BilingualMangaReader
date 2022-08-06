@@ -84,7 +84,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:translationY="-40dp"
             android:background="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
@@ -101,28 +101,46 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/pages_link_file_link_text"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar_manga_pages_link"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/page_link_file"
-                android:textColorHint="@color/text_primary"
-                android:layout_marginStart="@dimen/page_link_toolbar_size"
-                app:boxBackgroundColor="@color/primary"
-                app:boxStrokeColor="@color/on_secondary"
-                app:startIconTint="@color/on_secondary"
-                app:startIconDrawable="@drawable/ic_file"
-                app:placeholderTextColor="@color/text_primary"
-                app:hintTextColor="@color/on_secondary">
+                android:gravity="top"
+                android:background="@color/transparent"
+                app:popupTheme="@style/MyDarkToolbarStyle"
+                android:theme="@style/ToolbarTheme">
 
-                <AutoCompleteTextView
-                    android:id="@+id/pages_link_file_link_autocomplete"
+                <LinearLayout
+                    android:id="@+id/toolbar_title_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="none"
-                    android:textColor="@color/text_primary" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_gravity="center"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/pages_link_file_link_text"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="@string/page_link_file"
+                        android:textColorHint="@color/text_primary"
+                        app:boxBackgroundColor="@color/primary"
+                        app:boxStrokeColor="@color/on_secondary"
+                        app:startIconTint="@color/on_secondary"
+                        app:startIconDrawable="@drawable/ic_file"
+                        app:placeholderTextColor="@color/text_primary"
+                        app:hintTextColor="@color/on_secondary">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/pages_link_file_link_autocomplete"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="none"
+                            android:textColor="@color/text_primary" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+            </androidx.appcompat.widget.Toolbar>
 
             <LinearLayout
                 android:id="@+id/pages_link_top_content"
@@ -146,7 +164,7 @@
                     android:insetLeft="0dp"
                     android:textAllCaps="false"
                     android:padding="0dp"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginEnd="5dp"
                     app:iconPadding="0dp"
                     app:iconGravity="textStart"
                     app:rippleColor="@color/ripple_color"
@@ -327,6 +345,34 @@
 
         </com.google.android.material.button.MaterialButtonToggleGroup>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/pages_link_force_image_reload"
+            android:layout_height="@dimen/page_link_fullscreen_size"
+            android:layout_width="@dimen/page_link_fullscreen_size"
+            android:textColor="@color/text_primary"
+            android:contentDescription="@string/page_link_full_screen"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
+            android:insetBottom="0dp"
+            android:insetLeft="0dp"
+            android:padding="0dp"
+            android:layout_marginEnd="5dp"
+            android:visibility="gone"
+            app:iconPadding="0dp"
+            app:iconGravity="textStart"
+            app:rippleColor="@color/ripple_color"
+            app:strokeWidth="0dp"
+            app:backgroundTint="@color/file_link_full_screen"
+            app:icon="@drawable/ic_force_reload_image"
+            app:iconTint="@color/text_primary"
+            app:iconSize="28dp"
+            app:cornerRadius="100dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/pages_link_buttons_content"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
+
         <LinearLayout
             android:id="@+id/pages_link_buttons_content"
             android:layout_width="match_parent"
@@ -344,8 +390,8 @@
                 android:textColor="@color/text_primary"
                 android:contentDescription="@string/page_link_help"
                 android:layout_gravity="center"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="13dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="13dp"
                 android:gravity="center"
                 android:insetTop="0dp"
                 android:insetRight="0dp"

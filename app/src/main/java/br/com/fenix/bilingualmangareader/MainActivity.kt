@@ -102,21 +102,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         }
 
                     val images = File(cacheDir, GeneralConsts.CACHE_FOLDER.IMAGE)
-
                     if (images.exists())
-                        rar.listFiles()?.let {
+                        images.listFiles()?.let {
                             for (f in it)
                                 f.delete()
                         }
-
-                    val linked = File(cacheDir, GeneralConsts.CACHE_FOLDER.LINKED)
-
-                    if (linked.exists())
-                        rar.listFiles()?.let {
-                            for (f in it)
-                                f.delete()
-                        }
-
                 } catch (e: Exception) {
                     mLOGGER.error("Error clearing cache folders.", e)
                 }

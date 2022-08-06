@@ -96,6 +96,6 @@ class TarParse : Parse {
         return "tar"
     }
 
-    override fun destroy() {
+    override fun destroy(isClearCache: Boolean) {
     }
 }

@@ -94,6 +94,6 @@ class DirectoryParse : Parse {
         return "dir"
     }
 
-    override fun destroy() {
+    override fun destroy(isClearCache: Boolean) {
     }
 }

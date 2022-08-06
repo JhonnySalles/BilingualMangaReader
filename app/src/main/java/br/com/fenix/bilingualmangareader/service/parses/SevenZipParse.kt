@@ -105,6 +105,6 @@ class SevenZipParse : Parse {
     }
 
 
-    override fun destroy() {
+    override fun destroy(isClearCache: Boolean) {
     }
 }

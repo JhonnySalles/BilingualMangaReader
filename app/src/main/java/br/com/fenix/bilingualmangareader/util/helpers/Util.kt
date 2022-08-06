@@ -208,10 +208,10 @@ class Util {
             }
         }
 
-        fun destroyParse(parse: Parse?) {
+        fun destroyParse(parse: Parse?, isClearCache: Boolean = true) {
             if (parse != null) {
                 try {
-                    parse.destroy()
+                    parse.destroy(isClearCache)
                 } catch (e: Exception) {
                 }
             }
@@ -249,15 +249,15 @@ class Util {
                 path
         }
 
-        fun normalizeNameCache(name: String): String {
+        fun normalizeNameCache(name: String, prefix: String = "", isRandom: Boolean = true): String {
             val normalize = if (name.contains("-"))
                 name.substringBefore("-")
             else if (name.contains(" "))
                 name.substringBefore(" ")
             else name
 
-            val random = (0..1000).random()
-            return normalize.replace("[^\\w\\d]".toRegex(), "").trim().plus(random).lowercase()
+            val random = if (isRandom) (0..1000).random() else ""
+            return prefix + normalize.replace("[^\\w\\d ]".toRegex(), "").trim().plus(random).lowercase()
         }
 
         fun normalizeFilePath(path: String): String {
