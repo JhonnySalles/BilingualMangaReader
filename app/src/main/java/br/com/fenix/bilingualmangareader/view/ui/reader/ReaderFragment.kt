@@ -7,8 +7,6 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Bitmap
-import android.graphics.Point
-import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -16,8 +14,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.DisplayMetrics
-import android.util.Log
 import android.util.SparseArray
 import android.view.*
 import android.view.GestureDetector.SimpleOnGestureListener
@@ -60,14 +56,16 @@ import com.squareup.picasso.Picasso
 import com.squareup.picasso.Picasso.LoadedFrom
 import com.squareup.picasso.RequestHandler
 import com.squareup.picasso.Target
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.lang.ref.WeakReference
 import kotlin.math.max
 import kotlin.math.min
-import kotlin.math.roundToInt
 
 
 class ReaderFragment : Fragment(), View.OnTouchListener {
+
+    private val mLOGGER = LoggerFactory.getLogger(ReaderFragment::class.java)
 
     private val mViewModel: ReaderViewModel by activityViewModels()
 
@@ -227,9 +225,9 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                         .addRequestHandler((mComicHandler as RequestHandler))
                         .build()
                 } else
-                    Log.e(GeneralConsts.TAG.LOG, "Error in open file.")
+                    mLOGGER.info("Error in open file.")
             } else {
-                Log.e(GeneralConsts.TAG.LOG, "File not founded.")
+                mLOGGER.info("File not founded.")
                 AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
                     .setTitle(getString(R.string.manga_excluded))
                     .setMessage(getString(R.string.file_not_found))
@@ -529,8 +527,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             request.transform(mViewModel.filters.value!!)
                 .into(t)
         } catch (e: Exception) {
-            Log.e(GeneralConsts.TAG.LOG, "Error in open image: " + e.message)
-            Log.e(GeneralConsts.TAG.LOG, e.stackTraceToString())
+            mLOGGER.error("Error in open image: "  + e.message, e)
         }
 
     }
@@ -549,8 +546,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             request.transform(mViewModel.filters.value!!)
                 .into(t)
         } catch (e: Exception) {
-            Log.e(GeneralConsts.TAG.LOG, "Error in open image: " + e.message)
-            Log.e(GeneralConsts.TAG.LOG, e.stackTraceToString())
+            mLOGGER.error("Error in open image: "  + e.message, e)
         }
 
     }
@@ -571,8 +567,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 .transform(mViewModel.filters.value!!)
                 .into(t)
         } catch (e: Exception) {
-            Log.e(GeneralConsts.TAG.LOG, "Error in open image: " + e.message)
-            Log.e(GeneralConsts.TAG.LOG, e.stackTraceToString())
+            mLOGGER.error("Error in open image: "  + e.message, e)
         }
 
     }
@@ -634,6 +629,14 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             if ((requireActivity() as ReaderActivity).touchPosition(position))
                 return true
 
+            /*if (position == Position.LEFT || position == Position.RIGHT) {
+                val view = getCurrencyImageView()
+                view?.let {
+                    val scrool = it.autoScroll(position == Position.LEFT)
+                    println("scrool: " + scrool)
+                }
+            }*/
+
             when (position) {
                 Position.LEFT -> {
                     if (mIsLeftToRight) {
@@ -660,9 +663,11 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
     }
 
     private fun getPosition(e: MotionEvent): Position {
-        val horizontalSize = resources.getDimensionPixelSize(R.dimen.reader_touch_demonstration_initial_horizontal)
-
         val isLandscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+        val horizontalSize = resources.getDimensionPixelSize(R.dimen.reader_touch_demonstration_initial_horizontal)
+        val horizontal = (if (isLandscape) horizontalSize * 1.2 else horizontalSize * 3).toFloat()
+
         val x = e.x
         val y = e.y
         val divider = if (isLandscape) 5 else 3
@@ -671,23 +676,23 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         val width = Resources.getSystem().displayMetrics.widthPixels
 
         if (x < width / divider) {
-            return if (y <= horizontalSize)
+            return if (y <= horizontal)
                 Position.CORNER_TOP_LEFT
-            else if (y >= (height - horizontalSize))
+            else if (y >= (height - horizontal))
                 Position.CORNER_BOTTOM_LEFT
             else
                 Position.LEFT
         } else if (x > width / divider * (divider - 1)) {
-            return if (y <= horizontalSize)
+            return if (y <= horizontal)
                 Position.CORNER_TOP_RIGHT
-            else if (y >= (height - horizontalSize))
+            else if (y >= (height - horizontal))
                 Position.CORNER_BOTTOM_RIGHT
             else
                 Position.RIGHT
         } else {
-            return if (y <= horizontalSize)
+            return if (y <= horizontal)
                 Position.TOP
-            else if (y >= (height - horizontalSize))
+            else if (y >= (height - horizontal))
                 Position.BOTTOM
             else
                 Position.CENTER
@@ -872,7 +877,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 }
                 .setNegativeButton(
                     R.string.switch_action_negative
-                ) { _, _ ->  }
+                ) { _, _ -> }
                 .setOnDismissListener {
                     if (!confirm) {
                         mNewManga = null

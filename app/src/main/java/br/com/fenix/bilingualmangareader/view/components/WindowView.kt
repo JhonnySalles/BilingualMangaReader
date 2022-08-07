@@ -3,7 +3,6 @@ package br.com.fenix.bilingualmangareader.view.components
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
-import android.view.ScaleGestureDetector
 import android.widget.RelativeLayout
 import androidx.core.view.GestureDetectorCompat
 

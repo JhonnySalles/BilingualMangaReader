@@ -1,7 +1,6 @@
 package br.com.fenix.bilingualmangareader.view.ui.library
 
 import android.Manifest
-import android.app.Activity
 import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
@@ -12,8 +11,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
-import android.util.DisplayMetrics
-import android.util.Log
 import android.util.Pair
 import android.view.*
 import android.view.animation.AnimationUtils
@@ -550,7 +547,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 searchView.clearFocus()
             enableSearchView(searchView, !enabled)
         } catch (e: Exception) {
-            Log.e(GeneralConsts.TAG.LOG, "Disable search button error: " + e.message)
+            mLOGGER.error("Disable search button error: " + e.message, e)
         }
     }
 

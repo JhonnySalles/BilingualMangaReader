@@ -317,7 +317,8 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
                 mSubtitleController.setFileLink(fileLink.getFileLink(manga))
                 setFragment(fragment)
             }
-        }
+        } else
+            mFragment = supportFragmentManager.findFragmentById(R.id.root_frame_reader) as ReaderFragment?
 
     }
 
@@ -745,7 +746,6 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
                 true
             }
             Position.BOTTOM -> {
-
                 false
             }
             else -> false

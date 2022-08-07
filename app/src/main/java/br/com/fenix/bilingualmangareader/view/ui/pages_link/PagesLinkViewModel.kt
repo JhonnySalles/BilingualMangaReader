@@ -4,7 +4,6 @@ import android.app.Application
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Handler
-import android.os.Looper
 import android.os.Message
 import android.os.Process
 import androidx.lifecycle.AndroidViewModel
@@ -12,7 +11,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import br.com.fenix.bilingualmangareader.model.entity.FileLink
 import br.com.fenix.bilingualmangareader.model.entity.Manga
-import br.com.fenix.bilingualmangareader.model.entity.Page
 import br.com.fenix.bilingualmangareader.model.entity.PageLink
 import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.model.enums.LoadFile

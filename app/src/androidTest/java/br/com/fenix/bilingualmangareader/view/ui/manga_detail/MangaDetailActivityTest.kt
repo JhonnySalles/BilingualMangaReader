@@ -14,7 +14,6 @@ import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.enums.Libraries
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
-import br.com.fenix.bilingualmangareader.util.helpers.LibraryUtil
 import br.com.fenix.bilingualmangareader.utils.TestUtils
 import junit.framework.TestCase.assertTrue
 import org.hamcrest.Matchers.not

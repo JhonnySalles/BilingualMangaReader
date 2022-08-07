@@ -2,6 +2,7 @@ package br.com.fenix.bilingualmangareader.view.components
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Matrix
 import android.graphics.Point
 import android.graphics.RectF
@@ -22,6 +23,7 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
+
 @SuppressLint("ClickableViewAccessibility")
 open class PageImageView(context: Context, attributeSet: AttributeSet?) :
     androidx.appcompat.widget.AppCompatImageView(context, attributeSet) {
@@ -33,9 +35,9 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
     private var mSkipScaling = false
     private var mTranslateRightEdge = false
     private var mOuterTouchListener: OnTouchListener? = null
-    private var mScaleGestureDetector: ScaleGestureDetector? = null
-    private var mDragGestureDetector: GestureDetector? = null
-    private var mScroller: OverScroller? = null
+    private var mScaleGestureDetector: ScaleGestureDetector
+    private var mDragGestureDetector: GestureDetector
+    private var mScroller: OverScroller
     private var mMinScale = 0F
     private var mMaxScale = 0F
     private var mOriginalScale = 0F
@@ -68,14 +70,36 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
         mScaleGestureDetector = ScaleGestureDetector(getContext(), PrivateScaleDetector())
         mDragGestureDetector = GestureDetector(getContext(), PrivateDragListener())
         super.setOnTouchListener { v, event ->
-            mScaleGestureDetector!!.onTouchEvent(event)
-            mDragGestureDetector!!.onTouchEvent(event)
-            if (mOuterTouchListener != null) mOuterTouchListener!!.onTouch(v, event)
+            mScaleGestureDetector.onTouchEvent(event)
+            mDragGestureDetector.onTouchEvent(event)
+            mOuterTouchListener?.onTouch(v, event)
             true
         }
         mScroller = OverScroller(context)
-        mScroller!!.setFriction(ViewConfiguration.getScrollFriction() * 2)
+        mScroller.setFriction(ViewConfiguration.getScrollFriction() * 2)
         mViewMode = ReaderMode.ASPECT_FIT
+    }
+
+    fun autoScroll(isBack: Boolean = false): Boolean {
+        val displayMetrics = Resources.getSystem().displayMetrics
+
+        val distance = if (isBack)
+            +(displayMetrics.heightPixels).toFloat()
+        else
+            -(displayMetrics.heightPixels).toFloat()
+
+        val imageSize = computeCurrentImageSize()
+        val imageHeight = imageSize.y
+
+        mMatrix.getValues(m)
+        post(ScrollAnimation(m[Matrix.MTRANS_Y], distance))
+
+        return if (isBack)
+            m[Matrix.MTRANS_Y] <= 0
+        else if (imageHeight > height)
+            m[Matrix.MTRANS_Y] >= (imageHeight - height).toFloat()
+        else
+            m[Matrix.MTRANS_Y] >= (height / 2 - imageHeight / 2).toFloat()
     }
 
     override fun setOnTouchListener(l: OnTouchListener?) {
@@ -157,7 +181,7 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
 
     inner class PrivateDragListener : SimpleOnGestureListener() {
         override fun onDown(e: MotionEvent): Boolean {
-            mScroller!!.forceFinished(true)
+            mScroller.forceFinished(true)
             return true
         }
 
@@ -192,7 +216,7 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
                 minY = offset.y
                 maxY = offset.y
             }
-            mScroller!!.fling(
+            mScroller.fling(
                 offset.x, offset.y,
                 velocityX.toInt(), velocityY.toInt(),
                 minX, maxX, minY, maxY
@@ -215,9 +239,9 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
     }
 
     override fun computeScroll() {
-        if (!mScroller!!.isFinished && mScroller!!.computeScrollOffset()) {
-            val curX = mScroller!!.currX
-            val curY = mScroller!!.currY
+        if (!mScroller.isFinished && mScroller.computeScrollOffset()) {
+            val curX = mScroller.currX
+            val curY = mScroller.currY
             mMatrix.getValues(m)
             m[Matrix.MTRANS_X] = curX.toFloat()
             m[Matrix.MTRANS_Y] = curY.toFloat()
@@ -233,8 +257,8 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
         val coords = floatArrayOf(e.getX(index), e.getY(index))
         val matrix = Matrix()
         imageMatrix.invert(matrix)
-        m[Matrix.MTRANS_X] = mScroller!!.currX.toFloat()
-        m[Matrix.MTRANS_Y] = mScroller!!.currY.toFloat()
+        m[Matrix.MTRANS_X] = mScroller.currX.toFloat()
+        m[Matrix.MTRANS_Y] = mScroller.currY.toFloat()
         matrix.mapPoints(coords)
         val imageSize = computeCurrentImageSize()
         return floatArrayOf(coords[0], coords[1], imageSize.x.toFloat(), imageSize.y.toFloat())
@@ -265,12 +289,12 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
         return offset
     }
 
-    override fun setImageMatrix(matrix: Matrix?) {
-        super.setImageMatrix(fixMatrix(matrix!!))
+    override fun setImageMatrix(matrix: Matrix) {
+        super.setImageMatrix(fixMatrix(matrix))
         postInvalidate()
     }
 
-    open fun fixMatrix(matrix: Matrix): Matrix? {
+    open fun fixMatrix(matrix: Matrix): Matrix {
         if (drawable == null) return matrix
         matrix.getValues(m)
         val imageSize = computeCurrentImageSize()
@@ -283,6 +307,7 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
             m[Matrix.MTRANS_X] = min(0F, max(m[Matrix.MTRANS_X], -maxTransX))
         else
             m[Matrix.MTRANS_X] = (width / 2 - imageWidth / 2).toFloat()
+
         if (imageHeight > height)
             m[Matrix.MTRANS_Y] = min(0F, max(m[Matrix.MTRANS_Y], -maxTransY))
         else
@@ -306,6 +331,7 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
 
     companion object {
         const val ZOOM_DURATION = 200
+        const val SCROLL_DURATION = 200
     }
 
     inner class ZoomAnimation(x: Float, y: Float, scale: Float) :
@@ -347,6 +373,43 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
             mInterpolator = AccelerateDecelerateInterpolator()
             mStartScale = getCurrentScale()
             mStartTime = System.currentTimeMillis()
+        }
+    }
+
+    inner class ScrollAnimation(yInitial: Float, yFinal: Float) :
+        Runnable {
+        private var mYInitial: Float
+        private var mYFinal: Float
+        private var mInterpolator: Interpolator
+        private var mStartTime: Long
+
+        init {
+            mYInitial = yInitial
+            mYFinal = yFinal
+
+            mInterpolator = AccelerateDecelerateInterpolator()
+            mStartTime = System.currentTimeMillis()
+        }
+
+        override fun run() {
+            var t = (System.currentTimeMillis() - mStartTime).toFloat() / SCROLL_DURATION
+            val interpolateRatio = mInterpolator.getInterpolation(t)
+            t = if (t > 1f) 1f else t
+            val newTranslate = mYInitial + interpolateRatio * (mYFinal - mYInitial)
+
+            println("translate:" + newTranslate + "||" + t)
+            mMatrix.postTranslate(0F, newTranslate)
+            imageMatrix = mMatrix
+            if (t < 1f) {
+                post(this)
+            } else {
+                // set exact scale
+                mMatrix.postTranslate(
+                    0F,
+                    mYFinal
+                )
+                setImageMatrix(mMatrix)
+            }
         }
     }
 
