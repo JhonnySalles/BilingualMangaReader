@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
@@ -696,7 +695,7 @@ class SubTitleController private constructor(private val context: Context) {
         }
 
         override fun onBitmapFailed(e: Exception, errorDrawable: Drawable?) {
-            Log.e(GeneralConsts.TAG.LOG, "${e.message}")
+            mLOGGER.error("Bitmap load fail: " + e.message, e)
         }
 
         override fun onPrepareLoad(placeHolderDrawable: Drawable?) {

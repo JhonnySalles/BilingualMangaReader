@@ -21,7 +21,6 @@ import br.com.fenix.bilingualmangareader.service.controller.ImageController
 import br.com.fenix.bilingualmangareader.service.controller.ImageCoverController
 import br.com.fenix.bilingualmangareader.service.listener.InformationCardListener
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
-import br.com.fenix.bilingualmangareader.util.helpers.LibraryUtil
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import br.com.fenix.bilingualmangareader.view.adapter.manga_detail.InformationRelatedCardAdapter
 import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity

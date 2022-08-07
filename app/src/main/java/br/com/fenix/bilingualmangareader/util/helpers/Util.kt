@@ -12,7 +12,6 @@ import android.util.DisplayMetrics
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.enums.Languages
-import br.com.fenix.bilingualmangareader.model.enums.Libraries
 import br.com.fenix.bilingualmangareader.service.parses.Parse
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import com.google.android.material.dialog.MaterialAlertDialogBuilder

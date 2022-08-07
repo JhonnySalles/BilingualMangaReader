@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import br.com.fenix.bilingualmangareader.R
-import br.com.fenix.bilingualmangareader.model.enums.LoadFile
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition

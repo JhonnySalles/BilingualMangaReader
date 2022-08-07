@@ -7,7 +7,6 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,11 +23,13 @@ import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputLayout
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.InputStream
-import java.util.*
 
 class PopupSubtitleConfiguration : Fragment() {
+
+    private val mLOGGER = LoggerFactory.getLogger(PopupSubtitleConfiguration::class.java)
 
     private lateinit var mPreferences: SharedPreferences
     private lateinit var mLoadExternalSubtitle: TextInputLayout
@@ -179,7 +180,7 @@ class PopupSubtitleConfiguration : Fragment() {
                         mLoadExternalSubtitleAutoComplete.setText(path)
                         mSubTitleController.getChapterFromJson(listOf(inputString), true)
                     } catch (e: Exception) {
-                        Log.e(GeneralConsts.TAG.LOG, "Error when open file: " + e.message)
+                        mLOGGER.error("Error when open file: " + e.message, e)
                     }
                 }
             } else
