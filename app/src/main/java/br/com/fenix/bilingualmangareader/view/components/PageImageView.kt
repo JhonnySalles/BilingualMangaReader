@@ -90,16 +90,20 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
 
         val imageSize = computeCurrentImageSize()
         val imageHeight = imageSize.y
-
         mMatrix.getValues(m)
-        post(ScrollAnimation(m[Matrix.MTRANS_Y], distance))
 
-        return if (isBack)
-            m[Matrix.MTRANS_Y] <= 0
+        val isScroll = if (imageHeight < (displayMetrics.heightPixels).toFloat())
+            true
+        else if (isBack)
+            m[Matrix.MTRANS_Y] >= 0F
         else if (imageHeight > height)
-            m[Matrix.MTRANS_Y] >= (imageHeight - height).toFloat()
+            (m[Matrix.MTRANS_Y] * -1) >= (imageHeight - height).toFloat()
         else
-            m[Matrix.MTRANS_Y] >= (height / 2 - imageHeight / 2).toFloat()
+            (m[Matrix.MTRANS_Y] * -1) >= (height / 2 - imageHeight / 2).toFloat()
+
+        post(ScrollAnimation(0F, m[Matrix.MTRANS_Y], 0F, distance))
+
+        return !isScroll
     }
 
     override fun setOnTouchListener(l: OnTouchListener?) {
@@ -331,7 +335,7 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
 
     companion object {
         const val ZOOM_DURATION = 200
-        const val SCROLL_DURATION = 200
+        const val SCROLL_DURATION = 500
     }
 
     inner class ZoomAnimation(x: Float, y: Float, scale: Float) :
@@ -376,38 +380,33 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
         }
     }
 
-    inner class ScrollAnimation(yInitial: Float, yFinal: Float) :
+    inner class ScrollAnimation(xInitial: Float, yInitial: Float, xFinal: Float, yFinal: Float) :
         Runnable {
-        private var mYInitial: Float
-        private var mYFinal: Float
-        private var mInterpolator: Interpolator
-        private var mStartTime: Long
-
-        init {
-            mYInitial = yInitial
-            mYFinal = yFinal
-
-            mInterpolator = AccelerateDecelerateInterpolator()
-            mStartTime = System.currentTimeMillis()
-        }
+        private var mYInitial: Float = yInitial
+        private var mXInitial: Float = xInitial
+        private var mYFinal: Float = yFinal
+        private var mXFinal: Float = xFinal
+        private var mInterpolator: Interpolator = AccelerateDecelerateInterpolator()
+        private var mStartTime: Long = System.currentTimeMillis()
+        private var mInitialMatrix = mMatrix
 
         override fun run() {
             var t = (System.currentTimeMillis() - mStartTime).toFloat() / SCROLL_DURATION
-            val interpolateRatio = mInterpolator.getInterpolation(t)
+            val interpolate = mInterpolator.getInterpolation(t)
             t = if (t > 1f) 1f else t
-            val newTranslate = mYInitial + interpolateRatio * (mYFinal - mYInitial)
 
-            println("translate:" + newTranslate + "||" + t)
-            mMatrix.postTranslate(0F, newTranslate)
+            val yTranslate = ((mYFinal - mYInitial) * interpolate)
+            val xTranslate = ((mXFinal - mXInitial) * interpolate)
+
+            println("trans:" + xTranslate + "-" + yTranslate + "--" + interpolate + "||" + mXFinal + "-" + mYFinal + "||" + mXInitial + "-" + mYInitial)
+            mMatrix = mInitialMatrix
+            mMatrix.postTranslate(xTranslate, yTranslate)
             imageMatrix = mMatrix
             if (t < 1f) {
                 post(this)
             } else {
                 // set exact scale
-                mMatrix.postTranslate(
-                    0F,
-                    mYFinal
-                )
+                mMatrix.postTranslate(mXFinal, mYFinal)
                 setImageMatrix(mMatrix)
             }
         }

@@ -527,7 +527,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             request.transform(mViewModel.filters.value!!)
                 .into(t)
         } catch (e: Exception) {
-            mLOGGER.error("Error in open image: "  + e.message, e)
+            mLOGGER.error("Error in open image: " + e.message, e)
         }
 
     }
@@ -546,7 +546,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             request.transform(mViewModel.filters.value!!)
                 .into(t)
         } catch (e: Exception) {
-            mLOGGER.error("Error in open image: "  + e.message, e)
+            mLOGGER.error("Error in open image: " + e.message, e)
         }
 
     }
@@ -567,7 +567,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 .transform(mViewModel.filters.value!!)
                 .into(t)
         } catch (e: Exception) {
-            mLOGGER.error("Error in open image: "  + e.message, e)
+            mLOGGER.error("Error in open image: " + e.message, e)
         }
 
     }
@@ -629,13 +629,13 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             if ((requireActivity() as ReaderActivity).touchPosition(position))
                 return true
 
-            /*if (position == Position.LEFT || position == Position.RIGHT) {
+            if (position == Position.LEFT || position == Position.RIGHT) {
                 val view = getCurrencyImageView()
                 view?.let {
-                    val scrool = it.autoScroll(position == Position.LEFT)
-                    println("scrool: " + scrool)
+                    if (it.autoScroll(position == Position.LEFT))
+                        return true
                 }
-            }*/
+            }
 
             when (position) {
                 Position.LEFT -> {
