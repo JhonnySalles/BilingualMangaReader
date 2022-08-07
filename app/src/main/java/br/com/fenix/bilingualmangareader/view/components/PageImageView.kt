@@ -84,9 +84,9 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
         val displayMetrics = Resources.getSystem().displayMetrics
 
         val distance = if (isBack)
-            +(displayMetrics.heightPixels).toFloat()
+            m[Matrix.MTRANS_Y] + (displayMetrics.heightPixels).toFloat()
         else
-            -(displayMetrics.heightPixels).toFloat()
+            m[Matrix.MTRANS_Y] - (displayMetrics.heightPixels).toFloat()
 
         val imageSize = computeCurrentImageSize()
         val imageHeight = imageSize.y
@@ -335,7 +335,7 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
 
     companion object {
         const val ZOOM_DURATION = 200
-        const val SCROLL_DURATION = 500
+        const val SCROLL_DURATION = 300
     }
 
     inner class ZoomAnimation(x: Float, y: Float, scale: Float) :
@@ -388,7 +388,7 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
         private var mXFinal: Float = xFinal
         private var mInterpolator: Interpolator = AccelerateDecelerateInterpolator()
         private var mStartTime: Long = System.currentTimeMillis()
-        private var mInitialMatrix = mMatrix
+        private var mInitialMatrix = Matrix(mMatrix)
 
         override fun run() {
             var t = (System.currentTimeMillis() - mStartTime).toFloat() / SCROLL_DURATION
@@ -399,14 +399,16 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
             val xTranslate = ((mXFinal - mXInitial) * interpolate)
 
             println("trans:" + xTranslate + "-" + yTranslate + "--" + interpolate + "||" + mXFinal + "-" + mYFinal + "||" + mXInitial + "-" + mYInitial)
-            mMatrix = mInitialMatrix
+
+            mMatrix = Matrix(mInitialMatrix)
             mMatrix.postTranslate(xTranslate, yTranslate)
             imageMatrix = mMatrix
             if (t < 1f) {
                 post(this)
             } else {
                 // set exact scale
-                mMatrix.postTranslate(mXFinal, mYFinal)
+                mMatrix = Matrix(mInitialMatrix)
+                mMatrix.postTranslate(mXFinal - mXInitial, mYFinal - mYInitial)
                 setImageMatrix(mMatrix)
             }
         }
