@@ -20,7 +20,13 @@ class WindowView @JvmOverloads constructor(context: Context, attrs:AttributeSet?
     }
 
     override fun onTouchEvent(e: MotionEvent): Boolean {
+        performClick()
         mDetector?.onTouchEvent(e)
         return mWindowListener?.onTouch(e)?: false
+    }
+
+    override fun performClick(): Boolean {
+        super.performClick()
+        return true
     }
 }

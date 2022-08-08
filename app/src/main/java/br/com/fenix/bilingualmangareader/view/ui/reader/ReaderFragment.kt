@@ -321,7 +321,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         mPageNavTextView = mPageNavLayout.findViewById<View>(R.id.nav_reader_title) as TextView
         mViewPager = view.findViewById<View>(R.id.fragment_reader) as PageViewPager
         mViewPager.adapter = mPagerAdapter
-        mViewPager.offscreenPageLimit = 6
+        mViewPager.offscreenPageLimit = ReaderConsts.READER.OFF_SCREEN_PAGE_LIMIT
         mViewPager.setOnTouchListener(this)
         mViewPager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
             override fun onPageSelected(position: Int) {
@@ -402,6 +402,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
     }
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+        v?.performClick()
         return mGestureDetector.onTouchEvent(event)
     }
 
@@ -734,15 +735,13 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             } else {
                 getActionBar()?.hide()
                 @Suppress("DEPRECATION")
-                val flag = (View.SYSTEM_UI_FLAG_FULLSCREEN // Hide top iu
+                mViewPager.systemUiVisibility = (View.SYSTEM_UI_FLAG_FULLSCREEN // Hide top iu
                         or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // Hide navigator
                         or View.SYSTEM_UI_FLAG_IMMERSIVE // Force navigator hide
                         or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY // Force top iu hide
                         or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN // Force full screen
                         or View.SYSTEM_UI_FLAG_LAYOUT_STABLE // Stable transition on fullscreen and immersive
                         )
-                @Suppress("DEPRECATION")
-                mViewPager.systemUiVisibility = flag
 
                 Handler(Looper.getMainLooper()).postDelayed({
                     w.clearFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
@@ -764,11 +763,9 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             } else {
                 getActionBar()?.show()
                 @Suppress("DEPRECATION")
-                var flag = (View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                mViewPager.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
-                @Suppress("DEPRECATION")
-                mViewPager.systemUiVisibility = flag
 
                 Handler(Looper.getMainLooper()).postDelayed({
                     w.clearFlags(ContextCompat.getColor(requireContext(), R.color.transparent))

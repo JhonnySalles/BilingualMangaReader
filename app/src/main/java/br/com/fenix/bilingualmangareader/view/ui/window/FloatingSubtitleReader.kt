@@ -31,7 +31,6 @@ import com.pedromassango.doubleclick.DoubleClickListener
 import kotlin.math.abs
 
 
-@SuppressLint("ClickableViewAccessibility")
 class FloatingSubtitleReader constructor(private val context: Context, private val activity: AppCompatActivity) {
 
     private var windowManager: WindowManager? = null
@@ -44,7 +43,7 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
     private var mFloatingView: View =
         LayoutInflater.from(context).inflate(R.layout.floating_subtitle_reader, null)
 
-    private lateinit var layoutParams: WindowManager.LayoutParams
+    private var layoutParams: WindowManager.LayoutParams
 
     private var lastX: Int = 0
     private var lastY: Int = 0
