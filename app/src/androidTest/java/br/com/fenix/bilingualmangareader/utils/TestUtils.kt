@@ -59,6 +59,8 @@ class TestUtils {
                 (1..2).random() > 1,
                 SimpleDateFormat(DATE_TIME_PATTERN, Locale.getDefault()).parse("29/06/2022 00:41:00"),
                 Date(),
+                Date(),
+                GeneralConsts.KEYS.LIBRARY.DEFAULT,
                 (1..5).random() > 2
             )
 
@@ -96,6 +98,8 @@ class TestUtils {
                 (1..2).random() > 1,
                 SimpleDateFormat(DATE_TIME_PATTERN, Locale.getDefault()).parse("29/06/2022 00:41:00"),
                 Date(),
+                Date(),
+                GeneralConsts.KEYS.LIBRARY.DEFAULT,
                 (1..5).random() > 2
             )
         }
@@ -124,6 +128,8 @@ class TestUtils {
                         i in 2..5,
                         SimpleDateFormat(DATE_TIME_PATTERN, Locale.getDefault()).parse("29/06/2022 00:41:00"),
                         Date(),
+                        Date(),
+                        GeneralConsts.KEYS.LIBRARY.DEFAULT,
                         i in 4..6
                     )
                 )
