@@ -24,7 +24,6 @@ import kotlin.math.max
 import kotlin.math.min
 
 
-@SuppressLint("ClickableViewAccessibility")
 open class PageImageView(context: Context, attributeSet: AttributeSet?) :
     androidx.appcompat.widget.AppCompatImageView(context, attributeSet) {
 
@@ -70,6 +69,7 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
         mScaleGestureDetector = ScaleGestureDetector(getContext(), PrivateScaleDetector())
         mDragGestureDetector = GestureDetector(getContext(), PrivateDragListener())
         super.setOnTouchListener { v, event ->
+            v?.performClick()
             mScaleGestureDetector.onTouchEvent(event)
             mDragGestureDetector.onTouchEvent(event)
             mOuterTouchListener?.onTouch(v, event)
@@ -397,8 +397,6 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
 
             val yTranslate = ((mYFinal - mYInitial) * interpolate)
             val xTranslate = ((mXFinal - mXInitial) * interpolate)
-
-            println("trans:" + xTranslate + "-" + yTranslate + "--" + interpolate + "||" + mXFinal + "-" + mYFinal + "||" + mXInitial + "-" + mYInitial)
 
             mMatrix = Matrix(mInitialMatrix)
             mMatrix.postTranslate(xTranslate, yTranslate)

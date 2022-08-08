@@ -28,16 +28,20 @@ import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.entity.Manga
+import br.com.fenix.bilingualmangareader.model.entity.Pages
 import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.model.enums.PageMode
 import br.com.fenix.bilingualmangareader.model.enums.Position
 import br.com.fenix.bilingualmangareader.model.enums.ReaderMode
 import br.com.fenix.bilingualmangareader.service.controller.SubTitleController
 import br.com.fenix.bilingualmangareader.service.kanji.Formatter
+import br.com.fenix.bilingualmangareader.service.listener.ChapterCardListener
 import br.com.fenix.bilingualmangareader.service.ocr.GoogleVision
 import br.com.fenix.bilingualmangareader.service.ocr.OcrProcess
 import br.com.fenix.bilingualmangareader.service.repository.MangaRepository
@@ -46,6 +50,7 @@ import br.com.fenix.bilingualmangareader.service.repository.SubTitleRepository
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.LibraryUtil
 import br.com.fenix.bilingualmangareader.util.helpers.Util
+import br.com.fenix.bilingualmangareader.view.adapter.reader.MangaChaptersCardAdapter
 import br.com.fenix.bilingualmangareader.view.components.ComponentsUtil
 import br.com.fenix.bilingualmangareader.view.ui.pages_link.PagesLinkActivity
 import br.com.fenix.bilingualmangareader.view.ui.pages_link.PagesLinkViewModel
@@ -92,6 +97,9 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     private lateinit var mClockAndBattery: LinearLayout
     private lateinit var mBattery: TextView
     private lateinit var mTouchView: ConstraintLayout
+
+    private lateinit var mChapterContent: LinearLayout
+    private lateinit var mChapterList: RecyclerView
 
     private var mHandler = Handler(Looper.getMainLooper())
     private val mMonitoringBattery = Runnable { getBatteryPercent() }
@@ -280,6 +288,11 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
             closeViewTouch()
         }
 
+        mChapterContent = findViewById(R.id.container_chapters_list)
+        mChapterList = findViewById(R.id.chapters_list_covers)
+        mChapterContent.visibility = View.GONE
+        prepareChapters()
+
         val bundle = intent.extras
         if (bundle != null) {
             val name = bundle.getString(GeneralConsts.KEYS.MANGA.NAME) ?: ""
@@ -291,6 +304,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         }
 
         if (savedInstanceState == null) {
+            mViewModel.clearChapter()
             if (Intent.ACTION_VIEW == intent.action) {
                 val file = File(intent.data!!.path!!)
                 val fragment: ReaderFragment = ReaderFragment.create(mLibrary, file)
@@ -371,7 +385,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         setFragment(ReaderFragment.create(mLibrary, manga))
     }
 
-    fun setTitles(title: String, page: String) {
+    private fun setTitles(title: String, page: String) {
         mReaderTitle.text = page
         mToolbarTitle.text = title
     }
@@ -387,6 +401,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     }
 
     fun setManga(manga: Manga) {
+        mViewModel.clearChapter()
         mManga = manga
     }
 
@@ -647,6 +662,24 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         }
     }
 
+    private fun prepareChapters() {
+        val lineAdapter = MangaChaptersCardAdapter()
+        mChapterList.adapter = lineAdapter
+        val layout = GridLayoutManager(this, 1)
+        layout.orientation = RecyclerView.HORIZONTAL;
+        mChapterList.layoutManager = layout
+
+        val listener = object : ChapterCardListener {
+            override fun onClick(page: Pages) {
+                mFragment?.setCurrentPage(page.number)
+            }
+        }
+
+        lineAdapter.attachListener(listener)
+        //mChapterList.layoutAnimation = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_library_line)
+        mViewModel.chapters.observe(this) { lineAdapter.updateList(it) }
+    }
+
     fun openFileLink() {
         if (mManga != null) {
             val intent = Intent(applicationContext, PagesLinkActivity::class.java)
@@ -728,6 +761,11 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     }
 
     fun touchPosition(position: Position): Boolean {
+        if (position != Position.BOTTOM && mChapterContent.visibility == View.VISIBLE) {
+            chapterVisibility(false)
+            return true
+        }
+
         return when (position) {
             Position.CORNER_TOP_RIGHT -> {
                 mFragment?.changeAspect(mToolbar, ReaderMode.FIT_WIDTH)
@@ -746,7 +784,15 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
                 true
             }
             Position.BOTTOM -> {
-                false
+                val loaded = mViewModel.loadChapter(mManga) { page -> mChapterList.adapter?.notifyItemChanged(page) }
+                chapterVisibility(true)
+                mFragment?.let {
+                    if (loaded)
+                        mChapterList.scrollToPosition(it.getCurrentPage())
+                    else
+                        mChapterList.smoothScrollToPosition(it.getCurrentPage())
+                }
+                true
             }
             else -> false
         }
@@ -761,6 +807,26 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
                     mTouchView.visibility = View.GONE
                 }
             })
+    }
+
+    private fun chapterVisibility(isVisible: Boolean) {
+        val visibility = if (isVisible) View.VISIBLE else View.GONE
+        val finalAlpha = if (isVisible) 1.0f else 0.0f
+        val initialAlpha = if (isVisible) 0.0f else 1.0f
+
+        if (isVisible) {
+            mChapterContent.visibility = visibility
+            mChapterContent.alpha = initialAlpha
+        }
+
+        mChapterContent.animate().alpha(finalAlpha).setDuration(300L)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    super.onAnimationEnd(animation)
+                    mChapterContent.visibility = visibility
+                }
+            })
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

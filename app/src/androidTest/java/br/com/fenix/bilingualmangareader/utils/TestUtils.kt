@@ -57,6 +57,8 @@ class TestUtils {
                 (1..2).random() > 1,
                 LocalDateTime.parse("2022-06-28T14:15:50.63"),
                 LocalDateTime.now(),
+                LocalDateTime.now(),
+                GeneralConsts.KEYS.LIBRARY.DEFAULT,
                 (1..5).random() > 2
             )
 
@@ -84,7 +86,8 @@ class TestUtils {
             return Manga(
                 1, Util.getNameFromPath(TEST_FILE_PATH), "", TEST_FILE_PATH, Util.getFolderFromPath(TEST_FILE_PATH),
                 Util.getNameWithoutExtensionFromPath(TEST_FILE_PATH), Util.getExtensionFromPath(TEST_FILE_PATH), 10, 5,
-                (1..2).random() > 1, LocalDateTime.parse("2022-06-28T14:15:50.63"), LocalDateTime.now(), (1..5).random() > 2
+                (1..2).random() > 1, LocalDateTime.parse("2022-06-28T14:15:50.63"), LocalDateTime.now(),
+                LocalDateTime.now(), GeneralConsts.KEYS.LIBRARY.DEFAULT, (1..5).random() > 2
             )
         }
 
@@ -103,7 +106,7 @@ class TestUtils {
                         i.toLong(), Util.getNameFromPath(TEST_FILE_PATH), "", TEST_FILE_PATH, Util.getFolderFromPath(TEST_FILE_PATH),
                         Util.getNameWithoutExtensionFromPath(TEST_FILE_PATH), Util.getExtensionFromPath(TEST_FILE_PATH), 125,
                         (0..100).random(), i in 2..5, LocalDateTime.parse("2022-06-28T14:15:50.63"), LocalDateTime.now(),
-                        i in 4..6
+                        LocalDateTime.now(), GeneralConsts.KEYS.LIBRARY.DEFAULT, i in 4..6
                     )
                 )
 

@@ -31,6 +31,17 @@
             android:visibility="gone"
             layout="@layout/reader_clock_battery"/>
 
+        <include
+            android:id="@+id/container_chapters_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/manga_chapter_margin_bottom"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:visibility="gone"
+            layout="@layout/reader_chapters_list"/>
+
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/toolbar_reader_top"
             android:layout_width="match_parent"

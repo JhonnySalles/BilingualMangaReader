@@ -19,7 +19,6 @@ import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity
 import kotlin.math.abs
 
 
-@SuppressLint("ClickableViewAccessibility")
 class FloatingButtons constructor(private val context: Context, private val activity: AppCompatActivity) {
 
     private var windowManager: WindowManager? = null

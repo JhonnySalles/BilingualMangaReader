@@ -5,12 +5,17 @@ class ReaderConsts {
     object READER {
         const val MAX_PAGE_HEIGHT = 1600
         const val MAX_PAGE_WIDTH = 2000
-        const val MAX_RECENT_COUNT = 5
+        const val OFF_SCREEN_PAGE_LIMIT = 6
     }
 
     object COVER {
         const val COVER_THUMBNAIL_HEIGHT = 300
         const val COVER_THUMBNAIL_WIDTH = 200
+    }
+
+    object PAGE {
+        const val PAGE_CHAPTER_LIST_HEIGHT = 150
+        const val PAGE_CHAPTER_LIST_WIDTH = 100
     }
 
     object PAGESLINK {

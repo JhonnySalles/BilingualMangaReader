@@ -140,7 +140,7 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
         return false
     }
 
-    fun onUp(e: MotionEvent?): Boolean {
+    private fun onUp(e: MotionEvent?): Boolean {
         return false
     }
 

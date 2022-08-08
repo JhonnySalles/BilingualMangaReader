@@ -2,25 +2,40 @@ package br.com.fenix.bilingualmangareader.view.ui.reader
 
 import android.app.Application
 import android.content.SharedPreferences
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import br.com.fenix.bilingualmangareader.model.entity.Manga
+import br.com.fenix.bilingualmangareader.model.entity.Pages
 import br.com.fenix.bilingualmangareader.model.enums.Languages
+import br.com.fenix.bilingualmangareader.service.parses.ParseFactory
+import br.com.fenix.bilingualmangareader.service.parses.RarParse
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import br.com.fenix.bilingualmangareader.util.constants.ReaderConsts
+import br.com.fenix.bilingualmangareader.util.helpers.Util
 import com.squareup.picasso.Transformation
 import jp.wasabeef.picasso.transformations.ColorFilterTransformation
 import jp.wasabeef.picasso.transformations.GrayscaleTransformation
 import jp.wasabeef.picasso.transformations.gpu.InvertFilterTransformation
 import jp.wasabeef.picasso.transformations.gpu.SepiaFilterTransformation
+import kotlinx.coroutines.*
+import org.slf4j.LoggerFactory
+import java.io.File
 
 class ReaderViewModel(application: Application) : AndroidViewModel(application) {
 
     private val mContext = application.applicationContext
     private var mPreferences: SharedPreferences? = GeneralConsts.getSharedPreferences(mContext)
 
+    private val mLOGGER = LoggerFactory.getLogger(ReaderViewModel::class.java)
+
     private var mFilters: MutableLiveData<MutableList<Transformation>> = MutableLiveData(arrayListOf())
     val filters: LiveData<MutableList<Transformation>> = mFilters
+
+    private var mChapters: MutableLiveData<MutableList<Pages>> = MutableLiveData(arrayListOf())
+    val chapters: LiveData<MutableList<Pages>> = mChapters
 
     private var mCustomFilter: MutableLiveData<Boolean> = MutableLiveData(false)
     val customFilter: LiveData<Boolean> = mCustomFilter
@@ -45,7 +60,7 @@ class ReaderViewModel(application: Application) : AndroidViewModel(application) 
     private var mSepia: MutableLiveData<Boolean> = MutableLiveData(false)
     val sepia: LiveData<Boolean> = mSepia
 
-    private var mOcrItem: MutableLiveData<ArrayList<String>> =  MutableLiveData(arrayListOf())
+    private var mOcrItem: MutableLiveData<ArrayList<String>> = MutableLiveData(arrayListOf())
     var ocrItem: LiveData<ArrayList<String>> = mOcrItem
 
     var mLanguageOcr: Languages? = null
@@ -238,5 +253,70 @@ class ReaderViewModel(application: Application) : AndroidViewModel(application) 
         mFilters.value = filters
     }
 
+    fun clearChapter() {
+        mChapters.value = arrayListOf()
+    }
+
+    fun loadChapter(manga: Manga?, refresh: (Int) -> (Unit)): Boolean {
+        if (manga == null) {
+            clearChapter()
+            return false
+        }
+
+        var loaded = false
+        if (mChapters.value == null || mChapters.value!!.isEmpty()) {
+            val parse = ParseFactory.create(manga.file) ?: return loaded
+            loaded = true
+            val list = arrayListOf<Pages>()
+            if (parse is RarParse) {
+                val cacheDir = File(GeneralConsts.getCacheDir(mContext), GeneralConsts.CACHE_FOLDER.IMAGE)
+                (parse as RarParse?)!!.setCacheDirectory(cacheDir)
+            }
+
+            for (i in 0 until parse.numPages())
+                list.add(Pages(Util.getNameFromPath(parse.getPagePath(i) ?: ""), i, i+1))
+
+            mChapters.value = list
+
+            CoroutineScope(Dispatchers.IO).launch {
+                val deferred = async {
+                    for (page in list) {
+                        try {
+                            var stream = parse.getPage(page.number)
+                            val option = BitmapFactory.Options()
+                            option.inJustDecodeBounds = true
+                            BitmapFactory.decodeStream(stream, null, option)
+                            option.inSampleSize = Util.calculateInSampleSize(
+                                option,
+                                ReaderConsts.PAGE.PAGE_CHAPTER_LIST_WIDTH,
+                                ReaderConsts.PAGE.PAGE_CHAPTER_LIST_HEIGHT
+                            )
+                            option.inJustDecodeBounds = false
+                            Util.closeInputStream(stream)
+
+                            stream = parse.getPage(page.number)
+                            page.image = BitmapFactory.decodeStream(stream, null, option)
+                            Util.closeInputStream(stream)
+                            refresh(page.number)
+                        } catch (m: OutOfMemoryError) {
+                            System.gc()
+                            mLOGGER.error("Memory full, cleaning", m)
+                        } catch (e: Exception) {
+                            mLOGGER.error("Error to load image page", e)
+                        }
+                    }
+
+                    Util.destroyParse(parse)
+                }
+
+                deferred.await()
+                withContext(Dispatchers.Main) {
+                    mChapters.value = list
+                }
+            }
+        }
+
+        return loaded
+    }
 
 }
