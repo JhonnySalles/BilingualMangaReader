@@ -57,8 +57,8 @@ class PagesLinkFragment : Fragment() {
     private lateinit var mImageLoading: CircularProgressIndicator
     private lateinit var mScrollUp: FloatingActionButton
     private lateinit var mScrollDown: FloatingActionButton
-    private lateinit var mRecyclePageLink: RecyclerView
-    private lateinit var mRecyclePageNotLink: RecyclerView
+    private lateinit var mRecyclerPageLink: RecyclerView
+    private lateinit var mRecyclerPageNotLink: RecyclerView
     private lateinit var mPageNotLinkContent: ConstraintLayout
     private lateinit var mPageNotLinkIcon: ImageView
     private lateinit var mContent: LinearLayout
@@ -111,8 +111,8 @@ class PagesLinkFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_pages_link, container, false)
 
         mRoot = root.findViewById(R.id.pages_link_root)
-        mRecyclePageLink = root.findViewById(R.id.pages_link_pages_linked_recycler)
-        mRecyclePageNotLink = root.findViewById(R.id.pages_link_pages_not_linked_recycler)
+        mRecyclerPageLink = root.findViewById(R.id.pages_link_pages_linked_recycler)
+        mRecyclerPageNotLink = root.findViewById(R.id.pages_link_pages_not_linked_recycler)
         mPageNotLinkContent = root.findViewById(R.id.pages_link_content_pages_not_linked)
         mPageNotLinkIcon = root.findViewById(R.id.pages_link_icon_pages_not_linked)
 
@@ -155,12 +155,12 @@ class PagesLinkFragment : Fragment() {
         mScrollUp.visibility = View.GONE
         mScrollDown.visibility = View.GONE
 
-        mScrollUp.setOnClickListener { mRecyclePageLink.smoothScrollToPosition(0) }
+        mScrollUp.setOnClickListener { mRecyclerPageLink.smoothScrollToPosition(0) }
         mScrollDown.setOnClickListener {
-            mRecyclePageLink.smoothScrollToPosition((mRecyclePageLink.adapter as RecyclerView.Adapter).itemCount)
+            mRecyclerPageLink.smoothScrollToPosition((mRecyclerPageLink.adapter as RecyclerView.Adapter).itemCount)
         }
 
-        mRecyclePageLink.setOnScrollChangeListener { _, _, _, _, yOld ->
+        mRecyclerPageLink.setOnScrollChangeListener { _, _, _, _, yOld ->
             if (mShowScrollButton) {
                 if (yOld > 20) {
                     if (mHandler.hasCallbacks(mDismissDownButton))
@@ -329,7 +329,7 @@ class PagesLinkFragment : Fragment() {
             }
         }
 
-        mRecyclePageLink.setOnDragListener { _, dragEvent ->
+        mRecyclerPageLink.setOnDragListener { _, dragEvent ->
             when (dragEvent.action) {
                 DragEvent.ACTION_DRAG_STARTED -> {
                     mInDrag = true
@@ -347,7 +347,7 @@ class PagesLinkFragment : Fragment() {
         }
 
 
-        mRecyclePageNotLink.setOnDragListener { _, dragEvent ->
+        mRecyclerPageNotLink.setOnDragListener { _, dragEvent ->
             when (dragEvent.action) {
                 DragEvent.ACTION_DRAG_STARTED -> {
                     mPageNotLinkContent.background = requireContext().getDrawable(R.drawable.file_linked_rounded_border)
@@ -410,17 +410,17 @@ class PagesLinkFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val adapterPageLink = PageLinkCardAdapter()
-        mRecyclePageLink.adapter = adapterPageLink
-        mRecyclePageLink.layoutManager = LinearLayoutManager(requireContext())
+        mRecyclerPageLink.adapter = adapterPageLink
+        mRecyclerPageLink.layoutManager = LinearLayoutManager(requireContext())
         adapterPageLink.attachListener(mListener)
 
         mIsTabletOrLandscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE ||
-                mRecyclePageNotLink.tag.toString().compareTo("vertical", true) == 0
+                mRecyclerPageNotLink.tag.toString().compareTo("vertical", true) == 0
 
         val adapterPageNotLink = PageNotLinkCardAdapter()
-        mRecyclePageNotLink.adapter = adapterPageNotLink
+        mRecyclerPageNotLink.adapter = adapterPageNotLink
         val orientation = if (mIsTabletOrLandscape) RecyclerView.VERTICAL else RecyclerView.HORIZONTAL
-        mRecyclePageNotLink.layoutManager = LinearLayoutManager(requireContext(), orientation, false)
+        mRecyclerPageNotLink.layoutManager = LinearLayoutManager(requireContext(), orientation, false)
         adapterPageNotLink.attachListener(mListener)
 
         if (savedInstanceState != null) {
@@ -495,7 +495,7 @@ class PagesLinkFragment : Fragment() {
 
     private fun onPageLinkScrolling(point: Point) {
         val recycler = Rect()
-        mRecyclePageLink.getGlobalVisibleRect(recycler)
+        mRecyclerPageLink.getGlobalVisibleRect(recycler)
 
         val space = recycler.height() / 4
         val spaceTop = recycler.top + space
@@ -514,16 +514,16 @@ class PagesLinkFragment : Fragment() {
         } else 0
 
         if (padding != 0)
-            mRecyclePageLink.smoothScrollBy(0, padding)
+            mRecyclerPageLink.smoothScrollBy(0, padding)
     }
 
     private fun observer() {
         mViewModel.pagesLink.observe(viewLifecycleOwner) {
-            (mRecyclePageLink.adapter as PageLinkCardAdapter).updateList(it)
+            (mRecyclerPageLink.adapter as PageLinkCardAdapter).updateList(it)
         }
 
         mViewModel.pagesLinkNotLinked.observe(viewLifecycleOwner) {
-            (mRecyclePageNotLink.adapter as PageNotLinkCardAdapter).updateList(it)
+            (mRecyclerPageNotLink.adapter as PageNotLinkCardAdapter).updateList(it)
         }
 
         mViewModel.fileLink.observe(viewLifecycleOwner) {
@@ -547,34 +547,34 @@ class PagesLinkFragment : Fragment() {
 
     private fun notifyItemChanged(type: Pages, index: Int?, add: Boolean = false, remove: Boolean = false) {
         when {
-            type == Pages.NOT_LINKED && add && index != null && index > -1 -> (mRecyclePageNotLink.adapter as PageNotLinkCardAdapter).notifyItemInserted(
+            type == Pages.NOT_LINKED && add && index != null && index > -1 -> (mRecyclerPageNotLink.adapter as PageNotLinkCardAdapter).notifyItemInserted(
                 index
             )
-            type == Pages.NOT_LINKED && remove && index != null && index > -1 -> (mRecyclePageNotLink.adapter as PageNotLinkCardAdapter).notifyItemRemoved(
+            type == Pages.NOT_LINKED && remove && index != null && index > -1 -> (mRecyclerPageNotLink.adapter as PageNotLinkCardAdapter).notifyItemRemoved(
                 index
             )
-            type == Pages.NOT_LINKED && index != null && index > -1 -> (mRecyclePageNotLink.adapter as PageNotLinkCardAdapter).notifyItemChanged(
+            type == Pages.NOT_LINKED && index != null && index > -1 -> (mRecyclerPageNotLink.adapter as PageNotLinkCardAdapter).notifyItemChanged(
                 index
             )
-            type == Pages.NOT_LINKED && (index == null || index == -1) -> (mRecyclePageNotLink.adapter as PageNotLinkCardAdapter).notifyDataSetChanged()
+            type == Pages.NOT_LINKED && (index == null || index == -1) -> (mRecyclerPageNotLink.adapter as PageNotLinkCardAdapter).notifyDataSetChanged()
 
-            type != Pages.NOT_LINKED && add && index != null && index > -1 -> (mRecyclePageLink.adapter as PageLinkCardAdapter).notifyItemInserted(
+            type != Pages.NOT_LINKED && add && index != null && index > -1 -> (mRecyclerPageLink.adapter as PageLinkCardAdapter).notifyItemInserted(
                 index
             )
-            type != Pages.NOT_LINKED && remove && index != null && index > -1 -> (mRecyclePageLink.adapter as PageLinkCardAdapter).notifyItemRemoved(
+            type != Pages.NOT_LINKED && remove && index != null && index > -1 -> (mRecyclerPageLink.adapter as PageLinkCardAdapter).notifyItemRemoved(
                 index
             )
-            type != Pages.NOT_LINKED && index != null && index > -1 -> (mRecyclePageLink.adapter as PageLinkCardAdapter).notifyItemChanged(
+            type != Pages.NOT_LINKED && index != null && index > -1 -> (mRecyclerPageLink.adapter as PageLinkCardAdapter).notifyItemChanged(
                 index
             )
-            type != Pages.NOT_LINKED && (index == null || index == -1) -> (mRecyclePageLink.adapter as PageLinkCardAdapter).notifyDataSetChanged()
+            type != Pages.NOT_LINKED && (index == null || index == -1) -> (mRecyclerPageLink.adapter as PageLinkCardAdapter).notifyDataSetChanged()
         }
     }
 
     private fun enableContent(enabled: Boolean) {
         mAutoReorderPages = false
-        mRecyclePageLink.isEnabled = enabled
-        mRecyclePageNotLink.isEnabled = enabled
+        mRecyclerPageLink.isEnabled = enabled
+        mRecyclerPageNotLink.isEnabled = enabled
         mFileLink.isEnabled = enabled
         mFileLinkLanguage.isEnabled = enabled
         mSave.isEnabled = enabled
@@ -623,11 +623,11 @@ class PagesLinkFragment : Fragment() {
         super.onResume()
         mViewModel.addImageLoadHandler(mImageLoadHandler)
         processImageLoading(isVerify = true)
-        mRecyclePageLink.scrollToPosition(mPageSelected)
+        mRecyclerPageLink.scrollToPosition(mPageSelected)
     }
 
     override fun onPause() {
-        mPageSelected = (mRecyclePageLink.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
+        mPageSelected = (mRecyclerPageLink.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
         mViewModel.removeImageLoadHandler(mImageLoadHandler)
         super.onPause()
     }
@@ -704,7 +704,7 @@ class PagesLinkFragment : Fragment() {
             .setItems(items) { _, selected ->
                 val pageIndex = paths[items[selected]]
                 if (pageIndex != null)
-                    mRecyclePageLink.smoothScrollToPosition(pageIndex)
+                    mRecyclerPageLink.smoothScrollToPosition(pageIndex)
             }
             .show()
     }
