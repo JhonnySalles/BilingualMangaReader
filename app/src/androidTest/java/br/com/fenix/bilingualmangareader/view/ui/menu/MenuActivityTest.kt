@@ -45,5 +45,6 @@ class MenuActivityTest {
             TestCase.assertTrue(fragment is SelectMangaFragment)
         }
 
+        waiter.await()
     }
 }
