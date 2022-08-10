@@ -16,7 +16,7 @@ class MangaGridCardAdapter : RecyclerView.Adapter<GridViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GridViewHolder {
         val item =
-            LayoutInflater.from(parent.context).inflate(R.layout.manga_grid_card, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.grid_card_manga, parent, false)
         return GridViewHolder(item, mListener)
     }
 
