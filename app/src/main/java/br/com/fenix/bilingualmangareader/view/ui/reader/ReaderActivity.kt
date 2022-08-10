@@ -786,9 +786,9 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
                 chapterVisibility(true)
                 mFragment?.let {
                     if (loaded)
-                        mChapterList.scrollToPosition(it.getCurrentPage())
+                        mChapterList.scrollToPosition(it.getCurrentPage() -1)
                     else
-                        mChapterList.smoothScrollToPosition(it.getCurrentPage())
+                        mChapterList.smoothScrollToPosition(it.getCurrentPage() -1)
 
                     mViewModel.selectPage(it.getCurrentPage())
                 }

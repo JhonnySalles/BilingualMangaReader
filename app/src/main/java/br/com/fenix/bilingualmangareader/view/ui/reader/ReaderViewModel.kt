@@ -259,11 +259,11 @@ class ReaderViewModel(application: Application) : AndroidViewModel(application) 
         mChapters.value = arrayListOf()
     }
 
-    fun selectPage(number: Int) {
+    fun selectPage(page: Int) {
         if (mChapters.value == null || mChapters.value!!.isEmpty())
             return
 
-        mChapters.value?.forEach { it.isSelected = it.number == number }
+        mChapters.value?.forEach { it.isSelected = it.page == page }
         mChapters.value = mChapters.value
     }
 
