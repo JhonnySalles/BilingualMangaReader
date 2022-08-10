@@ -6,6 +6,8 @@
     android:layout_width="@dimen/manga_chapter_layout_width"
     android:layout_height="@dimen/manga_chapter_layout_height"
     android:layout_margin="1dp"
+    app:strokeWidth="0dp"
+    app:strokeColor="@color/secondary"
     app:rippleColor="@color/ripple_color">
 
     <androidx.constraintlayout.widget.ConstraintLayout

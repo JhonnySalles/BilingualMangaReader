@@ -37,6 +37,7 @@
     <dimen name="manga_chapter_layout_height">150dp</dimen>
     <dimen name="manga_chapter_number_size">12sp</dimen>
     <dimen name="manga_chapter_margin_bottom">20dp</dimen>
+    <dimen name="manga_chapter_selected_stroke">3dp</dimen>
 
     <dimen name="manga_detail_card_layout_width">150dp</dimen>
     <dimen name="manga_detail_card_layout_height">200dp</dimen>
@@ -71,6 +72,7 @@
     <dimen name="title_small_index_dialog_size">16sp</dimen>
 
     <dimen name="clock_and_battery">10sp</dimen>
+    <dimen name="clock_and_battery_tablet">12sp</dimen>
 
     <dimen name="reader_button_width">50dp</dimen>
     <dimen name="reader_change_comic_size">40dp</dimen>

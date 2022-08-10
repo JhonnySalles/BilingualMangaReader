@@ -17,7 +17,7 @@ class LibrariesLineCardAdapter : RecyclerView.Adapter<LibrariesLineViewHolder>()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LibrariesLineViewHolder {
-        val item = LayoutInflater.from(parent.context).inflate(R.layout.library_line_card, parent, false)
+        val item = LayoutInflater.from(parent.context).inflate(R.layout.line_card_library, parent, false)
         return LibrariesLineViewHolder(item, mListener)
     }
 

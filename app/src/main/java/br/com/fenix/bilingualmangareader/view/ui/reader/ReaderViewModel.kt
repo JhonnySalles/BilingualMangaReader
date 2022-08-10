@@ -2,6 +2,7 @@ package br.com.fenix.bilingualmangareader.view.ui.reader
 
 import android.app.Application
 import android.content.SharedPreferences
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import androidx.lifecycle.AndroidViewModel
@@ -10,6 +11,7 @@ import androidx.lifecycle.MutableLiveData
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.entity.Pages
 import br.com.fenix.bilingualmangareader.model.enums.Languages
+import br.com.fenix.bilingualmangareader.service.parses.Parse
 import br.com.fenix.bilingualmangareader.service.parses.ParseFactory
 import br.com.fenix.bilingualmangareader.service.parses.RarParse
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
@@ -257,7 +259,42 @@ class ReaderViewModel(application: Application) : AndroidViewModel(application) 
         mChapters.value = arrayListOf()
     }
 
-    fun loadChapter(manga: Manga?, refresh: (Int) -> (Unit)): Boolean {
+    fun selectPage(number: Int) {
+        if (mChapters.value == null || mChapters.value!!.isEmpty())
+            return
+
+        mChapters.value?.forEach { it.isSelected = it.number == number }
+        mChapters.value = mChapters.value
+    }
+
+    private fun loadImage(parse: Parse, page: Int) : Bitmap? {
+        try {
+            var stream = parse.getPage(page)
+            val option = BitmapFactory.Options()
+            option.inJustDecodeBounds = true
+            BitmapFactory.decodeStream(stream, null, option)
+            option.inSampleSize = Util.calculateInSampleSize(
+                option,
+                ReaderConsts.PAGE.PAGE_CHAPTER_LIST_WIDTH,
+                ReaderConsts.PAGE.PAGE_CHAPTER_LIST_HEIGHT
+            )
+            option.inJustDecodeBounds = false
+            Util.closeInputStream(stream)
+
+            stream = parse.getPage(page)
+            val image = BitmapFactory.decodeStream(stream, null, option)
+            Util.closeInputStream(stream)
+            return image
+        } catch (m: OutOfMemoryError) {
+            System.gc()
+            mLOGGER.error("Memory full, cleaning", m)
+        } catch (e: Exception) {
+            mLOGGER.error("Error to load image page", e)
+        }
+        return null
+    }
+
+    fun loadChapter(manga: Manga?, number: Int, refresh: (Int) -> (Unit)): Boolean {
         if (manga == null) {
             clearChapter()
             return false
@@ -280,31 +317,23 @@ class ReaderViewModel(application: Application) : AndroidViewModel(application) 
 
             CoroutineScope(Dispatchers.IO).launch {
                 val deferred = async {
-                    for (page in list) {
-                        try {
-                            var stream = parse.getPage(page.number)
-                            val option = BitmapFactory.Options()
-                            option.inJustDecodeBounds = true
-                            BitmapFactory.decodeStream(stream, null, option)
-                            option.inSampleSize = Util.calculateInSampleSize(
-                                option,
-                                ReaderConsts.PAGE.PAGE_CHAPTER_LIST_WIDTH,
-                                ReaderConsts.PAGE.PAGE_CHAPTER_LIST_HEIGHT
-                            )
-                            option.inJustDecodeBounds = false
-                            Util.closeInputStream(stream)
-
-                            stream = parse.getPage(page.number)
-                            page.image = BitmapFactory.decodeStream(stream, null, option)
-                            Util.closeInputStream(stream)
-                            refresh(page.number)
-                        } catch (m: OutOfMemoryError) {
-                            System.gc()
-                            mLOGGER.error("Memory full, cleaning", m)
-                        } catch (e: Exception) {
-                            mLOGGER.error("Error to load image page", e)
+                    if (number > 5) {
+                        for (i in number - 5 until list.size){
+                            val page = list[i]
+                            page.image = loadImage(parse, page.number)
+                            withContext(Dispatchers.Main) { refresh(page.number) }
                         }
-                    }
+
+                        for (i in number - 5 downTo 0){
+                            val page = list[i]
+                            page.image = loadImage(parse, page.number)
+                            withContext(Dispatchers.Main) { refresh(page.number) }
+                        }
+                    } else
+                        for (page in list) {
+                            page.image = loadImage(parse, page.number)
+                            withContext(Dispatchers.Main) { refresh(page.number) }
+                        }
 
                     Util.destroyParse(parse)
                 }

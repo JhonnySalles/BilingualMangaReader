@@ -33,8 +33,8 @@ class HistoryCardAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            HEADER -> HistoryHeaderViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.history_divider, parent, false), mListener)
-            else -> HistoryViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.history_card, parent, false), mListener)
+            HEADER -> HistoryHeaderViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.line_card_divider_history, parent, false), mListener)
+            else -> HistoryViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.line_card_history, parent, false), mListener)
         }
     }
 

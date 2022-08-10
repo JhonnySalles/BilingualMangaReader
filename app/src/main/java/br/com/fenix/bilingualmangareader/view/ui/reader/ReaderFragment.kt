@@ -466,7 +466,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         if (mManga != null)
             mSubtitleController.changeSubtitleInReader(mManga!!, mCurrentPage)
 
-        (requireActivity() as ReaderActivity).setSubtitle(mParse?.getPagePath(mCurrentPage)!!)
+        (requireActivity() as ReaderActivity).changePage(mManga?.title ?: "", mParse?.getPagePath(mCurrentPage) ?: "", mCurrentPage)
     }
 
     inner class ComicPagerAdapter : PagerAdapter() {

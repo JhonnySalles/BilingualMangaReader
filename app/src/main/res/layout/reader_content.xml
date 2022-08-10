@@ -28,6 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
             android:visibility="gone"
             layout="@layout/reader_clock_battery"/>
 
@@ -40,7 +41,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:visibility="gone"
-            layout="@layout/reader_chapters_list"/>
+            layout="@layout/list_reader_chapters"/>
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/toolbar_reader_top"

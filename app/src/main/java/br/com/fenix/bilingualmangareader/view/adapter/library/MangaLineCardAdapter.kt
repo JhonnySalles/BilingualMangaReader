@@ -22,7 +22,7 @@ class MangaLineCardAdapter : RecyclerView.Adapter<LineViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LineViewHolder {
-        val item = LayoutInflater.from(parent.context).inflate(R.layout.manga_line_card, parent, false)
+        val item = LayoutInflater.from(parent.context).inflate(R.layout.line_card_manga, parent, false)
         return LineViewHolder(item, mListener)
     }
 

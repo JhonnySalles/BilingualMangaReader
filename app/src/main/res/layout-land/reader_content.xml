@@ -20,6 +20,7 @@
             android:id="@+id/container_touch_demonstration"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginEnd="10dp"
             android:visibility="gone"
             layout="@layout/reader_touch_demonstration"/>
 
@@ -40,7 +41,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:visibility="gone"
-            layout="@layout/reader_chapters_list"/>
+            layout="@layout/list_reader_chapters"/>
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/toolbar_reader_top"

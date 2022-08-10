@@ -297,10 +297,10 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         if (bundle != null) {
             val name = bundle.getString(GeneralConsts.KEYS.MANGA.NAME) ?: ""
             val bookMark = if (bundle.containsKey(GeneralConsts.KEYS.MANGA.PAGE_NUMBER))
-                bundle.getInt(GeneralConsts.KEYS.MANGA.PAGE_NUMBER).toString()
+                bundle.getInt(GeneralConsts.KEYS.MANGA.PAGE_NUMBER)
             else
-                bundle.getInt(GeneralConsts.KEYS.MANGA.MARK).toString()
-            setTitles(name, bookMark)
+                bundle.getInt(GeneralConsts.KEYS.MANGA.MARK)
+            changePage(name, "", bookMark)
         }
 
         if (savedInstanceState == null) {
@@ -308,7 +308,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
             if (Intent.ACTION_VIEW == intent.action) {
                 val file = File(intent.data!!.path!!)
                 val fragment: ReaderFragment = ReaderFragment.create(mLibrary, file)
-                setTitles(file.name, "")
+                changePage(file.name, "", -1)
                 mSubtitleController.setFileLink(null)
                 setFragment(fragment)
             } else {
@@ -322,7 +322,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
 
                 val fragment: ReaderFragment = if (manga != null) {
                     mManga = manga
-                    setTitles(manga.title, page.toString())
+                    changePage(manga.title, "", page)
                     ReaderFragment.create(mLibrary, manga)
                 } else
                     ReaderFragment.create()
@@ -376,7 +376,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     }
 
     fun changeManga(manga: Manga) {
-        setTitles(manga.title, manga.bookMark.toString())
+        changePage(manga.title, "", manga.bookMark)
         setManga(manga)
 
         val fileLink: PagesLinkViewModel by viewModels()
@@ -385,19 +385,17 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         setFragment(ReaderFragment.create(mLibrary, manga))
     }
 
-    private fun setTitles(title: String, page: String) {
-        mReaderTitle.text = page
-        mToolbarTitle.text = title
-    }
-
     fun setLanguage(language: Languages) {
         mViewModel.mLanguageOcr = language
         mLanguageOcrDescription.text = getString(R.string.languages_description) + ": " + Util.languageToString(this, language)
         mSubToolbar.visibility = View.VISIBLE
     }
 
-    fun setSubtitle(text: String) {
+    fun changePage(title: String, text: String, page: Int) {
+        mReaderTitle.text = if (page > -1) page.toString() else ""
+        mToolbarTitle.text = title
         mToolbarSubTitle.text = text
+        mViewModel.selectPage(page)
     }
 
     fun setManga(manga: Manga) {
@@ -467,7 +465,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         val manga = (savedInstanceState.getSerializable(GeneralConsts.KEYS.OBJECT.MANGA) as Manga?)
         if (manga != null) {
             mManga = manga
-            setTitles(manga.title, manga.bookMark.toString())
+            changePage(manga.title, "", manga.bookMark)
         }
     }
 
@@ -666,17 +664,16 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         val lineAdapter = MangaChaptersCardAdapter()
         mChapterList.adapter = lineAdapter
         val layout = GridLayoutManager(this, 1)
-        layout.orientation = RecyclerView.HORIZONTAL;
+        layout.orientation = RecyclerView.HORIZONTAL
         mChapterList.layoutManager = layout
 
         val listener = object : ChapterCardListener {
             override fun onClick(page: Pages) {
-                mFragment?.setCurrentPage(page.number)
+                mFragment?.setCurrentPage(page.page)
             }
         }
 
         lineAdapter.attachListener(listener)
-        //mChapterList.layoutAnimation = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_library_line)
         mViewModel.chapters.observe(this) { lineAdapter.updateList(it) }
     }
 
@@ -784,13 +781,16 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
                 true
             }
             Position.BOTTOM -> {
-                val loaded = mViewModel.loadChapter(mManga) { page -> mChapterList.adapter?.notifyItemChanged(page) }
+                val initial = mFragment?.getCurrentPage() ?: 0
+                val loaded = mViewModel.loadChapter(mManga, initial) { page -> if (!mChapterList.isComputingLayout) mChapterList.adapter?.notifyItemChanged(page) }
                 chapterVisibility(true)
                 mFragment?.let {
                     if (loaded)
                         mChapterList.scrollToPosition(it.getCurrentPage())
                     else
                         mChapterList.smoothScrollToPosition(it.getCurrentPage())
+
+                    mViewModel.selectPage(it.getCurrentPage())
                 }
                 true
             }
