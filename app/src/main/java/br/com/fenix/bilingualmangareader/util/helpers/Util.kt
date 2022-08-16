@@ -22,6 +22,8 @@ import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 import kotlin.experimental.and
 import kotlin.math.roundToInt
 
@@ -325,6 +327,25 @@ class Util {
                 folder
         }
 
+
+        private fun getNumberAtEnd(str: String): String {
+            var numbers = ""
+            val m: Matcher = Pattern.compile("\\d+$").matcher(str)
+            while (m.find())
+                numbers = m.group()
+
+            return numbers
+        }
+
+        fun getNormalizedNameOrdering(path: String): String {
+            val name: String = getNameWithoutExtensionFromPath(path)
+            val numbers = getNumberAtEnd(name)
+            return if (numbers.isEmpty())
+                getNameFromPath(path)
+            else
+                name.substring(0, name.lastIndexOf(numbers)) + numbers.padStart(10, '0') + getExtensionFromPath(path)
+        }
+
         var googleLang: String = ""
         private var mapLanguages: HashMap<String, Languages>? = null
         fun getLanguages(context: Context): HashMap<String, Languages> {
@@ -494,11 +515,13 @@ class MsgUtil {
                 .create().show()
         }
 
-        inline fun error(context: Context,
-                         title: String,
-                         message: String,
-                         theme: Int = R.style.AppCompatMaterialErrorDialogStyle,
-                         crossinline action: (dialog: DialogInterface, which: Int) -> Unit) {
+        inline fun error(
+            context: Context,
+            title: String,
+            message: String,
+            theme: Int = R.style.AppCompatMaterialErrorDialogStyle,
+            crossinline action: (dialog: DialogInterface, which: Int) -> Unit
+        ) {
             MaterialAlertDialogBuilder(context, theme)
                 .setTitle(title).setMessage(message)
                 .setPositiveButton(
