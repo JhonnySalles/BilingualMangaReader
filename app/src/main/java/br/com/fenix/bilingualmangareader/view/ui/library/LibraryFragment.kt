@@ -304,6 +304,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         mRefreshLayout.setOnRefreshListener(this)
         mRefreshLayout.isEnabled = true
+        mRefreshLayout.setProgressViewOffset(false, (resources.getDimensionPixelOffset(R.dimen.default_navigator_header_margin_top) + 60)*-1, 10)
 
         mScrollUp.visibility = View.GONE
         mScrollDown.visibility = View.GONE

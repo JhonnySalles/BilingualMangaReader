@@ -392,7 +392,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     }
 
     fun changePage(title: String, text: String, page: Int) {
-        mReaderTitle.text = if (page > -1) page.toString() else ""
+        mReaderTitle.text = if (page > -1) "$page/${mManga?.pages?:""}" else ""
         mToolbarTitle.text = title
         mToolbarSubTitle.text = text
         mViewModel.selectPage(page)
