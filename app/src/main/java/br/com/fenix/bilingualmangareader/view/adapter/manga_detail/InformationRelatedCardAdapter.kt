@@ -19,7 +19,7 @@ class InformationRelatedCardAdapter : RecyclerView.Adapter<InformationRelatedVie
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InformationRelatedViewHolder {
         return InformationRelatedViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.manga_detail_information_related_card, parent, false),
+            LayoutInflater.from(parent.context).inflate(R.layout.related_card_manga_detail_information, parent, false),
             mListener
         )
     }
