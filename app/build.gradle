@@ -13,8 +13,8 @@ android {
         minSdkVersion 24
         maxSdkVersion 25
         targetSdk 24
-        versionCode 14
-        versionName "2.14 (Nougat)"
+        versionCode 15
+        versionName "2.15 (Nougat)"
         archivesBaseName = "BilingualManga_" + versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -57,7 +57,7 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    
+
     implementation 'com.github.rafi0101:Android-Room-Database-Backup:1.0.0-beta09' //backup
     implementation 'androidx.room:room-runtime:2.4.2' // database
     kapt 'androidx.room:room-compiler:2.4.2'  // use join room
