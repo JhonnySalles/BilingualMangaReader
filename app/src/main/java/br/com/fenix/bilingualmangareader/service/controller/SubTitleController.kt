@@ -142,9 +142,10 @@ class SubTitleController private constructor(private val context: Context) {
     }
 
 
-    fun getListChapter(parse: Parse) =
+    fun getListChapter(manga: Manga?, parse: Parse) =
         runBlocking { // this: CoroutineScope
             launch { // launch a new coroutine and continue
+                mManga = manga
                 mParse = parse
                 val listJson: List<String> = mParse.getSubtitles()
                 isSelected = false

@@ -151,7 +151,7 @@ class SelectMangaFragment : Fragment() {
         }
 
         observer()
-        mViewModel.list { }
+        mViewModel.list("") { }
 
         return root
     }

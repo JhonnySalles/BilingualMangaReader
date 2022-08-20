@@ -1,9 +1,6 @@
 package br.com.fenix.bilingualmangareader.model.entity
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.Index
-import androidx.room.PrimaryKey
+import androidx.room.*
 import br.com.fenix.bilingualmangareader.util.constants.DataBaseConsts
 import com.google.gson.annotations.SerializedName
 
@@ -34,4 +31,11 @@ data class Vocabulary(
     @ColumnInfo(name = DataBaseConsts.VOCABULARY.COLUMNS.REVISED)
     @SerializedName("revisado")
     val revised: Boolean
-)
+) {
+
+    @Ignore
+    var vocabularyMangas: List<VocabularyManga> = listOf()
+
+    @Ignore
+    var appears: Int = 0
+}

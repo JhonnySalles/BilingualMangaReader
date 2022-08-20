@@ -1,9 +1,11 @@
 package br.com.fenix.bilingualmangareader.service.repository
 
+import androidx.paging.PagingSource
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteOpenHelper
 import br.com.fenix.bilingualmangareader.model.entity.*
 import br.com.fenix.bilingualmangareader.util.constants.DataBaseConsts
+
 
 interface DataBaseDAO<T> {
 
@@ -183,7 +185,25 @@ abstract class PageLinkDAO : DataBaseDAO<PageLink> {
 abstract class VocabularyDAO : DataBaseDAO<Vocabulary> {
 
     @Query("SELECT * FROM " + DataBaseConsts.VOCABULARY.TABLE_NAME)
-    abstract fun list(): List<Vocabulary>
+    abstract fun list(): PagingSource<Int, Vocabulary>
+
+    @Query("SELECT * FROM " + DataBaseConsts.VOCABULARY.TABLE_NAME + " WHERE " + DataBaseConsts.VOCABULARY.COLUMNS.WORD + " = :vocabulary AND " + DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM + " = :basicForm")
+    abstract fun list(vocabulary: String, basicForm: String): PagingSource<Int, Vocabulary>
+
+    @Query(
+        "SELECT V.* FROM " + DataBaseConsts.VOCABULARY.TABLE_NAME + " V " +
+                " INNER JOIN " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + " MGV ON MGV." + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY + " = V." + DataBaseConsts.VOCABULARY.COLUMNS.ID +
+                " WHERE MGV." + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + " = :idManga "
+    )
+    abstract fun list(idManga: Long): PagingSource<Int, Vocabulary>
+
+    @Query(
+        "SELECT V.* FROM " + DataBaseConsts.VOCABULARY.TABLE_NAME + " V " +
+                " INNER JOIN " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + " MGV ON MGV." + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY + " = V." + DataBaseConsts.VOCABULARY.COLUMNS.ID +
+                " WHERE MGV." + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + " = :idManga " +
+                " AND V." + DataBaseConsts.VOCABULARY.COLUMNS.WORD + " = :vocabulary AND V." + DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM + " = :basicForm"
+    )
+    abstract fun list(idManga: Long, vocabulary: String, basicForm: String): PagingSource<Int, Vocabulary>
 
     @Query("SELECT * FROM " + DataBaseConsts.VOCABULARY.TABLE_NAME + " WHERE " + DataBaseConsts.VOCABULARY.COLUMNS.ID + " = :id")
     abstract fun get(id: Long): Vocabulary
@@ -203,9 +223,18 @@ abstract class VocabularyDAO : DataBaseDAO<Vocabulary> {
     @Query("SELECT * FROM " + DataBaseConsts.VOCABULARY.TABLE_NAME + " WHERE " + DataBaseConsts.VOCABULARY.COLUMNS.WORD + " = :vocabulary AND " + DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM + " = :basicForm LIMIT 1")
     abstract fun exists(vocabulary: String, basicForm: String): Vocabulary?
 
+    @Query("SELECT * FROM " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + " WHERE " + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY + " = :idVocabulary GROUP BY " + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA)
+    abstract fun findVocabularyManga(idVocabulary: Long): List<VocabularyManga>
+
+    @Query("SELECT COUNT(*) FROM " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + " WHERE " + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY + " = :idVocabulary ")
+    abstract fun appearsVocabularyManga(idVocabulary: Long): Int
+
+    @Query("SELECT COUNT(*) FROM " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + " WHERE " + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY + " = :idVocabulary AND " + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + " = :idManga")
+    abstract fun appearsVocabularyManga(idVocabulary: Long, idManga: Long): Int
+
     fun insert(dbHelper: SupportSQLiteOpenHelper, idManga: Long, idVocabulary: Long) {
         val database = dbHelper.readableDatabase
-        database.execSQL("INSERT OR IGNORE INTO " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + " (" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + "," + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY +") VALUES ($idManga, $idVocabulary)")
+        database.execSQL("INSERT OR IGNORE INTO " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + " (" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + "," + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY + ") VALUES ($idManga, $idVocabulary)")
     }
 
 }

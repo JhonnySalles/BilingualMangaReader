@@ -25,6 +25,7 @@
     <string name="menu_config">Configuração</string>
     <string name="menu_library">Biblioteca</string>
     <string name="menu_history">Histórico</string>
+    <string name="menu_vocabulary">Vocabulário</string>
     <string name="menu_grid_type">Tipo da grid</string>
 
     <!-- CONFIG -->
