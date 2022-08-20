@@ -34,28 +34,28 @@ class VocabularyRepository(context: Context) {
         mDataBaseDAO.delete(obj)
     }
 
-    fun list(idManga: Long? = null, vocabulary: String = ""): PagingSource<Int, Vocabulary> {
-        return if (idManga != null && vocabulary.isNotEmpty())
-            mDataBaseDAO.list(idManga, vocabulary, vocabulary)
-        else if (idManga != null)
-            mDataBaseDAO.list(idManga)
+    fun list(manga: String = "", vocabulary: String = "", favorite: Boolean = false): PagingSource<Int, Vocabulary> {
+        return if (manga.isNotEmpty() && vocabulary.isNotEmpty())
+            mDataBaseDAO.list(manga, vocabulary, vocabulary, favorite)
+        else if (manga.isNotEmpty())
+            mDataBaseDAO.list(manga, favorite)
         else if (vocabulary.isNotEmpty())
-            mDataBaseDAO.list(vocabulary, vocabulary)
+            mDataBaseDAO.list(vocabulary, vocabulary, favorite)
         else
-            mDataBaseDAO.list()
+            mDataBaseDAO.list(favorite)
     }
 
-    fun findVocabularyManga(vocabulary: Vocabulary): Vocabulary {
-        vocabulary.appears = mDataBaseDAO.appearsVocabularyManga(vocabulary.id!!)
-        vocabulary.vocabularyMangas = findVocabularyManga(vocabulary.id!!)
+    fun findByVocabulary(vocabulary: Vocabulary): Vocabulary {
+        vocabulary.vocabularyMangas = findByVocabulary(vocabulary.id!!)
+        vocabulary.appears = 0
+        vocabulary.vocabularyMangas.forEach { vocabulary.appears += it.appears }
         return vocabulary
     }
 
-    private fun findVocabularyManga(idVocabulary: Long): List<VocabularyManga> {
-        val list = mDataBaseDAO.findVocabularyManga(idVocabulary)
+    private fun findByVocabulary(idVocabulary: Long): List<VocabularyManga> {
+        val list = mDataBaseDAO.findByVocabulary(idVocabulary)
         list.forEach {
             it.manga = mMangaDAO.get(it.idManga)
-            it.appears = mDataBaseDAO.appearsVocabularyManga(idVocabulary, it.idManga)
         }
         return list
     }
@@ -96,8 +96,8 @@ class VocabularyRepository(context: Context) {
         }
     }
 
-    fun insert(idManga: Long, idVocabulary: Long) {
-        mDataBaseDAO.insert(mBase.openHelper, idManga, idVocabulary)
+    fun insert(idManga: Long, idVocabulary: Long, appears: Int) {
+        mDataBaseDAO.insert(mBase.openHelper, idManga, idVocabulary, appears)
     }
 
     fun processVocabulary(idManga: Long?, list: List<Chapter>) {
@@ -110,8 +110,12 @@ class VocabularyRepository(context: Context) {
                     for (chapter in list)
                         if (chapter.vocabulary.isNotEmpty())
                             for (vocabulary in chapter.vocabulary) {
+                                var appears = 0
+                                chapter.pages.forEach { p ->
+                                    p.vocabulary.forEach { v -> if (v == vocabulary) appears++ }
+                                }
                                 vocabulary.id = save(vocabulary)
-                                vocabulary.id?.let { insert(idManga, it) }
+                                vocabulary.id?.let { insert(idManga, it, appears) }
                             }
                 } catch (e: Exception) {
                     mLOGGER.error("Error process vocabulary.", e)

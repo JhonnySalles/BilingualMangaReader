@@ -222,6 +222,9 @@ class Migrations {
 
                 mLOGGER.info("Start migration 9 - 10...")
 
+                database.execSQL("ALTER TABLE " + DataBaseConsts.VOCABULARY.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.VOCABULARY.COLUMNS.FAVORITE + "  INTEGER DEFAULT 0")
+                database.execSQL("ALTER TABLE " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.APPEARS + "  INTEGER DEFAULT 0")
+
                 mLOGGER.info("Completed migration 9 - 10.")
             }
         }

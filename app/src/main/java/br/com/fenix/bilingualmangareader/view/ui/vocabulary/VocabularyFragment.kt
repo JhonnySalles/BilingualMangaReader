@@ -1,12 +1,13 @@
 package br.com.fenix.bilingualmangareader.view.ui.vocabulary
 
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
-import android.widget.AutoCompleteTextView
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -17,7 +18,9 @@ import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.service.listener.VocabularyCardListener
 import br.com.fenix.bilingualmangareader.view.adapter.vocabulary.VocabularyCardAdapter
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
@@ -34,13 +37,11 @@ class VocabularyFragment : Fragment() {
     private lateinit var mScrollDown: FloatingActionButton
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mContent: LinearLayout
-    private lateinit var mComic: TextInputLayout
-    private lateinit var mComicAutoComplete: AutoCompleteTextView
+    private lateinit var mManga: TextInputLayout
+    private lateinit var mMangaEditText: TextInputEditText
     private lateinit var mVocabulary: TextInputLayout
-    private lateinit var mVocabularyAutoComplete: AutoCompleteTextView
-
-    private lateinit var mToolbar: androidx.appcompat.widget.Toolbar
-    private lateinit var mLibrary: TextView
+    private lateinit var mVocabularyEditText: TextInputEditText
+    private lateinit var mFavoriteButton: MaterialButton
 
     private lateinit var mListener: VocabularyCardListener
 
@@ -70,19 +71,47 @@ class VocabularyFragment : Fragment() {
         mRecyclerView = root.findViewById(R.id.vocabulary_recycler)
 
         mContent = root.findViewById(R.id.vocabulary_content)
-        mComic = root.findViewById(R.id.vocabulary_manga_text)
-        mComicAutoComplete = root.findViewById(R.id.vocabulary_manga_autocomplete)
+        mManga = root.findViewById(R.id.vocabulary_manga_text)
+        mMangaEditText = root.findViewById(R.id.vocabulary_manga_edittext)
         mVocabulary = root.findViewById(R.id.vocabulary_find_text)
-        mVocabularyAutoComplete = root.findViewById(R.id.vocabulary_find_autocomplete)
+        mVocabularyEditText = root.findViewById(R.id.vocabulary_find_edittext)
+        mFavoriteButton = root.findViewById(R.id.vocabulary_favorite)
 
         mScrollUp = root.findViewById(R.id.vocabulary_scroll_up)
         mScrollDown = root.findViewById(R.id.vocabulary_scroll_down)
 
-        mToolbar = root.findViewById(R.id.vocabulary_toolbar)
-        mLibrary = root.findViewById(R.id.vocabulary_toolbar_library)
-
         mScrollUp.visibility = View.GONE
         mScrollDown.visibility = View.GONE
+
+        setFavorite(mViewModel.getFavorite())
+        mFavoriteButton.setOnClickListener {
+            mViewModel.setQuery(!mViewModel.getFavorite())
+            setFavorite(mViewModel.getFavorite())
+        }
+
+        mMangaEditText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(text: CharSequence?, start: Int, before: Int, count: Int) {
+                mViewModel.setQueryManga(text?.toString() ?: "")
+            }
+        })
+
+        mVocabularyEditText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(text: CharSequence?, start: Int, before: Int, count: Int) {
+                mViewModel.setQueryVocabulary(text?.toString() ?: "")
+            }
+        })
 
         mScrollUp.setOnClickListener { mRecyclerView.smoothScrollToPosition(0) }
         mScrollDown.setOnClickListener {
@@ -91,25 +120,37 @@ class VocabularyFragment : Fragment() {
 
         mRecyclerView.setOnScrollChangeListener { _, _, _, _, yOld ->
             if (yOld > 20) {
-                if (mHandler.hasCallbacks(mDismissDownButton))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if (mHandler.hasCallbacks(mDismissDownButton))
+                        mHandler.removeCallbacks(mDismissDownButton)
+                } else
                     mHandler.removeCallbacks(mDismissDownButton)
 
                 mScrollDown.hide()
             } else if (yOld < -20) {
-                if (mHandler.hasCallbacks(mDismissUpButton))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if (mHandler.hasCallbacks(mDismissUpButton))
+                        mHandler.removeCallbacks(mDismissUpButton)
+                } else
                     mHandler.removeCallbacks(mDismissUpButton)
 
                 mScrollUp.hide()
             }
 
             if (yOld > 150) {
-                if (mHandler.hasCallbacks(mDismissUpButton))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if (mHandler.hasCallbacks(mDismissUpButton))
+                        mHandler.removeCallbacks(mDismissUpButton)
+                } else
                     mHandler.removeCallbacks(mDismissUpButton)
 
                 mHandler.postDelayed(mDismissUpButton, 3000)
                 mScrollUp.show()
             } else if (yOld < -150) {
-                if (mHandler.hasCallbacks(mDismissDownButton))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if (mHandler.hasCallbacks(mDismissDownButton))
+                        mHandler.removeCallbacks(mDismissDownButton)
+                } else
                     mHandler.removeCallbacks(mDismissDownButton)
 
                 mHandler.postDelayed(mDismissDownButton, 3000)
@@ -143,11 +184,21 @@ class VocabularyFragment : Fragment() {
     }
 
     override fun onDestroy() {
-        if (mHandler.hasCallbacks(mDismissUpButton))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (mHandler.hasCallbacks(mDismissUpButton))
+                mHandler.removeCallbacks(mDismissUpButton)
+            if (mHandler.hasCallbacks(mDismissDownButton))
+                mHandler.removeCallbacks(mDismissDownButton)
+        } else {
             mHandler.removeCallbacks(mDismissUpButton)
-        if (mHandler.hasCallbacks(mDismissDownButton))
             mHandler.removeCallbacks(mDismissDownButton)
+        }
 
         super.onDestroy()
+    }
+
+    private fun setFavorite(favorite: Boolean) {
+        mFavoriteButton.setIconResource(if (favorite) R.drawable.ic_favorite_mark else R.drawable.ic_favorite_unmark)
+        mFavoriteButton.setIconTintResource(if (favorite) R.color.on_secondary else R.color.text_primary)
     }
 }

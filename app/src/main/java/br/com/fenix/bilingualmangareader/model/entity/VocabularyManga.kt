@@ -16,12 +16,10 @@ data class VocabularyManga(
     @ColumnInfo(name = DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY)
     val idVocabulary: Long,
     @ColumnInfo(name = DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA)
-    val idManga: Long
+    val idManga: Long,
+    @ColumnInfo(name = DataBaseConsts.MANGA_VOCABULARY.COLUMNS.APPEARS)
+    var appears: Int
 ) {
-
-    @Ignore
-    var appears: Int = 1
-
     @Ignore
     var manga: Manga? = null
 }

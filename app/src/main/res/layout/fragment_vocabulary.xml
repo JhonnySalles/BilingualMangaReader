@@ -14,6 +14,7 @@
         android:layout_height="match_parent"
         android:clipToPadding="true"
         android:clipChildren="true"
+        android:paddingTop="@dimen/default_navigator_header_margin_top"
         android:layout_margin="@dimen/margin_small">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -41,39 +42,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/content_toolbar_vocabulary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:theme="@style/ToolbarContentTheme"
-                android:background="@drawable/main_toolbar_background"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/vocabulary_toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/default_navigator_header_size"
-                    app:popupTheme="@style/MyDarkToolbarStyle"
-                    android:theme="@style/ToolbarTheme">
-
-                    <TextView
-                        android:id="@+id/vocabulary_toolbar_library"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                </androidx.appcompat.widget.Toolbar>
-
-            </com.google.android.material.appbar.AppBarLayout>
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/vocabulary_manga_text"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="Manga"
+                android:hint="@string/vocabulary_manga"
                 android:textColorHint="@color/text_primary"
+                android:enabled="true"
+                android:layout_marginTop="@dimen/margin_small"
                 app:boxBackgroundColor="@color/primary"
                 app:boxStrokeColor="@color/on_secondary"
                 app:startIconTint="@color/on_secondary"
@@ -81,12 +58,13 @@
                 app:placeholderTextColor="@color/text_primary"
                 app:hintTextColor="@color/on_secondary">
 
-                <AutoCompleteTextView
-                    android:id="@+id/vocabulary_manga_autocomplete"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/vocabulary_manga_edittext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="none"
-                    android:textColor="@color/text_primary" />
+                    android:inputType="text"
+                    android:textColor="@color/text_primary"
+                    />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -124,24 +102,27 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/vocabulary_find_text"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="Vocabulario"
+                    android:hint="@string/vocabulary_find"
                     android:textColorHint="@color/text_primary"
+                    android:enabled="true"
                     app:boxBackgroundColor="@color/primary"
                     app:boxStrokeColor="@color/on_secondary"
                     app:hintTextColor="@color/secondary"
                     app:startIconDrawable="@drawable/ic_translate"
                     app:startIconTint="@color/on_secondary"  >
 
-                    <AutoCompleteTextView
-                        android:id="@+id/vocabulary_find_autocomplete"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/vocabulary_find_edittext"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:inputType="none"
-                        android:textColor="@color/text_primary" />
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:textColor="@color/text_primary"
+                        />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
