@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.entity.Manga
+import br.com.fenix.bilingualmangareader.model.enums.Libraries
 import br.com.fenix.bilingualmangareader.service.repository.LibraryRepository
 import br.com.fenix.bilingualmangareader.service.repository.MangaRepository
 import br.com.fenix.bilingualmangareader.util.helpers.LibraryUtil
@@ -23,7 +24,6 @@ class SelectMangaViewModel(application: Application) : AndroidViewModel(applicat
     private val mLibraryRepository: LibraryRepository = LibraryRepository(application.applicationContext)
     private val mMangaRepository: MangaRepository = MangaRepository(application.applicationContext)
 
-    private var mManga: Manga? = null
     private var mDefaultLibrary = LibraryUtil.getDefault(application.applicationContext)
     private var mLibrary: Library = mDefaultLibrary
 
@@ -31,9 +31,15 @@ class SelectMangaViewModel(application: Application) : AndroidViewModel(applicat
     private var mListMangas = MutableLiveData<MutableList<Manga>>(mutableListOf())
     val listMangas: LiveData<MutableList<Manga>> = mListMangas
 
+    var manga: String = ""
+
     fun setDefaultLibrary(library: Library) {
         if (mLibrary.id == library.id)
             mLibrary = library
+    }
+
+    fun setDefaultLibrary(type: Libraries) {
+        mLibrary = mLibraryRepository.get(type) ?: mDefaultLibrary
     }
 
     fun setLibrary(library: Library) {
@@ -61,13 +67,6 @@ class SelectMangaViewModel(application: Application) : AndroidViewModel(applicat
 
     fun getLibrary() =
         mLibrary
-
-    fun setManga(manga: Manga) {
-        mManga = manga
-    }
-
-    fun getManga() =
-        mManga
 
     fun list(manga: String, refreshComplete: (Boolean) -> (Unit)) {
         val list = mMangaRepository.list(mLibrary)

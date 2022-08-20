@@ -4,6 +4,8 @@ import androidx.paging.PagingSource
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteOpenHelper
 import br.com.fenix.bilingualmangareader.model.entity.*
+import br.com.fenix.bilingualmangareader.model.enums.Libraries
+import br.com.fenix.bilingualmangareader.model.enums.LibraryType
 import br.com.fenix.bilingualmangareader.util.constants.DataBaseConsts
 
 
@@ -251,6 +253,9 @@ abstract class LibrariesDAO : DataBaseDAO<Library> {
 
     @Query("SELECT * FROM " + DataBaseConsts.LIBRARIES.TABLE_NAME + " WHERE " + DataBaseConsts.LIBRARIES.COLUMNS.ID + " = :id")
     abstract fun get(id: Long): Library
+
+    @Query("SELECT * FROM " + DataBaseConsts.LIBRARIES.TABLE_NAME + " WHERE " + DataBaseConsts.LIBRARIES.COLUMNS.TYPE + " = :type")
+    abstract fun get(type: Libraries): Library
 
     @Query("UPDATE " + DataBaseConsts.LIBRARIES.TABLE_NAME + " SET " + DataBaseConsts.LIBRARIES.COLUMNS.EXCLUDED + " = 1 WHERE " + DataBaseConsts.LIBRARIES.COLUMNS.ID + " = :id")
     abstract fun delete(id: Long)

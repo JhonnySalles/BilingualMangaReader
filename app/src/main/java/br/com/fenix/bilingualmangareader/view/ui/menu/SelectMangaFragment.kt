@@ -60,6 +60,15 @@ class SelectMangaFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
+        if (savedInstanceState == null) {
+            mViewModel.manga = ""
+            arguments?.let {
+                if (it.containsKey(GeneralConsts.KEYS.MANGA.NAME))
+                    mViewModel.manga = it.getString(GeneralConsts.KEYS.MANGA.NAME)!!
+            }
+            mViewModel.setDefaultLibrary(Libraries.PORTUGUESE)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -89,7 +98,8 @@ class SelectMangaFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_select_manga, container, false)
 
         mGridType = LibraryType.valueOf(
-            GeneralConsts.getSharedPreferences(requireContext()).getString(GeneralConsts.KEYS.LIBRARY.LIBRARY_TYPE, LibraryType.LINE.toString())
+            GeneralConsts.getSharedPreferences(requireContext())
+                .getString(GeneralConsts.KEYS.LIBRARY.LIBRARY_TYPE, LibraryType.LINE.toString())
                 .toString()
         )
 
@@ -151,7 +161,7 @@ class SelectMangaFragment : Fragment() {
         }
 
         observer()
-        mViewModel.list("") { }
+        mViewModel.list(mViewModel.manga) { }
 
         return root
     }

@@ -25,9 +25,10 @@ class MenuActivity : AppCompatActivity() {
             else -> null
         }
 
-        if (newFragment != null)
+        if (newFragment != null) {
+            newFragment.arguments = intent.extras
             setFragment(newFragment)
-        else
+        } else
             onBackPressed()
     }
 
