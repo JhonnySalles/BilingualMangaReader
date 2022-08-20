@@ -23,6 +23,7 @@ import br.com.fenix.bilingualmangareader.view.ui.help.HelpFragment
 import br.com.fenix.bilingualmangareader.view.ui.history.HistoryFragment
 import br.com.fenix.bilingualmangareader.view.ui.library.LibraryFragment
 import br.com.fenix.bilingualmangareader.view.ui.library.LibraryViewModel
+import br.com.fenix.bilingualmangareader.view.ui.vocabulary.VocabularyFragment
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -141,6 +142,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.menu_help -> HelpFragment()
             R.id.menu_about -> AboutFragment()
             R.id.menu_history -> HistoryFragment()
+            R.id.menu_vocabulary -> VocabularyFragment()
             in GeneralConsts.KEYS.LIBRARIES.INDEX_LIBRARIES..(GeneralConsts.KEYS.LIBRARIES.INDEX_LIBRARIES + mLibraries.size) -> {
                 val index = item.itemId - GeneralConsts.KEYS.LIBRARIES.INDEX_LIBRARIES
                 val library = LibraryFragment()

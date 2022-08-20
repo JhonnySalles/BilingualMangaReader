@@ -150,6 +150,7 @@ class DataBaseConsts private constructor() {
         const val TABLE_NAME = "MangaVocabulary"
 
         object COLUMNS {
+            const val ID = "id"
             const val ID_MANGA = "id_manga"
             const val ID_VOCABULARY = "id_vocabulary"
         }

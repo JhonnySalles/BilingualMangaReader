@@ -1,21 +1,43 @@
 package br.com.fenix.bilingualmangareader.view.ui.vocabulary
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import br.com.fenix.bilingualmangareader.model.entity.Vocabulary
+import androidx.lifecycle.*
+import androidx.paging.*
 import br.com.fenix.bilingualmangareader.service.repository.VocabularyRepository
-import org.slf4j.LoggerFactory
 
 
 class VocabularyViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val mLOGGER = LoggerFactory.getLogger(VocabularyViewModel::class.java)
-    private val mVocabularyRepository: VocabularyRepository = VocabularyRepository(application.applicationContext)
+    private val mDataBase: VocabularyRepository = VocabularyRepository(application.applicationContext)
 
-    private var mVocabulary = MutableLiveData<MutableList<Vocabulary>>()
-    val vocabulary: LiveData<MutableList<Vocabulary>> = mVocabulary
+    private val currentQuery = MutableLiveData(DEFAULT_QUERY)
 
+    private fun flowPager(query: Pair<Long?, String>) =
+        Pager(PagingConfig(pageSize = 50)) {
+            val list = mDataBase.list(query.first, query.second)
+            list
+        }.liveData.map { live ->
+            live.map { voc ->
+                mDataBase.findVocabularyManga(voc)
+            }
+        }
+
+    val vocabularyPager = currentQuery.switchMap { query -> flowPager(query).cachedIn(viewModelScope) }
+
+    fun setQuery(vocabulary: String) {
+        currentQuery.value = Pair(currentQuery.value?.first, vocabulary)
+    }
+
+    fun setQuery(idManga: Long?) {
+        currentQuery.value = Pair(idManga, currentQuery.value?.second ?: "")
+    }
+
+    fun clearQuery() {
+        currentQuery.value = DEFAULT_QUERY
+    }
+
+    companion object {
+        private val DEFAULT_QUERY = Pair<Long?, String>(null, "")
+    }
 
 }

@@ -200,4 +200,18 @@
     <dimen name="page_not_link_card_layout_width_tablet">100dp</dimen>
     <dimen name="page_not_link_card_layout_height_tablet">130dp</dimen>
 
+    <dimen name="vocabulary_title_size">30sp</dimen>
+    <dimen name="vocabulary_content_text_big_size">16sp</dimen>
+    <dimen name="vocabulary_content_text_normal_size">14sp</dimen>
+    <dimen name="vocabulary_content_text_small_size">12sp</dimen>
+    <dimen name="vocabulary_manga_cover_size">100dp</dimen>
+    <dimen name="vocabulary_manga_name_size">14sp</dimen>
+    <dimen name="vocabulary_manga_appear_size">20sp</dimen>
+
+    <dimen name="kanji_title_size">40sp</dimen>
+    <dimen name="kanji_sub_title_size">20sp</dimen>
+    <dimen name="kanji_content_text_big_size">16sp</dimen>
+    <dimen name="kanji_content_text_normal_size">14sp</dimen>
+    <dimen name="kanji_content_text_small_size">12sp</dimen>
+
 </resources>

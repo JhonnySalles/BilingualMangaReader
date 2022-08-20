@@ -10,13 +10,16 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.bilingualmangareader.R
+import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.service.listener.VocabularyCardListener
 import br.com.fenix.bilingualmangareader.view.adapter.vocabulary.VocabularyCardAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
 
 
@@ -61,7 +64,7 @@ class VocabularyFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment_pages_link, container, false)
+        val root = inflater.inflate(R.layout.fragment_vocabulary, container, false)
 
         mRoot = root.findViewById(R.id.vocabulary_root)
         mRecyclerView = root.findViewById(R.id.vocabulary_recycler)
@@ -114,21 +117,28 @@ class VocabularyFragment : Fragment() {
             }
         }
 
-        observer()
         return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapterPageLink = VocabularyCardAdapter()
-        mRecyclerView.adapter = adapterPageLink
-        mRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        adapterPageLink.attachListener(mListener)
-    }
 
-    private fun observer() {
-        mViewModel.vocabulary.observe(viewLifecycleOwner) {
-            (mRecyclerView.adapter as VocabularyCardAdapter).updateList(it)
+        mListener = object : VocabularyCardListener {
+            override fun onClick(manga: Manga) {
+            }
+
+            override fun onClickLong(manga: Manga, view: View, position: Int) {
+            }
+        }
+
+        val adapter = VocabularyCardAdapter(mListener)
+        mRecyclerView.adapter = adapter
+        mRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        lifecycleScope.launch {
+            mViewModel.vocabularyPager.observe(viewLifecycleOwner) {
+                adapter.submitData(viewLifecycleOwner.lifecycle, it)
+            }
         }
     }
 

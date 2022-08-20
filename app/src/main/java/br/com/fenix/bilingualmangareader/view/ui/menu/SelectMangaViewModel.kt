@@ -69,7 +69,7 @@ class SelectMangaViewModel(application: Application) : AndroidViewModel(applicat
     fun getManga() =
         mManga
 
-    fun list(refreshComplete: (Boolean) -> (Unit)) {
+    fun list(manga: String, refreshComplete: (Boolean) -> (Unit)) {
         val list = mMangaRepository.list(mLibrary)
         if (list != null) {
             if (mListMangasFull.value == null || mListMangasFull.value!!.isEmpty()) {
@@ -88,6 +88,7 @@ class SelectMangaViewModel(application: Application) : AndroidViewModel(applicat
             mListMangas.value = mutableListOf()
         }
 
+        sorted(manga)
         refreshComplete(mListMangas.value!!.isNotEmpty())
     }
 
