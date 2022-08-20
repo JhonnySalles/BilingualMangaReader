@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
+import java.net.URI
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -326,19 +327,15 @@ class ConfigFragment : Fragment() {
                 val fileUri: Uri? = data?.data
                 try {
                     fileUri?.let {
-                        val inputStream: InputStream? = requireContext().contentResolver.openInputStream(fileUri)
-                        inputStream?.let {
-                            if (DataBase.validDatabaseFile(requireContext(), fileUri))
-                                DataBase.restoreDatabase(requireContext(), inputStream)
-                            else
-                                MsgUtil.alert(
-                                    requireContext(),
-                                    getString(R.string.config_database_restore),
-                                    getString(R.string.config_database_invalid_file)
-                                ) { _, _ -> }
-
-                        }
-                        inputStream?.close()
+                        val file = File(it.path!!)
+                        if (DataBase.validDatabaseFile(requireContext(), fileUri))
+                            DataBase.restoreDatabase(requireContext(), file)
+                        else
+                            MsgUtil.alert(
+                                requireContext(),
+                                getString(R.string.config_database_restore),
+                                getString(R.string.config_database_invalid_file)
+                            ) { _, _ -> }
                     }
                 } catch (e: InvalidDatabase) {
                     MsgUtil.error(

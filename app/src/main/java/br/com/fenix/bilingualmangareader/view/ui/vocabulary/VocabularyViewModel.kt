@@ -12,32 +12,38 @@ class VocabularyViewModel(application: Application) : AndroidViewModel(applicati
 
     private val currentQuery = MutableLiveData(DEFAULT_QUERY)
 
-    private fun flowPager(query: Pair<Long?, String>) =
+    private fun flowPager(query: Triple<String, String, Boolean>) =
         Pager(PagingConfig(pageSize = 50)) {
-            val list = mDataBase.list(query.first, query.second)
+            val list = mDataBase.list(query.first, query.second, query.third)
             list
         }.liveData.map { live ->
             live.map { voc ->
-                mDataBase.findVocabularyManga(voc)
+                mDataBase.findByVocabulary(voc)
             }
         }
 
     val vocabularyPager = currentQuery.switchMap { query -> flowPager(query).cachedIn(viewModelScope) }
 
-    fun setQuery(vocabulary: String) {
-        currentQuery.value = Pair(currentQuery.value?.first, vocabulary)
+    fun setQueryVocabulary(vocabulary: String) {
+        currentQuery.value = Triple(currentQuery.value?.first ?: "", vocabulary, currentQuery.value?.third ?: false)
     }
 
-    fun setQuery(idManga: Long?) {
-        currentQuery.value = Pair(idManga, currentQuery.value?.second ?: "")
+    fun setQueryManga(manga: String) {
+        currentQuery.value = Triple(manga, currentQuery.value?.second ?: "", currentQuery.value?.third ?: false)
+    }
+
+    fun setQuery(favorite: Boolean) {
+        currentQuery.value = Triple(currentQuery.value?.first ?: "", currentQuery.value?.second ?: "", favorite)
     }
 
     fun clearQuery() {
         currentQuery.value = DEFAULT_QUERY
     }
 
+    fun getFavorite() : Boolean = currentQuery.value?.third ?: false
+
     companion object {
-        private val DEFAULT_QUERY = Pair<Long?, String>(null, "")
+        private val DEFAULT_QUERY = Triple("", "", false)
     }
 
 }

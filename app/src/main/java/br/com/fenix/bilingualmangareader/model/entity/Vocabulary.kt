@@ -30,7 +30,10 @@ data class Vocabulary(
 
     @ColumnInfo(name = DataBaseConsts.VOCABULARY.COLUMNS.REVISED)
     @SerializedName("revisado")
-    val revised: Boolean
+    val revised: Boolean,
+
+    @ColumnInfo(name = DataBaseConsts.VOCABULARY.COLUMNS.FAVORITE)
+    val favorite: Boolean
 ) {
 
     @Ignore
