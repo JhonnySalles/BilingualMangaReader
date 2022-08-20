@@ -143,6 +143,7 @@ class DataBaseConsts private constructor() {
             const val MEANING = "meaning"
             const val READING = "reading"
             const val REVISED = "revised"
+            const val FAVORITE = "favorite"
         }
     }
 
@@ -153,6 +154,7 @@ class DataBaseConsts private constructor() {
             const val ID = "id"
             const val ID_MANGA = "id_manga"
             const val ID_VOCABULARY = "id_vocabulary"
+            const val APPEARS = "appears"
         }
     }
 

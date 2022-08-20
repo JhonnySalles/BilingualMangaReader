@@ -155,7 +155,10 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
     }
 
     override fun onLongPress(e: MotionEvent?) {
-        if (mHandler.hasCallbacks(mDismissCloseButton))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (mHandler.hasCallbacks(mDismissCloseButton))
+                mHandler.removeCallbacks(mDismissCloseButton)
+        } else
             mHandler.removeCallbacks(mDismissCloseButton)
 
         mHandler.postDelayed(mDismissCloseButton, 3000)
@@ -308,7 +311,10 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
     }
 
     fun destroy() {
-        if (mHandler.hasCallbacks(mDismissCloseButton))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (mHandler.hasCallbacks(mDismissCloseButton))
+                mHandler.removeCallbacks(mDismissCloseButton)
+        } else
             mHandler.removeCallbacks(mDismissCloseButton)
 
         dismiss()

@@ -119,7 +119,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/pages_link_file_link_text"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:hint="@string/page_link_file"
@@ -177,7 +177,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/pages_link_language_combo"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

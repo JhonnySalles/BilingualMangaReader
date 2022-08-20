@@ -39,7 +39,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/txt_library_order"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_small"
@@ -61,7 +61,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:id="@+id/txt_library_path"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -131,7 +131,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/txt_default_subtitle_language"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_small"
@@ -155,7 +155,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/txt_default_subtitle_translate"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_small"
@@ -197,7 +197,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/txt_reader_comic_mode"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_small"
@@ -221,7 +221,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/txt_reader_page_mode"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_small"
@@ -274,7 +274,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/txt_system_format_date"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_small"

@@ -2,6 +2,7 @@ package br.com.fenix.bilingualmangareader.view.ui.menu
 
 import android.content.res.Configuration
 import android.content.res.Resources
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -124,26 +125,38 @@ class SelectMangaFragment : Fragment() {
 
         mRecycler.setOnScrollChangeListener { _, _, _, _, yOld ->
             if (yOld > 20) {
-                if (mHandler.hasCallbacks(mDismissDownButton))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if (mHandler.hasCallbacks(mDismissDownButton))
+                        mHandler.removeCallbacks(mDismissDownButton)
+                } else
                     mHandler.removeCallbacks(mDismissDownButton)
 
                 mScrollDown.hide()
             } else if (yOld < -20) {
-                if (mHandler.hasCallbacks(mDismissUpButton))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if (mHandler.hasCallbacks(mDismissUpButton))
+                        mHandler.removeCallbacks(mDismissUpButton)
+                } else
                     mHandler.removeCallbacks(mDismissUpButton)
 
                 mScrollUp.hide()
             }
 
             if (yOld > 150) {
-                if (mHandler.hasCallbacks(mDismissUpButton))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if (mHandler.hasCallbacks(mDismissUpButton))
+                        mHandler.removeCallbacks(mDismissUpButton)
+                } else
                     mHandler.removeCallbacks(mDismissUpButton)
 
                 mHandler.postDelayed(mDismissUpButton, 3000)
                 mScrollUp.show()
             } else if (yOld < -150) {
-                if (mHandler.hasCallbacks(mDismissDownButton))
-                    mHandler.removeCallbacks(mDismissDownButton)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if (mHandler.hasCallbacks(mDismissUpButton))
+                        mHandler.removeCallbacks(mDismissUpButton)
+                } else
+                    mHandler.removeCallbacks(mDismissUpButton)
 
                 mHandler.postDelayed(mDismissDownButton, 3000)
                 mScrollDown.show()
@@ -238,10 +251,15 @@ class SelectMangaFragment : Fragment() {
     }
 
     override fun onDestroy() {
-        if (mHandler.hasCallbacks(mDismissUpButton))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (mHandler.hasCallbacks(mDismissUpButton))
+                mHandler.removeCallbacks(mDismissUpButton)
+            if (mHandler.hasCallbacks(mDismissDownButton))
+                mHandler.removeCallbacks(mDismissDownButton)
+        } else {
             mHandler.removeCallbacks(mDismissUpButton)
-        if (mHandler.hasCallbacks(mDismissDownButton))
             mHandler.removeCallbacks(mDismissDownButton)
+        }
 
         super.onDestroy()
     }
