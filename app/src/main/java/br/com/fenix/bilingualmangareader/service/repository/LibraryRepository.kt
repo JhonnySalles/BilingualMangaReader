@@ -2,6 +2,8 @@ package br.com.fenix.bilingualmangareader.service.repository
 
 import android.content.Context
 import br.com.fenix.bilingualmangareader.model.entity.Library
+import br.com.fenix.bilingualmangareader.model.enums.Libraries
+import br.com.fenix.bilingualmangareader.model.enums.LibraryType
 import org.slf4j.LoggerFactory
 
 class LibraryRepository(context: Context) {
@@ -43,6 +45,15 @@ class LibraryRepository(context: Context) {
     fun get(id: Long): Library? {
         return try {
             mDataBase.get(id)
+        } catch (e: Exception) {
+            mLOGGER.error("Error when get Library: " + e.message, e)
+            null
+        }
+    }
+
+    fun get(type: Libraries): Library? {
+        return try {
+            mDataBase.get(type)
         } catch (e: Exception) {
             mLOGGER.error("Error when get Library: " + e.message, e)
             null

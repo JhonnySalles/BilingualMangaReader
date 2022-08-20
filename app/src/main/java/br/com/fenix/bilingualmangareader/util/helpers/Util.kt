@@ -247,16 +247,18 @@ class Util {
         fun getNameWithoutVolumeAndChapter(manga: String): String {
             if (manga.isEmpty()) return manga
 
-            var name = if (manga.contains("volume", true))
-                manga.replaceAfterLast("volume", "").replace("volume", "", true)
-            else if (manga.contains("capitulo", true))
-                manga.substringAfterLast("capitulo").replace("capitulo", "", true)
-            else if (manga.contains("capítulo", true))
-                manga.substringAfterLast("capítulo").replace("capítulo", "", true)
-            else manga
+            var name = manga
 
-            if (name.endsWith(" - "))
-                name = name.substringAfterLast(" - ")
+            if (name.contains(" - "))
+                name = name.substringBeforeLast(" - ")
+
+            name = if (name.contains("volume", true))
+                name.substringBeforeLast("volume", "").replace("volume", "", true)
+            else if (name.contains("capitulo", true))
+                name.substringBeforeLast("capitulo").replace("capitulo", "", true)
+            else if (name.contains("capítulo", true))
+                name.substringBeforeLast("capítulo").replace("capítulo", "", true)
+            else name
 
             return name
         }
