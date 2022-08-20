@@ -1,5 +1,6 @@
 package br.com.fenix.bilingualmangareader.view.ui.pages_link
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ClipData
 import android.content.ClipDescription
@@ -15,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.setPadding
@@ -163,25 +165,37 @@ class PagesLinkFragment : Fragment() {
         mRecyclerPageLink.setOnScrollChangeListener { _, _, _, _, yOld ->
             if (mShowScrollButton) {
                 if (yOld > 20) {
-                    if (mHandler.hasCallbacks(mDismissDownButton))
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        if (mHandler.hasCallbacks(mDismissDownButton))
+                            mHandler.removeCallbacks(mDismissDownButton)
+                    } else
                         mHandler.removeCallbacks(mDismissDownButton)
 
                     mScrollDown.hide()
                 } else if (yOld < -20) {
-                    if (mHandler.hasCallbacks(mDismissUpButton))
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        if (mHandler.hasCallbacks(mDismissUpButton))
+                            mHandler.removeCallbacks(mDismissUpButton)
+                    } else
                         mHandler.removeCallbacks(mDismissUpButton)
 
                     mScrollUp.hide()
                 }
 
                 if (yOld > 150) {
-                    if (mHandler.hasCallbacks(mDismissUpButton))
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        if (mHandler.hasCallbacks(mDismissUpButton))
+                            mHandler.removeCallbacks(mDismissUpButton)
+                    } else
                         mHandler.removeCallbacks(mDismissUpButton)
 
                     mHandler.postDelayed(mDismissUpButton, 3000)
                     mScrollUp.show()
                 } else if (yOld < -150) {
-                    if (mHandler.hasCallbacks(mDismissDownButton))
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        if (mHandler.hasCallbacks(mDismissDownButton))
+                            mHandler.removeCallbacks(mDismissDownButton)
+                    } else
                         mHandler.removeCallbacks(mDismissDownButton)
 
                     mHandler.postDelayed(mDismissDownButton, 3000)
@@ -244,8 +258,12 @@ class PagesLinkFragment : Fragment() {
         }
 
         mHelp.setOnClickListener {
-            if (mHandler.hasCallbacks(mReduceSizeGroupButton))
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                if (mHandler.hasCallbacks(mReduceSizeGroupButton))
+                    mHandler.removeCallbacks(mReduceSizeGroupButton)
+            } else
                 mHandler.removeCallbacks(mReduceSizeGroupButton)
+
             mHandler.postDelayed(mReduceSizeGroupButton, 5000)
 
             ComponentsUtil.changeWidthAnimateSize(mButtonsGroup, mExpandedButtonsGroupSize, false)
@@ -268,7 +286,7 @@ class PagesLinkFragment : Fragment() {
             else
                 R.drawable.ic_fullscreen_exit
 
-            mFullScreen.icon = ContextCompat.getDrawable(context!!, image)
+            mFullScreen.icon = ContextCompat.getDrawable(requireContext(), image)
         }
 
         mPagesIndex.setOnClickListener { openMenuIndexes() }
@@ -350,20 +368,20 @@ class PagesLinkFragment : Fragment() {
         mRecyclerPageNotLink.setOnDragListener { _, dragEvent ->
             when (dragEvent.action) {
                 DragEvent.ACTION_DRAG_STARTED -> {
-                    mPageNotLinkContent.background = requireContext().getDrawable(R.drawable.file_linked_rounded_border)
+                    mPageNotLinkContent.background = AppCompatResources.getDrawable(requireContext(), R.drawable.file_linked_rounded_border)
                     mPageNotLinkIcon.visibility = View.VISIBLE
                     mShowScrollButton = false
                     dragEvent.clipDescription.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)
                 }
 
                 DragEvent.ACTION_DRAG_ENTERED -> {
-                    mPageNotLinkContent.background = requireContext().getDrawable(R.drawable.file_linked_background_selected)
+                    mPageNotLinkContent.background = AppCompatResources.getDrawable(requireContext(), R.drawable.file_linked_background_selected)
                     mPageNotLinkIcon.visibility = View.VISIBLE
                     true
                 }
 
                 DragEvent.ACTION_DRAG_EXITED -> {
-                    mPageNotLinkContent.background = requireContext().getDrawable(R.drawable.file_linked_rounded_border)
+                    mPageNotLinkContent.background = AppCompatResources.getDrawable(requireContext(), R.drawable.file_linked_rounded_border)
                     mPageNotLinkIcon.visibility = View.VISIBLE
                     true
                 }
@@ -389,7 +407,7 @@ class PagesLinkFragment : Fragment() {
                 }
 
                 DragEvent.ACTION_DRAG_ENDED -> {
-                    mPageNotLinkContent.background = requireContext().getDrawable(R.drawable.file_linked_background)
+                    mPageNotLinkContent.background = AppCompatResources.getDrawable(requireContext(), R.drawable.file_linked_background)
                     mPageNotLinkIcon.visibility = View.INVISIBLE
                     mShowScrollButton = true
 
@@ -545,6 +563,7 @@ class PagesLinkFragment : Fragment() {
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun notifyItemChanged(type: Pages, index: Int?, add: Boolean = false, remove: Boolean = false) {
         when {
             type == Pages.NOT_LINKED && add && index != null && index > -1 -> (mRecyclerPageNotLink.adapter as PageNotLinkCardAdapter).notifyItemInserted(
@@ -639,12 +658,19 @@ class PagesLinkFragment : Fragment() {
 
     override fun onDestroy() {
         mViewModel.endThread()
-        if (mHandler.hasCallbacks(mDismissUpButton))
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (mHandler.hasCallbacks(mDismissUpButton))
+                mHandler.removeCallbacks(mDismissUpButton)
+            if (mHandler.hasCallbacks(mDismissDownButton))
+                mHandler.removeCallbacks(mDismissDownButton)
+            if (mHandler.hasCallbacks(mReduceSizeGroupButton))
+                mHandler.removeCallbacks(mReduceSizeGroupButton)
+        } else {
             mHandler.removeCallbacks(mDismissUpButton)
-        if (mHandler.hasCallbacks(mDismissDownButton))
             mHandler.removeCallbacks(mDismissDownButton)
-        if (mHandler.hasCallbacks(mReduceSizeGroupButton))
             mHandler.removeCallbacks(mReduceSizeGroupButton)
+        }
 
         mViewModel.onDestroy()
         super.onDestroy()

@@ -85,7 +85,7 @@
 
     <!-- LANGUAGE -->
     <string name="languages_choice">Select language</string>
-    <string name="languages_description">Language</string>
+    <string name="languages_description">Language: %1$s</string>
     <string-array name="languages">
         <item>Portuguese</item>
         <item>English</item>
@@ -283,6 +283,11 @@
         <item>Library</item>
         <item>Explorer</item>
     </string-array>
+
+    <!-- VOCABULARY -->
+    <string name="vocabulary_manga">Manga</string>
+    <string name="vocabulary_find">Vocabulary</string>
+    <string name="vocabulary_favorites">Favorites</string>
 
     <!-- HELP -->
     <string name="help_content">Content</string>

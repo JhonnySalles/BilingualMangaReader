@@ -87,7 +87,7 @@
 
     <!-- LANGUAGE -->
     <string name="languages_choice">Select language</string>
-    <string name="languages_description">Language</string>
+    <string name="languages_description">Language: %1$s</string>
     <string-array name="languages">
         <item>Portuguese</item>
         <item>English</item>
@@ -144,10 +144,10 @@
     <string name="open_app_kaku_not_founded">App Kaku not found.</string>
 
     <!-- OCR -->
-    <string name="ocr_tesseract_copy_data">Copying necessary data files, please wait...</string>
+    <string name="ocr_tesseract_copy_data">Copying necessary data files, please wait…</string>
     <string name="ocr_tesseract_copy_data_done">Copy of Tesseract data completed.</string>
-    <string name="ocr_tesseract_get_request">Processing image, please wait...</string>
-    <string name="ocr_google_vision_get_request">Communicating with google vision api, please wait...</string>
+    <string name="ocr_tesseract_get_request">Processing image, please wait…</string>
+    <string name="ocr_google_vision_get_request">Communicating with google vision api, please wait…</string>
     <string name="ocr_google_vision_error">Processing could not be performed. Try again later.</string>
 
     <!-- READER POPUP TITLES -->
@@ -287,6 +287,11 @@
         <item>Explorer</item>
     </string-array>
 
+    <!-- VOCABULARY -->
+    <string name="vocabulary_manga">Manga</string>
+    <string name="vocabulary_find">Vocabulary</string>
+    <string name="vocabulary_favorites">Favorites</string>
+
     <!-- HELP -->
     <string name="help_content">Content</string>
     <string name="help_library_content">• Library</string>
@@ -363,7 +368,6 @@
     <string name="about_app_github" translatable="false">JhonnySalles</string>
     <string name="about_app_github_link" translatable="false">https://github.com/JhonnySalles/BilingualMangaReader</string>
 
-
     <string-array name="about_app_library_content"  translatable="false">
         <item><![CDATA[Sudachi  -  https://github.com/WorksApplications/Sudachi]]></item>
         <item><![CDATA[Kurumoji  -  https://github.com/atilika/kuromoji]]></item>
@@ -377,6 +381,7 @@
     </string-array>
 
     <!-- OTHERS -->
+    <string name="percent" translatable="false">%d%%</string>
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
 </resources>

@@ -7,10 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.content.res.Resources
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
+import android.os.*
 import android.util.Pair
 import android.view.*
 import android.view.animation.AnimationUtils
@@ -331,23 +328,39 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 return@setOnScrollChangeListener
 
             if (yOld > 20 && mScrollDown.visibility == View.VISIBLE) {
-                if (mHandler.hasCallbacks(mDismissDownButton))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if (mHandler.hasCallbacks(mDismissDownButton))
+                        mHandler.removeCallbacks(mDismissDownButton)
+                } else
                     mHandler.removeCallbacks(mDismissDownButton)
 
                 mScrollDown.hide()
             } else if (yOld < -20 && mScrollUp.visibility == View.VISIBLE) {
-                if (mHandler.hasCallbacks(mDismissUpButton))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if (mHandler.hasCallbacks(mDismissUpButton))
+                        mHandler.removeCallbacks(mDismissUpButton)
+                } else
                     mHandler.removeCallbacks(mDismissUpButton)
 
                 mScrollUp.hide()
             }
 
             if (yOld > 180) {
-                mHandler.removeCallbacks(mDismissUpButton)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if (mHandler.hasCallbacks(mDismissUpButton))
+                        mHandler.removeCallbacks(mDismissUpButton)
+                } else
+                    mHandler.removeCallbacks(mDismissUpButton)
+
                 mHandler.postDelayed(mDismissUpButton, 3000)
                 mScrollUp.show()
             } else if (yOld < -180) {
-                mHandler.removeCallbacks(mDismissDownButton)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if (mHandler.hasCallbacks(mDismissDownButton))
+                        mHandler.removeCallbacks(mDismissDownButton)
+                } else
+                    mHandler.removeCallbacks(mDismissDownButton)
+
                 mHandler.postDelayed(mDismissDownButton, 3000)
                 mScrollDown.show()
             }
@@ -563,10 +576,15 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     override fun onRefresh() {
-        if (mHandler.hasCallbacks(mDismissUpButton))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (mHandler.hasCallbacks(mDismissUpButton))
+                mHandler.removeCallbacks(mDismissUpButton)
+            if (mHandler.hasCallbacks(mDismissDownButton))
+                mHandler.removeCallbacks(mDismissDownButton)
+        } else {
             mHandler.removeCallbacks(mDismissUpButton)
-        if (mHandler.hasCallbacks(mDismissDownButton))
             mHandler.removeCallbacks(mDismissDownButton)
+        }
 
         mScrollUp.hide()
         mScrollDown.hide()

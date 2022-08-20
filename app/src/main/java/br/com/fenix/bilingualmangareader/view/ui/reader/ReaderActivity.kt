@@ -7,10 +7,7 @@ import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.BatteryManager
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.os.*
 import android.provider.Settings
 import android.util.TypedValue
 import android.view.Menu
@@ -283,8 +280,13 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         getBatteryPercent()
 
         mTouchView.setOnClickListener {
-            if (mHandler.hasCallbacks(mDismissTouchView))
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                if (mHandler.hasCallbacks(mDismissTouchView))
+                    mHandler.removeCallbacks(mDismissTouchView)
+            } else {
                 mHandler.removeCallbacks(mDismissTouchView)
+            }
+
             closeViewTouch()
         }
 
@@ -387,12 +389,12 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
 
     fun setLanguage(language: Languages) {
         mViewModel.mLanguageOcr = language
-        mLanguageOcrDescription.text = getString(R.string.languages_description) + ": " + Util.languageToString(this, language)
+        mLanguageOcrDescription.text = getString(R.string.languages_description, Util.languageToString(this, language))
         mSubToolbar.visibility = View.VISIBLE
     }
 
     fun changePage(title: String, text: String, page: Int) {
-        mReaderTitle.text = if (page > -1) "$page/${mManga?.pages?:""}" else ""
+        mReaderTitle.text = if (page > -1) "$page/${mManga?.pages ?: ""}" else ""
         mToolbarTitle.text = title
         mToolbarSubTitle.text = text
         mViewModel.selectPage(page)
@@ -509,11 +511,16 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         if (::mFloatingButtons.isInitialized)
             mFloatingButtons.destroy()
 
-        if (mHandler.hasCallbacks(mMonitoringBattery))
-            mHandler.removeCallbacks(mMonitoringBattery)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (mHandler.hasCallbacks(mMonitoringBattery))
+                mHandler.removeCallbacks(mMonitoringBattery)
 
-        if (mHandler.hasCallbacks(mDismissTouchView))
+            if (mHandler.hasCallbacks(mDismissTouchView))
+                mHandler.removeCallbacks(mDismissTouchView)
+        } else {
+            mHandler.removeCallbacks(mMonitoringBattery)
             mHandler.removeCallbacks(mDismissTouchView)
+        }
 
         super.onDestroy()
     }
@@ -782,13 +789,16 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
             }
             Position.BOTTOM -> {
                 val initial = mFragment?.getCurrentPage() ?: 0
-                val loaded = mViewModel.loadChapter(mManga, initial) { page -> if (!mChapterList.isComputingLayout) mChapterList.adapter?.notifyItemChanged(page) }
+                val loaded = mViewModel.loadChapter(
+                    mManga,
+                    initial
+                ) { page -> if (!mChapterList.isComputingLayout) mChapterList.adapter?.notifyItemChanged(page) }
                 chapterVisibility(true)
                 mFragment?.let {
                     if (loaded)
-                        mChapterList.scrollToPosition(it.getCurrentPage() -1)
+                        mChapterList.scrollToPosition(it.getCurrentPage() - 1)
                     else
-                        mChapterList.smoothScrollToPosition(it.getCurrentPage() -1)
+                        mChapterList.smoothScrollToPosition(it.getCurrentPage() - 1)
 
                     mViewModel.selectPage(it.getCurrentPage())
                 }
@@ -904,8 +914,8 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
 
         MaterialAlertDialogBuilder(this, R.style.AppCompatMaterialAlertDialogStyle)
             .setTitle(getString(R.string.languages_choice))
-            .setItems(items) { _, selected ->
-                val language = mapLanguage[items[selected]]
+            .setItems(items) { _, selectItem ->
+                val language = mapLanguage[items[selectItem]]
                 if (language != null) {
                     setLanguage(language)
                     selected(language)
@@ -972,10 +982,10 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         }
     }
 
-    override fun setText(texts: ArrayList<String>) {
+    override fun setText(text: ArrayList<String>) {
         if (::mFloatingSubtitleReader.isInitialized) {
             mViewModel.mIsAlertSubtitle = true
-            mViewModel.addOcrItem(texts)
+            mViewModel.addOcrItem(text)
             mFloatingSubtitleReader.showWithoutDismiss()
             mFloatingSubtitleReader.changeLayout(false)
         }
@@ -988,7 +998,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     private fun getBatteryPercent() {
         try {
             val percent = (getSystemService(BATTERY_SERVICE) as BatteryManager).getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
-            mBattery.text = "$percent%"
+            mBattery.text = getString(R.string.percent, percent)
         } finally {
             mHandler.postDelayed(mMonitoringBattery, 60000)
         }
