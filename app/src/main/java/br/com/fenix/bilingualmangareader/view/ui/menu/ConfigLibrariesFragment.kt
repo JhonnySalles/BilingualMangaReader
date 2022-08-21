@@ -26,6 +26,7 @@ import br.com.fenix.bilingualmangareader.model.enums.Libraries
 import br.com.fenix.bilingualmangareader.service.listener.LibrariesCardListener
 import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import br.com.fenix.bilingualmangareader.util.helpers.MsgUtil
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import br.com.fenix.bilingualmangareader.view.adapter.configuration.LibrariesLineCardAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -170,11 +171,8 @@ class ConfigLibrariesFragment : Fragment() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == GeneralConsts.REQUEST.PERMISSION_FILES_ACCESS && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-            AlertDialog.Builder(requireContext(), R.style.AppCompatAlertDialogStyle)
-                .setTitle(requireContext().getString(R.string.alert_permission_files_access_denied_title))
-                .setMessage(requireContext().getString(R.string.alert_permission_files_access_denied))
-                .setPositiveButton(R.string.action_neutral) { _, _ -> }.create().show()
+        if (requestCode == GeneralConsts.REQUEST.PERMISSION_FILES_ACCESS) {
+            MsgUtil.validPermission(requireContext(), grantResults)
         }
     }
 

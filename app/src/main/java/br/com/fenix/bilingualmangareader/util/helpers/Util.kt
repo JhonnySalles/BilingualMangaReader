@@ -5,10 +5,12 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.SharedPreferences
 import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.DisplayMetrics
+import androidx.appcompat.app.AlertDialog
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.enums.Languages
@@ -477,6 +479,24 @@ class FileUtil(val context: Context) {
 
 class MsgUtil {
     companion object MsgUtil {
+        fun validPermission(grantResults: IntArray) : Boolean {
+            var permiss = true
+            for (grant in grantResults)
+                if (grant != PackageManager.PERMISSION_GRANTED) {
+                    permiss = false
+                    break
+                }
+            return permiss
+        }
+
+        fun validPermission(context: Context, grantResults: IntArray) {
+            if (!validPermission(grantResults))
+                AlertDialog.Builder(context, R.style.AppCompatAlertDialogStyle)
+                    .setTitle(context.getString(R.string.alert_permission_files_access_denied_title))
+                    .setMessage(context.getString(R.string.alert_permission_files_access_denied))
+                    .setPositiveButton(R.string.action_neutral) { _, _ -> }.create().show()
+        }
+
         inline fun alert(
             context: Context,
             title: String,

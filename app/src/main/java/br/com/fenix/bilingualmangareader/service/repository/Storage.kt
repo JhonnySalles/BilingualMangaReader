@@ -96,6 +96,24 @@ class Storage(context: Context) {
             }
         }
 
+        fun isPermissionWriteGranted(context: Context): Boolean {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+            // Valid permission on android 10 or above
+                Environment.isExternalStorageManager()
+            else {
+                val readExternalStoragePermission: Int = ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                )
+
+                val writeExternalStoragePermission: Int = ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+                readExternalStoragePermission == PackageManager.PERMISSION_GRANTED && writeExternalStoragePermission == PackageManager.PERMISSION_GRANTED
+            }
+        }
+
         fun takePermission(context: Context, activity: Activity) =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) try {
                 val intent =

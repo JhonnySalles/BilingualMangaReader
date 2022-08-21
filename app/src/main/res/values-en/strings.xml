@@ -64,6 +64,8 @@
     <string name="config_database_restore">Restore</string>
     <string name="config_database_select_file">Select DB File</string>
     <string name="config_database_invalid_file">Invalid selected file.</string>
+    <string name="config_database_backup_success">Backup performed successfully.</string>
+    <string name="config_database_restore_success">Restored backup successfully.</string>
     <string name="config_database_error_backup">An error occurred when generate backup file.</string>
     <string name="config_database_error_read_file">An error occurred when reading the file.</string>
     <string name="config_database_error_restore">An error occurred while restoring the informed backup, reverted to the original file.</string>
