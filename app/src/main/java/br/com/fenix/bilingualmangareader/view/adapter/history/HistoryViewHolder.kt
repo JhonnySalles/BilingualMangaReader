@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Manga
+import br.com.fenix.bilingualmangareader.model.entity.Text
 import br.com.fenix.bilingualmangareader.service.controller.ImageCoverController
 import br.com.fenix.bilingualmangareader.service.listener.MangaCardListener
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
@@ -28,6 +29,7 @@ class HistoryViewHolder(itemView: View, private val listener: MangaCardListener)
         val mangaImage = itemView.findViewById<ImageView>(R.id.history_image_cover)
         val mangaTitle = itemView.findViewById<TextView>(R.id.history_text_title)
         val mangaSubTitle = itemView.findViewById<TextView>(R.id.history_sub_title)
+        val mangaLibrary = itemView.findViewById<TextView>(R.id.history_library)
         val mangaFavorite = itemView.findViewById<ImageView>(R.id.history_favorite)
         val cardView = itemView.findViewById<LinearLayout>(R.id.history_card)
         cardView.setOnClickListener { listener.onClick(manga) }
@@ -56,6 +58,7 @@ class HistoryViewHolder(itemView: View, private val listener: MangaCardListener)
         } else
             mangaSubTitle.text = manga.subTitle
 
+        mangaLibrary.text = manga.library.title
         mangaFavorite.visibility = if (manga.favorite) View.VISIBLE else View.GONE
 
         if (manga.excluded)

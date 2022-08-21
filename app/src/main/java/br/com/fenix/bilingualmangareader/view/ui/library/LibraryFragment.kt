@@ -136,6 +136,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onStop() {
         Scanner.getInstance(requireContext()).removeUpdateHandler(mUpdateHandler)
+        mainFunctions.clearLibraryTitle()
         super.onStop()
     }
 

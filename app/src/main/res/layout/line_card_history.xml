@@ -72,5 +72,14 @@
             android:textColor="@color/on_secondary"
             android:textSize="@dimen/history_sub_title" />
 
+        <TextView
+            android:id="@+id/history_library"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textAppearance="?attr/textAppearanceSubtitle2"
+            android:textColor="@color/on_secondary"
+            android:textSize="@dimen/history_library" />
+
     </LinearLayout>
 </LinearLayout>
