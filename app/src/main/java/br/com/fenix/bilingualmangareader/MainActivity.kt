@@ -1,9 +1,11 @@
 package br.com.fenix.bilingualmangareader
 
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -17,6 +19,7 @@ import br.com.fenix.bilingualmangareader.service.repository.LibraryRepository
 import br.com.fenix.bilingualmangareader.service.scanner.Scanner
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.LibraryUtil
+import br.com.fenix.bilingualmangareader.util.helpers.MsgUtil
 import br.com.fenix.bilingualmangareader.view.ui.about.AboutFragment
 import br.com.fenix.bilingualmangareader.view.ui.configuration.ConfigFragment
 import br.com.fenix.bilingualmangareader.view.ui.help.HelpFragment
@@ -157,6 +160,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         mDrawer.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == GeneralConsts.REQUEST.PERMISSION_FILES_ACCESS) {
+            MsgUtil.validPermission(this, grantResults)
+        }
     }
 
     override fun showUpButton() {

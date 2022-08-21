@@ -398,12 +398,6 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         if (!Storage.isPermissionGranted(requireContext()))
             Storage.takePermission(requireContext(), requireActivity())
 
-        ActivityCompat.requestPermissions(
-            requireActivity(),
-            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE),
-            PackageManager.PERMISSION_GRANTED
-        )
-
         generateLayout()
         setIsRefreshing(true)
         Scanner.getInstance(requireContext()).scanLibrary(mViewModel.getLibrary())

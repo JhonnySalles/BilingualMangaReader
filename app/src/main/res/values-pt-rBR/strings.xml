@@ -63,6 +63,8 @@
     <string name="config_database_restore">Restaurar</string>
     <string name="config_database_select_file">Selecione um arquivo do banco de dados</string>
     <string name="config_database_invalid_file">Arquivo selecionado inválido.</string>
+    <string name="config_database_backup_success">Backup realizado com sucesso.</string>
+    <string name="config_database_restore_success">Restaurado backup com sucesso.</string>
     <string name="config_database_error_backup">Ocorreu um erro ao gerar o arquivo de backup.</string>
     <string name="config_database_error_read_file">Ocorreu um erro ao ler o arquivo.</string>
     <string name="config_database_error_restore">Ocorreu um erro ao restaurar o backup informado, backup revertido ao arquivo original.</string>

@@ -5,12 +5,14 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.AssetManager
 import android.net.Uri
+import android.widget.Toast
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import br.com.fenix.bilingualmangareader.MainActivity
+import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.*
 import br.com.fenix.bilingualmangareader.util.helpers.BackupError
 import br.com.fenix.bilingualmangareader.util.helpers.Converters
@@ -75,24 +77,25 @@ abstract class DataBase : RoomDatabase() {
             }
         }
 
-
         // Backup and restore
-        fun backupDatabase(context: Context, saveFile: File) {
+        fun backupDatabase(context: Context, file: File) {
             val backup = RoomBackup(context)
             backup
                 .database(INSTANCE)
                 .enableLogDebug(true)
-                .backupLocation(RoomBackup.BACKUP_FILE_LOCATION_EXTERNAL)
-                .backupLocationCustomFile(saveFile)
-                .maxFileCount(5)
+                .backupLocation(RoomBackup.BACKUP_FILE_LOCATION_CUSTOM_FILE)
+                .backupLocationCustomFile(File(file.path))
+                .customBackupFileName(file.name)
                 .backupIsEncrypted(false)
-                .onCompleteListener { success, msg ->
-                    mLOGGER.error("Backup database. success: $success, msg: $msg.")
-                    if (success)
-                        backup.restartApp(Intent(context, MainActivity::class.java))
-                    else {
-                        mLOGGER.error("Error when backup database", msg)
-                        throw BackupError("Error when backup database")
+                .apply {
+                    onCompleteListener { success, message, exitCode ->
+                        mLOGGER.error("Backup database. success: $success, msg: $message, code: $exitCode.")
+                        if (success)
+                            backup.restartApp(Intent(context, MainActivity::class.java))
+                        else {
+                            mLOGGER.error("Error when backup database", message)
+                            throw BackupError("Error when backup database")
+                        }
                     }
                 }.backup()
         }
@@ -102,35 +105,49 @@ abstract class DataBase : RoomDatabase() {
             backup
                 .database(INSTANCE)
                 .enableLogDebug(true)
-                .backupLocation(RoomBackup.BACKUP_FILE_LOCATION_INTERNAL)
+                .backupLocation(RoomBackup.BACKUP_FILE_LOCATION_EXTERNAL)
                 .maxFileCount(5)
                 .backupIsEncrypted(false)
-                .onCompleteListener { success, msg ->
-                    mLOGGER.error("Backup database. success: $success, msg: $msg.")
-                    if (success)
-                        backup.restartApp(Intent(context, MainActivity::class.java))
-                    else {
-                        mLOGGER.error("Error when backup database", msg)
-                        throw BackupError("Error when backup database")
+                .apply {
+                    onCompleteListener { success, message, exitCode ->
+                        mLOGGER.error("Backup database. success: $success, msg: $message, code: $exitCode.")
+                        if (success){
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.config_database_backup_success),
+                                Toast.LENGTH_LONG
+                            ).show()
+                            backup.restartApp(Intent(context, MainActivity::class.java))
+                        } else {
+                            mLOGGER.error("Error when backup database", message)
+                            throw BackupError("Error when backup database")
+                        }
                     }
                 }.backup()
         }
 
-        fun restoreDatabase(context: Context, savedFile: File) {
+        fun restoreDatabase(context: Context, file: File) {
             val backup = RoomBackup(context)
             backup
                 .database(INSTANCE)
                 .enableLogDebug(true)
-                .backupLocation(RoomBackup.BACKUP_FILE_LOCATION_EXTERNAL)
-                .backupLocationCustomFile(savedFile)
+                .backupLocation(RoomBackup.BACKUP_FILE_LOCATION_CUSTOM_FILE)
+                .backupLocationCustomFile(File(file.path))
                 .backupIsEncrypted(false)
-                .onCompleteListener { success, msg ->
-                    mLOGGER.error("Restore backup database. success: $success, msg: $msg.")
-                    if (success)
-                        backup.restartApp(Intent(context, MainActivity::class.java))
-                    else {
-                        mLOGGER.error("Error when restore backup database", msg)
-                        throw ErrorRestoreDatabase("Error for restore file.")
+                .apply {
+                    onCompleteListener { success, message, exitCode ->
+                        mLOGGER.error("Restore backup database. success: $success, msg: $message, code: $exitCode.")
+                        if (success) {
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.config_database_restore_success),
+                                Toast.LENGTH_LONG
+                            ).show()
+                            backup.restartApp(Intent(context, MainActivity::class.java))
+                        } else {
+                            mLOGGER.error("Error when restore backup database", message)
+                            throw ErrorRestoreDatabase("Error when restore file.")
+                        }
                     }
                 }.restore()
         }

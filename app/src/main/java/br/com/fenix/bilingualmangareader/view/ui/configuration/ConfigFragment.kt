@@ -240,7 +240,7 @@ class ConfigFragment : Fragment() {
                 type = "application/*"
                 putExtra(
                     Intent.EXTRA_MIME_TYPES, arrayOf(
-                        "application/db"
+                        "application/sqlite3"
                     )
                 )
 
@@ -249,7 +249,7 @@ class ConfigFragment : Fragment() {
                     Locale.getDefault()
                 ).format(
                     Date()
-                ) + ".db"
+                ) + ".sqlite3"
                 putExtra(Intent.EXTRA_TITLE, fileName)
             }
             startActivityForResult(intent, GeneralConsts.REQUEST.GENERATE_BACKUP)
@@ -305,7 +305,7 @@ class ConfigFragment : Fragment() {
                 val fileUri: Uri? = data?.data
                 try {
                     fileUri?.let {
-                        DataBase.backupDatabase(requireContext(), File(Util.normalizeFilePath(fileUri.path.toString())))
+                        DataBase.backupDatabase(requireContext(), File(Util.normalizeFilePath(it.path.toString())))
                     }
                 } catch (e: BackupError) {
                     MsgUtil.error(
@@ -327,8 +327,8 @@ class ConfigFragment : Fragment() {
                 val fileUri: Uri? = data?.data
                 try {
                     fileUri?.let {
-                        val file = File(it.path!!)
-                        if (DataBase.validDatabaseFile(requireContext(), fileUri))
+                        val file = File(Util.normalizeFilePath(it.path.toString()))
+                        if (DataBase.validDatabaseFile(requireContext(), it))
                             DataBase.restoreDatabase(requireContext(), file)
                         else
                             MsgUtil.alert(

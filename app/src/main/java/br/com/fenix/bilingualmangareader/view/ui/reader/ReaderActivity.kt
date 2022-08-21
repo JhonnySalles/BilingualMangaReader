@@ -938,7 +938,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         }
     }
 
-    //Force floating subtitle aways on top
+    //Force floating subtitle always on top
     private fun openFloatingWindow() {
         if (ComponentsUtil.canDrawOverlays(applicationContext)) {
             mFloatingWindowOcr.show()

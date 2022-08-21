@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import java.io.File
 import java.time.LocalDateTime
 
 class Storage(context: Context) {
@@ -93,6 +94,24 @@ class Storage(context: Context) {
                     Manifest.permission.READ_EXTERNAL_STORAGE
                 )
                 readExternalStoragePermission == PackageManager.PERMISSION_GRANTED
+            }
+        }
+
+        fun isPermissionWriteGranted(context: Context): Boolean {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+            // Valid permission on android 10 or above
+                Environment.isExternalStorageManager()
+            else {
+                val readExternalStoragePermission: Int = ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                )
+
+                val writeExternalStoragePermission: Int = ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+                readExternalStoragePermission == PackageManager.PERMISSION_GRANTED && writeExternalStoragePermission == PackageManager.PERMISSION_GRANTED
             }
         }
 
