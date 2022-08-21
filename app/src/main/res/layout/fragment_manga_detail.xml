@@ -91,7 +91,7 @@
                             android:ellipsize="end"
                             android:textAppearance="?attr/textAppearanceHeadline6"
                             android:textColor="@color/text_primary"
-                            android:textSize="@dimen/manga_detail_title_size"
+                            android:textSize="@dimen/manga_detail_title_size_tablet"
                             android:transitionName="transition_manga_title"
                             android:layout_gravity="bottom"/>
 

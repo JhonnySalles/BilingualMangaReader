@@ -208,7 +208,6 @@ class PagesLinkFragment : Fragment() {
         }
 
         mFileLinkAutoComplete.setOnClickListener {
-            mFileLinkAutoComplete.setText("")
             choiceSelectManga()
         }
 
@@ -507,8 +506,10 @@ class PagesLinkFragment : Fragment() {
                     }
                 }
             }
-        } else
+        } else {
+            mFileLinkAutoComplete.setText("")
             mViewModel.clearFileLink { index, type -> notifyItemChanged(type, index) }
+        }
     }
 
     private fun onPageLinkScrolling(point: Point) {
