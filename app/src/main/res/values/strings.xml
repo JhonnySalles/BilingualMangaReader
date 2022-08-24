@@ -298,7 +298,7 @@
     <string name="kanji_jlpt"><b><i>jlpt:</i></b> N%d</string>
     <string name="kanji_grade"><b><i>grade:</i></b> %d</string>
     <string name="kanji_strokes"><b><i>strokes:</i></b> %d</string>
-    <string name="kanji_frequency"><b><i>frequency:</i></b> %d</string>
+    <string name="kanji_frequency"><b><i>freq:</i></b> %d</string>
     <string name="kanji_parts"><b><i>parts:</i></b> %s</string>
     <string name="kanji_variants"><b><i>variants:</i></b> %s</string>
     <string name="kanji_radical"><b><i>radical:</i></b> %s</string>

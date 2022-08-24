@@ -2,28 +2,20 @@ package br.com.fenix.bilingualmangareader.service.kanji
 
 import android.annotation.TargetApi
 import android.content.Context
-import android.content.Intent
 import android.os.Build
 import android.text.*
 import android.text.style.ClickableSpan
 import android.text.style.RelativeSizeSpan
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.ListView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.text.HtmlCompat
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Kanjax
-import br.com.fenix.bilingualmangareader.model.entity.Library
-import br.com.fenix.bilingualmangareader.model.enums.Libraries
 import br.com.fenix.bilingualmangareader.service.repository.KanjaxRepository
 import br.com.fenix.bilingualmangareader.service.repository.KanjiRepository
-import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.JapaneseCharacter
-import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog
-import com.github.javiersantos.materialstyleddialogs.enums.Style
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
@@ -106,12 +98,8 @@ class Formatter {
 
         private fun getPopupKanji(context: Context, kanji: String) {
             val kanjax = mRepository?.get(kanji)
-            val title = SpannableString(kanji)
-            title.setSpan(RelativeSizeSpan(3f), 0, kanji.length, 0)
-
             val popup = createKanjiPopup(context, LayoutInflater.from(context), kanjax)
             MaterialAlertDialogBuilder(context, R.style.AppCompatMaterialAlertDialogStyle)
-                .setTitle(title)
                 .setView(popup)
                 .setCancelable(false)
                 .setPositiveButton(R.string.action_neutral) { _, _ -> }
@@ -124,12 +112,40 @@ class Formatter {
             inflater: LayoutInflater,
             kanjax: Kanjax?
         ): View? {
-            val root = inflater.inflate(R.layout.fragment_config_library, null, false)
+            val root = inflater.inflate(R.layout.fragment_kanji, null, false)
 
             kanjax?.let {
+                when (it.jlpt) {
+                    1 -> {
+                        root.findViewById<TextView>(R.id.kanji_jlpt).setTextColor(N1)
+                        root.findViewById<LinearLayout>(R.id.kanji_title_content).setBackgroundColor(N1)
+                    }
+                    2 -> {
+                        root.findViewById<TextView>(R.id.kanji_jlpt).setTextColor(N2)
+                        root.findViewById<LinearLayout>(R.id.kanji_title_content).setBackgroundColor(N2)
+                    }
+                    3 -> {
+                        root.findViewById<TextView>(R.id.kanji_jlpt).setTextColor(N3)
+                        root.findViewById<LinearLayout>(R.id.kanji_title_content).setBackgroundColor(N3)
+                    }
+                    4 -> {
+                        root.findViewById<TextView>(R.id.kanji_jlpt).setTextColor(N4)
+                        root.findViewById<LinearLayout>(R.id.kanji_title_content).setBackgroundColor(N4)
+                    }
+                    5 -> {
+                        root.findViewById<TextView>(R.id.kanji_jlpt).setTextColor(N5)
+                        root.findViewById<LinearLayout>(R.id.kanji_title_content).setBackgroundColor(N5)
+                    }
+                    else -> {
+                        root.findViewById<TextView>(R.id.kanji_jlpt).setTextColor(ANOTHER)
+                        root.findViewById<LinearLayout>(R.id.kanji_title_content).setBackgroundColor(ANOTHER)
+                    }
+                }
+
                 root.findViewById<TextView>(R.id.kanji_title).text = it.kanji
                 root.findViewById<TextView>(R.id.kanji_meaning_portuguese).text = it.meaningPt
                 root.findViewById<TextView>(R.id.kanji_meaning_english).text = it.meaning
+                root.findViewById<TextView>(R.id.kanji_jlpt).text = context.getString(R.string.kanji_jlpt, it.jlpt)
 
                 root.findViewById<TextView>(R.id.kanji_grade).text = context.getString(R.string.kanji_grade, it.grade)
                 root.findViewById<TextView>(R.id.kanji_strokes).text = context.getString(R.string.kanji_strokes, it.strokes)
@@ -143,16 +159,6 @@ class Formatter {
                 root.findViewById<TextView>(R.id.kanji_on_yomi_list).text = Html.fromHtml(it.kunWords, HtmlCompat.FROM_HTML_MODE_LEGACY)
                 root.findViewById<TextView>(R.id.kanji_kun_yomi_title).text = context.getString(R.string.kanji_kunYomi, it.onYomi)
                 root.findViewById<TextView>(R.id.kanji_kun_yomi_list).text = Html.fromHtml(it.onWords, HtmlCompat.FROM_HTML_MODE_LEGACY)
-
-                root.findViewById<TextView>(R.id.kanji_jlpt).text = context.getString(R.string.kanji_jlpt, it.jlpt)
-                when(it.jlpt) {
-                    1 -> root.findViewById<TextView>(R.id.kanji_jlpt).setTextColor(N1)
-                    2 -> root.findViewById<TextView>(R.id.kanji_jlpt).setTextColor(N2)
-                    3 -> root.findViewById<TextView>(R.id.kanji_jlpt).setTextColor(N3)
-                    4 -> root.findViewById<TextView>(R.id.kanji_jlpt).setTextColor(N4)
-                    5 -> root.findViewById<TextView>(R.id.kanji_jlpt).setTextColor(N5)
-                    else -> root.findViewById<TextView>(R.id.kanji_jlpt).setTextColor(ANOTHER)
-                }
             }
 
             return root

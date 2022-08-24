@@ -420,6 +420,9 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
     private var mMinimisedSize = context.resources.getDimension(R.dimen.floating_reader_button_close).toInt()
     private var isExpanded = true
     fun expanded(expand : Boolean = false) {
+        if (expand && isExpanded)
+            return
+
         if (expand || !isExpanded) {
             if (mOriginalHeight < minSize)
                 mOriginalHeight = minSize

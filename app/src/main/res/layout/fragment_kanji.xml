@@ -13,12 +13,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:background="@drawable/custom_ripple"
-            android:clickable="true"
-            android:focusable="true"
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/kanji_title_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center">
@@ -28,11 +26,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:ellipsize="end"
-                    android:maxLines="5"
-                    android:text="万"
                     android:textAppearance="?attr/textAppearanceHeadline6"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text_secondary"
                     android:textSize="@dimen/kanji_title_size" />
 
                 <LinearLayout
@@ -46,29 +41,23 @@
                         android:id="@+id/kanji_meaning_portuguese"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="5"
-                        android:text="agora"
                         android:textAppearance="?attr/textAppearanceHeadline6"
-                        android:textColor="@color/black"
+                        android:textColor="@color/text_secondary"
                         android:textSize="@dimen/kanji_sub_title_size" />
 
                     <TextView
                         android:id="@+id/kanji_meaning_english"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="5"
-                        android:text="now"
                         android:textAppearance="?attr/textAppearanceHeadline6"
-                        android:textColor="@color/black"
+                        android:textColor="@color/text_secondary"
                         android:textSize="@dimen/kanji_sub_title_size" />
 
                 </LinearLayout>
             </LinearLayout>
 
-
             <LinearLayout
+                android:layout_marginTop="@dimen/margin_small"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
@@ -79,11 +68,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:ellipsize="end"
-                    android:maxLines="5"
-                    android:text="jlpt 5"
                     android:textAppearance="?attr/textAppearanceHeadline6"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text_primary"
                     android:textSize="@dimen/kanji_content_text_normal_size" />
 
                 <TextView
@@ -91,11 +77,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:ellipsize="end"
-                    android:maxLines="5"
-                    android:text="grade "
                     android:textAppearance="?attr/textAppearanceHeadline6"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text_primary"
                     android:textSize="@dimen/kanji_content_text_normal_size" />
 
                 <TextView
@@ -103,11 +86,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:ellipsize="end"
-                    android:maxLines="5"
-                    android:text="traços "
                     android:textAppearance="?attr/textAppearanceHeadline6"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text_primary"
                     android:textSize="@dimen/kanji_content_text_normal_size" />
 
             </LinearLayout>
@@ -123,11 +103,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:ellipsize="end"
-                    android:maxLines="5"
-                    android:text="frequencia"
                     android:textAppearance="?attr/textAppearanceHeadline6"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text_primary"
                     android:textSize="@dimen/kanji_content_text_normal_size" />
 
                 <TextView
@@ -135,11 +112,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:ellipsize="end"
-                    android:maxLines="5"
-                    android:text="variante "
                     android:textAppearance="?attr/textAppearanceHeadline6"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text_primary"
                     android:textSize="@dimen/kanji_content_text_normal_size" />
 
                 <TextView
@@ -147,16 +121,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:ellipsize="end"
-                    android:maxLines="5"
-                    android:text="partes "
                     android:textAppearance="?attr/textAppearanceHeadline6"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text_primary"
                     android:textSize="@dimen/kanji_content_text_normal_size" />
 
             </LinearLayout>
 
             <LinearLayout
+                android:layout_marginBottom="@dimen/margin_small"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
@@ -167,11 +139,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:ellipsize="end"
-                    android:maxLines="5"
-                    android:text="radical "
                     android:textAppearance="?attr/textAppearanceHeadline6"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text_primary"
                     android:textSize="@dimen/kanji_content_text_normal_size" />
 
             </LinearLayout>
@@ -180,28 +149,24 @@
                 android:id="@+id/kanji_memory_phrase_one"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="5"
-                android:text="k1)  1"
                 android:textAppearance="?attr/textAppearanceHeadline6"
-                android:textColor="@color/black"
-                android:textSize="@dimen/kanji_content_text_normal_size" />
+                android:textColor="@color/text_primary"
+                android:textSize="@dimen/kanji_content_text_small_size" />
 
             <TextView
                 android:id="@+id/kanji_memory_phrase_two"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="5"
-                android:text="k2) 2 "
                 android:textAppearance="?attr/textAppearanceHeadline6"
-                android:textColor="@color/black"
-                android:textSize="@dimen/kanji_content_text_normal_size" />
+                android:textColor="@color/text_primary"
+                android:textSize="@dimen/kanji_content_text_small_size" />
 
             <LinearLayout
+                android:layout_marginTop="@dimen/margin_small"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:baselineAligned="false"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -215,11 +180,8 @@
                         android:id="@+id/kanji_on_yomi_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="5"
-                        android:text="on yomi "
                         android:textAppearance="?attr/textAppearanceHeadline6"
-                        android:textColor="@color/black"
+                        android:textColor="@color/text_primary"
                         android:textSize="@dimen/kanji_content_text_big_size" />
 
                     <TextView
@@ -227,7 +189,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/margin_small"
-                        android:nestedScrollingEnabled="true" />
+                        android:textColor="@color/text_primary"
+                        android:textSize="@dimen/kanji_content_text_small_size"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -241,11 +204,8 @@
                         android:id="@+id/kanji_kun_yomi_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="5"
-                        android:text="kun yomi  "
                         android:textAppearance="?attr/textAppearanceHeadline6"
-                        android:textColor="@color/black"
+                        android:textColor="@color/text_primary"
                         android:textSize="@dimen/kanji_content_text_big_size" />
 
                     <TextView
@@ -253,7 +213,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/margin_small"
-                        android:nestedScrollingEnabled="true" />
+                        android:textColor="@color/text_primary"
+                        android:textSize="@dimen/kanji_content_text_small_size"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
