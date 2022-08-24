@@ -38,7 +38,6 @@ class PageViewPager(context: Context, attributeSet: AttributeSet) : ViewPager(co
     }
 
     override fun performClick(): Boolean {
-        super.performClick()
-        return true
+        return super.performClick()
     }
 }
