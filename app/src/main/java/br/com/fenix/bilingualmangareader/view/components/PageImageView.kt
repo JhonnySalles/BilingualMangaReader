@@ -1,6 +1,5 @@
 package br.com.fenix.bilingualmangareader.view.components
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Matrix
@@ -70,8 +69,13 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
         mDragGestureDetector = GestureDetector(getContext(), PrivateDragListener())
         super.setOnTouchListener { v, event ->
             v?.performClick()
-            mScaleGestureDetector.onTouchEvent(event)
-            mDragGestureDetector.onTouchEvent(event)
+
+            if (event.pointerCount > 1) {
+                mScaleGestureDetector.onTouchEvent(event)
+                parent.requestDisallowInterceptTouchEvent(true)
+            } else
+                mDragGestureDetector.onTouchEvent(event)
+
             mOuterTouchListener?.onTouch(v, event)
             true
         }

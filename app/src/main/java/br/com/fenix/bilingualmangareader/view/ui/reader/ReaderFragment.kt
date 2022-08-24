@@ -616,8 +616,8 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             super.onLongPress(e)
             if (e == null) return
             val view: PageImageView = getCurrencyImageView() ?: return
-            val coord = view.getPointerCoordinate(e)
-            mSubtitleController.selectTextByCoordinate(coord)
+            val coordinator = view.getPointerCoordinate(e)
+            mSubtitleController.selectTextByCoordinate(coordinator)
         }
 
         override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
