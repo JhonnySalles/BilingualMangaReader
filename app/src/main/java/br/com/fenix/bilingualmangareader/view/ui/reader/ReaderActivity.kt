@@ -123,7 +123,9 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         Formatter.initializeAsync(applicationContext)
 
         mSubtitleController = SubTitleController.getInstance(applicationContext)
-        mSubtitleController.clearExternalSubtitlesSelected()
+
+        if (savedInstanceState == null)
+            mSubtitleController.clearExternalSubtitlesSelected()
 
         mToolbar = findViewById(R.id.toolbar_reader)
         mToolbarTitle = findViewById(R.id.toolbar_title_custom)
@@ -381,6 +383,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         changePage(manga.title, "", manga.bookMark)
         setManga(manga)
 
+        mSubtitleController.clearExternalSubtitlesSelected()
         val fileLink: PagesLinkViewModel by viewModels()
         mSubtitleController.setFileLink(fileLink.getFileLink(manga))
 
@@ -450,7 +453,6 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     }
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
-
         savedInstanceState.putSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY, mLibrary)
 
         if (mManga != null)
