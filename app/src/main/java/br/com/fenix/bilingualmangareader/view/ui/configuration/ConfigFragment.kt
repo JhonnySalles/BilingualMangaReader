@@ -57,6 +57,7 @@ class ConfigFragment : Fragment() {
     private lateinit var mReaderPageMode: TextInputLayout
     private lateinit var mPageModeAutoComplete: AutoCompleteTextView
     private lateinit var mShowClockAndBattery: SwitchMaterial
+    private lateinit var mUseMagnifierType: SwitchMaterial
 
     private lateinit var mSystemFormatDate: TextInputLayout
     private lateinit var mSystemFormatDateAutoComplete: AutoCompleteTextView
@@ -106,6 +107,7 @@ class ConfigFragment : Fragment() {
         mReaderPageMode = view.findViewById(R.id.txt_reader_page_mode)
         mPageModeAutoComplete = view.findViewById(R.id.menu_autocomplete_page_mode)
         mShowClockAndBattery = view.findViewById(R.id.switch_show_clock_and_battery)
+        mUseMagnifierType = view.findViewById(R.id.switch_use_magnifier_type)
 
         mSystemFormatDate = view.findViewById(R.id.txt_system_format_date)
         mSystemFormatDateAutoComplete = view.findViewById(R.id.menu_autocomplete_system_format_date)
@@ -428,6 +430,11 @@ class ConfigFragment : Fragment() {
                 mShowClockAndBattery.isChecked
             )
 
+            this.putBoolean(
+                GeneralConsts.KEYS.READER.USE_MAGNIFIER_TYPE,
+                mUseMagnifierType.isChecked
+            )
+
             this.putString(
                 GeneralConsts.KEYS.SYSTEM.FORMAT_DATA,
                 mDateSelect
@@ -537,6 +544,11 @@ class ConfigFragment : Fragment() {
 
         mShowClockAndBattery.isChecked = sharedPreferences.getBoolean(
             GeneralConsts.KEYS.READER.SHOW_CLOCK_AND_BATTERY,
+            false
+        )
+
+        mUseMagnifierType.isChecked = sharedPreferences.getBoolean(
+            GeneralConsts.KEYS.READER.USE_MAGNIFIER_TYPE,
             false
         )
 

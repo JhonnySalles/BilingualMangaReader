@@ -51,6 +51,7 @@
     <string name="config_option_order_favorite">Favoritos primeiro</string>
 
     <string name="config_reading_show_clock_and_battery">Mostrar o relógio e o percentual bateria?</string>
+    <string name="config_reading_use_magnifier_type">Utiliza o zoom em modo de lupa?</string>
 
     <string name="config_system_language">Linguagem do sistema</string>
     <string name="config_system_format_date">Formato de data</string>
@@ -112,6 +113,7 @@
     <string name="menu_reading_favorite">Favorito</string>
     <string name="menu_reading_order">Ordem da lista</string>
     <string name="menu_reading_order_change">Ordernado:</string>
+    <string name="menu_reading_use_magnifier_type">Zoom em lupa</string>
     <string name="menu_reading_subtitle">Legenda</string>
     <string name="menu_reading_color">Cor da página</string>
     <string name="menu_reading_file_link">Arquivo em outro idioma</string>

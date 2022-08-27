@@ -253,6 +253,17 @@
                 android:textColor="@color/text_primary"
                 android:theme="@style/SwitchMaterial" />
 
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/switch_use_magnifier_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/config_reading_use_magnifier_type"
+                android:textColor="@color/text_primary"
+                android:theme="@style/SwitchMaterial" />
+
             <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
