@@ -50,6 +50,7 @@
     <string name="config_option_order_favorite">Favorite first</string>
 
     <string name="config_reading_show_clock_and_battery">Show clock and battery percent?</string>
+    <string name="config_reading_use_magnifier_type">Use zoom in magnifying mode?</string>
 
     <string name="config_system_format_date">Date format</string>
     <string name="config_system_language">System language</string>
@@ -115,6 +116,7 @@
     <string name="menu_reading_favorite">Favorite</string>
     <string name="menu_reading_order">List order</string>
     <string name="menu_reading_order_change">Sort:</string>
+    <string name="menu_reading_use_magnifier_type">Magnifying zoom</string>
     <string name="menu_reading_subtitle">Subtitle</string>
     <string name="menu_reading_color">Page color</string>
     <string name="menu_reading_file_link">File in another language</string>

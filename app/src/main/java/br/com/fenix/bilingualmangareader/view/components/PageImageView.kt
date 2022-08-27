@@ -1,5 +1,6 @@
 package br.com.fenix.bilingualmangareader.view.components
 
+import android.R.color
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
@@ -16,6 +17,7 @@ import android.view.animation.Interpolator
 import android.widget.OverScroller
 import androidx.core.view.ViewCompat
 import androidx.core.view.drawToBitmap
+import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.enums.ReaderMode
 import kotlin.math.abs
 import kotlin.math.max
@@ -42,15 +44,19 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
     private val m = FloatArray(9)
     private var mMatrix: Matrix = Matrix()
 
+    var useMagnifierType = false
     private var mPinch = false
     private var mMagnifierMatrix: Matrix = Matrix()
     private var mZoomPos: PointF
     private var mZooming = false
     private var mPaint: Paint
+    private var mBorder: Paint
     private lateinit var mBitmap: Bitmap
     private lateinit var mShader: BitmapShader
     private val mMagnifierScale = 2.5F
-    private val mMagnifierSize = 200F
+    private val mMagnifierCenter: Float
+    private val mMagnifierSize: Float
+    private val mMagnifierRadius: Float
 
     fun setViewMode(viewMode: ReaderMode) {
         mViewMode = viewMode
@@ -99,8 +105,16 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
         mScroller.setFriction(ViewConfiguration.getScrollFriction() * 2)
         mViewMode = ReaderMode.FIT_WIDTH
 
+        mMagnifierSize = resources.getDimension(R.dimen.reader_zoom_size)
+        mMagnifierRadius = resources.getDimension(R.dimen.reader_zoom_magnifier_size)
+        mMagnifierCenter = mMagnifierSize/2
         mZoomPos = PointF(0F, 0F)
         mPaint = Paint()
+
+        mBorder = Paint()
+        mBorder.color = resources.getColor(R.color.black)
+        mBorder.style = Paint.Style.STROKE
+        mBorder.strokeWidth = resources.getDimension(R.dimen.reader_zoom_border)
     }
 
     fun autoScroll(isBack: Boolean = false): Boolean {
@@ -394,10 +408,26 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
         if (mZooming && !mPinch) {
             mPaint.shader = mShader
             mMagnifierMatrix.set(mMatrix)
-            mMagnifierMatrix.reset()
-            mMagnifierMatrix.postScale(mMagnifierScale, mMagnifierScale, mZoomPos.x, mZoomPos.y)
-            mPaint.shader.setLocalMatrix(mMagnifierMatrix)
-            canvas?.drawCircle(mZoomPos.x, mZoomPos.y, mMagnifierSize, mPaint)
+
+            if (useMagnifierType) {
+                mMagnifierMatrix.reset()
+                mMagnifierMatrix.postScale(mMagnifierScale, mMagnifierScale, mZoomPos.x, mZoomPos.y)
+                mPaint.shader.setLocalMatrix(mMagnifierMatrix)
+                canvas?.drawCircle(mZoomPos.x, mZoomPos.y, mMagnifierRadius, mPaint)
+            } else {
+                val x = if (mZoomPos.x < (width/2)) width.minus(mMagnifierSize) else 0F
+                val y = if (mZoomPos.y < (height/2)) height.minus(mMagnifierSize) else 0F
+
+                mMagnifierMatrix.reset()
+                mMagnifierMatrix.postScale(mMagnifierScale, mMagnifierScale, mZoomPos.x, mZoomPos.y)
+                mMagnifierMatrix.postTranslate(-mZoomPos.x, -mZoomPos.y)
+                mMagnifierMatrix.postTranslate(mMagnifierCenter, mMagnifierCenter)
+                mMagnifierMatrix.postTranslate(x, y)
+                mPaint.shader.setLocalMatrix(mMagnifierMatrix)
+
+                canvas?.drawRect(x-1, y-2, x + mMagnifierSize+1, y + mMagnifierSize+1, mBorder)
+                canvas?.drawRect(x, y, x + mMagnifierSize, y + mMagnifierSize, mPaint)
+            }
         }
     }
 

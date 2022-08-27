@@ -88,6 +88,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
     private var mIsFullscreen = false
     private var mFileName: String? = null
     var mReaderMode: ReaderMode = ReaderMode.FIT_WIDTH
+    var mUseMagnifierType = false
     var mIsLeftToRight = false
 
     var mParse: Parse? = null
@@ -249,6 +250,11 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 ).toString()
             )
 
+            mUseMagnifierType = mPreferences.getBoolean(
+                GeneralConsts.KEYS.READER.USE_MAGNIFIER_TYPE,
+                false
+            )
+
             mIsLeftToRight = PageMode.valueOf(
                 mPreferences.getString(
                     GeneralConsts.KEYS.READER.PAGE_MODE,
@@ -371,6 +377,8 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             menu.findItem(R.id.reading_left_to_right).isChecked = true
         else
             menu.findItem(R.id.reading_right_to_left).isChecked = true
+
+        menu.findItem(R.id.menu_item_use_magnifier_type).isChecked = true
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -420,6 +428,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 item.isChecked = true
                 mReaderMode = mResourceViewMode[item.itemId] ?: ReaderMode.FIT_WIDTH
                 updatePageViews(mViewPager)
+                saveConfiguration()
             }
             R.id.reading_left_to_right, R.id.reading_right_to_left -> {
                 item.isChecked = true
@@ -428,9 +437,37 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 setCurrentPage(page, false)
                 mViewPager.adapter?.notifyDataSetChanged()
                 updateSeekBar()
+                saveConfiguration()
+            }
+            R.id.menu_item_use_magnifier_type -> {
+                item.isChecked = !item.isChecked
+                mUseMagnifierType = item.isChecked
+                updatePageViews(mViewPager)
+                saveConfiguration()
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun saveConfiguration() {
+        with(mPreferences.edit()) {
+            this.putString(
+                GeneralConsts.KEYS.READER.PAGE_MODE,
+                mIsLeftToRight.toString()
+            )
+
+            this.putString(
+                GeneralConsts.KEYS.READER.READER_MODE,
+                mReaderMode.toString()
+            )
+
+            this.putBoolean(
+                GeneralConsts.KEYS.READER.USE_MAGNIFIER_TYPE,
+                mUseMagnifierType
+            )
+
+            this.commit()
+        }
     }
 
     fun changeAspect(toolbar: Toolbar, mode: ReaderMode) {
@@ -492,6 +529,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 layout.findViewById<View>(R.id.page_image_view) as PageImageView
             if (mReaderMode === ReaderMode.ASPECT_FILL) pageImageView.setTranslateToRightEdge(!mIsLeftToRight)
             pageImageView.setViewMode(mReaderMode)
+            pageImageView.useMagnifierType = mUseMagnifierType
             pageImageView.setOnTouchListener(this@ReaderFragment)
             container.addView(layout)
             val t = MyTarget(layout, position)
@@ -711,6 +749,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                     !mIsLeftToRight
                 )
                 view.setViewMode(mReaderMode)
+                view.useMagnifierType = mUseMagnifierType
             }
         }
     }
