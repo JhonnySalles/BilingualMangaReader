@@ -2,7 +2,6 @@ package br.com.fenix.bilingualmangareader.view.ui.manga_detail
 
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
@@ -10,36 +9,33 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.substring
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Information
+import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.service.controller.ImageController
 import br.com.fenix.bilingualmangareader.service.controller.ImageCoverController
 import br.com.fenix.bilingualmangareader.service.listener.InformationCardListener
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
-import br.com.fenix.bilingualmangareader.util.secrets.Secrets
 import br.com.fenix.bilingualmangareader.view.adapter.manga_detail.InformationRelatedCardAdapter
 import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity
 import com.google.android.material.button.MaterialButton
-import com.kttdevelopment.mal4j.MyAnimeList
-import com.kttdevelopment.mal4j.manga.MangaPreview
-import kotlinx.coroutines.*
 import org.slf4j.LoggerFactory
-import java.time.LocalDateTime
 
 
-class MangaDetailFragment(private var mManga: Manga?) : Fragment() {
+class MangaDetailFragment : Fragment() {
 
     private val mLOGGER = LoggerFactory.getLogger(MangaDetailFragment::class.java)
 
     private val mViewModel: MangaDetailViewModel by viewModels()
+
+    var mLibrary: Library? = null
+    var mManga: Manga? = null
 
     private lateinit var mBackgroundImage: ImageView
     private lateinit var mImage: ImageView
@@ -135,6 +131,7 @@ class MangaDetailFragment(private var mManga: Manga?) : Fragment() {
                 mViewModel.save(mManga)
                 val intent = Intent(context, ReaderActivity::class.java)
                 val bundle = Bundle()
+                bundle.putSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY, mLibrary)
                 bundle.putString(GeneralConsts.KEYS.MANGA.NAME, mManga!!.title)
                 bundle.putInt(GeneralConsts.KEYS.MANGA.MARK, mManga!!.bookMark)
                 bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, mManga!!)
@@ -168,7 +165,7 @@ class MangaDetailFragment(private var mManga: Manga?) : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        getInformation()
+        mViewModel.getInformation()
     }
 
     private fun observer() {
@@ -294,44 +291,6 @@ class MangaDetailFragment(private var mManga: Manga?) : Fragment() {
         mViewModel.informationRelations.observe(viewLifecycleOwner) {
             mRelatedContent.visibility = if (it != null && it.isNotEmpty()) View.VISIBLE else View.GONE
             updateRelatedList(it)
-        }
-
-    }
-
-    private fun getInformation() {
-        //MyAnimeList does not run on older versions
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O)
-            return
-
-        var name = mViewModel.manga.value?.title ?: ""
-
-        if (name.isNotEmpty()) {
-            name = Util.getNameFromMangaTitle(name).replace(" ", "%")
-
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    var search: List<MangaPreview>? = null
-                    val deferred = async {
-                        try {
-                            val mal: MyAnimeList = MyAnimeList.withClientID(Secrets.getSecrets(requireContext()).getAnimeListClientId())
-                            search = mal.manga
-                                .withQuery(name)
-                                .includeNSFW(false)
-                                .search()
-
-                        } catch (e: Exception) {
-                            mLOGGER.error("Error to search manga info", e)
-                        }
-                    }
-                    deferred.await()
-                    withContext(Dispatchers.Main) {
-                        if (!search.isNullOrEmpty())
-                            mViewModel.setInformation(search!!)
-                    }
-                } catch (e: Exception) {
-                    mLOGGER.error("Error to load manga info", e)
-                }
-            }
         }
 
     }

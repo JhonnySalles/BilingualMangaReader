@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.util.LruCache
 import android.widget.ImageView
 import br.com.fenix.bilingualmangareader.model.entity.Manga
+import br.com.fenix.bilingualmangareader.model.entity.Pages
 import br.com.fenix.bilingualmangareader.service.parses.Parse
 import br.com.fenix.bilingualmangareader.service.parses.ParseFactory
 import br.com.fenix.bilingualmangareader.service.parses.RarParse
@@ -104,7 +105,7 @@ class ImageCoverController private constructor() {
 
     private fun getCoverFromFile(context: Context, hash: String, parse: Parse, isCoverSize: Boolean = true): Bitmap? {
         var index = 0
-        for (i in 0..parse.numPages()) {
+        for (i in 0 until parse.numPages()) {
             if (Util.isImage(parse.getPagePath(i)!!)) {
                 index = i
                 break

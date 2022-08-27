@@ -17,7 +17,7 @@ class PageLinkCardAdapter : RecyclerView.Adapter<PageLinkViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PageLinkViewHolder {
-        return PageLinkViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.page_link_card, parent, false), mListener)
+        return PageLinkViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.grid_card_page_link, parent, false), mListener)
     }
 
     override fun getItemCount(): Int {

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frame_select_manga"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:clipToPadding="false"
+    android:clipChildren="false"
+    android:fitsSystemWindows="true"
+    tools:context=".view.ui.menu.SelectMangaFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/select_manga_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:clipChildren="false">
+        
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/select_manga_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:scrollbars="vertical"
+            android:layout_margin="@dimen/margin_small"
+            android:paddingTop="@dimen/page_link_list_link_padding_top"
+            android:paddingBottom="@dimen/manga_list_padding"
+            android:clipToPadding="false"
+            android:scrollbarStyle="outsideOverlay"
+            android:columnCount="3"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/content_toolbar_select_manga"
+            app:layout_constraintVertical_bias="0"/>
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/content_toolbar_select_manga"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/main_toolbar_background"
+            android:fitsSystemWindows="true"
+            android:theme="@style/ToolbarContentTheme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar_select_manga"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/default_navigator_header_size"
+                app:popupTheme="@style/MyDarkToolbarStyle"
+                android:theme="@style/ToolbarTheme">
+
+                <TextView
+                    android:id="@+id/toolbar_select_manga_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <!--                                Ended                                -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/select_manga_scroll_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center"
+            android:layout_margin="@dimen/page_link_scrolling_button_margin"
+            android:backgroundTint="@color/white"
+            android:contentDescription="@string/action_scroll_up"
+            android:visibility="gone"
+            app:tint="@color/on_secondary"
+            android:src="@drawable/ic_up_arrow"
+            app:backgroundTint="@color/on_secondary"
+            app:borderWidth="@dimen/page_link_up_border"
+            app:fabCustomSize="@dimen/page_link_up_width"
+            app:maxImageSize="@dimen/page_link_up_image_width"
+            app:layout_constraintTop_toTopOf="@+id/select_manga_recycler"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/select_manga_scroll_down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_margin="@dimen/page_link_scrolling_button_margin"
+            android:backgroundTint="@color/white"
+            android:contentDescription="@string/action_scroll_down"
+            android:visibility="gone"
+            app:tint="@color/on_secondary"
+            android:src="@drawable/ic_down_arrow"
+            app:backgroundTint="@color/on_secondary"
+            app:borderWidth="@dimen/page_link_down_border"
+            app:fabCustomSize="@dimen/page_link_down_width"
+            app:maxImageSize="@dimen/page_link_down_image_width"
+            app:layout_constraintBottom_toBottomOf="@+id/select_manga_recycler"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

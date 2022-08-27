@@ -9,6 +9,15 @@
         <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
     </style>
 
+    <style name="AppCompatMaterialErrorDialogStyle" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="colorAccent">@color/red</item>
+        <item name="android:textColorPrimary">@color/red</item>
+        <item name="android:background">@color/primary_material_dark</item>
+        <item name="colorControlHighlight">@color/red</item>
+        <item name="buttonBarNegativeButtonStyle">@style/ErrorButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/ErrorButtonStyle</item>
+    </style>
+
     <style name="AppCompatAlertDialogStyleFileChoice" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <!-- Title -->
         <item name="materialAlertDialogTitleTextStyle">@style/AppCompatAlertDialogStyleFileChoice.MaterialComponents.Title.Text</item>

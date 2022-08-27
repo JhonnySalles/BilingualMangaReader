@@ -3,12 +3,10 @@ package br.com.fenix.bilingualmangareader.view.adapter.library
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.widget.Filter
 import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.service.listener.MangaCardListener
-import java.util.*
 
 
 class MangaLineCardAdapter : RecyclerView.Adapter<LineViewHolder>() {
@@ -24,7 +22,7 @@ class MangaLineCardAdapter : RecyclerView.Adapter<LineViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LineViewHolder {
-        val item = LayoutInflater.from(parent.context).inflate(R.layout.manga_line_card, parent, false)
+        val item = LayoutInflater.from(parent.context).inflate(R.layout.line_card_manga, parent, false)
         return LineViewHolder(item, mListener)
     }
 

@@ -3,6 +3,7 @@ package br.com.fenix.bilingualmangareader.view.ui.window
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.PixelFormat
 import android.graphics.Point
 import android.os.Build
@@ -90,25 +91,26 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
 
     private fun getDefaultParams(): WindowManager.LayoutParams {
         val params = WindowManager.LayoutParams()
-        params.width = context.resources.getDimension(R.dimen.floating_ocr_height).toInt()
-        params.height = context.resources.getDimension(R.dimen.floating_ocr_width).toInt()
-        params.type = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O)
-            WindowManager.LayoutParams.TYPE_PHONE
-        else
-            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-        params.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-        params.format = PixelFormat.TRANSLUCENT
-        params.gravity = Gravity.TOP or Gravity.LEFT
-        params.x = (mRealDisplaySize.x / 2) - (params.width / 2)
-        params.y = (mRealDisplaySize.y / 2) - (params.height / 2)
+        with(params) {
+            width = context.resources.getDimension(R.dimen.floating_ocr_height).toInt()
+            height = context.resources.getDimension(R.dimen.floating_ocr_width).toInt()
+            type = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O)
+                WindowManager.LayoutParams.TYPE_PHONE
+            else
+                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+            flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+            format = PixelFormat.TRANSLUCENT
+            gravity = Gravity.TOP or Gravity.LEFT
+            x = (mRealDisplaySize.x / 2) - (width / 2)
+            y = (mRealDisplaySize.y / 2) - (height / 2)
+        }
         return params
     }
 
 
     private fun getRealDisplaySizeFromContext(): Point {
-        val displaySize = Point()
-        (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay.getRealSize(displaySize)
-        return displaySize
+        val metrics = Resources.getSystem().displayMetrics
+        return Point(metrics.widthPixels, metrics.heightPixels)
     }
 
     override fun onScroll(e1: MotionEvent?, e2: MotionEvent?, distanceX: Float, distanceY: Float): Boolean {
@@ -138,7 +140,7 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
         return false
     }
 
-    fun onUp(e: MotionEvent?): Boolean {
+    private fun onUp(e: MotionEvent?): Boolean {
         return false
     }
 
@@ -153,7 +155,10 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
     }
 
     override fun onLongPress(e: MotionEvent?) {
-        if (mHandler.hasCallbacks(mDismissCloseButton))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (mHandler.hasCallbacks(mDismissCloseButton))
+                mHandler.removeCallbacks(mDismissCloseButton)
+        } else
             mHandler.removeCallbacks(mDismissCloseButton)
 
         mHandler.postDelayed(mDismissCloseButton, 3000)
@@ -260,27 +265,29 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
     }
 
     private fun fixBoxBounds() {
-        if (layoutParams.x < 0) {
-            layoutParams.x = 0
-        } else if (layoutParams.x + layoutParams.width > mRealDisplaySize.x) {
-            layoutParams.x = mRealDisplaySize.x - layoutParams.width
-        }
-        if (layoutParams.y < 0) {
-            layoutParams.y = 0
-        } else if (layoutParams.y + layoutParams.height > mRealDisplaySize.y) {
-            layoutParams.y = mRealDisplaySize.y - layoutParams.height - getStatusBarHeight()
-        }
-        if (layoutParams.width > mRealDisplaySize.x) {
-            layoutParams.width = mRealDisplaySize.x
-        }
-        if (layoutParams.height > mRealDisplaySize.y) {
-            layoutParams.height = mRealDisplaySize.y
-        }
-        if (layoutParams.width < minSize) {
-            layoutParams.width = minSize
-        }
-        if (layoutParams.height < minSize) {
-            layoutParams.height = minSize
+        with(layoutParams) {
+            if (x < 0)
+                x = 0
+            else if (x + width > mRealDisplaySize.x)
+                x = mRealDisplaySize.x - width
+
+            if (y < 0)
+                y = 0
+            else if (y + height > mRealDisplaySize.y)
+                y = mRealDisplaySize.y - height - getStatusBarHeight()
+
+            if (width > mRealDisplaySize.x)
+                width = mRealDisplaySize.x
+
+            if (height > mRealDisplaySize.y)
+                height = mRealDisplaySize.y
+
+            if (width < minSize)
+                width = minSize
+
+            if (height < minSize)
+                height = minSize
+
         }
     }
 
@@ -304,7 +311,10 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
     }
 
     fun destroy() {
-        if (mHandler.hasCallbacks(mDismissCloseButton))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (mHandler.hasCallbacks(mDismissCloseButton))
+                mHandler.removeCallbacks(mDismissCloseButton)
+        } else
             mHandler.removeCallbacks(mDismissCloseButton)
 
         dismiss()

@@ -12,7 +12,7 @@ import java.util.zip.ZipEntry
 class SevenZipParse : Parse {
 
     private var mEntries = ArrayList<SevenZEntry>()
-    private var mSubtitles =  ArrayList<SevenZEntry>()
+    private var mSubtitles = ArrayList<SevenZEntry>()
 
     private class SevenZEntry(val entry: SevenZArchiveEntry, val bytes: ByteArray)
 
@@ -36,7 +36,10 @@ class SevenZipParse : Parse {
 
             entry = sevenZFile.nextEntry
         }
-        mEntries.sortBy { (it as ZipEntry).name }
+
+        mEntries.sortWith(compareBy<SevenZEntry> { Util.getFolderFromPath((it as ZipEntry).name) }.thenComparing { a, b ->
+            Util.getNormalizedNameOrdering((a as ZipEntry).name).compareTo(Util.getNormalizedNameOrdering((b as ZipEntry).name))
+        })
     }
 
     override fun numPages(): Int {
@@ -65,7 +68,7 @@ class SevenZipParse : Parse {
     override fun getSubtitlesNames(): Map<String, Int> {
         val paths = mutableMapOf<String, Int>()
 
-        for((index, entry) in mSubtitles.withIndex()) {
+        for ((index, entry) in mSubtitles.withIndex()) {
             val path = Util.getNameFromPath(getName(entry as ZipEntry))
             if (path.isNotEmpty() && !paths.containsKey(path))
                 paths[path] = index
@@ -87,7 +90,7 @@ class SevenZipParse : Parse {
     override fun getPagePaths(): Map<String, Int> {
         val paths = mutableMapOf<String, Int>()
 
-        for((index, entry) in mEntries.withIndex()) {
+        for ((index, entry) in mEntries.withIndex()) {
             val path = Util.getFolderFromPath(getName(entry as ZipEntry))
             if (path.isNotEmpty() && !paths.containsKey(path))
                 paths[path] = index
@@ -105,6 +108,6 @@ class SevenZipParse : Parse {
     }
 
 
-    override fun destroy() {
+    override fun destroy(isClearCache: Boolean) {
     }
 }

@@ -6,19 +6,37 @@ import android.widget.Filterable
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.enums.ListMod
 import br.com.fenix.bilingualmangareader.model.enums.Order
 import br.com.fenix.bilingualmangareader.service.repository.MangaRepository
+import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import java.util.*
 
 class LibraryViewModel(application: Application) : AndroidViewModel(application), Filterable {
 
+    private var mLibrary: Library = Library(GeneralConsts.KEYS.LIBRARY.DEFAULT)
     private val mMangaRepository: MangaRepository = MangaRepository(application.applicationContext)
 
     private var mListMangasFull = MutableLiveData<MutableList<Manga>>(mutableListOf())
     private var mListMangas = MutableLiveData<MutableList<Manga>>(mutableListOf())
     val listMangas: LiveData<MutableList<Manga>> = mListMangas
+
+    fun setDefaultLibrary(library: Library) {
+        if (mLibrary.id == library.id)
+            mLibrary = library
+    }
+
+    fun setLibrary(library: Library) {
+        if (mLibrary.id != library.id) {
+            mListMangasFull.value = mutableListOf()
+            mListMangas.value = mutableListOf()
+        }
+        mLibrary = library
+    }
+
+    fun getLibrary() = mLibrary
 
     fun save(obj: Manga): Manga {
         if (obj.id == 0L)
@@ -107,7 +125,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         var change = false
         val indexes = mutableListOf<Pair<ListMod, Int>>()
         if (mListMangasFull.value != null && mListMangasFull.value!!.isNotEmpty()) {
-            val list = mMangaRepository.listRecentChange()
+            val list = mMangaRepository.listRecentChange(mLibrary)
             if (list != null && list.isNotEmpty()) {
                 change = true
                 for (manga in list) {
@@ -126,7 +144,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
                     }
                 }
             }
-            val listDel = mMangaRepository.listRecentDeleted()
+            val listDel = mMangaRepository.listRecentDeleted(mLibrary)
             if (listDel != null && listDel.isNotEmpty()) {
                 change = true
                 for (manga in listDel) {
@@ -139,7 +157,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
                 }
             }
         } else {
-            val list = mMangaRepository.list()
+            val list = mMangaRepository.list(mLibrary)
             if (list != null) {
                 indexes.add(Pair(ListMod.FULL, list.size-1))
                 mListMangas.value = list.toMutableList()
@@ -149,15 +167,15 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
                 mListMangasFull.value = mutableListOf()
                 indexes.add(Pair(ListMod.FULL, 0))
             }
-
-            change = true
+            //Receive value force refresh, not necessary notify
+            change = false
         }
 
         refreshComplete(change, indexes)
     }
 
     fun list(refreshComplete: (Boolean) -> (Unit)) {
-        val list = mMangaRepository.list()
+        val list = mMangaRepository.list(mLibrary)
         if (list != null) {
             if (mListMangasFull.value == null || mListMangasFull.value!!.isEmpty()) {
                 mListMangas.value = list.toMutableList()
@@ -174,9 +192,6 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
 
     fun isEmpty(): Boolean =
         mListMangas.value == null || mListMangas.value!!.isEmpty()
-
-    fun getLastIndex(): Int =
-        if (mListMangas.value == null) 0 else mListMangas.value!!.size - 1
 
     fun sorted(order: Order) {
         when (order) {
@@ -207,7 +222,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         override fun performFiltering(constraint: CharSequence?): FilterResults {
             val filteredList: MutableList<Manga> = mutableListOf()
 
-            if (constraint == null || constraint.length === 0) {
+            if (constraint == null || constraint.isEmpty()) {
                 filteredList.addAll(mListMangasFull.value!!)
             } else {
                 val filterPattern = constraint.toString().lowercase(Locale.getDefault()).trim()
@@ -226,7 +241,9 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
 
         override fun publishResults(constraint: CharSequence?, filterResults: FilterResults?) {
             val list = mutableListOf<Manga>()
-            list.addAll(filterResults!!.values as Collection<Manga>)
+            filterResults?.let {
+                list.addAll(it.values as Collection<Manga>)
+            }
             mListMangas.value = list
         }
     }

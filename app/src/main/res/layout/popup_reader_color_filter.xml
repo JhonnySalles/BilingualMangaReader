@@ -23,10 +23,10 @@
             android:paddingEnd="16dp"
             android:text="@string/popup_reading_custom_color_filter"
             android:textColor="@color/text_primary"
+            android:theme="@style/SwitchMaterial"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:thumbTint="@color/on_secondary" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Red filter -->
 
@@ -199,8 +199,8 @@
             android:paddingEnd="16dp"
             android:text="@string/popup_reading_blue_light"
             android:textColor="@color/text_primary"
-            app:layout_constraintTop_toBottomOf="@id/seekbar_color_filter_alpha"
-            app:thumbTint="@color/on_secondary" />
+            android:theme="@style/SwitchMaterial"
+            app:layout_constraintTop_toBottomOf="@id/seekbar_color_filter_alpha" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/txt_blue_light_alpha_symbol"
@@ -249,8 +249,8 @@
             android:paddingEnd="16dp"
             android:text="@string/popup_reading_grayscale"
             android:textColor="@color/text_primary"
-            app:layout_constraintTop_toBottomOf="@id/seekbar_blue_light_alpha"
-            app:thumbTint="@color/on_secondary" />
+            android:theme="@style/SwitchMaterial"
+            app:layout_constraintTop_toBottomOf="@id/seekbar_blue_light_alpha" />
 
         <!-- Invert Color -->
 
@@ -262,8 +262,8 @@
             android:paddingEnd="16dp"
             android:text="@string/popup_reading_invert_color"
             android:textColor="@color/text_primary"
-            app:layout_constraintTop_toBottomOf="@id/switch_grayscale"
-            app:thumbTint="@color/on_secondary" />
+            android:theme="@style/SwitchMaterial"
+            app:layout_constraintTop_toBottomOf="@id/switch_grayscale" />
 
         <!-- Sepia -->
         <com.google.android.material.switchmaterial.SwitchMaterial
@@ -274,8 +274,8 @@
             android:paddingEnd="16dp"
             android:text="@string/popup_reading_sepia"
             android:textColor="@color/text_primary"
-            app:layout_constraintTop_toBottomOf="@id/switch_invert_color"
-            app:thumbTint="@color/on_secondary" />
+            android:theme="@style/SwitchMaterial"
+            app:layout_constraintTop_toBottomOf="@id/switch_invert_color" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

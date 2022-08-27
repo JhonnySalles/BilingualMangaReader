@@ -53,7 +53,7 @@
                 app:layout_constraintRight_toRightOf="parent">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
@@ -63,6 +63,7 @@
                         android:layout_height="@dimen/manga_detail_card_layout_height"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
+                        android:layout_gravity="bottom"
                         app:rippleColor="@color/ripple_color">
 
                         <ImageView
@@ -76,69 +77,68 @@
 
                     </com.google.android.material.card.MaterialCardView>
 
-
-                    <TextView
-                        android:id="@+id/manga_detail_title"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:textAppearance="?attr/textAppearanceHeadline6"
-                        android:textColor="@color/text_primary"
-                        android:textSize="@dimen/manga_detail_title_size"
-                        android:transitionName="transition_manga_title"
-                        android:layout_gravity="bottom"/>
-                </LinearLayout>
+                        android:orientation="vertical"
+                        android:layout_gravity="center"
+                        android:gravity="center_vertical">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_gravity="center"
-                    android:gravity="center_vertical">
+                        <TextView
+                            android:id="@+id/manga_detail_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:textAppearance="?attr/textAppearanceHeadline6"
+                            android:textColor="@color/text_primary"
+                            android:textSize="@dimen/manga_detail_title_size_tablet"
+                            android:transitionName="transition_manga_title"
+                            android:layout_gravity="bottom"/>
 
-                    <TextView
-                        android:id="@+id/manga_detail_folder"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="2dp"
-                        android:ellipsize="end"
-                        android:textAppearance="?attr/textAppearanceSubtitle2"
-                        android:textColor="@color/text_primary"
-                        android:textSize="@dimen/manga_detail_folder_size"/>
+                        <TextView
+                            android:id="@+id/manga_detail_folder"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="2dp"
+                            android:ellipsize="end"
+                            android:textAppearance="?attr/textAppearanceSubtitle2"
+                            android:textColor="@color/text_primary"
+                            android:textSize="@dimen/manga_detail_folder_size"/>
 
-                    <TextView
-                        android:id="@+id/manga_detail_last_access"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:ellipsize="end"
-                        android:singleLine="true"
-                        android:textAppearance="?attr/textAppearanceSubtitle2"
-                        android:textColor="@color/secondary"
-                        android:textSize="@dimen/manga_detail_last_access"/>
+                        <TextView
+                            android:id="@+id/manga_detail_last_access"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:textAppearance="?attr/textAppearanceSubtitle2"
+                            android:textColor="@color/secondary"
+                            android:textSize="@dimen/manga_detail_last_access"/>
 
-                    <TextView
-                        android:id="@+id/manga_detail_book_mark"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:ellipsize="end"
-                        android:textAppearance="?attr/textAppearanceSubtitle2"
-                        android:textColor="@color/secondary"
-                        android:textSize="@dimen/manga_detail_book_mark"/>
+                        <TextView
+                            android:id="@+id/manga_detail_book_mark"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:ellipsize="end"
+                            android:textAppearance="?attr/textAppearanceSubtitle2"
+                            android:textColor="@color/secondary"
+                            android:textSize="@dimen/manga_detail_book_mark"/>
 
-                    <TextView
-                        android:id="@+id/manga_detail_deleted"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:ellipsize="end"
-                        android:singleLine="true"
-                        android:textAppearance="?attr/textAppearanceSubtitle2"
-                        android:textColor="@color/red"
-                        android:textSize="@dimen/manga_detail_deleted"
-                        android:visibility="gone"/>
+                        <TextView
+                            android:id="@+id/manga_detail_deleted"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:textAppearance="?attr/textAppearanceSubtitle2"
+                            android:textColor="@color/red"
+                            android:textSize="@dimen/manga_detail_deleted"
+                            android:visibility="gone"/>
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
 

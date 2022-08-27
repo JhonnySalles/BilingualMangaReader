@@ -7,21 +7,26 @@ import androidx.lifecycle.MutableLiveData
 import br.com.fenix.bilingualmangareader.model.entity.FileLink
 import br.com.fenix.bilingualmangareader.model.entity.Information
 import br.com.fenix.bilingualmangareader.model.entity.Manga
+import br.com.fenix.bilingualmangareader.service.listener.ApiListener
 import br.com.fenix.bilingualmangareader.service.parses.ParseFactory
 import br.com.fenix.bilingualmangareader.service.parses.RarParse
 import br.com.fenix.bilingualmangareader.service.repository.FileLinkRepository
 import br.com.fenix.bilingualmangareader.service.repository.MangaRepository
+import br.com.fenix.bilingualmangareader.service.tracker.ParseInformation
+import br.com.fenix.bilingualmangareader.service.tracker.mal.MalMangaDetail
+import br.com.fenix.bilingualmangareader.service.tracker.mal.MyAnimeListTracker
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
-import com.kttdevelopment.mal4j.manga.MangaPreview
+import org.slf4j.LoggerFactory
 import java.io.File
-import java.time.LocalDateTime
 
 class MangaDetailViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val mContext = application.applicationContext
-    private val mMangaRepository: MangaRepository = MangaRepository(mContext)
-    private val mFileLinkRepository: FileLinkRepository = FileLinkRepository(mContext)
+    private val mLOGGER = LoggerFactory.getLogger(MangaDetailViewModel::class.java)
+
+    private val mMangaRepository: MangaRepository = MangaRepository(application.applicationContext)
+    private val mFileLinkRepository: FileLinkRepository = FileLinkRepository(application.applicationContext)
+    private val cache = GeneralConsts.getCacheDir(application.applicationContext)
 
     private var mManga = MutableLiveData<Manga>(null)
     val manga: LiveData<Manga> = mManga
@@ -43,6 +48,8 @@ class MangaDetailViewModel(application: Application) : AndroidViewModel(applicat
     private var mInformationRelations = MutableLiveData<MutableList<Information>>(mutableListOf())
     val informationRelations: LiveData<MutableList<Information>> = mInformationRelations
 
+    private val mTracker = MyAnimeListTracker(application.applicationContext)
+
     fun setManga(manga: Manga) {
         mManga.value = manga
 
@@ -54,7 +61,7 @@ class MangaDetailViewModel(application: Application) : AndroidViewModel(applicat
         try {
             if (parse is RarParse) {
                 val folder = GeneralConsts.CACHE_FOLDER.RAR + '/' + Util.normalizeNameCache(manga.file.nameWithoutExtension)
-                val cacheDir = File(GeneralConsts.getCacheDir(mContext), folder)
+                val cacheDir = File(cache, folder)
                 (parse as RarParse?)!!.setCacheDirectory(cacheDir)
             }
 
@@ -66,30 +73,39 @@ class MangaDetailViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
+    fun getInformation() {
+        var name = mManga.value?.title ?: ""
+
+        if (name.isEmpty())
+            return
+
+        name = Util.getNameFromMangaTitle(name).replace(" ", "%")
+        mTracker.getListManga(name, object : ApiListener<List<MalMangaDetail>> {
+            override fun onSuccess(result: List<MalMangaDetail>) {
+                setInformation(result)
+            }
+
+            override fun onFailure(message: String) {
+                mLOGGER.warn("Error to search manga info", message)
+            }
+        })
+
+    }
 
     private val PATTERN = Regex("[^\\w\\s]")
-    fun setInformation(mangas: List<MangaPreview>) {
-        var information: Information? = null
+    fun <T> setInformation(mangas: List<T>) {
+        val list = ParseInformation.getInformation(mangas)
+
         val name = Util.getNameFromMangaTitle(mManga.value?.title ?: "").replace(PATTERN, "")
-        val manga = mangas.find {
+
+        mInformation.value = list.find {
             it.title.replace(PATTERN, "").trim().equals(name, true) ||
-                    it.alternativeTitles.japanese.trim().equals(name, true) ||
-                    it.alternativeTitles.english.trim().equals(name, true) ||
-                    it.alternativeTitles.synonyms.any { sy -> sy.trim().equals(name, true) }
+                    it.alternativeTitles.contains(name, true)
         }
+        if (mInformation.value != null)
+            list.remove(mInformation.value)
 
-        if (manga != null)
-            information = Information(manga)
-
-        mInformation.value = information
-
-        val relations: MutableList<Information> = mutableListOf()
-        for (aux in mangas) {
-            if (aux != manga)
-                relations.add(Information(aux))
-        }
-
-        mInformationRelations.value = relations
+        mInformationRelations.value = list
     }
 
     fun getPage(folder: String): Int {

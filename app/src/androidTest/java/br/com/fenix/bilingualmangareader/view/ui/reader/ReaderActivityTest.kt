@@ -10,7 +10,9 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.custom.CustomTypes
+import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.entity.Manga
+import br.com.fenix.bilingualmangareader.model.enums.Libraries
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.utils.TestUtils
 import junit.framework.TestCase.assertFalse
@@ -40,6 +42,7 @@ class ReaderActivityTest {
         intent = Intent(ApplicationProvider.getApplicationContext(), ReaderActivity::class.java)
 
         val bundle = Bundle()
+        bundle.putSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY, Library(-1, Libraries.DEFAULT.name, ""))
         bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, manga)
         bundle.putString(GeneralConsts.KEYS.MANGA.NAME, manga.title)
         bundle.putInt(GeneralConsts.KEYS.MANGA.PAGE_NUMBER, 0)

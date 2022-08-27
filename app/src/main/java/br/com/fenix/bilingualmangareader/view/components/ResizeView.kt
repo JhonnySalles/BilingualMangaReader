@@ -27,6 +27,7 @@ class ResizeView @JvmOverloads constructor(context: Context, attributeSet: Attri
     }
 
     override fun onTouchEvent(e: MotionEvent): Boolean {
+        performClick()
         mDetector?.onTouchEvent(e)
         return mWindowListener?.onResize(e) ?: false
     }
@@ -49,6 +50,10 @@ class ResizeView @JvmOverloads constructor(context: Context, attributeSet: Attri
 
     override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
         return false
+    }
+
+    override fun performClick(): Boolean {
+        return super.performClick()
     }
 
 }

@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/default_navigator_header_size"
             app:popupTheme="@style/MyDarkToolbarStyle"
-            app:theme="@style/ToolbarTheme"/>
+            android:theme="@style/ToolbarTheme"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -35,7 +35,7 @@
         android:layout_gravity="top|center"
         android:contentDescription="@string/about_app_name"
         android:scaleType="centerCrop"
-        android:src="@mipmap/main_header_cut" />
+        android:src="@mipmap/main_header_cut_semi" />
 
     <View
         android:id="@+id/manga_detail_title_content"

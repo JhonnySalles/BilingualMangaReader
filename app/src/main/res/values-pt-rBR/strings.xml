@@ -9,27 +9,34 @@
     <string name="action_app_not_installed">O App necessário não está instalado</string>
     <string name="action_scroll_up">Subir</string>
     <string name="action_scroll_down">Descer</string>
+    <string name="action_disconnect">Desconectar</string>
 
     <string name="alert_permission_files_access_denied_title">Acesso negado</string>
     <string name="alert_permission_files_access_denied">Não foi possível obter a permissão de acesso a pasta informada, por favor libere o acesso na configuração do android.</string>
 
     <string name="date_format_unknown">desconhecido</string>
+    <string name="api_error">Error connecting to API</string>
 
     <!-- MENU -->
     <string name="menu_search">Procurar</string>
+    <string name="menu_libraries">Bibliotecas</string>
     <string name="menu_help">Ajuda</string>
     <string name="menu_about">Sobre</string>
     <string name="menu_config">Configuração</string>
     <string name="menu_library">Biblioteca</string>
     <string name="menu_history">Histórico</string>
+    <string name="menu_vocabulary">Vocabulário</string>
     <string name="menu_grid_type">Tipo da grid</string>
 
     <!-- CONFIG -->
     <string name="config_title_library">Biblioteca</string>
+    <string name="config_title_libraries">Bibliotecas</string>
     <string name="config_title_sub_title">Legenda</string>
     <string name="config_title_system">Sistema</string>
     <string name="config_title_reader">Leitor</string>
     <string name="config_title_file_link">Arquivo vinculado</string>
+    <string name="config_title_monitoring">Monitoramento</string>
+    <string name="config_title_database">Banco de dados</string>
 
     <string name="config_switch_use_path_name_for_linked">Utilizar o caminho da página para vincular as páginas?</string>
     <string name="config_switch_use_dual_page_calculate">Considerar página dupla pelo calculo das dimensões?</string>
@@ -42,13 +49,44 @@
     <string name="config_option_order_access">Último acesso</string>
     <string name="config_option_order_favorite">Favoritos primeiro</string>
 
+    <string name="config_reading_show_clock_and_battery">Mostrar o relógio e o percentual bateria?</string>
+
     <string name="config_system_language">Linguagem do sistema</string>
     <string name="config_system_format_date">Formato de data</string>
     <string name="config_option_date_time_format_0">Padrão (%s)</string>
 
+    <string name="config_monitoring_disconnect">Deseja desconectar do %1$s\?</string>
+    <string name="config_monitoring_mal">My Anime List</string>
+
+    <string name="config_database_last_backup">Último backup: %1$s\</string>
+    <string name="config_database_backup">Backup</string>
+    <string name="config_database_restore">Restaurar</string>
+    <string name="config_database_select_file">Selecione um arquivo do banco de dados</string>
+    <string name="config_database_invalid_file">Arquivo selecionado inválido.</string>
+    <string name="config_database_backup_success">Backup realizado com sucesso.</string>
+    <string name="config_database_restore_success">Restaurado backup com sucesso.</string>
+    <string name="config_database_error_backup">Ocorreu um erro ao gerar o arquivo de backup.</string>
+    <string name="config_database_error_read_file">Ocorreu um erro ao ler o arquivo.</string>
+    <string name="config_database_error_restore">Ocorreu um erro ao restaurar o backup informado, backup revertido ao arquivo original.</string>
+    <string name="config_database_error_new_database">Ocorreu um erro ao restaurar o backup e a versão anterior não pode ser restaurado. Uma nova base foi criada.</string>
+
+    <!-- CONFIG LIBRARIES -->
+    <string name="config_libraries_title_libraries">Bibliotecas</string>
+    <string name="config_libraries_add_library">Adicionar Biblioteca</string>
+    <string name="config_libraries_delete_library">Apagar Biblioteca</string>
+    <string name="config_libraries_confirm_delete_library">Biblioteca</string>
+
+    <string name="config_libraries_title_library">Titulo da biblioteca</string>
+    <string name="config_libraries_title_language">Linguagem da biblioteca</string>
+    <string name="config_libraries_title_path">Caminho da biblioteca</string>
+
+    <string name="config_libraries_title_library_required">Titulo é obrigatório</string>
+    <string name="config_libraries_title_path_required">Caminho da biblioteca é obrigatória</string>
+    <string name="config_libraries_title_path_default">O caminho foi definido como padrão</string>
+
     <!-- LANGUAGE -->
     <string name="languages_choice">Selecione a linguagem</string>
-    <string name="languages_description">Linguagem</string>
+    <string name="languages_description">Linguagem: %1$s</string>
     <string-array name="languages">
         <item>Português</item>
         <item>Inglês</item>
@@ -60,6 +98,7 @@
     <string name="reader_reload">Recarregar</string>
     <string name="reader_not_found">Não encontrado</string>
     <string name="file_not_found">Arquivo não encontrado</string>
+
     <string name="menu_view_mode">Modo de preenchimento</string>
     <string name="menu_view_mode_aspect_fill">Aspecto preencher</string>
     <string name="menu_view_mode_aspect_fit">Aspecto ajustar</string>
@@ -78,6 +117,7 @@
     <string name="menu_reading_floating">Popup flutuante</string>
     <string name="menu_reading_open_kaku">Abrir o app Kaku</string>
     <string name="menu_reading_floating_buttons">Botões flutuante</string>
+    <string name="menu_reading_view_touch">Funções touch</string>
 
     <string name="reading_button_screen_rotate">Rotação de tela</string>
     <string name="reading_button_page_linked">Página vinculada</string>
@@ -91,6 +131,14 @@
 
     <string name="reading_page_index">Índice</string>
     <string name="reading_page_empty">O arquivo não possui pastas</string>
+
+    <string name="reading_touch_demonstration_aspect_fit">Aspecto ajustar</string>
+    <string name="reading_touch_demonstration_fit_width">Ajustar à largura</string>
+    <string name="reading_touch_demonstration_chapters">Abrir lista de capítulos</string>
+    <string name="reading_touch_demonstration_next_file">Próximo arquivo</string>
+    <string name="reading_touch_demonstration_previous_file">Arquivo anterior</string>
+    <string name="reading_touch_demonstration_next_page">Próxima página</string>
+    <string name="reading_touch_demonstration_previous_page">Página anterior</string>
 
     <string name="open_app_kaku_not_founded">App Kaku não encontrado.</string>
 
@@ -174,6 +222,7 @@
     <string name="library_menu_delete">Deletar</string>
     <string name="library_menu_delete_description">Deseja excluir o arquivo?</string>
     <string name="library_menu_clear">Limpar histórico</string>
+    <string name="library_default">Padrão</string>
 
     <!-- MANGA DETAIL -->
     <string name="manga_detail_favorite">Favorito</string>
@@ -230,6 +279,28 @@
     <string name="page_link_process_reorder_single_page_done">Reordenação de páginas simples concluída.</string>
     <string name="page_link_process_reorder_sorted_page_done">Ordenação pela sequência da página concluída.</string>
     <string name="page_link_select_file_page_index">Selecione um arquivo</string>
+
+    <string name="page_link_select_origin_manga">Escolha a origem do arquivo</string>
+    <string-array name="origin_manga">
+        <item>Biblioteca</item>
+        <item>Explorador</item>
+    </string-array>
+
+    <!-- VOCABULARY -->
+    <string name="vocabulary_manga">Manga</string>
+    <string name="vocabulary_find">Vocabulário</string>
+    <string name="vocabulary_favorites">Favoritos</string>
+
+    <!-- KANJI -->
+    <string name="kanji_jlpt"><b><i>jlpt:</i></b> N%d</string>
+    <string name="kanji_grade"><b><i>grade:</i></b> %d</string>
+    <string name="kanji_strokes"><b><i>traços:</i></b> %d</string>
+    <string name="kanji_frequency"><b><i>freq:</i></b> %d</string>
+    <string name="kanji_parts"><b><i>partes:</i></b> %s</string>
+    <string name="kanji_variants"><b><i>variantes:</i></b> %s</string>
+    <string name="kanji_radical"><b><i>radical:</i></b> %s</string>
+    <string name="kanji_onYomi"><b><i>on:</i></b> %s</string>
+    <string name="kanji_kunYomi"><b><i>kun:</i></b> %s</string>
 
     <!-- HELP -->
     <string name="help_content">Conteúdo</string>

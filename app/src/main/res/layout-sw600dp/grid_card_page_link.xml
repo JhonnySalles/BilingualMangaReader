@@ -70,12 +70,13 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"/>
 
-            <TextView
+            <br.com.fenix.bilingualmangareader.view.components.TextViewEllipsizing
                 android:id="@+id/manga_link_page_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="start"
                 android:maxLines="3"
+                android:singleLine="false"
                 android:textAppearance="?attr/textAppearanceHeadline6"
                 android:textColor="@color/text_primary"
                 android:textSize="@dimen/page_link_card_page_name_size"
@@ -172,7 +173,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"/>
 
-                <TextView
+                <br.com.fenix.bilingualmangareader.view.components.TextViewEllipsizing
                     android:id="@+id/page_link_page_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -256,7 +257,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"/>
 
-                <TextView
+                <br.com.fenix.bilingualmangareader.view.components.TextViewEllipsizing
                     android:id="@+id/dual_page_link_page_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

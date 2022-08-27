@@ -4,11 +4,17 @@
     tools:showIn="navigation_view">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/menu_library"
-            android:icon="@drawable/ic_library"
-            android:iconTint="@color/white"
-            android:orderInCategory="100"
-            android:title="@string/menu_library" />
+            android:id="@+id/menu_library_content"
+            android:title="@string/menu_libraries">
+            <menu android:id="@+id/menu_library_items" >
+                <item
+                    android:id="@+id/menu_library_default"
+                    android:icon="@drawable/ic_library"
+                    android:iconTint="@color/white"
+                    android:orderInCategory="0"
+                    android:title="@string/menu_library"/>
+            </menu>
+        </item>
 
         <item
             android:id="@+id/menu_history"
@@ -16,6 +22,13 @@
             android:iconTint="@color/white"
             android:orderInCategory="100"
             android:title="@string/menu_history" />
+
+        <item
+            android:id="@+id/menu_vocabulary"
+            android:icon="@drawable/ic_vocabulary"
+            android:iconTint="@color/white"
+            android:orderInCategory="100"
+            android:title="@string/menu_vocabulary" />
 
         <item
             android:id="@+id/menu_configuration"
@@ -38,4 +51,5 @@
             android:orderInCategory="100"
             android:title="@string/menu_about" />
     </group>
+
 </menu>

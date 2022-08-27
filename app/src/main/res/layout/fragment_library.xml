@@ -39,7 +39,8 @@
                 android:columnCount="3"
                 android:layoutAnimation="@anim/layout_animation_library_line"
                 android:clipToPadding="false"
-                android:paddingBottom="70dp"/>
+                android:paddingBottom="@dimen/manga_list_padding"
+                android:layout_margin="@dimen/margin_small"/>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
