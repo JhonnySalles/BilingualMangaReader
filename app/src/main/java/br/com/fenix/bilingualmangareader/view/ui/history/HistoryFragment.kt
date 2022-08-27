@@ -49,6 +49,7 @@ class HistoryFragment : Fragment() {
                     val intent = Intent(context, ReaderActivity::class.java)
                     val bundle = Bundle()
                     manga.lastAccess = Date()
+                    bundle.putSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY, LibraryUtil.getDefault(requireContext()))
                     bundle.putString(GeneralConsts.KEYS.MANGA.NAME, manga.title)
                     bundle.putInt(GeneralConsts.KEYS.MANGA.MARK, manga.bookMark)
                     bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, manga)
