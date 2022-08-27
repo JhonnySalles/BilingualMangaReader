@@ -4,11 +4,12 @@
     <string name="action_positive">Yes</string>
     <string name="action_negative">No</string>
     <string name="action_delete">Delete</string>
-    <string name="action_copy">Copied text: </string>
+    <string name="action_copy">Copied text: %s</string>
     <string name="action_app_not_installed">Required App is not installed</string>
     <string name="action_scroll_up">Up</string>
     <string name="action_scroll_down">Down</string>
     <string name="action_disconnect">Disconnect</string>
+    <string name="action_copy_name">Copy name: %s</string>
 
     <string name="alert_permission_files_access_denied_title">Access denied</string>
     <string name="alert_permission_files_access_denied">It not possible to obtain the access permissions to the informed folder, please obtain access in android settings.</string>
@@ -226,6 +227,7 @@
     <string name="library_menu_delete_description">Do you really want to delete the file?</string>
     <string name="library_menu_clear">Clear history</string>
     <string name="library_default">Default</string>
+    <string name="library_menu_copy">Copy name</string>
 
     <!-- MANGA DETAIL -->
     <string name="manga_detail_favorite">Favorite</string>

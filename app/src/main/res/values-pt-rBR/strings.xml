@@ -5,11 +5,12 @@
     <string name="action_positive">Sim</string>
     <string name="action_negative">Não</string>
     <string name="action_delete">Apagar</string>
-    <string name="action_copy">Texto copiado: </string>
+    <string name="action_copy">Texto copiado: %s</string>
     <string name="action_app_not_installed">O App necessário não está instalado</string>
     <string name="action_scroll_up">Subir</string>
     <string name="action_scroll_down">Descer</string>
     <string name="action_disconnect">Desconectar</string>
+    <string name="action_copy_name">Copiar nome: %s</string>
 
     <string name="alert_permission_files_access_denied_title">Acesso negado</string>
     <string name="alert_permission_files_access_denied">Não foi possível obter a permissão de acesso a pasta informada, por favor libere o acesso na configuração do android.</string>
@@ -223,6 +224,7 @@
     <string name="library_menu_delete_description">Deseja excluir o arquivo?</string>
     <string name="library_menu_clear">Limpar histórico</string>
     <string name="library_default">Padrão</string>
+    <string name="library_menu_copy">Copiar nome</string>
 
     <!-- MANGA DETAIL -->
     <string name="manga_detail_favorite">Favorito</string>

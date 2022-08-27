@@ -2,8 +2,7 @@ package br.com.fenix.bilingualmangareader.view.ui.reader
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.content.Intent
-import android.content.SharedPreferences
+import android.content.*
 import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.net.Uri
@@ -45,6 +44,7 @@ import br.com.fenix.bilingualmangareader.service.repository.MangaRepository
 import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.service.repository.SubTitleRepository
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import br.com.fenix.bilingualmangareader.util.helpers.FileUtil
 import br.com.fenix.bilingualmangareader.util.helpers.LibraryUtil
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import br.com.fenix.bilingualmangareader.view.adapter.reader.MangaChaptersCardAdapter
@@ -204,6 +204,10 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         findViewById<MaterialButton>(R.id.nav_next_file).setOnClickListener { switchManga(true) }
 
         mToolbarTitleContent.setOnClickListener { dialogPageIndex() }
+        mToolbarTitleContent.setOnLongClickListener {
+            mManga?.let { FileUtil(this).copyName(it) }
+            true
+        }
 
         mPopupTranslateTab = findViewById(R.id.popup_translate_tab)
         mPopupTranslateView = findViewById(R.id.popup_translate_view_pager)
@@ -441,6 +445,19 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         index.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.title_small_index_dialog_size))
         index.setTextColor(ContextCompat.getColor(this, R.color.on_secondary))
         title.addView(index)
+        title.setOnLongClickListener {
+            val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("Copied Text", mToolbarTitle.text)
+            clipboard.setPrimaryClip(clip)
+
+            Toast.makeText(
+                this,
+                getString(R.string.action_copy, mToolbarTitle.text),
+                Toast.LENGTH_LONG
+            ).show()
+
+            true
+        }
 
         MaterialAlertDialogBuilder(this, R.style.AppCompatMaterialAlertDialogStyle)
             .setCustomTitle(title)
