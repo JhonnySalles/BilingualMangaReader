@@ -1,18 +1,18 @@
 package br.com.fenix.bilingualmangareader.util.helpers
 
 import android.app.ActivityManager
-import android.content.Context
-import android.content.DialogInterface
-import android.content.SharedPreferences
+import android.content.*
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.DisplayMetrics
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Library
+import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.service.parses.Parse
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
@@ -473,6 +473,30 @@ class FileUtil(val context: Context) {
                 toChannel?.close()
             }
         }
+    }
+
+    fun copyName(file: File) {
+        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("Copied Text", file.name)
+        clipboard.setPrimaryClip(clip)
+
+        Toast.makeText(
+            context,
+            context.getString(R.string.action_copy_name, file.name),
+            Toast.LENGTH_LONG
+        ).show()
+    }
+
+    fun copyName(manga: Manga) {
+        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("Copied Text", manga.fileName)
+        clipboard.setPrimaryClip(clip)
+
+        Toast.makeText(
+            context,
+            context.getString(R.string.action_copy_name, manga.fileName),
+            Toast.LENGTH_LONG
+        ).show()
     }
 
 }
