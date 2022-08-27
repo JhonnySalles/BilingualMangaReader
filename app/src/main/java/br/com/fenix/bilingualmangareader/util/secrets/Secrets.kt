@@ -26,7 +26,7 @@ class Secrets {
         }
     }
 
-    private var ANIME_LIST_CLIENT_ID: String = ""
+    private var MY_ANIME_LIST_CLIENT_ID: String = ""
 
     init {
         try {
@@ -35,15 +35,15 @@ class Secrets {
             val inputStream: InputStream = assetManager.open("secrets.properties")
             properties.load(inputStream)
 
-            ANIME_LIST_CLIENT_ID = properties.getProperty("ANIME_LIST_CLIENT_ID")
+            MY_ANIME_LIST_CLIENT_ID = properties.getProperty("ANIME_LIST_CLIENT_ID")
         } catch (e: IOException) {
             e.printStackTrace()
             mLOGGER.error("Error to read secrets", e)
         }
     }
 
-    fun getAnimeListClientId(): String {
-        return ANIME_LIST_CLIENT_ID
+    fun getMyAnimeListClientId(): String {
+        return MY_ANIME_LIST_CLIENT_ID
     }
 
 }

@@ -128,6 +128,7 @@
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout-sw600dp/fragment_about.xml" value="0.5" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout-sw600dp/fragment_manga_detail.xml" value="0.55078125" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout-sw600dp/fragment_pages_link.xml" value="0.5021582733812949" />
+        <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout-sw600dp/line_card_vocabulary.xml" value="0.27109375" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout-sw600dp/page_link_card.xml" value="0.5495495495495496" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout-sw600dp/page_not_link_card.xml" value="0.55078125" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/activity_PagesLink.xml" value="0.1527777777777778" />
@@ -166,6 +167,8 @@
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/fragment_reader_page.xml" value="0.20572916666666666" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/history_card.xml" value="0.11969286359530262" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/history_divider.xml" value="0.24537037037037038" />
+        <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/line_card_vocabulary.xml" value="0.16064814814814815" />
+        <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/line_card_vocabulary_manga_list.xml" value="0.16064814814814815" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/list_item.xml" value="0.20572916666666666" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/list_item_big.xml" value="0.3263888888888889" />
         <entry key="..\:/ProjetoApp/MangaReader/app/src/main/res/layout/list_item_vocabulary.xml" value="0.2109375" />
@@ -211,6 +214,6 @@
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
-    <option name="id" value="Android" />
+    <option name="id" value="jpab" />
   </component>
 </project>

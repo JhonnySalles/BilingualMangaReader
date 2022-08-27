@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.PixelFormat
 import android.graphics.Point
 import android.graphics.drawable.Drawable
@@ -30,7 +31,6 @@ import com.pedromassango.doubleclick.DoubleClickListener
 import kotlin.math.abs
 
 
-@SuppressLint("ClickableViewAccessibility")
 class FloatingSubtitleReader constructor(private val context: Context, private val activity: AppCompatActivity) {
 
     private var windowManager: WindowManager? = null
@@ -43,7 +43,7 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
     private var mFloatingView: View =
         LayoutInflater.from(context).inflate(R.layout.floating_subtitle_reader, null)
 
-    private lateinit var layoutParams: WindowManager.LayoutParams
+    private var layoutParams: WindowManager.LayoutParams
 
     private var lastX: Int = 0
     private var lastY: Int = 0
@@ -272,6 +272,8 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
             x = (mRealDisplaySize.x / 2) - (width / 2)
             y = context.resources.getDimension(R.dimen.floating_reader_initial_top_padding).toInt()
         }
+
+        mOriginalHeight = mFloatingView.height
     }
 
     inner class ChangeTextTouchListener : GestureDetector.SimpleOnGestureListener() {
@@ -292,9 +294,8 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
     private var minSize = 0
     private fun setResizer() {
         minSize = context.resources.getDimension(R.dimen.floating_reader_min_size).toInt()
-        val displaySize = Point()
-        windowManager!!.defaultDisplay!!.getRealSize(displaySize)
-        mRealDisplaySize = displaySize
+        val metrics = Resources.getSystem().displayMetrics
+        mRealDisplaySize = Point(metrics.widthPixels, metrics.heightPixels)
 
         var dx = 0
         var dy = 0
@@ -330,31 +331,34 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
     }
 
     private fun fixBoxBounds() {
-        if (layoutParams.x < 0) {
-            layoutParams.x = 0
-        } else if (layoutParams.x + layoutParams.width > mRealDisplaySize.x) {
-            layoutParams.x = mRealDisplaySize.x - layoutParams.width
+        with(layoutParams) {
+            if (x < 0)
+                x = 0
+            else if (x + width > mRealDisplaySize.x)
+                x = mRealDisplaySize.x - width
+
+            if (y < 0)
+                y = 0
+            else if (y + height > mRealDisplaySize.y)
+                y = mRealDisplaySize.y - height
+
+            if (width > mRealDisplaySize.x)
+                width = mRealDisplaySize.x
+
+            if (height > mRealDisplaySize.y)
+                height = mRealDisplaySize.y
+
+            if (isExpanded) {
+                if (width < minSize)
+                    width = minSize
+            } else {
+                if (width < mMinimisedSize)
+                    width = mMinimisedSize
+            }
+
+            if (height < minSize)
+                height = minSize
         }
-        if (layoutParams.y < 0) {
-            layoutParams.y = 0
-        } else if (layoutParams.y + layoutParams.height > mRealDisplaySize.y) {
-            layoutParams.y = mRealDisplaySize.y - layoutParams.height
-        }
-        if (layoutParams.width > mRealDisplaySize.x) {
-            layoutParams.width = mRealDisplaySize.x
-        }
-        if (layoutParams.height > mRealDisplaySize.y) {
-            layoutParams.height = mRealDisplaySize.y
-        }
-        if (isExpanded) {
-            if (layoutParams.width < minSize)
-                layoutParams.width = minSize
-        } else {
-            if (layoutParams.width < mMinimisedSize)
-                layoutParams.width = mMinimisedSize
-        }
-        if (layoutParams.height < minSize)
-            layoutParams.height = minSize
 
     }
 
@@ -416,6 +420,9 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
     private var mMinimisedSize = context.resources.getDimension(R.dimen.floating_reader_button_close).toInt()
     private var isExpanded = true
     fun expanded(expand : Boolean = false) {
+        if (expand && isExpanded)
+            return
+
         if (expand || !isExpanded) {
             if (mOriginalHeight < minSize)
                 mOriginalHeight = minSize

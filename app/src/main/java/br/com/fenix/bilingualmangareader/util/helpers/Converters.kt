@@ -22,7 +22,7 @@ class Converters {
     fun fromLocalDateTime(dateTime: String?): Date? {
         if (dateTime == null)
             return null
-        return SimpleDateFormat(GeneralConsts.DATE.DATE_TIME_PATTERN, Locale.getDefault()).parse(dateTime)
+        return SimpleDateFormat(GeneralConsts.PATTERNS.DATE_TIME_PATTERN, Locale.getDefault()).parse(dateTime)
     }
 
     @TypeConverter
@@ -30,7 +30,7 @@ class Converters {
         if (dateTime == null)
             return null
 
-        return SimpleDateFormat(GeneralConsts.DATE.DATE_TIME_PATTERN, Locale.getDefault()).format(dateTime);
+        return SimpleDateFormat(GeneralConsts.PATTERNS.DATE_TIME_PATTERN, Locale.getDefault()).format(dateTime)
     }
 
 }

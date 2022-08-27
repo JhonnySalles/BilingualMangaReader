@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/vocabulary_manga_list_content"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="3dp"
+    android:layout_marginEnd="3dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/vocabulary_manga_list_appear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textAppearance="?attr/textAppearanceHeadline6"
+        android:textColor="@color/text_primary"
+        android:textSize="@dimen/vocabulary_manga_appear_size" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/vocabulary_manga_list_image_card"
+        android:layout_width="@dimen/vocabulary_manga_cover_size"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:rippleColor="@color/ripple_color">
+
+        <ImageView
+            android:id="@+id/vocabulary_manga_list_image_cover"
+            android:layout_width="@dimen/vocabulary_manga_cover_size"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            app:srcCompat="@mipmap/book_cover_2" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/vocabulary_manga_list_nome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxEms="5"
+        android:textAppearance="?attr/textAppearanceHeadline6"
+        android:textColor="@color/text_primary"
+        android:textSize="@dimen/vocabulary_manga_name_size" />
+
+</LinearLayout>

@@ -12,7 +12,7 @@ class ZipParse : Parse {
 
     private var mZipFile: ZipFile? = null
     private var mEntries = ArrayList<ZipEntry>()
-    private var mSubtitles =  ArrayList<ZipEntry>()
+    private var mSubtitles = ArrayList<ZipEntry>()
 
     override fun parse(file: File?) {
         mZipFile = ZipFile(file?.absolutePath, StandardCharsets.UTF_8)
@@ -26,7 +26,10 @@ class ZipParse : Parse {
             else if (!ze.isDirectory && Util.isJson(ze.name))
                 mSubtitles.add(ze)
         }
-        mEntries.sortBy { it.name }
+
+        mEntries.sortWith(compareBy<ZipEntry> { Util.getFolderFromPath(it.name) }.thenComparing { a, b ->
+            Util.getNormalizedNameOrdering(a.name).compareTo(Util.getNormalizedNameOrdering(b.name))
+        })
     }
 
     override fun numPages(): Int {
@@ -55,7 +58,7 @@ class ZipParse : Parse {
     override fun getSubtitlesNames(): Map<String, Int> {
         val paths = mutableMapOf<String, Int>()
 
-        for((index, header) in mSubtitles.withIndex()) {
+        for ((index, header) in mSubtitles.withIndex()) {
             val path = Util.getNameFromPath(getName(header))
             if (path.isNotEmpty() && !paths.containsKey(path))
                 paths[path] = index
@@ -77,7 +80,7 @@ class ZipParse : Parse {
     override fun getPagePaths(): Map<String, Int> {
         val paths = mutableMapOf<String, Int>()
 
-        for((index, entry) in mEntries.withIndex()) {
+        for ((index, entry) in mEntries.withIndex()) {
             val path = Util.getFolderFromPath(getName(entry))
             if (path.isNotEmpty() && !paths.containsKey(path))
                 paths[path] = index
@@ -94,7 +97,7 @@ class ZipParse : Parse {
         return "zip"
     }
 
-    override fun destroy() {
-        mZipFile!!.close()
+    override fun destroy(isClearCache: Boolean) {
+        mZipFile?.close()
     }
 }

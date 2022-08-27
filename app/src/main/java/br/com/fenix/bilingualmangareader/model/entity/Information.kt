@@ -1,6 +1,7 @@
 package br.com.fenix.bilingualmangareader.model.entity
 
-import com.kttdevelopment.mal4j.manga.MangaPreview
+import br.com.fenix.bilingualmangareader.service.tracker.mal.MalMangaDetail
+import br.com.fenix.bilingualmangareader.service.tracker.mal.MalTransform
 import java.util.*
 
 class Information(
@@ -13,7 +14,7 @@ class Information(
 
     constructor() : this("", null, "", "", "", "", "", "", "", null, null, "", "")
 
-    constructor(manga: MangaPreview) : this() {
+    constructor(manga: MalMangaDetail) : this() {
         setManga(manga)
     }
 
@@ -32,29 +33,35 @@ class Information(
     var authors: String = authors
     var origin: String = ""
 
-    fun setManga(manga: MangaPreview) {
-        this.link = "https://myanimelist.net/manga/" + manga.id
-        this.imageLink = manga.mainPicture.mediumURL
+    fun setManga(manga: MalMangaDetail) {
+        this.link = "https://myanimelist.net/manga/${manga.id}"
+        this.imageLink = manga.mainPicture?.medium.toString()
         this.title = manga.title
         this.alternativeTitles = ""
-        if (manga.alternativeTitles.english.isNotEmpty())
-            this.alternativeTitles += manga.alternativeTitles.english + ", "
-        if (manga.alternativeTitles.japanese.isNotEmpty())
-            this.alternativeTitles += manga.alternativeTitles.japanese + ", "
-        if (manga.alternativeTitles.synonyms.isNotEmpty())
-            this.alternativeTitles += manga.alternativeTitles.synonyms + ", "
+
+        manga.alternativeTitles?.let {
+            if (it.english.isNotEmpty())
+                this.alternativeTitles += it.english + ", "
+            if (it.japanese.isNotEmpty())
+                this.alternativeTitles += it.japanese + ", "
+            if (it.synonyms.isNotEmpty())
+                this.alternativeTitles += it.synonyms + ", "
+
+            this.synonyms = it.synonyms.toString()
+        }
 
         this.alternativeTitles = this.alternativeTitles.substringBeforeLast(",").plus(".")
 
-        this.synopsis = manga.synopsis
-        this.synonyms = manga.synopsis
+        manga.synopsis?.let { this.synopsis = it }
         this.volumes = manga.volumes.toString()
         this.chapters = manga.chapters.toString()
-        this.status = manga.status.name
-        this.startDate = manga.startDate
-        this.endDate = manga.endDate
-        this.genres = manga.genres.joinToString { it.name }
-        this.authors = manga.authors.joinToString { it.firstName + " " + it.lastName + "(" + it.role + ")" }
+        manga.status?.let { this.status = it.name }
+
+        manga.startDate?.let { if (it.isNotEmpty()) this.startDate = MalTransform.getDate(it) }
+        manga.endDate?.let { if (it.isNotEmpty()) this.endDate = MalTransform.getDate(it) }
+
+        this.genres = manga.genres?.joinToString { it.name } ?: ""
+        this.authors = manga.authors?.joinToString { it.author.firstName + " " + it.author.lastName + "(" + it.role + ")" } ?: ""
         this.origin = MY_ANIME_LIST
     }
 }

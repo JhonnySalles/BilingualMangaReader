@@ -1,5 +1,6 @@
 package br.com.fenix.bilingualmangareader.view.ui.pages_link
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ClipData
 import android.content.ClipDescription
@@ -15,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.setPadding
@@ -37,6 +39,7 @@ import br.com.fenix.bilingualmangareader.util.helpers.Util
 import br.com.fenix.bilingualmangareader.view.adapter.page_link.PageLinkCardAdapter
 import br.com.fenix.bilingualmangareader.view.adapter.page_link.PageNotLinkCardAdapter
 import br.com.fenix.bilingualmangareader.view.components.ComponentsUtil
+import br.com.fenix.bilingualmangareader.view.ui.menu.MenuActivity
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -56,8 +59,8 @@ class PagesLinkFragment : Fragment() {
     private lateinit var mImageLoading: CircularProgressIndicator
     private lateinit var mScrollUp: FloatingActionButton
     private lateinit var mScrollDown: FloatingActionButton
-    private lateinit var mRecyclePageLink: RecyclerView
-    private lateinit var mRecyclePageNotLink: RecyclerView
+    private lateinit var mRecyclerPageLink: RecyclerView
+    private lateinit var mRecyclerPageNotLink: RecyclerView
     private lateinit var mPageNotLinkContent: ConstraintLayout
     private lateinit var mPageNotLinkIcon: ImageView
     private lateinit var mContent: LinearLayout
@@ -78,6 +81,7 @@ class PagesLinkFragment : Fragment() {
     private lateinit var mHelp: MaterialButton
     private lateinit var mDelete: MaterialButton
     private lateinit var mPagesIndex: MaterialButton
+    private lateinit var mForceImageReload: MaterialButton
     private lateinit var mToolbar: androidx.appcompat.widget.Toolbar
     private lateinit var mMangaName: TextView
 
@@ -109,8 +113,8 @@ class PagesLinkFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_pages_link, container, false)
 
         mRoot = root.findViewById(R.id.pages_link_root)
-        mRecyclePageLink = root.findViewById(R.id.pages_link_pages_linked_recycler)
-        mRecyclePageNotLink = root.findViewById(R.id.pages_link_pages_not_linked_recycler)
+        mRecyclerPageLink = root.findViewById(R.id.pages_link_pages_linked_recycler)
+        mRecyclerPageNotLink = root.findViewById(R.id.pages_link_pages_not_linked_recycler)
         mPageNotLinkContent = root.findViewById(R.id.pages_link_content_pages_not_linked)
         mPageNotLinkIcon = root.findViewById(R.id.pages_link_icon_pages_not_linked)
 
@@ -119,6 +123,9 @@ class PagesLinkFragment : Fragment() {
         mFileLinkAutoComplete = root.findViewById(R.id.pages_link_file_link_autocomplete)
         mFileLinkLanguage = root.findViewById(R.id.pages_link_language_combo)
         mFileLinkLanguageAutoComplete = root.findViewById(R.id.pages_link_language_autocomplete)
+        mPagesIndex = root.findViewById(R.id.pages_link_pages_index)
+        mMangaName = root.findViewById(R.id.pages_link_name_manga)
+
         mContentButton = root.findViewById(R.id.pages_link_buttons_content)
         mSave = root.findViewById(R.id.pages_link_save_button)
         mRefresh = root.findViewById(R.id.pages_link_refresh_button)
@@ -135,45 +142,60 @@ class PagesLinkFragment : Fragment() {
         mDualPages = root.findViewById(R.id.pages_link_dual_page_button)
         mHelp = root.findViewById(R.id.pages_link_help_button)
         mDelete = root.findViewById(R.id.file_link_delete_button)
-        mPagesIndex = root.findViewById(R.id.pages_link_pages_index)
-        mMangaName = root.findViewById(R.id.pages_link_name_manga)
-        mToolbar = requireActivity().findViewById(R.id.toolbar_manga_pages_link)
+        mForceImageReload = root.findViewById(R.id.pages_link_force_image_reload)
+        mToolbar = root.findViewById(R.id.toolbar_manga_pages_link)
 
-        mExpandedButtonsGroupSize = mButtonsGroup.layoutParams as ConstraintLayout.LayoutParams
-        mButtonsGroup.layoutParams = ConstraintLayout.LayoutParams(mButtonsGroup.layoutParams as ConstraintLayout.LayoutParams)
-        mButtonsGroup.layoutParams.width = resources.getDimension(R.dimen.page_link_buttons_size).toInt()
-        mCollapseButtonsGroupSize = mButtonsGroup.layoutParams as ConstraintLayout.LayoutParams
+        (requireActivity() as PagesLinkActivity).setActionBar(mToolbar)
+
+        if (mHelp.tag.toString().compareTo("not_used", true) != 0) {
+            mExpandedButtonsGroupSize = mButtonsGroup.layoutParams as ConstraintLayout.LayoutParams
+            mButtonsGroup.layoutParams = ConstraintLayout.LayoutParams(mButtonsGroup.layoutParams as ConstraintLayout.LayoutParams)
+            mButtonsGroup.layoutParams.width = resources.getDimension(R.dimen.page_link_buttons_size).toInt()
+            mCollapseButtonsGroupSize = mButtonsGroup.layoutParams as ConstraintLayout.LayoutParams
+        }
 
         mScrollUp.visibility = View.GONE
         mScrollDown.visibility = View.GONE
 
-        mScrollUp.setOnClickListener { mRecyclePageLink.smoothScrollToPosition(0) }
+        mScrollUp.setOnClickListener { mRecyclerPageLink.smoothScrollToPosition(0) }
         mScrollDown.setOnClickListener {
-            mRecyclePageLink.smoothScrollToPosition((mRecyclePageLink.adapter as RecyclerView.Adapter).itemCount)
+            mRecyclerPageLink.smoothScrollToPosition((mRecyclerPageLink.adapter as RecyclerView.Adapter).itemCount)
         }
 
-        mRecyclePageLink.setOnScrollChangeListener { _, _, _, _, yOld ->
+        mRecyclerPageLink.setOnScrollChangeListener { _, _, _, _, yOld ->
             if (mShowScrollButton) {
                 if (yOld > 20) {
-                    if (mHandler.hasCallbacks(mDismissDownButton))
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        if (mHandler.hasCallbacks(mDismissDownButton))
+                            mHandler.removeCallbacks(mDismissDownButton)
+                    } else
                         mHandler.removeCallbacks(mDismissDownButton)
 
                     mScrollDown.hide()
                 } else if (yOld < -20) {
-                    if (mHandler.hasCallbacks(mDismissUpButton))
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        if (mHandler.hasCallbacks(mDismissUpButton))
+                            mHandler.removeCallbacks(mDismissUpButton)
+                    } else
                         mHandler.removeCallbacks(mDismissUpButton)
 
                     mScrollUp.hide()
                 }
 
                 if (yOld > 150) {
-                    if (mHandler.hasCallbacks(mDismissUpButton))
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        if (mHandler.hasCallbacks(mDismissUpButton))
+                            mHandler.removeCallbacks(mDismissUpButton)
+                    } else
                         mHandler.removeCallbacks(mDismissUpButton)
 
                     mHandler.postDelayed(mDismissUpButton, 3000)
                     mScrollUp.show()
                 } else if (yOld < -150) {
-                    if (mHandler.hasCallbacks(mDismissDownButton))
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        if (mHandler.hasCallbacks(mDismissDownButton))
+                            mHandler.removeCallbacks(mDismissDownButton)
+                    } else
                         mHandler.removeCallbacks(mDismissDownButton)
 
                     mHandler.postDelayed(mDismissDownButton, 3000)
@@ -186,26 +208,7 @@ class PagesLinkFragment : Fragment() {
         }
 
         mFileLinkAutoComplete.setOnClickListener {
-            mFileLinkAutoComplete.setText("")
-            val intent = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O) {
-                Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                    addCategory(Intent.CATEGORY_OPENABLE)
-                    type = "application/zip|application/x-cbz|application/rar|application/x-cbr|application/x-rar-compressed|" +
-                            "application/x-zip-compressed|application/cbr|application/cbz|*/*"
-                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                }
-            } else
-                Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                    addCategory(Intent.CATEGORY_OPENABLE)
-                    type = "application/*"
-                    putExtra(
-                        Intent.EXTRA_MIME_TYPES, arrayOf(
-                            "application/zip", "application/x-cbz", "application/rar", "application/x-cbr",
-                            "application/x-rar-compressed", "application/x-zip-compressed", "application/cbr", "application/cbz"
-                        )
-                    )
-                }
-            startActivityForResult(intent, GeneralConsts.REQUEST.OPEN_PAGE_LINK)
+            choiceSelectManga()
         }
 
         val languages = resources.getStringArray(R.array.languages)
@@ -254,8 +257,12 @@ class PagesLinkFragment : Fragment() {
         }
 
         mHelp.setOnClickListener {
-            if (mHandler.hasCallbacks(mReduceSizeGroupButton))
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                if (mHandler.hasCallbacks(mReduceSizeGroupButton))
+                    mHandler.removeCallbacks(mReduceSizeGroupButton)
+            } else
                 mHandler.removeCallbacks(mReduceSizeGroupButton)
+
             mHandler.postDelayed(mReduceSizeGroupButton, 5000)
 
             ComponentsUtil.changeWidthAnimateSize(mButtonsGroup, mExpandedButtonsGroupSize, false)
@@ -278,10 +285,12 @@ class PagesLinkFragment : Fragment() {
             else
                 R.drawable.ic_fullscreen_exit
 
-            mFullScreen.icon = ContextCompat.getDrawable(context!!, image)
+            mFullScreen.icon = ContextCompat.getDrawable(requireContext(), image)
         }
 
         mPagesIndex.setOnClickListener { openMenuIndexes() }
+
+        mForceImageReload.setOnClickListener { mViewModel.reLoadImages() }
 
         mListener = object : PageLinkCardListener {
             override fun onClick(page: PageLink) {}
@@ -337,7 +346,7 @@ class PagesLinkFragment : Fragment() {
             }
         }
 
-        mRecyclePageLink.setOnDragListener { _, dragEvent ->
+        mRecyclerPageLink.setOnDragListener { _, dragEvent ->
             when (dragEvent.action) {
                 DragEvent.ACTION_DRAG_STARTED -> {
                     mInDrag = true
@@ -355,23 +364,23 @@ class PagesLinkFragment : Fragment() {
         }
 
 
-        mRecyclePageNotLink.setOnDragListener { _, dragEvent ->
+        mRecyclerPageNotLink.setOnDragListener { _, dragEvent ->
             when (dragEvent.action) {
                 DragEvent.ACTION_DRAG_STARTED -> {
-                    mPageNotLinkContent.background = requireContext().getDrawable(R.drawable.file_linked_rounded_border)
+                    mPageNotLinkContent.background = AppCompatResources.getDrawable(requireContext(), R.drawable.file_linked_rounded_border)
                     mPageNotLinkIcon.visibility = View.VISIBLE
                     mShowScrollButton = false
                     dragEvent.clipDescription.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)
                 }
 
                 DragEvent.ACTION_DRAG_ENTERED -> {
-                    mPageNotLinkContent.background = requireContext().getDrawable(R.drawable.file_linked_background_selected)
+                    mPageNotLinkContent.background = AppCompatResources.getDrawable(requireContext(), R.drawable.file_linked_background_selected)
                     mPageNotLinkIcon.visibility = View.VISIBLE
                     true
                 }
 
                 DragEvent.ACTION_DRAG_EXITED -> {
-                    mPageNotLinkContent.background = requireContext().getDrawable(R.drawable.file_linked_rounded_border)
+                    mPageNotLinkContent.background = AppCompatResources.getDrawable(requireContext(), R.drawable.file_linked_rounded_border)
                     mPageNotLinkIcon.visibility = View.VISIBLE
                     true
                 }
@@ -397,7 +406,7 @@ class PagesLinkFragment : Fragment() {
                 }
 
                 DragEvent.ACTION_DRAG_ENDED -> {
-                    mPageNotLinkContent.background = requireContext().getDrawable(R.drawable.file_linked_background)
+                    mPageNotLinkContent.background = AppCompatResources.getDrawable(requireContext(), R.drawable.file_linked_background)
                     mPageNotLinkIcon.visibility = View.INVISIBLE
                     mShowScrollButton = true
 
@@ -418,21 +427,21 @@ class PagesLinkFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val adapterPageLink = PageLinkCardAdapter()
-        mRecyclePageLink.adapter = adapterPageLink
-        mRecyclePageLink.layoutManager = LinearLayoutManager(requireContext())
+        mRecyclerPageLink.adapter = adapterPageLink
+        mRecyclerPageLink.layoutManager = LinearLayoutManager(requireContext())
         adapterPageLink.attachListener(mListener)
 
         mIsTabletOrLandscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE ||
-                mRecyclePageNotLink.tag.toString().compareTo("vertical", true) == 0
+                mRecyclerPageNotLink.tag.toString().compareTo("vertical", true) == 0
 
         val adapterPageNotLink = PageNotLinkCardAdapter()
-        mRecyclePageNotLink.adapter = adapterPageNotLink
+        mRecyclerPageNotLink.adapter = adapterPageNotLink
         val orientation = if (mIsTabletOrLandscape) RecyclerView.VERTICAL else RecyclerView.HORIZONTAL
-        mRecyclePageNotLink.layoutManager = LinearLayoutManager(requireContext(), orientation, false)
+        mRecyclerPageNotLink.layoutManager = LinearLayoutManager(requireContext(), orientation, false)
         adapterPageNotLink.attachListener(mListener)
 
         if (savedInstanceState != null) {
-            val fileLink = savedInstanceState.getSerializable(GeneralConsts.KEYS.OBJECT.PAGELINK)
+            val fileLink = savedInstanceState.getSerializable(GeneralConsts.KEYS.OBJECT.PAGE_LINK)
             if (fileLink != null)
                 mViewModel.reload(fileLink as FileLink) { index, type -> notifyItemChanged(type, index) }
             else
@@ -451,8 +460,8 @@ class PagesLinkFragment : Fragment() {
     override fun onActivityResult(
         requestCode: Int, resultCode: Int, resultData: Intent?
     ) {
-        if (requestCode == GeneralConsts.REQUEST.OPEN_PAGE_LINK) {
-            if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == GeneralConsts.REQUEST.OPEN_PAGE_LINK) {
                 resultData?.data?.also { uri ->
                     try {
                         mAutoReorderPages = true
@@ -475,14 +484,37 @@ class PagesLinkFragment : Fragment() {
                         mLOGGER.warn("Error when open file: " + e.message, e)
                     }
                 }
-            } else
-                mViewModel.clearFileLink { index, type -> notifyItemChanged(type, index) }
+
+            } else if (requestCode == GeneralConsts.REQUEST.SELECT_MANGA) {
+                resultData?.extras?.also {
+                    if (it.containsKey(GeneralConsts.KEYS.OBJECT.MANGA)) {
+                        val link = it.getSerializable(GeneralConsts.KEYS.OBJECT.MANGA) as Manga
+                        val loaded = mViewModel.readFileLink(link.path) { index, type -> notifyItemChanged(type, index) }
+                        if (loaded != LoadFile.LOADED) {
+                            val msg = if (loaded == LoadFile.ERROR_FILE_WRONG) getString(R.string.page_link_load_file_wrong) else getString(
+                                R.string.page_link_load_error
+                            )
+                            AlertDialog.Builder(requireContext(), R.style.AppCompatAlertDialogStyle)
+                                .setTitle(msg)
+                                .setMessage(link.path)
+                                .setPositiveButton(
+                                    R.string.action_neutral
+                                ) { _, _ -> }
+                                .create()
+                                .show()
+                        }
+                    }
+                }
+            }
+        } else {
+            mFileLinkAutoComplete.setText("")
+            mViewModel.clearFileLink { index, type -> notifyItemChanged(type, index) }
         }
     }
 
     private fun onPageLinkScrolling(point: Point) {
         val recycler = Rect()
-        mRecyclePageLink.getGlobalVisibleRect(recycler)
+        mRecyclerPageLink.getGlobalVisibleRect(recycler)
 
         val space = recycler.height() / 4
         val spaceTop = recycler.top + space
@@ -501,16 +533,16 @@ class PagesLinkFragment : Fragment() {
         } else 0
 
         if (padding != 0)
-            mRecyclePageLink.smoothScrollBy(0, padding)
+            mRecyclerPageLink.smoothScrollBy(0, padding)
     }
 
     private fun observer() {
         mViewModel.pagesLink.observe(viewLifecycleOwner) {
-            (mRecyclePageLink.adapter as PageLinkCardAdapter).updateList(it)
+            (mRecyclerPageLink.adapter as PageLinkCardAdapter).updateList(it)
         }
 
         mViewModel.pagesLinkNotLinked.observe(viewLifecycleOwner) {
-            (mRecyclePageNotLink.adapter as PageNotLinkCardAdapter).updateList(it)
+            (mRecyclerPageNotLink.adapter as PageNotLinkCardAdapter).updateList(it)
         }
 
         mViewModel.fileLink.observe(viewLifecycleOwner) {
@@ -532,36 +564,37 @@ class PagesLinkFragment : Fragment() {
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun notifyItemChanged(type: Pages, index: Int?, add: Boolean = false, remove: Boolean = false) {
         when {
-            type == Pages.NOT_LINKED && add && index != null && index > -1 -> (mRecyclePageNotLink.adapter as PageNotLinkCardAdapter).notifyItemInserted(
+            type == Pages.NOT_LINKED && add && index != null && index > -1 -> (mRecyclerPageNotLink.adapter as PageNotLinkCardAdapter).notifyItemInserted(
                 index
             )
-            type == Pages.NOT_LINKED && remove && index != null && index > -1 -> (mRecyclePageNotLink.adapter as PageNotLinkCardAdapter).notifyItemRemoved(
+            type == Pages.NOT_LINKED && remove && index != null && index > -1 -> (mRecyclerPageNotLink.adapter as PageNotLinkCardAdapter).notifyItemRemoved(
                 index
             )
-            type == Pages.NOT_LINKED && index != null && index > -1 -> (mRecyclePageNotLink.adapter as PageNotLinkCardAdapter).notifyItemChanged(
+            type == Pages.NOT_LINKED && index != null && index > -1 -> (mRecyclerPageNotLink.adapter as PageNotLinkCardAdapter).notifyItemChanged(
                 index
             )
-            type == Pages.NOT_LINKED && (index == null || index == -1) -> (mRecyclePageNotLink.adapter as PageNotLinkCardAdapter).notifyDataSetChanged()
+            type == Pages.NOT_LINKED && (index == null || index == -1) -> (mRecyclerPageNotLink.adapter as PageNotLinkCardAdapter).notifyDataSetChanged()
 
-            type != Pages.NOT_LINKED && add && index != null && index > -1 -> (mRecyclePageLink.adapter as PageLinkCardAdapter).notifyItemInserted(
+            type != Pages.NOT_LINKED && add && index != null && index > -1 -> (mRecyclerPageLink.adapter as PageLinkCardAdapter).notifyItemInserted(
                 index
             )
-            type != Pages.NOT_LINKED && remove && index != null && index > -1 -> (mRecyclePageLink.adapter as PageLinkCardAdapter).notifyItemRemoved(
+            type != Pages.NOT_LINKED && remove && index != null && index > -1 -> (mRecyclerPageLink.adapter as PageLinkCardAdapter).notifyItemRemoved(
                 index
             )
-            type != Pages.NOT_LINKED && index != null && index > -1 -> (mRecyclePageLink.adapter as PageLinkCardAdapter).notifyItemChanged(
+            type != Pages.NOT_LINKED && index != null && index > -1 -> (mRecyclerPageLink.adapter as PageLinkCardAdapter).notifyItemChanged(
                 index
             )
-            type != Pages.NOT_LINKED && (index == null || index == -1) -> (mRecyclePageLink.adapter as PageLinkCardAdapter).notifyDataSetChanged()
+            type != Pages.NOT_LINKED && (index == null || index == -1) -> (mRecyclerPageLink.adapter as PageLinkCardAdapter).notifyDataSetChanged()
         }
     }
 
     private fun enableContent(enabled: Boolean) {
         mAutoReorderPages = false
-        mRecyclePageLink.isEnabled = enabled
-        mRecyclePageNotLink.isEnabled = enabled
+        mRecyclerPageLink.isEnabled = enabled
+        mRecyclerPageNotLink.isEnabled = enabled
         mFileLink.isEnabled = enabled
         mFileLinkLanguage.isEnabled = enabled
         mSave.isEnabled = enabled
@@ -610,11 +643,11 @@ class PagesLinkFragment : Fragment() {
         super.onResume()
         mViewModel.addImageLoadHandler(mImageLoadHandler)
         processImageLoading(isVerify = true)
-        mRecyclePageLink.scrollToPosition(mPageSelected)
+        mRecyclerPageLink.scrollToPosition(mPageSelected)
     }
 
     override fun onPause() {
-        mPageSelected = (mRecyclePageLink.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
+        mPageSelected = (mRecyclerPageLink.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
         mViewModel.removeImageLoadHandler(mImageLoadHandler)
         super.onPause()
     }
@@ -626,13 +659,21 @@ class PagesLinkFragment : Fragment() {
 
     override fun onDestroy() {
         mViewModel.endThread()
-        if (mHandler.hasCallbacks(mDismissUpButton))
-            mHandler.removeCallbacks(mDismissUpButton)
-        if (mHandler.hasCallbacks(mDismissDownButton))
-            mHandler.removeCallbacks(mDismissDownButton)
-        if (mHandler.hasCallbacks(mReduceSizeGroupButton))
-            mHandler.removeCallbacks(mReduceSizeGroupButton)
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (mHandler.hasCallbacks(mDismissUpButton))
+                mHandler.removeCallbacks(mDismissUpButton)
+            if (mHandler.hasCallbacks(mDismissDownButton))
+                mHandler.removeCallbacks(mDismissDownButton)
+            if (mHandler.hasCallbacks(mReduceSizeGroupButton))
+                mHandler.removeCallbacks(mReduceSizeGroupButton)
+        } else {
+            mHandler.removeCallbacks(mDismissUpButton)
+            mHandler.removeCallbacks(mDismissDownButton)
+            mHandler.removeCallbacks(mReduceSizeGroupButton)
+        }
+
+        mViewModel.onDestroy()
         super.onDestroy()
     }
 
@@ -690,9 +731,55 @@ class PagesLinkFragment : Fragment() {
             .setItems(items) { _, selected ->
                 val pageIndex = paths[items[selected]]
                 if (pageIndex != null)
-                    mRecyclePageLink.smoothScrollToPosition(pageIndex)
+                    mRecyclerPageLink.smoothScrollToPosition(pageIndex)
             }
             .show()
+    }
+
+    private fun choiceSelectManga() {
+        val origins = requireContext().resources.getStringArray(R.array.origin_manga)
+        MaterialAlertDialogBuilder(requireActivity(), R.style.AppCompatAlertDialogStyle)
+            .setTitle(R.string.page_link_select_origin_manga)
+            .setItems(origins) { _, selected ->
+                val origin = origins[selected]
+                if (origin == origins[0])
+                    openLibrarySelectManga()
+                else
+                    openIntentSelectManga()
+            }
+            .show()
+    }
+
+    private fun openLibrarySelectManga() {
+        val intent = Intent(requireContext(), MenuActivity::class.java)
+        val bundle = Bundle()
+        bundle.putInt(GeneralConsts.KEYS.FRAGMENT.ID, R.id.frame_select_manga)
+        bundle.putString(GeneralConsts.KEYS.MANGA.NAME, mViewModel.getMangaName())
+        intent.putExtras(bundle)
+        requireActivity().overridePendingTransition(R.anim.fade_in_fragment_add_enter, R.anim.fade_out_fragment_remove_exit)
+        startActivityForResult(intent, GeneralConsts.REQUEST.SELECT_MANGA, null)
+    }
+
+    private fun openIntentSelectManga() {
+        val intent = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O) {
+            Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                addCategory(Intent.CATEGORY_OPENABLE)
+                type = "application/zip|application/x-cbz|application/rar|application/x-cbr|application/x-rar-compressed|" +
+                        "application/x-zip-compressed|application/cbr|application/cbz|*/*"
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+        } else
+            Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                addCategory(Intent.CATEGORY_OPENABLE)
+                type = "application/*"
+                putExtra(
+                    Intent.EXTRA_MIME_TYPES, arrayOf(
+                        "application/zip", "application/x-cbz", "application/rar", "application/x-cbr",
+                        "application/x-rar-compressed", "application/x-zip-compressed", "application/cbr", "application/cbz"
+                    )
+                )
+            }
+        startActivityForResult(intent, GeneralConsts.REQUEST.OPEN_PAGE_LINK)
     }
 
     private fun processImageLoading(isInitial: Boolean = false, isEnding: Boolean = false, isVerify: Boolean = false) {
@@ -746,7 +833,11 @@ class PagesLinkFragment : Fragment() {
                     processImageLoading()
                     notifyItemChanged(imageLoad.type, imageLoad.index)
                 }
-                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_LOAD_ERROR -> mViewModel.reLoadImages(imageLoad.type)
+                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_LOAD_ERROR -> mHandler.postDelayed(
+                    { mViewModel.reLoadImages(imageLoad.type) },
+                    300L
+                )
+                PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_LOAD_ERROR_ENABLE_MANUAL -> mForceImageReload.visibility = View.VISIBLE
                 PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_ADDED -> notifyItemChanged(imageLoad.type, imageLoad.index, add = true)
                 PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_REMOVED -> notifyItemChanged(
                     imageLoad.type,
@@ -763,6 +854,8 @@ class PagesLinkFragment : Fragment() {
                         mAutoReorderPages = false
                         mViewModel.autoReorderDoublePages(imageLoad.type, isNotify = false)
                     }
+
+                    mForceImageReload.visibility = if (!mViewModel.allImagesLoaded()) View.VISIBLE else View.GONE
                 }
                 PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_ITEM_CHANGE -> notifyItemChanged(imageLoad.type, imageLoad.index)
                 PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_ITEM_ADD -> notifyItemChanged(imageLoad.type, imageLoad.index, add = true)

@@ -31,11 +31,20 @@
     <dimen name="manga_line_sub_title">10sp</dimen>
     <dimen name="manga_line_favorite">10dp</dimen>
 
+    <dimen name="manga_list_padding">80dp</dimen>
+
+    <dimen name="manga_chapter_layout_width">100dp</dimen>
+    <dimen name="manga_chapter_layout_height">150dp</dimen>
+    <dimen name="manga_chapter_number_size">12sp</dimen>
+    <dimen name="manga_chapter_margin_bottom">20dp</dimen>
+    <dimen name="manga_chapter_selected_stroke">3dp</dimen>
+
     <dimen name="manga_detail_card_layout_width">150dp</dimen>
     <dimen name="manga_detail_card_layout_height">200dp</dimen>
     <dimen name="manga_detail_card_layout_width_tablet">200dp</dimen>
     <dimen name="manga_detail_card_layout_height_tablet">250dp</dimen>
-    <dimen name="manga_detail_title_size">30sp</dimen>
+    <dimen name="manga_detail_title_size_tablet">30sp</dimen>
+    <dimen name="manga_detail_title_size">28sp</dimen>
     <dimen name="manga_detail_folder_size">14sp</dimen>
     <dimen name="manga_detail_last_access">12sp</dimen>
     <dimen name="manga_detail_book_mark">12sp</dimen>
@@ -62,6 +71,16 @@
     <dimen name="title_small_size">12sp</dimen>
     <dimen name="title_index_dialog_size">20sp</dimen>
     <dimen name="title_small_index_dialog_size">16sp</dimen>
+
+    <dimen name="clock_and_battery">10sp</dimen>
+    <dimen name="clock_and_battery_tablet">12sp</dimen>
+
+    <dimen name="reader_button_width">50dp</dimen>
+    <dimen name="reader_change_comic_size">40dp</dimen>
+
+    <dimen name="reader_touch_demonstration_text_size">12sp</dimen>
+    <dimen name="reader_touch_demonstration_initial_horizontal">50dp</dimen>
+    <dimen name="reader_touch_demonstration_initial_vertical">120dp</dimen>
 
     <dimen name="popup_reader_title">15sp</dimen>
     <dimen name="popup_reader_file_page_name">10sp</dimen>
@@ -96,8 +115,12 @@
     <dimen name="history_card_image">70dp</dimen>
     <dimen name="history_title_size">18sp</dimen>
     <dimen name="history_sub_title">15sp</dimen>
+    <dimen name="history_library">10sp</dimen>
 
     <dimen name="history_divider_title">20sp</dimen>
+
+    <dimen name="config_tracker_ico_size">48dp</dimen>
+    <dimen name="config_tracker_margin">10dp</dimen>
 
     <dimen name="about_app_name">18sp</dimen>
     <dimen name="about_title_size">16sp</dimen>
@@ -118,7 +141,6 @@
     <dimen name="help_content_size">12sp</dimen>
     <dimen name="help_image_width">200dp</dimen>
 
-    <dimen name="page_link_toolbar_size">40dp</dimen>
     <dimen name="pages_link_file_link_margin_toolbar">30dp</dimen>
     <dimen name="page_link_page_index_title_padding">15dp</dimen>
     <dimen name="page_link_language_margin">3dp</dimen>
@@ -177,5 +199,19 @@
     <dimen name="page_not_link_card_layout_height_land">130dp</dimen>
     <dimen name="page_not_link_card_layout_width_tablet">100dp</dimen>
     <dimen name="page_not_link_card_layout_height_tablet">130dp</dimen>
+
+    <dimen name="vocabulary_title_size">30sp</dimen>
+    <dimen name="vocabulary_content_text_big_size">16sp</dimen>
+    <dimen name="vocabulary_content_text_normal_size">14sp</dimen>
+    <dimen name="vocabulary_content_text_small_size">12sp</dimen>
+    <dimen name="vocabulary_manga_cover_size">100dp</dimen>
+    <dimen name="vocabulary_manga_name_size">14sp</dimen>
+    <dimen name="vocabulary_manga_appear_size">14sp</dimen>
+
+    <dimen name="kanji_title_size">40sp</dimen>
+    <dimen name="kanji_sub_title_size">20sp</dimen>
+    <dimen name="kanji_content_text_big_size">16sp</dimen>
+    <dimen name="kanji_content_text_normal_size">14sp</dimen>
+    <dimen name="kanji_content_text_small_size">12sp</dimen>
 
 </resources>

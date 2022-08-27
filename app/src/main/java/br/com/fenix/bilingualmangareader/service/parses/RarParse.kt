@@ -31,7 +31,10 @@ class RarParse : Parse {
             }
             header = mArchive!!.nextFileHeader()
         }
-        mHeaders.sortBy { getName(it) }
+
+        mHeaders.sortWith(compareBy<FileHeader> { Util.getFolderFromPath(it.fileName) }.thenComparing { a, b ->
+            Util.getNormalizedNameOrdering(a.fileName).compareTo(Util.getNormalizedNameOrdering(b.fileName))
+        })
     }
 
     private fun getName(header: FileHeader): String {
@@ -63,7 +66,7 @@ class RarParse : Parse {
     override fun getSubtitlesNames(): Map<String, Int> {
         val paths = mutableMapOf<String, Int>()
 
-        for((index, header) in mSubtitles.withIndex()) {
+        for ((index, header) in mSubtitles.withIndex()) {
             val path = Util.getNameFromPath(getName(header))
             if (path.isNotEmpty() && !paths.containsKey(path))
                 paths[path] = index
@@ -73,7 +76,7 @@ class RarParse : Parse {
     }
 
     override fun getPagePath(num: Int): String? {
-        if (mHeaders.size < num)
+        if (mHeaders.isEmpty() || mHeaders.size < num)
             return null
         return getName(mHeaders[num])
     }
@@ -81,7 +84,7 @@ class RarParse : Parse {
     override fun getPagePaths(): Map<String, Int> {
         val paths = mutableMapOf<String, Int>()
 
-        for((index, header) in mHeaders.withIndex()) {
+        for ((index, header) in mHeaders.withIndex()) {
             val path = Util.getFolderFromPath(getName(header))
             if (path.isNotEmpty() && !paths.containsKey(path))
                 paths[path] = index
@@ -135,15 +138,18 @@ class RarParse : Parse {
         }
     }
 
-    override fun destroy() {
-        if (mCacheDir != null) {
-            for (f in mCacheDir?.listFiles()!!)
-                f.delete()
-
-            mCacheDir!!.delete()
+    override fun destroy(isClearCache: Boolean) {
+        if (isClearCache) {
+            if (mCacheDir != null) {
+                mCacheDir?.listFiles()?.let {
+                    for (f in it)
+                        f.delete()
+                }
+                mCacheDir?.delete()
+            }
         }
         mHeaders.clear()
-        mArchive!!.close()
+        mArchive?.close()
         mArchive = null
     }
 
@@ -153,12 +159,14 @@ class RarParse : Parse {
 
     fun setCacheDirectory(cacheDirectory: File?) {
         mCacheDir = cacheDirectory
-        if (!mCacheDir!!.exists())
-            mCacheDir!!.mkdirs()
+        mCacheDir?.let {
+            if (!it.exists())
+                it.mkdirs()
 
-        if (mCacheDir!!.listFiles() != null) {
-            for (f in mCacheDir?.listFiles()!!)
-                f.delete()
+            if (it.listFiles() != null) {
+                for (f in it.listFiles()!!)
+                    f.delete()
+            }
         }
     }
 }

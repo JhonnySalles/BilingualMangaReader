@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_reader_content">
+    <data>
+        <import type="android.view.View"/>
+        <import type="android.view.Gravity" />
+
+        <variable
+            name="toolbarReaderCenter"
+            type="Boolean" />
+    </data>
+
+    <RelativeLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/container_touch_demonstration"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            layout="@layout/reader_touch_demonstration"/>
+
+        <include
+            android:id="@+id/container_clock_battery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/margin"
+            android:visibility="gone"
+            layout="@layout/reader_clock_battery"/>
+
+        <include
+            android:id="@+id/container_chapters_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/manga_chapter_margin_bottom"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:visibility="gone"
+            layout="@layout/list_reader_chapters"/>
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/toolbar_reader_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/main_toolbar_background"
+            android:theme="@style/ToolbarContentTheme" >
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar_reader"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/default_navigator_header_size"
+                app:popupTheme="@style/MyDarkToolbarStyle"
+                android:theme="@style/ToolbarTheme">
+
+                <LinearLayout
+                    android:id="@+id/toolbar_title_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="center|start"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/toolbar_title_custom"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColor="@color/text_primary"
+                        android:textSize="@dimen/title_size" />
+
+                    <TextView
+                        android:id="@+id/toolbar_subtitle_custom"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="start"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColor="@color/on_secondary"
+                        android:textSize="@dimen/title_small_size"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+            </androidx.appcompat.widget.Toolbar>
+
+            <LinearLayout
+                android:id="@+id/sub_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:background="@color/secondary_variant_semitransparent">
+                <TextView
+                    android:id="@+id/ocr_language"
+                    android:layout_marginStart="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:autoLink="all"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/floating_ocr_language_text_size" />
+            </LinearLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <LinearLayout
+            android:id="@+id/nav_reader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="55dp"
+            android:layout_marginRight="55dp"
+            android:layout_marginBottom="80dp"
+            android:background="@drawable/reader_nav_bg"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingLeft="10dp"
+            android:paddingTop="2dp"
+            android:paddingRight="10dp">
+
+            <TextView
+                android:id="@+id/nav_reader_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/on_secondary"
+                android:textSize="@dimen/title_small_size" />
+
+            <SeekBar
+                android:id="@+id/nav_reader_progress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxHeight="2dp"
+                android:minHeight="2dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="10dp"
+                android:progressDrawable="@drawable/reader_nav_progress"
+                android:thumb="@drawable/reader_nav_thumb"
+                android:thumbOffset="6dp" />
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/nav_previous_file"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+            android:layout_width="@dimen/reader_change_comic_size"
+            android:layout_height="@dimen/reader_change_comic_size"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginBottom="85dp"
+            android:contentDescription="@string/reading_button_previous_file"
+            android:insetLeft="0dp"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
+            android:insetBottom="0dp"
+            android:padding="0dp"
+            android:textAllCaps="false"
+            android:textColor="@color/text_primary"
+            app:backgroundTint="@color/on_primary_semitransparent"
+            app:cornerRadius="100dp"
+            app:icon="@drawable/ic_previous_file"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:iconSize="28dp"
+            app:iconTint="@color/text_primary"
+            app:rippleColor="@color/ripple_color"
+            app:strokeWidth="0dp"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/nav_next_file"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+            android:layout_width="@dimen/reader_change_comic_size"
+            android:layout_height="@dimen/reader_change_comic_size"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="85dp"
+            android:contentDescription="@string/reading_button_next_file"
+            android:insetLeft="0dp"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
+            android:insetBottom="0dp"
+            android:padding="0dp"
+            android:textAllCaps="false"
+            android:textColor="@color/text_primary"
+            app:backgroundTint="@color/on_primary_semitransparent"
+            app:cornerRadius="100dp"
+            app:icon="@drawable/ic_next_file"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:iconSize="28dp"
+            app:iconTint="@color/text_primary"
+            app:rippleColor="@color/ripple_color"
+            app:strokeWidth="0dp"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <LinearLayout
+            android:id="@+id/toolbar_reader_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/main_toolbar_background_inverse"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_screen_rotate"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="@dimen/reader_button_width"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:background="@color/primary_semitransparent"
+                android:contentDescription="@string/reading_button_screen_rotate"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minHeight="@dimen/popup_reader_button_min_height"
+                android:paddingLeft="@dimen/popup_reader_button_padding"
+                android:paddingRight="@dimen/popup_reader_button_padding"
+                app:icon="@drawable/ic_screen_rotation"
+                app:iconSize="28dp"
+                app:iconTint="@color/text_primary"
+                app:rippleColor="@color/ripple_color" />
+
+            <Button
+                android:id="@+id/btn_menu_ocr"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="@dimen/reader_button_width"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:background="@color/primary_semitransparent"
+                android:contentDescription="@string/reading_button_menu_ocr"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minHeight="@dimen/popup_reader_button_min_height"
+                android:paddingLeft="@dimen/popup_reader_button_padding"
+                android:paddingRight="@dimen/popup_reader_button_padding"
+                app:icon="@drawable/ic_reader_ocr"
+                app:iconSize="28dp"
+                app:iconTint="@color/text_primary"
+                app:rippleColor="@color/ripple_color" />
+
+            <Button
+                android:id="@+id/btn_popup_subtitle"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="@dimen/reader_button_width"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:background="@color/primary_semitransparent"
+                android:contentDescription="@string/reading_button_subtitle"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minHeight="@dimen/popup_reader_button_min_height"
+                android:paddingLeft="@dimen/popup_reader_button_padding"
+                android:paddingRight="@dimen/popup_reader_button_padding"
+                app:icon="@drawable/ic_change_language"
+                app:iconSize="28dp"
+                app:iconTint="@color/text_primary"
+                app:rippleColor="@color/ripple_color" />
+
+            <Button
+                android:id="@+id/btn_popup_color"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="@dimen/reader_button_width"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:background="@color/primary_semitransparent"
+                android:contentDescription="@string/reading_button_color"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minHeight="@dimen/popup_reader_button_min_height"
+                android:paddingLeft="@dimen/popup_reader_button_padding"
+                android:paddingRight="@dimen/popup_reader_button_padding"
+                app:icon="@drawable/ic_color_settings"
+                app:iconSize="30dp"
+                app:iconTint="@color/text_primary"
+                app:rippleColor="@color/ripple_color" />
+
+            <Button
+                android:id="@+id/btn_menu_page_linked"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="@dimen/reader_button_width"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:background="@color/primary_semitransparent"
+                android:contentDescription="@string/reading_button_page_linked"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minHeight="@dimen/popup_reader_button_min_height"
+                android:paddingLeft="@dimen/popup_reader_button_padding"
+                android:paddingRight="@dimen/popup_reader_button_padding"
+                app:icon="@drawable/ic_page_linked"
+                app:iconSize="30dp"
+                app:iconTint="@color/text_primary"
+                app:rippleColor="@color/ripple_color" />
+
+            <Button
+                android:id="@+id/btn_menu_file_link"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="@dimen/reader_button_width"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:background="@color/primary_semitransparent"
+                android:contentDescription="@string/reading_button_file_link"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minHeight="@dimen/popup_reader_button_min_height"
+                android:paddingLeft="@dimen/popup_reader_button_padding"
+                android:paddingRight="@dimen/popup_reader_button_padding"
+                app:icon="@drawable/ic_file_link"
+                app:iconSize="30dp"
+                app:iconTint="@color/text_primary"
+                app:rippleColor="@color/ripple_color" />
+
+            <Button
+                android:id="@+id/btn_popup_open_floating"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="@dimen/reader_button_width"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="20dp"
+                android:background="@color/primary_semitransparent"
+                android:contentDescription="@string/reading_button_popup_floating"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minHeight="@dimen/popup_reader_button_min_height"
+                android:paddingLeft="@dimen/popup_reader_button_padding"
+                android:paddingRight="@dimen/popup_reader_button_padding"
+                app:icon="@drawable/ic_floating_window"
+                app:iconSize="30dp"
+                app:iconTint="@color/text_primary"
+                app:rippleColor="@color/ripple_color" />
+
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

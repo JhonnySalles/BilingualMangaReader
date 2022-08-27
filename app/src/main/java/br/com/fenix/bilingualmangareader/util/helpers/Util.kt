@@ -2,25 +2,33 @@ package br.com.fenix.bilingualmangareader.util.helpers
 
 import android.app.ActivityManager
 import android.content.Context
+import android.content.DialogInterface
+import android.content.SharedPreferences
 import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.DisplayMetrics
+import androidx.appcompat.app.AlertDialog
 import br.com.fenix.bilingualmangareader.R
+import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.service.parses.Parse
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.io.InputStream
+import java.io.*
 import java.math.BigInteger
+import java.nio.channels.FileChannel
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 import kotlin.experimental.and
 import kotlin.math.roundToInt
+
 
 class Util {
     companion object Utils {
@@ -75,12 +83,12 @@ class Util {
         }
 
         fun getDeviceWidth(context: Context): Int {
-            val displayMetrics = context.resources.displayMetrics
+            val displayMetrics = Resources.getSystem().displayMetrics
             return Math.round(displayMetrics.widthPixels / displayMetrics.density)
         }
 
         fun getDeviceHeight(context: Context): Int {
-            val displayMetrics = context.resources.displayMetrics
+            val displayMetrics = Resources.getSystem().displayMetrics
             return Math.round(displayMetrics.heightPixels / displayMetrics.density)
         }
 
@@ -204,10 +212,10 @@ class Util {
             }
         }
 
-        fun destroyParse(parse: Parse?) {
+        fun destroyParse(parse: Parse?, isClearCache: Boolean = true) {
             if (parse != null) {
                 try {
-                    parse.destroy()
+                    parse.destroy(isClearCache)
                 } catch (e: Exception) {
                 }
             }
@@ -223,7 +231,7 @@ class Util {
         }
 
         fun getNameWithoutExtensionFromPath(path: String): String {
-            var name =  if (path.contains('/'))
+            var name = if (path.contains('/'))
                 path.substringAfterLast("/")
             else if (path.contains('\\'))
                 path.substringAfterLast('\\')
@@ -238,6 +246,25 @@ class Util {
             return name
         }
 
+        fun getNameWithoutVolumeAndChapter(manga: String): String {
+            if (manga.isEmpty()) return manga
+
+            var name = manga
+
+            if (name.contains(" - "))
+                name = name.substringBeforeLast(" - ")
+
+            name = if (name.contains("volume", true))
+                name.substringBeforeLast("volume", "").replace("volume", "", true)
+            else if (name.contains("capitulo", true))
+                name.substringBeforeLast("capitulo").replace("capitulo", "", true)
+            else if (name.contains("capítulo", true))
+                name.substringBeforeLast("capítulo").replace("capítulo", "", true)
+            else name
+
+            return name
+        }
+
         fun getExtensionFromPath(path: String): String {
             return if (path.contains('.'))
                 path.substringAfterLast(".")
@@ -245,15 +272,15 @@ class Util {
                 path
         }
 
-        fun normalizeNameCache(name: String): String {
+        fun normalizeNameCache(name: String, prefix: String = "", isRandom: Boolean = true): String {
             val normalize = if (name.contains("-"))
                 name.substringBefore("-")
             else if (name.contains(" "))
                 name.substringBefore(" ")
             else name
 
-            val random = (0..1000).random()
-            return normalize.replace("[^\\w\\d]".toRegex(), "").trim().plus(random).lowercase()
+            val random = if (isRandom) (0..1000).random() else ""
+            return prefix + normalize.replace("[^\\w\\d ]".toRegex(), "").trim().plus(random).lowercase()
         }
 
         fun normalizeFilePath(path: String): String {
@@ -302,6 +329,25 @@ class Util {
                 folder.replaceBeforeLast('\\', "").replaceFirst("/", "")
             else
                 folder
+        }
+
+
+        private fun getNumberAtEnd(str: String): String {
+            var numbers = ""
+            val m: Matcher = Pattern.compile("\\d+$").matcher(str)
+            while (m.find())
+                numbers = m.group()
+
+            return numbers
+        }
+
+        fun getNormalizedNameOrdering(path: String): String {
+            val name: String = getNameWithoutExtensionFromPath(path)
+            val numbers = getNumberAtEnd(name)
+            return if (numbers.isEmpty())
+                getNameFromPath(path)
+            else
+                name.substring(0, name.lastIndexOf(numbers)) + numbers.padStart(10, '0') + getExtensionFromPath(path)
         }
 
         var googleLang: String = ""
@@ -369,9 +415,10 @@ class Util {
             return SimpleDateFormat(pattern, Locale.getDefault()).format(date)
         }
 
-        fun setBold(text: String): String = "<b>$text</b>"
+        fun setBold(text: String): String =
+            "<b>$text</b>"
 
-        fun getDivideStrings(text: String, delimiter: Char = '\n', occurrences: Int = 10) : Pair<String, String> {
+        fun getDivideStrings(text: String, delimiter: Char = '\n', occurrences: Int = 10): Pair<String, String> {
             var postion = text.length
             var occurence = 0
             for ((i, c) in text.withIndex()) {
@@ -387,6 +434,134 @@ class Util {
             val string2 = if (postion >= text.length) "" else text.substring(postion, text.length)
 
             return Pair(string1, string2)
+        }
+    }
+}
+
+class FileUtil(val context: Context) {
+
+    /**
+     * Copies an asset file from assets to phone internal storage, if it doesn't already exist
+     * Will be copied to path <prefix> + <assetName> in files directory
+     * Returns true if copied, false otherwise (including if file already exists)
+     */
+    fun copyAssetToFilesIfNotExist(prefix: String, assetName: String, dir: String = ""): Boolean {
+        val directory = dir.ifEmpty { context.filesDir.absolutePath }
+        val file = File(directory, prefix + assetName)
+        if (file.exists())
+            return false
+
+        val inputStream: InputStream = context.assets.open(assetName)
+        File(directory, prefix).mkdirs()
+        // Copy in 10mb chunks to avoid going oom for larger files
+        inputStream.copyTo(file.outputStream(), 10000)
+        inputStream.close()
+        return true
+    }
+
+    fun copyFile(fromFile: FileInputStream, toFile: FileOutputStream) {
+        var fromChannel: FileChannel? = null
+        var toChannel: FileChannel? = null
+        try {
+            fromChannel = fromFile.channel
+            toChannel = toFile.channel
+            fromChannel.transferTo(0, fromChannel.size(), toChannel)
+        } finally {
+            try {
+                fromChannel?.close()
+            } finally {
+                toChannel?.close()
+            }
+        }
+    }
+
+}
+
+class MsgUtil {
+    companion object MsgUtil {
+        fun validPermission(grantResults: IntArray) : Boolean {
+            var permiss = true
+            for (grant in grantResults)
+                if (grant != PackageManager.PERMISSION_GRANTED) {
+                    permiss = false
+                    break
+                }
+            return permiss
+        }
+
+        fun validPermission(context: Context, grantResults: IntArray) {
+            if (!validPermission(grantResults))
+                AlertDialog.Builder(context, R.style.AppCompatAlertDialogStyle)
+                    .setTitle(context.getString(R.string.alert_permission_files_access_denied_title))
+                    .setMessage(context.getString(R.string.alert_permission_files_access_denied))
+                    .setPositiveButton(R.string.action_neutral) { _, _ -> }.create().show()
+        }
+
+        inline fun alert(
+            context: Context,
+            title: String,
+            message: String,
+            theme: Int = R.style.AppCompatMaterialAlertDialogStyle,
+            crossinline action: (dialog: DialogInterface, which: Int) -> Unit
+        ) {
+            MaterialAlertDialogBuilder(context, theme)
+                .setTitle(title).setMessage(message)
+                .setPositiveButton(
+                    R.string.action_positive
+                ) { dialog, which ->
+                    action(dialog, which)
+                }
+                .create().show()
+        }
+
+        inline fun alert(
+            context: Context,
+            title: String,
+            message: String,
+            theme: Int = R.style.AppCompatMaterialAlertDialogStyle,
+            crossinline positiveAction: (dialog: DialogInterface, which: Int) -> Unit,
+            crossinline negativeAction: (dialog: DialogInterface, which: Int) -> Unit
+        ) {
+            MaterialAlertDialogBuilder(context, theme)
+                .setTitle(title).setMessage(message)
+                .setPositiveButton(
+                    R.string.action_positive
+                ) { dialog, which ->
+                    positiveAction(dialog, which)
+                }
+                .setNegativeButton(
+                    R.string.action_negative
+                ) { dialog, which ->
+                    negativeAction(dialog, which)
+                }
+                .create().show()
+        }
+
+        inline fun error(
+            context: Context,
+            title: String,
+            message: String,
+            theme: Int = R.style.AppCompatMaterialErrorDialogStyle,
+            crossinline action: (dialog: DialogInterface, which: Int) -> Unit
+        ) {
+            MaterialAlertDialogBuilder(context, theme)
+                .setTitle(title).setMessage(message)
+                .setPositiveButton(
+                    R.string.action_positive
+                ) { dialog, which ->
+                    action(dialog, which)
+                }
+                .create().show()
+        }
+    }
+}
+
+class LibraryUtil {
+    companion object LibraryUtils {
+        fun getDefault(context: Context): Library {
+            val preference: SharedPreferences = GeneralConsts.getSharedPreferences(context)
+            val path = preference.getString(GeneralConsts.KEYS.LIBRARY.FOLDER, "") ?: ""
+            return Library(GeneralConsts.KEYS.LIBRARY.DEFAULT, context.getString(R.string.library_default), path)
         }
     }
 }

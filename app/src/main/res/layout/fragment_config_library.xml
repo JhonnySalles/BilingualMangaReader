@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/frame_config_library"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/margin"
+        android:layout_marginBottom="@dimen/margin">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/libraries_txt_library_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_small"
+            android:layout_marginStart="@dimen/margin"
+            android:layout_marginEnd="32dp"
+            android:layout_marginTop="32dp"
+            android:hint="@string/config_libraries_title_library"
+            android:textColorHint="@color/text_primary"
+            app:endIconMode="clear_text"
+            app:boxBackgroundColor="@color/primary"
+            app:boxStrokeColor="@color/on_secondary"
+            app:placeholderTextColor="@color/text_primary"
+            app:hintTextColor="@color/on_secondary"
+            app:startIconDrawable="@drawable/ic_library"
+            app:startIconTint="@color/on_secondary"
+            app:errorEnabled="false">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/libraries_txt_library_language"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_small"
+            android:hint="@string/config_libraries_title_language"
+            android:textColorHint="@color/text_primary"
+            app:boxBackgroundColor="@color/primary"
+            app:boxStrokeColor="@color/on_secondary"
+            app:startIconTint="@color/on_secondary"
+            app:startIconDrawable="@drawable/ic_language"
+            app:placeholderTextColor="@color/text_primary"
+            app:hintTextColor="@color/on_secondary">
+
+            <AutoCompleteTextView
+                android:id="@+id/libraries_menu_autocomplete_library_language"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:textColor="@color/text_primary"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:id="@+id/libraries_txt_library_path"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_small"
+            android:layout_marginStart="@dimen/margin"
+            android:layout_marginEnd="32dp"
+            android:layout_marginTop="32dp"
+            android:hint="@string/config_libraries_title_path"
+            android:textColorHint="@color/text_primary"
+            app:endIconMode="clear_text"
+            app:boxBackgroundColor="@color/primary"
+            app:boxStrokeColor="@color/on_secondary"
+            app:placeholderTextColor="@color/text_primary"
+            app:hintTextColor="@color/on_secondary"
+            app:startIconDrawable="@drawable/ic_sd_storage"
+            app:startIconTint="@color/on_secondary"
+            app:errorEnabled="false">
+            <AutoCompleteTextView
+                android:id="@+id/libraries_menu_autocomplete_library_path"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:textColor="@color/text_primary"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+    </LinearLayout>
+</FrameLayout>

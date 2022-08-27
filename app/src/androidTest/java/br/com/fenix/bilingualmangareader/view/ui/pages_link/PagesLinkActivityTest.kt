@@ -12,7 +12,9 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import br.com.fenix.bilingualmangareader.R
+import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.entity.Manga
+import br.com.fenix.bilingualmangareader.model.enums.Libraries
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.utils.TestUtils
 import com.google.android.material.progressindicator.CircularProgressIndicator
@@ -44,6 +46,7 @@ class PagesLinkActivityTest {
         intent = Intent(ApplicationProvider.getApplicationContext(), PagesLinkActivity::class.java)
 
         val bundle = Bundle()
+        bundle.putSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY, Library(-1, Libraries.DEFAULT.name, ""))
         bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, manga)
         bundle.putInt(GeneralConsts.KEYS.MANGA.PAGE_NUMBER, 0)
         intent?.putExtras(bundle)

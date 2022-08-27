@@ -17,7 +17,7 @@ data class Chapter(
     val pages: List<Page>,
     val extra: Boolean,
     val raw: Boolean,
-    @SerializedName("vocabulario")
+    @SerializedName("vocabularios")
     val vocabulary: MutableSet<Vocabulary>
 ) {
     override fun equals(other: Any?): Boolean {

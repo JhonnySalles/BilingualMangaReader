@@ -1,6 +1,7 @@
 package br.com.fenix.bilingualmangareader.service.parses
 
 import br.com.fenix.bilingualmangareader.util.helpers.Util
+import com.github.junrar.rarfile.FileHeader
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
 import java.io.*
@@ -28,7 +29,10 @@ class TarParse : Parse {
 
             entry = `is`.nextTarEntry
         }
-        mEntries.sortBy { it.entry.name }
+
+        mEntries.sortWith(compareBy<TarEntry> { Util.getFolderFromPath(it.entry.name) }.thenComparing { a, b ->
+            Util.getNormalizedNameOrdering(a.entry.name).compareTo(Util.getNormalizedNameOrdering(b.entry.name))
+        })
     }
 
     override fun numPages(): Int {
@@ -96,6 +100,6 @@ class TarParse : Parse {
         return "tar"
     }
 
-    override fun destroy() {
+    override fun destroy(isClearCache: Boolean) {
     }
 }

@@ -2,6 +2,7 @@ package br.com.fenix.bilingualmangareader.view.ui.window
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.PixelFormat
 import android.graphics.Point
 import android.graphics.drawable.Drawable
@@ -18,7 +19,6 @@ import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity
 import kotlin.math.abs
 
 
-@SuppressLint("ClickableViewAccessibility")
 class FloatingButtons constructor(private val context: Context, private val activity: AppCompatActivity) {
 
     private var windowManager: WindowManager? = null
@@ -39,7 +39,6 @@ class FloatingButtons constructor(private val context: Context, private val acti
     private var firstY: Int = 0
 
     var isShowing = false
-    private var touchConsumedByMove = false
 
     private val mOnFlingListener = object : GestureDetector.SimpleOnGestureListener() {
         override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
@@ -132,8 +131,8 @@ class FloatingButtons constructor(private val context: Context, private val acti
 
         mFloatingView.setOnTouchListener(onTouchListener)
 
-        val displaySize = Point()
-        windowManager!!.defaultDisplay!!.getRealSize(displaySize)
+        val metrics = Resources.getSystem().displayMetrics
+        val displaySize = Point(metrics.widthPixels, metrics.heightPixels)
         mRealDisplaySize = displaySize
         mMiddle = mRealDisplaySize.x/2
         inLeft = true

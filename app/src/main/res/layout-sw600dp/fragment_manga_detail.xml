@@ -54,6 +54,7 @@
                     android:layout_height="@dimen/manga_detail_card_layout_height_tablet"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
+                    android:layout_gravity="bottom"
                     app:rippleColor="@color/ripple_color">
 
                     <ImageView
@@ -129,6 +130,7 @@
                         android:visibility="gone"/>
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/manga_detail_information_root"
                 android:layout_width="match_parent"

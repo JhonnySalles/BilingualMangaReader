@@ -20,7 +20,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/cb_subtitle_page"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/popup_reading_subtitle_page"

@@ -10,15 +10,16 @@ import java.util.*
     tableName = DataBaseConsts.MANGA.TABLE_NAME,
     indices = [Index(value = [DataBaseConsts.MANGA.COLUMNS.FILE_NAME, DataBaseConsts.MANGA.COLUMNS.TITLE])]
 )
-class Manga(id: Long?, title: String, subTitle: String, path: String, folder: String, name: String, type: String, pages: Int) : Serializable {
+class Manga(id: Long?, title: String, subTitle: String, path: String, folder: String, name: String, type: String, pages: Int, fkLibrary: Long?) : Serializable {
 
     constructor(
         id: Long?, title: String, subTitle: String,
         path: String, folder: String, name: String, type: String,
         pages: Int, bookMark: Int, favorite: Boolean,
         dateCreate: Date?, lastAccess: Date?,
-        lastAlteration : Date?, sort: Date? = null
-    ) : this(id, title, subTitle, path, folder, name, type, pages) {
+        lastAlteration : Date?, fkLibrary: Long?,
+        sort: Date? = null
+    ) : this(id, title, subTitle, path, folder, name, type, pages, fkLibrary) {
         this.bookMark = bookMark
         this.favorite = favorite
         this.dateCreate = dateCreate
@@ -32,8 +33,9 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
         path: String, folder: String, name: String, type: String,
         pages: Int, bookMark: Int, favorite: Boolean,
         dateCreate: Date?, lastAccess: Date?,
-        lastAlteration: Date?, excluded: Boolean = false
-    ) : this(id, title, subTitle, path, folder, name, type, pages) {
+        lastAlteration: Date?, fkLibrary: Long?,
+        excluded: Boolean = false
+    ) : this(id, title, subTitle, path, folder, name, type, pages, fkLibrary) {
         this.bookMark = bookMark
         this.favorite = favorite
         this.dateCreate = dateCreate
@@ -90,6 +92,12 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
 
     @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.EXCLUDED)
     var excluded: Boolean = false
+
+    @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.FK_ID_LIBRARY)
+    var fkLibrary: Long? = fkLibrary
+
+    @Ignore
+    var library: Library = Library(null)
 
     @Ignore
     var update: Boolean = false

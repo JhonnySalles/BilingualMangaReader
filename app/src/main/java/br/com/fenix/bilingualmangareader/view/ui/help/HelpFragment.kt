@@ -1,5 +1,6 @@
 package br.com.fenix.bilingualmangareader.view.ui.help
 
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -57,14 +58,22 @@ class HelpFragment : Fragment() {
         mScrollUp.visibility = View.GONE
         mScrollView.setOnScrollChangeListener { _, _, yNew, _, yOld ->
             if ((yNew - yOld) < -150) {
-                if (mHandler.hasCallbacks(mDismissUpButton))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if (mHandler.hasCallbacks(mDismissUpButton))
+                        mHandler.removeCallbacks(mDismissUpButton)
+                } else
                     mHandler.removeCallbacks(mDismissUpButton)
+
                 mHandler.postDelayed(mDismissUpButton, 3000)
 
                 mScrollUp.show()
             } else if ((yNew - yOld) > 1) {
-                if (mHandler.hasCallbacks(mDismissUpButton))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if (mHandler.hasCallbacks(mDismissUpButton))
+                        mHandler.removeCallbacks(mDismissUpButton)
+                } else
                     mHandler.removeCallbacks(mDismissUpButton)
+
                 
                 mScrollUp.hide()
             }
@@ -104,8 +113,12 @@ class HelpFragment : Fragment() {
     }
 
     override fun onDestroy() {
-        if (mHandler.hasCallbacks(mDismissUpButton))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (mHandler.hasCallbacks(mDismissUpButton))
+                mHandler.removeCallbacks(mDismissUpButton)
+        } else
             mHandler.removeCallbacks(mDismissUpButton)
+
         super.onDestroy()
     }
 }
