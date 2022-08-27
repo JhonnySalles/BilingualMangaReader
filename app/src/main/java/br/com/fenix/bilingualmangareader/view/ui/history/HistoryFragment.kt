@@ -18,6 +18,7 @@ import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.service.listener.MangaCardListener
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.FileUtil
+import br.com.fenix.bilingualmangareader.util.helpers.LibraryUtil
 import br.com.fenix.bilingualmangareader.view.adapter.history.HistoryCardAdapter
 import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity
 import java.util.*
