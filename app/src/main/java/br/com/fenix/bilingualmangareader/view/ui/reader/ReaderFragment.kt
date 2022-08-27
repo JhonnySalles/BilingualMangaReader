@@ -87,7 +87,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
     private var mResourceViewMode: HashMap<Int, ReaderMode> = HashMap()
     private var mIsFullscreen = false
     private var mFileName: String? = null
-    var mReaderMode: ReaderMode? = null
+    var mReaderMode: ReaderMode = ReaderMode.FIT_WIDTH
     var mIsLeftToRight = false
 
     var mParse: Parse? = null
@@ -418,7 +418,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         when (item.itemId) {
             R.id.view_mode_aspect_fill, R.id.view_mode_aspect_fit, R.id.view_mode_fit_width -> {
                 item.isChecked = true
-                mReaderMode = mResourceViewMode[item.itemId]
+                mReaderMode = mResourceViewMode[item.itemId] ?: ReaderMode.FIT_WIDTH
                 updatePageViews(mViewPager)
             }
             R.id.reading_left_to_right, R.id.reading_right_to_left -> {
