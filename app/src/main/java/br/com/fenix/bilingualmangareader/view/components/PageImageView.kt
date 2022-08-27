@@ -2,9 +2,7 @@ package br.com.fenix.bilingualmangareader.view.components
 
 import android.content.Context
 import android.content.res.Resources
-import android.graphics.Matrix
-import android.graphics.Point
-import android.graphics.RectF
+import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.GestureDetector
@@ -17,6 +15,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Interpolator
 import android.widget.OverScroller
 import androidx.core.view.ViewCompat
+import androidx.core.view.drawToBitmap
 import br.com.fenix.bilingualmangareader.model.enums.ReaderMode
 import kotlin.math.abs
 import kotlin.math.max
@@ -28,7 +27,7 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
 
     constructor(context: Context) : this(context, null)
 
-    private var mViewMode: ReaderMode? = null
+    private var mViewMode: ReaderMode
     private var mHaveFrame = false
     private var mSkipScaling = false
     private var mTranslateRightEdge = false
@@ -38,11 +37,22 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
     private var mScroller: OverScroller
     private var mMinScale = 0F
     private var mMaxScale = 0F
+    private var mZoomScale = 0F
     private var mOriginalScale = 0F
     private val m = FloatArray(9)
     private var mMatrix: Matrix = Matrix()
 
-    fun setViewMode(viewMode: ReaderMode?) {
+    private var mPinch = false
+    private var mMagnifierMatrix: Matrix = Matrix()
+    private var mZoomPos: PointF
+    private var mZooming = false
+    private var mPaint: Paint
+    private lateinit var mBitmap: Bitmap
+    private lateinit var mShader: BitmapShader
+    private val mMagnifierScale = 2.5F
+    private val mMagnifierSize = 200F
+
+    fun setViewMode(viewMode: ReaderMode) {
         mViewMode = viewMode
         mSkipScaling = false
         requestLayout()
@@ -68,20 +78,29 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
         mScaleGestureDetector = ScaleGestureDetector(getContext(), PrivateScaleDetector())
         mDragGestureDetector = GestureDetector(getContext(), PrivateDragListener())
         super.setOnTouchListener { v, event ->
-            v?.performClick()
+            v.performClick()
 
+            mPinch = event.pointerCount > 1
             if (event.pointerCount > 1) {
                 mScaleGestureDetector.onTouchEvent(event)
                 parent.requestDisallowInterceptTouchEvent(true)
             } else
                 mDragGestureDetector.onTouchEvent(event)
 
+            if (mZooming)
+                parent.requestDisallowInterceptTouchEvent(true)
+
             mOuterTouchListener?.onTouch(v, event)
+            onTouchEvent(event)
             true
         }
+
         mScroller = OverScroller(context)
         mScroller.setFriction(ViewConfiguration.getScrollFriction() * 2)
-        mViewMode = ReaderMode.ASPECT_FIT
+        mViewMode = ReaderMode.FIT_WIDTH
+
+        mZoomPos = PointF(0F, 0F)
+        mPaint = Paint()
     }
 
     fun autoScroll(isBack: Boolean = false): Boolean {
@@ -154,10 +173,12 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
         val w = dWidth * heightRatio
         if (w < vWidth) {
             mMinScale = vHeight * 0.75f / dHeight
-            mMaxScale = max(dWidth, vWidth) * 1.5f / dWidth
+            mMaxScale = max(dWidth, vWidth) * 4f / dWidth
+            mZoomScale = max(dWidth, vWidth) * 2f / dWidth
         } else {
             mMinScale = vWidth * 0.75f / dWidth
-            mMaxScale = max(dHeight, vHeight) * 1.5f / dHeight
+            mMaxScale = max(dHeight, vHeight) * 4f / dHeight
+            mZoomScale = max(dHeight, vHeight) * 2f / dHeight
         }
         imageMatrix = mMatrix
         mOriginalScale = getCurrentScale()
@@ -235,10 +256,19 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
 
         override fun onDoubleTapEvent(e: MotionEvent): Boolean {
             if (e.action == MotionEvent.ACTION_UP) {
-                val scale = if (mOriginalScale == getCurrentScale()) mMaxScale else mOriginalScale
+                val scale = if (mOriginalScale == getCurrentScale()) mZoomScale else mOriginalScale
                 zoomAnimated(e, scale)
             }
             return true
+        }
+
+        override fun onLongPress(e: MotionEvent?) {
+            super.onLongPress(e)
+            mBitmap = this@PageImageView.drawToBitmap()
+            mShader = BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+            mPaint = Paint()
+            mZooming = true
+            this@PageImageView.invalidate()
         }
     }
 
@@ -262,14 +292,14 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
 
     fun getPointerCoordinate(e: MotionEvent): FloatArray {
         val index = e.actionIndex
-        val coords = floatArrayOf(e.getX(index), e.getY(index))
+        val coordinates = floatArrayOf(e.getX(index), e.getY(index))
         val matrix = Matrix()
         imageMatrix.invert(matrix)
         m[Matrix.MTRANS_X] = mScroller.currX.toFloat()
         m[Matrix.MTRANS_Y] = mScroller.currY.toFloat()
-        matrix.mapPoints(coords)
+        matrix.mapPoints(coordinates)
         val imageSize = computeCurrentImageSize()
-        return floatArrayOf(coords[0], coords[1], imageSize.x.toFloat(), imageSize.y.toFloat())
+        return floatArrayOf(coordinates[0], coordinates[1], imageSize.x.toFloat(), imageSize.y.toFloat())
     }
 
     open fun getCurrentScale(): Float {
@@ -335,6 +365,40 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
             return false
         }
         return true
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        performClick()
+        val action = event?.action ?: return true
+
+        mZoomPos.x = event.x
+        mZoomPos.y = event.y
+
+        when (action) {
+            MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
+                if (mZooming)
+                    this.invalidate()
+            }
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                mZooming = false
+                this.invalidate()
+            }
+            else -> {}
+        }
+
+        return true
+    }
+
+    override fun onDraw(canvas: Canvas?) {
+        super.onDraw(canvas)
+        if (mZooming && !mPinch) {
+            mPaint.shader = mShader
+            mMagnifierMatrix.set(mMatrix)
+            mMagnifierMatrix.reset()
+            mMagnifierMatrix.postScale(mMagnifierScale, mMagnifierScale, mZoomPos.x, mZoomPos.y)
+            mPaint.shader.setLocalMatrix(mMagnifierMatrix)
+            canvas?.drawCircle(mZoomPos.x, mZoomPos.y, mMagnifierSize, mPaint)
+        }
     }
 
     companion object {
