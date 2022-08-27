@@ -3,7 +3,7 @@
     android:id="@+id/vocabulary_content"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="1dp"
+    android:layout_marginBottom="5dp"
     android:orientation="vertical">
 
     <LinearLayout
@@ -55,8 +55,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/vocabulary_manga_list"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:clipToPadding="false"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:scrollbarStyle="outsideOverlay"
         android:scrollbars="horizontal" />

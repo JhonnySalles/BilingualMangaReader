@@ -4,7 +4,8 @@
     android:id="@+id/vocabulary_manga_list_content"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="1dp"
+    android:layout_marginBottom="3dp"
+    android:layout_marginEnd="3dp"
     android:orientation="vertical">
 
     <TextView
@@ -13,8 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:ellipsize="end"
-        android:maxLines="5"
-        android:text="12"
+        android:maxLines="1"
         android:textAppearance="?attr/textAppearanceHeadline6"
         android:textColor="@color/text_primary"
         android:textSize="@dimen/vocabulary_manga_appear_size" />
@@ -38,11 +38,9 @@
 
     <TextView
         android:id="@+id/vocabulary_manga_list_nome"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:maxLines="5"
-        android:text="Manga name"
+        android:maxEms="5"
         android:textAppearance="?attr/textAppearanceHeadline6"
         android:textColor="@color/text_primary"
         android:textSize="@dimen/vocabulary_manga_name_size" />
