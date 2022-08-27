@@ -196,22 +196,18 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
     fun sorted(order: Order) {
         when (order) {
             Order.Date -> {
-                mListMangas.value!!.sortBy { it.dateCreate }
                 mListMangasFull.value!!.sortBy { it.dateCreate }
                 mListMangas.value!!.sortBy { it.dateCreate }
             }
             Order.LastAccess -> {
-                mListMangas.value!!.sortWith(compareByDescending<Manga> { it.lastAccess }.thenBy { it.name })
                 mListMangasFull.value!!.sortWith(compareByDescending<Manga> { it.lastAccess }.thenBy { it.name })
                 mListMangas.value!!.sortWith(compareByDescending<Manga> { it.lastAccess }.thenBy { it.name })
             }
             Order.Favorite -> {
-                mListMangas.value!!.sortWith(compareByDescending<Manga> { it.favorite }.thenBy { it.name })
                 mListMangasFull.value!!.sortWith(compareByDescending<Manga> { it.favorite }.thenBy { it.name })
                 mListMangas.value!!.sortWith(compareByDescending<Manga> { it.favorite }.thenBy { it.name })
             }
             else -> {
-                mListMangas.value!!.sortBy { it.name }
                 mListMangasFull.value!!.sortBy { it.name }
                 mListMangas.value!!.sortBy { it.name }
             }
