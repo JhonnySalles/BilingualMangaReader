@@ -20,4 +20,6 @@
         <attr name="android:layout_margin" format="dimension"  />
         <attr name="android:background" />
     </declare-styleable>
+
+    <bool name="isTablet">false</bool>
 </resources>

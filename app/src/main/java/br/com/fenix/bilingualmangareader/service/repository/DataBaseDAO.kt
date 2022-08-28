@@ -246,6 +246,9 @@ abstract class VocabularyDAO : DataBaseDAO<Vocabulary> {
     @Query("SELECT * FROM " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + " WHERE " + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + " = :idManga GROUP BY " + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY)
     abstract fun findByManga(idManga: Long): List<VocabularyManga>
 
+    @Query("SELECT * FROM " + DataBaseConsts.MANGA.TABLE_NAME + " WHERE " + DataBaseConsts.MANGA.COLUMNS.ID + " = :id")
+    abstract fun getManga(id: Long): Manga
+
     fun insert(dbHelper: SupportSQLiteOpenHelper, idManga: Long, idVocabulary: Long, appears: Int) {
         val database = dbHelper.readableDatabase
         database.execSQL(

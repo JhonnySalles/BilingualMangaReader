@@ -76,7 +76,9 @@
     <dimen name="clock_and_battery_tablet">12sp</dimen>
 
     <dimen name="reader_zoom_magnifier_size">120dp</dimen>
+    <dimen name="reader_zoom_magnifier_tablet_size">200dp</dimen>
     <dimen name="reader_zoom_size">250dp</dimen>
+    <dimen name="reader_zoom_tablet_size">400dp</dimen>
     <dimen name="reader_zoom_border">2dp</dimen>
     <dimen name="reader_button_width">50dp</dimen>
     <dimen name="reader_change_comic_size">40dp</dimen>
