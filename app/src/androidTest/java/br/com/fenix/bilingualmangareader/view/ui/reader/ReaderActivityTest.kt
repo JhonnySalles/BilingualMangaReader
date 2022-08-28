@@ -70,7 +70,7 @@ class ReaderActivityTest {
         onView(withId(R.id.root_frame_reader)).perform(click())
 
         waiter.await(awaitProcessSeconds, TimeUnit.SECONDS)
-        onView(withId(R.id.btn_popup_open_floating)).perform(click())
+        onView(withId(R.id.btn_floating_popup)).perform(click())
 
         waiter.await(awaitProcessSeconds, TimeUnit.SECONDS)
         onView(withId(R.id.root_frame_reader)).perform(click())

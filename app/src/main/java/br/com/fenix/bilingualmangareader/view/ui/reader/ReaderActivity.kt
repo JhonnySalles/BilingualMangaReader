@@ -102,6 +102,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     private val mMonitoringBattery = Runnable { getBatteryPercent() }
     private val mDismissTouchView = Runnable { closeViewTouch() }
 
+    private lateinit var mPreferences: SharedPreferences
     private lateinit var mStorage: Storage
     private lateinit var mRepository: MangaRepository
     private lateinit var mSubtitleController: SubTitleController
@@ -183,7 +184,8 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
                 mBottomSheetColor.state = BottomSheetBehavior.STATE_EXPANDED
             mMenuPopupColor.visibility = View.VISIBLE
         }
-        findViewById<Button>(R.id.btn_popup_open_floating).setOnClickListener { openFloatingSubtitle() }
+        findViewById<Button>(R.id.btn_floating_popup).setOnClickListener { openFloatingSubtitle() }
+        findViewById<Button>(R.id.btn_floating_buttons).setOnClickListener { openFloatingButtons() }
         findViewById<Button>(R.id.btn_screen_rotate).setOnClickListener {
             requestedOrientation = if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -275,10 +277,8 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
 
         mRepository = MangaRepository(applicationContext)
 
-        val sharedPreferences: SharedPreferences =
-            GeneralConsts.getSharedPreferences(this)
-
-        mClockAndBattery.visibility = if (sharedPreferences.getBoolean(GeneralConsts.KEYS.READER.SHOW_CLOCK_AND_BATTERY, false))
+        mPreferences = GeneralConsts.getSharedPreferences(this)
+        mClockAndBattery.visibility = if (mPreferences.getBoolean(GeneralConsts.KEYS.READER.SHOW_CLOCK_AND_BATTERY, false))
             View.VISIBLE
         else
             View.GONE
@@ -398,6 +398,15 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         mViewModel.mLanguageOcr = language
         mLanguageOcrDescription.text = getString(R.string.languages_description, Util.languageToString(this, language))
         mSubToolbar.visibility = View.VISIBLE
+    }
+
+    private fun changeShowBatteryClock(enabled: Boolean) {
+        mClockAndBattery.visibility = if (enabled)
+            View.VISIBLE
+        else
+            View.GONE
+
+        optionsSave(enabled)
     }
 
     fun changePage(title: String, text: String, page: Int) {
@@ -556,14 +565,15 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         if (any == null)
             return
 
-        val sharedPreferences: SharedPreferences =
-            GeneralConsts.getSharedPreferences(this)
         when (any) {
-            is PageMode -> sharedPreferences.edit()
+            is PageMode -> mPreferences.edit()
                 .putString(GeneralConsts.KEYS.READER.PAGE_MODE, any.toString())
                 .apply()
-            is ReaderMode -> sharedPreferences.edit()
+            is ReaderMode -> mPreferences.edit()
                 .putString(GeneralConsts.KEYS.READER.READER_MODE, any.toString())
+                .apply()
+            is Boolean -> mPreferences.edit()
+                .putBoolean(GeneralConsts.KEYS.READER.SHOW_CLOCK_AND_BATTERY, any)
                 .apply()
         }
     }
@@ -606,6 +616,10 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
             }
             R.id.menu_item_floating_buttons -> openFloatingButtons()
             R.id.menu_item_view_touch_screen -> openViewTouch()
+            R.id.menu_item_show_clock_and_battery -> {
+                item.isChecked = !item.isChecked
+                changeShowBatteryClock(item.isChecked)
+            }
         }
         return super.onOptionsItemSelected(item)
     }
