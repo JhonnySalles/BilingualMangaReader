@@ -378,7 +378,8 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         else
             menu.findItem(R.id.reading_right_to_left).isChecked = true
 
-        menu.findItem(R.id.menu_item_use_magnifier_type).isChecked = true
+        menu.findItem(R.id.menu_item_use_magnifier_type).isChecked = mUseMagnifierType
+        menu.findItem(R.id.menu_item_show_clock_and_battery).isChecked = mPreferences.getBoolean(GeneralConsts.KEYS.READER.SHOW_CLOCK_AND_BATTERY, false)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -427,8 +428,12 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             R.id.view_mode_aspect_fill, R.id.view_mode_aspect_fit, R.id.view_mode_fit_width -> {
                 item.isChecked = true
                 mReaderMode = mResourceViewMode[item.itemId] ?: ReaderMode.FIT_WIDTH
-                updatePageViews(mViewPager)
-                saveConfiguration()
+                updatePageViews(mViewPager) {
+                    if (mReaderMode === ReaderMode.ASPECT_FILL) it.setTranslateToRightEdge(
+                        !mIsLeftToRight
+                    )
+                    it.setViewMode(mReaderMode)
+                }
             }
             R.id.reading_left_to_right, R.id.reading_right_to_left -> {
                 item.isChecked = true
@@ -437,42 +442,34 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 setCurrentPage(page, false)
                 mViewPager.adapter?.notifyDataSetChanged()
                 updateSeekBar()
-                saveConfiguration()
             }
             R.id.menu_item_use_magnifier_type -> {
                 item.isChecked = !item.isChecked
                 mUseMagnifierType = item.isChecked
-                updatePageViews(mViewPager)
-                saveConfiguration()
+                updatePageViews(mViewPager) {
+                    it.useMagnifierType = mUseMagnifierType
+                }
+
+                with(mPreferences.edit()) {
+                    this.putBoolean(
+                        GeneralConsts.KEYS.READER.USE_MAGNIFIER_TYPE,
+                        mUseMagnifierType
+                    )
+                    this.commit()
+                }
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun saveConfiguration() {
-        with(mPreferences.edit()) {
-            this.putString(
-                GeneralConsts.KEYS.READER.PAGE_MODE,
-                mIsLeftToRight.toString()
-            )
-
-            this.putString(
-                GeneralConsts.KEYS.READER.READER_MODE,
-                mReaderMode.toString()
-            )
-
-            this.putBoolean(
-                GeneralConsts.KEYS.READER.USE_MAGNIFIER_TYPE,
-                mUseMagnifierType
-            )
-
-            this.commit()
-        }
-    }
-
     fun changeAspect(toolbar: Toolbar, mode: ReaderMode) {
         mReaderMode = mode
-        updatePageViews(mViewPager)
+        updatePageViews(mViewPager) {
+            if (mReaderMode === ReaderMode.ASPECT_FILL) it.setTranslateToRightEdge(
+                !mIsLeftToRight
+            )
+            it.setViewMode(mReaderMode)
+        }
 
         val id: Int = mResourceViewMode.filterValues { it == mode }.keys.first()
         val menuItem: MenuItem = toolbar.menu.findItem(id)
@@ -738,18 +735,14 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         }
     }
 
-    private fun updatePageViews(parentView: ViewGroup) {
+    private fun updatePageViews(parentView: ViewGroup, change: (PageImageView) -> (Unit)) {
         for (i in 0 until parentView.childCount) {
             val child = parentView.getChildAt(i)
             if (child is ViewGroup) {
-                updatePageViews(child)
+                updatePageViews(child, change)
             } else if (child is PageImageView) {
                 val view: PageImageView = child
-                if (mReaderMode === ReaderMode.ASPECT_FILL) view.setTranslateToRightEdge(
-                    !mIsLeftToRight
-                )
-                view.setViewMode(mReaderMode)
-                view.useMagnifierType = mUseMagnifierType
+                change(view)
             }
         }
     }

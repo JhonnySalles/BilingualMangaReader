@@ -226,6 +226,25 @@
                 app:rippleColor="@color/ripple_color" />
 
             <Button
+                android:id="@+id/btn_floating_buttons"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="@dimen/popup_reader_button_width"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:background="@color/primary_semitransparent"
+                android:contentDescription="@string/reading_button_floating_buttons"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minHeight="@dimen/reader_button_width"
+                android:paddingLeft="@dimen/popup_reader_button_padding"
+                android:paddingRight="@dimen/popup_reader_button_padding"
+                android:visibility="gone"
+                app:icon="@drawable/ic_floating_buttons"
+                app:iconSize="28dp"
+                app:iconTint="@color/text_primary"
+                app:rippleColor="@color/ripple_color" />
+
+            <Button
                 android:id="@+id/btn_menu_ocr"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="@dimen/reader_button_width"
@@ -316,7 +335,7 @@
                 app:rippleColor="@color/ripple_color" />
 
             <Button
-                android:id="@+id/btn_popup_open_floating"
+                android:id="@+id/btn_floating_popup"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="@dimen/reader_button_width"
                 android:layout_height="match_parent"

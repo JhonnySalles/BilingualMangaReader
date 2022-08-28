@@ -116,14 +116,20 @@
     <string name="menu_reading_favorite">Favorite</string>
     <string name="menu_reading_order">List order</string>
     <string name="menu_reading_order_change">Sort:</string>
-    <string name="menu_reading_use_magnifier_type">Magnifying zoom</string>
-    <string name="menu_reading_subtitle">Subtitle</string>
-    <string name="menu_reading_color">Page color</string>
-    <string name="menu_reading_file_link">File in another language</string>
+
     <string name="menu_reading_floating">Floating popup</string>
-    <string name="menu_reading_open_kaku">Open Kaku App</string>
     <string name="menu_reading_floating_buttons">Floating buttons</string>
+
+    <string name="menu_reading_options">Reading options</string>
+    <string name="menu_reading_show_clock_and_battery">Clock and battery percent</string>
+    <string name="menu_reading_use_magnifier_type">Magnifying zoom</string>
     <string name="menu_reading_view_touch">Touch functions</string>
+    <string name="menu_reading_color">Page color</string>
+
+    <string name="menu_reading_ocr_file_linked">Ocr and file linked</string>
+    <string name="menu_reading_open_kaku">Open Kaku App</string>
+    <string name="menu_reading_subtitle">Subtitle</string>
+    <string name="menu_reading_file_link">File in another language</string>
 
     <string name="reading_button_screen_rotate">Screen rotate</string>
     <string name="reading_button_page_linked">Page linked</string>
@@ -134,6 +140,7 @@
     <string name="reading_button_next_file">Next file</string>
     <string name="reading_button_previous_file">Previous file</string>
     <string name="reading_button_menu_ocr">Menu OCR</string>
+    <string name="reading_button_floating_buttons">Floating buttons</string>
 
     <string name="reading_page_index">Page index</string>
     <string name="reading_page_empty">File has no folders</string>
