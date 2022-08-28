@@ -105,8 +105,9 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
         mScroller.setFriction(ViewConfiguration.getScrollFriction() * 2)
         mViewMode = ReaderMode.FIT_WIDTH
 
-        mMagnifierSize = resources.getDimension(R.dimen.reader_zoom_size)
-        mMagnifierRadius = resources.getDimension(R.dimen.reader_zoom_magnifier_size)
+        val isTablet = resources.getBoolean(R.bool.isTablet)
+        mMagnifierSize = if (isTablet) resources.getDimension(R.dimen.reader_zoom_tablet_size) else resources.getDimension(R.dimen.reader_zoom_size)
+        mMagnifierRadius = if (isTablet) resources.getDimension(R.dimen.reader_zoom_magnifier_tablet_size) else resources.getDimension(R.dimen.reader_zoom_magnifier_size)
         mMagnifierCenter = mMagnifierSize/2
         mZoomPos = PointF(0F, 0F)
         mPaint = Paint()

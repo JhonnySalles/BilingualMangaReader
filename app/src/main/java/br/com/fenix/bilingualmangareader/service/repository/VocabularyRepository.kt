@@ -5,6 +5,7 @@ import androidx.paging.PagingSource
 import br.com.fenix.bilingualmangareader.model.entity.Chapter
 import br.com.fenix.bilingualmangareader.model.entity.Vocabulary
 import br.com.fenix.bilingualmangareader.model.entity.VocabularyManga
+import br.com.fenix.bilingualmangareader.model.enums.Languages
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -16,7 +17,6 @@ class VocabularyRepository(context: Context) {
     private val mLOGGER = LoggerFactory.getLogger(VocabularyRepository::class.java)
     private val mBase = DataBase.getDataBase(context)
     private var mDataBaseDAO = mBase.getVocabularyDao()
-    private val mMangaDAO = mBase.getMangaDao()
 
     fun save(obj: Vocabulary): Long {
         val exist = mDataBaseDAO.exists(obj.word, obj.basicForm ?: "")
@@ -55,7 +55,7 @@ class VocabularyRepository(context: Context) {
     private fun findByVocabulary(idVocabulary: Long): List<VocabularyManga> {
         val list = mDataBaseDAO.findByVocabulary(idVocabulary)
         list.forEach {
-            it.manga = mMangaDAO.get(it.idManga)
+            it.manga = mDataBaseDAO.getManga(it.idManga)
         }
         return list
     }
@@ -108,15 +108,16 @@ class VocabularyRepository(context: Context) {
             async {
                 try {
                     for (chapter in list)
-                        if (chapter.vocabulary.isNotEmpty())
-                            for (vocabulary in chapter.vocabulary) {
-                                var appears = 0
-                                chapter.pages.forEach { p ->
-                                    p.vocabulary.forEach { v -> if (v == vocabulary) appears++ }
+                        if (chapter.language == Languages.JAPANESE)
+                            if (chapter.vocabulary.isNotEmpty())
+                                for (vocabulary in chapter.vocabulary) {
+                                    var appears = 0
+                                    chapter.pages.forEach { p ->
+                                        p.vocabulary.forEach { v -> if (v == vocabulary) appears++ }
+                                    }
+                                    vocabulary.id = save(vocabulary)
+                                    vocabulary.id?.let { insert(idManga, it, appears) }
                                 }
-                                vocabulary.id = save(vocabulary)
-                                vocabulary.id?.let { insert(idManga, it, appears) }
-                            }
                 } catch (e: Exception) {
                     mLOGGER.error("Error process vocabulary.", e)
                 }
