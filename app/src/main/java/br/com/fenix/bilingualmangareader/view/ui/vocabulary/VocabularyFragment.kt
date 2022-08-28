@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.service.listener.VocabularyCardListener
@@ -26,13 +27,14 @@ import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
 
 
-class VocabularyFragment : Fragment() {
+class VocabularyFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private val mLOGGER = LoggerFactory.getLogger(VocabularyFragment::class.java)
 
     private val mViewModel: VocabularyViewModel by viewModels()
 
     private lateinit var mRoot: ConstraintLayout
+    private lateinit var mRefreshLayout: SwipeRefreshLayout
     private lateinit var mScrollUp: FloatingActionButton
     private lateinit var mScrollDown: FloatingActionButton
     private lateinit var mRecyclerView: RecyclerView
@@ -69,6 +71,7 @@ class VocabularyFragment : Fragment() {
 
         mRoot = root.findViewById(R.id.vocabulary_root)
         mRecyclerView = root.findViewById(R.id.vocabulary_recycler)
+        mRefreshLayout = root.findViewById(R.id.vocabulary_refresh)
 
         mContent = root.findViewById(R.id.vocabulary_content)
         mManga = root.findViewById(R.id.vocabulary_manga_text)
@@ -82,6 +85,13 @@ class VocabularyFragment : Fragment() {
 
         mScrollUp.visibility = View.GONE
         mScrollDown.visibility = View.GONE
+
+        mRefreshLayout.setOnRefreshListener(this)
+        mRefreshLayout.isEnabled = true
+
+        mViewModel.isQuery.observe(viewLifecycleOwner) {
+            mRefreshLayout.isRefreshing = it
+        }
 
         setFavorite(mViewModel.getFavorite())
         mFavoriteButton.setOnClickListener {
@@ -200,5 +210,9 @@ class VocabularyFragment : Fragment() {
     private fun setFavorite(favorite: Boolean) {
         mFavoriteButton.setIconResource(if (favorite) R.drawable.ic_favorite_mark else R.drawable.ic_favorite_unmark)
         mFavoriteButton.setIconTintResource(if (favorite) R.color.on_secondary else R.color.text_primary)
+    }
+
+    override fun onRefresh() {
+        mViewModel.setQuery(mMangaEditText.text.toString(), mVocabularyEditText.text.toString(), mFavoriteButton.isChecked)
     }
 }

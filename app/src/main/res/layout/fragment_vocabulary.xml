@@ -12,26 +12,28 @@
         android:id="@+id/vocabulary_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="true"
-        android:clipChildren="true"
         android:paddingTop="@dimen/default_navigator_header_margin_top"
         android:layout_margin="@dimen/margin_small">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/vocabulary_recycler"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/vocabulary_refresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
-            android:scrollbars="vertical"
             android:layout_marginTop="@dimen/page_link_list_link_margin_top"
-            android:clipToPadding="true"
-            android:scrollbarStyle="outsideOverlay"
             app:layout_constrainedHeight="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/vocabulary_content"
-            app:layout_constraintVertical_bias="0"/>
+            app:layout_constraintTop_toBottomOf="@+id/vocabulary_content">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/vocabulary_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+                android:scrollbarStyle="outsideOverlay"
+                app:layout_constraintVertical_bias="0"/>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <LinearLayout
             android:id="@+id/vocabulary_content"
@@ -50,7 +52,6 @@
                 android:hint="@string/vocabulary_manga"
                 android:textColorHint="@color/text_primary"
                 android:enabled="true"
-                android:layout_marginTop="@dimen/margin_small"
                 app:boxBackgroundColor="@color/primary"
                 app:boxStrokeColor="@color/on_secondary"
                 app:startIconTint="@color/on_secondary"
@@ -63,8 +64,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
-                    android:textColor="@color/text_primary"
-                    />
+                    android:textColor="@color/text_primary" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -145,7 +145,7 @@
             app:borderWidth="@dimen/page_link_up_border"
             app:fabCustomSize="@dimen/page_link_up_width"
             app:maxImageSize="@dimen/page_link_up_image_width"
-            app:layout_constraintTop_toTopOf="@+id/vocabulary_recycler"
+            app:layout_constraintTop_toTopOf="@+id/vocabulary_refresh"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"/>
 
