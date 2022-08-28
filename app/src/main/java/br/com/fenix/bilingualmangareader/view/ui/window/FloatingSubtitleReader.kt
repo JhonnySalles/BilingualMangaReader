@@ -1,6 +1,5 @@
 package br.com.fenix.bilingualmangareader.view.ui.window
 
-import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -56,12 +55,27 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
     private val mOnFlingListener = object : GestureDetector.SimpleOnGestureListener() {
         override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
             if (e1 != null && e2 != null)
-                if (abs(velocityX) > 200 && (e1.x - e2.x > 100 || e2.x - e1.x > 100)) {
-                    dismiss()
+                if (abs(e1.x - e2.x) > 150) {
+                    if (abs(e2.x) > abs(e1.x))
+                        moveWindow(false)
+                    else if (abs(e2.x) < abs(e1.x))
+                        moveWindow(true)
+
                     return false
                 }
 
             return super.onFling(e1, e2, velocityX, velocityY)
+        }
+    }
+
+    private fun moveWindow(toLeft: Boolean) {
+        if (toLeft)
+            layoutParams.x = 0
+        else
+            layoutParams.x = mRealDisplaySize.x - layoutParams.width
+
+        windowManager?.apply {
+            updateViewLayout(mFloatingView, layoutParams)
         }
     }
 
@@ -107,7 +121,9 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
                     touchConsumedByMove = false
                 }
             }
-            else -> { touchConsumedByMove = false }
+            else -> {
+                touchConsumedByMove = false
+            }
         }
         return touchConsumedByMove
     }
@@ -196,7 +212,7 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
 
             mSubtitleText.setOnClickListener(
                 DoubleClick(object : DoubleClickListener {
-                    override fun onSingleClick(view: View?) { }
+                    override fun onSingleClick(view: View?) {}
                     override fun onDoubleClick(view: View?) {
                         mSubTitleController.getNextText()
                     }
@@ -244,6 +260,23 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
                 mOcrKanjiDetail.visibility = View.GONE
             }
 
+            this.findViewById<AppCompatImageButton>(R.id.nav_floating_google_translate)
+                .setOnClickListener {
+                    if (mSubtitleText.text.toString().isNotEmpty()) {
+                        val list = mSubtitleText.text.split(" ").filter { it.isNotEmpty() }.toSet()
+                        val text = list.joinToString("\n")
+
+                        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                        val clip = ClipData.newPlainText("Copied Text", text)
+                        clipboard.setPrimaryClip(clip)
+
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.action_copy, text),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
         }
 
         mGestureDetector = GestureDetector(context, ChangeTextTouchListener())
@@ -420,7 +453,7 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
 
     private var mMinimisedSize = context.resources.getDimension(R.dimen.floating_reader_button_close).toInt()
     private var isExpanded = true
-    fun expanded(expand : Boolean = false) {
+    fun expanded(expand: Boolean = false) {
         if (expand && isExpanded)
             return
 
@@ -499,7 +532,7 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
             changeLayout(false)
             Formatter.generateKanjiColor(text,
                 { kanji -> mOcrText.text = kanji },
-                { kanji, detail ->  setKanjiDetail(kanji, detail) })
+                { kanji, detail -> setKanjiDetail(kanji, detail) })
             mOcrScrollContent.smoothScrollTo(0, 0)
         } else
             mOcrText.text = ""
