@@ -58,7 +58,7 @@ class HistoryViewHolder(itemView: View, private val listener: MangaCardListener)
         } else
             mangaSubTitle.text = manga.subTitle
 
-        mangaLibrary.text = manga.library.title
+        mangaLibrary.text = manga.library.title.uppercase()
         mangaFavorite.visibility = if (manga.favorite) View.VISIBLE else View.GONE
 
         if (manga.excluded)

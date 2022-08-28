@@ -84,7 +84,8 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
                 firstY = lastY
             }
             MotionEvent.ACTION_UP -> {
-                view.performClick()
+                // If use this, call two times on function onDoubleClick
+                //view.performClick()
             }
             MotionEvent.ACTION_MOVE -> {
                 val deltaX = event.rawX.toInt() - lastX
@@ -195,7 +196,7 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
 
             mSubtitleText.setOnClickListener(
                 DoubleClick(object : DoubleClickListener {
-                    override fun onSingleClick(view: View?) {}
+                    override fun onSingleClick(view: View?) { }
                     override fun onDoubleClick(view: View?) {
                         mSubTitleController.getNextText()
                     }

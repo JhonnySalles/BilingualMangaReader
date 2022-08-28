@@ -1,6 +1,5 @@
 package br.com.fenix.bilingualmangareader.view.ui.library
 
-import android.Manifest
 import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
@@ -15,7 +14,6 @@ import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -302,7 +300,11 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         mRefreshLayout.setOnRefreshListener(this)
         mRefreshLayout.isEnabled = true
-        mRefreshLayout.setProgressViewOffset(false, (resources.getDimensionPixelOffset(R.dimen.default_navigator_header_margin_top) + 60)*-1, 10)
+        mRefreshLayout.setProgressViewOffset(
+            false,
+            (resources.getDimensionPixelOffset(R.dimen.default_navigator_header_margin_top) + 60) * -1,
+            10
+        )
 
         mScrollUp.visibility = View.GONE
         mScrollDown.visibility = View.GONE
