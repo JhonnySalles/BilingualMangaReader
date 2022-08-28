@@ -3,6 +3,7 @@ package br.com.fenix.bilingualmangareader.service.repository
 import android.content.Context
 import androidx.paging.PagingSource
 import br.com.fenix.bilingualmangareader.model.entity.Chapter
+import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.entity.Vocabulary
 import br.com.fenix.bilingualmangareader.model.entity.VocabularyManga
 import br.com.fenix.bilingualmangareader.model.enums.Languages
@@ -52,10 +53,15 @@ class VocabularyRepository(context: Context) {
         return vocabulary
     }
 
+
+    private val manga: Set<Manga> = setOf()
     private fun findByVocabulary(idVocabulary: Long): List<VocabularyManga> {
         val list = mDataBaseDAO.findByVocabulary(idVocabulary)
         list.forEach {
-            it.manga = mDataBaseDAO.getManga(it.idManga)
+            it.manga = manga.firstOrNull { m -> m.id == it.idManga }
+
+            if (it.manga == null)
+                it.manga = mDataBaseDAO.getManga(it.idManga)
         }
         return list
     }
