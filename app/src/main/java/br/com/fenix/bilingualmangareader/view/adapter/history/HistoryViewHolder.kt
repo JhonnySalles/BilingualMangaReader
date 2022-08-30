@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Manga
-import br.com.fenix.bilingualmangareader.model.entity.Text
 import br.com.fenix.bilingualmangareader.service.controller.ImageCoverController
 import br.com.fenix.bilingualmangareader.service.listener.MangaCardListener
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts

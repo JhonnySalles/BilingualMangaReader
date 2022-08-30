@@ -3,7 +3,6 @@ package br.com.fenix.bilingualmangareader.service.repository
 import android.content.Context
 import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.enums.Libraries
-import br.com.fenix.bilingualmangareader.model.enums.LibraryType
 import org.slf4j.LoggerFactory
 
 class LibraryRepository(context: Context) {

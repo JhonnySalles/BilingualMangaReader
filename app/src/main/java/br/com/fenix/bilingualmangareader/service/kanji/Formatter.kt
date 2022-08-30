@@ -1,7 +1,6 @@
 package br.com.fenix.bilingualmangareader.service.kanji
 
 import android.content.Context
-import android.os.Build
 import android.text.*
 import android.text.style.ClickableSpan
 import android.text.style.RelativeSizeSpan

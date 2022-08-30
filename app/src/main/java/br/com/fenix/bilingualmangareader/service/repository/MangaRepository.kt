@@ -4,7 +4,6 @@ import android.content.Context
 import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import org.slf4j.LoggerFactory
-import java.time.LocalDateTime
 import java.util.*
 
 class MangaRepository(context: Context) {
@@ -24,13 +23,13 @@ class MangaRepository(context: Context) {
 
     fun updateBookMark(obj: Manga) {
         obj.lastAlteration = Date()
-        obj.lastAccess = Date()
         if (obj.id != null)
             mDataBase.updateBookMark(obj.id!!, obj.bookMark)
     }
 
-    fun updateLastAcess(obj: Manga) {
+    fun updateLastAccess(obj: Manga) {
         obj.lastAlteration = Date()
+        obj.lastAccess = Date()
         if (obj.id != null)
             mDataBase.update(obj)
     }

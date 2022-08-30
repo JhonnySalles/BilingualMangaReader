@@ -1,6 +1,5 @@
 package br.com.fenix.bilingualmangareader.view.ui.window
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.PixelFormat
