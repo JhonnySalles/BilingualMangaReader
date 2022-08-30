@@ -29,8 +29,6 @@ import com.google.android.material.textfield.TextInputLayout
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.IOException
-import java.io.InputStream
-import java.net.URI
 import java.text.SimpleDateFormat
 import java.util.*
 

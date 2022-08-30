@@ -34,7 +34,10 @@ import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.entity.Pages
-import br.com.fenix.bilingualmangareader.model.enums.*
+import br.com.fenix.bilingualmangareader.model.enums.Languages
+import br.com.fenix.bilingualmangareader.model.enums.PageMode
+import br.com.fenix.bilingualmangareader.model.enums.Position
+import br.com.fenix.bilingualmangareader.model.enums.ReaderMode
 import br.com.fenix.bilingualmangareader.service.controller.ImageCoverController
 import br.com.fenix.bilingualmangareader.service.controller.SubTitleController
 import br.com.fenix.bilingualmangareader.service.kanji.Formatter

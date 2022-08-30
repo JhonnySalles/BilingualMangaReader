@@ -1,6 +1,5 @@
 package br.com.fenix.bilingualmangareader.view.components
 
-import android.R.color
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.*

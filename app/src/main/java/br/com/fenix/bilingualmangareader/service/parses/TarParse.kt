@@ -1,7 +1,6 @@
 package br.com.fenix.bilingualmangareader.service.parses
 
 import br.com.fenix.bilingualmangareader.util.helpers.Util
-import com.github.junrar.rarfile.FileHeader
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
 import java.io.*

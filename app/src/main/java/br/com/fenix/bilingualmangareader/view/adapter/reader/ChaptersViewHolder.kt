@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Pages
 import br.com.fenix.bilingualmangareader.service.listener.ChapterCardListener
-import br.com.fenix.bilingualmangareader.view.adapter.page_link.PageLinkViewHolder
 import com.google.android.material.card.MaterialCardView
 
 
