@@ -142,7 +142,7 @@ class ImageCoverController private constructor() {
         return cover
     }
 
-    private fun getMangaCover(context: Context, manga: Manga, isCoverSize: Boolean): Bitmap? {
+    fun getMangaCover(context: Context, manga: Manga, isCoverSize: Boolean): Bitmap? {
         val hash = generateHash(manga.file)
         var image: Bitmap? = null
 

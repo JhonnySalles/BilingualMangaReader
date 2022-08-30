@@ -141,8 +141,6 @@ class Storage(context: Context) {
     }
 
     fun updateLastAccess(manga: Manga) {
-        manga.lastAlteration = LocalDateTime.now()
-        manga.lastAccess = LocalDateTime.now()
         mRepository.updateLastAccess(manga)
     }
 }

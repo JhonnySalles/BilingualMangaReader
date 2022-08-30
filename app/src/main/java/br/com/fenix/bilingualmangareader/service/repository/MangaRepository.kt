@@ -29,6 +29,7 @@ class MangaRepository(context: Context) {
 
     fun updateLastAccess(obj: Manga) {
         obj.lastAlteration = LocalDateTime.now()
+        obj.lastAccess = LocalDateTime.now()
         if (obj.id != null)
             mDataBase.update(obj)
     }
@@ -152,6 +153,22 @@ class MangaRepository(context: Context) {
         } catch (e: Exception) {
             mLOGGER.error("Error when find Manga by file folder: " + e.message, e)
             null
+        }
+    }
+
+    fun getLastedRead() : Pair<Manga?, Manga?> {
+        return try {
+            val last = mDataBase.getLastOpen()
+
+            return if (last != null && last.isNotEmpty()) {
+                val first = last[0]
+                val second = if(last.size > 1) last[1] else null
+                Pair (first, second)
+            } else
+                Pair(null, null)
+        } catch (e: Exception) {
+            mLOGGER.error("Error when find last Manga open: " + e.message, e)
+            Pair(null, null)
         }
     }
 

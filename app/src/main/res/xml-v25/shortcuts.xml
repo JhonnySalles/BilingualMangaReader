@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <shortcut
+        android:shortcutId="library"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_library"
+        android:shortcutShortLabel="@string/menu_library"
+        android:shortcutLongLabel="@string/menu_library"
+        android:shortcutDisabledMessage="@string/menu_library">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="br.com.fenix.bilingualmangareader"
+            android:targetClass="br.com.fenix.bilingualmangareader.MainActivity"
+            android:data="library"/>
+        <categories android:name="android.shortcut.conversation" />
+        <capability-binding android:key="actions.intent.CREATE_MESSAGE" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="history"
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_history"
+        android:shortcutShortLabel="@string/menu_history"
+        android:shortcutLongLabel="@string/menu_history"
+        android:shortcutDisabledMessage="@string/menu_history">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="br.com.fenix.bilingualmangareader"
+            android:targetClass="br.com.fenix.bilingualmangareader.MainActivity"
+            android:data="history"/>
+
+        <categories android:name="android.shortcut.conversation" />
+        <capability-binding android:key="actions.intent.CREATE_MESSAGE" />
+    </shortcut>
+
+</shortcuts>

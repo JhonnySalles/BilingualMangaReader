@@ -1,11 +1,9 @@
 package br.com.fenix.bilingualmangareader
 
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -86,11 +84,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         mFragmentManager = supportFragmentManager
 
-        // content_fragment use for receive fragments layout
-        mFragmentManager.beginTransaction().replace(R.id.main_content_root, LibraryFragment())
-            .commit()
-
         libraries()
+
+        val idLibrary = GeneralConsts.getSharedPreferences(this)
+            .getLong(GeneralConsts.KEYS.LIBRARY.LAST_LIBRARY, GeneralConsts.KEYS.LIBRARY.DEFAULT)
+
+        val library = if (idLibrary != GeneralConsts.KEYS.LIBRARY.DEFAULT)
+            mLibraries.find { it.id == idLibrary } ?: LibraryUtil.getDefault(this)
+        else
+            LibraryUtil.getDefault(this)
+
+        mLibraryModel.setLibrary(library)
+        var fragment: Fragment = LibraryFragment()
+
+        intent.dataString?.let {
+            fragment = when (it) {
+                "history" -> HistoryFragment()
+                else -> fragment
+            }
+        }
+
+        // content_fragment use for receive fragments layout
+        mFragmentManager.beginTransaction().replace(R.id.main_content_root, fragment)
+            .commit()
     }
 
     private fun clearCache() {
@@ -148,9 +164,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.menu_vocabulary -> VocabularyFragment()
             in GeneralConsts.KEYS.LIBRARIES.INDEX_LIBRARIES..(GeneralConsts.KEYS.LIBRARIES.INDEX_LIBRARIES + mLibraries.size) -> {
                 val index = item.itemId - GeneralConsts.KEYS.LIBRARIES.INDEX_LIBRARIES
-                val library = LibraryFragment()
                 mLibraryModel.setLibrary(mLibraries[index])
-                library
+                LibraryFragment()
             }
             else -> null
         }
@@ -195,6 +210,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun openFragment(fragment: Fragment) {
+        if (fragment is LibraryFragment)
+            mLibraryModel.saveLastLibrary()
+
         mFragmentManager.beginTransaction().setCustomAnimations(
             R.anim.slide_fragment_add_enter,
             R.anim.slide_fragment_add_exit,

@@ -18,6 +18,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
 
     private var mLibrary: Library = Library(GeneralConsts.KEYS.LIBRARY.DEFAULT)
     private val mMangaRepository: MangaRepository = MangaRepository(application.applicationContext)
+    private val mPreferences = GeneralConsts.getSharedPreferences(application.applicationContext)
 
     private var mListMangasFull = MutableLiveData<MutableList<Manga>>(mutableListOf())
     private var mListMangas = MutableLiveData<MutableList<Manga>>(mutableListOf())
@@ -36,7 +37,12 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         mLibrary = library
     }
 
-    fun getLibrary() = mLibrary
+    fun saveLastLibrary() {
+        mPreferences.edit().putLong(GeneralConsts.KEYS.LIBRARY.LAST_LIBRARY, mLibrary.id ?: GeneralConsts.KEYS.LIBRARY.DEFAULT).apply()
+    }
+
+    fun getLibrary() =
+        mLibrary
 
     fun save(obj: Manga): Manga {
         if (obj.id == 0L)
@@ -140,7 +146,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
                     } else {
                         mListMangas.value!!.add(manga)
                         mListMangasFull.value!!.add(manga)
-                        indexes.add(Pair(ListMod.ADD, mListMangas.value!!.size -1))
+                        indexes.add(Pair(ListMod.ADD, mListMangas.value!!.size - 1))
                     }
                 }
             }
@@ -159,7 +165,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         } else {
             val list = mMangaRepository.list(mLibrary)
             if (list != null) {
-                indexes.add(Pair(ListMod.FULL, list.size-1))
+                indexes.add(Pair(ListMod.FULL, list.size - 1))
                 mListMangas.value = list.toMutableList()
                 mListMangasFull.value = list.toMutableList()
             } else {
