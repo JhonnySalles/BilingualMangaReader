@@ -455,6 +455,9 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     }
 
     private fun setShortCutManga() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1)
+            return
+
         try {
             val shortcut = getSystemService(ShortcutManager::class.java)
             val lasts = mRepository.getLastedRead()
