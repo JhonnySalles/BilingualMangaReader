@@ -92,6 +92,9 @@ abstract class MangaDAO : DataBaseDAO<Manga> {
     @Query("UPDATE " + DataBaseConsts.MANGA.TABLE_NAME + " SET " + DataBaseConsts.MANGA.COLUMNS.EXCLUDED + " = 0 WHERE " + DataBaseConsts.MANGA.COLUMNS.FK_ID_LIBRARY + " = :library AND " + DataBaseConsts.MANGA.COLUMNS.ID + " = :id")
     abstract fun clearDelete(library: Long?, id: Long)
 
+    @Query("SELECT * FROM " + DataBaseConsts.MANGA.TABLE_NAME + " WHERE " + DataBaseConsts.MANGA.COLUMNS.EXCLUDED + " = 0 ORDER BY " + DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS + " DESC LIMIT 2")
+    abstract fun getLastOpen(): List<Manga>?
+
 }
 
 

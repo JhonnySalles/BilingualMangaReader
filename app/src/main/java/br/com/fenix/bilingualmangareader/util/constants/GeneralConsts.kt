@@ -64,6 +64,7 @@ class GeneralConsts private constructor() {
             const val ORIENTATION = "LAST_ORIENTATION"
             const val LIBRARY_TYPE = "LAST_LIBRARY_TYPE"
             const val DEFAULT = -1L
+            const val LAST_LIBRARY = "LAST_LIBRARY"
         }
 
         object LIBRARIES {
@@ -89,6 +90,7 @@ class GeneralConsts private constructor() {
         }
 
         object MANGA {
+            const val ID = "MANGA_ID"
             const val NAME = "MANGA_NAME"
             const val MARK = "MANGA_MARK"
             const val PAGE_NUMBER = "PAGE_NUMBER"

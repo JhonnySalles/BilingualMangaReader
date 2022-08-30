@@ -4,7 +4,10 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.*
 import android.content.pm.ActivityInfo
+import android.content.pm.ShortcutInfo
+import android.content.pm.ShortcutManager
 import android.graphics.Bitmap
+import android.graphics.drawable.Icon
 import android.net.Uri
 import android.os.*
 import android.provider.Settings
@@ -31,15 +34,14 @@ import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.entity.Pages
-import br.com.fenix.bilingualmangareader.model.enums.Languages
-import br.com.fenix.bilingualmangareader.model.enums.PageMode
-import br.com.fenix.bilingualmangareader.model.enums.Position
-import br.com.fenix.bilingualmangareader.model.enums.ReaderMode
+import br.com.fenix.bilingualmangareader.model.enums.*
+import br.com.fenix.bilingualmangareader.service.controller.ImageCoverController
 import br.com.fenix.bilingualmangareader.service.controller.SubTitleController
 import br.com.fenix.bilingualmangareader.service.kanji.Formatter
 import br.com.fenix.bilingualmangareader.service.listener.ChapterCardListener
 import br.com.fenix.bilingualmangareader.service.ocr.GoogleVision
 import br.com.fenix.bilingualmangareader.service.ocr.OcrProcess
+import br.com.fenix.bilingualmangareader.service.repository.LibraryRepository
 import br.com.fenix.bilingualmangareader.service.repository.MangaRepository
 import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.service.repository.SubTitleRepository
@@ -58,10 +60,13 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
+import org.slf4j.LoggerFactory
 import java.io.File
 
 
 class ReaderActivity : AppCompatActivity(), OcrProcess {
+
+    private val mLOGGER = LoggerFactory.getLogger(ReaderActivity::class.java)
 
     private val mViewModel: ReaderViewModel by viewModels()
 
@@ -309,16 +314,24 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
             else
                 bundle.getInt(GeneralConsts.KEYS.MANGA.MARK)
             changePage(name, "", bookMark)
-        }
+        } else
+            changePage("", "", 0)
 
         if (savedInstanceState == null) {
             mViewModel.clearChapter()
             if (Intent.ACTION_VIEW == intent.action) {
-                val file = File(intent.data!!.path!!)
-                val fragment: ReaderFragment = ReaderFragment.create(mLibrary, file)
-                changePage(file.name, "", -1)
-                mSubtitleController.setFileLink(null)
-                setFragment(fragment)
+                if (intent.extras != null && intent.extras!!.containsKey(GeneralConsts.KEYS.MANGA.ID)) {
+                    val manga = mRepository.get(intent.extras!!.getLong(GeneralConsts.KEYS.MANGA.ID))
+                    manga?.fkLibrary?.let {
+                        val library = LibraryRepository(this)
+                        mLibrary = library.get(it)?: mLibrary
+                    }
+                    initialize(manga)
+                } else
+                    intent.data?.path?.let {
+                        val file = File(it)
+                        initialize(file, 0)
+                    }
             } else {
                 val extras = intent.extras
 
@@ -326,22 +339,37 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
                     mLibrary = extras.getSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY) as Library
 
                 val manga = if (extras != null) (extras.getSerializable(GeneralConsts.KEYS.OBJECT.MANGA) as Manga?) else null
-                val page = extras?.getInt(GeneralConsts.KEYS.MANGA.MARK) ?: 0
+                manga?.let {
+                    it.bookMark = extras?.getInt(GeneralConsts.KEYS.MANGA.MARK) ?: 0
+                }
 
-                val fragment: ReaderFragment = if (manga != null) {
-                    mManga = manga
-                    changePage(manga.title, "", page)
-                    ReaderFragment.create(mLibrary, manga)
-                } else
-                    ReaderFragment.create()
-
-                val fileLink: PagesLinkViewModel by viewModels()
-                mSubtitleController.setFileLink(fileLink.getFileLink(manga))
-                setFragment(fragment)
+                initialize(manga)
             }
         } else
             mFragment = supportFragmentManager.findFragmentById(R.id.root_frame_reader) as ReaderFragment?
+    }
 
+    private fun initialize(manga: Manga?) {
+        val fragment: ReaderFragment = if (manga != null) {
+            setManga(manga)
+            ReaderFragment.create(mLibrary, manga)
+        } else
+            ReaderFragment.create()
+
+        val fileLink: PagesLinkViewModel by viewModels()
+        mSubtitleController.setFileLink(fileLink.getFileLink(manga))
+        setFragment(fragment)
+    }
+
+    private fun initialize(file: File?, page: Int) {
+        val fragment: ReaderFragment = if (file != null) {
+            changePage(file.name, "", page)
+            ReaderFragment.create(mLibrary, file)
+        } else
+            ReaderFragment.create()
+
+        mSubtitleController.setFileLink(null)
+        setFragment(fragment)
     }
 
     private fun switchManga(isNext: Boolean = true) {
@@ -384,7 +412,6 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     }
 
     fun changeManga(manga: Manga) {
-        changePage(manga.title, "", manga.bookMark)
         setManga(manga)
 
         mSubtitleController.clearExternalSubtitlesSelected()
@@ -416,9 +443,53 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         mViewModel.selectPage(page)
     }
 
-    fun setManga(manga: Manga) {
+    private fun setManga(manga: Manga) {
+        changePage(manga.title, "", manga.bookMark)
         mViewModel.clearChapter()
         mManga = manga
+        mRepository.updateLastAccess(manga)
+        setShortCutManga()
+    }
+
+    private fun setShortCutManga() {
+        try {
+            val shortcut = getSystemService(ShortcutManager::class.java)
+            val lasts = mRepository.getLastedRead()
+            val list = mutableListOf<ShortcutInfo>()
+
+            lasts.first?.let {
+                list.add(generateInfo("comic1", it))
+            }
+
+            lasts.second?.let {
+                list.add(generateInfo("comic2", it))
+            }
+
+            shortcut.dynamicShortcuts.clear()
+            shortcut.dynamicShortcuts = list
+        } catch (e: Exception) {
+            mLOGGER.warn("Error generate shortcut: " + e.message, e)
+        }
+    }
+
+    private fun generateInfo(id: String, manga: Manga) : ShortcutInfo {
+        val image = ImageCoverController.instance.getMangaCover(this, manga, true)
+        val icon = if (image != null) Icon.createWithAdaptiveBitmap(image) else Icon.createWithResource(this, R.drawable.ic_shortcut_book)
+
+        val intent = Intent(this, ReaderActivity::class.java)
+        intent.action = Intent.ACTION_VIEW
+        intent.data = Uri.parse(manga.path)
+        intent.extras
+
+        val bundle = Bundle()
+        bundle.putLong(GeneralConsts.KEYS.MANGA.ID, manga.id ?: -1)
+        intent.putExtras(bundle)
+
+        return ShortcutInfo.Builder(this, id)
+            .setShortLabel(manga.title)
+            .setIcon(icon)
+            .setIntent(intent)
+            .build()
     }
 
     private fun dialogPageIndex() {
