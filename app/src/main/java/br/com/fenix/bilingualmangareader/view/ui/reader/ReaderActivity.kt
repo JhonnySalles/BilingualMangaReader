@@ -7,6 +7,10 @@ import android.content.pm.ActivityInfo
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.AdaptiveIconDrawable
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.Icon
 import android.net.Uri
 import android.os.*
@@ -18,6 +22,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.*
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -330,7 +335,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
                     val manga = mRepository.get(intent.extras!!.getLong(GeneralConsts.KEYS.MANGA.ID))
                     manga?.fkLibrary?.let {
                         val library = LibraryRepository(this)
-                        mLibrary = library.get(it)?: mLibrary
+                        mLibrary = library.get(it) ?: mLibrary
                     }
                     initialize(manga)
                 } else
@@ -481,9 +486,24 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         }
     }
 
-    private fun generateInfo(id: String, manga: Manga) : ShortcutInfo {
-        val image = ImageCoverController.instance.getMangaCover(this, manga, true)
-        val icon = if (image != null) Icon.createWithAdaptiveBitmap(image) else Icon.createWithResource(this, R.drawable.ic_shortcut_book)
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    fun getMangaIconAdaptive(manga: Manga): Icon {
+        val image = ImageCoverController.instance.getMangaCover(this, manga, true) ?: return Icon.createWithResource(this, R.drawable.ic_shortcut_book)
+        val bitmapDrawable: Drawable = BitmapDrawable(resources, image)
+        val drawableIcon = AdaptiveIconDrawable(bitmapDrawable, bitmapDrawable)
+        val result = Bitmap.createBitmap(drawableIcon.intrinsicWidth, drawableIcon.intrinsicHeight, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(result)
+        drawableIcon.setBounds(0, 0, canvas.width, canvas.height)
+        drawableIcon.draw(canvas)
+        return Icon.createWithAdaptiveBitmap(result)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N_MR1)
+    private fun generateInfo(id: String, manga: Manga): ShortcutInfo {
+        val icon = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            getMangaIconAdaptive(manga)
+        else
+            Icon.createWithResource(this, R.drawable.ic_shortcut_book)
 
         val intent = Intent(this, ReaderActivity::class.java)
         intent.action = Intent.ACTION_VIEW
