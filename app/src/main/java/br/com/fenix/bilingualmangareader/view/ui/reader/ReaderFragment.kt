@@ -26,6 +26,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -759,7 +760,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         if (fullscreen) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 windowInsetsController.let {
-                    it.hide(WindowInsets.Type.systemBars())
+                    it.hide(WindowInsetsCompat.Type.systemBars())
                     it.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
                 }
                 WindowCompat.setDecorFitsSystemWindows(w, true)
@@ -788,7 +789,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 windowInsetsController.let {
-                    it.show(WindowInsets.Type.systemBars())
+                    it.show(WindowInsetsCompat.Type.systemBars())
                 }
                 //w.setDecorFitsSystemWindows(true)
                 WindowCompat.setDecorFitsSystemWindows(w, false)
