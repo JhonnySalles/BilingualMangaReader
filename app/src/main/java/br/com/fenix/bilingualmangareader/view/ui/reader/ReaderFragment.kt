@@ -790,8 +790,8 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 windowInsetsController.let {
                     it.show(WindowInsets.Type.systemBars())
                 }
+                //w.setDecorFitsSystemWindows(true)
                 WindowCompat.setDecorFitsSystemWindows(w, false)
-                w.setDecorFitsSystemWindows(true)
             } else {
                 getActionBar()?.show()
                 @Suppress("DEPRECATION")
@@ -805,16 +805,24 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 }, 300)
             }
 
-            mRoot.fitsSystemWindows = true
+            w.statusBarColor = resources.getColor(R.color.black)
+            w.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            w.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
+            w.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            w.navigationBarColor = resources.getColor(R.color.black)
+
+            //mRoot.fitsSystemWindows = true
             changeContentsVisibility(fullscreen)
         }
     }
 
-    private val duration = 300L
+    private val duration = 200L
     private fun changeContentsVisibility(isFullScreen: Boolean) {
         val visibility = if (isFullScreen) View.GONE else View.VISIBLE
         val finalAlpha = if (isFullScreen) 0.0f else 1.0f
         val initialAlpha = if (isFullScreen) 1.0f else 0.0f
+        val initialTranslation = if (isFullScreen) 0f else -50f
+        val finalTranslation = if (isFullScreen) -50f else 0f
 
         if (!isFullScreen) {
             mPageNavLayout.visibility = visibility
@@ -824,10 +832,13 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             mPreviousButton.visibility = visibility
 
             mPageNavLayout.alpha = initialAlpha
-            mToolbarBottom.alpha = initialAlpha
             mToolbarTop.alpha = initialAlpha
+            mToolbarBottom.alpha = initialAlpha
             mNextButton.alpha = initialAlpha
             mPreviousButton.alpha = initialAlpha
+
+            mToolbarTop.translationY = initialTranslation
+            mToolbarBottom.translationY = (initialTranslation*-1)
         }
 
         mPageNavLayout.animate().alpha(finalAlpha).setDuration(duration)
@@ -838,16 +849,16 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 }
             })
 
-        mToolbarBottom.animate().alpha(finalAlpha).setDuration(duration)
-            .setListener(object : AnimatorListenerAdapter() {
+        mToolbarBottom.animate().alpha(finalAlpha).translationY(finalTranslation *-1)
+            .setDuration(duration).setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator?) {
                     super.onAnimationEnd(animation)
                     mToolbarBottom.visibility = visibility
                 }
             })
 
-        mToolbarTop.animate().alpha(finalAlpha).setDuration(duration)
-            .setListener(object : AnimatorListenerAdapter() {
+        mToolbarTop.animate().alpha(finalAlpha).translationY(finalTranslation)
+            .setDuration(duration).setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator?) {
                     super.onAnimationEnd(animation)
                     mToolbarTop.visibility = visibility
