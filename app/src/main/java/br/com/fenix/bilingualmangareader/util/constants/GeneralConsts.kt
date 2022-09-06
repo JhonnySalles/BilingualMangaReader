@@ -43,7 +43,7 @@ class GeneralConsts private constructor() {
         @TargetApi(26)
         fun formatterDateTime(context: Context, dateTime: LocalDateTime): String {
             val preferences = getSharedPreferences(context)
-            val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, DATE_PATTERN) + TIME_PATTERN
+            val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, DATE_PATTERN) + " " + TIME_PATTERN
             return dateTime.format(DateTimeFormatter.ofPattern(pattern))
         }
     }
