@@ -10,13 +10,15 @@
     android:focusable="true"
     android:orientation="horizontal"
     android:elevation="2dp">
+
     <!-- Media -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/history_image_card"
+        style="@style/AppBackground.Card"
         android:layout_width="@dimen/history_card_image"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        app:rippleColor="@color/ripple_color">
+        app:rippleColor="?attr/colorTertiary">
 
         <ImageView
             android:id="@+id/history_image_cover"
@@ -43,42 +45,38 @@
 
             <ImageView
                 android:id="@+id/history_favorite"
+                style="@style/IconFavorite"
                 android:layout_width="@dimen/manga_grid_favorite"
                 android:layout_height="@dimen/manga_grid_favorite"
-                android:adjustViewBounds="true"
                 android:background="@drawable/ic_favorite_mark_border"
-                android:backgroundTint="@color/on_primary"
                 android:padding="2dp"
                 android:src="@drawable/ic_favorite_mark"
-                android:visibility="gone"
-                app:tint="@color/secondary" />
+                android:visibility="gone" />
 
             <!-- Title, secondary and supporting text -->
             <TextView
                 android:id="@+id/history_text_title"
+                style="@style/TextNormal.History.Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceHeadline6"
-                android:textColor="@color/text_primary"
                 android:textSize="@dimen/history_title_size" />
+
         </LinearLayout>
 
         <TextView
             android:id="@+id/history_sub_title"
+            style="@style/TextNormal.History.Subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:textAppearance="?attr/textAppearanceSubtitle2"
-            android:textColor="@color/on_secondary"
             android:textSize="@dimen/history_sub_title" />
 
         <TextView
             android:id="@+id/history_library"
+            style="@style/TextNormal.History"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:textAppearance="?attr/textAppearanceSubtitle2"
-            android:textColor="@color/text_primary"
             android:textSize="@dimen/history_library" />
 
     </LinearLayout>

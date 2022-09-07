@@ -58,6 +58,7 @@ import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.FileUtil
 import br.com.fenix.bilingualmangareader.util.helpers.LibraryUtil
 import br.com.fenix.bilingualmangareader.util.helpers.Util
+import br.com.fenix.bilingualmangareader.util.helpers.Util.Utils.getColorFromAttr
 import br.com.fenix.bilingualmangareader.view.adapter.reader.MangaChaptersCardAdapter
 import br.com.fenix.bilingualmangareader.view.components.ComponentsUtil
 import br.com.fenix.bilingualmangareader.view.ui.pages_link.PagesLinkActivity
@@ -238,7 +239,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         mPopupSubtitleConfigurationFragment = PopupSubtitleConfiguration()
         mPopupSubtitleReaderFragment = PopupSubtitleReader()
         mPopupSubtitleVocabularyFragment = PopupSubtitleVocabulary()
-        mPopupSubtitleVocabularyFragment.setBackground(R.color.on_primary)
+        mPopupSubtitleVocabularyFragment.setBackground(getColorFromAttr(R.attr.colorSurface))
 
         mFloatingButtons = FloatingButtons(applicationContext, this)
         mFloatingSubtitleReader = FloatingSubtitleReader(applicationContext, this)
@@ -547,12 +548,12 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         val name = TextView(this)
         name.text = mToolbarTitle.text
         name.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.title_index_dialog_size))
-        name.setTextColor(ContextCompat.getColor(this, R.color.text_primary))
+        name.setTextColor(getColorFromAttr(R.attr.colorPrimary))
         title.addView(name)
         val index = TextView(this)
         index.text = resources.getString(R.string.reading_page_index)
         index.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.title_small_index_dialog_size))
-        index.setTextColor(ContextCompat.getColor(this, R.color.on_secondary))
+        index.setTextColor(getColorFromAttr(R.attr.colorSecondary))
         title.addView(index)
         title.setOnLongClickListener {
             val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -568,7 +569,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
             true
         }
 
-        MaterialAlertDialogBuilder(this, R.style.AppCompatMaterialAlertDialogStyle)
+        MaterialAlertDialogBuilder(this, R.style.AppCompatMaterialAlertList)
             .setCustomTitle(title)
             .setItems(items) { _, selected ->
                 val pageNumber = paths[items[selected]]
@@ -754,7 +755,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
             ContextCompat.getDrawable(this, R.drawable.ic_favorite_mark)
         else
             ContextCompat.getDrawable(this, R.drawable.ic_favorite_unmark)
-        icon?.setTint(getColor(R.color.on_secondary))
+        icon?.setTint(getColorFromAttr(R.attr.colorSecondary))
         favoriteItem.icon = icon
         return super.onPrepareOptionsMenu(menu)
     }
@@ -769,7 +770,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
             ContextCompat.getDrawable(this, R.drawable.ic_favorite_mark)
         else
             ContextCompat.getDrawable(this, R.drawable.ic_favorite_unmark)
-        icon?.setTint(getColor(R.color.on_secondary))
+        icon?.setTint(getColorFromAttr(R.attr.colorSecondary))
         item.icon = icon
         mRepository.update(mManga!!)
     }
@@ -1045,7 +1046,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         val mapLanguage = Util.getLanguages(this)
         val items = mapLanguage.keys.filterNot { it == Util.googleLang }.toTypedArray()
 
-        MaterialAlertDialogBuilder(this, R.style.AppCompatMaterialAlertDialogStyle)
+        MaterialAlertDialogBuilder(this, R.style.AppCompatMaterialAlertList)
             .setTitle(getString(R.string.languages_choice))
             .setItems(items) { _, selectItem ->
                 val language = mapLanguage[items[selectItem]]

@@ -764,7 +764,6 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                     it.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
                 }
                 WindowCompat.setDecorFitsSystemWindows(w, true)
-                w.setDecorFitsSystemWindows(false)
             } else {
                 getActionBar()?.hide()
                 @Suppress("DEPRECATION")
@@ -791,7 +790,6 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 windowInsetsController.let {
                     it.show(WindowInsetsCompat.Type.systemBars())
                 }
-                //w.setDecorFitsSystemWindows(true)
                 WindowCompat.setDecorFitsSystemWindows(w, false)
             } else {
                 getActionBar()?.show()

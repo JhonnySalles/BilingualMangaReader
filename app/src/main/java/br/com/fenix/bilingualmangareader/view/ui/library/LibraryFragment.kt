@@ -34,6 +34,7 @@ import br.com.fenix.bilingualmangareader.service.scanner.Scanner
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.view.adapter.library.MangaGridCardAdapter
 import br.com.fenix.bilingualmangareader.view.adapter.library.MangaLineCardAdapter
+import br.com.fenix.bilingualmangareader.view.components.ComponentsUtil
 import br.com.fenix.bilingualmangareader.view.ui.manga_detail.MangaDetailActivity
 import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -99,6 +100,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 return false
             }
         })
+
         enableSearchView(searchView, !mRefreshLayout.isRefreshing)
         onChangeIconLayout()
     }
@@ -292,12 +294,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         mScrollUp = root.findViewById(R.id.library_scroll_up)
         mScrollDown = root.findViewById(R.id.library_scroll_down)
 
-        mRefreshLayout.setColorSchemeResources(
-            R.color.on_secondary,
-            R.color.on_secondary,
-            R.color.white
-        )
-
+        ComponentsUtil.setThemeColor(requireContext(), mRefreshLayout)
         mRefreshLayout.setOnRefreshListener(this)
         mRefreshLayout.isEnabled = true
         mRefreshLayout.setProgressViewOffset(

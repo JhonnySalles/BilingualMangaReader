@@ -8,15 +8,13 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <TextView
+        style="@style/MainNavigationTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:paddingBottom="@dimen/margin"
         android:paddingStart="@dimen/margin"
         android:text="@string/app_name"
-        android:textSize="@dimen/title_size"
-        android:textStyle="bold"
-        android:textColor="@color/secondary"
-        android:background="@color/semi_transparent"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+        android:textSize="@dimen/title_size"/>
+
 </LinearLayout>

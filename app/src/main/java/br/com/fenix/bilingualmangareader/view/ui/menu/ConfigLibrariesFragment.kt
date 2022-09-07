@@ -180,7 +180,7 @@ class ConfigLibrariesFragment : Fragment() {
     private fun addLibrary(library: Library? = null) {
         val popup = createLibraryPopup(LayoutInflater.from(context), library)
 
-        val dialog = MaterialAlertDialogBuilder(requireContext(), R.style.AppCompatMaterialAlertDialogStyle)
+        val dialog = MaterialAlertDialogBuilder(requireContext(), R.style.AppCompatMaterialAlertDialog)
             .setTitle(getString(R.string.config_libraries_add_library))
             .setView(popup)
             .setCancelable(false)

@@ -58,6 +58,7 @@
 
     <string name="config_option_date_time_format_0">Default (%s)</string>
 
+    <string name="config_tracker_checked">Checked</string>
     <string name="config_monitoring_disconnect">Do you want to disconnect from %1$s\?</string>
     <string name="config_monitoring_mal">My Anime List</string>
 

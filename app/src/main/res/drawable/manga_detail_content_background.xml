@@ -7,6 +7,5 @@
         android:endColor="@color/manga_detail_title_background_bottom"
         android:angle="90"
         android:type="linear"
-        android:useLevel="true"
-        />
+        android:useLevel="true" />
 </shape>

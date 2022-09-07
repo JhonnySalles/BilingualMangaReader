@@ -32,9 +32,7 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="20dp"
             android:contentDescription="@string/config_libraries_add_library"
-            app:backgroundTint="@color/secondary"
             app:srcCompat="@drawable/ic_add_library"
-            app:tint="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -42,32 +40,31 @@
             android:id="@+id/config_library_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/toolbar_transparent"
             android:fitsSystemWindows="true"
-            android:theme="@style/ToolbarContentTheme"
+            android:background="@color/transparent"
+            android:theme="@style/MainToolbarContentTheme.NoElevation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.appcompat.widget.Toolbar
+            <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar_configuration_libraries"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/default_navigator_header_size"
                 android:gravity="start|center"
-                app:popupTheme="@style/MyDarkToolbarStyle"
-                android:theme="@style/ToolbarTheme">
+                app:popupTheme="@style/MainToolbarStyle"
+                android:theme="@style/MainToolbarTheme">
 
                 <TextView
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:layout_marginStart="@dimen/margin"
-                    android:layout_marginBottom="@dimen/margin_small"
+                    style="@style/TextTitle"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
                     android:layout_gravity="top|center"
-                    android:textColor="@color/on_secondary"
+                    android:gravity="center"
                     android:text="@string/config_libraries_title_libraries"
                     android:textSize="@dimen/title_size"/>
 
-            </androidx.appcompat.widget.Toolbar>
+            </com.google.android.material.appbar.MaterialToolbar>
 
         </com.google.android.material.appbar.AppBarLayout>
 

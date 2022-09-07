@@ -94,7 +94,6 @@
 
     <dimen name="popup_reader_button_width">50dp</dimen>
     <dimen name="popup_reader_button_min_height">50dp</dimen>
-    <dimen name="popup_reader_button_padding">10dp</dimen>
 
     <dimen name="popup_reader_color_filter_padding">16dp</dimen>
     <dimen name="popup_reader_blue_light_padding">10dp</dimen>
@@ -131,7 +130,7 @@
     <dimen name="about_app_name">18sp</dimen>
     <dimen name="about_title_size">16sp</dimen>
     <dimen name="about_content_size">12sp</dimen>
-    <dimen name="about_button_text_size">12sp</dimen>
+    <dimen name="about_button_text_size">14sp</dimen>
     <dimen name="about_button_text_size_tablet">18sp</dimen>
     <dimen name="about_button_width">165dp</dimen>
     <dimen name="about_button_width_big">180dp</dimen>
@@ -221,5 +220,8 @@
     <dimen name="kanji_content_text_big_size">16sp</dimen>
     <dimen name="kanji_content_text_normal_size">14sp</dimen>
     <dimen name="kanji_content_text_small_size">12sp</dimen>
+
+    <dimen name="theme_layout_width">130dp</dimen>
+    <dimen name="theme_layout_height">180dp</dimen>
 
 </resources>

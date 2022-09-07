@@ -2,15 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
-    <group android:checkableBehavior="single">
+    <group>
         <item
             android:id="@+id/menu_library_content"
+            android:icon="@drawable/ic_library"
             android:title="@string/menu_libraries">
-            <menu android:id="@+id/menu_library_items" >
+            <menu android:id="@+id/menu_library_items">
                 <item
                     android:id="@+id/menu_library_default"
                     android:icon="@drawable/ic_library"
-                    android:iconTint="@color/white"
                     android:orderInCategory="0"
                     android:title="@string/menu_library"/>
             </menu>
@@ -19,35 +19,30 @@
         <item
             android:id="@+id/menu_history"
             android:icon="@drawable/ic_history"
-            android:iconTint="@color/white"
             android:orderInCategory="100"
             android:title="@string/menu_history" />
 
         <item
             android:id="@+id/menu_vocabulary"
             android:icon="@drawable/ic_vocabulary"
-            android:iconTint="@color/white"
             android:orderInCategory="100"
             android:title="@string/menu_vocabulary" />
 
         <item
             android:id="@+id/menu_configuration"
             android:icon="@drawable/ic_settings"
-            android:iconTint="@color/white"
             android:orderInCategory="100"
             android:title="@string/menu_config" />
 
         <item
             android:id="@+id/menu_help"
             android:icon="@drawable/ic_help"
-            android:iconTint="@color/white"
             android:orderInCategory="100"
             android:title="@string/menu_help" />
 
         <item
             android:id="@+id/menu_about"
             android:icon="@drawable/ic_about"
-            android:iconTint="@color/white"
             android:orderInCategory="100"
             android:title="@string/menu_about" />
     </group>

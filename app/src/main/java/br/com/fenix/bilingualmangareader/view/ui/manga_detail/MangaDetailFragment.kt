@@ -186,13 +186,10 @@ class MangaDetailFragment : Fragment() {
                 mProgress.max = it.pages
                 mProgress.setProgress(it.bookMark, false)
 
-                if (it.favorite) {
+                if (it.favorite)
                     mFavoriteButton.setIconResource(R.drawable.ic_favorite_mark)
-                    mFavoriteButton.setIconTintResource(R.color.on_secondary)
-                } else {
+                else
                     mFavoriteButton.setIconResource(R.drawable.ic_favorite_unmark)
-                    mFavoriteButton.setIconTintResource(R.color.text_primary)
-                }
 
                 if (it.excluded) {
                     mDeleted.text = getString(R.string.manga_detail_manga_deleted)
@@ -214,7 +211,6 @@ class MangaDetailFragment : Fragment() {
                 mProgress.max = 1
                 mProgress.setProgress(0, false)
                 mFavoriteButton.setIconResource(R.drawable.ic_favorite_unmark)
-                mFavoriteButton.setIconTintResource(R.color.text_primary)
             }
         }
 

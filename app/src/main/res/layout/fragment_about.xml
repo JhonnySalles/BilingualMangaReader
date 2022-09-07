@@ -24,12 +24,12 @@
         <!-- Title, secondary and supporting text -->
         <TextView
             android:id="@+id/about_app_name"
+            style="@style/TextTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingTop="5dp"
             android:text="@string/about_app_name"
-            android:textColor="@color/text_primary"
             android:textSize="@dimen/about_app_name" />
 
         <ScrollView
@@ -46,69 +46,65 @@
 
                 <TextView
                     android:id="@+id/about_app_version"
+                    style="@style/TextNormal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="15dp"
                     android:text="@string/about_app_version"
-                    android:textColor="@color/text_primary"
                     android:textSize="@dimen/about_content_size" />
 
                 <TextView
                     android:id="@+id/about_app_version_number"
+                    style="@style/TextTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
-                    android:textColor="@color/on_secondary"
                     android:textSize="@dimen/about_content_size" />
 
                 <com.google.android.material.divider.MaterialDivider
+                    style="@style/MaterialDivider"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin"
-                    android:background="@color/secondary"
-                    app:dividerInsetEnd="16dp"
-                    app:dividerInsetStart="16dp" />
+                    android:layout_margin="@dimen/margin" />
 
                 <TextView
+                    style="@style/TextTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="5dp"
                     android:text="@string/about_app_author"
-                    android:textColor="@color/on_secondary"
                     android:textSize="@dimen/about_title_size" />
 
                 <TextView
+                    style="@style/TextNormal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
                     android:text="@string/about_app_author_name"
-                    android:textColor="@color/text_primary"
                     android:textSize="@dimen/about_content_size" />
 
                 <com.google.android.material.divider.MaterialDivider
+                    style="@style/MaterialDivider"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin"
-                    android:background="@color/secondary"
-                    app:dividerInsetEnd="16dp"
-                    app:dividerInsetStart="16dp" />
+                    android:layout_margin="@dimen/margin" />
 
                 <TextView
+                    style="@style/TextTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="5dp"
                     android:text="@string/about_app_shared_and_rate_us"
-                    android:textColor="@color/on_secondary"
                     android:textSize="@dimen/about_title_size" />
 
                 <TextView
+                    style="@style/TextNormal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="5dp"
                     android:text="@string/about_app_shared_and_rate_us_description"
-                    android:textColor="@color/text_primary"
                     android:textSize="@dimen/about_content_size" />
 
                 <GridLayout
@@ -121,54 +117,46 @@
 
                     <Button
                         android:id="@+id/about_btn_rate_us"
-                        style="@style/Widget.MaterialComponents.Button.Icon"
+                        style="@style/Button"
                         android:layout_width="@dimen/about_button_width_big"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:text="@string/about_app_rate_us"
-                        android:textColor="@color/text_primary"
                         android:textSize="@dimen/about_button_text_size"
-                        app:backgroundTint="@color/on_secondary"
                         app:icon="@drawable/ic_rate_us"
-                        app:iconGravity="start"
-                        app:iconTint="@color/text_primary" />
+                        app:iconGravity="start" />
 
                     <Button
                         android:id="@+id/about_btn_shared"
-                        style="@style/Widget.MaterialComponents.Button.Icon"
+                        style="@style/Button"
                         android:layout_width="@dimen/about_button_width_big"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:text="@string/about_app_shared"
-                        android:textColor="@color/text_primary"
                         android:textSize="@dimen/about_button_text_size"
-                        app:backgroundTint="@color/on_secondary"
-                        app:icon="@drawable/ic_shared"
-                        app:iconTint="@color/text_primary" />
+                        app:icon="@drawable/ic_shared" />
                 </GridLayout>
 
                 <com.google.android.material.divider.MaterialDivider
+                    style="@style/MaterialDivider"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin"
-                    android:background="@color/secondary"
-                    app:dividerInsetEnd="16dp"
-                    app:dividerInsetStart="16dp" />
+                    android:layout_margin="@dimen/margin" />
 
                 <TextView
+                    style="@style/TextTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="5dp"
                     android:text="@string/about_app_contact"
-                    android:textColor="@color/on_secondary"
                     android:textSize="@dimen/about_title_size" />
 
                 <TextView
+                    style="@style/TextNormal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="5dp"
                     android:text="@string/about_app_contact_description"
-                    android:textColor="@color/text_primary"
                     android:textSize="@dimen/about_content_size" />
 
 
@@ -183,70 +171,57 @@
 
                     <Button
                         android:id="@+id/about_btn_suggestion"
-                        style="@style/Widget.MaterialComponents.Button.Icon"
+                        style="@style/Button"
                         android:layout_width="@dimen/about_button_width_big"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:text="@string/about_app_suggestion"
-                        android:textColor="@color/text_primary"
                         android:textSize="@dimen/about_button_text_size"
-                        app:backgroundTint="@color/on_secondary"
-                        app:icon="@drawable/ic_suggestion"
-                        app:iconGravity="start"
-                        app:iconTint="@color/text_primary" />
+                        app:icon="@drawable/ic_suggestion" />
 
                     <Button
                         android:id="@+id/about_btn_email"
-                        style="@style/Widget.MaterialComponents.Button.Icon"
+                        style="@style/Button"
                         android:layout_width="@dimen/about_button_width_big"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:text="@string/about_app_mail"
-                        android:textColor="@color/text_primary"
                         android:textSize="@dimen/about_button_text_size"
-                        app:backgroundTint="@color/on_secondary"
-                        app:icon="@drawable/ic_mail"
-                        app:iconTint="@color/text_primary" />
+                        app:icon="@drawable/ic_mail"/>
 
                     <Button
                         android:id="@+id/about_btn_github"
-                        style="@style/Widget.MaterialComponents.Button.Icon"
+                        style="@style/Button"
                         android:layout_width="@dimen/about_button_width_big"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:text="@string/about_app_github"
-                        android:textAllCaps="false"
-                        android:textColor="@color/text_primary"
                         android:textSize="@dimen/about_button_text_size"
-                        app:backgroundTint="@color/on_secondary"
-                        app:icon="@drawable/ic_web_page"
-                        app:iconTint="@color/text_primary" />
+                        app:icon="@drawable/ic_web_page" />
                 </GridLayout>
 
                 <com.google.android.material.divider.MaterialDivider
+                    style="@style/MaterialDivider"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin"
-                    android:background="@color/secondary"
-                    app:dividerInsetEnd="16dp"
-                    app:dividerInsetStart="16dp" />
+                    android:layout_margin="@dimen/margin" />
 
                 <TextView
+                    style="@style/TextTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="5dp"
                     android:text="@string/about_app_library"
-                    android:textColor="@color/on_secondary"
                     android:textSize="@dimen/about_title_size" />
 
                 <TextView
                     android:id="@+id/about_app_library"
+                    style="@style/TextNormal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:autoLink="all"
                     android:linksClickable="true"
-                    android:paddingTop="5dp"
-                    android:textColor="@color/text_primary" />
+                    android:paddingTop="5dp" />
 
             </LinearLayout>
         </ScrollView>

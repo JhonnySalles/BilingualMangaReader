@@ -27,130 +27,128 @@
 
             <TextView
                 android:id="@+id/help_content_title"
+                style="@style/TextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
                 android:text="@string/help_content"
-                android:textColor="@color/text_primary"
                 android:textSize="@dimen/help_title_size" />
 
             <TextView
                 android:id="@+id/help_library_content"
+                style="@style/TextTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_library_content"
-                android:textColor="@color/on_secondary"
                 android:textSize="@dimen/help_content_size" />
 
             <TextView
                 android:id="@+id/help_reader_content"
+                style="@style/TextTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_reader_content"
-                android:textColor="@color/on_secondary"
                 android:textSize="@dimen/help_content_size" />
 
             <TextView
                 android:id="@+id/help_subtitle_content"
+                style="@style/TextTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_subtitle_content"
-                android:textColor="@color/on_secondary"
                 android:textSize="@dimen/help_content_size" />
 
             <TextView
                 android:id="@+id/help_subtitle_import_content"
+                style="@style/TextTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_subtitle_import_content"
-                android:textColor="@color/on_secondary"
                 android:textSize="@dimen/help_content_size" />
 
             <TextView
                 android:id="@+id/help_subtitle_data_content"
+                style="@style/TextTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_subtitle_data_content"
-                android:textColor="@color/on_secondary"
                 android:textSize="@dimen/help_content_size" />
 
             <TextView
                 android:id="@+id/help_subtitle_vocabulary_content"
+                style="@style/TextTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_subtitle_vocabulary_content"
-                android:textColor="@color/on_secondary"
                 android:textSize="@dimen/help_content_size" />
 
             <TextView
                 android:id="@+id/help_vocabulary_content"
+                style="@style/TextTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_vocabulary_content"
-                android:textColor="@color/on_secondary"
                 android:textSize="@dimen/help_content_size" />
 
             <TextView
                 android:id="@+id/help_kanjis_content"
+                style="@style/TextTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_kanji_content"
-                android:textColor="@color/on_secondary"
                 android:textSize="@dimen/help_content_size" />
 
             <TextView
                 android:id="@+id/help_floating_popup_content"
+                style="@style/TextTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_floating_popup_content"
-                android:textColor="@color/on_secondary"
                 android:textSize="@dimen/help_content_size" />
 
             <TextView
                 android:id="@+id/help_language_support_content"
+                style="@style/TextTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_languages_support_content"
-                android:textColor="@color/on_secondary"
                 android:textSize="@dimen/help_content_size" />
 
             <com.google.android.material.divider.MaterialDivider
+                style="@style/MaterialDivider"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin"
-                android:background="@color/on_secondary"
-                app:dividerInsetEnd="16dp"
-                app:dividerInsetStart="16dp" />
+                android:layout_margin="@dimen/margin"/>
 
             <TextView
                 android:id="@+id/help_library_title"
+                style="@style/TextTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:text="@string/help_library_title"
-                android:textColor="@color/on_secondary"
                 android:textSize="@dimen/help_title_size" />
 
             <TextView
+                style="@style/TextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_library_description_1"
-                android:textColor="@color/text_primary"
                 android:textSize="@dimen/help_content_size" />
 
             <TextView
+                style="@style/TextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_library_description_2"
-                android:textColor="@color/text_primary"
                 android:textSize="@dimen/help_content_size" />
 
             <TextView
+                style="@style/TextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_library_description_3"
-                android:textColor="@color/text_primary"
                 android:textSize="@dimen/help_content_size" />
 
             <ImageView
@@ -164,83 +162,79 @@
                 app:srcCompat="@mipmap/tutorial_library" />
 
             <com.google.android.material.divider.MaterialDivider
+                style="@style/MaterialDivider"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin"
-                android:background="@color/secondary"
-                app:dividerInsetEnd="16dp"
-                app:dividerInsetStart="16dp" />
+                android:layout_margin="@dimen/margin"/>
 
             <TextView
                 android:id="@+id/help_reader_title"
+                style="@style/TextTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:text="@string/help_reader_title"
-                android:textColor="@color/on_secondary"
                 android:textSize="@dimen/help_title_size" />
 
             <TextView
+                style="@style/TextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_reader_description_1"
-                android:textColor="@color/text_primary"
                 android:textSize="@dimen/help_content_size" />
 
             <TextView
+                style="@style/TextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_reader_description_2"
-                android:textColor="@color/text_primary"
                 android:textSize="@dimen/help_content_size" />
 
 
             <TextView
+                style="@style/TextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_reader_description_3"
-                android:textColor="@color/text_primary"
                 android:textSize="@dimen/help_content_size" />
 
 
             <com.google.android.material.divider.MaterialDivider
+                style="@style/MaterialDivider"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin"
-                android:background="@color/secondary"
-                app:dividerInsetEnd="16dp"
-                app:dividerInsetStart="16dp" />
+                android:layout_margin="@dimen/margin" />
 
             <TextView
                 android:id="@+id/help_subtitle_title"
+                style="@style/TextTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:text="@string/help_subtitle_title"
-                android:textColor="@color/on_secondary"
                 android:textSize="@dimen/help_title_size" />
 
             <TextView
+                style="@style/TextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_subtitle_description_1"
-                android:textColor="@color/text_primary"
                 android:textSize="@dimen/help_content_size" />
 
             <TextView
+                style="@style/TextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_subtitle_description_2"
-                android:textColor="@color/text_primary"
                 android:textSize="@dimen/help_content_size" />
 
             <TextView
                 android:id="@+id/help_subtitle_import_title"
+                style="@style/TextTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:text="@string/help_subtitle_import_title"
-                android:textColor="@color/on_secondary"
                 android:textSize="@dimen/help_subtitle_size" />
 
             <ImageView
@@ -254,10 +248,10 @@
                 app:srcCompat="@mipmap/tutorial_import" />
 
             <TextView
+                style="@style/TextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_subtitle_description_external_subtitle"
-                android:textColor="@color/text_primary"
                 android:textSize="@dimen/help_content_size" />
 
             <ImageView
@@ -281,10 +275,10 @@
                 app:srcCompat="@mipmap/tutorial_choice_json_selected" />
 
             <TextView
+                style="@style/TextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_subtitle_description_chapters"
-                android:textColor="@color/text_primary"
                 android:textSize="@dimen/help_content_size" />
 
             <ImageView
@@ -298,26 +292,26 @@
                 app:srcCompat="@mipmap/tutorial_choice_json_option" />
 
             <TextView
+                style="@style/TextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_subtitle_description_translate"
-                android:textColor="@color/text_primary"
                 android:textSize="@dimen/help_content_size" />
 
             <TextView
                 android:id="@+id/help_subtitle_data_title"
+                style="@style/TextTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:text="@string/help_subtitle_data_title"
-                android:textColor="@color/on_secondary"
                 android:textSize="@dimen/help_subtitle_size" />
 
             <TextView
+                style="@style/TextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_subtitle_data"
-                android:textColor="@color/text_primary"
                 android:textSize="@dimen/help_content_size" />
 
             <ImageView
@@ -331,17 +325,17 @@
                 app:srcCompat="@mipmap/tutorial_subtitle" />
 
             <TextView
+                style="@style/TextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_subtitle_data_page"
-                android:textColor="@color/text_primary"
                 android:textSize="@dimen/help_content_size" />
 
             <TextView
+                style="@style/TextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_subtitle_data_button"
-                android:textColor="@color/text_primary"
                 android:textSize="@dimen/help_content_size" />
 
             <LinearLayout
@@ -353,21 +347,17 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    style="IconHelp"
                     android:layout_width="@dimen/help_button_example_width"
                     android:layout_height="@dimen/help_button_example_width"
                     android:layout_margin="@dimen/margin"
-                    android:adjustViewBounds="true"
-                    android:background="@color/primary_variant"
-                    android:scaleType="center"
-                    app:backgroundTint="@color/primary"
-                    app:srcCompat="@drawable/ic_translate"
-                    app:tint="@color/text_primary" />
+                    app:srcCompat="@drawable/ic_translate" />
 
                 <TextView
+                    style="@style/TextNormal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/help_subtitle_data_button_translate"
-                    android:textColor="@color/text_primary"
                     android:textSize="@dimen/help_content_size" />
             </LinearLayout>
 
@@ -381,21 +371,17 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    style="IconHelp"
                     android:layout_width="@dimen/help_button_example_width"
                     android:layout_height="@dimen/help_button_example_width"
                     android:layout_margin="@dimen/margin"
-                    android:adjustViewBounds="true"
-                    android:background="@color/primary_variant"
-                    android:scaleType="center"
-                    app:backgroundTint="@color/primary"
-                    app:srcCompat="@drawable/ic_draw_text"
-                    app:tint="@color/text_primary" />
+                    app:srcCompat="@drawable/ic_draw_text" />
 
                 <TextView
+                    style="@style/TextNormal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/help_subtitle_data_button_draw"
-                    android:textColor="@color/text_primary"
                     android:textSize="@dimen/help_content_size" />
             </LinearLayout>
 
@@ -417,21 +403,17 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    style="IconHelp"
                     android:layout_width="@dimen/help_button_example_width"
                     android:layout_height="@dimen/help_button_example_width"
                     android:layout_margin="@dimen/margin"
-                    android:adjustViewBounds="true"
-                    android:background="@color/primary_variant"
-                    android:scaleType="center"
-                    app:backgroundTint="@color/primary"
-                    app:srcCompat="@drawable/ic_refresh"
-                    app:tint="@color/text_primary" />
+                    app:srcCompat="@drawable/ic_refresh" />
 
                 <TextView
+                    style="@style/TextNormal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/help_subtitle_data_button_find"
-                    android:textColor="@color/text_primary"
                     android:textSize="@dimen/help_content_size" />
             </LinearLayout>
 
@@ -454,50 +436,42 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    style="IconHelp"
                     android:layout_width="@dimen/help_button_example_width"
                     android:layout_height="@dimen/help_button_example_width"
                     android:layout_margin="@dimen/margin"
-                    android:adjustViewBounds="true"
-                    android:background="@color/primary_variant"
-                    android:scaleType="center"
-                    app:backgroundTint="@color/primary"
-                    app:srcCompat="@drawable/ic_navigate_before"
-                    app:tint="@color/text_primary" />
+                    app:srcCompat="@drawable/ic_navigate_before" />
 
                 <ImageView
+                    style="IconHelp"
                     android:layout_width="@dimen/help_button_example_width"
                     android:layout_height="@dimen/help_button_example_width"
                     android:layout_marginRight="@dimen/margin"
-                    android:adjustViewBounds="true"
-                    android:background="@color/primary_variant"
-                    android:scaleType="center"
-                    app:backgroundTint="@color/primary"
-                    app:srcCompat="@drawable/ic_navigate_next"
-                    app:tint="@color/text_primary" />
-
+                    app:srcCompat="@drawable/ic_navigate_next" />
 
                 <TextView
+                    style="@style/TextNormal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/help_subtitle_data_button_next_before"
-                    android:textColor="@color/text_primary"
                     android:textSize="@dimen/help_content_size" />
+
             </LinearLayout>
 
             <TextView
                 android:id="@+id/help_subtitle_vocabulary_title"
+                style="@style/TextTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:text="@string/help_subtitle_vocabulary_title"
-                android:textColor="@color/on_secondary"
                 android:textSize="@dimen/help_subtitle_size" />
 
             <TextView
+                style="@style/TextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_subtitle_data"
-                android:textColor="@color/text_primary"
                 android:textSize="@dimen/help_content_size" />
 
             <ImageView
@@ -511,58 +485,54 @@
                 app:srcCompat="@mipmap/tutorial_vocabulary" />
 
             <com.google.android.material.divider.MaterialDivider
+                style="@style/MaterialDivider"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin"
-                android:background="@color/secondary"
-                app:dividerInsetEnd="16dp"
-                app:dividerInsetStart="16dp" />
+                android:layout_margin="@dimen/margin" />
 
             <TextView
                 android:id="@+id/help_vocabulary_title"
+                style="@style/TextTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:text="@string/help_vocabulary_title"
-                android:textColor="@color/on_secondary"
                 android:textSize="@dimen/help_title_size" />
 
             <TextView
+                style="@style/TextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_vocabulary_description"
-                android:textColor="@color/text_primary"
                 android:textSize="@dimen/help_content_size" />
 
             <com.google.android.material.divider.MaterialDivider
+                style="@style/MaterialDivider"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin"
-                android:background="@color/secondary"
-                app:dividerInsetEnd="16dp"
-                app:dividerInsetStart="16dp" />
+                android:layout_margin="@dimen/margin" />
 
             <TextView
                 android:id="@+id/help_kanjis_title"
+                style="@style/TextTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:text="@string/help_kanji_title"
-                android:textColor="@color/on_secondary"
                 android:textSize="@dimen/help_title_size" />
 
             <TextView
+                style="@style/TextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_kanji_description"
-                android:textColor="@color/text_primary"
                 android:textSize="@dimen/help_content_size" />
 
             <TextView
+                style="@style/TextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_kanji_use"
-                android:textColor="@color/text_primary"
                 android:textSize="@dimen/help_content_size" />
 
             <ImageView
@@ -576,27 +546,25 @@
                 app:srcCompat="@mipmap/tutorial_kanji" />
 
             <com.google.android.material.divider.MaterialDivider
+                style="@style/MaterialDivider"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin"
-                android:background="@color/secondary"
-                app:dividerInsetEnd="16dp"
-                app:dividerInsetStart="16dp" />
+                android:layout_margin="@dimen/margin"/>
 
             <TextView
                 android:id="@+id/help_floating_popup_title"
+                style="@style/TextTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:text="@string/help_floating_popup_title"
-                android:textColor="@color/on_secondary"
                 android:textSize="@dimen/help_title_size" />
 
             <TextView
+                style="@style/TextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_floating_popup_description"
-                android:textColor="@color/text_primary"
                 android:textSize="@dimen/help_content_size" />
 
             <ImageView
@@ -610,10 +578,10 @@
                 app:srcCompat="@mipmap/tutorial_popup" />
 
             <TextView
+                style="@style/TextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_floating_popup_resource"
-                android:textColor="@color/text_primary"
                 android:textSize="@dimen/help_content_size" />
 
             <ImageView
@@ -627,10 +595,10 @@
                 app:srcCompat="@mipmap/tutorial_popup_draw" />
 
             <TextView
+                style="@style/TextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_floating_popup_control"
-                android:textColor="@color/text_primary"
                 android:textSize="@dimen/help_content_size" />
 
             <ImageView
@@ -644,34 +612,32 @@
                 app:srcCompat="@mipmap/tutorial_popup_small" />
 
             <TextView
+                style="@style/TextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_floating_popup_gesture"
-                android:textColor="@color/text_primary"
                 android:textSize="@dimen/help_content_size" />
 
             <com.google.android.material.divider.MaterialDivider
+                style="@style/MaterialDivider"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin"
-                android:background="@color/secondary"
-                app:dividerInsetEnd="16dp"
-                app:dividerInsetStart="16dp" />
+                android:layout_margin="@dimen/margin" />
 
             <TextView
                 android:id="@+id/help_language_support_title"
+                style="@style/TextTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:text="@string/help_languages_support_title"
-                android:textColor="@color/on_secondary"
                 android:textSize="@dimen/help_title_size" />
 
             <TextView
+                style="@style/TextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help_languages_support_description"
-                android:textColor="@color/text_primary"
                 android:textSize="@dimen/help_content_size" />
 
         </LinearLayout>
@@ -679,16 +645,14 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/help_scroll_up"
+        style="@style/FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|center"
         android:layout_margin="@dimen/help_scrolling_button_margin"
-        android:backgroundTint="@color/white"
         android:contentDescription="@string/action_scroll_up"
         app:borderWidth="@dimen/help_scroll_up_border"
-        app:tint="@color/on_secondary"
         android:src="@drawable/ic_up_arrow"
-        app:backgroundTint="@color/on_secondary"
         app:fabCustomSize="@dimen/help_scroll_up_width"
         app:maxImageSize="@dimen/help_scroll_up_image_width" />
 
