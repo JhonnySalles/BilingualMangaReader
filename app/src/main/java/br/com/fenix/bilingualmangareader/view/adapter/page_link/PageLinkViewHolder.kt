@@ -17,6 +17,7 @@ import br.com.fenix.bilingualmangareader.model.enums.Pages
 import br.com.fenix.bilingualmangareader.service.listener.PageLinkCardListener
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.constants.PageLinkConsts
+import br.com.fenix.bilingualmangareader.util.helpers.Util.Utils.getColorFromAttr
 import com.google.android.material.card.MaterialCardView
 import kotlin.math.roundToInt
 
@@ -77,7 +78,7 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
         val dualPageName = itemView.findViewById<TextView>(R.id.dual_page_link_page_name)
         val dualProgress = itemView.findViewById<ProgressBar>(R.id.dual_page_progress_bar)
 
-        root.setBackgroundColor(itemView.context.getColor(R.color.on_primary))
+        root.setBackgroundColor(itemView.context.getColorFromAttr(R.attr.colorSurface))
         pageRoot.setOnClickListener { listener.onClick(page) }
 
         mangaNumber.text = page.mangaPage.toString()
@@ -85,6 +86,8 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
             page.mangaPagePath + "\\" + page.mangaPageName
         else
             page.mangaPageName
+
+        mangaName.visibility = if (mangaName.text.isEmpty()) View.INVISIBLE else View.VISIBLE
 
         if (page.imageMangaPage != null) {
             mangaImage.setImageBitmap(page.imageMangaPage)
@@ -100,6 +103,8 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
             page.fileLinkLeftPagePath + "\\" + page.fileLinkLeftPageName
         else
             page.fileLinkLeftPageName
+
+        pageName.visibility = if (pageName.text.isEmpty()) View.INVISIBLE else View.VISIBLE
 
         if (page.imageLeftFileLinkPage != null) {
             pageImage.setImageBitmap(page.imageLeftFileLinkPage)
@@ -119,6 +124,8 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
             page.fileLinkRightPagePath + "\\" + page.fileLinkRightPageName
         else
             page.fileLinkRightPageName
+
+        dualPageName.visibility = if (dualPageName.text.isEmpty()) View.INVISIBLE else View.VISIBLE
 
         if (page.isDualImage) {
             pageRoot.layoutParams.width = mPageLinkCardWidthInDual
@@ -157,13 +164,13 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
                 }
 
                 DragEvent.ACTION_DRAG_EXITED -> {
-                    root.setBackgroundColor(itemView.context.getColor(R.color.file_link_background))
+                    root.setBackgroundColor(itemView.context.getColorFromAttr(R.attr.colorOnSurfaceInverse))
                     setSelectedPageLink(page, pageRoot, dualPageRoot, isClear = true)
                     true
                 }
 
                 DragEvent.ACTION_DROP -> {
-                    root.setBackgroundColor(itemView.context.getColor(R.color.file_link_background))
+                    root.setBackgroundColor(itemView.context.getColorFromAttr(R.attr.colorOnSurfaceInverse))
                     listener.onDropItem(
                         Pages.valueOf(dragEvent.clipData.getItemAt(PageLinkConsts.CLIPDATA.PAGE_TYPE).text.toString()),
                         Pages.LINKED,
@@ -198,7 +205,7 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
                 }
 
                 DragEvent.ACTION_DRAG_EXITED -> {
-                    root.setBackgroundColor(itemView.context.getColor(R.color.file_link_background))
+                    root.setBackgroundColor(itemView.context.getColorFromAttr(R.attr.colorOnSurfaceInverse))
                     setSelectedPageLink(page, pageRoot, dualPageRoot, isClear = true)
                     true
                 }
@@ -214,7 +221,7 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
                 }
 
                 DragEvent.ACTION_DRAG_ENDED -> {
-                    root.setBackgroundColor(itemView.context.getColor(R.color.file_link_background))
+                    root.setBackgroundColor(itemView.context.getColorFromAttr(R.attr.colorOnSurfaceInverse))
                     val v = dragEvent.localState as View
                     if (!dragEvent.result || v.tag.toString().compareTo(PageLinkConsts.TAG.PAGE_LINK_RIGHT, true) != 0)
                         v.visibility = View.VISIBLE

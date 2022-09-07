@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/theme_card"
+        android:layout_width="@dimen/theme_layout_width"
+        android:layout_height="@dimen/theme_layout_height"
+        android:layout_margin="1dp"
+        app:strokeWidth="3dp"
+        app:strokeColor="?attr/colorPrimaryContainer"
+        app:rippleColor="?attr/colorTertiary">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            style="@style/ThemeBackground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                style="@style/ThemeBackground.Accent"
+                android:layout_width="match_parent"
+                android:layout_height="23dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"       >
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="20dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="10dp">
+
+                    <View
+                        style="@style/ThemeTextTitle"
+                        android:layout_width="60dp"
+                        android:layout_height="5dp"
+                        android:layout_marginBottom="3dp"/>
+
+                    <View
+                        style="@style/ThemeTextNormal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="5dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+                </LinearLayout>
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    style="@style/ThemeIcon"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginEnd="10dp"
+                    android:contentDescription=""
+                    tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+            </LinearLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="50dp"
+                android:layout_height="70dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginStart="20dp"
+                app:strokeWidth="2dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <View
+                    style="@style/ThemeBackground.Card"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="3dp" />
+
+                <LinearLayout
+                    style="@style/ThemeBackground.Card.ContentBackground"
+                    android:layout_width="match_parent"
+                    android:layout_height="26dp"
+                    android:layout_gravity="bottom"
+                    android:gravity="bottom"
+                    android:orientation="vertical">
+
+                    <View
+                        style="@style/ThemeTextNormal.Card.Title"
+                        android:layout_width="40dp"
+                        android:layout_height="5dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_gravity="center"
+                        android:background="@color/white"/>
+
+                    <View
+                        style="@style/ThemeTextNormal.Card.Text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="3dp"
+                        android:layout_gravity="bottom"
+                        android:layout_marginBottom="3dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+                    <ProgressBar
+                        style="@style/ProgressBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp"
+                        android:progress="60"
+                        android:transitionName="transition_progress_bar"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/ThemeTextNormal.Card.Border"
+                    android:layout_width="30dp"
+                    android:layout_height="7dp"
+                    android:layout_marginTop="5dp">
+
+                    <View
+                        style="@style/ThemeTextNormal.Card.Number"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="1dp"/>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout
+                style="@style/ThemeBackground.Accent"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    style="@style/FloatingActionButton"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginStart="5dp"
+                    tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck"
+                    android:contentDescription="" />
+
+                <LinearLayout
+                    style="@style/ThemeTextInput"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_marginStart="5dp"
+                    android:padding="3dp"
+                    android:orientation="horizontal">
+
+                    <View
+                        style="@style/ThemeTextInput.Icon"
+                        android:layout_width="7dp"
+                        android:layout_height="5dp"
+                        android:layout_marginStart="5dp"/>
+
+                    <View
+                        style="@style/ThemeTextInput.Text"
+                        android:layout_width="70dp"
+                        android:layout_height="5dp"
+                        android:layout_marginStart="5dp"/>
+
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/theme_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textAppearance="?attr/textAppearanceHeadline6"
+        android:textSize="@dimen/manga_chapter_number_size"/>
+
+</LinearLayout>

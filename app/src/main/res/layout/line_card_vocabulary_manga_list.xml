@@ -21,10 +21,11 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/vocabulary_manga_list_image_card"
+        style="@style/AppBackground.Card"
         android:layout_width="@dimen/vocabulary_manga_cover_size"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        app:rippleColor="@color/ripple_color">
+        app:rippleColor="?attr/colorTertiary">
 
         <ImageView
             android:id="@+id/vocabulary_manga_list_image_cover"

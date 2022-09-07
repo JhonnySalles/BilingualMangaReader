@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- - - - - - - - - - - - - - - - - - - - -  Blood Red Colors  - - - - - - - - - - - - - - - - - - - - -->
+    <color name="blood_theme_light_text_primary">#FFFFFF</color>
+    <color name="blood_theme_light_text_secondary">#000000</color>
+    <color name="blood_theme_light_title_primary">#006496</color>
+    <color name="blood_theme_light_title_secondary">#FFFFFF</color>
     <color name="blood_theme_seed">#64696F</color>
     <color name="blood_theme_light_primary">#006496</color>
     <color name="blood_theme_light_onPrimary">#FFFFFF</color>

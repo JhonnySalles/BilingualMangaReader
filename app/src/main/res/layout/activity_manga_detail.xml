@@ -3,13 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/AppBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/on_primary"
     android:fitsSystemWindows="true"
     android:clipToPadding="false"
     android:clipChildren="false"
-    android:theme="@style/AppTheme.NoActionBar"
+    android:theme="@style/Theme.MangaReader"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".view.ui.manga_detail.MangaDetailActivity">
 
@@ -29,20 +29,21 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/toolbar_transparent"
         android:fitsSystemWindows="true"
-        android:theme="@style/ToolbarContentTheme"
+        android:background="@color/transparent"
+        android:theme="@style/MainToolbarContentTheme.NoElevation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_manga_detail"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/default_navigator_header_size"
-            android:gravity="start|center"
-            app:popupTheme="@style/MyDarkToolbarStyle"
-            android:theme="@style/ToolbarTheme"/>
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar_manga_detail"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/default_navigator_header_size"
+                android:gravity="start|center"
+                android:background="@android:color/transparent"
+                app:popupTheme="@style/MainToolbarStyle"
+                android:theme="@style/MainToolbarTheme"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 

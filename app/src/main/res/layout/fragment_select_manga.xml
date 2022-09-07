@@ -41,26 +41,24 @@
             android:id="@+id/content_toolbar_select_manga"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/main_toolbar_background"
             android:fitsSystemWindows="true"
-            android:theme="@style/ToolbarContentTheme"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.appcompat.widget.Toolbar
+            <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar_select_manga"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/default_navigator_header_size"
-                app:popupTheme="@style/MyDarkToolbarStyle"
-                android:theme="@style/ToolbarTheme">
+                app:popupTheme="@style/MainToolbarStyle"
+                android:theme="@style/MainToolbarTheme">
 
                 <TextView
                     android:id="@+id/toolbar_select_manga_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
-            </androidx.appcompat.widget.Toolbar>
+            </com.google.android.material.appbar.MaterialToolbar>
 
         </com.google.android.material.appbar.AppBarLayout>
 

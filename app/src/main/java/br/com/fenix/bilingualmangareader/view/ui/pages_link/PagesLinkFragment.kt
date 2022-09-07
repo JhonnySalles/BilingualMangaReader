@@ -36,6 +36,7 @@ import br.com.fenix.bilingualmangareader.service.listener.PageLinkCardListener
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.constants.PageLinkConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util
+import br.com.fenix.bilingualmangareader.util.helpers.Util.Utils.getColorFromAttr
 import br.com.fenix.bilingualmangareader.view.adapter.page_link.PageLinkCardAdapter
 import br.com.fenix.bilingualmangareader.view.adapter.page_link.PageNotLinkCardAdapter
 import br.com.fenix.bilingualmangareader.view.components.ComponentsUtil
@@ -718,12 +719,12 @@ class PagesLinkFragment : Fragment() {
         val name = TextView(requireContext())
         name.text = if (isMangaIndexes) manga else file
         name.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.title_index_dialog_size))
-        name.setTextColor(ContextCompat.getColor(requireContext(), R.color.text_primary))
+        name.setTextColor(requireContext().getColorFromAttr(R.attr.colorPrimary))
         title.addView(name)
         val index = TextView(requireContext())
         index.text = resources.getString(R.string.reading_page_index)
         index.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.title_small_index_dialog_size))
-        index.setTextColor(ContextCompat.getColor(requireContext(), R.color.on_secondary))
+        index.setTextColor(requireContext().getColorFromAttr(R.attr.colorSecondary))
         title.addView(index)
 
         MaterialAlertDialogBuilder(requireActivity(), R.style.AppCompatAlertDialogStyle)
@@ -738,7 +739,7 @@ class PagesLinkFragment : Fragment() {
 
     private fun choiceSelectManga() {
         val origins = requireContext().resources.getStringArray(R.array.origin_manga)
-        MaterialAlertDialogBuilder(requireActivity(), R.style.AppCompatAlertDialogStyle)
+        MaterialAlertDialogBuilder(requireActivity(), R.style.AppCompatMaterialAlertList)
             .setTitle(R.string.page_link_select_origin_manga)
             .setItems(origins) { _, selected ->
                 val origin = origins[selected]

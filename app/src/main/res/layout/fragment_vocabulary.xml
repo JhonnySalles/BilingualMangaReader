@@ -48,25 +48,18 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/vocabulary_manga_text"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/TextInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/vocabulary_manga"
-                android:textColorHint="@color/text_primary"
                 android:enabled="true"
-                app:boxBackgroundColor="@color/primary"
-                app:boxStrokeColor="@color/on_secondary"
-                app:startIconTint="@color/on_secondary"
-                app:startIconDrawable="@drawable/ic_file"
-                app:placeholderTextColor="@color/text_primary"
-                app:hintTextColor="@color/on_secondary">
+                app:startIconDrawable="@drawable/ic_file">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/vocabulary_manga_edittext"
+                    style="@style/TextFieldEditText"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:textColor="@color/text_primary" />
+                    android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -79,51 +72,30 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/vocabulary_favorite"
+                    style="@style/Button.RoundedIconOnly"
                     android:layout_width="@dimen/page_link_pages_index"
                     android:layout_height="match_parent"
                     android:textColor="@color/text_primary"
                     android:contentDescription="@string/page_link_page_index"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:insetTop="0dp"
-                    android:insetRight="0dp"
-                    android:insetBottom="0dp"
-                    android:insetLeft="0dp"
-                    android:textAllCaps="false"
-                    android:padding="0dp"
                     android:layout_marginEnd="5dp"
-                    app:iconPadding="0dp"
-                    app:iconGravity="textStart"
-                    app:rippleColor="@color/ripple_color"
-                    app:strokeWidth="0dp"
-                    app:backgroundTint="@color/primary"
-                    app:icon="@drawable/ic_favorite_unmark"
-                    app:iconTint="@color/text_primary"
-                    app:iconSize="28dp"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
+                    app:iconTint="?attr/colorSecondary"
+                    app:icon="@drawable/ic_favorite_unmark"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/vocabulary_find_text"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    style="@style/TextInputEditText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="@string/vocabulary_find"
-                    android:textColorHint="@color/text_primary"
                     android:enabled="true"
-                    app:boxBackgroundColor="@color/primary"
-                    app:boxStrokeColor="@color/on_secondary"
-                    app:hintTextColor="@color/secondary"
-                    app:startIconDrawable="@drawable/ic_translate"
-                    app:startIconTint="@color/on_secondary"  >
+                    app:startIconDrawable="@drawable/ic_translate"  >
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/vocabulary_find_edittext"
+                        style="@style/TextFieldEditText"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="text"
-                        android:textColor="@color/text_primary"
-                        />
+                        android:layout_height="wrap_content" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -134,16 +106,14 @@
         <!--                                Ended                                -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/vocabulary_scroll_up"
+            style="@style/FloatingActionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|center"
             android:layout_margin="@dimen/page_link_scrolling_button_margin"
-            android:backgroundTint="@color/white"
             android:contentDescription="@string/action_scroll_up"
             android:visibility="gone"
-            app:tint="@color/on_secondary"
             android:src="@drawable/ic_up_arrow"
-            app:backgroundTint="@color/on_secondary"
             app:borderWidth="@dimen/page_link_up_border"
             app:fabCustomSize="@dimen/page_link_up_width"
             app:maxImageSize="@dimen/page_link_up_image_width"
@@ -153,16 +123,14 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/vocabulary_scroll_down"
+            style="@style/FloatingActionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
             android:layout_margin="@dimen/page_link_scrolling_button_margin"
-            android:backgroundTint="@color/white"
             android:contentDescription="@string/action_scroll_down"
             android:visibility="gone"
-            app:tint="@color/on_secondary"
             android:src="@drawable/ic_down_arrow"
-            app:backgroundTint="@color/on_secondary"
             app:borderWidth="@dimen/page_link_down_border"
             app:fabCustomSize="@dimen/page_link_down_width"
             app:maxImageSize="@dimen/page_link_down_image_width"

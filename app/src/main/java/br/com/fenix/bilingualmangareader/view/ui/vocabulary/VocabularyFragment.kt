@@ -18,13 +18,17 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.service.listener.VocabularyCardListener
+import br.com.fenix.bilingualmangareader.util.helpers.Util
+import br.com.fenix.bilingualmangareader.util.helpers.Util.Utils.getColorFromAttr
 import br.com.fenix.bilingualmangareader.view.adapter.vocabulary.VocabularyCardAdapter
+import br.com.fenix.bilingualmangareader.view.components.ComponentsUtil
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
+import kotlin.math.absoluteValue
 
 
 class VocabularyFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
@@ -86,6 +90,7 @@ class VocabularyFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         mScrollUp.visibility = View.GONE
         mScrollDown.visibility = View.GONE
 
+        ComponentsUtil.setThemeColor(requireContext(), mRefreshLayout)
         mRefreshLayout.setOnRefreshListener(this)
         mRefreshLayout.isEnabled = true
 
@@ -209,7 +214,7 @@ class VocabularyFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun setFavorite(favorite: Boolean) {
         mFavoriteButton.setIconResource(if (favorite) R.drawable.ic_favorite_mark else R.drawable.ic_favorite_unmark)
-        mFavoriteButton.setIconTintResource(if (favorite) R.color.on_secondary else R.color.text_primary)
+        //mFavoriteButton.setIconTintResource(if (favorite) R.color.on_secondary else R.color.text_primary)
     }
 
     override fun onRefresh() {

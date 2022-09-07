@@ -8,7 +8,10 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.DisplayMetrics
+import android.util.TypedValue
 import android.widget.Toast
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
 import androidx.appcompat.app.AlertDialog
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Library
@@ -383,7 +386,7 @@ class Util {
 
         fun choiceLanguage(
             context: Context,
-            theme: Int = R.style.AppCompatMaterialAlertDialogStyle,
+            theme: Int = R.style.AppCompatMaterialAlertList,
             ignoreGoogle: Boolean = true,
             setLanguage: (language: Languages) -> (Unit)
         ) {
@@ -434,6 +437,16 @@ class Util {
             val string2 = if (postion >= text.length) "" else text.substring(postion, text.length)
 
             return Pair(string1, string2)
+        }
+
+        @ColorInt
+        fun Context.getColorFromAttr(
+            @AttrRes attrColor: Int,
+            typedValue: TypedValue = TypedValue(),
+            resolveRefs: Boolean = true
+        ): Int {
+            theme.resolveAttribute(attrColor, typedValue, resolveRefs)
+            return typedValue.data
         }
     }
 }
@@ -525,7 +538,7 @@ class MsgUtil {
             context: Context,
             title: String,
             message: String,
-            theme: Int = R.style.AppCompatMaterialAlertDialogStyle,
+            theme: Int = R.style.AppCompatMaterialAlertDialog,
             crossinline action: (dialog: DialogInterface, which: Int) -> Unit
         ) {
             MaterialAlertDialogBuilder(context, theme)
@@ -542,7 +555,7 @@ class MsgUtil {
             context: Context,
             title: String,
             message: String,
-            theme: Int = R.style.AppCompatMaterialAlertDialogStyle,
+            theme: Int = R.style.AppCompatMaterialAlertDialog,
             crossinline positiveAction: (dialog: DialogInterface, which: Int) -> Unit,
             crossinline negativeAction: (dialog: DialogInterface, which: Int) -> Unit
         ) {

@@ -57,6 +57,7 @@
     <string name="config_system_format_date">Formato de data</string>
     <string name="config_option_date_time_format_0">Padrão (%s)</string>
 
+    <string name="config_tracker_checked">Ativo</string>
     <string name="config_monitoring_disconnect">Deseja desconectar do %1$s\?</string>
     <string name="config_monitoring_mal">My Anime List</string>
 

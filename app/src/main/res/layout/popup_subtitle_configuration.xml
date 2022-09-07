@@ -2,9 +2,9 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/on_primary"
     tools:context=".view.ui.reader.PopupSubtitleConfiguration">
 
     <LinearLayout
@@ -16,18 +16,14 @@
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/switch_use_page_linked_in_search_translate"
+            style="@style/SwitchMaterial"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:checked="false"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:text="@string/popup_reading_use_page_linked_in_search"
-            android:textColor="@color/text_primary"
-            android:theme="@style/SwitchMaterial" />
+            android:text="@string/popup_reading_use_page_linked_in_search" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/txt_external_subtitle_select_path"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            style="@style/TextInputWithoutDropMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_small"
@@ -35,16 +31,10 @@
             android:layout_marginTop="32dp"
             android:layout_marginEnd="32dp"
             android:hint="@string/popup_reading_import_subtitle_file"
-            android:textColorHint="@color/text_primary"
-            app:endIconMode="clear_text"
-            app:boxBackgroundColor="@color/primary"
-            app:boxStrokeColor="@color/on_secondary"
-            app:hintTextColor="@color/on_secondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:startIconDrawable="@drawable/ic_sd_storage"
-            app:startIconTint="@color/on_secondary">
+            app:startIconDrawable="@drawable/ic_sd_storage">
 
             <AutoCompleteTextView
                 android:id="@+id/menu_autocomplete_external_subtitle_select_path"
@@ -56,46 +46,34 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/cb_subtitle_selected"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            style="@style/TextInputDropMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_small"
             android:hint="@string/popup_reading_import_subtitle_selected"
-            android:textColorHint="@color/text_primary"
-            app:boxBackgroundColor="@color/primary"
-            app:boxStrokeColor="@color/on_secondary"
-            app:hintTextColor="@color/on_secondary"
-            app:startIconDrawable="@drawable/ic_language"
-            app:startIconTint="@color/on_secondary">
+            app:startIconDrawable="@drawable/ic_language">
 
             <AutoCompleteTextView
                 android:id="@+id/menu_autocomplete_subtitle_selected"
+                style="@style/AutoCompleteDropMenu"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="none"
-                android:textColor="@color/text_primary" />
+                android:layout_height="match_parent" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/cb_subtitle_language"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            style="@style/TextInputDropMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_small"
             android:hint="@string/popup_reading_import_subtitle_translate"
-            android:textColorHint="@color/text_primary"
-            app:boxBackgroundColor="@color/primary"
-            app:boxStrokeColor="@color/on_secondary"
-            app:hintTextColor="@color/on_secondary"
-            app:startIconDrawable="@drawable/ic_translate"
-            app:startIconTint="@color/on_secondary">
+            app:startIconDrawable="@drawable/ic_translate">
 
             <AutoCompleteTextView
                 android:id="@+id/menu_autocomplete_subtitle_language"
+                style="@style/AutoCompleteDropMenu"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="none"
-                android:textColor="@color/text_primary" />
+                android:layout_height="match_parent" />
         </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
