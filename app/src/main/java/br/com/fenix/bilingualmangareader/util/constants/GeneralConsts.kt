@@ -135,6 +135,11 @@ class GeneralConsts private constructor() {
         object FRAGMENT {
             const val ID = "FRAGMENT_ID"
         }
+
+        object THEME {
+            const val THEME_USED = "THEME_USED"
+            const val THEME_MODE = "THEME_MODE"
+        }
     }
 
     object TAG {

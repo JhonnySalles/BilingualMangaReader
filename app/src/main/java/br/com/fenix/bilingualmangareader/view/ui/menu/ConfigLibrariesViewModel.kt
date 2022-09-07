@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import br.com.fenix.bilingualmangareader.model.entity.Library
+import br.com.fenix.bilingualmangareader.model.enums.Themes
 import br.com.fenix.bilingualmangareader.service.repository.LibraryRepository
 
 class ConfigLibrariesViewModel(application: Application) : AndroidViewModel(application) {
@@ -12,10 +13,13 @@ class ConfigLibrariesViewModel(application: Application) : AndroidViewModel(appl
     private val mRepository: LibraryRepository = LibraryRepository(application.applicationContext)
 
     private var mListLibraries = MutableLiveData<MutableList<Library>>(mutableListOf())
-    val listLibraries: LiveData<MutableList<Library>> = mListLibraries
+    val libraries: LiveData<MutableList<Library>> = mListLibraries
+
+    private var mListThemes: MutableLiveData<MutableList<Pair<Themes, Boolean>>> = MutableLiveData(arrayListOf())
+    val themes: LiveData<MutableList<Pair<Themes, Boolean>>> = mListThemes
 
 
-    fun new(library: Library) {
+    fun newLibrary(library: Library) {
         if (library.title.isEmpty() || library.path.isEmpty())
             return
 
@@ -26,13 +30,13 @@ class ConfigLibrariesViewModel(application: Application) : AndroidViewModel(appl
             val deleted = mRepository.findDeleted(library.path)
             if (deleted != null)
                 library.id = deleted.id
-            add(library)
+            addLibrary(library)
         }
 
-        save(library)
+        saveLibrary(library)
     }
 
-    fun add(library: Library, position: Int = -1) {
+    fun addLibrary(library: Library, position: Int = -1) {
         if (mListLibraries.value!!.contains(library))
             mListLibraries.value!![mListLibraries.value!!.indexOf(library)].merge(library)
         else if (position > -1)
@@ -43,38 +47,47 @@ class ConfigLibrariesViewModel(application: Application) : AndroidViewModel(appl
         mListLibraries.value = mListLibraries.value
     }
 
-    fun delete(library: Library) {
+    fun deleteLibrary(library: Library) {
         if (library.id != null)
             mRepository.delete(library)
     }
 
-    fun save(library: Library) {
+    fun saveLibrary(library: Library) {
         if (library.id == null)
             library.id = mRepository.save(library)
         else
             mRepository.update(library)
     }
 
-    fun findDeleted(path: String): Library? {
+    fun findLibraryDeleted(path: String): Library? {
         return mRepository.findDeleted(path)
     }
 
-    fun load() {
+    fun loadLibrary() {
         val libraries = mRepository.list()
         mListLibraries.value = libraries.toMutableList()
     }
 
-    fun getAndRemove(position: Int): Library? {
+    fun loadThemes(initial: Themes = Themes.ORIGINAL) {
+        mListThemes.value = Themes.values().map { Pair(it, it == initial) }.toMutableList()
+    }
+
+    fun getLibraryAndRemove(position: Int): Library? {
         return if (mListLibraries.value != null) mListLibraries.value!!.removeAt(position) else null
     }
 
-    fun removeDefault(path: String) {
+    fun removeLibraryDefault(path: String) {
         mRepository.removeDefault(path)
         mListLibraries.value!!.removeIf { it.path.equals(path, true) }
     }
 
-    fun getList(): List<Library> {
+    fun getListLibrary(): List<Library> {
         return mListLibraries.value?.filter { it.enabled } ?: mutableListOf()
+    }
+
+    fun setEnableTheme(theme: Themes) {
+        if (mListThemes.value != null)
+            mListThemes.value = mListThemes.value!!.map { Pair(it.first, it.first == theme) }.toMutableList()
     }
 
 }

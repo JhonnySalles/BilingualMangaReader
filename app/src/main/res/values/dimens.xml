@@ -126,6 +126,8 @@
 
     <dimen name="config_tracker_ico_size">48dp</dimen>
     <dimen name="config_tracker_margin">10dp</dimen>
+    <dimen name="config_theme_height">200dp</dimen>
+    <dimen name="config_theme_selected_stroke">3dp</dimen>
 
     <dimen name="about_app_name">18sp</dimen>
     <dimen name="about_title_size">16sp</dimen>
