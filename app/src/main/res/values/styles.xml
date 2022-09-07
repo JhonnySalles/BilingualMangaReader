@@ -439,7 +439,13 @@
         <item name="android:textAppearance">?attr/textAppearanceHeadline6</item>
     </style>
 
-    <style name="TextNormal.Library" parent="TextTitle">
+    <style name="TextNormal.Library" parent="TextNormal">
+        <item name="android:ellipsize">end</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:textAppearance">?attr/textAppearanceSubtitle1</item>
+    </style>
+
+    <style name="TextTitle.Library" parent="TextTitle">
         <item name="android:ellipsize">end</item>
         <item name="android:padding">5dp</item>
         <item name="android:textAppearance">?attr/textAppearanceSubtitle1</item>

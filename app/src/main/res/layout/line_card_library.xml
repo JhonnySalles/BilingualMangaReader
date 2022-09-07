@@ -33,7 +33,7 @@
 
         <TextView
             android:id="@+id/library_line_path"
-            style="@style/TextNormal.Library"
+            style="@style/TextTitle.Library"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
