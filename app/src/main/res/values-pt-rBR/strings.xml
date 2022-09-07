@@ -38,6 +38,7 @@
     <string name="config_title_file_link">Arquivo vinculado</string>
     <string name="config_title_monitoring">Monitoramento</string>
     <string name="config_title_database">Banco de dados</string>
+    <string name="config_title_themes">Temas</string>
 
     <string name="config_switch_use_path_name_for_linked">Utilizar o caminho da página para vincular as páginas?</string>
     <string name="config_switch_use_dual_page_calculate">Considerar página dupla pelo calculo das dimensões?</string>
@@ -72,6 +73,26 @@
     <string name="config_database_error_read_file">Ocorreu um erro ao ler o arquivo.</string>
     <string name="config_database_error_restore">Ocorreu um erro ao restaurar o backup informado, backup revertido ao arquivo original.</string>
     <string name="config_database_error_new_database">Ocorreu um erro ao restaurar o backup e a versão anterior não pode ser restaurado. Uma nova base foi criada.</string>
+
+    <string name="config_theme_mode">Modo tema</string>
+    <string-array name="theme_mode">
+        <item>Sistema</item>
+        <item>Claro</item>
+        <item>Escuro</item>
+    </string-array>
+
+    <string-array name="themes">
+        <item>Original</item>
+        <item>Blood Red</item>
+        <item>Azul</item>
+        <item>Forest Green</item>
+        <item>Verde</item>
+        <item>Azul Neon</item>
+        <item>Verde Neon</item>
+        <item>Ocean Blue</item>
+        <item>Rosa</item>
+        <item>Vermelho</item>
+    </string-array>
 
     <!-- CONFIG LIBRARIES -->
     <string name="config_libraries_title_libraries">Bibliotecas</string>

@@ -66,7 +66,7 @@ class ConfigLibrariesFragment : Fragment() {
             }
 
             override fun changeEnable(library: Library) {
-                mViewModel.save(library)
+                mViewModel.saveLibrary(library)
             }
         }
         (mRecycleView.adapter as LibrariesLineCardAdapter).attachListener(mListener)
@@ -74,7 +74,7 @@ class ConfigLibrariesFragment : Fragment() {
 
         observer()
 
-        mViewModel.load()
+        mViewModel.loadLibrary()
     }
 
     override fun onCreateView(
@@ -105,7 +105,7 @@ class ConfigLibrariesFragment : Fragment() {
         }
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-            val library = mViewModel.getAndRemove(viewHolder.adapterPosition) ?: return
+            val library = mViewModel.getLibraryAndRemove(viewHolder.adapterPosition) ?: return
             val position = viewHolder.adapterPosition
             var excluded = false
             val dialog: AlertDialog =
@@ -115,12 +115,12 @@ class ConfigLibrariesFragment : Fragment() {
                     .setPositiveButton(
                         R.string.action_delete
                     ) { _, _ ->
-                        mViewModel.delete(library)
+                        mViewModel.deleteLibrary(library)
                         notifyDataSet(position, removed = true)
                         excluded = true
                     }.setOnDismissListener {
                         if (!excluded) {
-                            mViewModel.add(library, position)
+                            mViewModel.addLibrary(library, position)
                             notifyDataSet(position)
                         }
                     }
@@ -141,7 +141,7 @@ class ConfigLibrariesFragment : Fragment() {
     }
 
     private fun observer() {
-        mViewModel.listLibraries.observe(viewLifecycleOwner) {
+        mViewModel.libraries.observe(viewLifecycleOwner) {
             (mRecycleView.adapter as LibrariesLineCardAdapter).updateList(it)
         }
     }
@@ -195,7 +195,7 @@ class ConfigLibrariesFragment : Fragment() {
         dialog.show()
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
             if (validate()) {
-                mViewModel.new(getLibrary())
+                mViewModel.newLibrary(getLibrary())
                 dialog.dismiss()
             }
         }

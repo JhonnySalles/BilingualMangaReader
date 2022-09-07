@@ -17,6 +17,7 @@ import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.enums.Languages
+import br.com.fenix.bilingualmangareader.model.enums.Themes
 import br.com.fenix.bilingualmangareader.service.parses.Parse
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -384,6 +385,51 @@ class Util {
                 ""
         }
 
+        private var mapThemes: HashMap<String, Themes>? = null
+        fun getThemes(context: Context): HashMap<String, Themes> {
+            return if (mapThemes != null)
+                mapThemes!!
+            else {
+                val themes = context.resources.getStringArray(R.array.themes)
+                mapThemes = hashMapOf(
+                    themes[0] to Themes.ORIGINAL,
+                    themes[1] to Themes.BLOOD_RED,
+                    themes[2] to Themes.BLUE,
+                    themes[3] to Themes.FOREST_GREEN,
+                    themes[4] to Themes.GREEN,
+                    themes[5] to Themes.NEON_BLUE,
+                    themes[6] to Themes.NEON_GREEN,
+                    themes[7] to Themes.OCEAN_BLUE,
+                    themes[8] to Themes.PINK,
+                    themes[9] to Themes.RED,
+                )
+                mapThemes!!
+            }
+        }
+
+        fun themeDescription(context: Context, themes: Themes): String {
+            val mapThemes = getThemes(context)
+            return if (mapThemes.containsValue(themes))
+                mapThemes.filter { themes == it.value }.keys.first()
+            else
+                ""
+        }
+
+        fun getTheme(theme: Themes): Int {
+            return when (theme) {
+                Themes.BLOOD_RED -> R.style.Theme_MangaReader_BloodRed
+                Themes.BLUE -> R.style.Theme_MangaReader_Blue
+                Themes.FOREST_GREEN -> R.style.Theme_MangaReader_ForestGreen
+                Themes.GREEN -> R.style.Theme_MangaReader_Green
+                Themes.NEON_BLUE -> R.style.Theme_MangaReader_NeonBlue
+                Themes.NEON_GREEN -> R.style.Theme_MangaReader_Green
+                Themes.OCEAN_BLUE -> R.style.Theme_MangaReader_OceanBlue
+                Themes.PINK -> R.style.Theme_MangaReader_Pink
+                Themes.RED -> R.style.Theme_MangaReader_Red
+                else -> R.style.Theme_MangaReader
+            }
+        }
+
         fun choiceLanguage(
             context: Context,
             theme: Int = R.style.AppCompatMaterialAlertList,
@@ -516,7 +562,7 @@ class FileUtil(val context: Context) {
 
 class MsgUtil {
     companion object MsgUtil {
-        fun validPermission(grantResults: IntArray) : Boolean {
+        fun validPermission(grantResults: IntArray): Boolean {
             var permiss = true
             for (grant in grantResults)
                 if (grant != PackageManager.PERMISSION_GRANTED) {

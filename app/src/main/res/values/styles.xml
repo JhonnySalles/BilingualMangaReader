@@ -59,7 +59,6 @@
         <item name="tint">?attr/colorPrimaryContainer</item>
     </style>
 
-
     <style name="TouchDemonstration" >
         <item name="android:textSize">@dimen/reader_touch_demonstration_text_size</item>
         <item name="android:shadowColor">@color/shadow</item>
@@ -109,6 +108,10 @@
 
     <style name="AppBackground.Reader" parent="AppBackground">
         <item name="android:background">?attr/colorOnSurfaceInverse</item>
+    </style>
+
+    <style name="AppBackground.Popup" parent="AppBackground">
+        <item name="android:background">?attr/colorOnSurface</item>
     </style>
 
     <style name="MainToolbarContentTheme" parent="Theme.MaterialComponents">
@@ -394,6 +397,10 @@
         <item name="android:textColor">?attr/colorError</item>
     </style>
 
+    <style name="TextTitle.Popup" parent="TextTitle">
+        <item name="tint">?attr/colorSecondary</item>
+    </style>
+
     <style name="TextNormal.Card" parent="TextNormal">
         <item name="android:ellipsize">end</item>
         <item name="android:maxLines">5</item>
@@ -598,5 +605,17 @@
         <item name="android:background">?attr/colorSurface</item>
         <item name="android:textColor">?attr/colorPrimary</item>
     </style>
+
+    <style name="PopupTab" parent="AppBackground">
+        <item name="tabSelectedTextColor">?attr/colorTertiaryContainer</item>
+        <item name="tabTextAppearance">@style/TextPopupTab</item>
+        <item name="tabTextColor">?attr/colorPrimary</item>
+    </style>
+
+    <style name="TextPopupTab" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
 
 </resources>

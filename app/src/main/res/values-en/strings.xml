@@ -38,6 +38,7 @@
     <string name="config_title_file_link">File link</string>
     <string name="config_title_monitoring">Monitoring</string>
     <string name="config_title_database">Database</string>
+    <string name="config_title_themes">Themes</string>
 
     <string name="config_switch_use_path_name_for_linked">Use page path to link pages?</string>
     <string name="config_switch_use_dual_page_calculate">Consider double page by calculating dimensions?</string>
@@ -73,6 +74,26 @@
     <string name="config_database_error_read_file">An error occurred when reading the file.</string>
     <string name="config_database_error_restore">An error occurred while restoring the informed backup, reverted to the original file.</string>
     <string name="config_database_error_new_database">An error occurred while restoring the backup and the previous version cannot be restored. A new base has been created.</string>
+
+    <string name="config_theme_mode">Theme mode</string>
+    <string-array name="theme_mode">
+        <item>System</item>
+        <item>Light</item>
+        <item>Dark</item>
+    </string-array>
+
+    <string-array name="themes">
+        <item>Original</item>
+        <item>Blood Red</item>
+        <item>Blue</item>
+        <item>Forest Green</item>
+        <item>Green</item>
+        <item>Neon Blue</item>
+        <item>Neon Green</item>
+        <item>Ocean Blue</item>
+        <item>Pink</item>
+        <item>Red</item>
+    </string-array>
 
     <!-- CONFIG LIBRARIES -->
     <string name="config_libraries_title_libraries">Libraries</string>

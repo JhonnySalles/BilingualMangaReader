@@ -95,6 +95,57 @@
                 android:layout_width="wrap_content"
                 android:layout_marginStart="@dimen/margin"
                 android:layout_marginBottom="@dimen/margin_small"
+                android:text="@string/config_title_themes"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txt_theme_mode"
+                style="@style/TextInputDropMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_small"
+                android:hint="@string/config_theme_mode"
+                app:startIconDrawable="@drawable/ic_theme_mode">
+
+                <AutoCompleteTextView
+                    android:id="@+id/menu_autocomplete_theme_mode"
+                    style="@style/AutoCompleteDropMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_themes"
+                android:tag="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/config_theme_height"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:scrollbarStyle="outsideOverlay"
+                android:scrollbars="horizontal"
+                android:layout_margin="@dimen/margin_small"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_bias="0"
+                app:layout_constraintHorizontal_bias="0"/>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/MaterialDivider"
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginLeft="@dimen/margin"
+                android:layout_marginRight="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin_small"/>
+
+            <TextView
+                style="@style/TextTitle"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin_small"
                 android:text="@string/config_title_sub_title"/>
 
             <com.google.android.material.textfield.TextInputLayout
