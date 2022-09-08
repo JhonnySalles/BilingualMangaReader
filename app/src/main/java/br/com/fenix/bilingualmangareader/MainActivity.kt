@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import br.com.fenix.bilingualmangareader.model.entity.Library
+import br.com.fenix.bilingualmangareader.model.enums.ThemeMode
 import br.com.fenix.bilingualmangareader.service.listener.MainListener
 import br.com.fenix.bilingualmangareader.service.repository.LibraryRepository
 import br.com.fenix.bilingualmangareader.service.scanner.Scanner
@@ -54,6 +56,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         Thread.setDefaultUncaughtExceptionHandler { t, e ->
             mLOGGER.error("*** CRASH APP *** ", e)
             mDefaultUncaughtHandler?.uncaughtException(t, e)
+        }
+
+        when (ThemeMode.valueOf(
+            GeneralConsts.getSharedPreferences(this).getString(GeneralConsts.KEYS.THEME.THEME_MODE, ThemeMode.SYSTEM.toString())!!
+        )) {
+            ThemeMode.DARK -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            ThemeMode.LIGHT -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            else -> {}
         }
 
         clearCache()
