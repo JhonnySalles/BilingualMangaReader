@@ -1,14 +1,19 @@
 package br.com.fenix.bilingualmangareader.model.enums
 
-enum class Themes {
-    ORIGINAL,
-    BLOOD_RED,
-    BLUE,
-    FOREST_GREEN,
-    GREEN,
-    NEON_BLUE,
-    NEON_GREEN,
-    OCEAN_BLUE,
-    PINK,
-    RED;
+import br.com.fenix.bilingualmangareader.R
+
+enum class Themes(private val value: Int) {
+    ORIGINAL(R.style.Theme_MangaReader),
+    BLOOD_RED(R.style.Theme_MangaReader_BloodRed),
+    BLUE(R.style.Theme_MangaReader_Blue),
+    FOREST_GREEN(R.style.Theme_MangaReader_ForestGreen),
+    GREEN(R.style.Theme_MangaReader_Green),
+    NEON_BLUE(R.style.Theme_MangaReader_NeonBlue),
+    NEON_GREEN(R.style.Theme_MangaReader_NeonGreen),
+    OCEAN_BLUE(R.style.Theme_MangaReader_OceanBlue),
+    PINK(R.style.Theme_MangaReader_Pink),
+    RED(R.style.Theme_MangaReader_Red);
+
+    open fun getValue() : Int = this.value
+
 }
