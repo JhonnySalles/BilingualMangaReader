@@ -102,10 +102,9 @@
         colorOnBackground = Background accent
         colorOnSurfaceInverse = Background card
 
-        colorSurfaceVariant, colorOnSurfaceVariant =
+        colorSurfaceVariant, colorOnSurfaceVariant = Menu colors
 
         colorOnTertiary, colorTertiaryContainer = Card text and background semi transparent
-
 
         colorPrimaryContainer, colorOnPrimaryContainer = Button, ProgressBar, selected page
         colorSecondaryContainer, colorOnSecondaryContainer = Floating popup, button and background
@@ -140,8 +139,8 @@
     <color name="manga_reader_theme_light_onBackground">#b2dc60</color>
     <color name="manga_reader_theme_light_surface">#e6e7e4</color>
     <color name="manga_reader_theme_light_onSurface">#cdcfc9</color>
-    <color name="manga_reader_theme_light_surfaceVariant">#1d9902</color>
-    <color name="manga_reader_theme_light_onSurfaceVariant">#b2dc60</color>
+    <color name="manga_reader_theme_light_surfaceVariant">#FFFFFF</color>
+    <color name="manga_reader_theme_light_onSurfaceVariant">#84FF1D</color>
     <color name="manga_reader_theme_light_outline">#74796D</color>
     <color name="manga_reader_theme_light_inverseOnSurface">#0B2000</color>
     <color name="manga_reader_theme_light_inverseSurface">#79f300</color>
@@ -170,8 +169,8 @@
     <color name="manga_reader_theme_dark_onBackground">#212121</color>
     <color name="manga_reader_theme_dark_surface">#000000</color>
     <color name="manga_reader_theme_dark_onSurface">#1A1C18</color>
-    <color name="manga_reader_theme_dark_surfaceVariant">#1d9902</color>
-    <color name="manga_reader_theme_dark_onSurfaceVariant">#6FE000</color>
+    <color name="manga_reader_theme_dark_surfaceVariant">#FFFFFF</color>
+    <color name="manga_reader_theme_dark_onSurfaceVariant">#84FF1D</color>
     <color name="manga_reader_theme_dark_outline">#84FF1D</color>
     <color name="manga_reader_theme_dark_inverseOnSurface">#1A1C18</color>
     <color name="manga_reader_theme_dark_inverseSurface">#E3E3DC</color>

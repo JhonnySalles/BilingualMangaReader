@@ -685,7 +685,7 @@ class ConfigFragment : Fragment() {
             override fun onClick(theme: Pair<Themes, Boolean>) {
                 mThemeSelect = theme.first
                 mViewModel.setEnableTheme(theme.first)
-                requireContext().theme.applyStyle(Util.getTheme(mThemeSelect), true)
+                requireContext().theme.applyStyle(mThemeSelect.getValue(), true)
             }
         }
 

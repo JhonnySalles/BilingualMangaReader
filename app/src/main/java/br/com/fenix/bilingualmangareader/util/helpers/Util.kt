@@ -5,6 +5,7 @@ import android.content.*
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.content.res.Resources
+import android.content.res.TypedArray
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.DisplayMetrics
@@ -12,6 +13,8 @@ import android.util.TypedValue
 import android.widget.Toast
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
+import androidx.annotation.StyleRes
+import androidx.annotation.StyleableRes
 import androidx.appcompat.app.AlertDialog
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Library
@@ -20,6 +23,7 @@ import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.model.enums.Themes
 import br.com.fenix.bilingualmangareader.service.parses.Parse
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import br.com.fenix.bilingualmangareader.util.helpers.Util.Utils.getColorFromAttr
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.*
 import java.math.BigInteger
@@ -415,21 +419,6 @@ class Util {
                 ""
         }
 
-        fun getTheme(theme: Themes): Int {
-            return when (theme) {
-                Themes.BLOOD_RED -> R.style.Theme_MangaReader_BloodRed
-                Themes.BLUE -> R.style.Theme_MangaReader_Blue
-                Themes.FOREST_GREEN -> R.style.Theme_MangaReader_ForestGreen
-                Themes.GREEN -> R.style.Theme_MangaReader_Green
-                Themes.NEON_BLUE -> R.style.Theme_MangaReader_NeonBlue
-                Themes.NEON_GREEN -> R.style.Theme_MangaReader_Green
-                Themes.OCEAN_BLUE -> R.style.Theme_MangaReader_OceanBlue
-                Themes.PINK -> R.style.Theme_MangaReader_Pink
-                Themes.RED -> R.style.Theme_MangaReader_Red
-                else -> R.style.Theme_MangaReader
-            }
-        }
-
         fun choiceLanguage(
             context: Context,
             theme: Int = R.style.AppCompatMaterialAlertList,
@@ -494,6 +483,7 @@ class Util {
             theme.resolveAttribute(attrColor, typedValue, resolveRefs)
             return typedValue.data
         }
+
     }
 }
 
