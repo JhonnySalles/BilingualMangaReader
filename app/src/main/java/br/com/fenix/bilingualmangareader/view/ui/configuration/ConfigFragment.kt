@@ -13,8 +13,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.bilingualmangareader.MainActivity
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.enums.*
@@ -49,7 +47,7 @@ class ConfigFragment : Fragment() {
 
     private lateinit var mThemeMode: TextInputLayout
     private lateinit var mThemeModeAutoComplete: AutoCompleteTextView
-    private lateinit var mThemes: RecyclerView
+    private lateinit var mThemes: ListView
 
     private lateinit var mDefaultSubtitleLanguage: TextInputLayout
     private lateinit var mDefaultSubtitleLanguageAutoComplete: AutoCompleteTextView
@@ -105,7 +103,7 @@ class ConfigFragment : Fragment() {
 
         mThemeMode = view.findViewById(R.id.txt_theme_mode)
         mThemeModeAutoComplete = view.findViewById(R.id.menu_autocomplete_theme_mode)
-        mThemes = view.findViewById(R.id.recycler_themes)
+        mThemes = view.findViewById(R.id.list_themes)
 
         mDefaultSubtitleLanguage = view.findViewById(R.id.txt_default_subtitle_language)
         mDefaultSubtitleLanguageAutoComplete =
@@ -638,7 +636,12 @@ class ConfigFragment : Fragment() {
             )
         ) View.VISIBLE else View.GONE
 
-        mThemeModeSelect = ThemeMode.valueOf(sharedPreferences.getString(GeneralConsts.KEYS.THEME.THEME_MODE, ThemeMode.SYSTEM.toString())!!)
+        mThemeModeSelect = ThemeMode.valueOf(
+            sharedPreferences.getString(
+                GeneralConsts.KEYS.THEME.THEME_MODE,
+                ThemeMode.SYSTEM.toString()
+            )!!
+        )
         mThemeSelect = Themes.valueOf(sharedPreferences.getString(GeneralConsts.KEYS.THEME.THEME_USED, Themes.ORIGINAL.toString())!!)
 
         mThemeModeAutoComplete.setText(
@@ -675,12 +678,6 @@ class ConfigFragment : Fragment() {
     }
 
     private fun prepareThemes() {
-        val lineAdapter = ThemesCardAdapter()
-        mThemes.adapter = lineAdapter
-        val layout = GridLayoutManager(requireContext(), 1)
-        layout.orientation = RecyclerView.HORIZONTAL
-        mThemes.layoutManager = layout
-
         val listener = object : ThemesListener {
             override fun onClick(theme: Pair<Themes, Boolean>) {
                 mThemeSelect = theme.first
@@ -689,11 +686,18 @@ class ConfigFragment : Fragment() {
             }
         }
 
-        val theme = Themes.valueOf(GeneralConsts.getSharedPreferences(requireContext()).getString(GeneralConsts.KEYS.THEME.THEME_USED, Themes.ORIGINAL.toString())!!)
+        val lineAdapter = ThemesCardAdapter(requireContext(), listener)
+        mThemes.adapter = lineAdapter
+        mViewModel.themes.observe(viewLifecycleOwner) {
+            lineAdapter.updateList(it)
+        }
+
+        val theme = Themes.valueOf(
+            GeneralConsts.getSharedPreferences(requireContext())
+                .getString(GeneralConsts.KEYS.THEME.THEME_USED, Themes.ORIGINAL.toString())!!
+        )
         mViewModel.loadThemes(theme)
 
-        lineAdapter.attachListener(listener)
-        mViewModel.themes.observe(viewLifecycleOwner) { lineAdapter.updateList(it) }
     }
 
 }
