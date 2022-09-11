@@ -219,11 +219,14 @@ class Migrations {
         // Migration version 9.
         val MIGRATION_9_10 = object : Migration(9, 10) {
             override fun migrate(database: SupportSQLiteDatabase) {
-
                 mLOGGER.info("Start migration 9 - 10...")
 
-                database.execSQL("ALTER TABLE " + DataBaseConsts.VOCABULARY.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.VOCABULARY.COLUMNS.FAVORITE + "  INTEGER DEFAULT 0")
-                database.execSQL("ALTER TABLE " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.APPEARS + "  INTEGER DEFAULT 0")
+                try {
+                    database.execSQL("ALTER TABLE " + DataBaseConsts.VOCABULARY.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.VOCABULARY.COLUMNS.FAVORITE + "  INTEGER DEFAULT 0")
+                    database.execSQL("ALTER TABLE " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.APPEARS + "  INTEGER DEFAULT 0")
+                } catch (e: Exception) {
+                    // Has a Exception because it was shortened in the commit version, it will not be necessary to add the except because it already has the field.
+                }
 
                 mLOGGER.info("Completed migration 9 - 10.")
             }
@@ -234,6 +237,8 @@ class Migrations {
             override fun migrate(database: SupportSQLiteDatabase) {
 
                 mLOGGER.info("Start migration 10 - 11...")
+
+                database.execSQL("ALTER TABLE " + DataBaseConsts.MANGA.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.MANGA.COLUMNS.HAS_SUBTITLE + "  INTEGER DEFAULT 0")
 
                 mLOGGER.info("Completed migration 10 - 11.")
             }

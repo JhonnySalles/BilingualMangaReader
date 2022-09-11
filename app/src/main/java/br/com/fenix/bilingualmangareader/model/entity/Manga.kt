@@ -15,13 +15,14 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
     constructor(
         id: Long?, title: String, subTitle: String,
         path: String, folder: String, name: String, type: String,
-        pages: Int, bookMark: Int, favorite: Boolean,
+        pages: Int, bookMark: Int, favorite: Boolean, hasSubtitle: Boolean,
         dateCreate: Date?, lastAccess: Date?,
         lastAlteration : Date?, fkLibrary: Long?,
         sort: Date? = null
     ) : this(id, title, subTitle, path, folder, name, type, pages, fkLibrary) {
         this.bookMark = bookMark
         this.favorite = favorite
+        this.hasSubtitle = hasSubtitle
         this.dateCreate = dateCreate
         this.lastAccess = lastAccess
         this.lastAccess = lastAlteration
@@ -31,13 +32,14 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
     constructor(
         id: Long?, title: String, subTitle: String,
         path: String, folder: String, name: String, type: String,
-        pages: Int, bookMark: Int, favorite: Boolean,
+        pages: Int, bookMark: Int, favorite: Boolean, hasSubtitle: Boolean,
         dateCreate: Date?, lastAccess: Date?,
         lastAlteration: Date?, fkLibrary: Long?,
         excluded: Boolean = false
     ) : this(id, title, subTitle, path, folder, name, type, pages, fkLibrary) {
         this.bookMark = bookMark
         this.favorite = favorite
+        this.hasSubtitle = hasSubtitle
         this.dateCreate = dateCreate
         this.lastAccess = lastAccess
         this.lastAlteration = lastAlteration
@@ -80,6 +82,9 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
 
     @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.FAVORITE)
     var favorite: Boolean = false
+
+    @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.HAS_SUBTITLE)
+    var hasSubtitle: Boolean = false
 
     @ColumnInfo(name = DataBaseConsts.MANGA.COLUMNS.DATE_CREATE)
     var dateCreate: Date? = Date()

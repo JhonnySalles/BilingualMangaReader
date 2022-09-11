@@ -15,6 +15,7 @@ class DataBaseConsts private constructor() {
             const val FILE_TYPE = "type"
             const val FILE_FOLDER = "folder"
             const val FAVORITE = "favorite"
+            const val HAS_SUBTITLE = "hasSubtitle"
             const val DATE_CREATE = "dateCreate"
             const val LAST_ACCESS = "lastAccess"
             const val EXCLUDED = "excluded"
