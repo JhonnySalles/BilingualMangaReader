@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.enums.ThemeMode
+import br.com.fenix.bilingualmangareader.model.enums.Themes
 import br.com.fenix.bilingualmangareader.service.listener.MainListener
 import br.com.fenix.bilingualmangareader.service.repository.LibraryRepository
 import br.com.fenix.bilingualmangareader.service.scanner.Scanner
@@ -51,12 +52,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private val mDefaultUncaughtHandler = Thread.getDefaultUncaughtExceptionHandler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
         Thread.setDefaultUncaughtExceptionHandler { t, e ->
             mLOGGER.error("*** CRASH APP *** ", e)
             mDefaultUncaughtHandler?.uncaughtException(t, e)
         }
+
+        val theme = Themes.valueOf(
+            GeneralConsts.getSharedPreferences(this).getString(GeneralConsts.KEYS.THEME.THEME_USED, Themes.ORIGINAL.toString())!!
+        )
+        setTheme(theme.getValue())
+
+        super.onCreate(savedInstanceState)
 
         when (ThemeMode.valueOf(
             GeneralConsts.getSharedPreferences(this).getString(GeneralConsts.KEYS.THEME.THEME_MODE, ThemeMode.SYSTEM.toString())!!
@@ -96,21 +102,36 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         libraries()
 
-        val idLibrary = GeneralConsts.getSharedPreferences(this)
-            .getLong(GeneralConsts.KEYS.LIBRARY.LAST_LIBRARY, GeneralConsts.KEYS.LIBRARY.DEFAULT)
+        var fragment: Fragment
+        if (GeneralConsts.getSharedPreferences(this)
+                .getBoolean(GeneralConsts.KEYS.THEME.THEME_CHANGE, false)
+        ) {
+            with(GeneralConsts.getSharedPreferences(this).edit()) {
+                this.putBoolean(
+                    GeneralConsts.KEYS.THEME.THEME_CHANGE,
+                    false
+                )
+                this.commit()
+            }
 
-        val library = if (idLibrary != GeneralConsts.KEYS.LIBRARY.DEFAULT)
-            mLibraries.find { it.id == idLibrary } ?: LibraryUtil.getDefault(this)
-        else
-            LibraryUtil.getDefault(this)
+            fragment = ConfigFragment()
+        } else {
+            val idLibrary = GeneralConsts.getSharedPreferences(this)
+                .getLong(GeneralConsts.KEYS.LIBRARY.LAST_LIBRARY, GeneralConsts.KEYS.LIBRARY.DEFAULT)
 
-        mLibraryModel.setLibrary(library)
-        var fragment: Fragment = LibraryFragment()
+            val library = if (idLibrary != GeneralConsts.KEYS.LIBRARY.DEFAULT)
+                mLibraries.find { it.id == idLibrary } ?: LibraryUtil.getDefault(this)
+            else
+                LibraryUtil.getDefault(this)
 
-        intent.dataString?.let {
-            fragment = when (it) {
-                "history" -> HistoryFragment()
-                else -> fragment
+            mLibraryModel.setLibrary(library)
+            fragment = LibraryFragment()
+
+            intent.dataString?.let {
+                fragment = when (it) {
+                    "history" -> HistoryFragment()
+                    else -> fragment
+                }
             }
         }
 

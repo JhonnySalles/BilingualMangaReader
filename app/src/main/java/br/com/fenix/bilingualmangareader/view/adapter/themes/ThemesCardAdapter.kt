@@ -1,5 +1,6 @@
 package br.com.fenix.bilingualmangareader.view.adapter.themes
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
@@ -14,7 +15,7 @@ import br.com.fenix.bilingualmangareader.service.listener.ThemesListener
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import com.google.android.material.card.MaterialCardView
 
-class ThemesCardAdapter(var context: Context, listener: ThemesListener) : BaseAdapter() {
+class ThemesCardAdapter(var context: Context, list: MutableList<Pair<Themes, Boolean>>, listener: ThemesListener) : BaseAdapter() {
 
     companion object {
         var mPageSelectStroke: Int = 0
@@ -25,7 +26,7 @@ class ThemesCardAdapter(var context: Context, listener: ThemesListener) : BaseAd
     }
 
     private var mListener: ThemesListener = listener
-    private var mList: MutableList<Pair<Themes, Boolean>> = mutableListOf()
+    private var mList: MutableList<Pair<Themes, Boolean>> = list
 
     fun updateList(list: MutableList<Pair<Themes, Boolean>>) {
         mList = list
@@ -44,22 +45,25 @@ class ThemesCardAdapter(var context: Context, listener: ThemesListener) : BaseAd
         return index.toLong()
     }
 
+    //cannot reuse the view, as it contains another theme and cannot apply the corresponding theme to an already created view,
+    // performing the creation we guarantee that the colors will be the same as the theme in the list
+    @SuppressLint("ViewHolder")
     override fun getView(index: Int, view: View?, parent: ViewGroup?): View {
         val theme = getItem(index)
 
-        val convertView = LayoutInflater.from(context)
-                .cloneInContext(ContextThemeWrapper(context, mList[index].first.getValue()))
+        val newView = LayoutInflater.from(context)
+                .cloneInContext(ContextThemeWrapper(context, theme.first.getValue()))
                 .inflate(R.layout.grid_card_theme, parent, false)
 
-        convertView?.findViewById<MaterialCardView>(R.id.theme_card)?.strokeWidth = if (theme.second) mPageSelectStroke else 0
-        convertView?.findViewById<TextView>(R.id.theme_name)?.text = Util.themeDescription(context, theme.first)
+        newView?.findViewById<MaterialCardView>(R.id.theme_card)?.strokeWidth = if (theme.second) mPageSelectStroke else 0
+        newView?.findViewById<TextView>(R.id.theme_name)?.text = Util.themeDescription(context, theme.first)
 
-        convertView?.findViewById<LinearLayout>(R.id.theme_root)?.setOnClickListener {
+        newView?.findViewById<LinearLayout>(R.id.theme_root)?.setOnClickListener {
             mListener.onClick(theme)
             true
         }
 
-        return convertView
+        return newView
     }
 
 }

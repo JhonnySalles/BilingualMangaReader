@@ -72,6 +72,11 @@ class ConfigLibrariesViewModel(application: Application) : AndroidViewModel(appl
         mListThemes.value = Themes.values().map { Pair(it, it == initial) }.toMutableList()
     }
 
+    fun getSelectedThemeIndex(): Int  {
+        val index = mListThemes.value?.indexOfFirst { it.second } ?: 0
+        return if (index == -1) 0 else index
+    }
+
     fun getLibraryAndRemove(position: Int): Library? {
         return if (mListLibraries.value != null) mListLibraries.value!!.removeAt(position) else null
     }
