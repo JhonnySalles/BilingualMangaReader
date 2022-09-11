@@ -721,6 +721,11 @@ class ConfigFragment : Fragment() {
                 mThemeSelect.toString()
             )
 
+            this.putBoolean(
+                GeneralConsts.KEYS.THEME.THEME_CHANGE,
+                true
+            )
+
             this.commit()
         }
     }
