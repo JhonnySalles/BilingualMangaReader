@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.fenix.bilingualmangareader.MainActivity
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.enums.*
@@ -26,6 +27,7 @@ import br.com.fenix.bilingualmangareader.view.ui.menu.ConfigLibrariesViewModel
 import br.com.fenix.bilingualmangareader.view.ui.menu.MenuActivity
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputLayout
+import org.lucasr.twowayview.TwoWayView
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.IOException
@@ -47,7 +49,7 @@ class ConfigFragment : Fragment() {
 
     private lateinit var mThemeMode: TextInputLayout
     private lateinit var mThemeModeAutoComplete: AutoCompleteTextView
-    private lateinit var mThemes: ListView
+    private lateinit var mThemes: TwoWayView
 
     private lateinit var mDefaultSubtitleLanguage: TextInputLayout
     private lateinit var mDefaultSubtitleLanguageAutoComplete: AutoCompleteTextView
@@ -245,6 +247,8 @@ class ConfigFragment : Fragment() {
                         mMapThemeMode[parent.getItemAtPosition(position).toString()] ?: ThemeMode.SYSTEM
                     else
                         ThemeMode.SYSTEM
+
+                saveTheme()
 
                 when (mThemeModeSelect) {
                     ThemeMode.DARK -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -681,23 +685,56 @@ class ConfigFragment : Fragment() {
         val listener = object : ThemesListener {
             override fun onClick(theme: Pair<Themes, Boolean>) {
                 mThemeSelect = theme.first
-                mViewModel.setEnableTheme(theme.first)
-                requireContext().theme.applyStyle(mThemeSelect.getValue(), true)
-            }
-        }
+                saveTheme()
 
-        val lineAdapter = ThemesCardAdapter(requireContext(), listener)
-        mThemes.adapter = lineAdapter
-        mViewModel.themes.observe(viewLifecycleOwner) {
-            lineAdapter.updateList(it)
+                mViewModel.setEnableTheme(theme.first)
+                requireActivity().setTheme(mThemeSelect.getValue())
+                restartTheme()
+            }
         }
 
         val theme = Themes.valueOf(
             GeneralConsts.getSharedPreferences(requireContext())
                 .getString(GeneralConsts.KEYS.THEME.THEME_USED, Themes.ORIGINAL.toString())!!
         )
-        mViewModel.loadThemes(theme)
 
+        mViewModel.loadThemes(theme)
+        val lineAdapter = ThemesCardAdapter(requireContext(), mViewModel.themes.value!!, listener)
+        mThemes.adapter = lineAdapter
+
+        mThemes.scrollBy(mViewModel.getSelectedThemeIndex())
+
+        mViewModel.themes.observe(viewLifecycleOwner) {
+            lineAdapter.updateList(it)
+        }
+    }
+
+    private fun saveTheme() {
+        with(GeneralConsts.getSharedPreferences(requireContext()).edit()) {
+            this.putString(
+                GeneralConsts.KEYS.THEME.THEME_MODE,
+                mThemeModeSelect.toString()
+            )
+
+            this.putString(
+                GeneralConsts.KEYS.THEME.THEME_USED,
+                mThemeSelect.toString()
+            )
+
+            this.commit()
+        }
+    }
+
+    //to change the theme it is necessary to recreate the active, in this case it will signal to open the config
+    private fun restartTheme() {
+        with(GeneralConsts.getSharedPreferences(requireContext()).edit()) {
+            this.putBoolean(
+                GeneralConsts.KEYS.THEME.THEME_CHANGE,
+                true
+            )
+            this.commit()
+        }
+        requireActivity().recreate()
     }
 
 }

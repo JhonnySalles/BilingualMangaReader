@@ -139,6 +139,7 @@ class GeneralConsts private constructor() {
         object THEME {
             const val THEME_USED = "THEME_USED"
             const val THEME_MODE = "THEME_MODE"
+            const val THEME_CHANGE = "THEME_CHANGE"
         }
     }
 
