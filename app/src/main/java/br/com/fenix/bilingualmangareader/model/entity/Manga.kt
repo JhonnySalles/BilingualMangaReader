@@ -138,4 +138,11 @@ class Manga(id: Long?, title: String, subTitle: String, path: String, folder: St
         result = 31 * result + type.hashCode()
         return result
     }
+
+    fun update(manga: Manga) {
+        this.bookMark = manga.bookMark
+        this.favorite = manga.favorite
+        this.lastAccess = manga.lastAccess
+        this.hasSubtitle = manga.hasSubtitle
+    }
 }

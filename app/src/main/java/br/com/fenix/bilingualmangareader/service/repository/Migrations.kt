@@ -238,7 +238,7 @@ class Migrations {
 
                 mLOGGER.info("Start migration 10 - 11...")
 
-                database.execSQL("ALTER TABLE " + DataBaseConsts.MANGA.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.MANGA.COLUMNS.HAS_SUBTITLE + "  INTEGER DEFAULT 0")
+                database.execSQL("ALTER TABLE " + DataBaseConsts.MANGA.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.MANGA.COLUMNS.HAS_SUBTITLE + "  INTEGER DEFAULT 0 NOT NULL")
 
                 mLOGGER.info("Completed migration 10 - 11.")
             }
