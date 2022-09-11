@@ -136,10 +136,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
                 change = true
                 for (manga in list) {
                     if (mListMangasFull.value!!.contains(manga)) {
-                        val alter = mListMangasFull.value!![mListMangasFull.value!!.indexOf(manga)]
-                        alter.bookMark = manga.bookMark
-                        alter.favorite = manga.favorite
-                        alter.lastAccess = manga.lastAccess
+                        mListMangasFull.value!![mListMangasFull.value!!.indexOf(manga)].update(manga)
                         val index = mListMangas.value!!.indexOf(manga)
                         if (index > -1)
                             indexes.add(Pair(ListMod.MOD, index))
