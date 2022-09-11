@@ -125,7 +125,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/pages_link_file_link_text"
-                        style="@style/TextInputDropMenu"
+                        style="@style/TextInputWithoutDropMenu"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1.5"

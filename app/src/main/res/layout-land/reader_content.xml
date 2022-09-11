@@ -70,18 +70,20 @@
 
                     <TextView
                         android:id="@+id/toolbar_title_custom"
-                        tyle="@style/ReaderToolbarTheme"
+                        style="@style/ReaderToolbarTheme"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/title_size" />
 
                     <TextView
                         android:id="@+id/toolbar_subtitle_custom"
-                        tyle="@style/ReaderSubToolbarTheme"
+                        style="@style/ReaderSubToolbarTheme"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/title_small_size"/>
+
                 </LinearLayout>
+
             </com.google.android.material.appbar.MaterialToolbar>
         </com.google.android.material.appbar.AppBarLayout>
 

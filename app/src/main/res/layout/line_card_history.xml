@@ -53,6 +53,16 @@
                 android:src="@drawable/ic_favorite_mark"
                 android:visibility="gone" />
 
+            <ImageView
+                android:id="@+id/history_has_subtitle"
+                style="@style/IconFavorite"
+                android:layout_width="@dimen/manga_grid_subtitle"
+                android:layout_height="@dimen/manga_grid_subtitle"
+                android:padding="2dp"
+                android:background="@drawable/ic_subtitles_border"
+                android:src="@drawable/ic_subtitles"
+                android:visibility="gone"/>
+
             <!-- Title, secondary and supporting text -->
             <TextView
                 android:id="@+id/history_text_title"

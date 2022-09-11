@@ -200,6 +200,7 @@ class Scanner(private val context: Context) {
                                                 )
 
                                                 manga.excluded = false
+                                                manga.hasSubtitle = parse.hasSubtitles()
                                                 generateCover(parse, manga)
                                                 manga.id = storage.save(manga)
                                                 notifyMediaUpdatedAdd(manga)

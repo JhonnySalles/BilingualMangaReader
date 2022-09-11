@@ -47,6 +47,15 @@
                 android:visibility="gone"
                 android:src="@drawable/ic_favorite_mark" />
 
+            <ImageView
+                android:id="@+id/manga_line_has_subtitle"
+                style="@style/IconFavorite"
+                android:layout_width="@dimen/manga_grid_subtitle"
+                android:layout_height="@dimen/manga_grid_subtitle"
+                android:padding="2dp"
+                android:src="@drawable/ic_subtitles"
+                android:visibility="gone"/>
+
             <!-- Title, secondary and supporting text -->
             <TextView
                 android:id="@+id/manga_line_text_title"

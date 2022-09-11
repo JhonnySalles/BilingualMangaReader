@@ -30,7 +30,9 @@ class HistoryViewHolder(itemView: View, private val listener: MangaCardListener)
         val mangaSubTitle = itemView.findViewById<TextView>(R.id.history_sub_title)
         val mangaLibrary = itemView.findViewById<TextView>(R.id.history_library)
         val mangaFavorite = itemView.findViewById<ImageView>(R.id.history_favorite)
+        val mangaSubtitle = itemView.findViewById<ImageView>(R.id.history_has_subtitle)
         val cardView = itemView.findViewById<LinearLayout>(R.id.history_card)
+
         cardView.setOnClickListener { listener.onClick(manga) }
         cardView.setOnLongClickListener {
             listener.onClickLong(manga, it, layoutPosition)
@@ -59,6 +61,7 @@ class HistoryViewHolder(itemView: View, private val listener: MangaCardListener)
 
         mangaLibrary.text = manga.library.title.uppercase()
         mangaFavorite.visibility = if (manga.favorite) View.VISIBLE else View.GONE
+        mangaSubtitle.visibility  = if (manga.hasSubtitle) View.VISIBLE else View.GONE
 
         if (manga.excluded)
             cardView.setBackgroundResource(R.drawable.history_custom_ripple_item_deleted)

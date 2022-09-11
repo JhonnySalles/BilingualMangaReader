@@ -28,7 +28,7 @@
                 android:layout_marginRight="@dimen/margin"/>
 
             <TextView
-                style="@style/TextTitle"
+                style="@style/TextTitle.Config"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:layout_marginStart="@dimen/margin"
@@ -90,7 +90,7 @@
                 android:layout_marginBottom="@dimen/margin_small"/>
 
             <TextView
-                style="@style/TextTitle"
+                style="@style/TextTitle.Config"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:layout_marginStart="@dimen/margin"
@@ -141,7 +141,7 @@
                 android:layout_marginBottom="@dimen/margin_small"/>
 
             <TextView
-                style="@style/TextTitle"
+                style="@style/TextTitle.Config"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:layout_marginStart="@dimen/margin"
@@ -193,7 +193,7 @@
                 android:layout_marginBottom="@dimen/margin_small"/>
 
             <TextView
-                style="@style/TextTitle"
+                style="@style/TextTitle.Config"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:layout_marginStart="@dimen/margin"
@@ -259,7 +259,7 @@
                 android:layout_marginBottom="@dimen/margin_small"/>
 
             <TextView
-                style="@style/TextTitle"
+                style="@style/TextTitle.Config"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:layout_marginStart="@dimen/margin"
@@ -293,7 +293,7 @@
                 android:layout_marginBottom="@dimen/margin_small"/>
 
             <TextView
-                style="@style/TextTitle"
+                style="@style/TextTitle.Config"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:layout_marginStart="@dimen/margin"
@@ -324,7 +324,7 @@
                 android:layout_marginBottom="@dimen/margin_small"/>
 
             <TextView
-                style="@style/TextTitle"
+                style="@style/TextTitle.Config"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:layout_marginStart="@dimen/margin"
@@ -355,7 +355,7 @@
 
             <TextView
                 android:id="@+id/txt_last_backup"
-                style="@style/TextNormal"
+                style="@style/TextNormal.Config"
                 android:layout_height="match_parent"
                 android:layout_width="wrap_content"
                 android:layout_marginStart="@dimen/margin"
@@ -372,7 +372,7 @@
                 android:layout_marginBottom="@dimen/margin_small"/>
 
             <TextView
-                style="@style/TextTitle"
+                style="@style/TextTitle.Config"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:layout_marginStart="@dimen/margin"
@@ -407,7 +407,7 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <TextView
-                    style="@style/TextNormal"
+                    style="@style/TextNormal.Config"
                     android:layout_height="match_parent"
                     android:layout_width="0dp"
                     android:layout_weight="1"

@@ -150,6 +150,12 @@ class SubTitleController private constructor(private val context: Context) {
                 val listJson: List<String> = mParse.getSubtitles()
                 isSelected = false
                 getChapterFromJson(listJson)
+
+                manga?.let {
+                    if (it.hasSubtitle != parse.hasSubtitles()) {
+                        mSubtitleRepository.updateHasSubtitle(it.id, parse.hasSubtitles())
+                    }
+                }
             }
         }
 
