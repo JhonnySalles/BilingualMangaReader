@@ -88,7 +88,7 @@
                 android:layout_height="20dp"
                 android:orientation="vertical"
                 android:visibility="gone"
-                android:background="@color/secondary_variant_semitransparent">
+                android:background="@color/title_background_semitransparent">
                 <TextView
                     android:id="@+id/ocr_language"
                     android:layout_marginStart="5dp"
@@ -97,7 +97,7 @@
                     android:layout_weight="1"
                     android:autoLink="all"
                     android:gravity="center_vertical"
-                    android:textColor="@color/text_primary"
+                    android:textColor="?attr/colorPrimaryInverse"
                     android:textSize="@dimen/floating_ocr_language_text_size" />
             </LinearLayout>
         </com.google.android.material.appbar.AppBarLayout>

@@ -9,54 +9,17 @@
     <color name="JLPT5">#b366ff</color>
     <color name="VOCABULARY">#00ff00</color>
 
-    <!-- Primary color -->
-    <color name="primary">#212121</color>
-    <color name="primary_variant">#484848</color>
-    <color name="on_primary">#000000</color>
-    <color name="primary_semitransparent">#CE212121</color>
-    <color name="on_primary_semitransparent">#DD000000</color>
-    <color name="primary_variant_semitransparent">#CE484848</color>
-
-    <!-- Secondary color -->
-    <color name="secondary">#aeea00</color>
-    <color name="secondary_variant">#e4ff54</color>
-    <color name="on_secondary">#79b700</color>
-    <color name="on_secondary_variant">#275201</color>
-    <color name="secondary_variant_semitransparent">#CE275201</color>
-    <color name="on_secondary_variant_semitransparent">#DD195201</color>
-
-    <color name="ripple_color">#1d9902</color>
-
-    <color name="text_primary">#FFFFFF</color>
-    <color name="text_secondary">#000000</color>
-
-    <color name="white">#FFFFFF</color>
-    <color name="black">#000000</color>
-    <color name="red">#ff3300</color>
-
-    <color name="toolbar_transparent">#55000000</color>
-
-    <color name="translucent_status">#6F000000</color>
-
-    <color name="main_header_background_top">#000000</color>
-    <color name="main_header_background_bottom">#55000000</color>
-
-    <color name="item_selected_semi_transparent">#6600ff00</color>
-    <color name="floating_semi_transparent">#BF000000</color>
-    <color name="floating_button">#275201</color>
-
-    <color name="file_link_full_screen">#99212121</color>
-    <color name="file_link_buttons_expanded">#AA000000</color>
-
-    <color name="manga_detail_list_background">#212121</color>
-    <color name="manga_detail_list_divider">#484848</color>
-    <color name="manga_detail_list_text">#FFFFFFFF</color>
-
-
     <!-- - - - - - - - - - - - - - - - - - - - -  Used  - - - - - - - - - - - - - - - - - - - - -->
     <color name="file_link_buttons">#55000000</color>
+    <color name="file_link_buttons_expanded">#AA000000</color>
     <color name="title_background">#DD000000</color>
+
+    <color name="title_background_semitransparent">#55000000</color>
+    <color name="chapter_page_semitransparent">#CE212121</color>
+    <color name="main_header_background_top">#000000</color>
+
     <color name="reader_buttons">#FFFFFFFF</color>
+    <color name="reader_semi_transparent">#DD000000</color>
 
     <color name="button_close_ocr">#FFFFFF</color>
     <color name="button_close_ocr_background">#000000</color>
@@ -72,6 +35,8 @@
     <color name="manga_detail_title_background_center">#DD000000</color>
     <color name="manga_detail_title_background_bottom">#00000000</color>
 
+    <color name="manga_detail_list_divider">#484848</color>
+
     <color name="floating_background_semi_transparent">#BF000000</color>
     <color name="floating_button_color">#FFFFFF</color>
     <color name="floating_button_subtitle_background">#275201</color>
@@ -79,6 +44,8 @@
     <color name="floating_title_color">#79b700</color>
 
     <color name="card_number">#000000</color>
+    <color name="page_border">#000000</color>
+    <color name="status_bar_color">#000000</color>
 
     <color name="clock_text">#FFFFFF</color>
     <color name="touch_demonstration_text">#FFFFFF</color>

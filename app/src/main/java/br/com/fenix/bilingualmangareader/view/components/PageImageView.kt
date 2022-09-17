@@ -114,7 +114,7 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
         mPaint = Paint()
 
         mBorder = Paint()
-        mBorder.color = resources.getColor(R.color.black)
+        mBorder.color = resources.getColor(R.color.page_border)
         mBorder.style = Paint.Style.STROKE
         mBorder.strokeWidth = resources.getDimension(R.dimen.reader_zoom_border)
     }

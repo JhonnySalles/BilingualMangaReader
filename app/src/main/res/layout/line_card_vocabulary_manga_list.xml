@@ -16,7 +16,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:textAppearance="?attr/textAppearanceHeadline6"
-        android:textColor="@color/text_primary"
+        android:textColor="?attr/colorPrimaryInverse"
         android:textSize="@dimen/vocabulary_manga_appear_size" />
 
     <com.google.android.material.card.MaterialCardView
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:maxEms="5"
         android:textAppearance="?attr/textAppearanceHeadline6"
-        android:textColor="@color/text_primary"
+        android:textColor="?attr/colorPrimaryInverse"
         android:textSize="@dimen/vocabulary_manga_name_size" />
 
 </LinearLayout>
