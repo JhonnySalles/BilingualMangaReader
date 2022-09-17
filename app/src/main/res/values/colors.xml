@@ -85,7 +85,6 @@
      -->
 
     <!-- - - - - - - - - - - - - - - - - - - - -  Default Colors  - - - - - - - - - - - - - - - - - - - - -->
-    <color name="manga_reader_seed">#79f300</color>
     <color name="manga_reader_theme_light_primary">#000000</color>
     <color name="manga_reader_theme_light_onPrimary">#1d9902</color>
     <color name="manga_reader_theme_light_primaryContainer">#73e600</color>

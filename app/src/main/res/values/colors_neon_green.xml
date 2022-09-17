@@ -18,10 +18,10 @@
     <color name="green_neon_theme_light_errorContainer">#FFDAD6</color>
     <color name="green_neon_theme_light_onError">#FFFFFF</color>
     <color name="green_neon_theme_light_onErrorContainer">#410002</color>
-    <color name="green_neon_theme_light_background">#FDFDF5</color>
+    <color name="green_neon_theme_light_background">#f3f3f1</color>
     <color name="green_neon_theme_light_onBackground">#1A1C18</color>
     <color name="green_neon_theme_light_surface">#FDFDF5</color>
-    <color name="green_neon_theme_light_onSurface">#1A1C18</color>
+    <color name="green_neon_theme_light_onSurface">#d6ffb3</color>
     <color name="green_neon_theme_light_surfaceVariant">#E0E4D6</color>
     <color name="green_neon_theme_light_onSurfaceVariant">#43483E</color>
     <color name="green_neon_theme_light_outline">#74796D</color>
@@ -31,6 +31,7 @@
     <color name="green_neon_theme_light_shadow">#000000</color>
     <color name="green_neon_theme_light_surfaceTint">#2E6C00</color>
     <color name="green_neon_theme_light_surfaceTintColor">#2E6C00</color>
+
     <color name="green_neon_theme_dark_primary">#68E100</color>
     <color name="green_neon_theme_dark_onPrimary">#153800</color>
     <color name="green_neon_theme_dark_primaryContainer">#215100</color>

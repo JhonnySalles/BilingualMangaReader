@@ -18,7 +18,7 @@
     <color name="blue_theme_light_errorContainer">#FFDAD6</color>
     <color name="blue_theme_light_onError">#FFFFFF</color>
     <color name="blue_theme_light_onErrorContainer">#410002</color>
-    <color name="blue_theme_light_background">#FEFBFF</color>
+    <color name="blue_theme_light_background">#f3f3f1</color>
     <color name="blue_theme_light_onBackground">#1B1B1F</color>
     <color name="blue_theme_light_surface">#FEFBFF</color>
     <color name="blue_theme_light_onSurface">#1B1B1F</color>
@@ -31,6 +31,7 @@
     <color name="blue_theme_light_shadow">#000000</color>
     <color name="blue_theme_light_surfaceTint">#4757AD</color>
     <color name="blue_theme_light_surfaceTintColor">#4757AD</color>
+
     <color name="blue_theme_dark_primary">#BAC3FF</color>
     <color name="blue_theme_dark_onPrimary">#12267C</color>
     <color name="blue_theme_dark_primaryContainer">#2E3F94</color>

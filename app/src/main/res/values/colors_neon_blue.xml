@@ -18,10 +18,10 @@
     <color name="blue_neon_theme_light_errorContainer">#FFDAD6</color>
     <color name="blue_neon_theme_light_onError">#FFFFFF</color>
     <color name="blue_neon_theme_light_onErrorContainer">#410002</color>
-    <color name="blue_neon_theme_light_background">#FAFDFD</color>
+    <color name="blue_neon_theme_light_background">#f3f3f1</color>
     <color name="blue_neon_theme_light_onBackground">#191C1D</color>
     <color name="blue_neon_theme_light_surface">#FAFDFD</color>
-    <color name="blue_neon_theme_light_onSurface">#191C1D</color>
+    <color name="blue_neon_theme_light_onSurface">#d1f5fa</color>
     <color name="blue_neon_theme_light_surfaceVariant">#DBE4E6</color>
     <color name="blue_neon_theme_light_onSurfaceVariant">#3F484A</color>
     <color name="blue_neon_theme_light_outline">#6F797A</color>
@@ -31,6 +31,7 @@
     <color name="blue_neon_theme_light_shadow">#000000</color>
     <color name="blue_neon_theme_light_surfaceTint">#006874</color>
     <color name="blue_neon_theme_light_surfaceTintColor">#006874</color>
+
     <color name="blue_neon_theme_dark_primary">#4FD8EB</color>
     <color name="blue_neon_theme_dark_onPrimary">#00363D</color>
     <color name="blue_neon_theme_dark_primaryContainer">#004F58</color>

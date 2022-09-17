@@ -1,8 +1,10 @@
 package br.com.fenix.bilingualmangareader
 
 import android.os.Bundle
+import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -62,8 +64,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         )
         setTheme(theme.getValue())
 
-        super.onCreate(savedInstanceState)
-
         when (ThemeMode.valueOf(
             GeneralConsts.getSharedPreferences(this).getString(GeneralConsts.KEYS.THEME.THEME_MODE, ThemeMode.SYSTEM.toString())!!
         )) {
@@ -71,6 +71,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             ThemeMode.LIGHT -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             else -> {}
         }
+
+        super.onCreate(savedInstanceState)
 
         clearCache()
 
@@ -139,7 +141,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mFragmentManager.beginTransaction().replace(R.id.main_content_root, fragment)
             .commit()
     }
-
+    
     private fun clearCache() {
         val cacheDir = GeneralConsts.getCacheDir(this)
         CoroutineScope(Dispatchers.IO).launch {
