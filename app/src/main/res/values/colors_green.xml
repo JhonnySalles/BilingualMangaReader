@@ -18,10 +18,10 @@
     <color name="green_theme_light_errorContainer">#FFDAD6</color>
     <color name="green_theme_light_onError">#FFFFFF</color>
     <color name="green_theme_light_onErrorContainer">#410002</color>
-    <color name="green_theme_light_background">#FEFCF4</color>
+    <color name="green_theme_light_background">#f3f3f1</color>
     <color name="green_theme_light_onBackground">#1B1C17</color>
     <color name="green_theme_light_surface">#FEFCF4</color>
-    <color name="green_theme_light_onSurface">#1B1C17</color>
+    <color name="green_theme_light_onSurface">#ecffb3</color>
     <color name="green_theme_light_surfaceVariant">#E2E4D4</color>
     <color name="green_theme_light_onSurfaceVariant">#45483C</color>
     <color name="green_theme_light_outline">#76786B</color>
@@ -31,6 +31,7 @@
     <color name="green_theme_light_shadow">#000000</color>
     <color name="green_theme_light_surfaceTint">#4D6700</color>
     <color name="green_theme_light_surfaceTintColor">#4D6700</color>
+
     <color name="green_theme_dark_primary">#A5D71D</color>
     <color name="green_theme_dark_onPrimary">#263500</color>
     <color name="green_theme_dark_primaryContainer">#394D00</color>
