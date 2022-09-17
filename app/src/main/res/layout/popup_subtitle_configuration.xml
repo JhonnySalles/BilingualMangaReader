@@ -38,10 +38,11 @@
 
             <AutoCompleteTextView
                 android:id="@+id/menu_autocomplete_external_subtitle_select_path"
+                style="@style/AutoCompleteDropMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="none"
-                android:textColor="@color/text_primary" />
+                android:inputType="none"/>
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout

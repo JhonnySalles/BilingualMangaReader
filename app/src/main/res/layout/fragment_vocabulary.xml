@@ -75,7 +75,7 @@
                     style="@style/Button.RoundedIconOnly"
                     android:layout_width="@dimen/page_link_pages_index"
                     android:layout_height="match_parent"
-                    android:textColor="@color/text_primary"
+                    android:textColor="?attr/colorSecondary"
                     android:contentDescription="@string/page_link_page_index"
                     android:layout_marginEnd="5dp"
                     app:iconTint="?attr/colorSecondary"

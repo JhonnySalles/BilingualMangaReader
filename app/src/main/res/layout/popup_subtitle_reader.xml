@@ -30,12 +30,12 @@
 
             <AutoCompleteTextView
                 android:id="@+id/menu_autocomplete_subtitle_Page"
+                style="@style/AutoCompleteDropMenu"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:ellipsize="start"
                 android:inputType="none"
                 android:maxLines="1"
-                android:textColor="@color/text_primary"
                 tools:ignore="LabelFor" />
 
         </com.google.android.material.textfield.TextInputLayout>

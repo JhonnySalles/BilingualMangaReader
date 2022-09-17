@@ -804,11 +804,11 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 }, 300)
             }
 
-            w.statusBarColor = resources.getColor(R.color.black)
+            w.statusBarColor = resources.getColor(R.color.status_bar_color)
             w.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             w.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
             w.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            w.navigationBarColor = resources.getColor(R.color.black)
+            w.navigationBarColor = resources.getColor(R.color.status_bar_color)
 
             //mRoot.fitsSystemWindows = true
             changeContentsVisibility(fullscreen)

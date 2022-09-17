@@ -157,7 +157,6 @@
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/margin"
                 android:adjustViewBounds="true"
-                android:background="@color/primary_variant"
                 android:scaleType="centerCrop"
                 app:srcCompat="@mipmap/tutorial_library" />
 
@@ -243,7 +242,6 @@
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/margin"
                 android:adjustViewBounds="true"
-                android:background="@color/primary_variant"
                 android:scaleType="centerCrop"
                 app:srcCompat="@mipmap/tutorial_import" />
 
@@ -260,7 +258,6 @@
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/margin"
                 android:adjustViewBounds="true"
-                android:background="@color/primary_variant"
                 android:scaleType="centerCrop"
                 app:srcCompat="@mipmap/tutorial_choice_json" />
 
@@ -270,7 +267,6 @@
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/margin"
                 android:adjustViewBounds="true"
-                android:background="@color/primary_variant"
                 android:scaleType="centerCrop"
                 app:srcCompat="@mipmap/tutorial_choice_json_selected" />
 
@@ -287,7 +283,6 @@
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/margin"
                 android:adjustViewBounds="true"
-                android:background="@color/primary_variant"
                 android:scaleType="centerCrop"
                 app:srcCompat="@mipmap/tutorial_choice_json_option" />
 
@@ -320,7 +315,6 @@
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/margin"
                 android:adjustViewBounds="true"
-                android:background="@color/primary_variant"
                 android:scaleType="centerCrop"
                 app:srcCompat="@mipmap/tutorial_subtitle" />
 
@@ -391,7 +385,6 @@
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/margin"
                 android:adjustViewBounds="true"
-                android:background="@color/primary_variant"
                 android:scaleType="centerCrop"
                 app:srcCompat="@mipmap/tutorial_draw" />
 
@@ -424,7 +417,6 @@
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/margin"
                 android:adjustViewBounds="true"
-                android:background="@color/primary_variant"
                 android:scaleType="centerCrop"
                 app:srcCompat="@mipmap/tutorial_search" />
 
@@ -480,7 +472,6 @@
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/margin"
                 android:adjustViewBounds="true"
-                android:background="@color/primary_variant"
                 android:scaleType="centerCrop"
                 app:srcCompat="@mipmap/tutorial_vocabulary" />
 
@@ -541,7 +532,6 @@
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/margin"
                 android:adjustViewBounds="true"
-                android:background="@color/primary_variant"
                 android:scaleType="centerCrop"
                 app:srcCompat="@mipmap/tutorial_kanji" />
 
@@ -573,7 +563,6 @@
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/margin"
                 android:adjustViewBounds="true"
-                android:background="@color/primary_variant"
                 android:scaleType="centerCrop"
                 app:srcCompat="@mipmap/tutorial_popup" />
 
@@ -590,7 +579,6 @@
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/margin"
                 android:adjustViewBounds="true"
-                android:background="@color/primary_variant"
                 android:scaleType="centerCrop"
                 app:srcCompat="@mipmap/tutorial_popup_draw" />
 
@@ -607,7 +595,6 @@
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/margin"
                 android:adjustViewBounds="true"
-                android:background="@color/primary_variant"
                 android:scaleType="centerCrop"
                 app:srcCompat="@mipmap/tutorial_popup_small" />
 

@@ -376,7 +376,6 @@
                             android:layout_height="wrap_content"
                             android:maxHeight="@dimen/manga_detail_information_related_image_max_size"
                             android:adjustViewBounds="true"
-                            android:background="@color/primary"
                             android:scaleType="centerCrop"
                             android:layout_marginEnd="5dp"
                             android:visibility="gone"/>

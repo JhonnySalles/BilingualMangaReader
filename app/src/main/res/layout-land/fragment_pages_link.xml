@@ -180,7 +180,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textAppearance="?attr/textAppearanceHeadline6"
-                android:textColor="@color/white"
+                android:textColor="?attr/colorPrimaryInverse"
                 android:textSize="@dimen/page_link_card_page_number_size"
                 android:layout_marginTop="@dimen/page_link_card_page_name_margin"
                 android:background="?attr/colorOnSurface"
@@ -203,21 +203,18 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/pages_link_help_button"
+                style="@style/Button.RoundedIconOnly"
                 android:layout_width="@dimen/page_link_help_size"
                 android:layout_height="match_parent"
-                android:textColor="@color/text_primary"
+                android:textColor="?attr/colorTertiary"
                 android:contentDescription="@string/page_link_help"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:textAllCaps="false"
                 android:tag="not_used"
                 android:visibility="gone"
-                app:rippleColor="?attr/colorTertiary"
                 app:strokeWidth="0dp"
-                app:backgroundTint="@color/file_link_full_screen"
-                app:icon="@drawable/ic_help"
-                app:iconTint="@color/text_primary"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
+                app:icon="@drawable/ic_help" />
 
             <com.google.android.material.button.MaterialButtonToggleGroup
                 android:id="@+id/page_link_buttons_group"
@@ -318,7 +315,7 @@
                     android:visibility="invisible"
                     app:rippleColor="?attr/colorTertiary"
                     app:indicatorSize="@dimen/page_link_loading_progress_size"
-                    app:indicatorColor="@color/on_secondary"
+                    app:indicatorColor="?attr/colorTertiary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
