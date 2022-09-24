@@ -342,11 +342,22 @@ class Util {
 
         private fun getNumberAtEnd(str: String): String {
             var numbers = ""
-            val m: Matcher = Pattern.compile("\\d+$").matcher(str)
+            val m: Matcher = Pattern.compile("\\d+$|\\d+\\w$|\\d+\\.\\d+$").matcher(str)
             while (m.find())
                 numbers = m.group()
 
             return numbers
+        }
+
+        private fun getPadding(name: String, numbers: String): String {
+            return if (name.contains(Regex("\\d+$")))
+                numbers.padStart(10, '0')
+            else if (name.contains(Regex("\\d+\\w\$")))
+                numbers.replace(Regex("\\w\$"), "").padStart(10, '0') + numbers.replace(Regex("\\d+"), "")
+            else if (name.contains(Regex("\\d+\\.\\d+\$")))
+                numbers.replace(Regex("\\.\\d+\$"), "").padStart(10, '0') + '.' + numbers.replace(Regex("\\d+\\."), "")
+            else
+                numbers
         }
 
         fun getNormalizedNameOrdering(path: String): String {
@@ -355,7 +366,7 @@ class Util {
             return if (numbers.isEmpty())
                 getNameFromPath(path)
             else
-                name.substring(0, name.lastIndexOf(numbers)) + numbers.padStart(10, '0') + getExtensionFromPath(path)
+                name.substring(0, name.lastIndexOf(numbers)) + getPadding(name, numbers) + getExtensionFromPath(path)
         }
 
         var googleLang: String = ""
