@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- - - - - - - - - - - - - - - - - - - - -  Ocean Blue Colors  - - - - - - - - - - - - - - - - - - - - -->
-    <color name="ocean_theme_seed">#64696F</color>
-    <color name="ocean_theme_light_primary">#006496</color>
-    <color name="ocean_theme_light_onPrimary">#FFFFFF</color>
-    <color name="ocean_theme_light_primaryContainer">#CCE5FF</color>
-    <color name="ocean_theme_light_onPrimaryContainer">#001E31</color>
-    <color name="ocean_theme_light_secondary">#51606F</color>
-    <color name="ocean_theme_light_onSecondary">#FFFFFF</color>
+    <color name="ocean_theme_light_primary">#000066</color>
+    <color name="ocean_theme_light_onPrimary">#7979d2</color>
+    <color name="ocean_theme_light_primaryContainer">#b3c6ff</color>
+    <color name="ocean_theme_light_onPrimaryContainer">#000033</color>
+    <color name="ocean_theme_light_secondary">#002db3</color>
+    <color name="ocean_theme_light_onSecondary">#202060</color>
     <color name="ocean_theme_light_secondaryContainer">#D4E4F6</color>
     <color name="ocean_theme_light_onSecondaryContainer">#0D1D2A</color>
-    <color name="ocean_theme_light_tertiary">#66587B</color>
+    <color name="ocean_theme_light_tertiary">#b3b3ff</color>
     <color name="ocean_theme_light_onTertiary">#FFFFFF</color>
-    <color name="ocean_theme_light_tertiaryContainer">#ECDCFF</color>
-    <color name="ocean_theme_light_onTertiaryContainer">#211534</color>
+    <color name="ocean_theme_light_tertiaryContainer">#262673</color>
+    <color name="ocean_theme_light_onTertiaryContainer">#CE212121</color>
     <color name="ocean_theme_light_error">#BA1A1A</color>
     <color name="ocean_theme_light_errorContainer">#FFDAD6</color>
     <color name="ocean_theme_light_onError">#FFFFFF</color>
     <color name="ocean_theme_light_onErrorContainer">#410002</color>
     <color name="ocean_theme_light_background">#f3f3f1</color>
-    <color name="ocean_theme_light_onBackground">#001159</color>
+    <color name="ocean_theme_light_onBackground">#e6ecff</color>
     <color name="ocean_theme_light_surface">#FEFBFF</color>
     <color name="ocean_theme_light_onSurface">#cce7ff</color>
     <color name="ocean_theme_light_surfaceVariant">#DEE3EB</color>
-    <color name="ocean_theme_light_onSurfaceVariant">#42474E</color>
-    <color name="ocean_theme_light_outline">#72787E</color>
+    <color name="ocean_theme_light_onSurfaceVariant">#3366ff    </color>
+    <color name="ocean_theme_light_outline">#3366ff</color>
     <color name="ocean_theme_light_inverseOnSurface">#F0EFFF</color>
-    <color name="ocean_theme_light_inverseSurface">#12267C</color>
-    <color name="ocean_theme_light_inversePrimary">#91CCFF</color>
+    <color name="ocean_theme_light_inverseSurface">#0040ff</color>
+    <color name="ocean_theme_light_inversePrimary">#FFFFFF</color>
     <color name="ocean_theme_light_shadow">#000000</color>
     <color name="ocean_theme_light_surfaceTint">#006496</color>
     <color name="ocean_theme_light_surfaceTintColor">#006496</color>
@@ -43,7 +42,7 @@
     <color name="ocean_theme_dark_tertiary">#D1BFE7</color>
     <color name="ocean_theme_dark_onTertiary">#372A4A</color>
     <color name="ocean_theme_dark_tertiaryContainer">#4E4162</color>
-    <color name="ocean_theme_dark_onTertiaryContainer">#ECDCFF</color>
+    <color name="ocean_theme_dark_onTertiaryContainer">#CE212121</color>
     <color name="ocean_theme_dark_error">#FFB4AB</color>
     <color name="ocean_theme_dark_errorContainer">#93000A</color>
     <color name="ocean_theme_dark_onError">#690005</color>
@@ -57,7 +56,7 @@
     <color name="ocean_theme_dark_outline">#8C9198</color>
     <color name="ocean_theme_dark_inverseOnSurface">#001159</color>
     <color name="ocean_theme_dark_inverseSurface">#DEE1FF</color>
-    <color name="ocean_theme_dark_inversePrimary">#006496</color>
+    <color name="ocean_theme_dark_inversePrimary">#FFFFFF</color>
     <color name="ocean_theme_dark_shadow">#000000</color>
     <color name="ocean_theme_dark_surfaceTint">#91CCFF</color>
     <color name="ocean_theme_dark_surfaceTintColor">#91CCFF</color>

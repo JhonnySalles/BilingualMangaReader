@@ -7,7 +7,7 @@
     <color name="blood_theme_light_onPrimaryContainer">#330002</color>
     <color name="blood_theme_light_secondary">#990800</color>
     <color name="blood_theme_light_onSecondary">#410002</color>
-    <color name="blood_theme_light_secondaryContainer">#D4E4F6</color>
+    <color name="blood_theme_light_secondaryContainer">#ffcfcc</color>
     <color name="blood_theme_light_onSecondaryContainer">#800004</color>
     <color name="blood_theme_light_tertiary">#ff554d</color>
     <color name="blood_theme_light_onTertiary">#FFFFFF</color>
@@ -26,7 +26,7 @@
     <color name="blood_theme_light_outline">#e62e00</color>
     <color name="blood_theme_light_inverseOnSurface">#FFEDEA</color>
     <color name="blood_theme_light_inverseSurface">#ff0008</color>
-    <color name="blood_theme_light_inversePrimary">#91CCFF</color>
+    <color name="blood_theme_light_inversePrimary">#FFFFFF</color>
     <color name="blood_theme_light_shadow">#000000</color>
     <color name="blood_theme_light_surfaceTint">#990005</color>
     <color name="blood_theme_light_surfaceTintColor">#990005</color>
@@ -42,7 +42,7 @@
     <color name="blood_theme_dark_tertiary">#D1BFE7</color>
     <color name="blood_theme_dark_onTertiary">#372A4A</color>
     <color name="blood_theme_dark_tertiaryContainer">#4E4162</color>
-    <color name="blood_theme_dark_onTertiaryContainer">#ECDCFF</color>
+    <color name="blood_theme_dark_onTertiaryContainer">#CE212121</color>
     <color name="blood_theme_dark_error">#FFB4AB</color>
     <color name="blood_theme_dark_errorContainer">#93000A</color>
     <color name="blood_theme_dark_onError">#690005</color>
@@ -56,7 +56,7 @@
     <color name="blood_theme_dark_outline">#8C9198</color>
     <color name="blood_theme_dark_inverseOnSurface">#410002</color>
     <color name="blood_theme_dark_inverseSurface">#FFDAD6</color>
-    <color name="blood_theme_dark_inversePrimary">#006496</color>
+    <color name="blood_theme_dark_inversePrimary">#FFFFFF</color>
     <color name="blood_theme_dark_shadow">#000000</color>
     <color name="blood_theme_dark_surfaceTint">#91CCFF</color>
     <color name="blood_theme_dark_surfaceTintColor">#91CCFF</color>

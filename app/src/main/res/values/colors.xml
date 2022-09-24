@@ -62,7 +62,7 @@
 
         colorOutline = Divider
 
-        colorTertiary = Ripple
+        colorTertiary = Ripple / Number Page
 
         colorSurface = Background system
         colorOnSurface = Background accent, background text box

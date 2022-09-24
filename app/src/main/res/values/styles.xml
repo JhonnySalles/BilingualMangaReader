@@ -500,6 +500,10 @@
 
     <style name="TextNormal.Config" parent="TextNormal"/>
 
+    <style name="TextTitle.PageNumber" parent="Base.Theme.MangaReader">
+        <item name="android:textColor">?attr/colorTertiary</item>
+    </style>
+
     <style name="SeekBar" >
         <item name="android:progressBackgroundTint">?attr/colorOnPrimaryContainer</item>
         <item name="android:progressTint">?attr/colorPrimaryContainer</item>
