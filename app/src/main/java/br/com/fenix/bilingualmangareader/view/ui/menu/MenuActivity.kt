@@ -9,13 +9,16 @@ import androidx.fragment.app.Fragment
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.enums.Themes
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import br.com.fenix.bilingualmangareader.util.helpers.MenuUtil
 
 
 class MenuActivity : AppCompatActivity() {
 
+    private lateinit var mTheme : Themes
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        val theme = Themes.valueOf(GeneralConsts.getSharedPreferences(this).getString(GeneralConsts.KEYS.THEME.THEME_USED, Themes.ORIGINAL.toString())!!)
-        setTheme(theme.getValue())
+        mTheme = Themes.valueOf(GeneralConsts.getSharedPreferences(this).getString(GeneralConsts.KEYS.THEME.THEME_USED, Themes.ORIGINAL.toString())!!)
+        setTheme(mTheme.getValue())
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
@@ -44,6 +47,7 @@ class MenuActivity : AppCompatActivity() {
     }
 
     fun setActionBar(toolbar: Toolbar) {
+        toolbar.context.setTheme(MenuUtil.getToolbarTheme(mTheme))
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)

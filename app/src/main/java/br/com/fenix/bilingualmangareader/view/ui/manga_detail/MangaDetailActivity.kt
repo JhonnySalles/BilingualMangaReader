@@ -11,6 +11,7 @@ import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.enums.Themes
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.LibraryUtil
+import br.com.fenix.bilingualmangareader.util.helpers.MenuUtil
 
 
 class MangaDetailActivity : AppCompatActivity() {
@@ -23,7 +24,9 @@ class MangaDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_manga_detail)
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar_manga_detail)
+        toolbar.context.setTheme(MenuUtil.getToolbarTheme(theme))
         setSupportActionBar(toolbar)
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(true)
 
