@@ -673,10 +673,18 @@ class PagesLinkFragment : Fragment() {
                 mHandler.removeCallbacks(mDismissDownButton)
             if (mHandler.hasCallbacks(mReduceSizeGroupButton))
                 mHandler.removeCallbacks(mReduceSizeGroupButton)
+
+            if (mHandler.hasCallbacks(mVerifyAllImagesFinished))
+                mHandler.removeCallbacks(mVerifyAllImagesFinished)
+            if (mHandler.hasCallbacks(mVerifyAllImagesFinishedDelay))
+                mHandler.removeCallbacks(mVerifyAllImagesFinishedDelay)
         } else {
             mHandler.removeCallbacks(mDismissUpButton)
             mHandler.removeCallbacks(mDismissDownButton)
             mHandler.removeCallbacks(mReduceSizeGroupButton)
+
+            mHandler.removeCallbacks(mVerifyAllImagesFinished)
+            mHandler.removeCallbacks(mVerifyAllImagesFinishedDelay)
         }
 
         mViewModel.onDestroy()
@@ -829,6 +837,22 @@ class PagesLinkFragment : Fragment() {
             ).show()
     }
 
+    private val mVerifyAllImagesFinished = Runnable { mViewModel.reLoadImages(Pages.ALL, true) }
+    private val mVerifyAllImagesFinishedDelay = Runnable { verifyAllImagesFinished() }
+
+    private fun verifyAllImagesFinished() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (mHandler.hasCallbacks(mVerifyAllImagesFinishedDelay))
+                mHandler.removeCallbacks(mVerifyAllImagesFinishedDelay)
+        } else
+            mHandler.removeCallbacks(mVerifyAllImagesFinishedDelay)
+
+        if (mViewModel.imageThreadLoadingProgress() <= 0)
+            mHandler.postDelayed(mVerifyAllImagesFinished,500L )
+        else
+            mHandler.postDelayed(mVerifyAllImagesFinishedDelay,1000L )
+    }
+
     private inner class ImageLoadHandler(fragment: PagesLinkFragment) : Handler() {
         private val mOwner: WeakReference<PagesLinkFragment> = WeakReference(fragment)
         override fun handleMessage(msg: Message) {
@@ -852,7 +876,7 @@ class PagesLinkFragment : Fragment() {
                 )
                 PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_FINISHED -> {
                     processImageLoading(isEnding = true)
-                    mViewModel.reLoadImages(imageLoad.type, true)
+                    verifyAllImagesFinished()
                 }
                 PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_ALL_IMAGES_LOADED -> {
                     processImageLoading(isEnding = true)
