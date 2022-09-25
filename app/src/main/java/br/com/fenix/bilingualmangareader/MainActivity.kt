@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
 
         mToolBar = findViewById(R.id.main_toolbar)
-        mToolBar.context.setTheme(MenuUtil.getToolbarTheme(theme))
+        MenuUtil.tintToolbar(mToolBar, theme)
         setSupportActionBar(mToolBar)
 
         // drawer_Layout is a default layout from app

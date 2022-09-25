@@ -47,7 +47,7 @@ class MenuActivity : AppCompatActivity() {
     }
 
     fun setActionBar(toolbar: Toolbar) {
-        toolbar.context.setTheme(MenuUtil.getToolbarTheme(mTheme))
+        MenuUtil.tintToolbar(toolbar, mTheme)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
