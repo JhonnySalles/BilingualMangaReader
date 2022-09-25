@@ -2,7 +2,7 @@
 <resources>
     <!-- - - - - - - - - - - - - - - - - - - - -  Forest Green Colors  - - - - - - - - - - - - - - - - - - - - -->
     <color name="forest_theme_light_primary">#0f3d0f</color>
-    <color name="forest_theme_light_onPrimary">#2eb82e</color>
+    <color name="forest_theme_light_onPrimary">#d6f5d6</color>
     <color name="forest_theme_light_primaryContainer">#00ff00</color>
     <color name="forest_theme_light_onPrimaryContainer">#196619</color>
     <color name="forest_theme_light_secondary">#248f24</color>
@@ -20,7 +20,7 @@
     <color name="forest_theme_light_background">#f3f3f1</color>
     <color name="forest_theme_light_onBackground">#ccffcc</color>
     <color name="forest_theme_light_surface">#F7FFED</color>
-    <color name="forest_theme_light_onSurface">#d9ffcc</color>
+    <color name="forest_theme_light_onSurface">#009900</color>
     <color name="forest_theme_light_surfaceVariant">#DEE3EB</color>
     <color name="forest_theme_light_onSurfaceVariant">#4dff4d</color>
     <color name="forest_theme_light_outline">#33cc33</color>
@@ -28,36 +28,36 @@
     <color name="forest_theme_light_inverseSurface">#5cd65c</color>
     <color name="forest_theme_light_inversePrimary">#FFFFFF</color>
     <color name="forest_theme_light_shadow">#000000</color>
-    <color name="forest_theme_light_surfaceTint">#006496</color>
-    <color name="forest_theme_light_surfaceTintColor">#006496</color>
+    <color name="forest_theme_light_surfaceTint">#00ff00</color>
+    <color name="forest_theme_light_surfaceTintColor">#00ff00</color>
 
-    <color name="forest_theme_dark_primary">#91CCFF</color>
-    <color name="forest_theme_dark_onPrimary">#003351</color>
-    <color name="forest_theme_dark_primaryContainer">#004B72</color>
-    <color name="forest_theme_dark_onPrimaryContainer">#CCE5FF</color>
-    <color name="forest_theme_dark_secondary">#B8C8D9</color>
-    <color name="forest_theme_dark_onSecondary">#23323F</color>
-    <color name="forest_theme_dark_secondaryContainer">#394857</color>
-    <color name="forest_theme_dark_onSecondaryContainer">#D4E4F6</color>
-    <color name="forest_theme_dark_tertiary">#D1BFE7</color>
-    <color name="forest_theme_dark_onTertiary">#372A4A</color>
-    <color name="forest_theme_dark_tertiaryContainer">#4E4162</color>
+    <color name="forest_theme_dark_primary">#e6ffe6</color>
+    <color name="forest_theme_dark_onPrimary">#33ff33</color>
+    <color name="forest_theme_dark_primaryContainer">#00b300</color>
+    <color name="forest_theme_dark_onPrimaryContainer">#000000</color>
+    <color name="forest_theme_dark_secondary">#33ff33</color>
+    <color name="forest_theme_dark_onSecondary">#00b300</color>
+    <color name="forest_theme_dark_secondaryContainer">#b3ffb3</color>
+    <color name="forest_theme_dark_onSecondaryContainer">#00b300</color>
+    <color name="forest_theme_dark_tertiary">#33ff33</color>
+    <color name="forest_theme_dark_onTertiary">#ccffcc</color>
+    <color name="forest_theme_dark_tertiaryContainer">#00b300</color>
     <color name="forest_theme_dark_onTertiaryContainer">#CE212121</color>
     <color name="forest_theme_dark_error">#FFB4AB</color>
     <color name="forest_theme_dark_errorContainer">#93000A</color>
     <color name="forest_theme_dark_onError">#690005</color>
     <color name="forest_theme_dark_onErrorContainer">#FFDAD6</color>
     <color name="forest_theme_dark_background">#062100</color>
-    <color name="forest_theme_dark_onBackground">#A8F782</color>
+    <color name="forest_theme_dark_onBackground">#006600</color>
     <color name="forest_theme_dark_surface">#062100</color>
-    <color name="forest_theme_dark_onSurface">#A8F782</color>
-    <color name="forest_theme_dark_surfaceVariant">#42474E</color>
-    <color name="forest_theme_dark_onSurfaceVariant">#C2C7CE</color>
-    <color name="forest_theme_dark_outline">#8C9198</color>
+    <color name="forest_theme_dark_onSurface">#004d00</color>
+    <color name="forest_theme_dark_surfaceVariant">#99e699  </color>
+    <color name="forest_theme_dark_onSurfaceVariant">#009933</color>
+    <color name="forest_theme_dark_outline">#009933</color>
     <color name="forest_theme_dark_inverseOnSurface">#062100</color>
     <color name="forest_theme_dark_inverseSurface">#A8F782</color>
     <color name="forest_theme_dark_inversePrimary">#FFFFFF</color>
     <color name="forest_theme_dark_shadow">#000000</color>
-    <color name="forest_theme_dark_surfaceTint">#91CCFF</color>
-    <color name="forest_theme_dark_surfaceTintColor">#91CCFF</color>
+    <color name="forest_theme_dark_surfaceTint">#009933</color>
+    <color name="forest_theme_dark_surfaceTintColor">#009933</color>
 </resources>
