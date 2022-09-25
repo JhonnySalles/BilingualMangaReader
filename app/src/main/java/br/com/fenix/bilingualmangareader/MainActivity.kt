@@ -1,10 +1,8 @@
 package br.com.fenix.bilingualmangareader
 
 import android.os.Bundle
-import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -22,6 +20,7 @@ import br.com.fenix.bilingualmangareader.service.repository.LibraryRepository
 import br.com.fenix.bilingualmangareader.service.scanner.Scanner
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.LibraryUtil
+import br.com.fenix.bilingualmangareader.util.helpers.MenuUtil
 import br.com.fenix.bilingualmangareader.util.helpers.MsgUtil
 import br.com.fenix.bilingualmangareader.view.ui.about.AboutFragment
 import br.com.fenix.bilingualmangareader.view.ui.configuration.ConfigFragment
@@ -79,6 +78,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
 
         mToolBar = findViewById(R.id.main_toolbar)
+        mToolBar.context.setTheme(MenuUtil.getToolbarTheme(theme))
         setSupportActionBar(mToolBar)
 
         // drawer_Layout is a default layout from app
@@ -141,7 +141,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mFragmentManager.beginTransaction().replace(R.id.main_content_root, fragment)
             .commit()
     }
-    
+
     private fun clearCache() {
         val cacheDir = GeneralConsts.getCacheDir(this)
         CoroutineScope(Dispatchers.IO).launch {

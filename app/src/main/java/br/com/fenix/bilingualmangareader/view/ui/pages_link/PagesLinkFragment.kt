@@ -31,10 +31,12 @@ import br.com.fenix.bilingualmangareader.model.entity.PageLink
 import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.model.enums.LoadFile
 import br.com.fenix.bilingualmangareader.model.enums.Pages
+import br.com.fenix.bilingualmangareader.model.enums.Themes
 import br.com.fenix.bilingualmangareader.service.controller.SubTitleController
 import br.com.fenix.bilingualmangareader.service.listener.PageLinkCardListener
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.constants.PageLinkConsts
+import br.com.fenix.bilingualmangareader.util.helpers.MenuUtil
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import br.com.fenix.bilingualmangareader.util.helpers.Util.Utils.getColorFromAttr
 import br.com.fenix.bilingualmangareader.view.adapter.page_link.PageLinkCardAdapter
@@ -126,6 +128,9 @@ class PagesLinkFragment : Fragment() {
         mFileLinkLanguageAutoComplete = root.findViewById(R.id.pages_link_language_autocomplete)
         mPagesIndex = root.findViewById(R.id.pages_link_pages_index)
         mMangaName = root.findViewById(R.id.pages_link_name_manga)
+
+        MenuUtil.tintColor(requireContext(), mFileLink)
+        MenuUtil.tintColor(requireContext(), mFileLinkLanguage)
 
         mContentButton = root.findViewById(R.id.pages_link_buttons_content)
         mSave = root.findViewById(R.id.pages_link_save_button)

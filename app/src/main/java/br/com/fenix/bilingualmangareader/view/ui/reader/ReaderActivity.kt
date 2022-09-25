@@ -54,6 +54,7 @@ import br.com.fenix.bilingualmangareader.service.repository.SubTitleRepository
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.FileUtil
 import br.com.fenix.bilingualmangareader.util.helpers.LibraryUtil
+import br.com.fenix.bilingualmangareader.util.helpers.MenuUtil
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import br.com.fenix.bilingualmangareader.util.helpers.Util.Utils.getColorFromAttr
 import br.com.fenix.bilingualmangareader.view.adapter.reader.MangaChaptersCardAdapter
@@ -80,7 +81,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     private lateinit var mReaderTitle: TextView
     private lateinit var mReaderProgress: SeekBar
     private lateinit var mNavReader: LinearLayout
-    private lateinit var mToolbar: Toolbar
+    private lateinit var mToolBar: Toolbar
     private lateinit var mToolbarTitle: TextView
     private lateinit var mToolbarSubTitle: TextView
     private lateinit var mToolbarTitleContent: LinearLayout
@@ -145,15 +146,17 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         if (savedInstanceState == null)
             mSubtitleController.clearExternalSubtitlesSelected()
 
-        mToolbar = findViewById(R.id.toolbar_reader)
+        mToolBar = findViewById(R.id.toolbar_reader)
+        mToolBar.context.setTheme(MenuUtil.getToolbarTheme(theme))
         mToolbarTitle = findViewById(R.id.toolbar_title_custom)
         mToolbarSubTitle = findViewById(R.id.toolbar_subtitle_custom)
+        MenuUtil.tintColor(this, mToolbarSubTitle)
         mToolbarTitleContent = findViewById(R.id.toolbar_title_content)
         mSubToolbar = findViewById(R.id.sub_toolbar)
         mLanguageOcrDescription = findViewById(R.id.ocr_language)
         mLanguageOcrDescription.setOnClickListener { choiceLanguage { mViewModel.mLanguageOcr = it } }
 
-        setSupportActionBar(mToolbar)
+        setSupportActionBar(mToolBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(true)
 
@@ -906,11 +909,11 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
 
         return when (position) {
             Position.CORNER_TOP_RIGHT -> {
-                mFragment?.changeAspect(mToolbar, ReaderMode.FIT_WIDTH)
+                mFragment?.changeAspect(mToolBar, ReaderMode.FIT_WIDTH)
                 true
             }
             Position.CORNER_TOP_LEFT -> {
-                mFragment?.changeAspect(mToolbar, ReaderMode.ASPECT_FIT)
+                mFragment?.changeAspect(mToolBar, ReaderMode.ASPECT_FIT)
                 true
             }
             Position.CORNER_BOTTOM_RIGHT -> {
