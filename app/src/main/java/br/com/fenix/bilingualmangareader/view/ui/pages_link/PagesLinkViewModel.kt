@@ -1248,6 +1248,9 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
         if (!isForced && (mLoadError > 3 || (isVerifyImages && mLoadVerify > 3))) {
             if (mLoadError > 3)
                 notifyMessages(type, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_LOAD_ERROR_ENABLE_MANUAL)
+            else if (mLoadVerify > 3 && !isAllImagesLoaded(type))
+                notifyMessages(type, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_LOAD_ERROR_ENABLE_MANUAL)
+
             return
         }
 
