@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
+import androidx.appcompat.widget.Toolbar
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.enums.Themes
 import br.com.fenix.bilingualmangareader.util.helpers.Util.Utils.getColorFromAttr
@@ -16,6 +17,11 @@ import com.google.android.material.textfield.TextInputLayout
 
 class MenuUtil {
     companion object MenuUtils {
+
+        fun tintToolbar(toolbar: Toolbar, theme: Themes) {
+            toolbar.context.setTheme(getToolbarTheme(theme))
+            toolbar.popupTheme = theme.getValue()
+        }
 
         fun getToolbarTheme(theme: Themes): Int {
             return when (theme) {

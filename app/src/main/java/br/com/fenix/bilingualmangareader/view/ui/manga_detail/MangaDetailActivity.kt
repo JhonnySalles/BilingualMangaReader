@@ -24,7 +24,7 @@ class MangaDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_manga_detail)
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar_manga_detail)
-        toolbar.context.setTheme(MenuUtil.getToolbarTheme(theme))
+        MenuUtil.tintToolbar(toolbar, theme)
         setSupportActionBar(toolbar)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

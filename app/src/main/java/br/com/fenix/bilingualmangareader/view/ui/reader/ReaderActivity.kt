@@ -147,7 +147,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
             mSubtitleController.clearExternalSubtitlesSelected()
 
         mToolBar = findViewById(R.id.toolbar_reader)
-        mToolBar.context.setTheme(MenuUtil.getToolbarTheme(theme))
+        MenuUtil.tintToolbar(mToolBar, theme)
         mToolbarTitle = findViewById(R.id.toolbar_title_custom)
         mToolbarSubTitle = findViewById(R.id.toolbar_subtitle_custom)
         MenuUtil.tintColor(this, mToolbarSubTitle)
