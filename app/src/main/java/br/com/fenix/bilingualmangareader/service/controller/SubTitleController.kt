@@ -947,8 +947,8 @@ class SubTitleController private constructor(private val context: Context) {
     fun locateFileLink(page: Int) {
         if (mFileLink == null) return
 
-        mFileLink!!.pagesLink!!.first { it.mangaPage.compareTo(page) == 0 }.let {
-            if (it.fileLinkLeftPage > -1) {
+        mFileLink!!.pagesLink!!.firstOrNull { it.mangaPage.compareTo(page) == 0 }.let {
+            if (it != null && it.fileLinkLeftPage > -1) {
                 val uri = if (it.isDualImage)
                     saveImageFolder(mFileLink!!, it.fileLinkLeftPage, it.fileLinkRightPage)
                 else

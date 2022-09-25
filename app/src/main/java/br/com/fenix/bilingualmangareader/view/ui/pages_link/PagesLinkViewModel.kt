@@ -398,7 +398,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                                     if (pagesLink[i + padding].mangaPagePath.equals(pagesLink[i + padding - 1].mangaPagePath, true)) {
                                         do {
                                             padding++
-                                            if ((i + padding) > pagesLink.size)
+                                            if ((i + padding) >= pagesLink.size)
                                                 break
                                         } while (pagesLink[i + padding].mangaPagePath.equals(
                                                 pagesLink[i + padding - 1].mangaPagePath,
