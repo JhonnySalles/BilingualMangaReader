@@ -5,7 +5,7 @@
     <color name="green_neon_theme_light_onPrimary">#001a00</color>
     <color name="green_neon_theme_light_primaryContainer">#80FF2B</color>
     <color name="green_neon_theme_light_onPrimaryContainer">#092100</color>
-    <color name="green_neon_theme_light_secondary">#56624B</color>
+    <color name="green_neon_theme_light_secondary">#4dff4d</color>
     <color name="green_neon_theme_light_onSecondary">#FFFFFF</color>
     <color name="green_neon_theme_light_secondaryContainer">#D9E7CA</color>
     <color name="green_neon_theme_light_onSecondaryContainer">#141E0D</color>
@@ -17,11 +17,11 @@
     <color name="green_neon_theme_light_errorContainer">#FFDAD6</color>
     <color name="green_neon_theme_light_onError">#FFFFFF</color>
     <color name="green_neon_theme_light_onErrorContainer">#410002</color>
-    <color name="green_neon_theme_light_background">#f3f3f1</color>
+    <color name="green_neon_theme_light_background">#e6ffe6</color>
     <color name="green_neon_theme_light_onBackground">#1A1C18</color>
-    <color name="green_neon_theme_light_surface">#FDFDF5</color>
+    <color name="green_neon_theme_light_surface">#e6ffe6</color>
     <color name="green_neon_theme_light_onSurface">#006600</color>
-    <color name="green_neon_theme_light_surfaceVariant">#43483E</color>
+    <color name="green_neon_theme_light_surfaceVariant">#66ff33</color>
     <color name="green_neon_theme_light_onSurfaceVariant">#4d9900</color>
     <color name="green_neon_theme_light_outline">#74796D</color>
     <color name="green_neon_theme_light_inverseOnSurface">#F1F1EA</color>
@@ -51,7 +51,7 @@
     <color name="green_neon_theme_dark_onBackground">#E3E3DC</color>
     <color name="green_neon_theme_dark_surface">#001a00</color>
     <color name="green_neon_theme_dark_onSurface">#006600</color>
-    <color name="green_neon_theme_dark_surfaceVariant">#43483E</color>
+    <color name="green_neon_theme_dark_surfaceVariant">#66ff33</color>
     <color name="green_neon_theme_dark_onSurfaceVariant">#4d9900</color>
     <color name="green_neon_theme_dark_outline">#66ff33</color>
     <color name="green_neon_theme_dark_inverseOnSurface">#006600</color>

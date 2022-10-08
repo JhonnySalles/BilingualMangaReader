@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.view.Menu
+import android.view.View
 import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.TextView
@@ -17,6 +18,10 @@ import com.google.android.material.textfield.TextInputLayout
 
 class MenuUtil {
     companion object MenuUtils {
+
+        fun tintBackground(context: Context, background: View) {
+            background.setBackgroundColor(context.getColorFromAttr(R.attr.colorSurface))
+        }
 
         fun tintToolbar(toolbar: Toolbar, theme: Themes) {
             toolbar.context.setTheme(getToolbarTheme(theme))

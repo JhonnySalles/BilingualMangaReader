@@ -19,7 +19,7 @@
     <color name="blood_theme_light_onErrorContainer">#410002</color>
     <color name="blood_theme_light_background">#f3f3f1</color>
     <color name="blood_theme_light_onBackground">#ffe7e6</color>
-    <color name="blood_theme_light_surface">#FFFBFF</color>
+    <color name="blood_theme_light_surface">#ffe7e6</color>
     <color name="blood_theme_light_onSurface">#ffb3b5</color>
     <color name="blood_theme_light_surfaceVariant">#DEE3EB</color>
     <color name="blood_theme_light_onSurfaceVariant">#e62e00</color>

@@ -9,8 +9,15 @@
     android:fitsSystemWindows="true"
     android:clipToPadding="false"
     android:clipChildren="false"
-    android:theme="@style/Theme.MangaReader"
+    android:theme="@style/Theme.MangaReader.NoNavigationBar"
     tools:context=".MainActivity">
+
+    <View
+        android:id="@+id/manga_background"
+        style="@style/AppBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"/>
 
     <!-- action bar -->
     <com.google.android.material.appbar.AppBarLayout
@@ -38,7 +45,7 @@
         android:src="@mipmap/main_header_cut_semi" />
 
     <View
-        android:id="@+id/manga_detail_title_content"
+        android:id="@+id/main_detail_title_content"
         android:layout_width="match_parent"
         android:layout_gravity="top|center"
         android:layout_height="380dp"

@@ -5,7 +5,7 @@
     <color name="blue_neon_theme_light_onPrimary">#000a1a</color>
     <color name="blue_neon_theme_light_primaryContainer">#97F0FF</color>
     <color name="blue_neon_theme_light_onPrimaryContainer">#001F24</color>
-    <color name="blue_neon_theme_light_secondary">#4A6267</color>
+    <color name="blue_neon_theme_light_secondary">#47d8eb</color>
     <color name="blue_neon_theme_light_onSecondary">#FFFFFF</color>
     <color name="blue_neon_theme_light_secondaryContainer">#CDE7EC</color>
     <color name="blue_neon_theme_light_onSecondaryContainer">#051F23</color>
@@ -17,11 +17,11 @@
     <color name="blue_neon_theme_light_errorContainer">#FFDAD6</color>
     <color name="blue_neon_theme_light_onError">#FFFFFF</color>
     <color name="blue_neon_theme_light_onErrorContainer">#410002</color>
-    <color name="blue_neon_theme_light_background">#f3f3f1</color>
+    <color name="blue_neon_theme_light_background">#e6ffff</color>
     <color name="blue_neon_theme_light_onBackground">#191C1D</color>
-    <color name="blue_neon_theme_light_surface">#FAFDFD</color>
+    <color name="blue_neon_theme_light_surface">#e6ffff</color>
     <color name="blue_neon_theme_light_onSurface">#2b4e55</color>
-    <color name="blue_neon_theme_light_surfaceVariant">#3F484A</color>
+    <color name="blue_neon_theme_light_surfaceVariant">#00ffff</color>
     <color name="blue_neon_theme_light_onSurfaceVariant">#447c88</color>
     <color name="blue_neon_theme_light_outline">#6F797A</color>
     <color name="blue_neon_theme_light_inverseOnSurface">#EFF1F1</color>
@@ -51,7 +51,7 @@
     <color name="blue_neon_theme_dark_onBackground">#E1E3E3</color>
     <color name="blue_neon_theme_dark_surface">#00001a</color>
     <color name="blue_neon_theme_dark_onSurface">#2b4e55</color>
-    <color name="blue_neon_theme_dark_surfaceVariant">#3F484A</color>
+    <color name="blue_neon_theme_dark_surfaceVariant">#00ffff</color>
     <color name="blue_neon_theme_dark_onSurfaceVariant">#447c88</color>
     <color name="blue_neon_theme_dark_outline">#00ffff</color>
     <color name="blue_neon_theme_dark_inverseOnSurface">#00004d</color>

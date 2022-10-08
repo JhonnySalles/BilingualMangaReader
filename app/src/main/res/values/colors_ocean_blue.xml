@@ -17,12 +17,12 @@
     <color name="ocean_theme_light_errorContainer">#FFDAD6</color>
     <color name="ocean_theme_light_onError">#FFFFFF</color>
     <color name="ocean_theme_light_onErrorContainer">#410002</color>
-    <color name="ocean_theme_light_background">#f3f3f1</color>
+    <color name="ocean_theme_light_background">#e6e6ff</color>
     <color name="ocean_theme_light_onBackground">#e6ecff</color>
-    <color name="ocean_theme_light_surface">#FEFBFF</color>
+    <color name="ocean_theme_light_surface">#e6e6ff</color>
     <color name="ocean_theme_light_onSurface">#cce7ff</color>
-    <color name="ocean_theme_light_surfaceVariant">#DEE3EB</color>
-    <color name="ocean_theme_light_onSurfaceVariant">#3366ff    </color>
+    <color name="ocean_theme_light_surfaceVariant">#ccccff</color>
+    <color name="ocean_theme_light_onSurfaceVariant">#4d4dff</color>
     <color name="ocean_theme_light_outline">#3366ff</color>
     <color name="ocean_theme_light_inverseOnSurface">#F0EFFF</color>
     <color name="ocean_theme_light_inverseSurface">#0040ff</color>

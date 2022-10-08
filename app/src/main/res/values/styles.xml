@@ -17,39 +17,39 @@
         <item name="android:background">?attr/colorTertiaryContainer</item>
     </style>
 
-    <style name="ThemeTextTitle" parent="Base.Theme.MangaReader">
+    <style name="ThemeTextTitle" parent="Theme.MangaReader">
         <item name="android:background">?attr/colorOnPrimary</item>
     </style>
 
-    <style name="ThemeTextNormal" parent="Base.Theme.MangaReader">
+    <style name="ThemeTextNormal" parent="Theme.MangaReader">
         <item name="android:background">?attr/colorPrimary</item>
     </style>
 
-    <style name="ThemeTextNormal.Card.Title" parent="Base.Theme.MangaReader">
+    <style name="ThemeTextNormal.Card.Title" parent="Theme.MangaReader">
         <item name="android:background">?attr/colorOnTertiary</item>
     </style>
 
-    <style name="ThemeTextNormal.Card.Text" parent="Base.Theme.MangaReader">
+    <style name="ThemeTextNormal.Card.Text" parent="Theme.MangaReader">
         <item name="android:background">?attr/colorOnTertiary</item>
     </style>
 
-    <style name="ThemeTextNormal.Card.Number" parent="Base.Theme.MangaReader">
+    <style name="ThemeTextNormal.Card.Number" parent="Theme.MangaReader">
         <item name="android:background">@color/card_number</item>
     </style>
 
-    <style name="ThemeTextNormal.Card.Border" parent="Base.Theme.MangaReader">
+    <style name="ThemeTextNormal.Card.Border" parent="Theme.MangaReader">
         <item name="android:background">@color/shadow_inverse</item>
     </style>
 
-    <style name="ThemeTextInput" parent="Base.Theme.MangaReader">
+    <style name="ThemeTextInput" parent="Theme.MangaReader">
         <item name="android:background">?attr/colorOnSurface</item>
     </style>
 
-    <style name="ThemeTextInput.Icon" parent="Base.Theme.MangaReader">
+    <style name="ThemeTextInput.Icon" parent="Theme.MangaReader">
         <item name="android:background">?attr/colorPrimaryContainer</item>
     </style>
 
-    <style name="ThemeTextInput.Text" parent="Base.Theme.MangaReader">
+    <style name="ThemeTextInput.Text" parent="Theme.MangaReader">
         <item name="android:background">?attr/colorPrimary</item>
     </style>
 
@@ -84,7 +84,7 @@
     </style>
 
     <!-- - - - - - - - - - - - - - - - - - - - Basic System Style - - - - - - - - - - - - - - - - - - - -->
-    <style name="AppBackground" parent="Base.Theme.MangaReader">
+    <style name="AppBackground" parent="Theme.MangaReader">
         <item name="android:background">?attr/colorSurface</item>
     </style>
 
@@ -114,7 +114,7 @@
         <item name="android:background">?attr/colorOnSurface</item>
     </style>
 
-    <style name="MaterialDivider" parent="Base.Theme.MangaReader">
+    <style name="MaterialDivider" parent="Theme.MangaReader">
         <item name="dividerColor">?attr/colorOutline</item>
         <item name="dividerInsetStart">16dp</item>
         <item name="dividerInsetEnd">16dp</item>
@@ -163,7 +163,7 @@
         <item name="android:textColor">?attr/colorPrimary</item>
     </style>
 
-    <style name="SwitchMaterial" parent="Base.Theme.MangaReader">
+    <style name="SwitchMaterial" parent="Theme.MangaReader">
         <item name="android:textColor">?attr/colorPrimary</item>
         <item name="android:checked">false</item>
         <item name="android:paddingStart">16dp</item>
@@ -266,11 +266,11 @@
         <item name="shapeAppearanceOverlay">@style/FloatingActionButtonRounded</item>
     </style>
 
-    <style name="TextTitle" parent="Base.Theme.MangaReader">
+    <style name="TextTitle" parent="Theme.MangaReader">
         <item name="android:textColor">?attr/colorSecondary</item>
     </style>
 
-    <style name="TextNormal" parent="Base.Theme.MangaReader" >
+    <style name="TextNormal" parent="Theme.MangaReader" >
         <item name="android:textColor">?attr/colorPrimary</item>
         <item name="iconTint">?attr/colorPrimary</item>
     </style>
@@ -427,7 +427,7 @@
 
     <style name="TextNormal.Config" parent="TextNormal"/>
 
-    <style name="TextTitle.PageNumber" parent="Base.Theme.MangaReader">
+    <style name="TextTitle.PageNumber" parent="Theme.MangaReader">
         <item name="android:textColor">?attr/colorTertiary</item>
     </style>
 
