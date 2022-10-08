@@ -5,7 +5,7 @@
     <color name="forest_theme_light_onPrimary">#d6f5d6</color>
     <color name="forest_theme_light_primaryContainer">#00ff00</color>
     <color name="forest_theme_light_onPrimaryContainer">#196619</color>
-    <color name="forest_theme_light_secondary">#248f24</color>
+    <color name="forest_theme_light_secondary">#0f3d0f</color>
     <color name="forest_theme_light_onSecondary">#145214</color>
     <color name="forest_theme_light_secondaryContainer">#d6f5d6</color>
     <color name="forest_theme_light_onSecondaryContainer">#009900</color>
@@ -19,7 +19,7 @@
     <color name="forest_theme_light_onErrorContainer">#410002</color>
     <color name="forest_theme_light_background">#f3f3f1</color>
     <color name="forest_theme_light_onBackground">#ccffcc</color>
-    <color name="forest_theme_light_surface">#F7FFED</color>
+    <color name="forest_theme_light_surface">#ccffcc</color>
     <color name="forest_theme_light_onSurface">#009900</color>
     <color name="forest_theme_light_surfaceVariant">#DEE3EB</color>
     <color name="forest_theme_light_onSurfaceVariant">#4dff4d</color>

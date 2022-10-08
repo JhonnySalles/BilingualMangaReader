@@ -13,6 +13,7 @@ import android.view.animation.AnimationUtils
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -25,6 +26,7 @@ import br.com.fenix.bilingualmangareader.model.enums.Libraries
 import br.com.fenix.bilingualmangareader.service.listener.LibrariesCardListener
 import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import br.com.fenix.bilingualmangareader.util.helpers.MenuUtil
 import br.com.fenix.bilingualmangareader.util.helpers.MsgUtil
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import br.com.fenix.bilingualmangareader.view.adapter.configuration.LibrariesLineCardAdapter
@@ -57,6 +59,7 @@ class ConfigLibrariesFragment : Fragment() {
         mRecycleView.layoutAnimation = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_library_line)
 
         mToolbar = view.findViewById(R.id.toolbar_configuration_libraries)
+        MenuUtil.tintColor(requireContext(), view.findViewById<TextView>(R.id.config_libraries_title))
 
         (requireActivity() as MenuActivity).setActionBar(mToolbar)
 

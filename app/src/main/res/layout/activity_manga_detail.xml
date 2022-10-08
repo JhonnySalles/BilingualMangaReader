@@ -9,9 +9,16 @@
     android:fitsSystemWindows="true"
     android:clipToPadding="false"
     android:clipChildren="false"
-    android:theme="@style/Theme.MangaReader"
+    android:theme="@style/Theme.MangaReader.NoNavigationBar"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".view.ui.manga_detail.MangaDetailActivity">
+
+    <View
+        android:id="@+id/manga_detail_background"
+        style="@style/AppBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"/>
 
     <LinearLayout
         android:id="@+id/root_frame_manga_detail"
