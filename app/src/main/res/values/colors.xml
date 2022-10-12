@@ -39,6 +39,7 @@
 
     <color name="floating_background_semi_transparent">#BF000000</color>
     <color name="floating_button_color">#FFFFFF</color>
+    <color name="floating_button_subtitle_background_selected">#000000</color>
     <color name="floating_button_subtitle_background">#275201</color>
     <color name="floating_text_color">#FFFFFF</color>
     <color name="floating_title_color">#79b700</color>
