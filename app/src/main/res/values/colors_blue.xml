@@ -22,7 +22,7 @@
     <color name="blue_theme_light_surface">#f3f3f1</color>
     <color name="blue_theme_light_onSurface">#cdcfc9</color>
     <color name="blue_theme_light_surfaceVariant">#FFFFFF</color>
-    <color name="blue_theme_light_onSurfaceVariant">#46464F</color>
+    <color name="blue_theme_light_onSurfaceVariant">#4d69e6</color>
     <color name="blue_theme_light_outline">#4d69e6</color>
     <color name="blue_theme_light_inverseOnSurface">#FBEEEC</color>
     <color name="blue_theme_light_inverseSurface">#bcc7f5</color>
