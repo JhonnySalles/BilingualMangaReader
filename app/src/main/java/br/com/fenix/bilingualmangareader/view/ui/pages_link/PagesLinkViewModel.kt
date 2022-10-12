@@ -394,7 +394,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                             folder = Util.getFolderFromPath(pagePath)
                             if (!folder.equals(lastFolder, true)) {
                                 lastFolder = folder
-                                if (i > 0) {
+                                if (i > 0 && (i + padding) < pagesLink.size) {
                                     if (pagesLink[i + padding].mangaPagePath.equals(pagesLink[i + padding - 1].mangaPagePath, true)) {
                                         do {
                                             padding++

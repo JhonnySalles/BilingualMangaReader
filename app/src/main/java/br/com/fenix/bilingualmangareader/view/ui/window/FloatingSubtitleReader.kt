@@ -151,6 +151,8 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
     private var mOcrListText: ListView
     private var mOcrScrollContent: NestedScrollView
 
+    private var mBtnChangeSubtitle : AppCompatImageButton
+    private var mBtnChangeOcr : AppCompatImageButton
     private var mBtnExpanded: AppCompatImageButton
     private var mIconExpanded: Drawable?
     private var mIconRetracted: Drawable?
@@ -178,11 +180,11 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
             this.findViewById<AppCompatImageButton>(R.id.nav_floating_subtitle_page_linked)
                 .setOnClickListener { mSubTitleController.drawPageLinked() }
 
-            this.findViewById<AppCompatImageButton>(R.id.nav_floating_subtitle_change_subtitle)
-                .setOnClickListener { changeLayout() }
+            mBtnChangeSubtitle = this.findViewById(R.id.nav_floating_subtitle_change_subtitle)
+            mBtnChangeOcr = this.findViewById(R.id.nav_floating_subtitle_change_ocr)
 
-            this.findViewById<AppCompatImageButton>(R.id.nav_floating_subtitle_change_ocr)
-                .setOnClickListener { changeLayout(false) }
+            mBtnChangeSubtitle.setOnClickListener { changeLayout() }
+            mBtnChangeOcr.setOnClickListener { changeLayout(false) }
 
             this.findViewById<AppCompatImageButton>(R.id.nav_floating_subtitle_go_to_top).setOnClickListener {
                 mSubtitleScrollContent.smoothScrollTo(0, 0)
@@ -201,7 +203,7 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
             mSubtitleTitle = this.findViewById(R.id.floating_subtitle_title)
             mSubtitleText = this.findViewById(R.id.floating_subtitle_subtitle)
             mListPageVocabulary = this.findViewById(R.id.floating_subtitle_list_page_vocabulary)
-            mListPageVocabulary.adapter = ArrayAdapter(context, R.layout.list_item_vocabulary_small, mVocabularyItem)
+            mListPageVocabulary.adapter = ArrayAdapter(context, R.layout.floating_subtitle_list_item, mVocabularyItem)
             mListPageVocabulary.choiceMode = ListView.CHOICE_MODE_SINGLE
             mListPageVocabulary.isLongClickable = true
             mListPageVocabulary.onItemLongClickListener = OnItemLongClickListener { _, _, index, _ ->
@@ -239,7 +241,7 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
             }
 
             mOcrListText = this.findViewById(R.id.floating_subtitle_ocr_list)
-            mOcrListText.adapter = ArrayAdapter(context, R.layout.list_item_vocabulary_small, mOcrItem)
+            mOcrListText.adapter = ArrayAdapter(context, R.layout.floating_subtitle_list_item, mOcrItem)
             mOcrListText.choiceMode = ListView.CHOICE_MODE_SINGLE
             mOcrListText.isLongClickable = true
             mOcrListText.onItemClickListener = AdapterView.OnItemClickListener { _, _, index, _ ->
@@ -542,9 +544,15 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
         if (isSubtitle) {
             mSubtitleContent.visibility = View.VISIBLE
             mOcrContent.visibility = View.GONE
+
+            mBtnChangeSubtitle.setBackgroundColor(context.getColor(R.color.floating_button_subtitle_background_selected))
+            mBtnChangeOcr.setBackgroundColor(context.getColor(R.color.floating_button_subtitle_background))
         } else {
             mSubtitleContent.visibility = View.GONE
             mOcrContent.visibility = View.VISIBLE
+
+            mBtnChangeSubtitle.setBackgroundColor(context.getColor(R.color.floating_button_subtitle_background))
+            mBtnChangeOcr.setBackgroundColor(context.getColor(R.color.floating_button_subtitle_background_selected))
         }
     }
 
