@@ -22,7 +22,7 @@
     <color name="green_theme_light_surface">#f3f3f1</color>
     <color name="green_theme_light_onSurface">#cdcfc9</color>
     <color name="green_theme_light_surfaceVariant">#FFFFFF</color>
-    <color name="green_theme_light_onSurfaceVariant">#45483C</color>
+    <color name="green_theme_light_onSurfaceVariant">#009900</color>
     <color name="green_theme_light_outline">#2eb82e</color>
     <color name="green_theme_light_inverseOnSurface">#F2F1E9</color>
     <color name="green_theme_light_inverseSurface">#5cd65c</color>

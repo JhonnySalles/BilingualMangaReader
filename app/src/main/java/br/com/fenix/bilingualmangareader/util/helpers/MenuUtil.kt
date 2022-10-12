@@ -24,8 +24,8 @@ class MenuUtil {
         }
 
         fun tintToolbar(toolbar: Toolbar, theme: Themes) {
-            toolbar.context.setTheme(getToolbarTheme(theme))
             toolbar.popupTheme = theme.getValue()
+            toolbar.context.setTheme(getToolbarTheme(theme))
         }
 
         fun getToolbarTheme(theme: Themes): Int {
