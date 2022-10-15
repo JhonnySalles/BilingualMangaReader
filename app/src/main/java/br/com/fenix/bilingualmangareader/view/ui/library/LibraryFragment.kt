@@ -370,15 +370,28 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         mListener = object : MangaCardListener {
             override fun onClick(manga: Manga) {
-                val intent = Intent(context, ReaderActivity::class.java)
-                val bundle = Bundle()
-                bundle.putSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY, mViewModel.getLibrary())
-                bundle.putString(GeneralConsts.KEYS.MANGA.NAME, manga.title)
-                bundle.putInt(GeneralConsts.KEYS.MANGA.MARK, manga.bookMark)
-                bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, manga)
-                intent.putExtras(bundle)
-                context?.startActivity(intent)
-                requireActivity().overridePendingTransition(R.anim.fade_in_fragment_add_enter, R.anim.fade_out_fragment_remove_exit)
+                if (manga.file.exists()) {
+                    val intent = Intent(context, ReaderActivity::class.java)
+                    val bundle = Bundle()
+                    bundle.putSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY, mViewModel.getLibrary())
+                    bundle.putString(GeneralConsts.KEYS.MANGA.NAME, manga.title)
+                    bundle.putInt(GeneralConsts.KEYS.MANGA.MARK, manga.bookMark)
+                    bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, manga)
+                    intent.putExtras(bundle)
+                    context?.startActivity(intent)
+                    requireActivity().overridePendingTransition(R.anim.fade_in_fragment_add_enter, R.anim.fade_out_fragment_remove_exit)
+                } else {
+                    removeList(manga)
+                    mViewModel.delete(manga)
+                    AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
+                        .setTitle(getString(R.string.manga_excluded))
+                        .setMessage(getString(R.string.file_not_found))
+                        .setPositiveButton(
+                            R.string.action_neutral
+                        ) { _, _ -> }
+                        .create()
+                        .show()
+                }
             }
 
             override fun onClickLong(manga: Manga, view: View, position: Int) {
@@ -626,8 +639,8 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun deleteFile(manga: Manga?) {
         if (manga?.file != null) {
-            mViewModel.delete(manga)
             removeList(manga)
+            mViewModel.delete(manga)
             if (manga.file.exists()) {
                 val isDeleted = manga.file.delete()
                 mLOGGER.info("File deleted ${manga.name}: $isDeleted")

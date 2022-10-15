@@ -57,6 +57,10 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
+    fun updateDelete(manga: Manga) {
+        mMangaRepository.delete(manga)
+    }
+
     fun updateLastAccess(manga: Manga) {
         mMangaRepository.update(manga)
     }

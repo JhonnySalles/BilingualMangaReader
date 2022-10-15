@@ -51,4 +51,9 @@ class HistoryCardAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         mListener = listener
     }
 
+    fun notifyItemChanged(manga: Manga) {
+        if (mHistoryList.contains(manga))
+            notifyItemChanged(mHistoryList.indexOf(manga))
+    }
+
 }

@@ -45,7 +45,7 @@ class HistoryFragment : Fragment() {
         ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(mRecycleView)
         mListener = object : MangaCardListener {
             override fun onClick(manga: Manga) {
-                if (!manga.excluded) {
+                if (!manga.excluded && manga.file.exists()) {
                     val intent = Intent(context, ReaderActivity::class.java)
                     val bundle = Bundle()
                     manga.lastAccess = LocalDateTime.now()
@@ -56,7 +56,15 @@ class HistoryFragment : Fragment() {
                     intent.putExtras(bundle)
                     context?.startActivity(intent)
                     mViewModel.updateLastAccess(manga)
-                } else
+                } else {
+                    if (!manga.excluded) {
+                        manga.excluded = true
+                        mViewModel.updateDelete(manga)
+                        mRecycleView.adapter?.let {
+                            (it as HistoryCardAdapter).notifyItemChanged(manga)
+                        }
+                    }
+
                     AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
                         .setTitle(getString(R.string.manga_excluded))
                         .setMessage(manga.file.path)
@@ -65,6 +73,7 @@ class HistoryFragment : Fragment() {
                         ) { _, _ -> }
                         .create()
                         .show()
+                }
             }
 
             override fun onClickLong(manga: Manga, view: View, position: Int) {

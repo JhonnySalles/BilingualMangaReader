@@ -342,7 +342,7 @@ class Util {
 
         private fun getNumberAtEnd(str: String): String {
             var numbers = ""
-            val m: Matcher = Pattern.compile("\\d+$|\\d+\\w$|\\d+\\.\\d+$").matcher(str)
+            val m: Matcher = Pattern.compile("\\d+$|\\d+\\w$|\\d+\\.\\d+$|(\\(|\\{|\\[)\\d+(\\)|\\]|\\})$").matcher(str)
             while (m.find())
                 numbers = m.group()
 
@@ -356,6 +356,8 @@ class Util {
                 numbers.replace(Regex("\\w\$"), "").padStart(10, '0') + numbers.replace(Regex("\\d+"), "")
             else if (name.contains(Regex("\\d+\\.\\d+\$")))
                 numbers.replace(Regex("\\.\\d+\$"), "").padStart(10, '0') + '.' + numbers.replace(Regex("\\d+\\."), "")
+            else if (name.contains(Regex("(\\(|\\{|\\[)\\d+(\\)|\\]|\\})$")))
+                numbers.replace(Regex("[^0-9]"), "").padStart(10, '0')
             else
                 numbers
         }
