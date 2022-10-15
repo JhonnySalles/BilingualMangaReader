@@ -34,10 +34,9 @@ class VocabularyMangaListViewHolder(itemView: View) : RecyclerView.ViewHolder(it
         val appear = itemView.findViewById<TextView>(R.id.vocabulary_manga_list_appear)
         val card = itemView.findViewById<MaterialCardView>(R.id.vocabulary_manga_list_image_card)
         val cover = itemView.findViewById<ImageView>(R.id.vocabulary_manga_list_image_cover)
-        val name = itemView.findViewById<TextView>(R.id.vocabulary_manga_list_nome)
 
+        card.tooltipText = vocabulary.manga?.name ?: ""
         appear.text = vocabulary.appears.toString()
-        name.text = vocabulary.manga?.name ?: ""
 
         val image = when ((1..5).random()) {
             1 -> GridViewHolder.mDefaultImageCover1
