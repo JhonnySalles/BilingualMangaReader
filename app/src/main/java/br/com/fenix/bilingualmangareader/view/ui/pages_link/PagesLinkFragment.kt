@@ -768,6 +768,7 @@ class PagesLinkFragment : Fragment() {
         val intent = Intent(requireContext(), MenuActivity::class.java)
         val bundle = Bundle()
         bundle.putInt(GeneralConsts.KEYS.FRAGMENT.ID, R.id.frame_select_manga)
+        bundle.putLong(GeneralConsts.KEYS.MANGA.ID, mViewModel.getMangaId())
         bundle.putString(GeneralConsts.KEYS.MANGA.NAME, mViewModel.getMangaName())
         intent.putExtras(bundle)
         requireActivity().overridePendingTransition(R.anim.fade_in_fragment_add_enter, R.anim.fade_out_fragment_remove_exit)
