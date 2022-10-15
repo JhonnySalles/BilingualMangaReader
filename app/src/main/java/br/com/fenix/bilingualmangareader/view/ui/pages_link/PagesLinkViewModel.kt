@@ -54,6 +54,10 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
     private var mUsePagePath = GeneralConsts.getSharedPreferences(mContext)
         .getBoolean(GeneralConsts.KEYS.PAGE_LINK.USE_PAGE_PATH_FOR_LINKED, false)
 
+    fun getMangaId(): Long {
+        return mManga?.id ?: -1
+    }
+
     fun getMangaName(): String {
         return mManga?.fileName ?: ""
     }

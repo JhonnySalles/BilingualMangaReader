@@ -183,7 +183,9 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
 
     override fun onResume() {
         super.onResume()
-        setFullscreen(fullscreen = true)
+
+        if (mParse != null)
+            setFullscreen(fullscreen = true)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -191,9 +193,11 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         mCurrentPage = 0
         mStorage = Storage(requireContext())
         mLibrary = LibraryUtil.getDefault(requireContext())
+        mPreferences = GeneralConsts.getSharedPreferences(requireContext())
+        mSubtitleController = SubTitleController.getInstance(requireContext())
 
         val bundle: Bundle? = arguments
-        if (bundle != null) {
+        if (bundle != null && !bundle.isEmpty) {
             mLibrary = bundle.getSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY) as Library
 
             mManga = bundle.getSerializable(GeneralConsts.KEYS.OBJECT.MANGA) as Manga?
@@ -206,7 +210,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             } else
                 bundle.getSerializable(GeneralConsts.KEYS.OBJECT.FILE) as File?
 
-            if (file != null) {
+            if (file != null && file.exists()) {
                 if (mManga == null)
                     mManga = mStorage.findByName(file.name)
 
@@ -217,7 +221,6 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
 
                 mParse = ParseFactory.create(file)
                 if (mParse != null) {
-                    mSubtitleController = SubTitleController.getInstance(requireContext())
                     mSubtitleController.getListChapter(mManga, mParse!!)
                     mSubtitleController.mReaderFragment = this
                     mFileName = file.name
@@ -243,7 +246,6 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             mPagerAdapter = ComicPagerAdapter()
             mGestureDetector = GestureDetector(requireActivity(), MyTouchListener())
 
-            mPreferences = GeneralConsts.getSharedPreferences(requireContext())
             mReaderMode = ReaderMode.valueOf(
                 mPreferences.getString(
                     GeneralConsts.KEYS.READER.READER_MODE,
@@ -288,12 +290,6 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
     ): View {
         val view: View = inflater.inflate(R.layout.fragment_reader, container, false)
 
-        if (mParse == null) {
-            val imageError = view.findViewById<ImageView>(R.id.image_error)
-            imageError.visibility = View.VISIBLE
-            return view
-        }
-
         mRoot = requireActivity().findViewById(R.id.root_activity_reader)
         mToolbarTop = requireActivity().findViewById(R.id.toolbar_reader_top)
         mPopupSubtitle = requireActivity().findViewById(R.id.menu_popup_translate)
@@ -302,12 +298,21 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         mToolbarBottom = requireActivity().findViewById(R.id.toolbar_reader_bottom)
         mPreviousButton = requireActivity().findViewById(R.id.nav_previous_file)
         mNextButton = requireActivity().findViewById(R.id.nav_next_file)
+        mViewPager = view.findViewById<View>(R.id.fragment_reader) as PageViewPager
 
         (mPageNavLayout.findViewById<View>(R.id.nav_reader_progress) as SeekBar).also {
             mPageSeekBar = it
         }
-        mPageSeekBar.max = (mParse?.numPages() ?: 2) - 1
+        mPageNavTextView = mPageNavLayout.findViewById<View>(R.id.nav_reader_title) as TextView
 
+        if (mParse == null) {
+            view.findViewById<ImageView>(R.id.image_error).visibility = View.VISIBLE
+            mPageNavTextView.text = ""
+            return view
+        } else
+            view.findViewById<ImageView>(R.id.image_error).visibility = View.GONE
+
+        mPageSeekBar.max = (mParse?.numPages() ?: 2) - 1
         mPageSeekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
@@ -325,8 +330,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 mPicasso.resumeTag(this@ReaderFragment.requireActivity())
             }
         })
-        mPageNavTextView = mPageNavLayout.findViewById<View>(R.id.nav_reader_title) as TextView
-        mViewPager = view.findViewById<View>(R.id.fragment_reader) as PageViewPager
+
         mViewPager.adapter = mPagerAdapter
         mViewPager.offscreenPageLimit = ReaderConsts.READER.OFF_SCREEN_PAGE_LIMIT
         mViewPager.setOnTouchListener(this)
@@ -356,9 +360,9 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             val newComicId = savedInstanceState.getLong(ReaderConsts.STATES.STATE_NEW_COMIC)
             val titleRes = savedInstanceState.getInt(ReaderConsts.STATES.STATE_NEW_COMIC_TITLE)
             confirmSwitch(mStorage.get(newComicId), titleRes)
-        } else {
+        } else
             setFullscreen(true)
-        }
+
         requireActivity().title = mFileName
         updateSeekBar()
 
@@ -407,7 +411,9 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
     override fun onDestroy() {
         mSubtitleController.mReaderFragment = null
         Util.destroyParse(mParse)
-        mPicasso.shutdown()
+        if (::mPicasso.isInitialized)
+            mPicasso.shutdown()
+
         super.onDestroy()
     }
 
@@ -489,7 +495,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             mViewPager.setCurrentItem(mViewPager.adapter!!.count - page, animated)
             mPageSeekBar.progress = mViewPager.adapter!!.count - page
         }
-        val navPage: String = StringBuilder()
+        val navPage: String = if (mParse == null) "" else StringBuilder()
             .append(page).append("/").append(mParse?.numPages() ?: 1)
             .toString()
         mPageNavTextView.text = navPage

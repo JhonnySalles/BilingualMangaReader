@@ -365,7 +365,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     }
 
     private fun initialize(manga: Manga?) {
-        val fragment: ReaderFragment = if (manga != null) {
+        val fragment: ReaderFragment = if (manga != null && manga.file.exists()) {
             setManga(manga)
             ReaderFragment.create(mLibrary, manga)
         } else

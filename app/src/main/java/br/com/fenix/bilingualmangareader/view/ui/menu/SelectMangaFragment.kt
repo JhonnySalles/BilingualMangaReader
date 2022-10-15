@@ -63,8 +63,11 @@ class SelectMangaFragment : Fragment() {
         setHasOptionsMenu(true)
 
         if (savedInstanceState == null) {
-            mViewModel.manga = ""
+            mViewModel.clearMangaSelected()
             arguments?.let {
+                if (it.containsKey(GeneralConsts.KEYS.MANGA.ID))
+                    mViewModel.id = it.getLong(GeneralConsts.KEYS.MANGA.ID)
+
                 if (it.containsKey(GeneralConsts.KEYS.MANGA.NAME))
                     mViewModel.manga = it.getString(GeneralConsts.KEYS.MANGA.NAME)!!
             }
@@ -174,7 +177,7 @@ class SelectMangaFragment : Fragment() {
         }
 
         observer()
-        mViewModel.list(mViewModel.manga) { }
+        mViewModel.list(mViewModel.id, mViewModel.manga) { }
 
         return root
     }
