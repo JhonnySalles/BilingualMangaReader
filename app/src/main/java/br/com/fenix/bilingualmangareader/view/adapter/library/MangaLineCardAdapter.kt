@@ -36,6 +36,8 @@ class MangaLineCardAdapter : RecyclerView.Adapter<LineViewHolder>() {
     }
 
     fun removeList(manga: Manga) {
+        if (mMangaList.contains(manga))
+            notifyItemRemoved(mMangaList.indexOf(manga))
         mMangaList.remove(manga)
     }
 

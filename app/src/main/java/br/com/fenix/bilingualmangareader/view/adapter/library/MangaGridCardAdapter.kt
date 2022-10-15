@@ -40,6 +40,8 @@ class MangaGridCardAdapter : RecyclerView.Adapter<GridViewHolder>() {
     }
 
     fun removeList(manga: Manga) {
+        if (mMangaList.contains(manga))
+            notifyItemRemoved(mMangaList.indexOf(manga))
         mMangaList.remove(manga)
     }
 
