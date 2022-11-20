@@ -143,7 +143,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
                     } else {
                         mListMangas.value!!.add(manga)
                         mListMangasFull.value!!.add(manga)
-                        indexes.add(Pair(ListMod.ADD, mListMangas.value!!.size - 1))
+                        indexes.add(Pair(ListMod.ADD, mListMangas.value!!.size))
                     }
                 }
             }
@@ -162,7 +162,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         } else {
             val list = mMangaRepository.list(mLibrary)
             if (list != null) {
-                indexes.add(Pair(ListMod.FULL, list.size - 1))
+                indexes.add(Pair(ListMod.FULL, list.size))
                 mListMangas.value = list.toMutableList()
                 mListMangasFull.value = list.toMutableList()
             } else {

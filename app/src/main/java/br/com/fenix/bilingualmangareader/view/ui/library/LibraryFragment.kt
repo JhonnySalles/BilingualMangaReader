@@ -161,7 +161,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun notifyDataSet(indexes: MutableList<kotlin.Pair<ListMod, Int>>) {
         if (indexes.any { it.first == ListMod.FULL })
-            notifyDataSet(0, (mViewModel.listMangas.value?.size ?: 2) - 1)
+            notifyDataSet(0, (mViewModel.listMangas.value?.size ?: 1))
         else {
             for (index in indexes)
                 when (index.first) {
@@ -234,7 +234,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun sortList() {
         mViewModel.sorted(mOrderBy)
-        val range = (mViewModel.listMangas.value?.size ?: 2) - 1
+        val range = (mViewModel.listMangas.value?.size ?: 1)
         notifyDataSet(0, range)
     }
 

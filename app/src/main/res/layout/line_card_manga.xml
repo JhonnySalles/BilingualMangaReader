@@ -39,21 +39,26 @@
             android:paddingStart="5dp"
             android:paddingEnd="1dp">
 
-            <ImageView
-                android:id="@+id/manga_line_favorite"
-                style="@style/IconFavorite"
-                android:layout_width="@dimen/manga_grid_favorite"
-                android:layout_height="@dimen/manga_grid_favorite"
-                android:visibility="gone"
-                android:src="@drawable/ic_favorite_mark" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/manga_line_favorite"
+                    style="@style/IconFavorite"
+                    android:layout_width="@dimen/manga_grid_favorite"
+                    android:layout_height="@dimen/manga_grid_favorite"
+                    android:src="@drawable/ic_favorite_mark"
+                    android:visibility="gone" />
 
-            <ImageView
-                android:id="@+id/manga_line_has_subtitle"
-                style="@style/IconFavorite"
-                android:layout_width="@dimen/manga_grid_subtitle"
-                android:layout_height="@dimen/manga_grid_subtitle"
-                android:src="@drawable/ic_subtitles"
-                android:visibility="gone"/>
+                <ImageView
+                    android:id="@+id/manga_line_has_subtitle"
+                    style="@style/IconFavorite"
+                    android:layout_width="@dimen/manga_grid_subtitle"
+                    android:layout_height="@dimen/manga_grid_subtitle"
+                    android:src="@drawable/ic_subtitles"
+                    android:visibility="gone" />
+            </LinearLayout>
 
             <!-- Title, secondary and supporting text -->
             <TextView
