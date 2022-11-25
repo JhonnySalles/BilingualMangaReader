@@ -145,6 +145,22 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
         return !isScroll
     }
 
+    fun getScrollPercent(): Float {
+        val imageSize = computeCurrentImageSize()
+        val imageHeight = imageSize.y
+        return (m[Matrix.MTRANS_Y] / imageHeight)
+    }
+
+    fun setScrollPercent(percent : Float) {
+        val imageSize = computeCurrentImageSize()
+        val imageHeight = imageSize.y
+        mMatrix.getValues(m)
+        val distance = m[Matrix.MTRANS_Y] + (imageHeight * percent)
+        mMatrix.postTranslate(0F, distance)
+        imageMatrix = mMatrix
+        postInvalidate()
+    }
+
     override fun setOnTouchListener(l: OnTouchListener?) {
         mOuterTouchListener = l
     }
