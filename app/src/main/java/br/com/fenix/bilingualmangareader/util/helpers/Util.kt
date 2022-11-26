@@ -469,6 +469,14 @@ class Util {
         fun setBold(text: String): String =
             "<b>$text</b>"
 
+        fun setVerticalText(text: String) : String {
+            var vertical : String = ""
+            for (c in text)
+                vertical += c + "\n"
+
+            return vertical
+        }
+
         fun getDivideStrings(text: String, delimiter: Char = '\n', occurrences: Int = 10): Pair<String, String> {
             var postion = text.length
             var occurence = 0

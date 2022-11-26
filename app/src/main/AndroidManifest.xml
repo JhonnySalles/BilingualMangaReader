@@ -56,6 +56,11 @@
             android:theme="@style/Theme.MangaReader.NoActionBar"
             android:parentActivityName=".MainActivity"/>
         <activity
+            android:name="br.com.fenix.bilingualmangareader.view.ui.vocabulary.VocabularyActivity"
+            android:exported="true"
+            android:theme="@style/Theme.MangaReader.NoActionBar"
+            android:parentActivityName=".MainActivity"/>
+        <activity
             android:name="br.com.fenix.bilingualmangareader.view.ui.menu.MenuActivity"
             android:exported="true"
             android:theme="@style/Theme.MangaReader.NoActionBar"

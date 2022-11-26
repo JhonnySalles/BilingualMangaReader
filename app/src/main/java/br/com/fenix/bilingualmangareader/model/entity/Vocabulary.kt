@@ -33,7 +33,7 @@ data class Vocabulary(
     val revised: Boolean,
 
     @ColumnInfo(name = DataBaseConsts.VOCABULARY.COLUMNS.FAVORITE)
-    val favorite: Boolean
+    var favorite: Boolean
 ) {
 
     @Ignore

@@ -107,6 +107,8 @@
     <dimen name="floating_reader_text">20sp</dimen>
     <dimen name="floating_reader_button_width">25dp</dimen>
     <dimen name="floating_reader_button_close">25dp</dimen>
+    <dimen name="floating_reader_right_margin">10dp</dimen>
+    <dimen name="floating_reader_right_margin_with_button">30dp</dimen>
 
     <dimen name="floating_ocr_min_size">50dp</dimen>
     <dimen name="floating_ocr_height">100dp</dimen>
@@ -214,9 +216,13 @@
     <dimen name="vocabulary_content_text_big_size">16sp</dimen>
     <dimen name="vocabulary_content_text_normal_size">14sp</dimen>
     <dimen name="vocabulary_content_text_small_size">12sp</dimen>
+    <dimen name="vocabulary_favorites_button_size">55dp</dimen>
     <dimen name="vocabulary_manga_cover_size">100dp</dimen>
     <dimen name="vocabulary_manga_name_size">14sp</dimen>
     <dimen name="vocabulary_manga_appear_size">14sp</dimen>
+    <dimen name="vocabulary_content_text_width">180dp</dimen>
+    <dimen name="vocabulary_content_text_width_tablet">200dp</dimen>
+    <dimen name="vocabulary_content_favorite_button_size">45dp</dimen>
 
     <dimen name="kanji_title_size">40sp</dimen>
     <dimen name="kanji_sub_title_size">20sp</dimen>

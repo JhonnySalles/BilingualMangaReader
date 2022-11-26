@@ -20,7 +20,6 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:clipToPadding="false"
             android:clipChildren="false"
             android:fillViewport="false">
@@ -221,6 +220,21 @@
                         app:iconPadding="@dimen/manga_detail_icon_padding"
                         app:iconGravity="textTop"
                         app:icon="@drawable/ic_delete"
+                        app:iconSize="@dimen/manga_detail_icon_size"
+                        app:cornerRadius="@dimen/manga_detail_icon_rounded"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/manga_detail_button_vocabulary"
+                        style="@style/Button.Detail.Tablet"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginStart="5dp"
+                        android:contentDescription="@string/manga_detail_vocabulary"
+                        android:text="@string/manga_detail_vocabulary"
+                        app:iconPadding="@dimen/manga_detail_icon_padding"
+                        app:iconGravity="textTop"
+                        app:icon="@drawable/ic_vocabulary"
                         app:iconSize="@dimen/manga_detail_icon_size"
                         app:cornerRadius="@dimen/manga_detail_icon_rounded"/>
 

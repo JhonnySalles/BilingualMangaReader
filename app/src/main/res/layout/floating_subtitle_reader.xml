@@ -191,7 +191,6 @@
             android:layout_width="@dimen/floating_reader_button_width"
             android:layout_height="@dimen/floating_reader_button_width"
             android:layout_marginTop="5dp"
-            android:layout_marginStart="5dp"
             android:src="@drawable/ic_navigate_next"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>

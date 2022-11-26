@@ -894,6 +894,8 @@ class SubTitleController private constructor(private val context: Context) {
         }
     }
 
+    fun getLanguage() : Languages = selectedSubtitle.value?.language ?: Languages.PORTUGUESE
+
     private var mOriginalSize: FloatArray? = null
     fun selectTextByCoordinate(coord: FloatArray) {
         if (pageSelected.value == null)
