@@ -82,6 +82,7 @@ dependencies {
     implementation 'com.github.pedromassango:doubleClick:3.0'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.36'
     implementation 'com.github.tony19:logback-android:2.0.0'
+    implementation "com.android.support:appcompat-v7:27.1.1" // Only < Android O
 
     //Horizontal list view
     implementation 'org.lucasr.twowayview:twowayview:0.1.4'
