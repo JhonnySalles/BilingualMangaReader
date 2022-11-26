@@ -227,6 +227,7 @@
     <string name="popup_reading_button_find">Procura automática de legenda</string>
     <string name="popup_reading_button_before">Texto anterior</string>
     <string name="popup_reading_button_next">Próximo texto</string>
+    <string name="popup_reading_button_favorite">Favorito</string>
 
     <string name="popup_reading_subtitle_empty">Legendas não encontrada</string>
     <string name="popup_reading_subtitle_embedded_empty">Não encontrado legenda embutida no manga selecionado, favor selecionar um arquivo no menu.</string>
@@ -266,6 +267,7 @@
     <string name="manga_detail_subtitles_title">Legendas</string>
     <string name="manga_detail_file_links_title">Arquivos vinculados</string>
     <string name="manga_detail_manga_deleted">Arquivo apagado</string>
+    <string name="manga_detail_vocabulary">Vocabulário</string>
 
     <string name="manga_detail_information">Informações</string>
     <string name="manga_detail_related">Relacionados</string>
@@ -323,6 +325,8 @@
     <string name="vocabulary_manga">Manga</string>
     <string name="vocabulary_find">Vocabulário</string>
     <string name="vocabulary_favorites">Favoritos</string>
+    <string name="vocabulary_favorite">Favoritos</string>
+    <string name="vocabulary_appear">Frequência: %d</string>
 
     <!-- KANJI -->
     <string name="kanji_jlpt"><b><i>jlpt:</i></b> N%d</string>

@@ -145,18 +145,49 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
         return !isScroll
     }
 
-    fun getScrollPercent(): Float {
-        val imageSize = computeCurrentImageSize()
-        val imageHeight = imageSize.y
-        return (m[Matrix.MTRANS_Y] / imageHeight)
+    private fun getMultipleScale() : Float {
+        val dWidth = drawable.intrinsicWidth
+        val dHeight = drawable.intrinsicHeight
+        val vWidth: Int = width
+        val vHeight: Int = height
+        val current = getCurrentScale()
+
+        val heightRatio = vHeight.toFloat() / dHeight
+        val w = dWidth * heightRatio
+        return if (w < vWidth)
+            current * dWidth / max(dWidth, vWidth)
+        else
+            current * dHeight / max(dHeight, vHeight)
     }
 
-    fun setScrollPercent(percent : Float) {
+    private fun generateScale(multiple: Float) : Float {
+        val dWidth = drawable.intrinsicWidth
+        val dHeight = drawable.intrinsicHeight
+        val vWidth: Int = width
+        val vHeight: Int = height
+
+        val heightRatio = vHeight.toFloat() / dHeight
+        val w = dWidth * heightRatio
+        return if (w < vWidth)
+            max(dWidth, vWidth) * multiple / dWidth
+        else
+            max(dHeight, vHeight) * multiple / dHeight
+    }
+
+    fun getScrollPercent(): Triple<Float, Float, Float> {
         val imageSize = computeCurrentImageSize()
-        val imageHeight = imageSize.y
+        return Triple((m[Matrix.MTRANS_X] / imageSize.x), (m[Matrix.MTRANS_Y] / imageSize.y), getMultipleScale())
+    }
+
+    fun setScrollPercent(percent : Triple<Float, Float, Float>) {
+        val (x, y, zoom) = percent
+        val scale = generateScale(zoom)
+        mMatrix.setScale(scale, scale)
         mMatrix.getValues(m)
-        val distance = m[Matrix.MTRANS_Y] + (imageHeight * percent)
-        mMatrix.postTranslate(0F, distance)
+        val imageSize = computeCurrentImageSize()
+        val posY = m[Matrix.MTRANS_Y] + (imageSize.y * y)
+        val posX = m[Matrix.MTRANS_X] + (imageSize.x * x)
+        mMatrix.postTranslate(posX, posY)
         imageMatrix = mMatrix
         postInvalidate()
     }

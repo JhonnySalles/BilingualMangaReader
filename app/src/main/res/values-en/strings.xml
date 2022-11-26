@@ -227,6 +227,7 @@
     <string name="popup_reading_button_find">Automatic subtitle search</string>
     <string name="popup_reading_button_before">Previous text</string>
     <string name="popup_reading_button_next">Next text</string>
+    <string name="popup_reading_button_favorite">Favorite</string>
 
     <string name="popup_reading_subtitle_empty">Subtitles not found</string>
     <string name="popup_reading_subtitle_embedded_empty">Subtitles not found in opened manga, please select a file from the menu.</string>
@@ -266,6 +267,7 @@
     <string name="manga_detail_subtitles_title">Subtitles</string>
     <string name="manga_detail_file_links_title">Files links</string>
     <string name="manga_detail_manga_deleted">File deleted</string>
+    <string name="manga_detail_vocabulary">Vocabulary</string>
 
     <string name="manga_detail_information">Information</string>
     <string name="manga_detail_related">Related</string>
@@ -323,6 +325,8 @@
     <string name="vocabulary_manga">Manga</string>
     <string name="vocabulary_find">Vocabulary</string>
     <string name="vocabulary_favorites">Favorites</string>
+    <string name="vocabulary_favorite">Favorite</string>
+    <string name="vocabulary_appear">Frequency: %d</string>
 
     <!-- KANJI -->
     <string name="kanji_jlpt"><b><i>jlpt:</i></b> N%d</string>

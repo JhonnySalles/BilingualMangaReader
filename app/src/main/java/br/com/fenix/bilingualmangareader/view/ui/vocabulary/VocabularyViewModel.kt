@@ -3,6 +3,7 @@ package br.com.fenix.bilingualmangareader.view.ui.vocabulary
 import android.app.Application
 import androidx.lifecycle.*
 import androidx.paging.*
+import br.com.fenix.bilingualmangareader.model.entity.Vocabulary
 import br.com.fenix.bilingualmangareader.service.repository.VocabularyRepository
 
 
@@ -56,6 +57,10 @@ class VocabularyViewModel(application: Application) : AndroidViewModel(applicati
 
     companion object {
         private val DEFAULT_QUERY = Triple("", "", false)
+    }
+
+    fun update(vocabulary: Vocabulary) {
+        mDataBase.update(vocabulary)
     }
 
 }
