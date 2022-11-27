@@ -591,7 +591,6 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         } catch (e: Exception) {
             mLOGGER.error("Error in open image: " + e.message, e)
         }
-
     }
 
     fun loadImage(t: MyTarget) {
@@ -612,7 +611,6 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         } catch (e: Exception) {
             mLOGGER.error("Error in open image: " + e.message, e)
         }
-
     }
 
     inner class MyTarget(layout: View, val position: Int) : Target,
