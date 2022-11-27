@@ -1104,7 +1104,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                 continue
 
             if (page.mangaPage > maxNumPage)
-                break
+                pagesLinkTemp.add(PageLink(page))
             else {
                 val pageLink = PageLink(page)
                 pagesLinkTemp.add(pageLink)
