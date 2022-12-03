@@ -13,8 +13,8 @@ android {
         minSdkVersion 24
         maxSdkVersion 25
         targetSdk 24
-        versionCode 16
-        versionName "2.16 (Nougat)"
+        versionCode 17
+        versionName "2.17 (Nougat)"
         archivesBaseName = "BilingualManga_" + versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
