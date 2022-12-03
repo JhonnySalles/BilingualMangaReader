@@ -1,15 +1,24 @@
 package br.com.fenix.bilingualmangareader.view.adapter.page_link
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.annotation.SuppressLint
 import android.content.ClipDescription
+import android.content.Context
 import android.content.res.Configuration
+import android.drm.DrmRights
 import android.graphics.Point
 import android.graphics.Rect
+import android.text.method.LinkMovementMethod
 import android.view.DragEvent
+import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.PageLink
@@ -19,6 +28,11 @@ import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.constants.PageLinkConsts
 import br.com.fenix.bilingualmangareader.util.helpers.Util.Utils.getColorFromAttr
 import com.google.android.material.card.MaterialCardView
+import com.pedromassango.doubleclick.DoubleClick
+import com.pedromassango.doubleclick.DoubleClickListener
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 
@@ -33,6 +47,7 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
         var mPageLinkCardWidthInDual: Int = 0
         var mPageLinkRightSelectStroke: Int = 0
         var mUsePagePath = false
+        const val MIN_SWIPE_DISTANCE = -200
     }
 
     init {
@@ -79,7 +94,8 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
         val dualProgress = itemView.findViewById<ProgressBar>(R.id.dual_page_progress_bar)
 
         root.setBackgroundColor(itemView.context.getColorFromAttr(R.attr.colorSurface))
-        pageRoot.setOnClickListener { listener.onClick(page) }
+        mangaRoot.setOnClickListener(getDoubleClick(mangaRoot, page, true))
+        pageRoot.setOnClickListener(getDoubleClick(pageRoot, page))
 
         mangaNumber.text = page.mangaPage.toString()
         mangaName.text = if (mUsePagePath && page.mangaPage != PageLinkConsts.VALUES.PAGE_EMPTY)
@@ -128,6 +144,8 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
         dualPageName.visibility = if (dualPageName.text.isEmpty()) View.INVISIBLE else View.VISIBLE
 
         if (page.isDualImage) {
+            dualPageRoot.setOnClickListener(getDoubleClick(dualPageRoot, page, isRight = true))
+
             pageRoot.layoutParams.width = mPageLinkCardWidthInDual
             dualPageRoot.visibility = View.VISIBLE
             dualPageImage.setImageBitmap(page.imageRightFileLinkPage)
@@ -141,6 +159,7 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
                 dualProgress.visibility = if (page.fileLinkRightPage != PageLinkConsts.VALUES.PAGE_EMPTY) View.VISIBLE else View.GONE
             }
         } else {
+            dualPageRoot.setOnClickListener { }
             pageRoot.layoutParams.width = mPageLinkCardWidth
             dualPageRoot.visibility = View.GONE
             dualPageImage.visibility = View.GONE
@@ -295,6 +314,17 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
                 mPageLinkCardWidth
 
         }
+    }
+
+    private fun getDoubleClick(root: View, page: PageLink, isManga : Boolean = false, isRight: Boolean = false) : DoubleClick {
+        return DoubleClick(object : DoubleClickListener {
+            override fun onSingleClick(view: View?) {
+                listener.onClick(root, page, isManga, isRight)
+            }
+            override fun onDoubleClick(view: View?) {
+                listener.onDoubleClick(root, page, isManga, isRight)
+            }
+        }, 500)
     }
 
 }

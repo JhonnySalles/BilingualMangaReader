@@ -292,7 +292,7 @@
     <string name="page_link_manga_empty_description">Manga não selecionado</string>
     <string name="page_link_file">Arquivo em outro idioma</string>
     <string name="page_link_file_language">Linguagem do arquivo</string>
-    <string name="page_link_refresh_file_link">Recarregar arquivo vinculado</string>
+    <string name="page_link_reload_file_link">Recarregar arquivo vinculado</string>
     <string name="page_link_save">Salvar</string>
     <string name="page_link_delete_file_link">Deletar arquivo vinculado</string>
     <string name="page_link_delete_description">Deseja excluir as páginas vinculadas?</string>
@@ -305,6 +305,15 @@
     <string name="page_link_reorder_dual_page">Ordenar página duplas</string>
     <string name="page_link_reorder_single_page">Ordenar página única</string>
     <string name="page_link_reorder_sorted_page">Ordenar sequência da página</string>
+    <string name="page_link_reorder_undo_changes">Desfazer última alteração</string>
+
+    <string name="page_link_popup_reorder_return">Retornar próximas páginas aqui</string>
+    <string name="page_link_popup_reorder_single_page">Ordenar próximas páginas simples</string>
+    <string name="page_link_popup_reorder_dual_page">Ordenar próximas páginas duplas</string>
+    <string name="page_link_popup_reorder_auto_page">Ordenar automático próximas páginas</string>
+    <string name="page_link_popup_reorder_not_linked">Obter apartir de não vinculados</string>
+    <string name="page_link_popup_add_not_linked">Mover para não vinculados</string>
+
     <string name="page_link_help">Ajuda</string>
     <string name="page_link_page_index">Índice</string>
     <string name="page_link_full_screen">Full screen</string>
@@ -313,6 +322,9 @@
     <string name="page_link_process_reorder_dual_pages_done">Reordenação de páginas duplas concluída.</string>
     <string name="page_link_process_reorder_single_page_done">Reordenação de páginas simples concluída.</string>
     <string name="page_link_process_reorder_sorted_page_done">Ordenação pela sequência da página concluída.</string>
+    <string name="page_link_process_reorder_return_page_done">Retornar próximas páginas concluída.</string>
+    <string name="page_link_process_reorder_get_not_link_page_done">Obter apartir de não vinculados concluido.</string>
+    <string name="page_link_process_undo_last_change_done">Desfeito as ultimas alterações.</string>
     <string name="page_link_select_file_page_index">Selecione um arquivo</string>
 
     <string name="page_link_select_origin_manga">Escolha a origem do arquivo</string>

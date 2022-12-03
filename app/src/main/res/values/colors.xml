@@ -12,6 +12,7 @@
     <!-- - - - - - - - - - - - - - - - - - - - -  Used  - - - - - - - - - - - - - - - - - - - - -->
     <color name="file_link_buttons">#55000000</color>
     <color name="file_link_buttons_expanded">#AA000000</color>
+    <color name="file_link_buttons_disabled">#44484848</color>
     <color name="title_background">#DD000000</color>
 
     <color name="title_background_semitransparent">#55000000</color>

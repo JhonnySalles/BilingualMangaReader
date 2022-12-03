@@ -10,8 +10,7 @@ import br.com.fenix.bilingualmangareader.service.listener.PageLinkCardListener
 import com.google.android.material.card.MaterialCardView
 
 
-class PageNotLinkViewHolder(itemView: View, private val listener: PageLinkCardListener) :
-    RecyclerView.ViewHolder(itemView) {
+class PageNotLinkViewHolder(itemView: View, private val listener: PageLinkCardListener) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(page: PageLink) {
         val root = itemView.findViewById<MaterialCardView>(R.id.page_not_link_card)
@@ -19,6 +18,7 @@ class PageNotLinkViewHolder(itemView: View, private val listener: PageLinkCardLi
         if (page.imageLeftFileLinkPage != null)
             image.setImageBitmap(page.imageLeftFileLinkPage)
 
+        root.setOnClickListener { listener.onDoubleClick(root, page, isManga = false, isRight = false) }
         root.setOnLongClickListener { listener.onClickLong(it, page, Pages.NOT_LINKED, -1) }
     }
 
