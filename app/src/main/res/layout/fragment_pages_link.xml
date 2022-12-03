@@ -153,6 +153,7 @@
                     android:contentDescription="@string/page_link_page_index"
                     android:layout_marginEnd="5dp"
                     app:iconTint="?attr/colorSecondary"
+                    android:tag=""
                     app:icon="@drawable/ic_file_link_pages_index"/>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -196,7 +197,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/pages_link_buttons_content">
 
-            <com.google.android.material.button.MaterialButton
+            <br.com.fenix.bilingualmangareader.view.components.MaterialButtonExpanded
                 android:id="@+id/pages_link_auto_process_button"
                 style="@style/Button.PageLinkFunction"
                 android:layout_width="match_parent"
@@ -205,7 +206,7 @@
                 android:text="@string/page_link_reorder_auto"
                 app:icon="@drawable/ic_file_link_auto_process"/>
 
-            <com.google.android.material.button.MaterialButton
+            <br.com.fenix.bilingualmangareader.view.components.MaterialButtonExpanded
                 android:id="@+id/pages_link_dual_page_button"
                 style="@style/Button.PageLinkFunction"
                 android:layout_width="match_parent"
@@ -214,7 +215,7 @@
                 android:text="@string/page_link_reorder_dual_page"
                 app:icon="@drawable/ic_file_link_dual_page"/>
 
-            <com.google.android.material.button.MaterialButton
+            <br.com.fenix.bilingualmangareader.view.components.MaterialButtonExpanded
                 android:id="@+id/pages_link_single_page_button"
                 style="@style/Button.PageLinkFunction"
                 android:layout_width="match_parent"
@@ -223,7 +224,7 @@
                 android:text="@string/page_link_reorder_single_page"
                 app:icon="@drawable/ic_file_link_single_page"/>
 
-            <com.google.android.material.button.MaterialButton
+            <br.com.fenix.bilingualmangareader.view.components.MaterialButtonExpanded
                 android:id="@+id/pages_link_reorder_button"
                 style="@style/Button.PageLinkFunction"
                 android:layout_width="match_parent"
@@ -232,7 +233,7 @@
                 android:text="@string/page_link_reorder_sorted_page"
                 app:icon="@drawable/ic_file_link_reorder" />
 
-            <com.google.android.material.button.MaterialButton
+            <br.com.fenix.bilingualmangareader.view.components.MaterialButtonExpanded
                 android:id="@+id/file_link_delete_button"
                 style="@style/Button.PageLinkFunction"
                 android:layout_width="match_parent"
@@ -241,14 +242,24 @@
                 android:text="@string/page_link_delete_file_link"
                 app:icon="@drawable/ic_file_link_delete"/>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/pages_link_refresh_button"
+            <br.com.fenix.bilingualmangareader.view.components.MaterialButtonExpanded
+                android:id="@+id/pages_link_undo_changes_button"
                 style="@style/Button.PageLinkFunction"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/page_link_refresh_file_link"
-                android:text="@string/page_link_refresh_file_link"
-                app:icon="@drawable/ic_file_link_refresh"/>
+                android:contentDescription="@string/page_link_reorder_undo_changes"
+                android:text="@string/page_link_reorder_undo_changes"
+                android:enabled="false"
+                app:icon="@drawable/ic_file_link_undo_changes"/>
+
+            <br.com.fenix.bilingualmangareader.view.components.MaterialButtonExpanded
+                android:id="@+id/pages_link_reload_button"
+                style="@style/Button.PageLinkFunction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/page_link_reload_file_link"
+                android:text="@string/page_link_reload_file_link"
+                app:icon="@drawable/ic_file_link_reload" />
 
         </com.google.android.material.button.MaterialButtonToggleGroup>
 
@@ -274,7 +285,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:gravity="end">
 
-            <com.google.android.material.button.MaterialButton
+            <br.com.fenix.bilingualmangareader.view.components.MaterialButtonExpanded
                 android:id="@+id/pages_link_help_button"
                 style="@style/Button.RoundedIconOnly"
                 android:layout_width="@dimen/page_link_help_size"

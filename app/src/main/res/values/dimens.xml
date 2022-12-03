@@ -212,6 +212,8 @@
     <dimen name="page_not_link_card_layout_width_tablet">100dp</dimen>
     <dimen name="page_not_link_card_layout_height_tablet">130dp</dimen>
 
+    <dimen name="page_link_image_detail_size">15sp</dimen>
+
     <dimen name="vocabulary_title_size">30sp</dimen>
     <dimen name="vocabulary_content_text_big_size">16sp</dimen>
     <dimen name="vocabulary_content_text_normal_size">14sp</dimen>

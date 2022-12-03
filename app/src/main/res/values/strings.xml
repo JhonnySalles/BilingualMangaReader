@@ -295,7 +295,7 @@
     <string name="page_link_manga_empty_description">Manga not selected</string>
     <string name="page_link_file">File in another language</string>
     <string name="page_link_file_language">File language</string>
-    <string name="page_link_refresh_file_link">Refresh file link</string>
+    <string name="page_link_reload_file_link">Refresh file link</string>
     <string name="page_link_save">Save</string>
     <string name="page_link_delete_file_link">Delete file link</string>
     <string name="page_link_delete_description">You want to delete linked pages?</string>
@@ -308,6 +308,15 @@
     <string name="page_link_reorder_dual_page">Reorder dual pages</string>
     <string name="page_link_reorder_single_page">Reorder single page</string>
     <string name="page_link_reorder_sorted_page">Sort by pages sequence</string>
+    <string name="page_link_reorder_undo_changes">Undo last change</string>
+
+    <string name="page_link_popup_reorder_return">Return next pages here</string>
+    <string name="page_link_popup_reorder_single_page">Reorder next pages single page</string>
+    <string name="page_link_popup_reorder_dual_page">Reorder next pages dual pages</string>
+    <string name="page_link_popup_reorder_auto_page">Reorder auto next pages</string>
+    <string name="page_link_popup_reorder_not_linked">Get pages from not linked</string>
+    <string name="page_link_popup_add_not_linked">Move to not linked</string>
+
     <string name="page_link_help">Help</string>
     <string name="page_link_page_index">Page index</string>
     <string name="page_link_full_screen">Full screen</string>
@@ -316,6 +325,9 @@
     <string name="page_link_process_reorder_dual_pages_done">Reorder double pages done.</string>
     <string name="page_link_process_reorder_single_page_done">Reorder simple pages done.</string>
     <string name="page_link_process_reorder_sorted_page_done">Sort by pages sequence done.</string>
+    <string name="page_link_process_reorder_return_page_done">Return next pages done.</string>
+    <string name="page_link_process_reorder_get_not_link_page_done">Get pages from not linked done.</string>
+    <string name="page_link_process_undo_last_change_done">Undo the last changes.</string>
     <string name="page_link_select_file_page_index">Choose a file</string>
 
     <string name="page_link_select_origin_manga">Choose a origin file</string>

@@ -231,9 +231,9 @@
         <item name="android:insetBottom">0dp</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_gravity">start</item>
-        <item name="backgroundTint">@color/file_link_buttons</item>
+        <item name="backgroundTint">@drawable/page_link_button_selector</item>
         <item name="strokeColor">@color/file_link_buttons</item>
-        <item name="iconTint">?attr/colorPrimaryContainer</item>
+        <item name="iconTint">@drawable/page_link_button_icon_selector</item>
         <item name="strokeWidth">1dp</item>
     </style>
 

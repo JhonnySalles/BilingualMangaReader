@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_page_link_popup_reorder_return"
+        android:title="@string/page_link_popup_reorder_return" />
+    <item
+        android:id="@+id/menu_page_link_popup_reorder_auto_page"
+        android:title="@string/page_link_popup_reorder_auto_page"/>
+    <item
+        android:id="@+id/menu_page_link_popup_reorder_single_page"
+        android:title="@string/page_link_popup_reorder_single_page"/>
+    <item
+        android:id="@+id/menu_page_link_popup_reorder_dual_page"
+        android:title="@string/page_link_popup_reorder_dual_page"/>
+    <item
+        android:id="@+id/menu_page_link_popup_reorder_not_linked"
+        android:title="@string/page_link_popup_reorder_not_linked"/>
+    <item
+        android:id="@+id/menu_page_link_popup_add_not_linked"
+        android:title="@string/page_link_popup_add_not_linked"/>
+</menu>

@@ -110,7 +110,7 @@ class PagesLinkActivityTest {
         onView(withId(R.id.pages_link_auto_process_button)).perform(click())
 
         waiter.await(awaitProcessSeconds, TimeUnit.SECONDS)
-        onView(withId(R.id.pages_link_refresh_button)).perform(click())
+        onView(withId(R.id.pages_link_reload_button)).perform(click())
 
         waiter.await(awaitProcessSeconds, TimeUnit.SECONDS)
         onView(withId(R.id.file_link_delete_button)).perform(click())
