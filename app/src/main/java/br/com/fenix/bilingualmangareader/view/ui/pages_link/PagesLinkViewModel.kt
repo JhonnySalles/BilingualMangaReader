@@ -40,6 +40,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
     private val mApplication = application
     private val mFileLinkRepository: FileLinkRepository = FileLinkRepository(application.applicationContext)
 
+    private var mFileLinkImageList = ArrayList<Triple<Int, Boolean, Bitmap?>>(ArrayList())
     private var mManga: Manga? = null
     private var mFileLink = MutableLiveData<FileLink>()
     val fileLink: LiveData<FileLink> = mFileLink
@@ -177,6 +178,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
             obj.pagesLink?.forEachIndexed { index, pageLink -> pageLink.imageMangaPage = mPagesLink.value!![index].imageMangaPage }
 
         mFileLink.value = obj
+        mFileLinkImageList.clear()
         mPagesLink.value?.forEach { it.clearPageLink() }
         mPagesNotLinked.value?.clear()
         setLanguage(obj.language)
@@ -195,6 +197,9 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
         refresh(null, Pages.ALL)
 
         val type = if (isLoadManga) Pages.ALL else Pages.LINKED
+
+        for (i in 0 until mParseLink.numPages())
+            mFileLinkImageList.add(Triple(i, false, null))
 
         getImage(mParseManga, mParseLink, mPagesLink.value!!, type)
         if (mPagesNotLinked.value!!.isNotEmpty()) {
@@ -1555,17 +1560,34 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                 if ((type == Pages.ALL || type == Pages.MANGA) && (page.imageMangaPage == null))
                     return false
                 if (isFileLink && (type == Pages.ALL || type == Pages.LINKED)) {
-                    if ((page.fileLinkLeftPage != PageLinkConsts.VALUES.PAGE_EMPTY && page.imageLeftFileLinkPage == null)
-                        || (page.isDualImage && page.imageRightFileLinkPage == null)
-                    )
-                        return false
+                    if (page.fileLinkLeftPage != PageLinkConsts.VALUES.PAGE_EMPTY && page.imageLeftFileLinkPage == null) {
+                        val image = mFileLinkImageList.find { it.first == page.fileLinkLeftPage }
+                        if (image?.third != null) {
+                            page.isFileLeftDualPage = image.second
+                            page.imageLeftFileLinkPage = image.third
+                        } else
+                            return false
+                    } else if (page.isDualImage && page.imageRightFileLinkPage == null) {
+                        val image = mFileLinkImageList.find { it.first == page.fileLinkRightPage }
+                        if (image?.third != null) {
+                            page.isFileRightDualPage = image.second
+                            page.imageRightFileLinkPage = image.third
+                        } else
+                            return false
+                    }
                 }
             }
 
         if (isFileLink && (type == Pages.NOT_LINKED || type == Pages.ALL))
             for (page in mPagesNotLinked.value!!) {
-                if (page.fileLinkLeftPage != PageLinkConsts.VALUES.PAGE_EMPTY && page.imageLeftFileLinkPage == null)
-                    return false
+                if (page.fileLinkLeftPage != PageLinkConsts.VALUES.PAGE_EMPTY && page.imageLeftFileLinkPage == null) {
+                    val image = mFileLinkImageList.find { it.first == page.fileLinkLeftPage }
+                    if (image?.third != null) {
+                        page.isFileLeftDualPage = image.second
+                        page.imageLeftFileLinkPage = image.third
+                    } else
+                        return false
+                }
             }
 
         notifyMessages(type, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_ALL_IMAGES_LOADED)
@@ -1671,6 +1693,7 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                 forceEnd = false
                 size = list.size
                 notifyMessages(type, PageLinkConsts.MESSAGES.MESSAGE_PAGES_LINK_IMAGE_START)
+
                 for ((index, page) in list.withIndex()) {
                     progress = index
                     if (reload) {
@@ -1702,35 +1725,88 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
                             }
 
                             if (parsePageLink != null) {
-                                val (isDualPage, image) = generateBitmap(parsePageLink!!, page.fileLinkLeftPage)
-                                page.imageLeftFileLinkPage = image
-                                page.isFileLeftDualPage = isDualPage
+                                val number = page.fileLinkLeftPage
+                                val (isDualPage, image) = generateBitmap(parsePageLink!!, number)
+                                mFileLinkImageList.find { it.first == number }?.let {
+                                    mFileLinkImageList.remove(it)
+                                    mFileLinkImageList.add(Triple(number, isDualPage, image))
+                                }
 
-                                if (page.isDualImage)
-                                    generateBitmap(
-                                        parsePageLink!!,
-                                        page.fileLinkRightPage
-                                    ) { IsDualPage, Image -> page.imageRightFileLinkPage = Image; page.isFileRightDualPage = IsDualPage }
+                                if (page.fileLinkLeftPage == number) {
+                                    page.imageLeftFileLinkPage = image
+                                    page.isFileLeftDualPage = isDualPage
+
+                                    if (page.isDualImage) {
+                                        val number = page.fileLinkRightPage
+                                        generateBitmap(
+                                            parsePageLink!!,
+                                            page.fileLinkRightPage
+                                        ) { IsDualPage, Image ->
+                                            run {
+                                                mFileLinkImageList.find { it.first == number }?.let {
+                                                    mFileLinkImageList.remove(it)
+                                                    mFileLinkImageList.add(Triple(number, isDualPage, image))
+                                                }
+
+                                                if (page.fileLinkRightPage == number) {
+                                                    page.imageRightFileLinkPage = Image
+                                                    page.isFileRightDualPage = IsDualPage
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                         Pages.MANGA -> generateBitmap(
                             parseManga!!,
                             page.mangaPage
                         ) { isDualPage, image -> page.imageMangaPage = image; page.isMangaDualPage = isDualPage }
-                        Pages.NOT_LINKED -> generateBitmap(
-                            parsePageLink!!,
-                            page.fileLinkLeftPage
-                        ) { isDualPage, image -> page.imageLeftFileLinkPage = image; page.isFileLeftDualPage = isDualPage }
-                        Pages.LINKED -> {
-                            val (isDualPage, image) = generateBitmap(parsePageLink!!, page.fileLinkLeftPage)
-                            page.imageLeftFileLinkPage = image
-                            page.isFileLeftDualPage = isDualPage
+                        Pages.NOT_LINKED -> {
+                            val number = page.fileLinkLeftPage
+                            val (isDualPage, image) = generateBitmap(parsePageLink!!, number)
+                            mFileLinkImageList.find { it.first == number }?.let {
+                                mFileLinkImageList.remove(it)
+                                mFileLinkImageList.add(Triple(number, isDualPage, image))
+                            }
 
-                            if (page.isDualImage)
-                                generateBitmap(
-                                    parsePageLink!!,
-                                    page.fileLinkRightPage
-                                ) { IsDualPage, Image -> page.imageRightFileLinkPage = Image; page.isFileRightDualPage = IsDualPage }
+                            if (page.fileLinkLeftPage == number) {
+                                page.imageLeftFileLinkPage = image
+                                page.isFileLeftDualPage = isDualPage
+                            }
+                        }
+                        Pages.LINKED -> {
+                            val number = page.fileLinkLeftPage
+                            val (isDualPage, image) = generateBitmap(parsePageLink!!, number)
+                            mFileLinkImageList.find { it.first == number }?.let {
+                                mFileLinkImageList.remove(it)
+                                mFileLinkImageList.add(Triple(number, isDualPage, image))
+                            }
+
+                            if (page.fileLinkLeftPage == number) {
+                                page.imageLeftFileLinkPage = image
+                                page.isFileLeftDualPage = isDualPage
+
+                                if (page.isDualImage) {
+                                    val number = page.fileLinkRightPage
+                                    generateBitmap(
+                                        parsePageLink!!,
+                                        page.fileLinkRightPage
+                                    ) { IsDualPage, Image ->
+                                        run {
+                                            mFileLinkImageList.find { it.first == number }?.let {
+                                                mFileLinkImageList.remove(it)
+                                                mFileLinkImageList.add(Triple(number, isDualPage, image))
+                                            }
+
+                                            if (page.fileLinkRightPage == number) {
+                                                page.imageRightFileLinkPage = Image
+                                                page.isFileRightDualPage = IsDualPage
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                         else -> {}
                     }
