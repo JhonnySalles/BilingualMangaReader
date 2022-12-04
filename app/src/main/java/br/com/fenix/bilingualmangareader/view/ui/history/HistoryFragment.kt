@@ -78,7 +78,7 @@ class HistoryFragment : Fragment() {
 
             override fun onClickLong(manga: Manga, view: View, position: Int) {
                 val wrapper = ContextThemeWrapper(requireContext(), R.style.PopupMenu)
-                val popup = PopupMenu(wrapper, view)
+                val popup = PopupMenu(wrapper, view, 0,  R.attr.popupMenuStyle, R.style.PopupMenu)
                 popup.menuInflater.inflate(R.menu.menu_book, popup.menu)
 
                 if (manga.favorite)

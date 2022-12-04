@@ -2,6 +2,7 @@ package br.com.fenix.bilingualmangareader.util.helpers
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.content.*
 import android.content.pm.ApplicationInfo
@@ -9,9 +10,9 @@ import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.PointF
 import android.util.DisplayMetrics
 import android.util.TypedValue
-import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener
@@ -30,6 +31,7 @@ import br.com.fenix.bilingualmangareader.service.parses.Parse
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.*
+import java.lang.Math.abs
 import java.math.BigInteger
 import java.nio.channels.FileChannel
 import java.security.MessageDigest
@@ -475,8 +477,8 @@ class Util {
         fun setBold(text: String): String =
             "<b>$text</b>"
 
-        fun setVerticalText(text: String) : String {
-            var vertical : String = ""
+        fun setVerticalText(text: String): String {
+            var vertical: String = ""
             for (c in text)
                 vertical += c + "\n"
 
@@ -668,9 +670,12 @@ class LibraryUtil {
 
 class ImageUtil {
     companion object ImageUtils {
+        private var initTouchDown = 0L
+        private var initPos: PointF = PointF(0f, 0f)
         private var mScaleFactor = 1.0f
 
-        fun setZoomPinch(context: Context, image: ImageView) {
+        @SuppressLint("ClickableViewAccessibility")
+        fun setZoomPinch(context: Context, image: ImageView, oneClick: () -> Unit) {
             val mScaleListener = object : SimpleOnScaleGestureListener() {
                 override fun onScale(scaleGestureDetector: ScaleGestureDetector): Boolean {
                     mScaleFactor *= scaleGestureDetector.scaleFactor
@@ -681,24 +686,41 @@ class ImageUtil {
                 }
             }
             val mScaleGestureDetector = ScaleGestureDetector(context, mScaleListener)
-            image.setOnTouchListener { _: View, event: MotionEvent ->
-                if (event.action == MotionEvent.ACTION_UP){
-                    image.animate()
-                        .scaleX(1.0f)
-                        .scaleY(1.0f)
-                        .setDuration(300L)
-                        .setListener(object : AnimatorListenerAdapter() {
-                            override fun onAnimationEnd(animation: Animator?) {
-                                super.onAnimationEnd(animation)
-                                mScaleFactor = 1.0f
-                                image.scaleX = mScaleFactor
-                                image.scaleY = mScaleFactor
-                            }
-                        }).start()
-                    false
-                } else
-                    mScaleGestureDetector.onTouchEvent(event)
+            image.setOnTouchListener { view: View, event: MotionEvent ->
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        initTouchDown = System.currentTimeMillis()
+                        initPos = PointF(event.x, event.y)
+                    }
+                    MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                        image.animate()
+                            .scaleX(1.0f)
+                            .scaleY(1.0f)
+                            .setDuration(300L)
+                            .setListener(object : AnimatorListenerAdapter() {
+                                override fun onAnimationEnd(animation: Animator?) {
+                                    super.onAnimationEnd(animation)
+                                    mScaleFactor = 1.0f
+                                    image.scaleX = mScaleFactor
+                                    image.scaleY = mScaleFactor
+                                }
+                            }).start()
+
+                        val isTouchDuration = System.currentTimeMillis() - initTouchDown < 300
+                        val isTouchLength = abs(event.x - initPos.x) + abs(event.y - initPos.y) < 10
+
+                        if (isTouchLength && isTouchDuration)
+                            view.performClick()
+                    }
+                    else -> {
+                        mScaleGestureDetector.onTouchEvent(event)
+                    }
+                }
+
+                true
             }
+
+            image.setOnClickListener { oneClick() }
         }
     }
 }

@@ -870,7 +870,7 @@ class PagesLinkFragment : Fragment() {
         if (page.isNotLinked)
             return
 
-        val popup = PopupMenu(ContextThemeWrapper(requireContext(), R.style.PopupMenu), view)
+        val popup = PopupMenu(ContextThemeWrapper(requireContext(), R.style.PopupMenu), view, 0,  R.attr.popupMenuStyle, R.style.PopupMenu)
         popup.menuInflater.inflate(R.menu.menu_page_link, popup.menu)
 
         if (isRight || page.fileLinkLeftPage != PageLinkConsts.VALUES.PAGE_EMPTY) {
@@ -904,7 +904,11 @@ class PagesLinkFragment : Fragment() {
         val imageLeft = layout.findViewById<ImageView>(R.id.popup_image_detail_left)
         val name = layout.findViewById<TextView>(R.id.popup_image_name)
 
-        ImageUtil.setZoomPinch(requireContext(), imageLeft)
+        val popup = MaterialAlertDialogBuilder(requireContext(), R.style.AppCompatMaterialAlertDialog)
+            .setView(layout)
+            .create()
+
+        ImageUtil.setZoomPinch(requireContext(), imageLeft) { popup.dismiss() }
 
         if (isManga) {
             mViewModel.loadImageManga(page.mangaPage, imageLeft)
@@ -912,7 +916,7 @@ class PagesLinkFragment : Fragment() {
         } else if (page.isDualImage) {
             mViewModel.loadImagePageLink(page.fileLinkLeftPage, imageLeft)
             val imageRight = layout.findViewById<ImageView>(R.id.popup_image_detail_right)
-            ImageUtil.setZoomPinch(requireContext(), imageRight)
+            ImageUtil.setZoomPinch(requireContext(), imageRight) { popup.dismiss() }
             mViewModel.loadImagePageLink(page.fileLinkRightPage, imageRight)
             imageRight.visibility = View.VISIBLE
             name.text = page.fileLinkLeftPageName + "\n" + page.fileLinkRightPageName
@@ -924,9 +928,6 @@ class PagesLinkFragment : Fragment() {
             name.text = page.fileLinkLeftPageName
         }
 
-        val popup = MaterialAlertDialogBuilder(requireContext(), R.style.AppCompatMaterialAlertDialog)
-            .setView(layout)
-            .create()
         layout.findViewById<LinearLayout>(R.id.popup_image_background).setOnClickListener { popup.dismiss() }
         popup.show()
     }
