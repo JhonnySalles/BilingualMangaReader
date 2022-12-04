@@ -816,7 +816,8 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    fun hasBackup() : Boolean = mBackupLinked.isNotEmpty()
+    fun hasBackup(): Boolean =
+        mBackupLinked.isNotEmpty()
 
     private fun clearBackup() {
         mBackupLinked.clear()
