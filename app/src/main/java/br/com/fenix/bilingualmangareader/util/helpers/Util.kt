@@ -1,20 +1,25 @@
 package br.com.fenix.bilingualmangareader.util.helpers
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.app.ActivityManager
 import android.content.*
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.content.res.Resources
-import android.content.res.TypedArray
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.DisplayMetrics
 import android.util.TypedValue
+import android.view.GestureDetector
+import android.view.MotionEvent
+import android.view.ScaleGestureDetector
+import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener
+import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
-import androidx.annotation.StyleRes
-import androidx.annotation.StyleableRes
 import androidx.appcompat.app.AlertDialog
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Library
@@ -23,7 +28,6 @@ import br.com.fenix.bilingualmangareader.model.enums.Languages
 import br.com.fenix.bilingualmangareader.model.enums.Themes
 import br.com.fenix.bilingualmangareader.service.parses.Parse
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
-import br.com.fenix.bilingualmangareader.util.helpers.Util.Utils.getColorFromAttr
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.*
 import java.math.BigInteger
@@ -35,6 +39,8 @@ import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import kotlin.experimental.and
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.roundToInt
 
 
@@ -656,6 +662,43 @@ class LibraryUtil {
             val preference: SharedPreferences = GeneralConsts.getSharedPreferences(context)
             val path = preference.getString(GeneralConsts.KEYS.LIBRARY.FOLDER, "") ?: ""
             return Library(GeneralConsts.KEYS.LIBRARY.DEFAULT, context.getString(R.string.library_default), path)
+        }
+    }
+}
+
+class ImageUtil {
+    companion object ImageUtils {
+        private var mScaleFactor = 1.0f
+
+        fun setZoomPinch(context: Context, image: ImageView) {
+            val mScaleListener = object : SimpleOnScaleGestureListener() {
+                override fun onScale(scaleGestureDetector: ScaleGestureDetector): Boolean {
+                    mScaleFactor *= scaleGestureDetector.scaleFactor
+                    mScaleFactor = max(1.0f, min(mScaleFactor, 5.0f))
+                    image.scaleX = mScaleFactor
+                    image.scaleY = mScaleFactor
+                    return true
+                }
+            }
+            val mScaleGestureDetector = ScaleGestureDetector(context, mScaleListener)
+            image.setOnTouchListener { _: View, event: MotionEvent ->
+                if (event.action == MotionEvent.ACTION_UP){
+                    image.animate()
+                        .scaleX(1.0f)
+                        .scaleY(1.0f)
+                        .setDuration(300L)
+                        .setListener(object : AnimatorListenerAdapter() {
+                            override fun onAnimationEnd(animation: Animator?) {
+                                super.onAnimationEnd(animation)
+                                mScaleFactor = 1.0f
+                                image.scaleX = mScaleFactor
+                                image.scaleY = mScaleFactor
+                            }
+                        }).start()
+                    false
+                } else
+                    mScaleGestureDetector.onTouchEvent(event)
+            }
         }
     }
 }

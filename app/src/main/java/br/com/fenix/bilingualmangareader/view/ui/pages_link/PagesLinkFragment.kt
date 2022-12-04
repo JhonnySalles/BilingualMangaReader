@@ -34,6 +34,7 @@ import br.com.fenix.bilingualmangareader.service.controller.SubTitleController
 import br.com.fenix.bilingualmangareader.service.listener.PageLinkCardListener
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.constants.PageLinkConsts
+import br.com.fenix.bilingualmangareader.util.helpers.ImageUtil
 import br.com.fenix.bilingualmangareader.util.helpers.MenuUtil
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import br.com.fenix.bilingualmangareader.util.helpers.Util.Utils.getColorFromAttr
@@ -903,12 +904,15 @@ class PagesLinkFragment : Fragment() {
         val imageLeft = layout.findViewById<ImageView>(R.id.popup_image_detail_left)
         val name = layout.findViewById<TextView>(R.id.popup_image_name)
 
+        ImageUtil.setZoomPinch(requireContext(), imageLeft)
+
         if (isManga) {
             mViewModel.loadImageManga(page.mangaPage, imageLeft)
             name.text = page.mangaPageName
         } else if (page.isDualImage) {
             mViewModel.loadImagePageLink(page.fileLinkLeftPage, imageLeft)
             val imageRight = layout.findViewById<ImageView>(R.id.popup_image_detail_right)
+            ImageUtil.setZoomPinch(requireContext(), imageRight)
             mViewModel.loadImagePageLink(page.fileLinkRightPage, imageRight)
             imageRight.visibility = View.VISIBLE
             name.text = page.fileLinkLeftPageName + "\n" + page.fileLinkRightPageName
