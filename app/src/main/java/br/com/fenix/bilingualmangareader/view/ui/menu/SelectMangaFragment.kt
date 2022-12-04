@@ -23,6 +23,7 @@ import br.com.fenix.bilingualmangareader.model.enums.Libraries
 import br.com.fenix.bilingualmangareader.model.enums.LibraryType
 import br.com.fenix.bilingualmangareader.service.listener.MangaCardListener
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import br.com.fenix.bilingualmangareader.util.helpers.MenuUtil
 import br.com.fenix.bilingualmangareader.view.adapter.library.MangaGridCardAdapter
 import br.com.fenix.bilingualmangareader.view.adapter.library.MangaLineCardAdapter
 import br.com.fenix.bilingualmangareader.view.ui.library.LibraryFragment
@@ -113,6 +114,7 @@ class SelectMangaFragment : Fragment() {
         mScrollDown = root.findViewById(R.id.select_manga_scroll_down)
         mToolbar = root.findViewById(R.id.toolbar_select_manga)
         mTitle = root.findViewById(R.id.toolbar_select_manga_title)
+        MenuUtil.tintColor(requireContext(), mTitle)
 
         (requireActivity() as MenuActivity).setActionBar(mToolbar)
 

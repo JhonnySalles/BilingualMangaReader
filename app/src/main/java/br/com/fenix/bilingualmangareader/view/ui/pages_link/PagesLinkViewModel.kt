@@ -30,6 +30,7 @@ import java.io.File
 import java.io.InputStream
 import java.io.InterruptedIOException
 import java.util.*
+import kotlin.math.max
 
 
 class PagesLinkViewModel(application: Application) : AndroidViewModel(application) {
@@ -815,7 +816,8 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    fun hasBackup() : Boolean = mBackupLinked.isNotEmpty()
+    fun hasBackup(): Boolean =
+        mBackupLinked.isNotEmpty()
 
     private fun clearBackup() {
         mBackupLinked.clear()
