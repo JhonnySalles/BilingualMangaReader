@@ -731,7 +731,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     private fun showMenuFromButton(button: Button, view: View) {
         when (button.id) {
             R.id.btn_menu_ocr -> {
-                val popup = PopupMenu(this, view)
+                val popup = PopupMenu(this, view, 0,  R.attr.popupMenuStyle, R.style.PopupMenu)
                 popup.menuInflater.inflate(R.menu.menu_ocr, popup.menu)
                 popup.setOnMenuItemClickListener { menuItem: MenuItem ->
                     when (menuItem.itemId) {

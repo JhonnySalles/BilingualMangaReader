@@ -30,7 +30,7 @@
         <item name="android:textAllCaps">true</item>
     </style>
 
-    <style name="AppCompatMaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+    <style name="AppCompatMaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="colorAccent">?attr/colorSecondary</item>
         <item name="android:textColorPrimary">?attr/colorPrimary</item>
         <item name="textColorAlertDialogListItem">?attr/colorPrimary</item>
@@ -45,6 +45,16 @@
 
         <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
         <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+
+        <item name="alertDialogStyle">@style/MaterialAlertDialog.Rounded</item>
+    </style>
+
+    <style name="MaterialAlertDialog.Rounded" parent="MaterialAlertDialog.MaterialComponents">
+        <item name="shapeAppearance">@style/ShapeAppearanceOverlay.MaterialAlertDialog.Rounded</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.MaterialAlertDialog.Rounded" parent="">
+        <item name="cornerSize">10dp</item>
     </style>
 
     <style name="AppCompatMaterialAlertList" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">

@@ -585,9 +585,9 @@
         <item name="android:textSize">@dimen/clock_and_battery_tablet</item>
     </style>
 
-    <style name="PopupMenu" parent="Widget.AppCompat.PopupMenu">
-        <item name="android:background">?attr/colorSurface</item>
+    <style name="PopupMenu" parent="Widget.MaterialComponents.PopupMenu">
         <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:background">@color/transparent</item>
     </style>
 
     <style name="PopupTab" parent="AppBackground">
