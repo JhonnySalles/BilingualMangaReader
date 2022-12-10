@@ -98,7 +98,7 @@ class Formatter {
             val popup = createKanjiPopup(context, LayoutInflater.from(context), kanjax)
             MaterialAlertDialogBuilder(context, R.style.AppCompatMaterialAlertDialog)
                 .setView(popup)
-                .setCancelable(false)
+                .setCancelable(true)
                 .setPositiveButton(R.string.action_neutral) { _, _ -> }
                 .create()
                 .show()

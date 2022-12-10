@@ -16,6 +16,7 @@ import java.util.*
 
 class LibraryViewModel(application: Application) : AndroidViewModel(application), Filterable {
 
+    private var mStackLibrary = mutableMapOf<String, Triple<Int,Library,MutableList<Manga>>>()
     private var mLibrary: Library = Library(GeneralConsts.KEYS.LIBRARY.DEFAULT)
     private val mMangaRepository: MangaRepository = MangaRepository(application.applicationContext)
     private val mPreferences = GeneralConsts.getSharedPreferences(application.applicationContext)
@@ -41,8 +42,27 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         mPreferences.edit().putLong(GeneralConsts.KEYS.LIBRARY.LAST_LIBRARY, mLibrary.id ?: GeneralConsts.KEYS.LIBRARY.DEFAULT).apply()
     }
 
-    fun getLibrary() =
-        mLibrary
+    fun getLibrary() = mLibrary
+
+    fun existStack(id: String) : Boolean = mStackLibrary.contains(id)
+
+    fun restoreLastStackLibrary(id: String) {
+        if (mStackLibrary.contains(id)) {
+            mStackLibrary.remove(id)
+            for (item in mStackLibrary) {
+                if (item.value.first == mStackLibrary.size) {
+                    mLibrary = item.value.second
+                    mListMangasFull.value = item.value.third
+                    mListMangas.value = item.value.third.toMutableList()
+                    break
+                }
+            }
+        }
+    }
+
+    fun addStackLibrary(id: String, library: Library) = mStackLibrary.put(id, Triple(mStackLibrary.size +1, library, mListMangasFull.value!!))
+
+    fun removeStackLibrary(id: String) = mStackLibrary.remove(id)
 
     fun save(obj: Manga): Manga {
         if (obj.id == 0L)

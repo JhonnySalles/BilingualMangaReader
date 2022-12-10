@@ -318,14 +318,6 @@ class MangaDetailFragment : Fragment() {
                 if (manga.file.exists()) {
                     val isDeleted = manga.file.delete()
                     mLOGGER.info("File deleted ${manga.name}: $isDeleted")
-
-                    if (isDeleted) {
-                        val folder = File(manga.folder)
-                        if (folder.isDirectory && folder.listFiles()?.isEmpty() == true) {
-                            folder.delete()
-                            mLOGGER.info("Folder deleted ${folder.name}")
-                        }
-                    }
                 }
                 (requireActivity() as MangaDetailActivity).onBackPressed()
             }

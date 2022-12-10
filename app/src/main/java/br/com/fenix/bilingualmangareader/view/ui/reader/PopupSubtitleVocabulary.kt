@@ -60,7 +60,7 @@ class PopupSubtitleVocabulary : Fragment() {
 
         mSubTitleController.pageSelected.observe(viewLifecycleOwner) {
             if (it?.vocabulary != null && it.vocabulary.isNotEmpty()) {
-                val vocabulary = it.vocabulary.map { vocab -> vocab.word + " - " + vocab.portuguese + if (!vocab.revised && vocab.portuguese.isNotEmpty()) "¹" else "" }
+                val vocabulary = it.vocabulary.map { vocab -> vocab.word + " - " + vocab.portuguese + if (!vocab.revised && vocab.portuguese?.isNotEmpty() == true) "¹" else "" }
                 mVocabularyItem.clear()
                 mVocabularyItem.addAll(vocabulary)
             } else
