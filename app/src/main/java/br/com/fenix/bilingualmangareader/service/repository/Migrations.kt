@@ -266,6 +266,7 @@ class Migrations {
                     return
                 }
 
+                database.execSQL("DROP TABLE IF EXISTS " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME)
                 database.execSQL("DROP INDEX IF EXISTS index_" + DataBaseConsts.VOCABULARY.TABLE_NAME)
                 database.execSQL("DROP TABLE IF EXISTS " + DataBaseConsts.VOCABULARY.TABLE_NAME)
 
@@ -286,6 +287,15 @@ class Migrations {
                             + "_" + DataBaseConsts.VOCABULARY.COLUMNS.WORD + "_" + DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM
                             + " ON " + DataBaseConsts.VOCABULARY.TABLE_NAME +
                             "(" + DataBaseConsts.VOCABULARY.COLUMNS.WORD + ", " + DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM + ")"
+                )
+
+                database.execSQL(
+                    "CREATE TABLE " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + " (" +
+                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + " INTEGER UNIQUE, " +
+                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY + " INTEGER UNIQUE," +
+                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.APPEARS + "  INTEGER DEFAULT 0," +
+                            " FOREIGN KEY(" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA +") REFERENCES " + DataBaseConsts.MANGA.TABLE_NAME + "(" + DataBaseConsts.MANGA.COLUMNS.ID + ")," +
+                            " FOREIGN KEY(" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY +") REFERENCES " + DataBaseConsts.LIBRARIES.TABLE_NAME + "(" + DataBaseConsts.LIBRARIES.COLUMNS.ID + "))"
                 )
 
                 mLOGGER.info("Insert initial vocabulary data...")
