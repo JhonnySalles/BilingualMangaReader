@@ -39,6 +39,7 @@ import br.com.fenix.bilingualmangareader.view.ui.manga_detail.MangaDetailActivit
 import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.slf4j.LoggerFactory
+import java.io.File
 import kotlin.math.max
 
 
@@ -644,6 +645,14 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             if (manga.file.exists()) {
                 val isDeleted = manga.file.delete()
                 mLOGGER.info("File deleted ${manga.name}: $isDeleted")
+
+                if (isDeleted) {
+                    val folder = File(manga.folder)
+                    if (folder.isDirectory && folder.listFiles()?.isEmpty() == true) {
+                        folder.delete()
+                        mLOGGER.info("Folder deleted ${folder.name}")
+                    }
+                }
             }
         }
     }

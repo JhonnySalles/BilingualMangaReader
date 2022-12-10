@@ -415,10 +415,10 @@ class FloatingSubtitleReader constructor(private val context: Context, private v
     fun updatePage(page: Page?) {
         if (page != null) {
             if (page.vocabulary != null && page.vocabulary.isNotEmpty()) {
-                mVocabulary = page.vocabulary.map { vocab -> vocab.word to vocab.word + " - " + vocab.meaning + if (!vocab.revised) "¹" else "" }
+                mVocabulary = page.vocabulary.map { vocab -> vocab.word to vocab.word + " - " + vocab.portuguese + if (!vocab.revised) "¹" else "" }
                     .toMap()
                 mVocabularyItem.clear()
-                mVocabularyItem.addAll(page.vocabulary.map { vocab -> vocab.word + " - " + vocab.meaning + if (!vocab.revised) "¹" else "" })
+                mVocabularyItem.addAll(page.vocabulary.map { vocab -> vocab.word + " - " + vocab.portuguese + if (!vocab.revised) "¹" else "" })
                 mListPageVocabulary.visibility = View.VISIBLE
             } else {
                 mVocabularyItem.clear()

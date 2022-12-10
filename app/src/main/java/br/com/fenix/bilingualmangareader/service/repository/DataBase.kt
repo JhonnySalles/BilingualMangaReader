@@ -24,7 +24,7 @@ import java.io.File
 
 
 @Database(
-    version = 11,
+    version = 12,
     entities = [Manga::class, SubTitle::class, KanjiJLPT::class, Kanjax::class, FileLink::class, PageLink::class,
         Vocabulary::class, Library::class, VocabularyManga::class]
 )
@@ -56,7 +56,7 @@ abstract class DataBase : RoomDatabase() {
                     .addMigrations(
                         Migrations.MIGRATION_1_2, Migrations.MIGRATION_2_3, Migrations.MIGRATION_3_4, Migrations.MIGRATION_4_5,
                         Migrations.MIGRATION_5_6, Migrations.MIGRATION_6_7, Migrations.MIGRATION_7_8, Migrations.MIGRATION_8_9,
-                        Migrations.MIGRATION_9_10, Migrations.MIGRATION_10_11
+                        Migrations.MIGRATION_9_10, Migrations.MIGRATION_10_11, Migrations.MIGRATION_11_12
                     )
                     .allowMainThreadQueries()
                     .build() // MainThread uses another thread in db conection

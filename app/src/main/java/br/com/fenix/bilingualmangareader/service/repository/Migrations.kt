@@ -27,17 +27,21 @@ class Migrations {
 
         const val VOCABULARY: String = "INSERT INTO " + DataBaseConsts.VOCABULARY.TABLE_NAME +
                 " (" + DataBaseConsts.VOCABULARY.COLUMNS.WORD + ", " + DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM + ", " +
-                DataBaseConsts.VOCABULARY.COLUMNS.READING + ", " + DataBaseConsts.VOCABULARY.COLUMNS.MEANING + ") VALUES "
+                DataBaseConsts.VOCABULARY.COLUMNS.READING + ", " + DataBaseConsts.VOCABULARY.COLUMNS.ENGLISH + ", " +
+                DataBaseConsts.VOCABULARY.COLUMNS.PORTUGUESE + ") VALUES "
 
     }
 
     companion object {
         private val mLOGGER = LoggerFactory.getLogger(Migrations::class.java)
+        private var isInitial = false
 
         // Migration version 2.
         val MIGRATION_1_2 = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 mLOGGER.info("Start migration 1 - 2...")
+
+                isInitial = true
 
                 database.execSQL("ALTER TABLE " + DataBaseConsts.MANGA.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.MANGA.COLUMNS.EXCLUDED + " INTEGER DEFAULT 0 NOT NULL")
 
@@ -171,7 +175,8 @@ class Migrations {
                             DataBaseConsts.VOCABULARY.COLUMNS.WORD + " TEXT NOT NULL, " +
                             DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM + " TEXT, " +
                             DataBaseConsts.VOCABULARY.COLUMNS.READING + " TEXT NOT NULL, " +
-                            DataBaseConsts.VOCABULARY.COLUMNS.MEANING + " TEXT NOT NULL, " +
+                            DataBaseConsts.VOCABULARY.COLUMNS.ENGLISH + " TEXT NOT NULL, " +
+                            DataBaseConsts.VOCABULARY.COLUMNS.PORTUGUESE + " TEXT NOT NULL, " +
                             DataBaseConsts.VOCABULARY.COLUMNS.REVISED + " INTEGER DEFAULT 0 NOT NULL)"
                 )
 
@@ -246,6 +251,49 @@ class Migrations {
 
         // Migration version 11.
         val MIGRATION_11_12 = object : Migration(11, 12) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                mLOGGER.info("Start migration 11 - 12...")
+
+                if (isInitial) {
+                    mLOGGER.info("Skip migration 11 - 12...")
+                    return
+                }
+
+                database.execSQL("DROP INDEX index_" + DataBaseConsts.VOCABULARY.TABLE_NAME)
+                database.execSQL("DROP TABLE " + DataBaseConsts.VOCABULARY.TABLE_NAME)
+
+                database.execSQL(
+                    "CREATE TABLE " + DataBaseConsts.VOCABULARY.TABLE_NAME + " (" +
+                            DataBaseConsts.VOCABULARY.COLUMNS.ID + " INTEGER PRIMARY KEY, " +
+                            DataBaseConsts.VOCABULARY.COLUMNS.WORD + " TEXT NOT NULL, " +
+                            DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM + " TEXT, " +
+                            DataBaseConsts.VOCABULARY.COLUMNS.READING + " TEXT NOT NULL, " +
+                            DataBaseConsts.VOCABULARY.COLUMNS.ENGLISH + " TEXT NOT NULL, " +
+                            DataBaseConsts.VOCABULARY.COLUMNS.PORTUGUESE + " TEXT NOT NULL, " +
+                            DataBaseConsts.VOCABULARY.COLUMNS.REVISED + " INTEGER DEFAULT 0 NOT NULL, " +
+                            DataBaseConsts.VOCABULARY.COLUMNS.FAVORITE + " INTEGER DEFAULT 0 NOT NULL)"
+                )
+
+                database.execSQL(
+                    "CREATE INDEX index_" + DataBaseConsts.VOCABULARY.TABLE_NAME
+                            + "_" + DataBaseConsts.VOCABULARY.COLUMNS.WORD + "_" + DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM
+                            + " ON " + DataBaseConsts.VOCABULARY.TABLE_NAME +
+                            "(" + DataBaseConsts.VOCABULARY.COLUMNS.WORD + ", " + DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM + ")"
+                )
+
+                mLOGGER.info("Insert initial vocabulary data...")
+
+                val kanji = DataBase.mAssets.open("vocabulary.sql").bufferedReader().use(BufferedReader::readText)
+                database.execSQL(SQLINITIAL.VOCABULARY + kanji)
+                database.execSQL( "UPDATE " + DataBaseConsts.VOCABULARY.TABLE_NAME + " SET " + DataBaseConsts.VOCABULARY.COLUMNS.REVISED + " = 1"  )
+
+                mLOGGER.info("Completed migration 11 - 12.")
+
+            }
+        }
+
+        // Migration version 12.
+        val MIGRATION_12_13 = object : Migration(12, 13) {
             override fun migrate(database: SupportSQLiteDatabase) {
 
                 mLOGGER.info("Start migration 11 - 12...")
