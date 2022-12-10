@@ -43,31 +43,31 @@ class PopupSubtitleVocabulary : Fragment() {
         mListPageVocabulary.onItemLongClickListener = OnItemLongClickListener { _, _, index, _ ->
             if (index >= 0 && mVocabularyItem.size > index) {
                 val text = mVocabularyItem[index]
-                Toast.makeText(
-                    requireContext(),
-                    requireContext().getString(R.string.action_copy) + " $text",
-                    Toast.LENGTH_SHORT
-                ).show()
-
                 val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 val clip = ClipData.newPlainText("Copied Text", text)
                 clipboard.setPrimaryClip(clip)
+
+                Toast.makeText(
+                    requireActivity(),
+                    getString(R.string.action_copy, text),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
             true
         }
 
         mSubTitleController = SubTitleController.getInstance(requireContext())
 
-        mSubTitleController.pageSelected.observe(viewLifecycleOwner, {
+        mSubTitleController.pageSelected.observe(viewLifecycleOwner) {
             if (it?.vocabulary != null && it.vocabulary.isNotEmpty()) {
-                val vocabulary = it.vocabulary.map { vocab -> vocab.word + " - " + vocab.meaning + if (!vocab.revised && vocab.meaning.isNotEmpty()) "¹" else "" }
+                val vocabulary = it.vocabulary.map { vocab -> vocab.word + " - " + vocab.portuguese + if (!vocab.revised && vocab.portuguese?.isNotEmpty() == true) "¹" else "" }
                 mVocabularyItem.clear()
                 mVocabularyItem.addAll(vocabulary)
             } else
                 mVocabularyItem.clear()
 
             (mListPageVocabulary.adapter as ArrayAdapter<*>).notifyDataSetChanged()
-        })
+        }
 
         return root
     }

@@ -62,11 +62,14 @@ class GridViewHolder(itemView: View, private val listener: MangaCardListener) :
         val mangaProgress = itemView.findViewById<ProgressBar>(R.id.manga_grid_progress)
         val cardView = itemView.findViewById<MaterialCardView>(R.id.manga_grid_card)
         val favorite = itemView.findViewById<ImageView>(R.id.manga_grid_favorite)
+        val subtitle = itemView.findViewById<ImageView>(R.id.manga_grid_has_subtitle)
 
         if (manga.favorite)
             favorite.visibility = View.VISIBLE
         else
             favorite.visibility = View.GONE
+
+        subtitle.visibility  = if (manga.hasSubtitle) View.VISIBLE else View.GONE
 
         when (LibraryFragment.mGridType) {
             LibraryType.GRID_MEDIUM -> if (mIsLandscape) cardView.layoutParams.width = mMangaCardWidthLandscapeMedium

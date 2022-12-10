@@ -1,7 +1,6 @@
 package br.com.fenix.bilingualmangareader.service.parses
 
 import br.com.fenix.bilingualmangareader.util.helpers.Util
-import com.github.junrar.rarfile.FileHeader
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
 import java.io.*
@@ -56,6 +55,10 @@ class TarParse : Parse {
             subtitles.add(content.toString())
         }
         return subtitles
+    }
+
+    override fun hasSubtitles(): Boolean {
+        return mSubtitles.isNotEmpty()
     }
 
     override fun getSubtitlesNames(): Map<String, Int> {

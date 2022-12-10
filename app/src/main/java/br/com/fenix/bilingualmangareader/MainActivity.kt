@@ -1,12 +1,11 @@
 package br.com.fenix.bilingualmangareader
 
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -14,11 +13,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import br.com.fenix.bilingualmangareader.model.entity.Library
+import br.com.fenix.bilingualmangareader.model.enums.ThemeMode
+import br.com.fenix.bilingualmangareader.model.enums.Themes
 import br.com.fenix.bilingualmangareader.service.listener.MainListener
 import br.com.fenix.bilingualmangareader.service.repository.LibraryRepository
 import br.com.fenix.bilingualmangareader.service.scanner.Scanner
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.LibraryUtil
+import br.com.fenix.bilingualmangareader.util.helpers.MenuUtil
 import br.com.fenix.bilingualmangareader.util.helpers.MsgUtil
 import br.com.fenix.bilingualmangareader.view.ui.about.AboutFragment
 import br.com.fenix.bilingualmangareader.view.ui.configuration.ConfigFragment
@@ -51,18 +53,32 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private val mDefaultUncaughtHandler = Thread.getDefaultUncaughtExceptionHandler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
         Thread.setDefaultUncaughtExceptionHandler { t, e ->
             mLOGGER.error("*** CRASH APP *** ", e)
             mDefaultUncaughtHandler?.uncaughtException(t, e)
         }
+
+        val theme = Themes.valueOf(
+            GeneralConsts.getSharedPreferences(this).getString(GeneralConsts.KEYS.THEME.THEME_USED, Themes.ORIGINAL.toString())!!
+        )
+        setTheme(theme.getValue())
+
+        when (ThemeMode.valueOf(
+            GeneralConsts.getSharedPreferences(this).getString(GeneralConsts.KEYS.THEME.THEME_MODE, ThemeMode.SYSTEM.toString())!!
+        )) {
+            ThemeMode.DARK -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            ThemeMode.LIGHT -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            else -> {}
+        }
+
+        super.onCreate(savedInstanceState)
 
         clearCache()
 
         setContentView(R.layout.activity_main)
 
         mToolBar = findViewById(R.id.main_toolbar)
+        MenuUtil.tintToolbar(mToolBar, theme)
         setSupportActionBar(mToolBar)
 
         // drawer_Layout is a default layout from app
@@ -86,11 +102,44 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         mFragmentManager = supportFragmentManager
 
-        // content_fragment use for receive fragments layout
-        mFragmentManager.beginTransaction().replace(R.id.main_content_root, LibraryFragment())
-            .commit()
-
         libraries()
+
+        var fragment: Fragment
+        if (GeneralConsts.getSharedPreferences(this)
+                .getBoolean(GeneralConsts.KEYS.THEME.THEME_CHANGE, false)
+        ) {
+            with(GeneralConsts.getSharedPreferences(this).edit()) {
+                this.putBoolean(
+                    GeneralConsts.KEYS.THEME.THEME_CHANGE,
+                    false
+                )
+                this.commit()
+            }
+
+            fragment = ConfigFragment()
+        } else {
+            val idLibrary = GeneralConsts.getSharedPreferences(this)
+                .getLong(GeneralConsts.KEYS.LIBRARY.LAST_LIBRARY, GeneralConsts.KEYS.LIBRARY.DEFAULT)
+
+            val library = if (idLibrary != GeneralConsts.KEYS.LIBRARY.DEFAULT)
+                mLibraries.find { it.id == idLibrary } ?: LibraryUtil.getDefault(this)
+            else
+                LibraryUtil.getDefault(this)
+
+            mLibraryModel.setLibrary(library)
+            fragment = LibraryFragment()
+
+            intent.dataString?.let {
+                fragment = when (it) {
+                    "history" -> HistoryFragment()
+                    else -> fragment
+                }
+            }
+        }
+
+        // content_fragment use for receive fragments layout
+        mFragmentManager.beginTransaction().replace(R.id.main_content_root, fragment)
+            .commit()
     }
 
     private fun clearCache() {
@@ -148,9 +197,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.menu_vocabulary -> VocabularyFragment()
             in GeneralConsts.KEYS.LIBRARIES.INDEX_LIBRARIES..(GeneralConsts.KEYS.LIBRARIES.INDEX_LIBRARIES + mLibraries.size) -> {
                 val index = item.itemId - GeneralConsts.KEYS.LIBRARIES.INDEX_LIBRARIES
-                val library = LibraryFragment()
                 mLibraryModel.setLibrary(mLibraries[index])
-                library
+                LibraryFragment()
             }
             else -> null
         }
@@ -195,6 +243,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun openFragment(fragment: Fragment) {
+        if (fragment is LibraryFragment)
+            mLibraryModel.saveLastLibrary()
+
         mFragmentManager.beginTransaction().setCustomAnimations(
             R.anim.slide_fragment_add_enter,
             R.anim.slide_fragment_add_exit,

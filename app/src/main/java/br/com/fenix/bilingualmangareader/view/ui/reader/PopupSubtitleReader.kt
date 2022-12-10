@@ -56,15 +56,15 @@ class PopupSubtitleReader : Fragment() {
 
         mSubtitleContent.setOnLongClickListener {
             if (mSubtitleContent.text.isNotEmpty()) {
-                Toast.makeText(
-                    requireActivity(),
-                    getString(R.string.action_copy) + " ${mSubtitleContent.text}",
-                    Toast.LENGTH_SHORT
-                ).show()
-
                 val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 val clip = ClipData.newPlainText("Copied Text", mSubtitleContent.text)
                 clipboard.setPrimaryClip(clip)
+
+                Toast.makeText(
+                    requireActivity(),
+                    getString(R.string.action_copy, mSubtitleContent.text),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
             true
         }

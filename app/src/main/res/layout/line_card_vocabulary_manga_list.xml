@@ -16,15 +16,16 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:textAppearance="?attr/textAppearanceHeadline6"
-        android:textColor="@color/text_primary"
+        android:textColor="?attr/colorPrimaryInverse"
         android:textSize="@dimen/vocabulary_manga_appear_size" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/vocabulary_manga_list_image_card"
+        style="@style/AppBackground.Card"
         android:layout_width="@dimen/vocabulary_manga_cover_size"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        app:rippleColor="@color/ripple_color">
+        app:rippleColor="?attr/colorTertiary">
 
         <ImageView
             android:id="@+id/vocabulary_manga_list_image_cover"
@@ -35,14 +36,5 @@
             app:srcCompat="@mipmap/book_cover_2" />
 
     </com.google.android.material.card.MaterialCardView>
-
-    <TextView
-        android:id="@+id/vocabulary_manga_list_nome"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:maxEms="5"
-        android:textAppearance="?attr/textAppearanceHeadline6"
-        android:textColor="@color/text_primary"
-        android:textSize="@dimen/vocabulary_manga_name_size" />
 
 </LinearLayout>

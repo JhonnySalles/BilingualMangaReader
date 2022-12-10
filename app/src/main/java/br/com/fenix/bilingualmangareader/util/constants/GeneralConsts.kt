@@ -43,7 +43,7 @@ class GeneralConsts private constructor() {
         @TargetApi(26)
         fun formatterDateTime(context: Context, dateTime: LocalDateTime): String {
             val preferences = getSharedPreferences(context)
-            val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, DATE_PATTERN) + TIME_PATTERN
+            val pattern = preferences.getString(KEYS.SYSTEM.FORMAT_DATA, DATE_PATTERN) + " " + TIME_PATTERN
             return dateTime.format(DateTimeFormatter.ofPattern(pattern))
         }
     }
@@ -64,6 +64,7 @@ class GeneralConsts private constructor() {
             const val ORIENTATION = "LAST_ORIENTATION"
             const val LIBRARY_TYPE = "LAST_LIBRARY_TYPE"
             const val DEFAULT = -1L
+            const val LAST_LIBRARY = "LAST_LIBRARY"
         }
 
         object LIBRARIES {
@@ -80,6 +81,7 @@ class GeneralConsts private constructor() {
             const val READER_MODE = "READER_MODE"
             const val PAGE_MODE = "READER_PAGE_MODE"
             const val SHOW_CLOCK_AND_BATTERY = "SHOW_CLOCK_AND_BATTERY"
+            const val USE_MAGNIFIER_TYPE = "USE_MAGNIFIER_TYPE"
         }
 
         object SYSTEM {
@@ -88,6 +90,7 @@ class GeneralConsts private constructor() {
         }
 
         object MANGA {
+            const val ID = "MANGA_ID"
             const val NAME = "MANGA_NAME"
             const val MARK = "MANGA_MARK"
             const val PAGE_NUMBER = "PAGE_NUMBER"
@@ -131,6 +134,12 @@ class GeneralConsts private constructor() {
 
         object FRAGMENT {
             const val ID = "FRAGMENT_ID"
+        }
+
+        object THEME {
+            const val THEME_USED = "THEME_USED"
+            const val THEME_MODE = "THEME_MODE"
+            const val THEME_CHANGE = "THEME_CHANGE"
         }
     }
 

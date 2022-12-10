@@ -2,11 +2,11 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppBackground"
     android:id="@+id/frame_pages_link_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/on_primary"
     android:clipToPadding="false"
     android:clipChildren="false"
     android:fillViewport="false"
@@ -93,32 +93,32 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <View
+            style="@style/AppBackground"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:translationY="-40dp"
-            android:background="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <LinearLayout
+            style="@style/AppBackground"
             android:id="@+id/pages_link_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@color/on_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.appcompat.widget.Toolbar
+            <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar_manga_pages_link"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="top"
                 android:background="@color/transparent"
-                app:popupTheme="@style/MyDarkToolbarStyle"
-                android:theme="@style/ToolbarTheme">
+                app:popupTheme="@style/MainToolbarStyle"
+                android:theme="@style/MainToolbarTheme">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -127,76 +127,52 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/pages_link_file_link_text"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        style="@style/TextInputWithoutDropMenu"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1.5"
                         android:layout_marginEnd="@dimen/page_link_language_margin"
                         android:hint="@string/page_link_file"
-                        android:textColorHint="@color/text_primary"
-                        app:boxBackgroundColor="@color/primary"
-                        app:boxStrokeColor="@color/on_secondary"
-                        app:startIconTint="@color/on_secondary"
-                        app:startIconDrawable="@drawable/ic_file"
-                        app:placeholderTextColor="@color/text_primary"
-                        app:hintTextColor="@color/on_secondary">
+                        app:startIconDrawable="@drawable/ic_file">
 
                         <AutoCompleteTextView
                             android:id="@+id/pages_link_file_link_autocomplete"
+                            style="@style/AutoCompleteDropMenu"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="none"
-                            android:textColor="@color/text_primary" />
+                            android:layout_height="wrap_content" />
+
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/pages_link_language_combo"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        style="@style/TextInputDropMenu"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="0.9"
                         android:hint="@string/page_link_file_language"
-                        android:textColorHint="@color/text_primary"
                         android:layout_marginEnd="5dp"
-                        app:boxBackgroundColor="@color/primary"
-                        app:boxStrokeColor="@color/on_secondary"
-                        app:hintTextColor="@color/on_secondary"
-                        app:startIconDrawable="@drawable/ic_translate"
-                        app:startIconTint="@color/on_secondary">
+                        app:startIconDrawable="@drawable/ic_translate">
 
                         <AutoCompleteTextView
                             android:id="@+id/pages_link_language_autocomplete"
+                            style="@style/AutoCompleteDropMenu"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:inputType="none"
-                            android:textColor="@color/text_primary" />
+                            android:layout_height="match_parent" />
+
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/pages_link_pages_index"
+                        style="@style/Button.RoundedIconOnly"
                         android:layout_width="@dimen/page_link_pages_index"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/text_primary"
                         android:contentDescription="@string/page_link_page_index"
-                        android:layout_gravity="top"
-                        android:gravity="top"
-                        android:insetTop="0dp"
-                        android:insetRight="0dp"
-                        android:insetBottom="0dp"
-                        android:insetLeft="0dp"
-                        android:textAllCaps="false"
-                        android:padding="0dp"
-                        app:iconPadding="0dp"
-                        app:iconGravity="textStart"
-                        app:rippleColor="@color/ripple_color"
-                        app:strokeWidth="0dp"
-                        app:backgroundTint="@color/primary"
-                        app:icon="@drawable/ic_file_link_pages_index"
-                        app:iconTint="@color/text_primary"
-                        app:iconSize="28dp"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
+                        app:iconTint="?attr/colorSecondary"
+                        android:tag=""
+                        app:icon="@drawable/ic_file_link_pages_index"/>
+
                 </LinearLayout>
-            </androidx.appcompat.widget.Toolbar>
+            </com.google.android.material.appbar.MaterialToolbar>
 
             <TextView
                 android:id="@+id/pages_link_name_manga"
@@ -205,10 +181,10 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textAppearance="?attr/textAppearanceHeadline6"
-                android:textColor="@color/white"
+                android:textColor="?attr/colorPrimaryInverse"
                 android:textSize="@dimen/page_link_card_page_number_size"
                 android:layout_marginTop="@dimen/page_link_card_page_name_margin"
-                android:background="@color/primary"
+                android:background="?attr/colorOnSurface"
                 android:paddingStart="2dp"
                 android:paddingEnd="2dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -226,23 +202,20 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:gravity="end">
 
-            <com.google.android.material.button.MaterialButton
+            <br.com.fenix.bilingualmangareader.view.components.MaterialButtonExpanded
                 android:id="@+id/pages_link_help_button"
+                style="@style/Button.RoundedIconOnly"
                 android:layout_width="@dimen/page_link_help_size"
                 android:layout_height="match_parent"
-                android:textColor="@color/text_primary"
+                android:textColor="?attr/colorTertiary"
                 android:contentDescription="@string/page_link_help"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:textAllCaps="false"
                 android:tag="not_used"
                 android:visibility="gone"
-                app:rippleColor="@color/ripple_color"
                 app:strokeWidth="0dp"
-                app:backgroundTint="@color/file_link_full_screen"
-                app:icon="@drawable/ic_help"
-                app:iconTint="@color/text_primary"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
+                app:icon="@drawable/ic_help" />
 
             <com.google.android.material.button.MaterialButtonToggleGroup
                 android:id="@+id/page_link_buttons_group"
@@ -254,128 +227,77 @@
                 android:layout_gravity="center"
                 android:gravity="center">
 
-                <com.google.android.material.button.MaterialButton
+                <br.com.fenix.bilingualmangareader.view.components.MaterialButtonExpanded
                     android:id="@+id/pages_link_auto_process_button"
+                    style="@style/Button.PageLinkFunction"
                     android:layout_width="@dimen/page_link_buttons_size_land"
                     android:layout_height="match_parent"
-                    android:textColor="@color/text_primary"
                     android:contentDescription="@string/page_link_reorder_auto"
                     android:text="@string/page_link_reorder_auto"
-                    android:layout_gravity="start"
-                    android:gravity="center"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:rippleColor="@color/ripple_color"
-                    app:strokeWidth="0dp"
-                    app:backgroundTint="@color/file_link_buttons"
-                    app:icon="@drawable/ic_file_link_auto_process"
-                    app:iconTint="@color/secondary"
-                    app:iconSize="20dp"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
+                    app:icon="@drawable/ic_file_link_auto_process"/>
 
-                <com.google.android.material.button.MaterialButton
+                <br.com.fenix.bilingualmangareader.view.components.MaterialButtonExpanded
                     android:id="@+id/pages_link_dual_page_button"
+                    style="@style/Button.PageLinkFunction"
                     android:layout_width="@dimen/page_link_buttons_size_land"
                     android:layout_height="match_parent"
-                    android:textColor="@color/text_primary"
                     android:contentDescription="@string/page_link_reorder_dual_page"
                     android:text="@string/page_link_reorder_dual_page"
-                    android:layout_gravity="start"
-                    android:gravity="center"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:rippleColor="@color/ripple_color"
-                    app:strokeWidth="0dp"
-                    app:backgroundTint="@color/file_link_buttons"
-                    app:icon="@drawable/ic_file_link_dual_page"
-                    app:iconTint="@color/secondary"
-                    app:iconSize="20dp"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
+                    app:icon="@drawable/ic_file_link_dual_page"/>
 
-                <com.google.android.material.button.MaterialButton
+                <br.com.fenix.bilingualmangareader.view.components.MaterialButtonExpanded
                     android:id="@+id/pages_link_single_page_button"
+                    style="@style/Button.PageLinkFunction"
                     android:layout_width="@dimen/page_link_buttons_size_land"
                     android:layout_height="match_parent"
-                    android:textColor="@color/text_primary"
                     android:contentDescription="@string/page_link_reorder_single_page"
                     android:text="@string/page_link_reorder_single_page"
-                    android:layout_gravity="start"
-                    android:gravity="center"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:rippleColor="@color/ripple_color"
-                    app:strokeWidth="0dp"
-                    app:backgroundTint="@color/file_link_buttons"
-                    app:icon="@drawable/ic_file_link_single_page"
-                    app:iconTint="@color/secondary"
-                    app:iconSize="20dp"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
+                    app:icon="@drawable/ic_file_link_single_page"/>
 
-                <com.google.android.material.button.MaterialButton
+                <br.com.fenix.bilingualmangareader.view.components.MaterialButtonExpanded
                     android:id="@+id/pages_link_reorder_button"
+                    style="@style/Button.PageLinkFunction"
                     android:layout_width="@dimen/page_link_buttons_size_land"
                     android:layout_height="match_parent"
-                    android:textColor="@color/text_primary"
                     android:contentDescription="@string/page_link_reorder_sorted_page"
                     android:text="@string/page_link_reorder_sorted_page"
-                    android:layout_gravity="start"
-                    android:gravity="center"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:rippleColor="@color/ripple_color"
-                    app:strokeWidth="0dp"
-                    app:backgroundTint="@color/file_link_buttons"
-                    app:icon="@drawable/ic_file_link_reorder"
-                    app:iconTint="@color/secondary"
-                    app:iconSize="20dp"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
+                    app:icon="@drawable/ic_file_link_reorder"/>
 
-                <com.google.android.material.button.MaterialButton
+                <br.com.fenix.bilingualmangareader.view.components.MaterialButtonExpanded
                     android:id="@+id/file_link_delete_button"
+                    style="@style/Button.PageLinkFunction"
                     android:layout_width="@dimen/page_link_buttons_size_land"
                     android:layout_height="match_parent"
-                    android:textColor="@color/text_primary"
                     android:contentDescription="@string/page_link_delete_file_link"
                     android:text="@string/page_link_delete_file_link"
-                    android:layout_gravity="start"
-                    android:gravity="center"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    android:textAllCaps="false"
-                    app:rippleColor="@color/ripple_color"
-                    app:strokeWidth="0dp"
-                    app:backgroundTint="@color/file_link_buttons"
-                    app:icon="@drawable/ic_file_link_delete"
-                    app:iconTint="@color/secondary"
-                    app:iconSize="20dp"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
+                    app:icon="@drawable/ic_file_link_delete"/>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/pages_link_refresh_button"
+                <br.com.fenix.bilingualmangareader.view.components.MaterialButtonExpanded
+                    android:id="@+id/pages_link_undo_changes_button"
+                    style="@style/Button.PageLinkFunction"
                     android:layout_width="@dimen/page_link_buttons_size_land"
                     android:layout_height="match_parent"
-                    android:textColor="@color/text_primary"
-                    android:contentDescription="@string/page_link_refresh_file_link"
-                    android:text="@string/page_link_refresh_file_link"
-                    android:layout_gravity="start"
-                    android:gravity="center"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    app:rippleColor="@color/ripple_color"
-                    app:strokeWidth="0dp"
-                    app:backgroundTint="@color/file_link_buttons"
-                    app:icon="@drawable/ic_file_link_refresh"
-                    app:iconTint="@color/secondary"
-                    app:iconSize="20dp"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
+                    android:contentDescription="@string/page_link_reorder_undo_changes"
+                    android:text="@string/page_link_reorder_undo_changes"
+                    android:enabled="false"
+                    app:icon="@drawable/ic_file_link_undo_changes"/>
+
+                <br.com.fenix.bilingualmangareader.view.components.MaterialButtonExpanded
+                    android:id="@+id/pages_link_reload_button"
+                    style="@style/Button.PageLinkFunction"
+                    android:layout_width="@dimen/page_link_buttons_size_land"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/page_link_reload_file_link"
+                    android:text="@string/page_link_reload_file_link"
+                    app:icon="@drawable/ic_file_link_reload"/>
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
             <Button
                 android:id="@+id/pages_link_save_button"
+                style="@style/Button"
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:textColor="@color/text_primary"
                 android:text="@string/page_link_save"
                 android:textAllCaps="false"
                 android:layout_margin="@dimen/page_link_button_margin"
@@ -402,9 +324,9 @@
                     android:max="100"
                     android:progress="100"
                     android:visibility="invisible"
-                    app:rippleColor="@color/ripple_color"
+                    app:rippleColor="?attr/colorTertiary"
                     app:indicatorSize="@dimen/page_link_loading_progress_size"
-                    app:indicatorColor="@color/on_secondary"
+                    app:indicatorColor="?attr/colorTertiary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -412,96 +334,63 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/pages_link_full_screen_button"
+                    style="@style/Button.RoundedIconOnly"
                     android:layout_height="@dimen/page_link_fullscreen_size"
                     android:layout_width="@dimen/page_link_fullscreen_size"
-                    android:textColor="@color/text_primary"
                     android:contentDescription="@string/page_link_full_screen"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:insetTop="0dp"
-                    android:insetRight="0dp"
-                    android:insetBottom="0dp"
-                    android:insetLeft="0dp"
-                    app:rippleColor="@color/ripple_color"
-                    app:strokeWidth="0dp"
-                    app:backgroundTint="@color/file_link_full_screen"
                     app:icon="@drawable/ic_fullscreen"
-                    app:iconTint="@color/text_primary"
-                    app:iconSize="28dp"
-                    app:cornerRadius="100dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
+                    app:layout_constraintBottom_toBottomOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/pages_link_force_image_reload"
+            style="@style/Button.RoundedIconOnly"
             android:layout_height="@dimen/page_link_fullscreen_size"
             android:layout_width="@dimen/page_link_fullscreen_size"
-            android:textColor="@color/text_primary"
             android:contentDescription="@string/page_link_full_screen"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:insetTop="0dp"
-            android:insetRight="0dp"
-            android:insetBottom="0dp"
-            android:insetLeft="0dp"
-            android:padding="0dp"
             android:layout_marginEnd="5dp"
             android:visibility="gone"
-            app:iconPadding="0dp"
-            app:iconGravity="textStart"
-            app:rippleColor="@color/ripple_color"
-            app:strokeWidth="0dp"
-            app:backgroundTint="@color/file_link_full_screen"
             app:icon="@drawable/ic_force_reload_image"
-            app:iconTint="@color/text_primary"
-            app:iconSize="28dp"
-            app:cornerRadius="100dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/pages_link_buttons_content"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
+            app:layout_constraintBottom_toTopOf="@+id/pages_link_buttons_content"/>
 
         <!--                                Ended                                -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/pages_link_scroll_up"
+            style="@style/FloatingActionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|right"
             android:layout_margin="@dimen/page_link_scrolling_button_margin"
-            android:backgroundTint="@color/white"
             android:contentDescription="@string/action_scroll_up"
             android:src="@drawable/ic_up_arrow"
             android:visibility="gone"
-            app:backgroundTint="@color/on_secondary"
             app:borderWidth="@dimen/page_link_up_border"
             app:fabCustomSize="@dimen/page_link_up_width"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pages_link_content"
-            app:maxImageSize="@dimen/page_link_up_image_width"
-            app:tint="@color/on_secondary" />
+            app:maxImageSize="@dimen/page_link_up_image_width" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/pages_link_scroll_down"
+            style="@style/FloatingActionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
             android:layout_margin="@dimen/page_link_scrolling_button_margin"
-            android:backgroundTint="@color/white"
             android:contentDescription="@string/action_scroll_down"
             android:src="@drawable/ic_down_arrow"
             android:visibility="gone"
-            app:backgroundTint="@color/on_secondary"
             app:borderWidth="@dimen/page_link_down_border"
             app:fabCustomSize="@dimen/page_link_down_width"
             app:layout_constraintBottom_toTopOf="@+id/pages_link_buttons_content"
             app:layout_constraintRight_toRightOf="parent"
-            app:maxImageSize="@dimen/page_link_down_image_width"
-            app:tint="@color/on_secondary" />
+            app:maxImageSize="@dimen/page_link_down_image_width" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

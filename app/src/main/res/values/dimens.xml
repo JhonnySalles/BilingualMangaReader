@@ -9,6 +9,7 @@
     <dimen name="default_navigator_header_padding_tablet_button">40dp</dimen>
     <dimen name="default_navigator_header_size">60dp</dimen>
 
+    <dimen name="margin_big">20dp</dimen>
     <dimen name="margin">10dp</dimen>
     <dimen name="margin_small">6dp</dimen>
     <dimen name="margin_bottom">50dp</dimen>
@@ -19,6 +20,7 @@
     <dimen name="manga_grid_title_size">12sp</dimen>
     <dimen name="manga_grid_sub_title">10sp</dimen>
     <dimen name="manga_grid_favorite">20dp</dimen>
+    <dimen name="manga_grid_subtitle">20dp</dimen>
 
     <dimen name="manga_grid_card_layout_width_medium">120dp</dimen>
     <dimen name="manga_grid_card_layout_width_landscape_medium">130dp</dimen>
@@ -75,6 +77,11 @@
     <dimen name="clock_and_battery">10sp</dimen>
     <dimen name="clock_and_battery_tablet">12sp</dimen>
 
+    <dimen name="reader_zoom_magnifier_size">120dp</dimen>
+    <dimen name="reader_zoom_magnifier_tablet_size">200dp</dimen>
+    <dimen name="reader_zoom_size">250dp</dimen>
+    <dimen name="reader_zoom_tablet_size">400dp</dimen>
+    <dimen name="reader_zoom_border">2dp</dimen>
     <dimen name="reader_button_width">50dp</dimen>
     <dimen name="reader_change_comic_size">40dp</dimen>
 
@@ -88,7 +95,6 @@
 
     <dimen name="popup_reader_button_width">50dp</dimen>
     <dimen name="popup_reader_button_min_height">50dp</dimen>
-    <dimen name="popup_reader_button_padding">10dp</dimen>
 
     <dimen name="popup_reader_color_filter_padding">16dp</dimen>
     <dimen name="popup_reader_blue_light_padding">10dp</dimen>
@@ -101,6 +107,8 @@
     <dimen name="floating_reader_text">20sp</dimen>
     <dimen name="floating_reader_button_width">25dp</dimen>
     <dimen name="floating_reader_button_close">25dp</dimen>
+    <dimen name="floating_reader_right_margin">10dp</dimen>
+    <dimen name="floating_reader_right_margin_with_button">30dp</dimen>
 
     <dimen name="floating_ocr_min_size">50dp</dimen>
     <dimen name="floating_ocr_height">100dp</dimen>
@@ -121,11 +129,13 @@
 
     <dimen name="config_tracker_ico_size">48dp</dimen>
     <dimen name="config_tracker_margin">10dp</dimen>
+    <dimen name="config_theme_height">200dp</dimen>
+    <dimen name="config_theme_selected_stroke">3dp</dimen>
 
     <dimen name="about_app_name">18sp</dimen>
     <dimen name="about_title_size">16sp</dimen>
     <dimen name="about_content_size">12sp</dimen>
-    <dimen name="about_button_text_size">12sp</dimen>
+    <dimen name="about_button_text_size">14sp</dimen>
     <dimen name="about_button_text_size_tablet">18sp</dimen>
     <dimen name="about_button_width">165dp</dimen>
     <dimen name="about_button_width_big">180dp</dimen>
@@ -202,18 +212,27 @@
     <dimen name="page_not_link_card_layout_width_tablet">100dp</dimen>
     <dimen name="page_not_link_card_layout_height_tablet">130dp</dimen>
 
+    <dimen name="page_link_image_detail_size">15sp</dimen>
+
     <dimen name="vocabulary_title_size">30sp</dimen>
     <dimen name="vocabulary_content_text_big_size">16sp</dimen>
     <dimen name="vocabulary_content_text_normal_size">14sp</dimen>
     <dimen name="vocabulary_content_text_small_size">12sp</dimen>
+    <dimen name="vocabulary_favorites_button_size">55dp</dimen>
     <dimen name="vocabulary_manga_cover_size">100dp</dimen>
     <dimen name="vocabulary_manga_name_size">14sp</dimen>
     <dimen name="vocabulary_manga_appear_size">14sp</dimen>
+    <dimen name="vocabulary_content_text_width">180dp</dimen>
+    <dimen name="vocabulary_content_text_width_tablet">200dp</dimen>
+    <dimen name="vocabulary_content_favorite_button_size">45dp</dimen>
 
     <dimen name="kanji_title_size">40sp</dimen>
     <dimen name="kanji_sub_title_size">20sp</dimen>
     <dimen name="kanji_content_text_big_size">16sp</dimen>
     <dimen name="kanji_content_text_normal_size">14sp</dimen>
     <dimen name="kanji_content_text_small_size">12sp</dimen>
+
+    <dimen name="theme_layout_width">130dp</dimen>
+    <dimen name="theme_layout_height">180dp</dimen>
 
 </resources>

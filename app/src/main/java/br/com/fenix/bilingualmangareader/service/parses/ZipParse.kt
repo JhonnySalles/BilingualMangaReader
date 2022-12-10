@@ -55,6 +55,10 @@ class ZipParse : Parse {
         return subtitles
     }
 
+    override fun hasSubtitles(): Boolean {
+        return mSubtitles.isNotEmpty()
+    }
+
     override fun getSubtitlesNames(): Map<String, Int> {
         val paths = mutableMapOf<String, Int>()
 

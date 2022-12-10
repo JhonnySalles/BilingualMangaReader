@@ -26,6 +26,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -88,6 +89,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
     private var mIsFullscreen = false
     private var mFileName: String? = null
     var mReaderMode: ReaderMode = ReaderMode.FIT_WIDTH
+    var mUseMagnifierType = false
     var mIsLeftToRight = false
 
     var mParse: Parse? = null
@@ -181,7 +183,9 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
 
     override fun onResume() {
         super.onResume()
-        setFullscreen(fullscreen = true)
+
+        if (mParse != null)
+            setFullscreen(fullscreen = true)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -189,9 +193,11 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         mCurrentPage = 0
         mStorage = Storage(requireContext())
         mLibrary = LibraryUtil.getDefault(requireContext())
+        mPreferences = GeneralConsts.getSharedPreferences(requireContext())
+        mSubtitleController = SubTitleController.getInstance(requireContext())
 
         val bundle: Bundle? = arguments
-        if (bundle != null) {
+        if (bundle != null && !bundle.isEmpty) {
             mLibrary = bundle.getSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY) as Library
 
             mManga = bundle.getSerializable(GeneralConsts.KEYS.OBJECT.MANGA) as Manga?
@@ -204,7 +210,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             } else
                 bundle.getSerializable(GeneralConsts.KEYS.OBJECT.FILE) as File?
 
-            if (file != null) {
+            if (file != null && file.exists()) {
                 if (mManga == null)
                     mManga = mStorage.findByName(file.name)
 
@@ -215,7 +221,6 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
 
                 mParse = ParseFactory.create(file)
                 if (mParse != null) {
-                    mSubtitleController = SubTitleController.getInstance(requireContext())
                     mSubtitleController.getListChapter(mManga, mParse!!)
                     mSubtitleController.mReaderFragment = this
                     mFileName = file.name
@@ -241,12 +246,16 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             mPagerAdapter = ComicPagerAdapter()
             mGestureDetector = GestureDetector(requireActivity(), MyTouchListener())
 
-            mPreferences = GeneralConsts.getSharedPreferences(requireContext())
             mReaderMode = ReaderMode.valueOf(
                 mPreferences.getString(
                     GeneralConsts.KEYS.READER.READER_MODE,
                     ReaderMode.FIT_WIDTH.toString()
                 ).toString()
+            )
+
+            mUseMagnifierType = mPreferences.getBoolean(
+                GeneralConsts.KEYS.READER.USE_MAGNIFIER_TYPE,
+                false
             )
 
             mIsLeftToRight = PageMode.valueOf(
@@ -281,12 +290,6 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
     ): View {
         val view: View = inflater.inflate(R.layout.fragment_reader, container, false)
 
-        if (mParse == null) {
-            val imageError = view.findViewById<ImageView>(R.id.image_error)
-            imageError.visibility = View.VISIBLE
-            return view
-        }
-
         mRoot = requireActivity().findViewById(R.id.root_activity_reader)
         mToolbarTop = requireActivity().findViewById(R.id.toolbar_reader_top)
         mPopupSubtitle = requireActivity().findViewById(R.id.menu_popup_translate)
@@ -295,12 +298,21 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         mToolbarBottom = requireActivity().findViewById(R.id.toolbar_reader_bottom)
         mPreviousButton = requireActivity().findViewById(R.id.nav_previous_file)
         mNextButton = requireActivity().findViewById(R.id.nav_next_file)
+        mViewPager = view.findViewById<View>(R.id.fragment_reader) as PageViewPager
 
         (mPageNavLayout.findViewById<View>(R.id.nav_reader_progress) as SeekBar).also {
             mPageSeekBar = it
         }
-        mPageSeekBar.max = (mParse?.numPages() ?: 2) - 1
+        mPageNavTextView = mPageNavLayout.findViewById<View>(R.id.nav_reader_title) as TextView
 
+        if (mParse == null) {
+            view.findViewById<ImageView>(R.id.image_error).visibility = View.VISIBLE
+            mPageNavTextView.text = ""
+            return view
+        } else
+            view.findViewById<ImageView>(R.id.image_error).visibility = View.GONE
+
+        mPageSeekBar.max = (mParse?.numPages() ?: 2) - 1
         mPageSeekBar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
@@ -318,8 +330,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 mPicasso.resumeTag(this@ReaderFragment.requireActivity())
             }
         })
-        mPageNavTextView = mPageNavLayout.findViewById<View>(R.id.nav_reader_title) as TextView
-        mViewPager = view.findViewById<View>(R.id.fragment_reader) as PageViewPager
+
         mViewPager.adapter = mPagerAdapter
         mViewPager.offscreenPageLimit = ReaderConsts.READER.OFF_SCREEN_PAGE_LIMIT
         mViewPager.setOnTouchListener(this)
@@ -349,9 +360,9 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             val newComicId = savedInstanceState.getLong(ReaderConsts.STATES.STATE_NEW_COMIC)
             val titleRes = savedInstanceState.getInt(ReaderConsts.STATES.STATE_NEW_COMIC_TITLE)
             confirmSwitch(mStorage.get(newComicId), titleRes)
-        } else {
+        } else
             setFullscreen(true)
-        }
+
         requireActivity().title = mFileName
         updateSeekBar()
 
@@ -371,6 +382,9 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             menu.findItem(R.id.reading_left_to_right).isChecked = true
         else
             menu.findItem(R.id.reading_right_to_left).isChecked = true
+
+        menu.findItem(R.id.menu_item_use_magnifier_type).isChecked = mUseMagnifierType
+        menu.findItem(R.id.menu_item_show_clock_and_battery).isChecked = mPreferences.getBoolean(GeneralConsts.KEYS.READER.SHOW_CLOCK_AND_BATTERY, false)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -397,7 +411,9 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
     override fun onDestroy() {
         mSubtitleController.mReaderFragment = null
         Util.destroyParse(mParse)
-        mPicasso.shutdown()
+        if (::mPicasso.isInitialized)
+            mPicasso.shutdown()
+
         super.onDestroy()
     }
 
@@ -419,7 +435,12 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             R.id.view_mode_aspect_fill, R.id.view_mode_aspect_fit, R.id.view_mode_fit_width -> {
                 item.isChecked = true
                 mReaderMode = mResourceViewMode[item.itemId] ?: ReaderMode.FIT_WIDTH
-                updatePageViews(mViewPager)
+                updatePageViews(mViewPager) {
+                    if (mReaderMode === ReaderMode.ASPECT_FILL) it.setTranslateToRightEdge(
+                        !mIsLeftToRight
+                    )
+                    it.setViewMode(mReaderMode)
+                }
             }
             R.id.reading_left_to_right, R.id.reading_right_to_left -> {
                 item.isChecked = true
@@ -429,13 +450,33 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 mViewPager.adapter?.notifyDataSetChanged()
                 updateSeekBar()
             }
+            R.id.menu_item_use_magnifier_type -> {
+                item.isChecked = !item.isChecked
+                mUseMagnifierType = item.isChecked
+                updatePageViews(mViewPager) {
+                    it.useMagnifierType = mUseMagnifierType
+                }
+
+                with(mPreferences.edit()) {
+                    this.putBoolean(
+                        GeneralConsts.KEYS.READER.USE_MAGNIFIER_TYPE,
+                        mUseMagnifierType
+                    )
+                    this.commit()
+                }
+            }
         }
         return super.onOptionsItemSelected(item)
     }
 
     fun changeAspect(toolbar: Toolbar, mode: ReaderMode) {
         mReaderMode = mode
-        updatePageViews(mViewPager)
+        updatePageViews(mViewPager) {
+            if (mReaderMode === ReaderMode.ASPECT_FILL) it.setTranslateToRightEdge(
+                !mIsLeftToRight
+            )
+            it.setViewMode(mReaderMode)
+        }
 
         val id: Int = mResourceViewMode.filterValues { it == mode }.keys.first()
         val menuItem: MenuItem = toolbar.menu.findItem(id)
@@ -454,7 +495,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             mViewPager.setCurrentItem(mViewPager.adapter!!.count - page, animated)
             mPageSeekBar.progress = mViewPager.adapter!!.count - page
         }
-        val navPage: String = StringBuilder()
+        val navPage: String = if (mParse == null) "" else StringBuilder()
             .append(page).append("/").append(mParse?.numPages() ?: 1)
             .toString()
         mPageNavTextView.text = navPage
@@ -492,6 +533,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 layout.findViewById<View>(R.id.page_image_view) as PageImageView
             if (mReaderMode === ReaderMode.ASPECT_FILL) pageImageView.setTranslateToRightEdge(!mIsLeftToRight)
             pageImageView.setViewMode(mReaderMode)
+            pageImageView.useMagnifierType = mUseMagnifierType
             pageImageView.setOnTouchListener(this@ReaderFragment)
             container.addView(layout)
             val t = MyTarget(layout, position)
@@ -549,7 +591,6 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         } catch (e: Exception) {
             mLOGGER.error("Error in open image: " + e.message, e)
         }
-
     }
 
     fun loadImage(t: MyTarget) {
@@ -570,7 +611,6 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         } catch (e: Exception) {
             mLOGGER.error("Error in open image: " + e.message, e)
         }
-
     }
 
     inner class MyTarget(layout: View, val position: Int) : Target,
@@ -700,17 +740,14 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         }
     }
 
-    private fun updatePageViews(parentView: ViewGroup) {
+    private fun updatePageViews(parentView: ViewGroup, change: (PageImageView) -> (Unit)) {
         for (i in 0 until parentView.childCount) {
             val child = parentView.getChildAt(i)
             if (child is ViewGroup) {
-                updatePageViews(child)
+                updatePageViews(child, change)
             } else if (child is PageImageView) {
                 val view: PageImageView = child
-                if (mReaderMode === ReaderMode.ASPECT_FILL) view.setTranslateToRightEdge(
-                    !mIsLeftToRight
-                )
-                view.setViewMode(mReaderMode)
+                change(view)
             }
         }
     }
@@ -727,11 +764,10 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         if (fullscreen) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 windowInsetsController.let {
-                    it.hide(WindowInsets.Type.systemBars())
+                    it.hide(WindowInsetsCompat.Type.systemBars())
                     it.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
                 }
                 WindowCompat.setDecorFitsSystemWindows(w, true)
-                w.setDecorFitsSystemWindows(false)
             } else {
                 getActionBar()?.hide()
                 @Suppress("DEPRECATION")
@@ -756,10 +792,9 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 windowInsetsController.let {
-                    it.show(WindowInsets.Type.systemBars())
+                    it.show(WindowInsetsCompat.Type.systemBars())
                 }
                 WindowCompat.setDecorFitsSystemWindows(w, false)
-                w.setDecorFitsSystemWindows(true)
             } else {
                 getActionBar()?.show()
                 @Suppress("DEPRECATION")
@@ -773,16 +808,24 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 }, 300)
             }
 
-            mRoot.fitsSystemWindows = true
+            w.statusBarColor = resources.getColor(R.color.status_bar_color)
+            w.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            w.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
+            w.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            w.navigationBarColor = resources.getColor(R.color.status_bar_color)
+
+            //mRoot.fitsSystemWindows = true
             changeContentsVisibility(fullscreen)
         }
     }
 
-    private val duration = 300L
+    private val duration = 200L
     private fun changeContentsVisibility(isFullScreen: Boolean) {
         val visibility = if (isFullScreen) View.GONE else View.VISIBLE
         val finalAlpha = if (isFullScreen) 0.0f else 1.0f
         val initialAlpha = if (isFullScreen) 1.0f else 0.0f
+        val initialTranslation = if (isFullScreen) 0f else -50f
+        val finalTranslation = if (isFullScreen) -50f else 0f
 
         if (!isFullScreen) {
             mPageNavLayout.visibility = visibility
@@ -792,10 +835,13 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             mPreviousButton.visibility = visibility
 
             mPageNavLayout.alpha = initialAlpha
-            mToolbarBottom.alpha = initialAlpha
             mToolbarTop.alpha = initialAlpha
+            mToolbarBottom.alpha = initialAlpha
             mNextButton.alpha = initialAlpha
             mPreviousButton.alpha = initialAlpha
+
+            mToolbarTop.translationY = initialTranslation
+            mToolbarBottom.translationY = (initialTranslation*-1)
         }
 
         mPageNavLayout.animate().alpha(finalAlpha).setDuration(duration)
@@ -806,16 +852,16 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 }
             })
 
-        mToolbarBottom.animate().alpha(finalAlpha).setDuration(duration)
-            .setListener(object : AnimatorListenerAdapter() {
+        mToolbarBottom.animate().alpha(finalAlpha).translationY(finalTranslation *-1)
+            .setDuration(duration).setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator?) {
                     super.onAnimationEnd(animation)
                     mToolbarBottom.visibility = visibility
                 }
             })
 
-        mToolbarTop.animate().alpha(finalAlpha).setDuration(duration)
-            .setListener(object : AnimatorListenerAdapter() {
+        mToolbarTop.animate().alpha(finalAlpha).translationY(finalTranslation)
+            .setDuration(duration).setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator?) {
                     super.onAnimationEnd(animation)
                     mToolbarTop.visibility = visibility

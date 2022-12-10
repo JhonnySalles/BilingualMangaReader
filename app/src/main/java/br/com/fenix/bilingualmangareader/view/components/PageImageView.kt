@@ -16,6 +16,7 @@ import android.view.animation.Interpolator
 import android.widget.OverScroller
 import androidx.core.view.ViewCompat
 import androidx.core.view.drawToBitmap
+import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.enums.ReaderMode
 import kotlin.math.abs
 import kotlin.math.max
@@ -42,15 +43,20 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
     private val m = FloatArray(9)
     private var mMatrix: Matrix = Matrix()
 
+    var useMagnifierType = false
     private var mPinch = false
     private var mMagnifierMatrix: Matrix = Matrix()
     private var mZoomPos: PointF
     private var mZooming = false
+    private var mLastZoomPos: PointF
     private var mPaint: Paint
+    private var mBorder: Paint
     private lateinit var mBitmap: Bitmap
     private lateinit var mShader: BitmapShader
     private val mMagnifierScale = 2.5F
-    private val mMagnifierSize = 200F
+    private val mMagnifierCenter: Float
+    private val mMagnifierSize: Float
+    private val mMagnifierRadius: Float
 
     fun setViewMode(viewMode: ReaderMode) {
         mViewMode = viewMode
@@ -99,8 +105,18 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
         mScroller.setFriction(ViewConfiguration.getScrollFriction() * 2)
         mViewMode = ReaderMode.FIT_WIDTH
 
+        val isTablet = resources.getBoolean(R.bool.isTablet)
+        mMagnifierSize = if (isTablet) resources.getDimension(R.dimen.reader_zoom_tablet_size) else resources.getDimension(R.dimen.reader_zoom_size)
+        mMagnifierRadius = if (isTablet) resources.getDimension(R.dimen.reader_zoom_magnifier_tablet_size) else resources.getDimension(R.dimen.reader_zoom_magnifier_size)
+        mMagnifierCenter = mMagnifierSize/2
         mZoomPos = PointF(0F, 0F)
+        mLastZoomPos = PointF(-1F, -1F)
         mPaint = Paint()
+
+        mBorder = Paint()
+        mBorder.color = resources.getColor(R.color.page_border)
+        mBorder.style = Paint.Style.STROKE
+        mBorder.strokeWidth = resources.getDimension(R.dimen.reader_zoom_border)
     }
 
     fun autoScroll(isBack: Boolean = false): Boolean {
@@ -127,6 +143,53 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
         post(ScrollAnimation(0F, m[Matrix.MTRANS_Y], 0F, distance))
 
         return !isScroll
+    }
+
+    private fun getMultipleScale() : Float {
+        val dWidth = drawable.intrinsicWidth
+        val dHeight = drawable.intrinsicHeight
+        val vWidth: Int = width
+        val vHeight: Int = height
+        val current = getCurrentScale()
+
+        val heightRatio = vHeight.toFloat() / dHeight
+        val w = dWidth * heightRatio
+        return if (w < vWidth)
+            current * dWidth / max(dWidth, vWidth)
+        else
+            current * dHeight / max(dHeight, vHeight)
+    }
+
+    private fun generateScale(multiple: Float) : Float {
+        val dWidth = drawable.intrinsicWidth
+        val dHeight = drawable.intrinsicHeight
+        val vWidth: Int = width
+        val vHeight: Int = height
+
+        val heightRatio = vHeight.toFloat() / dHeight
+        val w = dWidth * heightRatio
+        return if (w < vWidth)
+            max(dWidth, vWidth) * multiple / dWidth
+        else
+            max(dHeight, vHeight) * multiple / dHeight
+    }
+
+    fun getScrollPercent(): Triple<Float, Float, Float> {
+        val imageSize = computeCurrentImageSize()
+        return Triple((m[Matrix.MTRANS_X] / imageSize.x), (m[Matrix.MTRANS_Y] / imageSize.y), getMultipleScale())
+    }
+
+    fun setScrollPercent(percent : Triple<Float, Float, Float>) {
+        val (x, y, zoom) = percent
+        val scale = generateScale(zoom)
+        mMatrix.setScale(scale, scale)
+        mMatrix.getValues(m)
+        val imageSize = computeCurrentImageSize()
+        val posY = m[Matrix.MTRANS_Y] + (imageSize.y * y)
+        val posX = m[Matrix.MTRANS_X] + (imageSize.x * x)
+        mMatrix.postTranslate(posX, posY)
+        imageMatrix = mMatrix
+        postInvalidate()
     }
 
     override fun setOnTouchListener(l: OnTouchListener?) {
@@ -268,6 +331,7 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
             mShader = BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
             mPaint = Paint()
             mZooming = true
+            mLastZoomPos = PointF(-1F, -1F)
             this@PageImageView.invalidate()
         }
     }
@@ -380,6 +444,7 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
                     this.invalidate()
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                mLastZoomPos = PointF(-1F, -1F)
                 mZooming = false
                 this.invalidate()
             }
@@ -394,10 +459,30 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
         if (mZooming && !mPinch) {
             mPaint.shader = mShader
             mMagnifierMatrix.set(mMatrix)
-            mMagnifierMatrix.reset()
-            mMagnifierMatrix.postScale(mMagnifierScale, mMagnifierScale, mZoomPos.x, mZoomPos.y)
-            mPaint.shader.setLocalMatrix(mMagnifierMatrix)
-            canvas?.drawCircle(mZoomPos.x, mZoomPos.y, mMagnifierSize, mPaint)
+
+            if (useMagnifierType) {
+                mMagnifierMatrix.reset()
+                mMagnifierMatrix.postScale(mMagnifierScale, mMagnifierScale, mZoomPos.x, mZoomPos.y)
+                mPaint.shader.setLocalMatrix(mMagnifierMatrix)
+                canvas?.drawCircle(mZoomPos.x, mZoomPos.y, mMagnifierRadius, mPaint)
+            } else {
+                val x = if (mZoomPos.x < (width/2)) width.minus(mMagnifierSize) else 0F
+
+                if (mLastZoomPos.x != x)
+                    mLastZoomPos.y = if (mZoomPos.y < (height/2)) height.minus(mMagnifierSize) else 0F
+
+                mLastZoomPos.x = x
+
+                mMagnifierMatrix.reset()
+                mMagnifierMatrix.postScale(mMagnifierScale, mMagnifierScale, mZoomPos.x, mZoomPos.y)
+                mMagnifierMatrix.postTranslate(-mZoomPos.x, -mZoomPos.y)
+                mMagnifierMatrix.postTranslate(mMagnifierCenter, mMagnifierCenter)
+                mMagnifierMatrix.postTranslate(mLastZoomPos.x, mLastZoomPos.y)
+                mPaint.shader.setLocalMatrix(mMagnifierMatrix)
+
+                canvas?.drawRect(mLastZoomPos.x-1, mLastZoomPos.y-2, mLastZoomPos.x + mMagnifierSize+1, mLastZoomPos.y + mMagnifierSize+1, mBorder)
+                canvas?.drawRect(mLastZoomPos.x, mLastZoomPos.y, mLastZoomPos.x + mMagnifierSize, mLastZoomPos.y + mMagnifierSize, mPaint)
+            }
         }
     }
 

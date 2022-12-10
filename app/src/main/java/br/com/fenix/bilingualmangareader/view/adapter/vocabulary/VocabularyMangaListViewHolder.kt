@@ -2,9 +2,11 @@ package br.com.fenix.bilingualmangareader.view.adapter.vocabulary
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Build
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.TooltipCompat
 import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.VocabularyManga
@@ -34,10 +36,13 @@ class VocabularyMangaListViewHolder(itemView: View) : RecyclerView.ViewHolder(it
         val appear = itemView.findViewById<TextView>(R.id.vocabulary_manga_list_appear)
         val card = itemView.findViewById<MaterialCardView>(R.id.vocabulary_manga_list_image_card)
         val cover = itemView.findViewById<ImageView>(R.id.vocabulary_manga_list_image_cover)
-        val name = itemView.findViewById<TextView>(R.id.vocabulary_manga_list_nome)
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
+            TooltipCompat.setTooltipText(card, vocabulary.manga?.name ?: "")
+        else
+            card.tooltipText = vocabulary.manga?.name ?: ""
 
         appear.text = vocabulary.appears.toString()
-        name.text = vocabulary.manga?.name ?: ""
 
         val image = when ((1..5).random()) {
             1 -> GridViewHolder.mDefaultImageCover1

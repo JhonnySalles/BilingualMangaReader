@@ -14,10 +14,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Manga
+import br.com.fenix.bilingualmangareader.model.entity.Vocabulary
 import br.com.fenix.bilingualmangareader.service.listener.VocabularyCardListener
 import br.com.fenix.bilingualmangareader.view.adapter.vocabulary.VocabularyCardAdapter
+import br.com.fenix.bilingualmangareader.view.components.ComponentsUtil
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
@@ -26,19 +29,22 @@ import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
 
 
-class VocabularyFragment : Fragment() {
+class VocabularyFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private val mLOGGER = LoggerFactory.getLogger(VocabularyFragment::class.java)
 
     private val mViewModel: VocabularyViewModel by viewModels()
 
+    var mManga: Manga? = null
+
     private lateinit var mRoot: ConstraintLayout
+    private lateinit var mRefreshLayout: SwipeRefreshLayout
     private lateinit var mScrollUp: FloatingActionButton
     private lateinit var mScrollDown: FloatingActionButton
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mContent: LinearLayout
-    private lateinit var mManga: TextInputLayout
-    private lateinit var mMangaEditText: TextInputEditText
+    private lateinit var mMangaName: TextInputLayout
+    private lateinit var mMangaNameEditText: TextInputEditText
     private lateinit var mVocabulary: TextInputLayout
     private lateinit var mVocabularyEditText: TextInputEditText
     private lateinit var mFavoriteButton: MaterialButton
@@ -69,13 +75,14 @@ class VocabularyFragment : Fragment() {
 
         mRoot = root.findViewById(R.id.vocabulary_root)
         mRecyclerView = root.findViewById(R.id.vocabulary_recycler)
+        mRefreshLayout = root.findViewById(R.id.vocabulary_refresh)
 
         mContent = root.findViewById(R.id.vocabulary_content)
-        mManga = root.findViewById(R.id.vocabulary_manga_text)
-        mMangaEditText = root.findViewById(R.id.vocabulary_manga_edittext)
+        mMangaName = root.findViewById(R.id.vocabulary_manga_text)
+        mMangaNameEditText = root.findViewById(R.id.vocabulary_manga_edittext)
         mVocabulary = root.findViewById(R.id.vocabulary_find_text)
         mVocabularyEditText = root.findViewById(R.id.vocabulary_find_edittext)
-        mFavoriteButton = root.findViewById(R.id.vocabulary_favorite)
+        mFavoriteButton = root.findViewById(R.id.vocabulary_favorites)
 
         mScrollUp = root.findViewById(R.id.vocabulary_scroll_up)
         mScrollDown = root.findViewById(R.id.vocabulary_scroll_down)
@@ -83,13 +90,26 @@ class VocabularyFragment : Fragment() {
         mScrollUp.visibility = View.GONE
         mScrollDown.visibility = View.GONE
 
+        mManga?.let {
+            mMangaNameEditText.setText(it.name)
+            mViewModel.setQueryManga(it.name)
+        }
+
+        ComponentsUtil.setThemeColor(requireContext(), mRefreshLayout)
+        mRefreshLayout.setOnRefreshListener(this)
+        mRefreshLayout.isEnabled = true
+
+        mViewModel.isQuery.observe(viewLifecycleOwner) {
+            mRefreshLayout.isRefreshing = it
+        }
+
         setFavorite(mViewModel.getFavorite())
         mFavoriteButton.setOnClickListener {
             mViewModel.setQuery(!mViewModel.getFavorite())
             setFavorite(mViewModel.getFavorite())
         }
 
-        mMangaEditText.addTextChangedListener(object : TextWatcher {
+        mMangaNameEditText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
             }
 
@@ -165,10 +185,14 @@ class VocabularyFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         mListener = object : VocabularyCardListener {
-            override fun onClick(manga: Manga) {
+            override fun onClick(vocabulary: Vocabulary) {
             }
 
-            override fun onClickLong(manga: Manga, view: View, position: Int) {
+            override fun onClickLong(vocabulary: Vocabulary, view: View, position: Int) {
+            }
+
+            override fun onClickFavorite(vocabulary: Vocabulary) {
+                mViewModel.update(vocabulary)
             }
         }
 
@@ -199,6 +223,9 @@ class VocabularyFragment : Fragment() {
 
     private fun setFavorite(favorite: Boolean) {
         mFavoriteButton.setIconResource(if (favorite) R.drawable.ic_favorite_mark else R.drawable.ic_favorite_unmark)
-        mFavoriteButton.setIconTintResource(if (favorite) R.color.on_secondary else R.color.text_primary)
+    }
+
+    override fun onRefresh() {
+        mViewModel.setQuery(mMangaNameEditText.text.toString(), mVocabularyEditText.text.toString(), mFavoriteButton.isChecked)
     }
 }

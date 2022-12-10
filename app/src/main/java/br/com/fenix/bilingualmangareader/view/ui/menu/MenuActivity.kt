@@ -7,14 +7,23 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import br.com.fenix.bilingualmangareader.R
+import br.com.fenix.bilingualmangareader.model.enums.Themes
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import br.com.fenix.bilingualmangareader.util.helpers.MenuUtil
 
 
 class MenuActivity : AppCompatActivity() {
 
+    private lateinit var mTheme : Themes
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        mTheme = Themes.valueOf(GeneralConsts.getSharedPreferences(this).getString(GeneralConsts.KEYS.THEME.THEME_USED, Themes.ORIGINAL.toString())!!)
+        setTheme(mTheme.getValue())
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
+
+        MenuUtil.tintBackground(this, findViewById(R.id.menu_background))
 
         val id = intent.extras!!.getInt(GeneralConsts.KEYS.FRAGMENT.ID)
 
@@ -40,6 +49,7 @@ class MenuActivity : AppCompatActivity() {
     }
 
     fun setActionBar(toolbar: Toolbar) {
+        MenuUtil.tintToolbar(toolbar, mTheme)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)

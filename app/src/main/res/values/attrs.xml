@@ -20,4 +20,10 @@
         <attr name="android:layout_margin" format="dimension"  />
         <attr name="android:background" />
     </declare-styleable>
+
+    <bool name="isTablet">false</bool>
+
+    <declare-styleable name="PageLinkButtons">
+        <attr name="state_expanded" format="boolean" />
+    </declare-styleable>
 </resources>

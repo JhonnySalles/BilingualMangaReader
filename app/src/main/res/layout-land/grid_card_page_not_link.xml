@@ -3,20 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/page_not_link_card"
+    style="@style/AppBackground.Card"
     android:orientation="horizontal"
-    android:background="@color/on_primary"
     android:layout_width="@dimen/page_not_link_card_layout_width_land"
     android:layout_height="@dimen/page_not_link_card_layout_height_land"
     android:layout_margin="@dimen/page_link_card_layout_margin"
-    android:tag="page_not_link"
-    app:rippleColor="@color/ripple_color">
+    android:tag="page_not_link">
 
     <ImageView
         android:id="@+id/page_not_link_image"
+        style="@style/AppBackground.Item"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
-        android:background="@color/primary_variant"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

@@ -46,17 +46,17 @@ abstract class MangaDAO : DataBaseDAO<Manga> {
         "SELECT * FROM ( " +
                 " SELECT ${DataBaseConsts.MANGA.COLUMNS.ID}, ${DataBaseConsts.MANGA.COLUMNS.TITLE}, ${DataBaseConsts.MANGA.COLUMNS.SUB_TITLE}, ${DataBaseConsts.MANGA.COLUMNS.FILE_PATH}, " +
                 "        ${DataBaseConsts.MANGA.COLUMNS.FILE_FOLDER}, ${DataBaseConsts.MANGA.COLUMNS.FILE_NAME}, ${DataBaseConsts.MANGA.COLUMNS.FILE_TYPE}, ${DataBaseConsts.MANGA.COLUMNS.PAGES}, " +
-                "        ${DataBaseConsts.MANGA.COLUMNS.BOOK_MARK}, ${DataBaseConsts.MANGA.COLUMNS.FAVORITE}, ${DataBaseConsts.MANGA.COLUMNS.DATE_CREATE}, ${DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS}, " +
-                "         ${DataBaseConsts.MANGA.COLUMNS.FK_ID_LIBRARY}, ${DataBaseConsts.MANGA.COLUMNS.EXCLUDED} AS excluded, ${DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS} AS sort " +
+                "        ${DataBaseConsts.MANGA.COLUMNS.BOOK_MARK}, ${DataBaseConsts.MANGA.COLUMNS.FAVORITE}, ${DataBaseConsts.MANGA.COLUMNS.HAS_SUBTITLE}, ${DataBaseConsts.MANGA.COLUMNS.DATE_CREATE}, " +
+                "        ${DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS}, ${DataBaseConsts.MANGA.COLUMNS.FK_ID_LIBRARY}, ${DataBaseConsts.MANGA.COLUMNS.EXCLUDED} AS excluded, ${DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS} AS sort " +
                 " FROM " + DataBaseConsts.MANGA.TABLE_NAME +
                 " WHERE " + DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS + " is not null " +
                 "UNION" +
                 " SELECT null AS ${DataBaseConsts.MANGA.COLUMNS.ID}, '' AS ${DataBaseConsts.MANGA.COLUMNS.TITLE}, " +
                 "        '' AS ${DataBaseConsts.MANGA.COLUMNS.SUB_TITLE}, '' AS ${DataBaseConsts.MANGA.COLUMNS.FILE_PATH}, '' AS ${DataBaseConsts.MANGA.COLUMNS.FILE_FOLDER}, " +
                 "        '' AS ${DataBaseConsts.MANGA.COLUMNS.FILE_NAME}, '' AS ${DataBaseConsts.MANGA.COLUMNS.FILE_TYPE}, 0 AS ${DataBaseConsts.MANGA.COLUMNS.PAGES}, " +
-                "        0 AS ${DataBaseConsts.MANGA.COLUMNS.BOOK_MARK}, 0 AS ${DataBaseConsts.MANGA.COLUMNS.FAVORITE}, null AS ${DataBaseConsts.MANGA.COLUMNS.DATE_CREATE}, " +
+                "        0 AS ${DataBaseConsts.MANGA.COLUMNS.BOOK_MARK}, 0 AS ${DataBaseConsts.MANGA.COLUMNS.FAVORITE}, ${DataBaseConsts.MANGA.COLUMNS.HAS_SUBTITLE},  null AS ${DataBaseConsts.MANGA.COLUMNS.DATE_CREATE}, " +
                 "        Substr(${DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS}, 0, 12) || '00:00:00.000' AS ${DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS}," +
-                "         ${DataBaseConsts.MANGA.COLUMNS.FK_ID_LIBRARY}, ${DataBaseConsts.MANGA.COLUMNS.EXCLUDED} AS excluded, " +
+                "        ${DataBaseConsts.MANGA.COLUMNS.FK_ID_LIBRARY}, ${DataBaseConsts.MANGA.COLUMNS.EXCLUDED} AS excluded, " +
                 "        Substr(${DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS}, 0, 12) || '25:60:60.000' AS sort " +
                 " FROM  " + DataBaseConsts.MANGA.TABLE_NAME +
                 " WHERE " + DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS + " is not null " +
@@ -92,6 +92,9 @@ abstract class MangaDAO : DataBaseDAO<Manga> {
     @Query("UPDATE " + DataBaseConsts.MANGA.TABLE_NAME + " SET " + DataBaseConsts.MANGA.COLUMNS.EXCLUDED + " = 0 WHERE " + DataBaseConsts.MANGA.COLUMNS.FK_ID_LIBRARY + " = :library AND " + DataBaseConsts.MANGA.COLUMNS.ID + " = :id")
     abstract fun clearDelete(library: Long?, id: Long)
 
+    @Query("SELECT * FROM " + DataBaseConsts.MANGA.TABLE_NAME + " WHERE " + DataBaseConsts.MANGA.COLUMNS.EXCLUDED + " = 0 ORDER BY " + DataBaseConsts.MANGA.COLUMNS.LAST_ACCESS + " DESC LIMIT 2")
+    abstract fun getLastOpen(): List<Manga>?
+
 }
 
 
@@ -109,6 +112,9 @@ abstract class SubTitleDAO : DataBaseDAO<SubTitle> {
 
     @Query("DELETE FROM " + DataBaseConsts.SUBTITLES.TABLE_NAME + " WHERE " + DataBaseConsts.SUBTITLES.COLUMNS.FK_ID_MANGA + " = :idManga")
     abstract fun deleteAll(idManga: Long)
+
+    @Query("UPDATE " + DataBaseConsts.MANGA.TABLE_NAME + " SET " + DataBaseConsts.MANGA.COLUMNS.HAS_SUBTITLE + " = :hasSubtitle" + " WHERE " + DataBaseConsts.MANGA.COLUMNS.ID + " = :idManga")
+    abstract fun updateHasSubtitle(idManga: Long, hasSubtitle: Boolean)
 
 }
 
@@ -188,7 +194,7 @@ abstract class VocabularyDAO : DataBaseDAO<Vocabulary> {
     @Query(
         "SELECT * FROM " + DataBaseConsts.VOCABULARY.TABLE_NAME +
                 " WHERE CASE WHEN 1 = :favorite THEN " + DataBaseConsts.VOCABULARY.COLUMNS.FAVORITE + " = :favorite ELSE 1 > 0 END " +
-                " ORDER BY " + DataBaseConsts.VOCABULARY.COLUMNS.FAVORITE + " DESC," + DataBaseConsts.VOCABULARY.COLUMNS.WORD
+                " GROUP BY " + DataBaseConsts.VOCABULARY.COLUMNS.WORD + " ORDER BY " + DataBaseConsts.VOCABULARY.COLUMNS.WORD
     )
     abstract fun list(favorite: Boolean): PagingSource<Int, Vocabulary>
 
@@ -196,7 +202,7 @@ abstract class VocabularyDAO : DataBaseDAO<Vocabulary> {
         "SELECT * FROM " + DataBaseConsts.VOCABULARY.TABLE_NAME +
                 " WHERE (" + DataBaseConsts.VOCABULARY.COLUMNS.WORD + " LIKE '%' || :vocabulary || '%' OR " + DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM + " LIKE '%' || :basicForm || '%' )" +
                 " AND CASE WHEN 1 = :favorite THEN " + DataBaseConsts.VOCABULARY.COLUMNS.FAVORITE + " = :favorite ELSE 1 > 0 END " +
-                " ORDER BY " + DataBaseConsts.VOCABULARY.COLUMNS.FAVORITE + " DESC," + DataBaseConsts.VOCABULARY.COLUMNS.WORD
+                " GROUP BY " + DataBaseConsts.VOCABULARY.COLUMNS.WORD + " ORDER BY " + DataBaseConsts.VOCABULARY.COLUMNS.WORD
     )
     abstract fun list(vocabulary: String, basicForm: String, favorite: Boolean): PagingSource<Int, Vocabulary>
 
@@ -206,7 +212,7 @@ abstract class VocabularyDAO : DataBaseDAO<Vocabulary> {
                 " INNER JOIN " + DataBaseConsts.MANGA.TABLE_NAME + " MG ON MGV." + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + " = MG." + DataBaseConsts.MANGA.COLUMNS.ID +
                 " WHERE CASE WHEN LENGTH(:manga) <> 0 THEN MG." + DataBaseConsts.MANGA.COLUMNS.TITLE + " LIKE '%' || :manga || '%' ELSE 1 > 0 END " +
                 " AND CASE WHEN 1 = :favorite THEN V." + DataBaseConsts.VOCABULARY.COLUMNS.FAVORITE + " = :favorite ELSE 1 > 0 END " +
-                " ORDER BY V." + DataBaseConsts.VOCABULARY.COLUMNS.FAVORITE + " DESC," + DataBaseConsts.VOCABULARY.COLUMNS.WORD
+                " GROUP BY " + DataBaseConsts.VOCABULARY.COLUMNS.WORD + " ORDER BY " + DataBaseConsts.VOCABULARY.COLUMNS.WORD
     )
     abstract fun list(manga: String, favorite: Boolean): PagingSource<Int, Vocabulary>
 
@@ -217,7 +223,7 @@ abstract class VocabularyDAO : DataBaseDAO<Vocabulary> {
                 " WHERE CASE WHEN LENGTH(:manga) <> 0 THEN MG." + DataBaseConsts.MANGA.COLUMNS.TITLE + " LIKE '%' || :manga || '%' ELSE 1 > 0 END " +
                 " AND (V." + DataBaseConsts.VOCABULARY.COLUMNS.WORD + " LIKE '%' || :vocabulary || '%' OR V." + DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM + " LIKE '%' || :basicForm || '%' )" +
                 " AND CASE WHEN 1 = :favorite THEN V." + DataBaseConsts.VOCABULARY.COLUMNS.FAVORITE + " = :favorite ELSE 1 > 0 END " +
-                " ORDER BY V." + DataBaseConsts.VOCABULARY.COLUMNS.FAVORITE + " DESC," + DataBaseConsts.VOCABULARY.COLUMNS.WORD
+                " GROUP BY " + DataBaseConsts.VOCABULARY.COLUMNS.WORD + " ORDER BY " + DataBaseConsts.VOCABULARY.COLUMNS.WORD
     )
     abstract fun list(manga: String, vocabulary: String, basicForm: String, favorite: Boolean): PagingSource<Int, Vocabulary>
 
@@ -236,8 +242,10 @@ abstract class VocabularyDAO : DataBaseDAO<Vocabulary> {
     @Query("SELECT * FROM " + DataBaseConsts.VOCABULARY.TABLE_NAME + " WHERE " + DataBaseConsts.VOCABULARY.COLUMNS.ID + " = :idManga ")
     abstract fun find(idManga: Long): List<Vocabulary>
 
-    @Query("SELECT * FROM " + DataBaseConsts.VOCABULARY.TABLE_NAME + " WHERE " + DataBaseConsts.VOCABULARY.COLUMNS.WORD + " = :vocabulary " +
-            " AND CASE WHEN LENGTH(:basicForm) = 0 THEN " + DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM + " IS NULL ELSE " + DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM + " = :basicForm END LIMIT 1")
+    @Query(
+        "SELECT * FROM " + DataBaseConsts.VOCABULARY.TABLE_NAME + " WHERE " + DataBaseConsts.VOCABULARY.COLUMNS.WORD + " = :vocabulary " +
+                " AND CASE WHEN LENGTH(:basicForm) = 0 THEN " + DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM + " IS NULL ELSE " + DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM + " = :basicForm END LIMIT 1"
+    )
     abstract fun exists(vocabulary: String, basicForm: String): Vocabulary?
 
     @Query("SELECT * FROM " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + " WHERE " + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY + " = :idVocabulary GROUP BY " + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA)
@@ -245,6 +253,9 @@ abstract class VocabularyDAO : DataBaseDAO<Vocabulary> {
 
     @Query("SELECT * FROM " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + " WHERE " + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + " = :idManga GROUP BY " + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY)
     abstract fun findByManga(idManga: Long): List<VocabularyManga>
+
+    @Query("SELECT * FROM " + DataBaseConsts.MANGA.TABLE_NAME + " WHERE " + DataBaseConsts.MANGA.COLUMNS.ID + " = :id")
+    abstract fun getManga(id: Long): Manga
 
     fun insert(dbHelper: SupportSQLiteOpenHelper, idManga: Long, idVocabulary: Long, appears: Int) {
         val database = dbHelper.readableDatabase

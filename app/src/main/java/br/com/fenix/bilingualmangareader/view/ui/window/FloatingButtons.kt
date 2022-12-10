@@ -1,6 +1,5 @@
 package br.com.fenix.bilingualmangareader.view.ui.window
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.PixelFormat
@@ -43,12 +42,32 @@ class FloatingButtons constructor(private val context: Context, private val acti
     private val mOnFlingListener = object : GestureDetector.SimpleOnGestureListener() {
         override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
             if (e1 != null && e2 != null)
-                if (abs(velocityX) > 200 && (e1.x - e2.x > 100 || e2.x - e1.x > 100)) {
-                    dismiss()
+                if (abs(e1.x - e2.x) > 150) {
+                    if (e2.x > e1.x)
+                        moveWindow(false)
+                    else if (e2.x < e1.x)
+                        moveWindow(true)
+
                     return false
                 }
 
             return super.onFling(e1, e2, velocityX, velocityY)
+        }
+    }
+
+    private fun moveWindow(toLeft: Boolean) {
+        if (toLeft) {
+            mMoveWindow.setImageDrawable(mIconToRight)
+            inLeft = true
+            layoutParams.x = 10
+        } else {
+            mMoveWindow.setImageDrawable(mIconToLeft)
+            inLeft = false
+            layoutParams.x = mRealDisplaySize.x - (mContent.width + 10)
+        }
+
+        windowManager?.apply {
+            updateViewLayout(mFloatingView, layoutParams)
         }
     }
 
@@ -67,7 +86,7 @@ class FloatingButtons constructor(private val context: Context, private val acti
                 firstY = lastY
             }
             MotionEvent.ACTION_UP -> {
-                view.performClick()
+                //view.performClick()
             }
             MotionEvent.ACTION_MOVE -> {
                 val deltaX = event.rawX.toInt() - lastX

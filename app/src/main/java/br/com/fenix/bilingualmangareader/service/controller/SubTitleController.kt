@@ -5,7 +5,6 @@ import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.view.View
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.collection.arraySetOf
 import androidx.core.graphics.drawable.toBitmap
@@ -150,6 +149,12 @@ class SubTitleController private constructor(private val context: Context) {
                 val listJson: List<String> = mParse.getSubtitles()
                 isSelected = false
                 getChapterFromJson(listJson)
+
+                manga?.let {
+                    if (it.hasSubtitle != parse.hasSubtitles()) {
+                        mSubtitleRepository.updateHasSubtitle(it.id, parse.hasSubtitles())
+                    }
+                }
             }
         }
 
@@ -632,7 +637,9 @@ class SubTitleController private constructor(private val context: Context) {
 
         val view: PageImageView = mReaderFragment!!.getCurrencyImageView() ?: return
         if (isDrawing) {
+            val percentScroll = view.getScrollPercent()
             view.setImageBitmap(imageBackup)
+            view.setScrollPercent(percentScroll)
             isDrawing = false
         } else {
             target = MyTarget(view, true)
@@ -643,22 +650,25 @@ class SubTitleController private constructor(private val context: Context) {
     private fun drawPageLinked(path: Uri) {
         val view: PageImageView = mReaderFragment!!.getCurrencyImageView() ?: return
         if (isDrawing) {
+            val percentScroll = view.getScrollPercent()
             view.setImageBitmap(imageBackup)
+            view.setScrollPercent(percentScroll)
             isDrawing = false
             return
         }
 
-        target = MyTarget(view, false)
+        target = MyTarget(view)
         mReaderFragment!!.loadImage(target!!, path, false)
     }
 
-    inner class MyTarget(layout: View, isText: Boolean) : Target {
+    inner class MyTarget(layout: View, isText: Boolean = false, isKeepScroll: Boolean = true) : Target {
         private val mLayout: WeakReference<View> = WeakReference(layout)
         private val isText = isText
+        private val isKeepScroll = isKeepScroll
 
         override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
             val layout = mLayout.get() ?: return
-            val iv = layout.findViewById<View>(R.id.page_image_view) as ImageView
+            val iv = layout.findViewById<View>(R.id.page_image_view) as PageImageView
             if (isText) {
                 imageBackup = bitmap
                 if (imageBackup == null)
@@ -687,10 +697,21 @@ class SubTitleController private constructor(private val context: Context) {
                         paint
                     )
                 }
-                iv.setImageBitmap(image)
+                if (isKeepScroll) {
+                    val percentScroll = iv.getScrollPercent()
+                    iv.setImageBitmap(image)
+                    iv.setScrollPercent(percentScroll)
+                } else
+                    iv.setImageBitmap(image)
             } else {
                 imageBackup = iv.drawable.toBitmap()
-                iv.setImageBitmap(bitmap)
+
+                if (isKeepScroll) {
+                    val percentScroll = iv.getScrollPercent()
+                    iv.setImageBitmap(bitmap)
+                    iv.setScrollPercent(percentScroll)
+                } else
+                    iv.setImageBitmap(bitmap)
             }
             isDrawing = true
         }
@@ -873,6 +894,8 @@ class SubTitleController private constructor(private val context: Context) {
         }
     }
 
+    fun getLanguage() : Languages = selectedSubtitle.value?.language ?: Languages.PORTUGUESE
+
     private var mOriginalSize: FloatArray? = null
     fun selectTextByCoordinate(coord: FloatArray) {
         if (pageSelected.value == null)
@@ -906,7 +929,9 @@ class SubTitleController private constructor(private val context: Context) {
     fun drawPageLinked() {
         if (isDrawing) {
             val view: PageImageView = mReaderFragment!!.getCurrencyImageView() ?: return
+            val percentScroll = view.getScrollPercent()
             view.setImageBitmap(imageBackup)
+            view.setScrollPercent(percentScroll)
             isDrawing = false
         } else
             locateFileLink(ReaderFragment.mCurrentPage)
@@ -941,8 +966,8 @@ class SubTitleController private constructor(private val context: Context) {
     fun locateFileLink(page: Int) {
         if (mFileLink == null) return
 
-        mFileLink!!.pagesLink!!.first { it.mangaPage.compareTo(page) == 0 }.let {
-            if (it.fileLinkLeftPage > -1) {
+        mFileLink!!.pagesLink!!.firstOrNull { it.mangaPage.compareTo(page) == 0 }.let {
+            if (it != null && it.fileLinkLeftPage > -1) {
                 val uri = if (it.isDualImage)
                     saveImageFolder(mFileLink!!, it.fileLinkLeftPage, it.fileLinkRightPage)
                 else

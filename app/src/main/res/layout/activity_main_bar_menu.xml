@@ -3,44 +3,53 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/on_primary"
     android:fitsSystemWindows="true"
     android:clipToPadding="false"
     android:clipChildren="false"
-    android:theme="@style/AppTheme.NoActionBar"
+    android:theme="@style/Theme.MangaReader.NoNavigationBar"
     tools:context=".MainActivity">
+
+    <View
+        android:id="@+id/manga_background"
+        style="@style/AppBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"/>
 
     <!-- action bar -->
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/main_toolbar_background"
         android:fitsSystemWindows="true"
-        android:theme="@style/ToolbarContentTheme" >
+        android:background="@drawable/main_toolbar_background"
+        android:theme="@style/MainToolbarContentTheme">
 
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/main_toolbar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/default_navigator_header_size"
-            app:popupTheme="@style/MyDarkToolbarStyle"
-            android:theme="@style/ToolbarTheme"/>
+            app:popupTheme="@style/MainToolbarStyle"
+            android:theme="@style/MainToolbarTheme"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="230dp"
         android:layout_gravity="top|center"
         android:contentDescription="@string/about_app_name"
         android:scaleType="centerCrop"
         android:src="@mipmap/main_header_cut_semi" />
 
     <View
-        android:id="@+id/manga_detail_title_content"
+        android:id="@+id/main_detail_title_content"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_gravity="top|center"
+        android:layout_height="380dp"
+        android:translationY="-40dp"
         android:background="@drawable/main_header_background"/>
 
     <!-- fragment dynamic content -->

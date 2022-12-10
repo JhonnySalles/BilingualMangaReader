@@ -32,11 +32,17 @@ class LineViewHolder(itemView: View, private val listener: MangaCardListener) :
         val mangaProgress = itemView.findViewById<ProgressBar>(R.id.manga_line_progress)
         val cardView = itemView.findViewById<LinearLayout>(R.id.manga_line_card)
         val favorite = itemView.findViewById<ImageView>(R.id.manga_line_favorite)
+        val subtitle = itemView.findViewById<ImageView>(R.id.manga_line_has_subtitle)
 
         if (manga.favorite)
             favorite.visibility = View.VISIBLE
         else
             favorite.visibility = View.GONE
+
+        subtitle.visibility  = if (manga.hasSubtitle)
+            View.VISIBLE
+        else
+            View.GONE
 
         cardView.setOnClickListener { listener.onClick(manga) }
         cardView.setOnLongClickListener {

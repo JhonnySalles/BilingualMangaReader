@@ -1,10 +1,14 @@
 package br.com.fenix.bilingualmangareader.service.repository
 
 import android.content.Context
+import android.widget.Toast
 import androidx.paging.PagingSource
+import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Chapter
+import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.entity.Vocabulary
 import br.com.fenix.bilingualmangareader.model.entity.VocabularyManga
+import br.com.fenix.bilingualmangareader.model.enums.Languages
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -16,7 +20,7 @@ class VocabularyRepository(context: Context) {
     private val mLOGGER = LoggerFactory.getLogger(VocabularyRepository::class.java)
     private val mBase = DataBase.getDataBase(context)
     private var mDataBaseDAO = mBase.getVocabularyDao()
-    private val mMangaDAO = mBase.getMangaDao()
+    private val mVocabImported = Toast.makeText(context, context.getString(R.string.vocabulary_imported), Toast.LENGTH_SHORT)
 
     fun save(obj: Vocabulary): Long {
         val exist = mDataBaseDAO.exists(obj.word, obj.basicForm ?: "")
@@ -52,10 +56,15 @@ class VocabularyRepository(context: Context) {
         return vocabulary
     }
 
+
+    private val manga: Set<Manga> = setOf()
     private fun findByVocabulary(idVocabulary: Long): List<VocabularyManga> {
         val list = mDataBaseDAO.findByVocabulary(idVocabulary)
         list.forEach {
-            it.manga = mMangaDAO.get(it.idManga)
+            it.manga = manga.firstOrNull { m -> m.id == it.idManga }
+
+            if (it.manga == null)
+                it.manga = mDataBaseDAO.getManga(it.idManga)
         }
         return list
     }
@@ -100,25 +109,38 @@ class VocabularyRepository(context: Context) {
         mDataBaseDAO.insert(mBase.openHelper, idManga, idVocabulary, appears)
     }
 
-    fun processVocabulary(idManga: Long?, list: List<Chapter>) {
-        if (idManga == null || list.isEmpty())
+    fun processVocabulary(idManga: Long?, chapters: List<Chapter>) {
+        if (idManga == null || chapters.isEmpty())
             return
 
         CoroutineScope(Dispatchers.IO).launch {
             async {
                 try {
-                    for (chapter in list)
-                        if (chapter.vocabulary.isNotEmpty())
-                            for (vocabulary in chapter.vocabulary) {
-                                var appears = 0
-                                chapter.pages.forEach { p ->
-                                    p.vocabulary.forEach { v -> if (v == vocabulary) appears++ }
-                                }
-                                vocabulary.id = save(vocabulary)
-                                vocabulary.id?.let { insert(idManga, it, appears) }
+                    val list = mutableListOf<Vocabulary>()
+
+                    chapters.parallelStream().filter { it.language == Languages.JAPANESE && it.vocabulary.isNotEmpty() }
+                        .forEach {
+                            for (vocabulary in it.vocabulary)
+                                if (!list.contains(vocabulary))
+                                    list.add(vocabulary)
+                        }
+
+                    for (vocabulary in list) {
+                        var appears = 0
+
+                        chapters.parallelStream().filter { it.language == Languages.JAPANESE && it.vocabulary.isNotEmpty() }
+                            .forEach { c ->
+                                c.pages.parallelStream()
+                                    .forEach { p -> p.vocabulary.parallelStream().forEach { v -> if (v == vocabulary) appears++ } }
                             }
+
+                        vocabulary.id = save(vocabulary)
+                        vocabulary.id?.let { insert(idManga, it, appears) }
+                    }
+
+                    mVocabImported.show()
                 } catch (e: Exception) {
-                    mLOGGER.error("Error process vocabulary.", e)
+                    mLOGGER.error("Error process vocabulary. ", e)
                 }
             }
         }

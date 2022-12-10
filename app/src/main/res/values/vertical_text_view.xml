@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="VerticalTextView">
+        <attr name="text" format="string|reference" />
+        <attr name="textColor" format="color|reference" />
+        <attr name="textSize" format="dimension|reference" />
+        <attr name="rowSpacing" format="dimension|reference" />
+        <attr name="columnSpacing" format="dimension|reference" />
+        <attr name="columnCharCount" format="integer" />
+        <attr name="maxColumns" format="integer" />
+        <attr name="includeFontPadding" format="boolean" />
+        <attr name="textGravity">
+            <flag name="left" value="0" />
+            <flag name="center" value="1" />
+        </attr>
+        <attr name="textStyle">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+        </attr>
+    </declare-styleable>
+</resources>

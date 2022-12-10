@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Manga
+import br.com.fenix.bilingualmangareader.model.enums.Themes
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import br.com.fenix.bilingualmangareader.util.helpers.MenuUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -20,9 +22,15 @@ class PagesLinkActivity : AppCompatActivity() {
 
     private val mLOGGER = LoggerFactory.getLogger(PagesLinkActivity::class.java)
 
+    private lateinit var mTheme : Themes
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        mTheme = Themes.valueOf(GeneralConsts.getSharedPreferences(this).getString(GeneralConsts.KEYS.THEME.THEME_USED, Themes.ORIGINAL.toString())!!)
+        setTheme(mTheme.getValue())
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pages_link)
+
         val extras = intent.extras
         val fragment = supportFragmentManager.findFragmentById(R.id.root_frame_pages_link)
 
@@ -44,6 +52,7 @@ class PagesLinkActivity : AppCompatActivity() {
     }
 
     fun setActionBar(toolbar: Toolbar) {
+        MenuUtil.tintToolbar(toolbar, mTheme)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)

@@ -3,17 +3,17 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/chapter_card"
+    style="@style/AppBackground.Card"
     android:layout_width="@dimen/manga_chapter_layout_width"
     android:layout_height="@dimen/manga_chapter_layout_height"
     android:layout_margin="1dp"
     app:strokeWidth="0dp"
-    app:strokeColor="@color/secondary"
-    app:rippleColor="@color/ripple_color">
+    app:strokeColor="?attr/colorPrimaryContainer">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/primary"
+        android:background="@color/chapter_page_semitransparent"
         android:orientation="vertical">
 
         <!-- Media -->
@@ -22,7 +22,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
-            android:background="@color/primary_variant"
             android:scaleType="centerCrop"
             android:transitionName="transition_manga_cover"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -38,7 +37,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textAppearance="?attr/textAppearanceHeadline6"
-            android:textColor="@color/text_primary"
+            android:textColor="?attr/colorPrimaryInverse"
             android:textSize="@dimen/manga_chapter_number_size"
             android:text="10"
             app:layout_constraintBottom_toBottomOf="parent"

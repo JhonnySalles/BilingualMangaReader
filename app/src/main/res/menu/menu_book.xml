@@ -9,4 +9,7 @@
     <item
         android:id="@+id/menu_book_delete"
         android:title="@string/library_menu_delete"/>
+    <item
+        android:id="@+id/menu_book_copy_name"
+        android:title="@string/library_menu_copy"/>
 </menu>

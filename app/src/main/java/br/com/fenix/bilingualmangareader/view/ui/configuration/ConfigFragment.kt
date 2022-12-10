@@ -10,27 +10,27 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.fenix.bilingualmangareader.MainActivity
 import br.com.fenix.bilingualmangareader.R
-import br.com.fenix.bilingualmangareader.model.enums.Languages
-import br.com.fenix.bilingualmangareader.model.enums.Order
-import br.com.fenix.bilingualmangareader.model.enums.PageMode
-import br.com.fenix.bilingualmangareader.model.enums.ReaderMode
+import br.com.fenix.bilingualmangareader.model.enums.*
+import br.com.fenix.bilingualmangareader.service.listener.ThemesListener
 import br.com.fenix.bilingualmangareader.service.repository.DataBase
 import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.*
+import br.com.fenix.bilingualmangareader.view.adapter.themes.ThemesCardAdapter
 import br.com.fenix.bilingualmangareader.view.ui.menu.ConfigLibrariesViewModel
 import br.com.fenix.bilingualmangareader.view.ui.menu.MenuActivity
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputLayout
+import org.lucasr.twowayview.TwoWayView
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.IOException
-import java.io.InputStream
-import java.net.URI
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -47,6 +47,10 @@ class ConfigFragment : Fragment() {
     private lateinit var mLibraryOrderAutoComplete: AutoCompleteTextView
     private lateinit var mLibrariesButton: Button
 
+    private lateinit var mThemeMode: TextInputLayout
+    private lateinit var mThemeModeAutoComplete: AutoCompleteTextView
+    private lateinit var mThemes: TwoWayView
+
     private lateinit var mDefaultSubtitleLanguage: TextInputLayout
     private lateinit var mDefaultSubtitleLanguageAutoComplete: AutoCompleteTextView
     private lateinit var mDefaultSubtitleTranslate: TextInputLayout
@@ -57,6 +61,7 @@ class ConfigFragment : Fragment() {
     private lateinit var mReaderPageMode: TextInputLayout
     private lateinit var mPageModeAutoComplete: AutoCompleteTextView
     private lateinit var mShowClockAndBattery: SwitchMaterial
+    private lateinit var mUseMagnifierType: SwitchMaterial
 
     private lateinit var mSystemFormatDate: TextInputLayout
     private lateinit var mSystemFormatDateAutoComplete: AutoCompleteTextView
@@ -77,6 +82,8 @@ class ConfigFragment : Fragment() {
     private var mReaderModeSelect: ReaderMode = ReaderMode.FIT_WIDTH
     private var mOrderSelect: Order = Order.Name
 
+    private var mThemeModeSelect: ThemeMode = ThemeMode.SYSTEM
+    private var mThemeSelect: Themes = Themes.ORIGINAL
     private var mDefaultSubtitleLanguageSelect: Languages = Languages.JAPANESE
     private var mDefaultSubtitleTranslateSelect: Languages = Languages.PORTUGUESE
 
@@ -84,6 +91,8 @@ class ConfigFragment : Fragment() {
     private lateinit var mMapPageMode: HashMap<String, PageMode>
     private lateinit var mMapReaderMode: HashMap<String, ReaderMode>
     private lateinit var mMapLanguage: HashMap<String, Languages>
+    private lateinit var mMapThemeMode: HashMap<String, ThemeMode>
+    private lateinit var mMapThemes: HashMap<String, Themes>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -93,6 +102,10 @@ class ConfigFragment : Fragment() {
         mLibraryOrder = view.findViewById(R.id.txt_library_order)
         mLibraryOrderAutoComplete = view.findViewById(R.id.menu_autocomplete_library_order)
         mLibrariesButton = view.findViewById(R.id.btn_libraries)
+
+        mThemeMode = view.findViewById(R.id.txt_theme_mode)
+        mThemeModeAutoComplete = view.findViewById(R.id.menu_autocomplete_theme_mode)
+        mThemes = view.findViewById(R.id.list_themes)
 
         mDefaultSubtitleLanguage = view.findViewById(R.id.txt_default_subtitle_language)
         mDefaultSubtitleLanguageAutoComplete =
@@ -106,6 +119,7 @@ class ConfigFragment : Fragment() {
         mReaderPageMode = view.findViewById(R.id.txt_reader_page_mode)
         mPageModeAutoComplete = view.findViewById(R.id.menu_autocomplete_page_mode)
         mShowClockAndBattery = view.findViewById(R.id.switch_show_clock_and_battery)
+        mUseMagnifierType = view.findViewById(R.id.switch_use_magnifier_type)
 
         mSystemFormatDate = view.findViewById(R.id.txt_system_format_date)
         mSystemFormatDateAutoComplete = view.findViewById(R.id.menu_autocomplete_system_format_date)
@@ -147,6 +161,15 @@ class ConfigFragment : Fragment() {
             getString(R.string.menu_view_mode_aspect_fit) to ReaderMode.ASPECT_FIT,
             getString(R.string.menu_view_mode_fit_width) to ReaderMode.FIT_WIDTH
         )
+
+        val themeMode = requireContext().resources.getStringArray(R.array.theme_mode)
+        mMapThemeMode = hashMapOf(
+            themeMode[0] to ThemeMode.SYSTEM,
+            themeMode[1] to ThemeMode.LIGHT,
+            themeMode[2] to ThemeMode.DARK
+        )
+
+        mMapThemes = Util.getThemes(requireContext())
 
         val adapterOrder =
             ArrayAdapter(requireContext(), R.layout.list_item, mMapOrder.keys.toTypedArray())
@@ -213,6 +236,27 @@ class ConfigFragment : Fragment() {
                     PageMode.Comics
             }
 
+        val themesMode = ArrayAdapter(requireContext(), R.layout.list_item, mMapThemeMode.keys.toTypedArray())
+        mThemeModeAutoComplete.setAdapter(themesMode)
+        mThemeModeAutoComplete.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, _, position, _ ->
+                mThemeModeSelect =
+                    if (parent.getItemAtPosition(position).toString().isNotEmpty() &&
+                        mMapThemeMode.containsKey(parent.getItemAtPosition(position).toString())
+                    )
+                        mMapThemeMode[parent.getItemAtPosition(position).toString()] ?: ThemeMode.SYSTEM
+                    else
+                        ThemeMode.SYSTEM
+
+                saveTheme()
+
+                when (mThemeModeSelect) {
+                    ThemeMode.DARK -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    ThemeMode.LIGHT -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+                }
+            }
+
         val date0 = SimpleDateFormat(mDatePattern[0]).format(Date())
         val date1 = SimpleDateFormat(mDatePattern[1]).format(Date())
         val date2 = SimpleDateFormat(mDatePattern[2]).format(Date())
@@ -266,16 +310,17 @@ class ConfigFragment : Fragment() {
 
         mMalMonitoring.setOnClickListener { changeMonitoring() }
 
+        prepareThemes()
         loadConfig()
 
-        mViewModel.load()
+        mViewModel.loadLibrary()
     }
 
     override fun onDestroyView() {
         saveConfig()
 
-        mViewModel.removeDefault(mLibraryPath.editText?.text.toString())
-        (requireActivity() as MainActivity).setLibraries(mViewModel.getList())
+        mViewModel.removeLibraryDefault(mLibraryPath.editText?.text.toString())
+        (requireActivity() as MainActivity).setLibraries(mViewModel.getListLibrary())
 
         super.onDestroyView()
     }
@@ -297,8 +342,8 @@ class ConfigFragment : Fragment() {
             }
 
             GeneralConsts.REQUEST.CONFIG_LIBRARIES -> {
-                mViewModel.load()
-                (requireActivity() as MainActivity).setLibraries(mViewModel.getList())
+                mViewModel.loadLibrary()
+                (requireActivity() as MainActivity).setLibraries(mViewModel.getListLibrary())
             }
 
             GeneralConsts.REQUEST.GENERATE_BACKUP -> {
@@ -428,6 +473,11 @@ class ConfigFragment : Fragment() {
                 mShowClockAndBattery.isChecked
             )
 
+            this.putBoolean(
+                GeneralConsts.KEYS.READER.USE_MAGNIFIER_TYPE,
+                mUseMagnifierType.isChecked
+            )
+
             this.putString(
                 GeneralConsts.KEYS.SYSTEM.FORMAT_DATA,
                 mDateSelect
@@ -446,6 +496,16 @@ class ConfigFragment : Fragment() {
             this.putBoolean(
                 GeneralConsts.KEYS.MONITORING.MY_ANIME_LIST,
                 mMalMonitoringChecked.visibility == View.VISIBLE
+            )
+
+            this.putString(
+                GeneralConsts.KEYS.THEME.THEME_MODE,
+                mThemeModeSelect.toString()
+            )
+
+            this.putString(
+                GeneralConsts.KEYS.THEME.THEME_USED,
+                mThemeSelect.toString()
             )
 
             this.commit()
@@ -540,6 +600,11 @@ class ConfigFragment : Fragment() {
             false
         )
 
+        mUseMagnifierType.isChecked = sharedPreferences.getBoolean(
+            GeneralConsts.KEYS.READER.USE_MAGNIFIER_TYPE,
+            false
+        )
+
         mUseDualPageCalculate.isChecked = sharedPreferences.getBoolean(
             GeneralConsts.KEYS.PAGE_LINK.USE_DUAL_PAGE_CALCULATE,
             false
@@ -575,6 +640,19 @@ class ConfigFragment : Fragment() {
             )
         ) View.VISIBLE else View.GONE
 
+        mThemeModeSelect = ThemeMode.valueOf(
+            sharedPreferences.getString(
+                GeneralConsts.KEYS.THEME.THEME_MODE,
+                ThemeMode.SYSTEM.toString()
+            )!!
+        )
+        mThemeSelect = Themes.valueOf(sharedPreferences.getString(GeneralConsts.KEYS.THEME.THEME_USED, Themes.ORIGINAL.toString())!!)
+
+        mThemeModeAutoComplete.setText(
+            mMapThemeMode.filterValues { it == mThemeModeSelect }.keys.first(),
+            false
+        )
+
     }
 
     private fun changeMonitoring() {
@@ -601,6 +679,67 @@ class ConfigFragment : Fragment() {
         intent.putExtras(bundle)
         requireActivity().overridePendingTransition(R.anim.fade_in_fragment_add_enter, R.anim.fade_out_fragment_remove_exit)
         startActivityForResult(intent, GeneralConsts.REQUEST.CONFIG_LIBRARIES, null)
+    }
+
+    private fun prepareThemes() {
+        val listener = object : ThemesListener {
+            override fun onClick(theme: Pair<Themes, Boolean>) {
+                mThemeSelect = theme.first
+                saveTheme()
+
+                mViewModel.setEnableTheme(theme.first)
+                requireActivity().setTheme(mThemeSelect.getValue())
+                restartTheme()
+            }
+        }
+
+        val theme = Themes.valueOf(
+            GeneralConsts.getSharedPreferences(requireContext())
+                .getString(GeneralConsts.KEYS.THEME.THEME_USED, Themes.ORIGINAL.toString())!!
+        )
+
+        mViewModel.loadThemes(theme)
+        val lineAdapter = ThemesCardAdapter(requireContext(), mViewModel.themes.value!!, listener)
+        mThemes.adapter = lineAdapter
+
+        mThemes.scrollBy(mViewModel.getSelectedThemeIndex())
+
+        mViewModel.themes.observe(viewLifecycleOwner) {
+            lineAdapter.updateList(it)
+        }
+    }
+
+    private fun saveTheme() {
+        with(GeneralConsts.getSharedPreferences(requireContext()).edit()) {
+            this.putString(
+                GeneralConsts.KEYS.THEME.THEME_MODE,
+                mThemeModeSelect.toString()
+            )
+
+            this.putString(
+                GeneralConsts.KEYS.THEME.THEME_USED,
+                mThemeSelect.toString()
+            )
+
+            this.putBoolean(
+                GeneralConsts.KEYS.THEME.THEME_CHANGE,
+                true
+            )
+
+            this.commit()
+        }
+    }
+
+    //to change the theme it is necessary to recreate the active, in this case it will signal to open the config
+    private fun restartTheme() {
+        with(GeneralConsts.getSharedPreferences(requireContext()).edit()) {
+            this.putBoolean(
+                GeneralConsts.KEYS.THEME.THEME_CHANGE,
+                true
+            )
+            this.commit()
+        }
+        requireActivity().recreate()
     }
 
 }

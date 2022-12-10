@@ -2,10 +2,16 @@ package br.com.fenix.bilingualmangareader.view.ui.reader
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.content.Intent
-import android.content.SharedPreferences
+import android.content.*
 import android.content.pm.ActivityInfo
+import android.content.pm.ShortcutInfo
+import android.content.pm.ShortcutManager
 import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.AdaptiveIconDrawable
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.Icon
 import android.net.Uri
 import android.os.*
 import android.provider.Settings
@@ -13,8 +19,10 @@ import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.WindowManager
 import android.widget.*
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -32,21 +40,23 @@ import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.entity.Pages
-import br.com.fenix.bilingualmangareader.model.enums.Languages
-import br.com.fenix.bilingualmangareader.model.enums.PageMode
-import br.com.fenix.bilingualmangareader.model.enums.Position
-import br.com.fenix.bilingualmangareader.model.enums.ReaderMode
+import br.com.fenix.bilingualmangareader.model.enums.*
+import br.com.fenix.bilingualmangareader.service.controller.ImageCoverController
 import br.com.fenix.bilingualmangareader.service.controller.SubTitleController
 import br.com.fenix.bilingualmangareader.service.kanji.Formatter
 import br.com.fenix.bilingualmangareader.service.listener.ChapterCardListener
 import br.com.fenix.bilingualmangareader.service.ocr.GoogleVision
 import br.com.fenix.bilingualmangareader.service.ocr.OcrProcess
+import br.com.fenix.bilingualmangareader.service.repository.LibraryRepository
 import br.com.fenix.bilingualmangareader.service.repository.MangaRepository
 import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.service.repository.SubTitleRepository
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import br.com.fenix.bilingualmangareader.util.helpers.FileUtil
 import br.com.fenix.bilingualmangareader.util.helpers.LibraryUtil
+import br.com.fenix.bilingualmangareader.util.helpers.MenuUtil
 import br.com.fenix.bilingualmangareader.util.helpers.Util
+import br.com.fenix.bilingualmangareader.util.helpers.Util.Utils.getColorFromAttr
 import br.com.fenix.bilingualmangareader.view.adapter.reader.MangaChaptersCardAdapter
 import br.com.fenix.bilingualmangareader.view.components.ComponentsUtil
 import br.com.fenix.bilingualmangareader.view.ui.pages_link.PagesLinkActivity
@@ -58,17 +68,20 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
+import org.slf4j.LoggerFactory
 import java.io.File
 
 
 class ReaderActivity : AppCompatActivity(), OcrProcess {
+
+    private val mLOGGER = LoggerFactory.getLogger(ReaderActivity::class.java)
 
     private val mViewModel: ReaderViewModel by viewModels()
 
     private lateinit var mReaderTitle: TextView
     private lateinit var mReaderProgress: SeekBar
     private lateinit var mNavReader: LinearLayout
-    private lateinit var mToolbar: Toolbar
+    private lateinit var mToolBar: Toolbar
     private lateinit var mToolbarTitle: TextView
     private lateinit var mToolbarSubTitle: TextView
     private lateinit var mToolbarTitleContent: LinearLayout
@@ -102,6 +115,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     private val mMonitoringBattery = Runnable { getBatteryPercent() }
     private val mDismissTouchView = Runnable { closeViewTouch() }
 
+    private lateinit var mPreferences: SharedPreferences
     private lateinit var mStorage: Storage
     private lateinit var mRepository: MangaRepository
     private lateinit var mSubtitleController: SubTitleController
@@ -117,8 +131,13 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val theme = Themes.valueOf(GeneralConsts.getSharedPreferences(this).getString(GeneralConsts.KEYS.THEME.THEME_USED, Themes.ORIGINAL.toString())!!)
+        setTheme(theme.getValue())
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reader)
+
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         Formatter.initializeAsync(applicationContext)
 
@@ -127,15 +146,17 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         if (savedInstanceState == null)
             mSubtitleController.clearExternalSubtitlesSelected()
 
-        mToolbar = findViewById(R.id.toolbar_reader)
+        mToolBar = findViewById(R.id.toolbar_reader)
+        MenuUtil.tintToolbar(mToolBar, theme)
         mToolbarTitle = findViewById(R.id.toolbar_title_custom)
         mToolbarSubTitle = findViewById(R.id.toolbar_subtitle_custom)
+        MenuUtil.tintColor(this, mToolbarSubTitle)
         mToolbarTitleContent = findViewById(R.id.toolbar_title_content)
         mSubToolbar = findViewById(R.id.sub_toolbar)
         mLanguageOcrDescription = findViewById(R.id.ocr_language)
         mLanguageOcrDescription.setOnClickListener { choiceLanguage { mViewModel.mLanguageOcr = it } }
 
-        setSupportActionBar(mToolbar)
+        setSupportActionBar(mToolBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(true)
 
@@ -183,7 +204,8 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
                 mBottomSheetColor.state = BottomSheetBehavior.STATE_EXPANDED
             mMenuPopupColor.visibility = View.VISIBLE
         }
-        findViewById<Button>(R.id.btn_popup_open_floating).setOnClickListener { openFloatingSubtitle() }
+        findViewById<Button>(R.id.btn_floating_popup).setOnClickListener { openFloatingSubtitle() }
+        findViewById<Button>(R.id.btn_floating_buttons).setOnClickListener { openFloatingButtons() }
         findViewById<Button>(R.id.btn_screen_rotate).setOnClickListener {
             requestedOrientation = if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -204,6 +226,10 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         findViewById<MaterialButton>(R.id.nav_next_file).setOnClickListener { switchManga(true) }
 
         mToolbarTitleContent.setOnClickListener { dialogPageIndex() }
+        mToolbarTitleContent.setOnLongClickListener {
+            mManga?.let { FileUtil(this).copyName(it) }
+            true
+        }
 
         mPopupTranslateTab = findViewById(R.id.popup_translate_tab)
         mPopupTranslateView = findViewById(R.id.popup_translate_view_pager)
@@ -216,7 +242,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         mPopupSubtitleConfigurationFragment = PopupSubtitleConfiguration()
         mPopupSubtitleReaderFragment = PopupSubtitleReader()
         mPopupSubtitleVocabularyFragment = PopupSubtitleVocabulary()
-        mPopupSubtitleVocabularyFragment.setBackground(R.color.on_primary)
+        mPopupSubtitleVocabularyFragment.setBackground(getColorFromAttr(R.attr.colorSurface))
 
         mFloatingButtons = FloatingButtons(applicationContext, this)
         mFloatingSubtitleReader = FloatingSubtitleReader(applicationContext, this)
@@ -271,10 +297,8 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
 
         mRepository = MangaRepository(applicationContext)
 
-        val sharedPreferences: SharedPreferences =
-            GeneralConsts.getSharedPreferences(this)
-
-        mClockAndBattery.visibility = if (sharedPreferences.getBoolean(GeneralConsts.KEYS.READER.SHOW_CLOCK_AND_BATTERY, false))
+        mPreferences = GeneralConsts.getSharedPreferences(this)
+        mClockAndBattery.visibility = if (mPreferences.getBoolean(GeneralConsts.KEYS.READER.SHOW_CLOCK_AND_BATTERY, false))
             View.VISIBLE
         else
             View.GONE
@@ -305,16 +329,24 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
             else
                 bundle.getInt(GeneralConsts.KEYS.MANGA.MARK)
             changePage(name, "", bookMark)
-        }
+        } else
+            changePage("", "", 0)
 
         if (savedInstanceState == null) {
             mViewModel.clearChapter()
             if (Intent.ACTION_VIEW == intent.action) {
-                val file = File(intent.data!!.path!!)
-                val fragment: ReaderFragment = ReaderFragment.create(mLibrary, file)
-                changePage(file.name, "", -1)
-                mSubtitleController.setFileLink(null)
-                setFragment(fragment)
+                if (intent.extras != null && intent.extras!!.containsKey(GeneralConsts.KEYS.MANGA.ID)) {
+                    val manga = mRepository.get(intent.extras!!.getLong(GeneralConsts.KEYS.MANGA.ID))
+                    manga?.fkLibrary?.let {
+                        val library = LibraryRepository(this)
+                        mLibrary = library.get(it) ?: mLibrary
+                    }
+                    initialize(manga)
+                } else
+                    intent.data?.path?.let {
+                        val file = File(it)
+                        initialize(file, 0)
+                    }
             } else {
                 val extras = intent.extras
 
@@ -322,22 +354,37 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
                     mLibrary = extras.getSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY) as Library
 
                 val manga = if (extras != null) (extras.getSerializable(GeneralConsts.KEYS.OBJECT.MANGA) as Manga?) else null
-                val page = extras?.getInt(GeneralConsts.KEYS.MANGA.MARK) ?: 0
+                manga?.let {
+                    it.bookMark = extras?.getInt(GeneralConsts.KEYS.MANGA.MARK) ?: 0
+                }
 
-                val fragment: ReaderFragment = if (manga != null) {
-                    mManga = manga
-                    changePage(manga.title, "", page)
-                    ReaderFragment.create(mLibrary, manga)
-                } else
-                    ReaderFragment.create()
-
-                val fileLink: PagesLinkViewModel by viewModels()
-                mSubtitleController.setFileLink(fileLink.getFileLink(manga))
-                setFragment(fragment)
+                initialize(manga)
             }
         } else
             mFragment = supportFragmentManager.findFragmentById(R.id.root_frame_reader) as ReaderFragment?
+    }
 
+    private fun initialize(manga: Manga?) {
+        val fragment: ReaderFragment = if (manga != null && manga.file.exists()) {
+            setManga(manga)
+            ReaderFragment.create(mLibrary, manga)
+        } else
+            ReaderFragment.create()
+
+        val fileLink: PagesLinkViewModel by viewModels()
+        mSubtitleController.setFileLink(fileLink.getFileLink(manga))
+        setFragment(fragment)
+    }
+
+    private fun initialize(file: File?, page: Int) {
+        val fragment: ReaderFragment = if (file != null) {
+            changePage(file.name, "", page)
+            ReaderFragment.create(mLibrary, file)
+        } else
+            ReaderFragment.create()
+
+        mSubtitleController.setFileLink(null)
+        setFragment(fragment)
     }
 
     private fun switchManga(isNext: Boolean = true) {
@@ -380,7 +427,6 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     }
 
     fun changeManga(manga: Manga) {
-        changePage(manga.title, "", manga.bookMark)
         setManga(manga)
 
         mSubtitleController.clearExternalSubtitlesSelected()
@@ -396,6 +442,15 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         mSubToolbar.visibility = View.VISIBLE
     }
 
+    private fun changeShowBatteryClock(enabled: Boolean) {
+        mClockAndBattery.visibility = if (enabled)
+            View.VISIBLE
+        else
+            View.GONE
+
+        optionsSave(enabled)
+    }
+
     fun changePage(title: String, text: String, page: Int) {
         mReaderTitle.text = if (page > -1) "$page/${mManga?.pages ?: ""}" else ""
         mToolbarTitle.text = title
@@ -403,9 +458,71 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         mViewModel.selectPage(page)
     }
 
-    fun setManga(manga: Manga) {
+    private fun setManga(manga: Manga) {
+        changePage(manga.title, "", manga.bookMark)
         mViewModel.clearChapter()
         mManga = manga
+        mRepository.updateLastAccess(manga)
+        setShortCutManga()
+    }
+
+    private fun setShortCutManga() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1)
+            return
+
+        try {
+            val shortcut = getSystemService(ShortcutManager::class.java)
+            val lasts = mRepository.getLastedRead()
+            val list = mutableListOf<ShortcutInfo>()
+
+            lasts.first?.let {
+                list.add(generateInfo("comic1", it))
+            }
+
+            lasts.second?.let {
+                list.add(generateInfo("comic2", it))
+            }
+
+            shortcut.dynamicShortcuts.clear()
+            shortcut.dynamicShortcuts = list
+        } catch (e: Exception) {
+            mLOGGER.warn("Error generate shortcut: " + e.message, e)
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    fun getMangaIconAdaptive(manga: Manga): Icon {
+        val image = ImageCoverController.instance.getMangaCover(this, manga, true) ?: return Icon.createWithResource(this, R.drawable.ic_shortcut_book)
+        val bitmapDrawable: Drawable = BitmapDrawable(resources, image)
+        val drawableIcon = AdaptiveIconDrawable(bitmapDrawable, bitmapDrawable)
+        val result = Bitmap.createBitmap(drawableIcon.intrinsicWidth, drawableIcon.intrinsicHeight, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(result)
+        drawableIcon.setBounds(0, 0, canvas.width, canvas.height)
+        drawableIcon.draw(canvas)
+        return Icon.createWithAdaptiveBitmap(result)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N_MR1)
+    private fun generateInfo(id: String, manga: Manga): ShortcutInfo {
+        val icon = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            getMangaIconAdaptive(manga)
+        else
+            Icon.createWithResource(this, R.drawable.ic_shortcut_book)
+
+        val intent = Intent(this, ReaderActivity::class.java)
+        intent.action = Intent.ACTION_VIEW
+        intent.data = Uri.parse(manga.path)
+        intent.extras
+
+        val bundle = Bundle()
+        bundle.putLong(GeneralConsts.KEYS.MANGA.ID, manga.id ?: -1)
+        intent.putExtras(bundle)
+
+        return ShortcutInfo.Builder(this, id)
+            .setShortLabel(manga.title)
+            .setIcon(icon)
+            .setIntent(intent)
+            .build()
     }
 
     private fun dialogPageIndex() {
@@ -434,15 +551,28 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         val name = TextView(this)
         name.text = mToolbarTitle.text
         name.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.title_index_dialog_size))
-        name.setTextColor(ContextCompat.getColor(this, R.color.text_primary))
+        name.setTextColor(getColorFromAttr(R.attr.colorPrimary))
         title.addView(name)
         val index = TextView(this)
         index.text = resources.getString(R.string.reading_page_index)
         index.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.title_small_index_dialog_size))
-        index.setTextColor(ContextCompat.getColor(this, R.color.on_secondary))
+        index.setTextColor(getColorFromAttr(R.attr.colorSecondary))
         title.addView(index)
+        title.setOnLongClickListener {
+            val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("Copied Text", mToolbarTitle.text)
+            clipboard.setPrimaryClip(clip)
 
-        MaterialAlertDialogBuilder(this, R.style.AppCompatMaterialAlertDialogStyle)
+            Toast.makeText(
+                this,
+                getString(R.string.action_copy, mToolbarTitle.text),
+                Toast.LENGTH_LONG
+            ).show()
+
+            true
+        }
+
+        MaterialAlertDialogBuilder(this, R.style.AppCompatMaterialAlertList)
             .setCustomTitle(title)
             .setItems(items) { _, selected ->
                 val pageNumber = paths[items[selected]]
@@ -539,14 +669,15 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         if (any == null)
             return
 
-        val sharedPreferences: SharedPreferences =
-            GeneralConsts.getSharedPreferences(this)
         when (any) {
-            is PageMode -> sharedPreferences.edit()
+            is PageMode -> mPreferences.edit()
                 .putString(GeneralConsts.KEYS.READER.PAGE_MODE, any.toString())
                 .apply()
-            is ReaderMode -> sharedPreferences.edit()
+            is ReaderMode -> mPreferences.edit()
                 .putString(GeneralConsts.KEYS.READER.READER_MODE, any.toString())
+                .apply()
+            is Boolean -> mPreferences.edit()
+                .putBoolean(GeneralConsts.KEYS.READER.SHOW_CLOCK_AND_BATTERY, any)
                 .apply()
         }
     }
@@ -589,6 +720,10 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
             }
             R.id.menu_item_floating_buttons -> openFloatingButtons()
             R.id.menu_item_view_touch_screen -> openViewTouch()
+            R.id.menu_item_show_clock_and_battery -> {
+                item.isChecked = !item.isChecked
+                changeShowBatteryClock(item.isChecked)
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -596,7 +731,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     private fun showMenuFromButton(button: Button, view: View) {
         when (button.id) {
             R.id.btn_menu_ocr -> {
-                val popup = PopupMenu(this, view)
+                val popup = PopupMenu(this, view, 0,  R.attr.popupMenuStyle, R.style.PopupMenu)
                 popup.menuInflater.inflate(R.menu.menu_ocr, popup.menu)
                 popup.setOnMenuItemClickListener { menuItem: MenuItem ->
                     when (menuItem.itemId) {
@@ -623,7 +758,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
             ContextCompat.getDrawable(this, R.drawable.ic_favorite_mark)
         else
             ContextCompat.getDrawable(this, R.drawable.ic_favorite_unmark)
-        icon?.setTint(getColor(R.color.on_secondary))
+        icon?.setTint(getColorFromAttr(R.attr.colorSecondary))
         favoriteItem.icon = icon
         return super.onPrepareOptionsMenu(menu)
     }
@@ -638,7 +773,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
             ContextCompat.getDrawable(this, R.drawable.ic_favorite_mark)
         else
             ContextCompat.getDrawable(this, R.drawable.ic_favorite_unmark)
-        icon?.setTint(getColor(R.color.on_secondary))
+        icon?.setTint(getColorFromAttr(R.attr.colorSecondary))
         item.icon = icon
         mRepository.update(mManga!!)
     }
@@ -774,11 +909,11 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
 
         return when (position) {
             Position.CORNER_TOP_RIGHT -> {
-                mFragment?.changeAspect(mToolbar, ReaderMode.FIT_WIDTH)
+                mFragment?.changeAspect(mToolBar, ReaderMode.FIT_WIDTH)
                 true
             }
             Position.CORNER_TOP_LEFT -> {
-                mFragment?.changeAspect(mToolbar, ReaderMode.ASPECT_FIT)
+                mFragment?.changeAspect(mToolBar, ReaderMode.ASPECT_FIT)
                 true
             }
             Position.CORNER_BOTTOM_RIGHT -> {
@@ -914,7 +1049,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         val mapLanguage = Util.getLanguages(this)
         val items = mapLanguage.keys.filterNot { it == Util.googleLang }.toTypedArray()
 
-        MaterialAlertDialogBuilder(this, R.style.AppCompatMaterialAlertDialogStyle)
+        MaterialAlertDialogBuilder(this, R.style.AppCompatMaterialAlertList)
             .setTitle(getString(R.string.languages_choice))
             .setItems(items) { _, selectItem ->
                 val language = mapLanguage[items[selectItem]]
