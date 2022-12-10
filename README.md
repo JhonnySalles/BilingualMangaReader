@@ -85,11 +85,15 @@ O aplicativo é também compatível com legendas extraidas e pré processadas co
     |   ├── hashPagina         # Hash md5 da imagem que foi processada, para que possa localizar a legenda desta página
     │   └── vocabulario        # Vocabulário da página
     │       ├── palavra       
-    │       ├── significado   
+    │       ├── portugues      # Significado da palavra em português
+    │	    ├── ingles         # Significado da palavra em inglês
+    │	    ├── leitura        # Leitura em katakana
     │       └── revisado       # Flag sinalizadora que o vocabulário foi revisado ou não. 
     └── vocabulario            # Vocabulário do capitulo
-        ├── palavra       
-        ├── significado   
+        ├── palavra            
+        ├── portugues          # Significado da palavra em português
+	├── ingles             # Significado da palavra em inglês
+	├── leitura            # Leitura em katakana
         └── revisado           # Flag sinalizadora que o vocabulário foi revisado ou não.
   
          
@@ -146,8 +150,36 @@ O aplicativo é também compatível com legendas extraidas e pré processadas co
     * Adicionado nova tela com informações adicionais sobre o arquivo, com informações de capítulos e outros arquivos vinculados.
     * Adicionado animações nas transições de tela e nos arquivos da biblioteca.
     * Implementado um novo painel flutuante com botões essenciais para leitura, não sendo necessário sair da tela cheia para executar algum comando.
-* 0.2.12
-    * Em progresso. 
+* 0.2.14
+    * Refatorado alguns nomes de icones.
+    * Ajuste de layout.
+    * Correção em bug no scrool automático.
+    * Ajuste de cores do projeto.
+    * Implementado backup do banco de dados.
+* 0.2.15
+    * Ajuste na ordenação de páginas.
+    * Criado tela para verificação do vocabulário.
+* 0.2.16
+    * Impelemntado novo tema de detalhe sobre o kanji.
+    * Adicionado banco de dados do kanji.
+    * Ajuste de layout.
+    * Implemetado temas no aplicativo.
+* 0.2.17
+    * Implementado zoom na imagem com o toque longo.
+    * Ajustes nas cores e layouts.
+    * Adicionado funcionalidade copiar o vocabulário no toque longo.
+    * Implementado para desfazer até 10 ultimas alterações na tela de vínculo de arquivos.
+    * Correção de bug na ordenação das páginas na tela de vinculo de arquivos.
+    * Implementado para o aplicativo realizar a abertura de qualquer arquivo cbr ou zip diretamente.
+    * Adicionado atalhos para ultimos arquivos abertos.
+* 0.2.18
+    * Implementado popup na tela de vínculo de arquivos para visualizar a imagem em maior tamanho.
+    * Otimizado o carregamento das imagens na tela de vinculo de arquivos.
+    * Implementado função de zoom de pinça no popup de imagem.
+    * Correção no vocabulário para aceitar a tradução em português e inglês.
+    * Correção para a troca da página entre os arquivos vinculado esteja mantendo a posição da leitura.
+* 0.2.19
+    * Em progresso.
 
 ### Features
 
@@ -192,9 +224,18 @@ O aplicativo é também compatível com legendas extraidas e pré processadas co
 - [X] Implementar o Tesseract OCR ao projeto e realizar identificação de palavras em imagens.
 - [X] Ajustar o painel flutuante para receber palavras que foram reconhecidas pelo Tesseract.
 - [X] Implementar a api Google Vision para reconhecimento de palavras em imagens.
-- [ ] Ajustar para ser guardado em banco a linguagem do arquivo.
-- [ ] Favoritar vocabulário para estudo posterior
-- [ ] Adição de dicionarios japonês
+- [X] Favoritar vocabulário para estudo posterior
+- [X] Implementar temas no aplicativo.
+- [X] Adição de dicionarios japonês.
+- [X] Adição de várias pastas de biblioteca.
+- [X] Implementar zoom nas imagens na tela de vinculo de arquivo.
+- [X] Implementar novas ordenações na tela de vinculo de arquivo.
+- [X] Abertura de arquivos diretamente pelo aplicativo.
+- [X] Adicionado atalho para ultimos arquivos lidos.
+- [ ] Implementar nova funcionalidade para leituras de novel.
+- [ ] Implementar abertura de arquivos pdf.
+- [ ] Implementar abertura de arquivos ebook.
+- [ ] Implementar abertura de páginas da web.
 - [ ] Exportar vocabularios ao Anki
 
 
