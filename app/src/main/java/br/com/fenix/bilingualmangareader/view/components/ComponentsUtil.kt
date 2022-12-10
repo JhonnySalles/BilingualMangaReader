@@ -8,6 +8,9 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.Transformation
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import br.com.fenix.bilingualmangareader.R
+import br.com.fenix.bilingualmangareader.util.helpers.Util.Utils.getColorFromAttr
 
 
 class ComponentsUtil {
@@ -64,7 +67,7 @@ class ComponentsUtil {
             }
         }
 
-        fun changeWidthAnimateSize(view: View, finalLayout: ConstraintLayout.LayoutParams, isExpanded:Boolean? = null) {
+        fun changeWidthAnimateSize(view: View, finalLayout: ConstraintLayout.LayoutParams, isExpanded: Boolean? = null) {
             val isInitialExpanded = isExpanded ?: (view.width >= finalLayout.width)
             view.layoutParams = ConstraintLayout.LayoutParams(view.layoutParams as ConstraintLayout.LayoutParams)
 
@@ -76,10 +79,10 @@ class ComponentsUtil {
                     if (interpolatedTime >= 1f)
                         view.layoutParams = finalLayout
                     else {
-                         view.layoutParams.width = if (isInitialExpanded)
-                             finalWidth + (initialWidth - (initialWidth * interpolatedTime).toInt())
+                        view.layoutParams.width = if (isInitialExpanded)
+                            finalWidth + (initialWidth - (initialWidth * interpolatedTime).toInt())
                         else
-                             initialWidth + (finalWidth * interpolatedTime).toInt()
+                            initialWidth + (finalWidth * interpolatedTime).toInt()
                     }
                     view.requestLayout()
                 }
@@ -89,8 +92,17 @@ class ComponentsUtil {
                 }
             }
 
-            animation.duration = duration/2
+            animation.duration = duration / 2
             view.startAnimation(animation)
+        }
+
+        fun setThemeColor(context: Context, swipe: SwipeRefreshLayout) {
+            swipe.setColorSchemeColors(
+                context.getColorFromAttr(R.attr.colorOnPrimaryContainer),
+                context.getColorFromAttr(R.attr.colorOnPrimaryContainer),
+                context.getColorFromAttr(R.attr.colorPrimaryContainer)
+            )
+            swipe.setProgressBackgroundColorSchemeColor(context.getColorFromAttr(R.attr.colorPrimaryContainer))
         }
 
     }

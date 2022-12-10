@@ -5,11 +5,12 @@
     <string name="action_positive">Sim</string>
     <string name="action_negative">Não</string>
     <string name="action_delete">Apagar</string>
-    <string name="action_copy">Texto copiado: </string>
+    <string name="action_copy">Texto copiado: %s</string>
     <string name="action_app_not_installed">O App necessário não está instalado</string>
     <string name="action_scroll_up">Subir</string>
     <string name="action_scroll_down">Descer</string>
     <string name="action_disconnect">Desconectar</string>
+    <string name="action_copy_name">Copiar nome: %s</string>
 
     <string name="alert_permission_files_access_denied_title">Acesso negado</string>
     <string name="alert_permission_files_access_denied">Não foi possível obter a permissão de acesso a pasta informada, por favor libere o acesso na configuração do android.</string>
@@ -37,6 +38,7 @@
     <string name="config_title_file_link">Arquivo vinculado</string>
     <string name="config_title_monitoring">Monitoramento</string>
     <string name="config_title_database">Banco de dados</string>
+    <string name="config_title_themes">Temas</string>
 
     <string name="config_switch_use_path_name_for_linked">Utilizar o caminho da página para vincular as páginas?</string>
     <string name="config_switch_use_dual_page_calculate">Considerar página dupla pelo calculo das dimensões?</string>
@@ -50,11 +52,13 @@
     <string name="config_option_order_favorite">Favoritos primeiro</string>
 
     <string name="config_reading_show_clock_and_battery">Mostrar o relógio e o percentual bateria?</string>
+    <string name="config_reading_use_magnifier_type">Utiliza o zoom em modo de lupa?</string>
 
     <string name="config_system_language">Linguagem do sistema</string>
     <string name="config_system_format_date">Formato de data</string>
     <string name="config_option_date_time_format_0">Padrão (%s)</string>
 
+    <string name="config_tracker_checked">Ativo</string>
     <string name="config_monitoring_disconnect">Deseja desconectar do %1$s\?</string>
     <string name="config_monitoring_mal">My Anime List</string>
 
@@ -69,6 +73,26 @@
     <string name="config_database_error_read_file">Ocorreu um erro ao ler o arquivo.</string>
     <string name="config_database_error_restore">Ocorreu um erro ao restaurar o backup informado, backup revertido ao arquivo original.</string>
     <string name="config_database_error_new_database">Ocorreu um erro ao restaurar o backup e a versão anterior não pode ser restaurado. Uma nova base foi criada.</string>
+
+    <string name="config_theme_mode">Modo tema</string>
+    <string-array name="theme_mode">
+        <item>Sistema</item>
+        <item>Claro</item>
+        <item>Escuro</item>
+    </string-array>
+
+    <string-array name="themes">
+        <item>Original</item>
+        <item>Blood Red</item>
+        <item>Azul</item>
+        <item>Forest Green</item>
+        <item>Verde</item>
+        <item>Azul Neon</item>
+        <item>Verde Neon</item>
+        <item>Ocean Blue</item>
+        <item>Rosa</item>
+        <item>Vermelho</item>
+    </string-array>
 
     <!-- CONFIG LIBRARIES -->
     <string name="config_libraries_title_libraries">Bibliotecas</string>
@@ -111,13 +135,20 @@
     <string name="menu_reading_favorite">Favorito</string>
     <string name="menu_reading_order">Ordem da lista</string>
     <string name="menu_reading_order_change">Ordernado:</string>
-    <string name="menu_reading_subtitle">Legenda</string>
-    <string name="menu_reading_color">Cor da página</string>
-    <string name="menu_reading_file_link">Arquivo em outro idioma</string>
+
     <string name="menu_reading_floating">Popup flutuante</string>
-    <string name="menu_reading_open_kaku">Abrir o app Kaku</string>
     <string name="menu_reading_floating_buttons">Botões flutuante</string>
+
+    <string name="menu_reading_options">Reading options</string>
+    <string name="menu_reading_show_clock_and_battery">Clock and battery percent</string>
+    <string name="menu_reading_use_magnifier_type">Zoom em lupa</string>
     <string name="menu_reading_view_touch">Funções touch</string>
+    <string name="menu_reading_color">Cor da página</string>
+
+    <string name="menu_reading_ocr_file_linked">Ocr and file linked</string>
+    <string name="menu_reading_open_kaku">Abrir o app Kaku</string>
+    <string name="menu_reading_subtitle">Legenda</string>
+    <string name="menu_reading_file_link">Arquivo em outro idioma</string>
 
     <string name="reading_button_screen_rotate">Rotação de tela</string>
     <string name="reading_button_page_linked">Página vinculada</string>
@@ -128,6 +159,7 @@
     <string name="reading_button_next_file">Próximo arquivo</string>
     <string name="reading_button_previous_file">Arquivo anterior</string>
     <string name="reading_button_menu_ocr">Menu OCR</string>
+    <string name="reading_button_floating_buttons">Botões flutuante</string>
 
     <string name="reading_page_index">Índice</string>
     <string name="reading_page_empty">O arquivo não possui pastas</string>
@@ -195,6 +227,7 @@
     <string name="popup_reading_button_find">Procura automática de legenda</string>
     <string name="popup_reading_button_before">Texto anterior</string>
     <string name="popup_reading_button_next">Próximo texto</string>
+    <string name="popup_reading_button_favorite">Favorito</string>
 
     <string name="popup_reading_subtitle_empty">Legendas não encontrada</string>
     <string name="popup_reading_subtitle_embedded_empty">Não encontrado legenda embutida no manga selecionado, favor selecionar um arquivo no menu.</string>
@@ -223,6 +256,7 @@
     <string name="library_menu_delete_description">Deseja excluir o arquivo?</string>
     <string name="library_menu_clear">Limpar histórico</string>
     <string name="library_default">Padrão</string>
+    <string name="library_menu_copy">Copiar nome</string>
 
     <!-- MANGA DETAIL -->
     <string name="manga_detail_favorite">Favorito</string>
@@ -233,6 +267,7 @@
     <string name="manga_detail_subtitles_title">Legendas</string>
     <string name="manga_detail_file_links_title">Arquivos vinculados</string>
     <string name="manga_detail_manga_deleted">Arquivo apagado</string>
+    <string name="manga_detail_vocabulary">Vocabulário</string>
 
     <string name="manga_detail_information">Informações</string>
     <string name="manga_detail_related">Relacionados</string>
@@ -257,7 +292,7 @@
     <string name="page_link_manga_empty_description">Manga não selecionado</string>
     <string name="page_link_file">Arquivo em outro idioma</string>
     <string name="page_link_file_language">Linguagem do arquivo</string>
-    <string name="page_link_refresh_file_link">Recarregar arquivo vinculado</string>
+    <string name="page_link_reload_file_link">Recarregar arquivo vinculado</string>
     <string name="page_link_save">Salvar</string>
     <string name="page_link_delete_file_link">Deletar arquivo vinculado</string>
     <string name="page_link_delete_description">Deseja excluir as páginas vinculadas?</string>
@@ -270,6 +305,15 @@
     <string name="page_link_reorder_dual_page">Ordenar página duplas</string>
     <string name="page_link_reorder_single_page">Ordenar página única</string>
     <string name="page_link_reorder_sorted_page">Ordenar sequência da página</string>
+    <string name="page_link_reorder_undo_changes">Desfazer última alteração</string>
+
+    <string name="page_link_popup_reorder_return">Retornar próximas páginas aqui</string>
+    <string name="page_link_popup_reorder_single_page">Ordenar próximas páginas simples</string>
+    <string name="page_link_popup_reorder_dual_page">Ordenar próximas páginas duplas</string>
+    <string name="page_link_popup_reorder_auto_page">Ordenar automático próximas páginas</string>
+    <string name="page_link_popup_reorder_not_linked">Obter apartir de não vinculados</string>
+    <string name="page_link_popup_add_not_linked">Mover para não vinculados</string>
+
     <string name="page_link_help">Ajuda</string>
     <string name="page_link_page_index">Índice</string>
     <string name="page_link_full_screen">Full screen</string>
@@ -278,6 +322,9 @@
     <string name="page_link_process_reorder_dual_pages_done">Reordenação de páginas duplas concluída.</string>
     <string name="page_link_process_reorder_single_page_done">Reordenação de páginas simples concluída.</string>
     <string name="page_link_process_reorder_sorted_page_done">Ordenação pela sequência da página concluída.</string>
+    <string name="page_link_process_reorder_return_page_done">Retornar próximas páginas concluída.</string>
+    <string name="page_link_process_reorder_get_not_link_page_done">Obter apartir de não vinculados concluido.</string>
+    <string name="page_link_process_undo_last_change_done">Desfeito as ultimas alterações.</string>
     <string name="page_link_select_file_page_index">Selecione um arquivo</string>
 
     <string name="page_link_select_origin_manga">Escolha a origem do arquivo</string>
@@ -290,6 +337,9 @@
     <string name="vocabulary_manga">Manga</string>
     <string name="vocabulary_find">Vocabulário</string>
     <string name="vocabulary_favorites">Favoritos</string>
+    <string name="vocabulary_favorite">Favoritos</string>
+    <string name="vocabulary_appear">Frequência: %d</string>
+    <string name="vocabulary_imported">Concluído importação do vocabulário.</string>
 
     <!-- KANJI -->
     <string name="kanji_jlpt"><b><i>jlpt:</i></b> N%d</string>

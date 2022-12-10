@@ -4,7 +4,6 @@ import android.app.Activity.RESULT_OK
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -14,6 +13,7 @@ import android.view.animation.AnimationUtils
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -26,6 +26,7 @@ import br.com.fenix.bilingualmangareader.model.enums.Libraries
 import br.com.fenix.bilingualmangareader.service.listener.LibrariesCardListener
 import br.com.fenix.bilingualmangareader.service.repository.Storage
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import br.com.fenix.bilingualmangareader.util.helpers.MenuUtil
 import br.com.fenix.bilingualmangareader.util.helpers.MsgUtil
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import br.com.fenix.bilingualmangareader.view.adapter.configuration.LibrariesLineCardAdapter
@@ -58,6 +59,7 @@ class ConfigLibrariesFragment : Fragment() {
         mRecycleView.layoutAnimation = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_library_line)
 
         mToolbar = view.findViewById(R.id.toolbar_configuration_libraries)
+        MenuUtil.tintColor(requireContext(), view.findViewById<TextView>(R.id.config_libraries_title))
 
         (requireActivity() as MenuActivity).setActionBar(mToolbar)
 
@@ -67,7 +69,7 @@ class ConfigLibrariesFragment : Fragment() {
             }
 
             override fun changeEnable(library: Library) {
-                mViewModel.save(library)
+                mViewModel.saveLibrary(library)
             }
         }
         (mRecycleView.adapter as LibrariesLineCardAdapter).attachListener(mListener)
@@ -75,7 +77,7 @@ class ConfigLibrariesFragment : Fragment() {
 
         observer()
 
-        mViewModel.load()
+        mViewModel.loadLibrary()
     }
 
     override fun onCreateView(
@@ -106,7 +108,7 @@ class ConfigLibrariesFragment : Fragment() {
         }
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-            val library = mViewModel.getAndRemove(viewHolder.adapterPosition) ?: return
+            val library = mViewModel.getLibraryAndRemove(viewHolder.adapterPosition) ?: return
             val position = viewHolder.adapterPosition
             var excluded = false
             val dialog: AlertDialog =
@@ -116,12 +118,12 @@ class ConfigLibrariesFragment : Fragment() {
                     .setPositiveButton(
                         R.string.action_delete
                     ) { _, _ ->
-                        mViewModel.delete(library)
+                        mViewModel.deleteLibrary(library)
                         notifyDataSet(position, removed = true)
                         excluded = true
                     }.setOnDismissListener {
                         if (!excluded) {
-                            mViewModel.add(library, position)
+                            mViewModel.addLibrary(library, position)
                             notifyDataSet(position)
                         }
                     }
@@ -142,7 +144,7 @@ class ConfigLibrariesFragment : Fragment() {
     }
 
     private fun observer() {
-        mViewModel.listLibraries.observe(viewLifecycleOwner) {
+        mViewModel.libraries.observe(viewLifecycleOwner) {
             (mRecycleView.adapter as LibrariesLineCardAdapter).updateList(it)
         }
     }
@@ -181,7 +183,7 @@ class ConfigLibrariesFragment : Fragment() {
     private fun addLibrary(library: Library? = null) {
         val popup = createLibraryPopup(LayoutInflater.from(context), library)
 
-        val dialog = MaterialAlertDialogBuilder(requireContext(), R.style.AppCompatMaterialAlertDialogStyle)
+        val dialog = MaterialAlertDialogBuilder(requireContext(), R.style.AppCompatMaterialAlertDialog)
             .setTitle(getString(R.string.config_libraries_add_library))
             .setView(popup)
             .setCancelable(false)
@@ -196,7 +198,7 @@ class ConfigLibrariesFragment : Fragment() {
         dialog.show()
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
             if (validate()) {
-                mViewModel.new(getLibrary())
+                mViewModel.newLibrary(getLibrary())
                 dialog.dismiss()
             }
         }

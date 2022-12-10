@@ -5,26 +5,31 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import br.com.fenix.bilingualmangareader.model.entity.Manga
+import br.com.fenix.bilingualmangareader.service.repository.LibraryRepository
 import br.com.fenix.bilingualmangareader.service.repository.MangaRepository
+import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 
 class HistoryViewModel(application: Application) : AndroidViewModel(application) {
 
     private val mMangaRepository: MangaRepository = MangaRepository(application.applicationContext)
+    private val mLibraryRepository: LibraryRepository = LibraryRepository(application.applicationContext)
 
     private var mListMangas = MutableLiveData<ArrayList<Manga>>(ArrayList())
     val listMangas: LiveData<ArrayList<Manga>> = mListMangas
 
     fun list() {
         val list = mMangaRepository.listHistory()
-        if (list != null)
+        if (list != null) {
+            getLibraries(list)
             mListMangas.value = ArrayList(list)
-        else
+        } else
             mListMangas.value = ArrayList()
     }
 
     fun list(refreshComplete: (Int) -> (Unit)) {
         val list = mMangaRepository.listHistory()
         if (list != null) {
+            getLibraries(list)
             if (mListMangas.value == null || mListMangas.value!!.isEmpty())
                 mListMangas.value = ArrayList(list)
             else
@@ -35,6 +40,14 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
         refreshComplete(mListMangas.value!!.size - 1)
     }
 
+    private fun getLibraries(list: List<Manga>) {
+        val libraries = mLibraryRepository.list()
+        list.forEach {
+            if (it.fkLibrary != GeneralConsts.KEYS.LIBRARY.DEFAULT)
+                it.library = libraries.find { lb -> lb.id == it.fkLibrary } ?: it.library
+        }
+    }
+
     fun update(list: List<Manga>) {
         if (list.isNotEmpty()) {
             for (manga in list) {
@@ -42,6 +55,10 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
                     mListMangas.value!!.add(manga)
             }
         }
+    }
+
+    fun updateDelete(manga: Manga) {
+        mMangaRepository.delete(manga)
     }
 
     fun updateLastAccess(manga: Manga) {

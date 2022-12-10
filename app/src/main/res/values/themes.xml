@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!--============-->
     <!-- Base Theme -->
     <!--============-->
@@ -36,46 +36,74 @@
     <!--== Default Theme ==-->
     <style name="Theme.MangaReader" parent="Base.Theme.MangaReader">
         <!-- Status bar color -->
-        <item name="android:statusBarColor">@color/manga_reader_theme_light_onSurfaceVariant</item>
-
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowContentTransitions">true</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowActivityTransitions">true</item>
-        <item name="android:windowDrawsSystemBarBackgrounds">false</item>
+    </style>
+
+    <style name="Theme.MangaReader.NoActionBar" parent="Theme.MangaReader">
+        <!-- Customize your theme here. -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
         <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:windowTranslucentNavigation">false</item>
+        <item name="android:windowActionBarOverlay">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="Theme.MangaReader.NoNavigationBar" parent="Theme.MangaReader">
+        <!-- Customize your theme here. -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="Theme.MangaReader.FullScreen" parent="Theme.MangaReader">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">shortEdges</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
     <!--== Blood Red Theme ==-->
     <style name="Theme.MangaReader.BloodRed">
         <!-- Theme Colors -->
-        <item name="colorPrimary">@color/blood_theme_dark_primary</item>
-        <item name="colorOnPrimary">@color/blood_theme_dark_onPrimary</item>
-        <item name="colorPrimaryContainer">@color/blood_theme_dark_primaryContainer</item>
-        <item name="colorOnPrimaryContainer">@color/blood_theme_dark_onPrimaryContainer</item>
-        <item name="colorSecondary">@color/blood_theme_dark_secondary</item>
-        <item name="colorOnSecondary">@color/blood_theme_dark_onSecondary</item>
-        <item name="colorSecondaryContainer">@color/blood_theme_dark_secondaryContainer</item>
-        <item name="colorOnSecondaryContainer">@color/blood_theme_dark_onSecondaryContainer</item>
-        <item name="colorTertiary">@color/blood_theme_dark_tertiary</item>
-        <item name="colorOnTertiary">@color/blood_theme_dark_onTertiary</item>
-        <item name="colorTertiaryContainer">@color/blood_theme_dark_tertiaryContainer</item>
-        <item name="colorOnTertiaryContainer">@color/blood_theme_dark_onTertiaryContainer</item>
-        <item name="colorError">@color/blood_theme_dark_error</item>
-        <item name="colorErrorContainer">@color/blood_theme_dark_errorContainer</item>
-        <item name="colorOnError">@color/blood_theme_dark_onError</item>
-        <item name="colorOnErrorContainer">@color/blood_theme_dark_onErrorContainer</item>
-        <item name="android:colorBackground">@color/blood_theme_dark_background</item>
-        <item name="colorOnBackground">@color/blood_theme_dark_onBackground</item>
-        <item name="colorSurface">@color/blood_theme_dark_surface</item>
-        <item name="colorOnSurface">@color/blood_theme_dark_onSurface</item>
-        <item name="colorSurfaceVariant">@color/blood_theme_dark_surfaceVariant</item>
-        <item name="colorOnSurfaceVariant">@color/blood_theme_dark_onSurfaceVariant</item>
-        <item name="colorOutline">@color/blood_theme_dark_outline</item>
-        <item name="colorOnSurfaceInverse">@color/blood_theme_dark_inverseOnSurface</item>
-        <item name="colorSurfaceInverse">@color/blood_theme_dark_inverseSurface</item>
-        <item name="colorPrimaryInverse">@color/blood_theme_dark_inversePrimary</item>
+        <item name="colorPrimary">@color/blood_theme_light_primary</item>
+        <item name="colorOnPrimary">@color/blood_theme_light_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/blood_theme_light_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/blood_theme_light_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/blood_theme_light_secondary</item>
+        <item name="colorOnSecondary">@color/blood_theme_light_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/blood_theme_light_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/blood_theme_light_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/blood_theme_light_tertiary</item>
+        <item name="colorOnTertiary">@color/blood_theme_light_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/blood_theme_light_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/blood_theme_light_onTertiaryContainer</item>
+        <item name="colorError">@color/blood_theme_light_error</item>
+        <item name="colorErrorContainer">@color/blood_theme_light_errorContainer</item>
+        <item name="colorOnError">@color/blood_theme_light_onError</item>
+        <item name="colorOnErrorContainer">@color/blood_theme_light_onErrorContainer</item>
+        <item name="android:colorBackground">@color/blood_theme_light_background</item>
+        <item name="colorOnBackground">@color/blood_theme_light_onBackground</item>
+        <item name="colorSurface">@color/blood_theme_light_surface</item>
+        <item name="colorOnSurface">@color/blood_theme_light_onSurface</item>
+        <item name="colorSurfaceVariant">@color/blood_theme_light_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/blood_theme_light_onSurfaceVariant</item>
+        <item name="colorOutline">@color/blood_theme_light_outline</item>
+        <item name="colorOnSurfaceInverse">@color/blood_theme_light_inverseOnSurface</item>
+        <item name="colorSurfaceInverse">@color/blood_theme_light_inverseSurface</item>
+        <item name="colorPrimaryInverse">@color/blood_theme_light_inversePrimary</item>
     </style>
 
     <!--== Blue Theme ==-->

@@ -70,7 +70,7 @@ class PopupSubtitleConfiguration : Fragment() {
         )
         mUsePageLinkInSearchTranslate.setOnClickListener {
             mSubTitleController.setUseFileLink(mUsePageLinkInSearchTranslate.isChecked)
-            mPreferences.edit().putBoolean(GeneralConsts.KEYS.PAGE_LINK.USE_IN_SEARCH_TRANSLATE, mUsePageLinkInSearchTranslate.isChecked).commit()
+            mPreferences.edit().putBoolean(GeneralConsts.KEYS.PAGE_LINK.USE_IN_SEARCH_TRANSLATE, mUsePageLinkInSearchTranslate.isChecked).apply()
         }
 
         observer()

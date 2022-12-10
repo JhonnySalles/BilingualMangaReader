@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/TextNormal.ListItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:ellipsize="end"
-    android:maxLines="1"
-    android:padding="16dp"
-    android:textAppearance="?attr/textAppearanceSubtitle1"
-    android:textColor="@color/text_primary"
-    android:background="@color/on_primary"
-    tools:text="List " />
+    android:maxLines="1"/>

@@ -140,8 +140,6 @@ class Storage(context: Context) {
     }
 
     fun updateLastAccess(manga: Manga) {
-        manga.lastAlteration = Date()
-        manga.lastAccess = Date()
-        mRepository.updateLastAcess(manga)
+        mRepository.updateLastAccess(manga)
     }
 }

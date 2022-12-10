@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/on_primary"
     android:orientation="vertical"
     android:paddingLeft="@dimen/margin_small"
     android:paddingTop="@dimen/margin_small"
@@ -20,169 +20,121 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/cb_subtitle_page"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            style="@style/TextInputDropMenu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/popup_reading_subtitle_page"
-            android:textColorHint="@color/text_primary"
-            app:boxBackgroundColor="@color/primary"
-            app:boxStrokeColor="@color/on_secondary"
-            app:hintTextColor="@color/on_secondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:placeholderTextColor="@color/text_primary"
-            app:startIconTint="@color/on_secondary">
+            app:layout_constraintTop_toTopOf="parent">
 
             <AutoCompleteTextView
                 android:id="@+id/menu_autocomplete_subtitle_Page"
+                style="@style/AutoCompleteDropMenu"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:ellipsize="start"
                 android:inputType="none"
                 android:maxLines="1"
-                android:textColor="@color/text_primary"
                 tools:ignore="LabelFor" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/nav_change_language"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            style="@style/Button.RoundedIconOnly"
             android:layout_width="@dimen/popup_reader_button_width"
             android:layout_height="@dimen/popup_reader_button_width"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="1dp"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
             android:minHeight="@dimen/popup_reader_button_min_height"
-            android:paddingLeft="@dimen/popup_reader_button_padding"
-            android:paddingRight="@dimen/popup_reader_button_padding"
             android:tooltipText="@string/popup_reading_button_translate"
-            app:backgroundTint="@color/primary"
             app:icon="@drawable/ic_translate"
-            app:iconTint="@color/text_primary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/nav_draw"
-            app:layout_constraintTop_toBottomOf="@+id/cb_subtitle_page"
-            app:rippleColor="@color/ripple_color" />
+            app:layout_constraintTop_toBottomOf="@+id/cb_subtitle_page" />
 
         <Button
             android:id="@+id/nav_draw"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            style="@style/Button.RoundedIconOnly"
             android:layout_width="@dimen/popup_reader_button_width"
             android:layout_height="@dimen/popup_reader_button_width"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="1dp"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
             android:minHeight="@dimen/popup_reader_button_min_height"
-            android:paddingLeft="@dimen/popup_reader_button_padding"
-            android:paddingRight="@dimen/popup_reader_button_padding"
             android:tooltipText="@string/popup_reading_button_draw"
-            app:backgroundTint="@color/primary"
             app:icon="@drawable/ic_draw_text"
-            app:iconTint="@color/text_primary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/nav_change_language"
             app:layout_constraintRight_toLeftOf="@+id/nav_refresh"
-            app:layout_constraintTop_toBottomOf="@+id/cb_subtitle_page"
-            app:rippleColor="@color/ripple_color" />
+            app:layout_constraintTop_toBottomOf="@+id/cb_subtitle_page" />
 
         <Button
             android:id="@+id/nav_refresh"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            style="@style/Button.RoundedIconOnly"
             android:layout_width="@dimen/popup_reader_button_width"
             android:layout_height="@dimen/popup_reader_button_width"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="1dp"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
             android:minHeight="@dimen/popup_reader_button_min_height"
-            android:paddingLeft="@dimen/popup_reader_button_padding"
-            android:paddingRight="@dimen/popup_reader_button_padding"
             android:tooltipText="@string/popup_reading_button_find"
-            app:backgroundTint="@color/primary"
             app:icon="@drawable/ic_refresh"
-            app:iconTint="@color/text_primary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/nav_draw"
-            app:layout_constraintRight_toLeftOf="@+id/nav_before_text"
-            app:rippleColor="@color/ripple_color" />
+            app:layout_constraintRight_toLeftOf="@+id/nav_before_text"/>
 
         <Button
             android:id="@+id/nav_before_text"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            style="@style/Button.RoundedIconOnly"
             android:layout_width="@dimen/popup_reader_button_width"
             android:layout_height="@dimen/popup_reader_button_width"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="1dp"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
             android:minHeight="@dimen/popup_reader_button_min_height"
-            android:paddingLeft="@dimen/popup_reader_button_padding"
-            android:paddingRight="@dimen/popup_reader_button_padding"
             android:tooltipText="@string/popup_reading_button_before"
-            app:backgroundTint="@color/primary"
             app:icon="@drawable/ic_navigate_before"
-            app:iconTint="@color/text_primary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/nav_refresh"
             app:layout_constraintRight_toLeftOf="@+id/nav_next_text"
-            app:layout_constraintTop_toBottomOf="@+id/cb_subtitle_page"
-            app:rippleColor="@color/ripple_color" />
+            app:layout_constraintTop_toBottomOf="@+id/cb_subtitle_page" />
 
         <Button
             android:id="@+id/nav_next_text"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            style="@style/Button.RoundedIconOnly"
             android:layout_width="@dimen/popup_reader_button_width"
             android:layout_height="@dimen/popup_reader_button_width"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="1dp"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
             android:minHeight="@dimen/popup_reader_button_min_height"
-            android:paddingLeft="@dimen/popup_reader_button_padding"
-            android:paddingRight="@dimen/popup_reader_button_padding"
             android:tooltipText="@string/popup_reading_button_next"
-            app:backgroundTint="@color/primary"
             app:icon="@drawable/ic_navigate_next"
-            app:iconTint="@color/text_primary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/nav_before_text"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cb_subtitle_page"
-            app:rippleColor="@color/ripple_color" />
+            app:layout_constraintTop_toBottomOf="@+id/cb_subtitle_page"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/txt_subtitle_title"
+        style="@style/TextTitle.SubtitleReader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="2dp"
-        android:fontFamily="monospace"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:textColor="@color/secondary"
         android:textSize="@dimen/popup_reader_title" />
 
     <TextView
         android:id="@+id/txt_subtitle_content"
+        style="@style/TextNormal.SubtitleReader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="1dp"
-        android:autoLink="all"
-        android:fontFamily="monospace"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:textColor="@color/text_primary"
         android:textSize="@dimen/popup_reader_text" />
 
 </LinearLayout>

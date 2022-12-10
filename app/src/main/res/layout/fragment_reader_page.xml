@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/frame_reader_page_root"
+    style="@style/AppBackground.Reader"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/primary">
+    android:orientation="vertical">
 
     <br.com.fenix.bilingualmangareader.view.components.PageImageView
         android:id="@+id/page_image_view"
@@ -15,23 +15,22 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
+
         <ProgressBar
             android:id="@+id/load_progress_bar"
+            style="@style/RoundedProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:progressTint="@color/secondary"
-            android:indeterminateTint="@color/secondary"
             android:visibility="visible"/>
+
         <ImageButton
             android:id="@+id/reload_Button"
+            style="@style/IconPageBroken"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:background="@android:color/transparent"
             android:visibility="gone"
             android:src="@drawable/ic_broken"
             android:contentDescription="@string/reader_reload" />
-    </RelativeLayout>
 
+    </RelativeLayout>
 </FrameLayout>

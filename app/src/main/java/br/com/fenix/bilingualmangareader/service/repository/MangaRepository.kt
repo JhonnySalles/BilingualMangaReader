@@ -4,7 +4,6 @@ import android.content.Context
 import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import org.slf4j.LoggerFactory
-import java.time.LocalDateTime
 import java.util.*
 
 class MangaRepository(context: Context) {
@@ -28,8 +27,9 @@ class MangaRepository(context: Context) {
             mDataBase.updateBookMark(obj.id!!, obj.bookMark)
     }
 
-    fun updateLastAcess(obj: Manga) {
+    fun updateLastAccess(obj: Manga) {
         obj.lastAlteration = Date()
+        obj.lastAccess = Date()
         if (obj.id != null)
             mDataBase.update(obj)
     }
@@ -153,6 +153,22 @@ class MangaRepository(context: Context) {
         } catch (e: Exception) {
             mLOGGER.error("Error when find Manga by file folder: " + e.message, e)
             null
+        }
+    }
+
+    fun getLastedRead() : Pair<Manga?, Manga?> {
+        return try {
+            val last = mDataBase.getLastOpen()
+
+            return if (last != null && last.isNotEmpty()) {
+                val first = last[0]
+                val second = if(last.size > 1) last[1] else null
+                Pair (first, second)
+            } else
+                Pair(null, null)
+        } catch (e: Exception) {
+            mLOGGER.error("Error when find last Manga open: " + e.message, e)
+            Pair(null, null)
         }
     }
 

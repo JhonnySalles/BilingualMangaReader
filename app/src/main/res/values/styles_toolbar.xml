@@ -1,0 +1,158 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- - - - - - - - - - - - - - - - - - - - Theme Toolbar and Navigation - - - - - - - - - - - - - - - - - - - -->
+    <style name="MainToolbarContentTheme" parent="Theme.MaterialComponents">
+        <item name="elevation">2dp</item>
+    </style>
+
+    <style name="MainToolbarContentTheme.NoElevation" parent="MainToolbarContentTheme">
+        <item name="elevation">0dp</item>
+    </style>
+
+    <style name="MainToolbarStyle" parent="Widget.MaterialComponents.Toolbar">
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textColorPrimary">?attr/colorSurfaceVariant</item>
+        <item name="android:textColorSecondary">?attr/colorOnSurfaceVariant</item>
+        <item name="colorControlNormal">?attr/colorOnSurfaceVariant</item>
+        <item name="android:drawableTint">?attr/colorOnSurfaceVariant</item>
+        <item name="android:textColor">?attr/colorSurfaceVariant</item>
+        <item name="colorControlHighlight">?attr/colorOnSurfaceVariant</item>
+        <item name="materialThemeOverlay">@style/MainToolbarTheme</item>
+    </style>
+
+    <style name="MainToolbarTheme" parent="Base.Theme.MangaReader">
+        <item name="android:textColorPrimary">?attr/colorSurfaceVariant</item>
+        <item name="android:textColorSecondary">?attr/colorOnSurfaceVariant</item>
+        <item name="colorControlNormal">?attr/colorOnSurfaceVariant</item>
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+        <item name="colorControlHighlight">?attr/colorOnSurfaceVariant</item>
+        <item name="iconTint">?attr/colorOnSurfaceVariant</item>
+        <item name="android:shadowColor">@color/shadow</item>
+        <item name="android:shadowDx">1.5</item>
+        <item name="android:shadowDy">1.3</item>
+        <item name="android:shadowRadius">1.6</item>
+    </style>
+
+    <style name="MainToolbarTheme.BloodRed" parent="Theme.MangaReader.BloodRed">
+        <item name="android:textColorPrimary">?attr/colorSurfaceVariant</item>
+        <item name="android:textColorSecondary">?attr/colorOnSurfaceVariant</item>
+        <item name="colorControlNormal">?attr/colorOnSurfaceVariant</item>
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+        <item name="colorControlHighlight">?attr/colorOnSurfaceVariant</item>
+        <item name="iconTint">?attr/colorOnSurfaceVariant</item>
+    </style>
+
+    <style name="MainToolbarTheme.Red" parent="Theme.MangaReader.Red">
+        <item name="android:textColorPrimary">?attr/colorSurfaceVariant</item>
+        <item name="android:textColorSecondary">?attr/colorOnSurfaceVariant</item>
+        <item name="colorControlNormal">?attr/colorOnSurfaceVariant</item>
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+        <item name="colorControlHighlight">?attr/colorOnSurfaceVariant</item>
+        <item name="iconTint">?attr/colorOnSurfaceVariant</item>
+    </style>
+
+    <style name="MainToolbarTheme.OceanBlue" parent="Theme.MangaReader.OceanBlue">
+        <item name="android:textColorPrimary">?attr/colorSurfaceVariant</item>
+        <item name="android:textColorSecondary">?attr/colorOnSurfaceVariant</item>
+        <item name="colorControlNormal">?attr/colorOnSurfaceVariant</item>
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+        <item name="colorControlHighlight">?attr/colorOnSurfaceVariant</item>
+        <item name="iconTint">?attr/colorOnSurfaceVariant</item>
+    </style>
+
+    <style name="MainToolbarTheme.Blue" parent="Theme.MangaReader.Blue">
+        <item name="android:textColorPrimary">?attr/colorSurfaceVariant</item>
+        <item name="android:textColorSecondary">?attr/colorOnSurfaceVariant</item>
+        <item name="colorControlNormal">?attr/colorOnSurfaceVariant</item>
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+        <item name="colorControlHighlight">?attr/colorOnSurfaceVariant</item>
+        <item name="iconTint">?attr/colorOnSurfaceVariant</item>
+    </style>
+
+    <style name="MainToolbarTheme.ForestGreen" parent="Theme.MangaReader.ForestGreen">
+        <item name="android:textColorPrimary">?attr/colorSurfaceVariant</item>
+        <item name="android:textColorSecondary">?attr/colorOnSurfaceVariant</item>
+        <item name="colorControlNormal">?attr/colorOnSurfaceVariant</item>
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+        <item name="colorControlHighlight">?attr/colorOnSurfaceVariant</item>
+        <item name="iconTint">?attr/colorOnSurfaceVariant</item>
+    </style>
+
+    <style name="MainToolbarTheme.Green" parent="Theme.MangaReader.Green">
+        <item name="android:textColorPrimary">?attr/colorSurfaceVariant</item>
+        <item name="android:textColorSecondary">?attr/colorOnSurfaceVariant</item>
+        <item name="colorControlNormal">?attr/colorOnSurfaceVariant</item>
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+        <item name="colorControlHighlight">?attr/colorOnSurfaceVariant</item>
+        <item name="iconTint">?attr/colorOnSurfaceVariant</item>
+    </style>
+
+    <style name="MainToolbarTheme.NeonBlue" parent="Theme.MangaReader.NeonBlue">
+        <item name="android:textColorPrimary">?attr/colorSurfaceVariant</item>
+        <item name="android:textColorSecondary">?attr/colorOnSurfaceVariant</item>
+        <item name="colorControlNormal">?attr/colorOnSurfaceVariant</item>
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+        <item name="colorControlHighlight">?attr/colorOnSurfaceVariant</item>
+        <item name="iconTint">?attr/colorOnSurfaceVariant</item>
+    </style>
+
+    <style name="MainToolbarTheme.NeonGreen" parent="Theme.MangaReader.NeonGreen">
+        <item name="android:textColorPrimary">?attr/colorSurfaceVariant</item>
+        <item name="android:textColorSecondary">?attr/colorOnSurfaceVariant</item>
+        <item name="colorControlNormal">?attr/colorOnSurfaceVariant</item>
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+        <item name="colorControlHighlight">?attr/colorOnSurfaceVariant</item>
+        <item name="iconTint">?attr/colorOnSurfaceVariant</item>
+    </style>
+
+    <style name="MainToolbarTheme.Pink" parent="Theme.MangaReader.Pink">
+        <item name="android:textColorPrimary">?attr/colorSurfaceVariant</item>
+        <item name="android:textColorSecondary">?attr/colorOnSurfaceVariant</item>
+        <item name="colorControlNormal">?attr/colorOnSurfaceVariant</item>
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+        <item name="colorControlHighlight">?attr/colorOnSurfaceVariant</item>
+        <item name="iconTint">?attr/colorOnSurfaceVariant</item>
+    </style>
+
+    <style name="MainSubToolbarTheme" parent="Base.Theme.MangaReader">
+        <item name="android:textColorPrimary">?attr/colorPrimary</item>
+        <item name="android:textColorSecondary">?attr/colorOnSecondary</item>
+        <item name="colorControlNormal">?attr/colorOnSecondary</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="colorControlHighlight">?attr/colorOnSecondary</item>
+    </style>
+
+    <style name="ReaderToolbarTheme" parent="Base.Theme.MangaReader">
+        <item name="android:textColor">?attr/colorSurfaceVariant</item>
+        <item name="android:textColorPrimary">?attr/colorSurfaceVariant</item>
+        <item name="android:textColorSecondary">?attr/colorSurfaceVariant</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="ReaderSubToolbarTheme" parent="Base.Theme.MangaReader">
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+        <item name="android:textColorPrimary">?attr/colorOnSurfaceVariant</item>
+        <item name="android:textColorSecondary">?attr/colorOnSurfaceVariant</item>
+        <item name="android:ellipsize">start</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="MainNavigation" parent="Base.Theme.MangaReader">
+        <item name="android:background">?attr/colorSurface</item>
+        <item name="itemTextColor">?attr/colorPrimary</item>
+        <item name="itemIconTint">?attr/colorSecondary</item>
+        <item name="subheaderColor">?attr/colorSecondary</item>
+    </style>
+
+    <style name="MainNavigationTitle" parent="Base.Theme.MangaReader">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?attr/colorPrimaryContainer</item>
+        <item name="android:background">@color/title_background</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body1</item>
+    </style>
+
+</resources>

@@ -13,8 +13,8 @@ android {
         minSdkVersion 24
         maxSdkVersion 25
         targetSdk 24
-        versionCode 15
-        versionName "2.15 (Nougat)"
+        versionCode 18
+        versionName "2.18 (Nougat)"
         archivesBaseName = "BilingualManga_" + versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -78,12 +78,16 @@ dependencies {
     implementation 'jp.co.cyberagent.android:gpuimage:2.1.0'
 
     implementation group: 'com.atilika.kuromoji', name: 'kuromoji-ipadic', version: '0.9.0'
-    //implementation 'com.worksap.nlp:sudachi:0.5.2'
+    //implementation 'com.worksap.nlp:sudachi:0.5.2' //Only > Android O
     implementation 'com.github.javiersantos:MaterialStyledDialogs:3.0.2'
     implementation 'com.github.ivanisidrowu:palumu:v1.0.0'
     implementation 'com.github.pedromassango:doubleClick:3.0'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.36'
     implementation 'com.github.tony19:logback-android:2.0.0'
+    implementation "com.android.support:appcompat-v7:27.1.1" // Only < Android O
+
+    //Horizontal list view
+    implementation 'org.lucasr.twowayview:twowayview:0.1.4'
 
     // OCR
     implementation 'cz.adaptech:tesseract4android:4.1.1'

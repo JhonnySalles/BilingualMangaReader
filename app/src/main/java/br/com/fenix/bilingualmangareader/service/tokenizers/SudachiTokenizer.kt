@@ -2,7 +2,6 @@ package br.com.fenix.bilingualmangareader.service.tokenizers
 
 import android.annotation.TargetApi
 import android.content.Context
-import br.com.fenix.bilingualmangareader.util.helpers.FileUtil
 
 @TargetApi(26)
 class SudachiTokenizer(context: Context) {

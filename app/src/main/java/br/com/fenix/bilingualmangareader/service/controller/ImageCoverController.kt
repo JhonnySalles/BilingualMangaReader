@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory
 import android.util.LruCache
 import android.widget.ImageView
 import br.com.fenix.bilingualmangareader.model.entity.Manga
-import br.com.fenix.bilingualmangareader.model.entity.Pages
 import br.com.fenix.bilingualmangareader.service.parses.Parse
 import br.com.fenix.bilingualmangareader.service.parses.ParseFactory
 import br.com.fenix.bilingualmangareader.service.parses.RarParse
@@ -142,7 +141,7 @@ class ImageCoverController private constructor() {
         return cover
     }
 
-    private fun getMangaCover(context: Context, manga: Manga, isCoverSize: Boolean): Bitmap? {
+    fun getMangaCover(context: Context, manga: Manga, isCoverSize: Boolean): Bitmap? {
         val hash = generateHash(manga.file)
         var image: Bitmap? = null
 

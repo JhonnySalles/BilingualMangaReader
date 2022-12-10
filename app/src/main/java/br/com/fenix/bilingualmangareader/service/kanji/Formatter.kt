@@ -1,7 +1,6 @@
 package br.com.fenix.bilingualmangareader.service.kanji
 
 import android.content.Context
-import android.os.Build
 import android.text.*
 import android.text.style.ClickableSpan
 import android.text.style.RelativeSizeSpan
@@ -97,9 +96,9 @@ class Formatter {
         private fun getPopupKanji(context: Context, kanji: String) {
             val kanjax = mRepository?.get(kanji)
             val popup = createKanjiPopup(context, LayoutInflater.from(context), kanjax)
-            MaterialAlertDialogBuilder(context, R.style.AppCompatMaterialAlertDialogStyle)
+            MaterialAlertDialogBuilder(context, R.style.AppCompatMaterialAlertDialog)
                 .setView(popup)
-                .setCancelable(false)
+                .setCancelable(true)
                 .setPositiveButton(R.string.action_neutral) { _, _ -> }
                 .create()
                 .show()

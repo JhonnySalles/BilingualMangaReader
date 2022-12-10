@@ -4,7 +4,6 @@
     <item android:id="@+id/menu_item_reader_favorite"
         android:title="@string/menu_reading_favorite"
         android:icon="@drawable/ic_favorite_unmark"
-        android:iconTint="#FFFFFF"
         android:orderInCategory="100"
         app:showAsAction="always">
     </item>
@@ -12,7 +11,6 @@
     <item
         android:id="@+id/menu_item_reader_reading"
         android:icon="@drawable/ic_book_open"
-        android:iconTint="#FFFFFF"
         android:orderInCategory="100"
         android:title="@string/menu_reading_mode"
         app:showAsAction="never">
@@ -27,10 +25,10 @@
             </group>
         </menu>
     </item>
+
     <item
         android:id="@+id/menu_item_reader_aspect_ratio"
         android:icon="@drawable/ic_reader_mode"
-        android:iconTint="#FFFFFF"
         android:orderInCategory="101"
         android:title="@string/menu_view_mode"
         app:showAsAction="never">
@@ -50,60 +48,84 @@
     </item>
 
     <item
+        android:icon="@drawable/ic_reading_options"
+        android:orderInCategory="102"
+        android:title="@string/menu_reading_options"
+        app:showAsAction="never">
+        <menu>
+            <item
+                android:id="@+id/menu_item_use_magnifier_type"
+                android:icon="@drawable/ic_use_magnifier_type"
+                android:orderInCategory="101"
+                android:title="@string/menu_reading_use_magnifier_type"
+                android:checkable="true"
+                app:showAsAction="never"/>
+
+            <item
+                android:id="@+id/menu_item_popup_color"
+                android:icon="@drawable/ic_color_settings"
+                android:orderInCategory="102"
+                android:title="@string/menu_reading_color"
+                app:showAsAction="never"/>
+
+            <item
+                android:id="@+id/menu_item_view_touch_screen"
+                android:icon="@drawable/ic_view_touch_screen"
+                android:orderInCategory="103"
+                android:title="@string/menu_reading_view_touch"
+                app:showAsAction="never"/>
+
+            <item
+                android:id="@+id/menu_item_show_clock_and_battery"
+                android:icon="@drawable/ic_show_clock_and_battery"
+                android:orderInCategory="104"
+                android:title="@string/menu_reading_show_clock_and_battery"
+                android:checkable="true"
+                app:showAsAction="never"/>
+        </menu>
+    </item>
+
+    <item
+        android:icon="@drawable/ic_ocr_file_linked"
+        android:orderInCategory="103"
+        android:title="@string/menu_reading_ocr_file_linked"
+        app:showAsAction="never">
+        <menu>
+            <item
+                android:id="@+id/menu_item_popup_subtitle"
+                android:icon="@drawable/ic_change_language"
+                android:orderInCategory="102"
+                android:title="@string/menu_reading_subtitle"
+                app:showAsAction="never"/>
+
+            <item
+                android:id="@+id/menu_item_file_link"
+                android:icon="@drawable/ic_file_link"
+                android:orderInCategory="103"
+                android:title="@string/menu_reading_file_link"
+                app:showAsAction="never"/>
+
+            <item
+                android:id="@+id/menu_item_open_kaku"
+                android:icon="@mipmap/app_kaku"
+                android:orderInCategory="104"
+                android:title="@string/menu_reading_open_kaku"
+                app:showAsAction="never"/>
+        </menu>
+    </item>
+
+    <item
         android:id="@+id/menu_item_popup_open_floating"
         android:icon="@drawable/ic_floating_window"
-        android:iconTint="#FFFFFF"
-        android:orderInCategory="102"
+        android:orderInCategory="104"
         android:title="@string/menu_reading_floating"
-        app:showAsAction="never"/>
-
-    <item
-        android:id="@+id/menu_item_popup_subtitle"
-        android:icon="@drawable/ic_change_language"
-        android:iconTint="#FFFFFF"
-        android:orderInCategory="103"
-        android:title="@string/menu_reading_subtitle"
-        app:showAsAction="never"/>
-
-    <item
-        android:id="@+id/menu_item_popup_color"
-        android:icon="@drawable/ic_color_settings"
-        android:iconTint="#FFFFFF"
-        android:orderInCategory="103"
-        android:title="@string/menu_reading_color"
-        app:showAsAction="never"/>
-
-    <item
-        android:id="@+id/menu_item_file_link"
-        android:icon="@drawable/ic_file_link"
-        android:iconTint="#FFFFFF"
-        android:orderInCategory="103"
-        android:title="@string/menu_reading_file_link"
-        app:showAsAction="never"/>
-
-    <item
-        android:id="@+id/menu_item_open_kaku"
-        android:icon="@mipmap/app_kaku"
-        android:iconTint="#FFFFFF"
-        android:orderInCategory="103"
-        android:title="@string/menu_reading_open_kaku"
         app:showAsAction="never"/>
 
     <item
         android:id="@+id/menu_item_floating_buttons"
         android:icon="@drawable/ic_item_floating_buttons"
-        android:iconTint="#FFFFFF"
-        android:orderInCategory="103"
+        android:orderInCategory="105"
         android:title="@string/menu_reading_floating_buttons"
         app:showAsAction="never"/>
-
-    <item
-        android:id="@+id/menu_item_view_touch_screen"
-        android:icon="@drawable/ic_view_touch_screen"
-        android:iconTint="#FFFFFF"
-        android:orderInCategory="103"
-        android:title="@string/menu_reading_view_touch"
-        app:showAsAction="never"/>
-
 
 </menu>

@@ -1,6 +1,5 @@
 package br.com.fenix.bilingualmangareader.view.ui.library
 
-import android.Manifest
 import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
@@ -15,7 +14,6 @@ import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -36,16 +34,21 @@ import br.com.fenix.bilingualmangareader.service.scanner.Scanner
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.view.adapter.library.MangaGridCardAdapter
 import br.com.fenix.bilingualmangareader.view.adapter.library.MangaLineCardAdapter
+import br.com.fenix.bilingualmangareader.view.components.ComponentsUtil
 import br.com.fenix.bilingualmangareader.view.ui.manga_detail.MangaDetailActivity
 import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.slf4j.LoggerFactory
+import java.util.*
+import kotlin.collections.HashMap
 import kotlin.math.max
 
 
 class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private val mLOGGER = LoggerFactory.getLogger(LibraryFragment::class.java)
+
+    private val uniqueID: String = UUID.randomUUID().toString()
 
     private lateinit var mViewModel: LibraryViewModel
     private lateinit var mainFunctions: MainListener
@@ -79,6 +82,9 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         mViewModel = ViewModelProvider(requireActivity()).get(LibraryViewModel::class.java)
         loadConfig()
         setHasOptionsMenu(true)
+
+        if (!mViewModel.existStack(uniqueID))
+            mViewModel.addStackLibrary(uniqueID, mViewModel.getLibrary())
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -101,6 +107,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 return false
             }
         })
+
         enableSearchView(searchView, !mRefreshLayout.isRefreshing)
         onChangeIconLayout()
     }
@@ -140,6 +147,11 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         super.onStop()
     }
 
+    override fun onDestroy() {
+        mViewModel.removeStackLibrary(uniqueID)
+        super.onDestroy()
+    }
+
     private inner class UpdateHandler : Handler() {
         override fun handleMessage(msg: Message) {
             val obj = msg.obj
@@ -161,7 +173,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun notifyDataSet(indexes: MutableList<kotlin.Pair<ListMod, Int>>) {
         if (indexes.any { it.first == ListMod.FULL })
-            notifyDataSet(0, (mViewModel.listMangas.value?.size ?: 2) - 1)
+            notifyDataSet(0, (mViewModel.listMangas.value?.size ?: 1))
         else {
             for (index in indexes)
                 when (index.first) {
@@ -234,7 +246,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun sortList() {
         mViewModel.sorted(mOrderBy)
-        val range = (mViewModel.listMangas.value?.size ?: 2) - 1
+        val range = (mViewModel.listMangas.value?.size ?: 1)
         notifyDataSet(0, range)
     }
 
@@ -294,15 +306,14 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         mScrollUp = root.findViewById(R.id.library_scroll_up)
         mScrollDown = root.findViewById(R.id.library_scroll_down)
 
-        mRefreshLayout.setColorSchemeResources(
-            R.color.on_secondary,
-            R.color.on_secondary,
-            R.color.white
-        )
-
+        ComponentsUtil.setThemeColor(requireContext(), mRefreshLayout)
         mRefreshLayout.setOnRefreshListener(this)
         mRefreshLayout.isEnabled = true
-        mRefreshLayout.setProgressViewOffset(false, (resources.getDimensionPixelOffset(R.dimen.default_navigator_header_margin_top) + 60)*-1, 10)
+        mRefreshLayout.setProgressViewOffset(
+            false,
+            (resources.getDimensionPixelOffset(R.dimen.default_navigator_header_margin_top) + 60) * -1,
+            10
+        )
 
         mScrollUp.visibility = View.GONE
         mScrollDown.visibility = View.GONE
@@ -371,15 +382,28 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         mListener = object : MangaCardListener {
             override fun onClick(manga: Manga) {
-                val intent = Intent(context, ReaderActivity::class.java)
-                val bundle = Bundle()
-                bundle.putSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY, mViewModel.getLibrary())
-                bundle.putString(GeneralConsts.KEYS.MANGA.NAME, manga.title)
-                bundle.putInt(GeneralConsts.KEYS.MANGA.MARK, manga.bookMark)
-                bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, manga)
-                intent.putExtras(bundle)
-                context?.startActivity(intent)
-                requireActivity().overridePendingTransition(R.anim.fade_in_fragment_add_enter, R.anim.fade_out_fragment_remove_exit)
+                if (manga.file.exists()) {
+                    val intent = Intent(context, ReaderActivity::class.java)
+                    val bundle = Bundle()
+                    bundle.putSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY, mViewModel.getLibrary())
+                    bundle.putString(GeneralConsts.KEYS.MANGA.NAME, manga.title)
+                    bundle.putInt(GeneralConsts.KEYS.MANGA.MARK, manga.bookMark)
+                    bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, manga)
+                    intent.putExtras(bundle)
+                    context?.startActivity(intent)
+                    requireActivity().overridePendingTransition(R.anim.fade_in_fragment_add_enter, R.anim.fade_out_fragment_remove_exit)
+                } else {
+                    removeList(manga)
+                    mViewModel.delete(manga)
+                    AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
+                        .setTitle(getString(R.string.manga_excluded))
+                        .setMessage(getString(R.string.file_not_found))
+                        .setPositiveButton(
+                            R.string.action_neutral
+                        ) { _, _ -> }
+                        .create()
+                        .show()
+                }
             }
 
             override fun onClickLong(manga: Manga, view: View, position: Int) {
@@ -412,6 +436,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     searchView.isIconified = true
                 else {
                     isEnabled = false
+                    mViewModel.restoreLastStackLibrary(uniqueID)
                     requireActivity().onBackPressed()
                 }
             }
@@ -627,8 +652,8 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun deleteFile(manga: Manga?) {
         if (manga?.file != null) {
-            mViewModel.delete(manga)
             removeList(manga)
+            mViewModel.delete(manga)
             if (manga.file.exists()) {
                 val isDeleted = manga.file.delete()
                 mLOGGER.info("File deleted ${manga.name}: $isDeleted")

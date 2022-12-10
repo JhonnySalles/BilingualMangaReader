@@ -17,6 +17,7 @@ import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.service.listener.MangaCardListener
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import br.com.fenix.bilingualmangareader.util.helpers.FileUtil
 import br.com.fenix.bilingualmangareader.util.helpers.LibraryUtil
 import br.com.fenix.bilingualmangareader.view.adapter.history.HistoryCardAdapter
 import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity
@@ -44,17 +45,26 @@ class HistoryFragment : Fragment() {
         ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(mRecycleView)
         mListener = object : MangaCardListener {
             override fun onClick(manga: Manga) {
-                if (!manga.excluded) {
+                if (!manga.excluded && manga.file.exists()) {
                     val intent = Intent(context, ReaderActivity::class.java)
                     val bundle = Bundle()
                     manga.lastAccess = Date()
+                    bundle.putSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY, LibraryUtil.getDefault(requireContext()))
                     bundle.putString(GeneralConsts.KEYS.MANGA.NAME, manga.title)
                     bundle.putInt(GeneralConsts.KEYS.MANGA.MARK, manga.bookMark)
                     bundle.putSerializable(GeneralConsts.KEYS.OBJECT.MANGA, manga)
                     intent.putExtras(bundle)
                     context?.startActivity(intent)
                     mViewModel.updateLastAccess(manga)
-                } else
+                } else {
+                    if (!manga.excluded) {
+                        manga.excluded = true
+                        mViewModel.updateDelete(manga)
+                        mRecycleView.adapter?.let {
+                            (it as HistoryCardAdapter).notifyItemChanged(manga)
+                        }
+                    }
+
                     AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
                         .setTitle(getString(R.string.manga_excluded))
                         .setMessage(manga.file.path)
@@ -63,11 +73,12 @@ class HistoryFragment : Fragment() {
                         ) { _, _ -> }
                         .create()
                         .show()
+                }
             }
 
             override fun onClickLong(manga: Manga, view: View, position: Int) {
                 val wrapper = ContextThemeWrapper(requireContext(), R.style.PopupMenu)
-                val popup = PopupMenu(wrapper, view)
+                val popup = PopupMenu(wrapper, view, 0,  R.attr.popupMenuStyle, R.style.PopupMenu)
                 popup.menuInflater.inflate(R.menu.menu_book, popup.menu)
 
                 if (manga.favorite)
@@ -105,6 +116,7 @@ class HistoryFragment : Fragment() {
                                     .create()
                             dialog.show()
                         }
+                        R.id.menu_book_copy_name -> FileUtil(requireContext()).copyName(manga)
                     }
                     true
                 }

@@ -3,8 +3,8 @@ package br.com.fenix.bilingualmangareader.util.constants
 class ReaderConsts {
 
     object READER {
-        const val MAX_PAGE_HEIGHT = 1600
-        const val MAX_PAGE_WIDTH = 2000
+        const val MAX_PAGE_HEIGHT = 2400
+        const val MAX_PAGE_WIDTH = 3000
         const val OFF_SCREEN_PAGE_LIMIT = 6
     }
 

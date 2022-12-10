@@ -8,18 +8,25 @@ import androidx.appcompat.widget.Toolbar
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.entity.Manga
+import br.com.fenix.bilingualmangareader.model.enums.Themes
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.LibraryUtil
+import br.com.fenix.bilingualmangareader.util.helpers.MenuUtil
 
 
 class MangaDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val theme = Themes.valueOf(GeneralConsts.getSharedPreferences(this).getString(GeneralConsts.KEYS.THEME.THEME_USED, Themes.ORIGINAL.toString())!!)
+        setTheme(theme.getValue())
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_manga_detail)
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar_manga_detail)
+        MenuUtil.tintToolbar(toolbar, theme)
         setSupportActionBar(toolbar)
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(true)
 

@@ -10,11 +10,11 @@
 
     <TextView
         android:id="@+id/history_divider_title"
+        style="@style/TextTitle.History"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:textAppearance="?attr/textAppearanceTitleMedium"
-        android:textColor="@color/on_secondary"
         android:textSize="@dimen/history_divider_title" />
 
 </LinearLayout>

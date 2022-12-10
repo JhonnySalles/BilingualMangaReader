@@ -1,23 +1,37 @@
 package br.com.fenix.bilingualmangareader.util.helpers
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.annotation.SuppressLint
 import android.app.ActivityManager
-import android.content.Context
-import android.content.DialogInterface
-import android.content.SharedPreferences
+import android.content.*
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.PointF
 import android.util.DisplayMetrics
+import android.util.TypedValue
+import android.view.MotionEvent
+import android.view.ScaleGestureDetector
+import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener
+import android.view.View
+import android.widget.ImageView
+import android.widget.Toast
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
 import androidx.appcompat.app.AlertDialog
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Library
+import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.enums.Languages
+import br.com.fenix.bilingualmangareader.model.enums.Themes
 import br.com.fenix.bilingualmangareader.service.parses.Parse
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.*
+import java.lang.Math.abs
 import java.math.BigInteger
 import java.nio.channels.FileChannel
 import java.security.MessageDigest
@@ -27,6 +41,8 @@ import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import kotlin.experimental.and
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.roundToInt
 
 
@@ -334,11 +350,24 @@ class Util {
 
         private fun getNumberAtEnd(str: String): String {
             var numbers = ""
-            val m: Matcher = Pattern.compile("\\d+$").matcher(str)
+            val m: Matcher = Pattern.compile("\\d+$|\\d+\\w$|\\d+\\.\\d+$|(\\(|\\{|\\[)\\d+(\\)|\\]|\\})$").matcher(str)
             while (m.find())
                 numbers = m.group()
 
             return numbers
+        }
+
+        private fun getPadding(name: String, numbers: String): String {
+            return if (name.contains(Regex("\\d+$")))
+                numbers.padStart(10, '0')
+            else if (name.contains(Regex("\\d+\\w\$")))
+                numbers.replace(Regex("\\w\$"), "").padStart(10, '0') + numbers.replace(Regex("\\d+"), "")
+            else if (name.contains(Regex("\\d+\\.\\d+\$")))
+                numbers.replace(Regex("\\.\\d+\$"), "").padStart(10, '0') + '.' + numbers.replace(Regex("\\d+\\."), "")
+            else if (name.contains(Regex("(\\(|\\{|\\[)\\d+(\\)|\\]|\\})$")))
+                numbers.replace(Regex("[^0-9]"), "").padStart(10, '0')
+            else
+                numbers
         }
 
         fun getNormalizedNameOrdering(path: String): String {
@@ -347,7 +376,7 @@ class Util {
             return if (numbers.isEmpty())
                 getNameFromPath(path)
             else
-                name.substring(0, name.lastIndexOf(numbers)) + numbers.padStart(10, '0') + getExtensionFromPath(path)
+                name.substring(0, name.lastIndexOf(numbers)) + getPadding(name, numbers) + getExtensionFromPath(path)
         }
 
         var googleLang: String = ""
@@ -381,9 +410,39 @@ class Util {
                 ""
         }
 
+        private var mapThemes: HashMap<String, Themes>? = null
+        fun getThemes(context: Context): HashMap<String, Themes> {
+            return if (mapThemes != null)
+                mapThemes!!
+            else {
+                val themes = context.resources.getStringArray(R.array.themes)
+                mapThemes = hashMapOf(
+                    themes[0] to Themes.ORIGINAL,
+                    themes[1] to Themes.BLOOD_RED,
+                    themes[2] to Themes.BLUE,
+                    themes[3] to Themes.FOREST_GREEN,
+                    themes[4] to Themes.GREEN,
+                    themes[5] to Themes.NEON_BLUE,
+                    themes[6] to Themes.NEON_GREEN,
+                    themes[7] to Themes.OCEAN_BLUE,
+                    themes[8] to Themes.PINK,
+                    themes[9] to Themes.RED,
+                )
+                mapThemes!!
+            }
+        }
+
+        fun themeDescription(context: Context, themes: Themes): String {
+            val mapThemes = getThemes(context)
+            return if (mapThemes.containsValue(themes))
+                mapThemes.filter { themes == it.value }.keys.first()
+            else
+                ""
+        }
+
         fun choiceLanguage(
             context: Context,
-            theme: Int = R.style.AppCompatMaterialAlertDialogStyle,
+            theme: Int = R.style.AppCompatMaterialAlertList,
             ignoreGoogle: Boolean = true,
             setLanguage: (language: Languages) -> (Unit)
         ) {
@@ -418,6 +477,14 @@ class Util {
         fun setBold(text: String): String =
             "<b>$text</b>"
 
+        fun setVerticalText(text: String): String {
+            var vertical: String = ""
+            for (c in text)
+                vertical += c + "\n"
+
+            return vertical
+        }
+
         fun getDivideStrings(text: String, delimiter: Char = '\n', occurrences: Int = 10): Pair<String, String> {
             var postion = text.length
             var occurence = 0
@@ -435,6 +502,17 @@ class Util {
 
             return Pair(string1, string2)
         }
+
+        @ColorInt
+        fun Context.getColorFromAttr(
+            @AttrRes attrColor: Int,
+            typedValue: TypedValue = TypedValue(),
+            resolveRefs: Boolean = true
+        ): Int {
+            theme.resolveAttribute(attrColor, typedValue, resolveRefs)
+            return typedValue.data
+        }
+
     }
 }
 
@@ -475,11 +553,35 @@ class FileUtil(val context: Context) {
         }
     }
 
+    fun copyName(file: File) {
+        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("Copied Text", file.name)
+        clipboard.setPrimaryClip(clip)
+
+        Toast.makeText(
+            context,
+            context.getString(R.string.action_copy_name, file.name),
+            Toast.LENGTH_LONG
+        ).show()
+    }
+
+    fun copyName(manga: Manga) {
+        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("Copied Text", manga.fileName)
+        clipboard.setPrimaryClip(clip)
+
+        Toast.makeText(
+            context,
+            context.getString(R.string.action_copy_name, manga.fileName),
+            Toast.LENGTH_LONG
+        ).show()
+    }
+
 }
 
 class MsgUtil {
     companion object MsgUtil {
-        fun validPermission(grantResults: IntArray) : Boolean {
+        fun validPermission(grantResults: IntArray): Boolean {
             var permiss = true
             for (grant in grantResults)
                 if (grant != PackageManager.PERMISSION_GRANTED) {
@@ -501,7 +603,7 @@ class MsgUtil {
             context: Context,
             title: String,
             message: String,
-            theme: Int = R.style.AppCompatMaterialAlertDialogStyle,
+            theme: Int = R.style.AppCompatMaterialAlertDialog,
             crossinline action: (dialog: DialogInterface, which: Int) -> Unit
         ) {
             MaterialAlertDialogBuilder(context, theme)
@@ -518,7 +620,7 @@ class MsgUtil {
             context: Context,
             title: String,
             message: String,
-            theme: Int = R.style.AppCompatMaterialAlertDialogStyle,
+            theme: Int = R.style.AppCompatMaterialAlertDialog,
             crossinline positiveAction: (dialog: DialogInterface, which: Int) -> Unit,
             crossinline negativeAction: (dialog: DialogInterface, which: Int) -> Unit
         ) {
@@ -562,6 +664,63 @@ class LibraryUtil {
             val preference: SharedPreferences = GeneralConsts.getSharedPreferences(context)
             val path = preference.getString(GeneralConsts.KEYS.LIBRARY.FOLDER, "") ?: ""
             return Library(GeneralConsts.KEYS.LIBRARY.DEFAULT, context.getString(R.string.library_default), path)
+        }
+    }
+}
+
+class ImageUtil {
+    companion object ImageUtils {
+        private var initTouchDown = 0L
+        private var initPos: PointF = PointF(0f, 0f)
+        private var mScaleFactor = 1.0f
+
+        @SuppressLint("ClickableViewAccessibility")
+        fun setZoomPinch(context: Context, image: ImageView, oneClick: () -> Unit) {
+            val mScaleListener = object : SimpleOnScaleGestureListener() {
+                override fun onScale(detector: ScaleGestureDetector): Boolean {
+                    mScaleFactor *= detector.scaleFactor
+                    mScaleFactor = max(1.0f, min(mScaleFactor, 5.0f))
+                    image.scaleX = mScaleFactor
+                    image.scaleY = mScaleFactor
+                    return true
+                }
+            }
+            val mScaleGestureDetector = ScaleGestureDetector(context, mScaleListener)
+            image.setOnTouchListener { view: View, event: MotionEvent ->
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        initTouchDown = System.currentTimeMillis()
+                        initPos = PointF(event.x, event.y)
+                    }
+                    MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                        image.animate()
+                            .scaleX(1.0f)
+                            .scaleY(1.0f)
+                            .setDuration(300L)
+                            .setListener(object : AnimatorListenerAdapter() {
+                                override fun onAnimationEnd(animation: Animator?) {
+                                    super.onAnimationEnd(animation)
+                                    mScaleFactor = 1.0f
+                                    image.scaleX = mScaleFactor
+                                    image.scaleY = mScaleFactor
+                                }
+                            }).start()
+
+                        val isTouchDuration = System.currentTimeMillis() - initTouchDown < 300
+                        val isTouchLength = abs(event.x - initPos.x) + abs(event.y - initPos.y) < 10
+
+                        if (isTouchLength && isTouchDuration)
+                            view.performClick()
+                    }
+                    else -> {
+                        mScaleGestureDetector.onTouchEvent(event)
+                    }
+                }
+
+                true
+            }
+
+            image.setOnClickListener { oneClick() }
         }
     }
 }

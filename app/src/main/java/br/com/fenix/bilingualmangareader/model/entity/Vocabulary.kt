@@ -17,13 +17,17 @@ data class Vocabulary(
     @SerializedName("palavra")
     val word: String,
 
-    @ColumnInfo(name = DataBaseConsts.VOCABULARY.COLUMNS.MEANING)
-    @SerializedName("significado")
-    val meaning: String,
+    @ColumnInfo(name = DataBaseConsts.VOCABULARY.COLUMNS.PORTUGUESE)
+    @SerializedName("portugues")
+    val portuguese: String?,
+
+    @ColumnInfo(name = DataBaseConsts.VOCABULARY.COLUMNS.ENGLISH)
+    @SerializedName("ingles")
+    val english: String?,
 
     @ColumnInfo(name = DataBaseConsts.VOCABULARY.COLUMNS.READING)
     @SerializedName("leitura")
-    val reading: String,
+    val reading: String?,
 
     @ColumnInfo(name = DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM)
     val basicForm: String?,
@@ -33,7 +37,7 @@ data class Vocabulary(
     val revised: Boolean,
 
     @ColumnInfo(name = DataBaseConsts.VOCABULARY.COLUMNS.FAVORITE)
-    val favorite: Boolean
+    var favorite: Boolean
 ) {
 
     @Ignore
@@ -41,4 +45,24 @@ data class Vocabulary(
 
     @Ignore
     var appears: Int = 0
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Vocabulary
+
+        if (id != other.id) return false
+        if (word != other.word) return false
+        if (basicForm != other.basicForm) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id?.hashCode() ?: 0
+        result = 31 * result + word.hashCode()
+        result = 31 * result + (basicForm?.hashCode() ?: 0)
+        return result
+    }
 }

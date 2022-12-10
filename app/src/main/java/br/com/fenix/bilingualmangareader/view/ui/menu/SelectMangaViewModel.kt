@@ -31,7 +31,13 @@ class SelectMangaViewModel(application: Application) : AndroidViewModel(applicat
     private var mListMangas = MutableLiveData<MutableList<Manga>>(mutableListOf())
     val listMangas: LiveData<MutableList<Manga>> = mListMangas
 
+    var id: Long = -1
     var manga: String = ""
+
+    fun clearMangaSelected() {
+        id = -1
+        manga = ""
+    }
 
     fun setDefaultLibrary(library: Library) {
         if (mLibrary.id == library.id)
@@ -63,12 +69,17 @@ class SelectMangaViewModel(application: Application) : AndroidViewModel(applicat
             mListMangas.value = list.toMutableList()
             mListMangasFull.value = list.toMutableList()
         }
+
+        prepareList()
     }
 
     fun getLibrary() =
         mLibrary
 
-    fun list(manga: String, refreshComplete: (Boolean) -> (Unit)) {
+    fun list(id: Long, manga: String, refreshComplete: (Boolean) -> (Unit)) {
+        this.id = id
+        this.manga = manga
+
         val list = mMangaRepository.list(mLibrary)
         if (list != null) {
             if (mListMangasFull.value == null || mListMangasFull.value!!.isEmpty()) {
@@ -87,7 +98,7 @@ class SelectMangaViewModel(application: Application) : AndroidViewModel(applicat
             mListMangas.value = mutableListOf()
         }
 
-        sorted(manga)
+        prepareList()
         refreshComplete(mListMangas.value!!.isNotEmpty())
     }
 
@@ -96,6 +107,12 @@ class SelectMangaViewModel(application: Application) : AndroidViewModel(applicat
         list.add(mDefaultLibrary)
         list.addAll(mLibraryRepository.list())
         return list
+    }
+
+    private fun prepareList() {
+        mListMangasFull.value?.removeIf { it.id == id }
+        mListMangas.value?.removeIf { it.id == id }
+        sorted(manga)
     }
 
     fun sorted(manga: String) {

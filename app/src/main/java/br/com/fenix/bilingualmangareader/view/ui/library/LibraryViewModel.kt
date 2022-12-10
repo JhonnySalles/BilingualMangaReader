@@ -16,8 +16,10 @@ import java.util.*
 
 class LibraryViewModel(application: Application) : AndroidViewModel(application), Filterable {
 
+    private var mStackLibrary = mutableMapOf<String, Triple<Int,Library,MutableList<Manga>>>()
     private var mLibrary: Library = Library(GeneralConsts.KEYS.LIBRARY.DEFAULT)
     private val mMangaRepository: MangaRepository = MangaRepository(application.applicationContext)
+    private val mPreferences = GeneralConsts.getSharedPreferences(application.applicationContext)
 
     private var mListMangasFull = MutableLiveData<MutableList<Manga>>(mutableListOf())
     private var mListMangas = MutableLiveData<MutableList<Manga>>(mutableListOf())
@@ -36,7 +38,31 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         mLibrary = library
     }
 
+    fun saveLastLibrary() {
+        mPreferences.edit().putLong(GeneralConsts.KEYS.LIBRARY.LAST_LIBRARY, mLibrary.id ?: GeneralConsts.KEYS.LIBRARY.DEFAULT).apply()
+    }
+
     fun getLibrary() = mLibrary
+
+    fun existStack(id: String) : Boolean = mStackLibrary.contains(id)
+
+    fun restoreLastStackLibrary(id: String) {
+        if (mStackLibrary.contains(id)) {
+            mStackLibrary.remove(id)
+            for (item in mStackLibrary) {
+                if (item.value.first == mStackLibrary.size) {
+                    mLibrary = item.value.second
+                    mListMangasFull.value = item.value.third
+                    mListMangas.value = item.value.third.toMutableList()
+                    break
+                }
+            }
+        }
+    }
+
+    fun addStackLibrary(id: String, library: Library) = mStackLibrary.put(id, Triple(mStackLibrary.size +1, library, mListMangasFull.value!!))
+
+    fun removeStackLibrary(id: String) = mStackLibrary.remove(id)
 
     fun save(obj: Manga): Manga {
         if (obj.id == 0L)
@@ -130,17 +156,14 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
                 change = true
                 for (manga in list) {
                     if (mListMangasFull.value!!.contains(manga)) {
-                        val alter = mListMangasFull.value!![mListMangasFull.value!!.indexOf(manga)]
-                        alter.bookMark = manga.bookMark
-                        alter.favorite = manga.favorite
-                        alter.lastAccess = manga.lastAccess
+                        mListMangasFull.value!![mListMangasFull.value!!.indexOf(manga)].update(manga)
                         val index = mListMangas.value!!.indexOf(manga)
                         if (index > -1)
                             indexes.add(Pair(ListMod.MOD, index))
                     } else {
                         mListMangas.value!!.add(manga)
                         mListMangasFull.value!!.add(manga)
-                        indexes.add(Pair(ListMod.ADD, mListMangas.value!!.size -1))
+                        indexes.add(Pair(ListMod.ADD, mListMangas.value!!.size))
                     }
                 }
             }
@@ -159,7 +182,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         } else {
             val list = mMangaRepository.list(mLibrary)
             if (list != null) {
-                indexes.add(Pair(ListMod.FULL, list.size-1))
+                indexes.add(Pair(ListMod.FULL, list.size))
                 mListMangas.value = list.toMutableList()
                 mListMangasFull.value = list.toMutableList()
             } else {
@@ -196,22 +219,18 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
     fun sorted(order: Order) {
         when (order) {
             Order.Date -> {
-                mListMangas.value!!.sortBy { it.dateCreate }
                 mListMangasFull.value!!.sortBy { it.dateCreate }
                 mListMangas.value!!.sortBy { it.dateCreate }
             }
             Order.LastAccess -> {
-                mListMangas.value!!.sortWith(compareByDescending<Manga> { it.lastAccess }.thenBy { it.name })
                 mListMangasFull.value!!.sortWith(compareByDescending<Manga> { it.lastAccess }.thenBy { it.name })
                 mListMangas.value!!.sortWith(compareByDescending<Manga> { it.lastAccess }.thenBy { it.name })
             }
             Order.Favorite -> {
-                mListMangas.value!!.sortWith(compareByDescending<Manga> { it.favorite }.thenBy { it.name })
                 mListMangasFull.value!!.sortWith(compareByDescending<Manga> { it.favorite }.thenBy { it.name })
                 mListMangas.value!!.sortWith(compareByDescending<Manga> { it.favorite }.thenBy { it.name })
             }
             else -> {
-                mListMangas.value!!.sortBy { it.name }
                 mListMangasFull.value!!.sortBy { it.name }
                 mListMangas.value!!.sortBy { it.name }
             }

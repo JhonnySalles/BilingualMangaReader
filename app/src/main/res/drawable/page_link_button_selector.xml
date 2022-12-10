@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item app:state_expanded="true" android:color="@color/file_link_buttons_expanded"  />
+    <item android:state_enabled="false" android:color="@color/file_link_buttons_disabled"  />
+    <item android:color="@color/file_link_buttons" />
+</selector>

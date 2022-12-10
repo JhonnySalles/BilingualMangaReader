@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Manga
-import br.com.fenix.bilingualmangareader.model.entity.Text
 import br.com.fenix.bilingualmangareader.service.controller.ImageCoverController
 import br.com.fenix.bilingualmangareader.service.listener.MangaCardListener
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
@@ -31,7 +30,9 @@ class HistoryViewHolder(itemView: View, private val listener: MangaCardListener)
         val mangaSubTitle = itemView.findViewById<TextView>(R.id.history_sub_title)
         val mangaLibrary = itemView.findViewById<TextView>(R.id.history_library)
         val mangaFavorite = itemView.findViewById<ImageView>(R.id.history_favorite)
+        val mangaSubtitle = itemView.findViewById<ImageView>(R.id.history_has_subtitle)
         val cardView = itemView.findViewById<LinearLayout>(R.id.history_card)
+
         cardView.setOnClickListener { listener.onClick(manga) }
         cardView.setOnLongClickListener {
             listener.onClickLong(manga, it, layoutPosition)
@@ -58,8 +59,9 @@ class HistoryViewHolder(itemView: View, private val listener: MangaCardListener)
         } else
             mangaSubTitle.text = manga.subTitle
 
-        mangaLibrary.text = manga.library.title
+        mangaLibrary.text = manga.library.title.uppercase()
         mangaFavorite.visibility = if (manga.favorite) View.VISIBLE else View.GONE
+        mangaSubtitle.visibility  = if (manga.hasSubtitle) View.VISIBLE else View.GONE
 
         if (manga.excluded)
             cardView.setBackgroundResource(R.drawable.history_custom_ripple_item_deleted)

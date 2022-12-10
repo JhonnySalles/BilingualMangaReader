@@ -3,15 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/manga_grid_card"
+    style="@style/AppBackground.Card"
     android:layout_width="@dimen/manga_grid_card_layout_width"
     android:layout_height="@dimen/manga_grid_card_layout_height"
-    android:layout_margin="8dp"
-    app:rippleColor="@color/ripple_color">
+    android:layout_margin="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/Card"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/primary"
         android:orientation="vertical">
 
         <!-- Media -->
@@ -20,7 +20,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
-            android:background="@color/primary_variant"
             android:scaleType="centerCrop"
             android:transitionName="transition_manga_cover"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -31,11 +30,9 @@
 
         <LinearLayout
             android:id="@+id/manga_grid_detail"
+            style="@style/Card.Detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="@color/primary_semitransparent"
-            android:orientation="vertical"
             android:paddingLeft="5dp"
             android:paddingTop="5dp"
             android:paddingRight="5dp"
@@ -48,39 +45,30 @@
             <!-- Title, secondary and supporting text -->
             <TextView
                 android:id="@+id/manga_grid_text_title"
+                style="@style/TextNormal.Card.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="5"
-                android:textAppearance="?attr/textAppearanceHeadline6"
-                android:textColor="@color/text_primary"
                 android:textSize="@dimen/manga_grid_title_size"
+                android:text="asdfasdfasdfasd"
                 android:transitionName="transition_manga_title"/>
 
             <TextView
                 android:id="@+id/manga_grid_sub_title"
+                style="@style/TextNormal.Card"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:layout_marginBottom="2dp"
-                android:ellipsize="end"
+                android:text="asdfasdfasdfasd"
                 android:singleLine="true"
-                android:textAppearance="?attr/textAppearanceSubtitle2"
-                android:textColor="@color/text_primary"
                 android:textSize="@dimen/manga_grid_sub_title" />
 
             <ProgressBar
                 android:id="@+id/manga_grid_progress"
-                style="?android:attr/progressBarStyleHorizontal"
+                style="@style/ProgressBar"
                 android:layout_width="match_parent"
                 android:layout_height="5dp"
-                android:background="@color/on_primary"
-                android:indeterminateTint="@color/secondary"
-                android:transitionName="transition_progress_bar"
-                android:max="100"
-                android:min="0"
-                android:progressBackgroundTint="@color/on_primary"
-                android:progressTint="@color/secondary" />
+                android:transitionName="transition_progress_bar"/>
 
         </LinearLayout>
 
@@ -88,16 +76,25 @@
 
     <ImageView
         android:id="@+id/manga_grid_favorite"
+        style="@style/IconFavorite"
         android:layout_width="@dimen/manga_grid_favorite"
         android:layout_height="@dimen/manga_grid_favorite"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
-        android:adjustViewBounds="true"
         android:background="@drawable/ic_favorite_mark_border"
-        android:backgroundTint="@color/on_primary"
-        android:padding="1dp"
         android:src="@drawable/ic_favorite_mark"
-        android:visibility="gone"
-        app:tint="@color/secondary" />
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/manga_grid_has_subtitle"
+        style="@style/IconFavorite"
+        android:layout_width="@dimen/manga_grid_subtitle"
+        android:layout_height="@dimen/manga_grid_subtitle"
+        android:layout_marginEnd="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/ic_subtitles_border"
+        android:layout_gravity="end"
+        android:src="@drawable/ic_subtitles"
+        android:visibility="gone"/>
 
 </com.google.android.material.card.MaterialCardView>

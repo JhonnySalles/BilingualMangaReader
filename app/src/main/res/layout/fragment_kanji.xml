@@ -12,7 +12,6 @@
             android:id="@+id/vocabulary_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -23,11 +22,10 @@
 
                 <TextView
                     android:id="@+id/kanji_title"
+                    style="@style/TextNormal.Inverse.Kanji"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:textAppearance="?attr/textAppearanceHeadline6"
-                    android:textColor="@color/text_secondary"
                     android:textSize="@dimen/kanji_title_size" />
 
                 <LinearLayout
@@ -39,18 +37,16 @@
 
                     <TextView
                         android:id="@+id/kanji_meaning_portuguese"
+                        style="@style/TextNormal.Inverse.Kanji"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?attr/textAppearanceHeadline6"
-                        android:textColor="@color/text_secondary"
                         android:textSize="@dimen/kanji_sub_title_size" />
 
                     <TextView
                         android:id="@+id/kanji_meaning_english"
+                        style="@style/TextNormal.Inverse.Kanji"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?attr/textAppearanceHeadline6"
-                        android:textColor="@color/text_secondary"
                         android:textSize="@dimen/kanji_sub_title_size" />
 
                 </LinearLayout>
@@ -61,33 +57,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/kanji_jlpt"
+                    style="@style/TextNormal.Kanji"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textAppearance="?attr/textAppearanceHeadline6"
-                    android:textColor="@color/text_primary"
                     android:textSize="@dimen/kanji_content_text_normal_size" />
 
                 <TextView
                     android:id="@+id/kanji_grade"
+                    style="@style/TextNormal.Kanji"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textAppearance="?attr/textAppearanceHeadline6"
-                    android:textColor="@color/text_primary"
                     android:textSize="@dimen/kanji_content_text_normal_size" />
 
                 <TextView
                     android:id="@+id/kanji_strokes"
+                    style="@style/TextNormal.Kanji"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textAppearance="?attr/textAppearanceHeadline6"
-                    android:textColor="@color/text_primary"
                     android:textSize="@dimen/kanji_content_text_normal_size" />
 
             </LinearLayout>
@@ -96,33 +91,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/kanji_frequence"
+                    style="@style/TextNormal.Kanji"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textAppearance="?attr/textAppearanceHeadline6"
-                    android:textColor="@color/text_primary"
                     android:textSize="@dimen/kanji_content_text_normal_size" />
 
                 <TextView
                     android:id="@+id/kanji_variant"
+                    style="@style/TextNormal.Kanji"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textAppearance="?attr/textAppearanceHeadline6"
-                    android:textColor="@color/text_primary"
                     android:textSize="@dimen/kanji_content_text_normal_size" />
 
                 <TextView
                     android:id="@+id/kanji_parts"
+                    style="@style/TextNormal.Kanji"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textAppearance="?attr/textAppearanceHeadline6"
-                    android:textColor="@color/text_primary"
                     android:textSize="@dimen/kanji_content_text_normal_size" />
 
             </LinearLayout>
@@ -132,33 +126,36 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/kanji_radical"
+                    style="@style/TextNormal.Kanji"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textAppearance="?attr/textAppearanceHeadline6"
-                    android:textColor="@color/text_primary"
                     android:textSize="@dimen/kanji_content_text_normal_size" />
 
             </LinearLayout>
 
             <TextView
                 android:id="@+id/kanji_memory_phrase_one"
+                style="@style/TextNormal.Kanji"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceHeadline6"
-                android:textColor="@color/text_primary"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
                 android:textSize="@dimen/kanji_content_text_small_size" />
 
             <TextView
                 android:id="@+id/kanji_memory_phrase_two"
+                style="@style/TextNormal.Kanji"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceHeadline6"
-                android:textColor="@color/text_primary"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
                 android:textSize="@dimen/kanji_content_text_small_size" />
 
             <LinearLayout
@@ -166,6 +163,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
                 android:baselineAligned="false"
                 android:orientation="horizontal">
 
@@ -178,18 +177,17 @@
 
                     <TextView
                         android:id="@+id/kanji_on_yomi_title"
+                        style="@style/TextNormal.Kanji"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?attr/textAppearanceHeadline6"
-                        android:textColor="@color/text_primary"
                         android:textSize="@dimen/kanji_content_text_big_size" />
 
                     <TextView
                         android:id="@+id/kanji_on_yomi_list"
+                        style="@style/TextNormal"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/margin_small"
-                        android:textColor="@color/text_primary"
                         android:textSize="@dimen/kanji_content_text_small_size"/>
                 </LinearLayout>
 
@@ -202,18 +200,17 @@
 
                     <TextView
                         android:id="@+id/kanji_kun_yomi_title"
+                        style="@style/TextNormal.Kanji"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?attr/textAppearanceHeadline6"
-                        android:textColor="@color/text_primary"
                         android:textSize="@dimen/kanji_content_text_big_size" />
 
                     <TextView
                         android:id="@+id/kanji_kun_yomi_list"
+                        style="@style/TextNormal"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/margin_small"
-                        android:textColor="@color/text_primary"
                         android:textSize="@dimen/kanji_content_text_small_size"/>
                 </LinearLayout>
             </LinearLayout>

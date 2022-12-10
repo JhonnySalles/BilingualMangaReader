@@ -5,17 +5,17 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+        style="@style/AppBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/on_primary"
         android:fitsSystemWindows="true"
         tools:context=".view.ui.reader.ReaderActivity">
 
         <FrameLayout
             android:id="@+id/root_frame_reader"
+            style="@style/AppBackground.Reader"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/primary"
             android:fitsSystemWindows="false" />
 
         <include
@@ -26,10 +26,10 @@
 
         <FrameLayout
             android:id="@+id/menu_popup_translate"
+            style="@style/AppBackground.Popup"
             android:layout_width="430dp"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:background="@color/primary"
             android:fitsSystemWindows="true"
             android:orientation="vertical"
             android:paddingTop="30dp"
@@ -37,23 +37,23 @@
 
             <ImageView
                 android:id="@+id/menu_translate_close"
+                style="@style/TextTitle.Popup"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|top"
                 android:contentDescription="@string/popup_reading_close"
                 android:scaleType="center"
-                android:src="@drawable/ic_close"
-                app:tint="@color/on_secondary" />
+                android:src="@drawable/ic_close" />
 
             <ImageView
                 android:id="@+id/menu_translate_floating_touch"
+                style="@style/TextTitle.Popup"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|top"
                 android:contentDescription="@string/popup_reading_floating_popup"
                 android:scaleType="center"
-                android:src="@drawable/ic_floating_window"
-                app:tint="@color/on_secondary" />
+                android:src="@drawable/ic_floating_window" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -63,18 +63,15 @@
 
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/popup_translate_tab"
+                    style="@style/PopupTab"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/primary"
                     app:tabGravity="fill"
                     app:tabMode="fixed"
                     app:tabPaddingBottom="0dp"
                     app:tabPaddingEnd="0dp"
                     app:tabPaddingStart="0dp"
-                    app:tabPaddingTop="0dp"
-                    app:tabSelectedTextColor="@color/secondary"
-                    app:tabTextAppearance="@style/PopupTab"
-                    app:tabTextColor="@color/on_secondary">
+                    app:tabPaddingTop="0dp">
 
                     <com.google.android.material.tabs.TabItem
                         android:id="@+id/tab_item_subtitle"
@@ -107,10 +104,10 @@
 
         <FrameLayout
             android:id="@+id/menu_popup_color"
+            style="@style/AppBackground.Popup"
             android:layout_width="430dp"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:background="@color/primary"
             android:fitsSystemWindows="true"
             android:orientation="vertical"
             android:paddingTop="30dp"
@@ -118,13 +115,13 @@
 
             <ImageView
                 android:id="@+id/menu_color_close"
+                style="@style/TextTitle.Popup"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|top"
                 android:contentDescription="@string/popup_reading_close"
                 android:scaleType="center"
-                android:src="@drawable/ic_close"
-                app:tint="@color/on_secondary" />
+                android:src="@drawable/ic_close" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -134,18 +131,15 @@
 
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/popup_color_tab"
+                    style="@style/PopupTab"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/primary"
                     app:tabGravity="fill"
                     app:tabMode="fixed"
                     app:tabPaddingBottom="0dp"
                     app:tabPaddingEnd="0dp"
                     app:tabPaddingStart="0dp"
-                    app:tabPaddingTop="0dp"
-                    app:tabSelectedTextColor="@color/secondary"
-                    app:tabTextAppearance="@style/PopupTab"
-                    app:tabTextColor="@color/on_secondary">
+                    app:tabPaddingTop="0dp">
 
                     <com.google.android.material.tabs.TabItem
                         android:id="@+id/tab_item_brightness"
