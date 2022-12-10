@@ -32,6 +32,7 @@ import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity
 import br.com.fenix.bilingualmangareader.view.ui.vocabulary.VocabularyActivity
 import com.google.android.material.button.MaterialButton
 import org.slf4j.LoggerFactory
+import java.io.File
 
 
 class MangaDetailFragment : Fragment() {
@@ -317,6 +318,14 @@ class MangaDetailFragment : Fragment() {
                 if (manga.file.exists()) {
                     val isDeleted = manga.file.delete()
                     mLOGGER.info("File deleted ${manga.name}: $isDeleted")
+
+                    if (isDeleted) {
+                        val folder = File(manga.folder)
+                        if (folder.isDirectory && folder.listFiles()?.isEmpty() == true) {
+                            folder.delete()
+                            mLOGGER.info("Folder deleted ${folder.name}")
+                        }
+                    }
                 }
                 (requireActivity() as MangaDetailActivity).onBackPressed()
             }

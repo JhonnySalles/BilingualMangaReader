@@ -339,6 +339,7 @@
     <string name="vocabulary_favorites">Favoritos</string>
     <string name="vocabulary_favorite">Favoritos</string>
     <string name="vocabulary_appear">Frequência: %d</string>
+    <string name="vocabulary_imported">Concluído importação do vocabulário.</string>
 
     <!-- KANJI -->
     <string name="kanji_jlpt"><b><i>jlpt:</i></b> N%d</string>

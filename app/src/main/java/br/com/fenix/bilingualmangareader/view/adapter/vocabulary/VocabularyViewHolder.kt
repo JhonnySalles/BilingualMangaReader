@@ -29,12 +29,12 @@ class VocabularyViewHolder(itemView: View, private val listener: VocabularyCardL
 
         content.setOnLongClickListener {
             val clipboard = itemView.context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            val clip = ClipData.newPlainText("Copied Text", vocabulary.word + " " + vocabulary.meaning)
+            val clip = ClipData.newPlainText("Copied Text", vocabulary.word + " " + vocabulary.portuguese)
             clipboard.setPrimaryClip(clip)
 
             Toast.makeText(
                 itemView.context,
-                itemView.context.getString(R.string.action_copy, vocabulary.word + " " + vocabulary.meaning),
+                itemView.context.getString(R.string.action_copy, vocabulary.word + " " + vocabulary.portuguese),
                 Toast.LENGTH_LONG
             ).show()
 
@@ -43,7 +43,7 @@ class VocabularyViewHolder(itemView: View, private val listener: VocabularyCardL
 
         title.text = Util.setVerticalText(vocabulary.word)
         reading.text = vocabulary.reading + (if (vocabulary.revised) '¹' else "")
-        meaning.text = vocabulary.meaning
+        meaning.text = vocabulary.portuguese
         appear.text = itemView.context.getString(R.string.vocabulary_appear, vocabulary.appears)
 
         favorite.setIconResource(if (vocabulary.favorite) R.drawable.ic_favorite_mark else R.drawable.ic_favorite_unmark)
