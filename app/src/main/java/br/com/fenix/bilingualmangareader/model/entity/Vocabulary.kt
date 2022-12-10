@@ -19,15 +19,15 @@ data class Vocabulary(
 
     @ColumnInfo(name = DataBaseConsts.VOCABULARY.COLUMNS.PORTUGUESE)
     @SerializedName("portugues")
-    val portuguese: String,
+    val portuguese: String?,
 
     @ColumnInfo(name = DataBaseConsts.VOCABULARY.COLUMNS.ENGLISH)
     @SerializedName("ingles")
-    val english: String,
+    val english: String?,
 
     @ColumnInfo(name = DataBaseConsts.VOCABULARY.COLUMNS.READING)
     @SerializedName("leitura")
-    val reading: String,
+    val reading: String?,
 
     @ColumnInfo(name = DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM)
     val basicForm: String?,

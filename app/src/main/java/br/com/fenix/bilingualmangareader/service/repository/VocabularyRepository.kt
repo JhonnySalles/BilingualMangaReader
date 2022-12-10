@@ -140,7 +140,7 @@ class VocabularyRepository(context: Context) {
 
                     mVocabImported.show()
                 } catch (e: Exception) {
-                    mLOGGER.error("Error process vocabulary.", e)
+                    mLOGGER.error("Error process vocabulary. ", e)
                 }
             }
         }

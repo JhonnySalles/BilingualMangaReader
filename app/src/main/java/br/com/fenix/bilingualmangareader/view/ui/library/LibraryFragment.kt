@@ -39,13 +39,16 @@ import br.com.fenix.bilingualmangareader.view.ui.manga_detail.MangaDetailActivit
 import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.slf4j.LoggerFactory
-import java.io.File
+import java.util.*
+import kotlin.collections.HashMap
 import kotlin.math.max
 
 
 class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private val mLOGGER = LoggerFactory.getLogger(LibraryFragment::class.java)
+
+    private val uniqueID: String = UUID.randomUUID().toString()
 
     private lateinit var mViewModel: LibraryViewModel
     private lateinit var mainFunctions: MainListener
@@ -79,6 +82,9 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         mViewModel = ViewModelProvider(requireActivity()).get(LibraryViewModel::class.java)
         loadConfig()
         setHasOptionsMenu(true)
+
+        if (!mViewModel.existStack(uniqueID))
+            mViewModel.addStackLibrary(uniqueID, mViewModel.getLibrary())
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -139,6 +145,11 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         Scanner.getInstance(requireContext()).removeUpdateHandler(mUpdateHandler)
         mainFunctions.clearLibraryTitle()
         super.onStop()
+    }
+
+    override fun onDestroy() {
+        mViewModel.removeStackLibrary(uniqueID)
+        super.onDestroy()
     }
 
     private inner class UpdateHandler : Handler() {
@@ -425,6 +436,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     searchView.isIconified = true
                 else {
                     isEnabled = false
+                    mViewModel.restoreLastStackLibrary(uniqueID)
                     requireActivity().onBackPressed()
                 }
             }
@@ -645,14 +657,6 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             if (manga.file.exists()) {
                 val isDeleted = manga.file.delete()
                 mLOGGER.info("File deleted ${manga.name}: $isDeleted")
-
-                if (isDeleted) {
-                    val folder = File(manga.folder)
-                    if (folder.isDirectory && folder.listFiles()?.isEmpty() == true) {
-                        folder.delete()
-                        mLOGGER.info("Folder deleted ${folder.name}")
-                    }
-                }
             }
         }
     }
