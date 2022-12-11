@@ -56,6 +56,13 @@ class VocabularyFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private val mDismissUpButton = Runnable { mScrollUp.hide() }
     private val mDismissDownButton = Runnable { mScrollDown.hide() }
 
+    private val mSetQuery = Runnable {
+        mViewModel.setQuery(
+            mMangaNameEditText.text?.toString() ?: "",
+            mVocabularyEditText.text?.toString() ?: ""
+        )
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -117,7 +124,13 @@ class VocabularyFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             }
 
             override fun onTextChanged(text: CharSequence?, start: Int, before: Int, count: Int) {
-                mViewModel.setQueryManga(text?.toString() ?: "")
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if (mHandler.hasCallbacks(mSetQuery))
+                        mHandler.removeCallbacks(mSetQuery)
+                } else
+                    mHandler.removeCallbacks(mSetQuery)
+
+                mHandler.postDelayed(mSetQuery, 1000)
             }
         })
 
@@ -129,7 +142,13 @@ class VocabularyFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             }
 
             override fun onTextChanged(text: CharSequence?, start: Int, before: Int, count: Int) {
-                mViewModel.setQueryVocabulary(text?.toString() ?: "")
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if (mHandler.hasCallbacks(mSetQuery))
+                        mHandler.removeCallbacks(mSetQuery)
+                } else
+                    mHandler.removeCallbacks(mSetQuery)
+
+                mHandler.postDelayed(mSetQuery, 1000)
             }
         })
 

@@ -149,6 +149,9 @@ class ImageCoverController private constructor() {
             image = retrieveBitmapFromCache(context, hash)
 
         if (image == null) {
+            if (!manga.file.exists())
+                return image
+
             val parse = ParseFactory.create(manga.file) ?: return image
             try {
                 if (parse is RarParse) {
