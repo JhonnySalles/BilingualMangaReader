@@ -45,11 +45,11 @@ class VocabularyMangaListViewHolder(itemView: View) : RecyclerView.ViewHolder(it
         appear.text = vocabulary.appears.toString()
 
         val image = when ((1..5).random()) {
-            1 -> GridViewHolder.mDefaultImageCover1
-            2 -> GridViewHolder.mDefaultImageCover2
-            3 -> GridViewHolder.mDefaultImageCover3
-            4 -> GridViewHolder.mDefaultImageCover4
-            else -> GridViewHolder.mDefaultImageCover5
+            1 -> mDefaultImageCover1
+            2 -> mDefaultImageCover2
+            3 -> mDefaultImageCover3
+            4 -> mDefaultImageCover4
+            else -> mDefaultImageCover5
         }
 
         cover.setImageBitmap(image)

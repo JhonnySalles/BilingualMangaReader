@@ -9,6 +9,7 @@ import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.entity.Vocabulary
 import br.com.fenix.bilingualmangareader.model.entity.VocabularyManga
 import br.com.fenix.bilingualmangareader.model.enums.Languages
+import br.com.fenix.bilingualmangareader.util.constants.DataBaseConsts
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -51,8 +52,6 @@ class VocabularyRepository(context: Context) {
 
     fun findByVocabulary(vocabulary: Vocabulary): Vocabulary {
         vocabulary.vocabularyMangas = findByVocabulary(vocabulary.id!!)
-        vocabulary.appears = 0
-        vocabulary.vocabularyMangas.forEach { vocabulary.appears += it.appears }
         return vocabulary
     }
 
