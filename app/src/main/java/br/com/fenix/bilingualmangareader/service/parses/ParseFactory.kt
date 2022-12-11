@@ -1,6 +1,7 @@
 package br.com.fenix.bilingualmangareader.service.parses
 
 import br.com.fenix.bilingualmangareader.util.helpers.Util
+import com.github.junrar.exception.RarException
 import com.github.junrar.exception.UnsupportedRarV5Exception
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -39,7 +40,7 @@ class ParseFactory {
                 parser.parse(file)
             } catch (e: UnsupportedRarV5Exception) {
                 mLOGGER.warn("UnsupportedRarV5Exception: Error when parse: " + e.message + " - File: " + file.name)
-            } catch (e: Exception) {
+            } catch (e: RarException) {
                 mLOGGER.warn("Error when parse: " + e.message + " - File: " + file.name, e)
                 return null
             } catch (e: IllegalArgumentException) {
@@ -47,6 +48,9 @@ class ParseFactory {
                 mLOGGER.warn("java.lang.IllegalArgumentException:" + cause + " Error when parse: " + e.message + " - File: " + file.name)
                 return null
             } catch (e: IOException) {
+                mLOGGER.warn("Error when parse: " + e.message + " - File: " + file.name, e)
+                return null
+            } catch (e: Exception) {
                 mLOGGER.warn("Error when parse: " + e.message + " - File: " + file.name, e)
                 return null
             }

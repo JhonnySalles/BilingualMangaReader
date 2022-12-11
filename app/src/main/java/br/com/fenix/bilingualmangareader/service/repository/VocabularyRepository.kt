@@ -15,6 +15,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
+import java.util.*
+import kotlin.streams.toList
 
 class VocabularyRepository(context: Context) {
 
@@ -22,6 +24,7 @@ class VocabularyRepository(context: Context) {
     private val mBase = DataBase.getDataBase(context)
     private var mDataBaseDAO = mBase.getVocabularyDao()
     private val mVocabImported = Toast.makeText(context, context.getString(R.string.vocabulary_imported), Toast.LENGTH_SHORT)
+    private var mLastImport : Long? = null
 
     fun save(obj: Vocabulary): Long {
         val exist = mDataBaseDAO.exists(obj.word, obj.basicForm ?: "")
@@ -111,37 +114,41 @@ class VocabularyRepository(context: Context) {
     }
 
     fun processVocabulary(idManga: Long?, chapters: List<Chapter>) {
-        if (idManga == null || chapters.isEmpty())
+        if (idManga == null || chapters.isEmpty() || idManga == mLastImport)
             return
 
         CoroutineScope(Dispatchers.IO).launch {
             async {
                 try {
-                    val chaptersList = chapters.toList()
-                    val list = mutableListOf<Vocabulary>()
+                    val chaptersList = chapters.parallelStream()
+                        .filter(Objects::nonNull)
+                        .filter { it.language == Languages.JAPANESE && it.vocabulary.isNotEmpty() }
+                        .toList()
 
-                    chaptersList.parallelStream().filter { it.language == Languages.JAPANESE && it.vocabulary.isNotEmpty() }
+                    val list = mutableSetOf<Vocabulary>()
+                    val pages = mutableListOf<Vocabulary>()
+
+                    chaptersList.parallelStream()
                         .forEach {
                             for (vocabulary in it.vocabulary)
                                 if (!list.contains(vocabulary))
                                     list.add(vocabulary)
+
+                            it.pages.parallelStream().forEach { p -> pages.addAll(p.vocabulary) }
                         }
 
                     for (vocabulary in list) {
                         if (vocabulary != null) {
                             var appears = 0
 
-                            chaptersList.parallelStream().filter { it.language == Languages.JAPANESE && it.vocabulary.isNotEmpty() }
-                                .forEach { c ->
-                                    c.pages.parallelStream()
-                                        .forEach { p -> p.vocabulary.parallelStream().forEach { v -> if (v == vocabulary) appears++ } }
-                                }
+                            pages.parallelStream().forEach { v -> if (v == vocabulary) appears++ }
 
                             vocabulary.id = save(vocabulary)
                             vocabulary.id?.let { insert(idManga, it, appears) }
                         }
                     }
 
+                    mLastImport = idManga
                     mVocabImported.show()
                 } catch (e: Exception) {
                     mLOGGER.error("Error process vocabulary. ", e)
