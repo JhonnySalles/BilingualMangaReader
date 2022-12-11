@@ -190,11 +190,12 @@ class Migrations {
 
                 database.execSQL(
                     "CREATE TABLE " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + " (" +
-                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + " INTEGER UNIQUE, " +
-                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY + " INTEGER UNIQUE," +
-                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.APPEARS + "  INTEGER DEFAULT 0," +
+                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID + " INTEGER PRIMARY KEY, " +
+                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + " INTEGER NOT NULL UNIQUE, " +
+                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY + " INTEGER NOT NULL UNIQUE," +
+                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.APPEARS + "  INTEGER DEFAULT 0 NOT NULL," +
                             " FOREIGN KEY(" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA +") REFERENCES " + DataBaseConsts.MANGA.TABLE_NAME + "(" + DataBaseConsts.MANGA.COLUMNS.ID + ")," +
-                            " FOREIGN KEY(" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY +") REFERENCES " + DataBaseConsts.LIBRARIES.TABLE_NAME + "(" + DataBaseConsts.LIBRARIES.COLUMNS.ID + "))"
+                            " FOREIGN KEY(" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY +") REFERENCES " + DataBaseConsts.VOCABULARY.TABLE_NAME + "(" + DataBaseConsts.VOCABULARY.COLUMNS.ID + "))"
                 )
 
                 database.execSQL(
@@ -291,11 +292,12 @@ class Migrations {
 
                 database.execSQL(
                     "CREATE TABLE " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + " (" +
-                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + " INTEGER UNIQUE, " +
-                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY + " INTEGER UNIQUE," +
-                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.APPEARS + "  INTEGER DEFAULT 0," +
+                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID + " INTEGER PRIMARY KEY, " +
+                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + " INTEGER NOT NULL UNIQUE, " +
+                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY + " INTEGER NOT NULL UNIQUE," +
+                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.APPEARS + "  INTEGER DEFAULT 0 NOT NULL," +
                             " FOREIGN KEY(" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA +") REFERENCES " + DataBaseConsts.MANGA.TABLE_NAME + "(" + DataBaseConsts.MANGA.COLUMNS.ID + ")," +
-                            " FOREIGN KEY(" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY +") REFERENCES " + DataBaseConsts.LIBRARIES.TABLE_NAME + "(" + DataBaseConsts.LIBRARIES.COLUMNS.ID + "))"
+                            " FOREIGN KEY(" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY +") REFERENCES " + DataBaseConsts.VOCABULARY.TABLE_NAME + "(" + DataBaseConsts.VOCABULARY.COLUMNS.ID + "))"
                 )
 
                 mLOGGER.info("Insert initial vocabulary data...")
