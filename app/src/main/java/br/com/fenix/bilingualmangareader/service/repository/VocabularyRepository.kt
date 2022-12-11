@@ -116,9 +116,10 @@ class VocabularyRepository(context: Context) {
         CoroutineScope(Dispatchers.IO).launch {
             async {
                 try {
+                    val chaptersList = chapters.toList()
                     val list = mutableListOf<Vocabulary>()
 
-                    chapters.parallelStream().filter { it.language == Languages.JAPANESE && it.vocabulary.isNotEmpty() }
+                    chaptersList.parallelStream().filter { it.language == Languages.JAPANESE && it.vocabulary.isNotEmpty() }
                         .forEach {
                             for (vocabulary in it.vocabulary)
                                 if (!list.contains(vocabulary))
@@ -126,16 +127,18 @@ class VocabularyRepository(context: Context) {
                         }
 
                     for (vocabulary in list) {
-                        var appears = 0
+                        if (vocabulary != null) {
+                            var appears = 0
 
-                        chapters.parallelStream().filter { it.language == Languages.JAPANESE && it.vocabulary.isNotEmpty() }
-                            .forEach { c ->
-                                c.pages.parallelStream()
-                                    .forEach { p -> p.vocabulary.parallelStream().forEach { v -> if (v == vocabulary) appears++ } }
-                            }
+                            chaptersList.parallelStream().filter { it.language == Languages.JAPANESE && it.vocabulary.isNotEmpty() }
+                                .forEach { c ->
+                                    c.pages.parallelStream()
+                                        .forEach { p -> p.vocabulary.parallelStream().forEach { v -> if (v == vocabulary) appears++ } }
+                                }
 
-                        vocabulary.id = save(vocabulary)
-                        vocabulary.id?.let { insert(idManga, it, appears) }
+                            vocabulary.id = save(vocabulary)
+                            vocabulary.id?.let { insert(idManga, it, appears) }
+                        }
                     }
 
                     mVocabImported.show()
