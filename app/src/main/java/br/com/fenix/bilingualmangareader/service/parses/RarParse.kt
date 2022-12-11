@@ -3,6 +3,7 @@ package br.com.fenix.bilingualmangareader.service.parses
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import com.github.junrar.Archive
 import com.github.junrar.exception.RarException
+import com.github.junrar.exception.UnsupportedRarV5Exception
 import com.github.junrar.rarfile.FileHeader
 import java.io.*
 
@@ -15,11 +16,8 @@ class RarParse : Parse {
     private var mSubtitles = ArrayList<FileHeader>()
 
     override fun parse(file: File?) {
-        mArchive = try {
-            Archive(file)
-        } catch (e: RarException) {
-            throw IOException("Unable to open archive")
-        }
+        mArchive = Archive(file)
+
         var header = mArchive!!.nextFileHeader()
         while (header != null) {
             if (!header.isDirectory) {
