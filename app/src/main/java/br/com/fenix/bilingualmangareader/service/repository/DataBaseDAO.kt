@@ -256,8 +256,13 @@ abstract class VocabularyDAO : DataBaseDAO<Vocabulary> {
     )
     abstract fun exists(vocabulary: String, basicForm: String): Vocabulary?
 
-    @Query("SELECT * FROM " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + " WHERE " + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY + " = :idVocabulary GROUP BY " + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA)
-    abstract fun findByVocabulary(idVocabulary: Long): List<VocabularyManga>
+    @Query("SELECT V.*, (CASE WHEN LENGTH(:mangaName) <> 0 THEN M." + DataBaseConsts.MANGA.COLUMNS.TITLE + " LIKE :mangaName || '%' ELSE 0 END) AS Ord " +
+            " FROM " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + " V " +
+            " INNER JOIN " + DataBaseConsts.MANGA.TABLE_NAME + " M ON M." + DataBaseConsts.MANGA.COLUMNS.ID + " = V." + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA +
+            " WHERE " + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY + " = :idVocabulary " +
+            " GROUP BY " + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA +
+            " ORDER BY Ord DESC, M." + DataBaseConsts.MANGA.COLUMNS.TITLE + " ASC")
+    abstract fun findByVocabulary(mangaName: String, idVocabulary: Long): List<VocabularyManga>
 
     @Query("SELECT * FROM " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + " WHERE " + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + " = :idManga GROUP BY " + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY)
     abstract fun findByManga(idManga: Long): List<VocabularyManga>

@@ -50,20 +50,22 @@ class VocabularyRepository(context: Context) {
             mDataBaseDAO.list(favorite)
     }
 
-    fun findByVocabulary(vocabulary: Vocabulary): Vocabulary {
-        vocabulary.vocabularyMangas = findByVocabulary(vocabulary.id!!)
+    fun findByVocabulary(mangaName: String, vocabulary: Vocabulary): Vocabulary {
+        vocabulary.vocabularyMangas = findByVocabulary(mangaName, vocabulary.id!!)
         return vocabulary
     }
 
 
-    private val manga: Set<Manga> = setOf()
-    private fun findByVocabulary(idVocabulary: Long): List<VocabularyManga> {
-        val list = mDataBaseDAO.findByVocabulary(idVocabulary)
+    private val manga: Set<Manga> = mutableSetOf()
+    private fun findByVocabulary(mangaName: String, idVocabulary: Long): List<VocabularyManga> {
+        val list = mDataBaseDAO.findByVocabulary(mangaName, idVocabulary)
         list.forEach {
             it.manga = manga.firstOrNull { m -> m.id == it.idManga }
 
-            if (it.manga == null)
+            if (it.manga == null) {
                 it.manga = mDataBaseDAO.getManga(it.idManga)
+                manga.plus(it.manga)
+            }
         }
         return list
     }

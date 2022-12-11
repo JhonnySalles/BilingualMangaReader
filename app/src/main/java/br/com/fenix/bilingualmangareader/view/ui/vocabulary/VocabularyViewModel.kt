@@ -22,7 +22,7 @@ class VocabularyViewModel(application: Application) : AndroidViewModel(applicati
             list
         }.liveData.map { live ->
             live.map { voc ->
-                mDataBase.findByVocabulary(voc)
+                mDataBase.findByVocabulary(query.first, voc)
             }
         }
 
@@ -31,6 +31,10 @@ class VocabularyViewModel(application: Application) : AndroidViewModel(applicati
         val result = flowPager(query).cachedIn(viewModelScope)
         mIsQuery.value = false
         result
+    }
+
+    fun setQuery(manga: String, vocabulary: String) {
+        currentQuery.value = Triple(manga, vocabulary, currentQuery.value?.third ?: false)
     }
 
     fun setQueryVocabulary(vocabulary: String) {
