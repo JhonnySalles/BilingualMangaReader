@@ -146,6 +146,7 @@ class DataBaseConsts private constructor() {
             const val READING = "reading"
             const val REVISED = "revised"
             const val FAVORITE = "favorite"
+            const val APPEARS = "appears"
         }
     }
 

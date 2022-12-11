@@ -37,14 +37,14 @@ data class Vocabulary(
     val revised: Boolean,
 
     @ColumnInfo(name = DataBaseConsts.VOCABULARY.COLUMNS.FAVORITE)
-    var favorite: Boolean
+    var favorite: Boolean,
+
+    @ColumnInfo(name = DataBaseConsts.VOCABULARY.COLUMNS.APPEARS)
+    var appears: Int
 ) {
 
     @Ignore
     var vocabularyMangas: List<VocabularyManga> = listOf()
-
-    @Ignore
-    var appears: Int = 0
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
