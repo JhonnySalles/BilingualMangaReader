@@ -23,7 +23,8 @@ class VocabularyRepository(context: Context) {
     private val mLOGGER = LoggerFactory.getLogger(VocabularyRepository::class.java)
     private val mBase = DataBase.getDataBase(context)
     private var mDataBaseDAO = mBase.getVocabularyDao()
-    private val mVocabImported = Toast.makeText(context, context.getString(R.string.vocabulary_imported), Toast.LENGTH_SHORT)
+    private val mMsgImport = context.getString(R.string.vocabulary_imported)
+    private val mVocabImported = Toast.makeText(context, mMsgImport, Toast.LENGTH_SHORT)
     private var mLastImport : Long? = null
 
     fun save(obj: Vocabulary): Long {
@@ -149,6 +150,7 @@ class VocabularyRepository(context: Context) {
                     }
 
                     mLastImport = idManga
+                    mVocabImported.setText("$mMsgImport\n${mDataBaseDAO.getManga(idManga).title}")
                     mVocabImported.show()
                 } catch (e: Exception) {
                     mLOGGER.error("Error process vocabulary. ", e)
