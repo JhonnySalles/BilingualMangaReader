@@ -132,6 +132,7 @@
     <string name="menu_reading_mode_left_to_right">Comic</string>
     <string name="menu_reading_mode_right_to_left">Manga</string>
 
+    <string name="menu_reading_save_share_image">Imagem</string>
     <string name="menu_reading_favorite">Favorito</string>
     <string name="menu_reading_order">Ordem da lista</string>
     <string name="menu_reading_order_change">Ordernado:</string>
@@ -139,13 +140,13 @@
     <string name="menu_reading_floating">Popup flutuante</string>
     <string name="menu_reading_floating_buttons">Botões flutuante</string>
 
-    <string name="menu_reading_options">Reading options</string>
-    <string name="menu_reading_show_clock_and_battery">Clock and battery percent</string>
+    <string name="menu_reading_options">Opções de leitura</string>
+    <string name="menu_reading_show_clock_and_battery">Relógio e percentual de baterria</string>
     <string name="menu_reading_use_magnifier_type">Zoom em lupa</string>
     <string name="menu_reading_view_touch">Funções touch</string>
     <string name="menu_reading_color">Cor da página</string>
 
-    <string name="menu_reading_ocr_file_linked">Ocr and file linked</string>
+    <string name="menu_reading_ocr_file_linked">Ocr e arquivo vinculado</string>
     <string name="menu_reading_open_kaku">Abrir o app Kaku</string>
     <string name="menu_reading_subtitle">Legenda</string>
     <string name="menu_reading_file_link">Arquivo em outro idioma</string>
@@ -174,11 +175,15 @@
 
     <string name="open_app_kaku_not_founded">App Kaku não encontrado.</string>
 
+    <string name="reading_title_save_share_image">Salvar\Compartilhar imagem</string>
+    <string name="reading_choice_save_image">Salvar</string>
+    <string name="reading_choice_share_image">Compartilhar</string>
+
     <!-- OCR -->
-    <string name="ocr_tesseract_copy_data">Copiando arquivos necessários, aguarde...</string>
+    <string name="ocr_tesseract_copy_data">Copiando arquivos necessários, aguarde…</string>
     <string name="ocr_tesseract_copy_data_done">Cópia de arquivos do Tesseract concluído.</string>
-    <string name="ocr_tesseract_get_request">Processando a imagem, aguarde...</string>
-    <string name="ocr_google_vision_get_request">Comunicando com a api do google vision, aguarde...</string>
+    <string name="ocr_tesseract_get_request">Processando a imagem, aguarde…</string>
+    <string name="ocr_google_vision_get_request">Comunicando com a api do google vision, aguarde…</string>
     <string name="ocr_google_vision_error">Não foi possível realizar o processamento. Tente novamente mais tarde.</string>
 
     <!-- READER POPUP TITLES -->
@@ -276,8 +281,7 @@
     <string name="manga_detail_information_status">Estatus:</string>
     <string name="manga_detail_information_volumes">Volumes:</string>
     <string name="manga_detail_information_chapters">Capítulos:</string>
-    <string name="manga_detail_information_publish">Publicação:</string>
-    <string name="manga_detail_information_publish_to"> até </string>
+    <string name="manga_detail_information_publish"><b>Publicação:</b> %s até %s</string>
     <string name="manga_detail_information_publish_in_publication">em publicação</string>
     <string name="manga_detail_information_authors">Autores:</string>
     <string name="manga_detail_information_genre">Gêneros:</string>
@@ -285,6 +289,7 @@
     <!-- HISTORY -->
     <string name="history_last_access">Último acesso</string>
     <string name="history_today">Hoje</string>
+    <string name="history_day_ago">%s dias atrás.</string>
     <string name="history_delete_description">Deseja realmente excluir o histórico?</string>
 
     <!-- PAGE LINK -->
@@ -305,7 +310,7 @@
     <string name="page_link_reorder_dual_page">Ordenar página duplas</string>
     <string name="page_link_reorder_single_page">Ordenar página única</string>
     <string name="page_link_reorder_sorted_page">Ordenar sequência da página</string>
-    <string name="page_link_reorder_undo_changes">Desfazer última alteração</string>
+    <string name="page_link_reorder_undo_changes">Desfazer última ordenação</string>
 
     <string name="page_link_popup_reorder_return">Retornar próximas páginas aqui</string>
     <string name="page_link_popup_reorder_single_page">Ordenar próximas páginas simples</string>

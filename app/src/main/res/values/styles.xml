@@ -520,7 +520,8 @@
 
     <style name="FloatingButtonSubtitle" parent="Base.Widget.AppCompat.Button.Borderless" >
         <item name="android:tint">@color/floating_button_color</item>
-        <item name="android:background">@color/floating_button_subtitle_background</item>
+        <item name="android:background">@drawable/floating_subtitle_buttons</item>
+        <item name="cornerRadius">10dp</item>
     </style>
 
     <style name="FloatingButtonSubtitle.Close" parent="FloatingButtonSubtitle" >

@@ -12,7 +12,7 @@
     <dimen name="margin_big">20dp</dimen>
     <dimen name="margin">10dp</dimen>
     <dimen name="margin_small">6dp</dimen>
-    <dimen name="margin_bottom">50dp</dimen>
+    <dimen name="margin_bottom">55dp</dimen>
 
     <dimen name="manga_grid_card_image">200dp</dimen>
     <dimen name="manga_grid_card_layout_width">150dp</dimen>

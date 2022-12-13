@@ -32,7 +32,7 @@ class ImageCoverController private constructor() {
 
     private val maxMemory = (Runtime.getRuntime().maxMemory() / 1024).toInt()
     private val cacheSize = maxMemory / 4
-    private val lru = object : LruCache<String, Bitmap> (cacheSize)  {
+    private val lru = object : LruCache<String, Bitmap>(cacheSize) {
         override fun sizeOf(key: String, bitmap: Bitmap): Int {
             return bitmap.byteCount / 1024
         }
@@ -40,7 +40,7 @@ class ImageCoverController private constructor() {
 
     private fun saveBitmapToLru(key: String, bitmap: Bitmap) {
         try {
-            synchronized (instance.lru) {
+            synchronized(instance.lru) {
                 if (instance.lru.get(key) == null)
                     instance.lru.put(key, bitmap)
             }
@@ -137,7 +137,7 @@ class ImageCoverController private constructor() {
             cover = BitmapFactory.decodeStream(stream)
             Util.closeInputStream(stream)
         }
-        
+
         return cover
     }
 
@@ -199,7 +199,7 @@ class ImageCoverController private constructor() {
         context: Context,
         manga: Manga,
         imagesView: ArrayList<ImageView>,
-        isCoverSize: Boolean = true
+        isCoverSize: Boolean = true,
     ) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -213,6 +213,34 @@ class ImageCoverController private constructor() {
                         for (imageView in imagesView)
                             imageView.setImageBitmap(image)
                     }
+                }
+            } catch (m: OutOfMemoryError) {
+                System.gc()
+                mLOGGER.error("Memory full, cleaning", m)
+            } catch (e: Exception) {
+                mLOGGER.error("Error to load image array async", e)
+            }
+        }
+    }
+
+    fun setImageCoverAsync(
+        context: Context,
+        manga: Manga,
+        imageView: ImageView,
+        isCoverSize: Boolean = true,
+        function: (Bitmap?) -> (Unit)
+    ) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                var image: Bitmap? = null
+                val deferred = async {
+                    image = getMangaCover(context, manga, isCoverSize)
+                }
+                deferred.await()
+                withContext(Dispatchers.Main) {
+                    if (image != null)
+                        imageView.setImageBitmap(image)
+                    function(image)
                 }
             } catch (m: OutOfMemoryError) {
                 System.gc()

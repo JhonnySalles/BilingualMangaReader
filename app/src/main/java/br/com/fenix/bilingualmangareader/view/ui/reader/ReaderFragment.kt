@@ -2,7 +2,9 @@ package br.com.fenix.bilingualmangareader.view.ui.reader
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.content.res.Resources
@@ -14,6 +16,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.MediaStore.Images
 import android.util.SparseArray
 import android.view.*
 import android.view.GestureDetector.SimpleOnGestureListener
@@ -52,6 +55,7 @@ import br.com.fenix.bilingualmangareader.view.components.PageViewPager
 import br.com.fenix.bilingualmangareader.view.managers.MangaHandler
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Picasso.LoadedFrom
@@ -409,6 +413,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
     }
 
     override fun onDestroy() {
+        mSubtitleController.clearImageBackup()
         mSubtitleController.mReaderFragment = null
         Util.destroyParse(mParse)
         if (::mPicasso.isInitialized)
@@ -465,6 +470,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                     this.commit()
                 }
             }
+            R.id.menu_item_save_share_image -> openPopupSaveShareImage()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -544,6 +550,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
 
         override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
             val layout = `object` as View
+            mSubtitleController.removeImageBackup(position)
             mPicasso.cancelRequest(mTargets[position])
             mTargets.delete(position)
             container.removeView(layout)
@@ -938,5 +945,46 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         val bounds = mPageSeekBar.progressDrawable.bounds
         mPageSeekBar.progressDrawable = d
         mPageSeekBar.progressDrawable.bounds = bounds
+    }
+
+    private fun openPopupSaveShareImage() {
+        val items = arrayListOf(requireContext().getString(R.string.reading_choice_save_image),
+            requireContext().getString(R.string.reading_choice_share_image)).toTypedArray()
+
+        MaterialAlertDialogBuilder(requireContext(), R.style.AppCompatMaterialAlertList)
+            .setTitle(getString(R.string.reading_title_save_share_image))
+            .setIcon(R.drawable.ic_save_share_image)
+            .setItems(items) { _, selectItem ->
+                val language = items[selectItem]
+
+                mParse?.getPage(mCurrentPage).let {
+
+                    /*try {
+                            val os = requireContext().contentResolver.openOutputStream(it)
+                        icon.compress(Bitmap.CompressFormat.JPEG, 100, os)
+                        os?.close()
+                    } catch (e: java.lang.Exception) {
+                        System.err.println(e.toString())
+                    }
+
+                    if (language.equals(requireContext().getString(R.string.reading_choice_save_image), true)) {
+
+                    } else {
+                        val share = Intent(Intent.ACTION_SEND)
+                        share.type = "image/jpeg"
+                        val values = ContentValues()
+                        values.put(Images.Media.TITLE, mManga?.name ?: mCurrentPage.toString())
+                        values.put(Images.Media.MIME_TYPE, "image/jpeg")
+                        val uri: Uri = requireContext().contentResolver.insert(
+                            Images.Media.EXTERNAL_CONTENT_URI,
+                            values
+                        )
+
+                        share.putExtra(Intent.EXTRA_STREAM, uri)
+                        startActivity(Intent.createChooser(share, "Share Image"))
+                    }*/
+                }
+            }
+            .show()
     }
 }

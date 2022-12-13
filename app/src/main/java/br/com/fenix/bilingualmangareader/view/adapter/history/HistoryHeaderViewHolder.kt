@@ -21,6 +21,11 @@ class HistoryHeaderViewHolder(itemView: View, private val listener: MangaCardLis
             calendar.add(Calendar.DAY_OF_YEAR, -1)
             title.text = if (manga.lastAccess!!.after(calendar.time))
                 itemView.context.getString(R.string.history_today)
+            else if (manga.lastAccess!!.isAfter(LocalDateTime.now().minusDays(7)))
+                itemView.context.getString(
+                    R.string.history_day_ago,
+                    ChronoUnit.DAYS.between(manga.lastAccess, LocalDateTime.now()).toString()
+                )
             else
                 GeneralConsts.formatterDate(
                     itemView.context,

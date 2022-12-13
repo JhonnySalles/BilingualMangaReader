@@ -128,4 +128,11 @@
         android:title="@string/menu_reading_floating_buttons"
         app:showAsAction="never"/>
 
+    <item
+        android:id="@+id/menu_item_save_share_image"
+        android:icon="@drawable/ic_save_share_image"
+        android:orderInCategory="106"
+        android:title="@string/menu_reading_save_share_image"
+        app:showAsAction="never"/>
+
 </menu>

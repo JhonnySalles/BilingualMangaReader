@@ -132,6 +132,7 @@
     <string name="menu_reading_mode_left_to_right">Comics</string>
     <string name="menu_reading_mode_right_to_left">Manga</string>
 
+    <string name="menu_reading_save_share_image">Image</string>
     <string name="menu_reading_favorite">Favorite</string>
     <string name="menu_reading_order">List order</string>
     <string name="menu_reading_order_change">Sort:</string>
@@ -174,11 +175,15 @@
 
     <string name="open_app_kaku_not_founded">App Kaku not found.</string>
 
+    <string name="reading_title_save_share_image">Save\Share image</string>
+    <string name="reading_choice_save_image">Save</string>
+    <string name="reading_choice_share_image">Share</string>
+
     <!-- OCR -->
-    <string name="ocr_tesseract_copy_data">Copying necessary data files, please wait...</string>
-    <string name="ocr_tesseract_copy_data_done">Copy of Tesseract data completed.</string>
-    <string name="ocr_tesseract_get_request">Processing image, please wait...</string>
-    <string name="ocr_google_vision_get_request">Communicating with google vision api, please wait...</string>
+    <string name="ocr_tesseract_copy_data">Copying necessary data files, please wait…</string>
+    <string name="ocr_tesseract_copy_data_done">Copy of Tesseracts data completed.</string>
+    <string name="ocr_tesseract_get_request">Processing image, please wait…</string>
+    <string name="ocr_google_vision_get_request">Communicating with google vision api, please wait…</string>
     <string name="ocr_google_vision_error">Processing could not be performed. Try again later.</string>
 
     <!-- READER POPUP TITLES -->
@@ -276,8 +281,7 @@
     <string name="manga_detail_information_status">Status:</string>
     <string name="manga_detail_information_volumes">Volumes:</string>
     <string name="manga_detail_information_chapters">Chapters:</string>
-    <string name="manga_detail_information_publish">Published:</string>
-    <string name="manga_detail_information_publish_to"> to </string>
+    <string name="manga_detail_information_publish"><b>Published:</b> %s to %s</string>
     <string name="manga_detail_information_publish_in_publication">in publication</string>
     <string name="manga_detail_information_authors">Authors:</string>
     <string name="manga_detail_information_genre">Genres:</string>
@@ -285,6 +289,7 @@
     <!-- HISTORY -->
     <string name="history_last_access">Last access</string>
     <string name="history_today">Today</string>
+    <string name="history_day_ago">%s days ago.</string>
     <string name="history_delete_description">Do you really want to delete the history?</string>
 
     <!-- PAGE LINK -->
@@ -305,7 +310,7 @@
     <string name="page_link_reorder_dual_page">Reorder dual pages</string>
     <string name="page_link_reorder_single_page">Reorder single page</string>
     <string name="page_link_reorder_sorted_page">Sort by pages sequence</string>
-    <string name="page_link_reorder_undo_changes">Undo last change</string>
+    <string name="page_link_reorder_undo_changes">Undo last reorder</string>
 
     <string name="page_link_popup_reorder_return">Return next pages here</string>
     <string name="page_link_popup_reorder_single_page">Reorder next pages single page</string>
