@@ -181,6 +181,7 @@
     <string name="reading_title_save_share_image">Save\Share image</string>
     <string name="reading_choice_save_image">Save</string>
     <string name="reading_choice_share_image">Share</string>
+    <string name="reading_choice_share_chose_app">Choose app</string>
 
     <!-- OCR -->
     <string name="ocr_tesseract_copy_data">Copying necessary data files, please wait…</string>

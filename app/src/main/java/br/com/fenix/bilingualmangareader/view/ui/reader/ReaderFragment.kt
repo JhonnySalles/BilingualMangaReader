@@ -9,6 +9,7 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -63,6 +64,7 @@ import com.squareup.picasso.RequestHandler
 import com.squareup.picasso.Target
 import org.slf4j.LoggerFactory
 import java.io.File
+import java.io.OutputStream
 import java.lang.ref.WeakReference
 import kotlin.math.max
 import kotlin.math.min
@@ -388,7 +390,10 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             menu.findItem(R.id.reading_right_to_left).isChecked = true
 
         menu.findItem(R.id.menu_item_use_magnifier_type).isChecked = mUseMagnifierType
-        menu.findItem(R.id.menu_item_show_clock_and_battery).isChecked = mPreferences.getBoolean(GeneralConsts.KEYS.READER.SHOW_CLOCK_AND_BATTERY, false)
+        menu.findItem(R.id.menu_item_show_clock_and_battery).isChecked = mPreferences.getBoolean(
+            GeneralConsts.KEYS.READER.SHOW_CLOCK_AND_BATTERY,
+            false
+        )
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -848,7 +853,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             mPreviousButton.alpha = initialAlpha
 
             mToolbarTop.translationY = initialTranslation
-            mToolbarBottom.translationY = (initialTranslation*-1)
+            mToolbarBottom.translationY = (initialTranslation * -1)
         }
 
         mPageNavLayout.animate().alpha(finalAlpha).setDuration(duration)
@@ -859,7 +864,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                 }
             })
 
-        mToolbarBottom.animate().alpha(finalAlpha).translationY(finalTranslation *-1)
+        mToolbarBottom.animate().alpha(finalAlpha).translationY(finalTranslation * -1)
             .setDuration(duration).setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator?) {
                     super.onAnimationEnd(animation)
@@ -948,8 +953,10 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
     }
 
     private fun openPopupSaveShareImage() {
-        val items = arrayListOf(requireContext().getString(R.string.reading_choice_save_image),
-            requireContext().getString(R.string.reading_choice_share_image)).toTypedArray()
+        val items = arrayListOf(
+            requireContext().getString(R.string.reading_choice_save_image),
+            requireContext().getString(R.string.reading_choice_share_image)
+        ).toTypedArray()
 
         MaterialAlertDialogBuilder(requireContext(), R.style.AppCompatMaterialAlertList)
             .setTitle(getString(R.string.reading_title_save_share_image))
@@ -957,32 +964,44 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
             .setItems(items) { _, selectItem ->
                 val language = items[selectItem]
 
-                mParse?.getPage(mCurrentPage).let {
-
-                    /*try {
-                            val os = requireContext().contentResolver.openOutputStream(it)
-                        icon.compress(Bitmap.CompressFormat.JPEG, 100, os)
-                        os?.close()
-                    } catch (e: java.lang.Exception) {
-                        System.err.println(e.toString())
-                    }
-
-                    if (language.equals(requireContext().getString(R.string.reading_choice_save_image), true)) {
-
-                    } else {
-                        val share = Intent(Intent.ACTION_SEND)
-                        share.type = "image/jpeg"
+                mParse?.getPage(mCurrentPage)?.let {
+                    val os: OutputStream
+                    try {
+                        val fileName = (mManga?.name ?: mCurrentPage.toString()) + ".jpeg"
                         val values = ContentValues()
-                        values.put(Images.Media.TITLE, mManga?.name ?: mCurrentPage.toString())
+                        values.put(Images.Media.DISPLAY_NAME, fileName)
+                        values.put(Images.Media.TITLE, fileName)
+                        values.put(Images.Media.DATE_TAKEN, System.currentTimeMillis())
                         values.put(Images.Media.MIME_TYPE, "image/jpeg")
-                        val uri: Uri = requireContext().contentResolver.insert(
-                            Images.Media.EXTERNAL_CONTENT_URI,
-                            values
-                        )
 
-                        share.putExtra(Intent.EXTRA_STREAM, uri)
-                        startActivity(Intent.createChooser(share, "Share Image"))
-                    }*/
+                        val uri: Uri? = requireContext().contentResolver.insert(Images.Media.EXTERNAL_CONTENT_URI, values)
+                        os = requireContext().contentResolver.openOutputStream(uri!!)!!
+                        val bitmap = BitmapFactory.decodeStream(it)
+                        bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, os)
+
+                        if (language.equals(requireContext().getString(R.string.reading_choice_share_image), true)) {
+                            val image = File(uri.toString())
+                            val shareIntent = Intent()
+                            shareIntent.action = Intent.ACTION_SEND
+                            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                            shareIntent.type = "image/jpeg"
+                            shareIntent.putExtra(Intent.EXTRA_STREAM, image)
+                            shareIntent.putExtra(Intent.EXTRA_TEXT, fileName)
+                            startActivity(
+                                Intent.createChooser(
+                                    shareIntent,
+                                    requireContext().getString(R.string.reading_choice_share_chose_app)
+                                )
+                            )
+                            image.delete()
+                        }
+
+                        Util.closeOutputStream(os)
+                    } catch (e: Exception) {
+                        mLOGGER.error("Error generate image to share.", e)
+                    } finally {
+                        Util.closeInputStream(it)
+                    }
                 }
             }
             .show()

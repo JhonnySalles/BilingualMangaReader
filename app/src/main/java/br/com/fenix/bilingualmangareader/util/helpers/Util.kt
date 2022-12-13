@@ -191,6 +191,16 @@ class Util {
             }
         }
 
+        fun toOutputStream(`is`: InputStream): OutputStream {
+            val output = ByteArrayOutputStream()
+            val b = ByteArray(4096)
+            var n: Int
+            while (`is`.read(b).also { n = it } != -1) {
+                output.write(b, 0, n)
+            }
+            return output
+        }
+
         fun imageToByteArray(image: Bitmap): ByteArray? {
             val output = ByteArrayOutputStream()
             return output.use { otp ->
@@ -223,6 +233,15 @@ class Util {
             if (input != null) {
                 try {
                     input.close()
+                } catch (e: Exception) {
+                }
+            }
+        }
+
+        fun closeOutputStream(output: OutputStream?) {
+            if (output != null) {
+                try {
+                    output.close()
                 } catch (e: Exception) {
                 }
             }
