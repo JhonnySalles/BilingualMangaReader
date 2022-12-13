@@ -7,6 +7,9 @@ import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.service.listener.MangaCardListener
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.temporal.ChronoUnit
 import java.util.*
 
 class HistoryHeaderViewHolder(itemView: View, private val listener: MangaCardListener) :
@@ -21,16 +24,22 @@ class HistoryHeaderViewHolder(itemView: View, private val listener: MangaCardLis
             calendar.add(Calendar.DAY_OF_YEAR, -1)
             title.text = if (manga.lastAccess!!.after(calendar.time))
                 itemView.context.getString(R.string.history_today)
-            else if (manga.lastAccess!!.isAfter(LocalDateTime.now().minusDays(7)))
-                itemView.context.getString(
-                    R.string.history_day_ago,
-                    ChronoUnit.DAYS.between(manga.lastAccess, LocalDateTime.now()).toString()
-                )
-            else
-                GeneralConsts.formatterDate(
-                    itemView.context,
-                    manga.lastAccess!!
-                )
+            else {
+                calendar.add(Calendar.DAY_OF_YEAR, -7)
+                if (manga.lastAccess!!.after(calendar.time))
+                    itemView.context.getString(
+                        R.string.history_day_ago,
+                        ChronoUnit.DAYS.between(
+                            manga.lastAccess!!.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
+                            LocalDate.now()
+                        ).toString()
+                    )
+                else
+                    GeneralConsts.formatterDate(
+                        itemView.context,
+                        manga.lastAccess!!
+                    )
+            }
         } else
             title.text = ""
 
