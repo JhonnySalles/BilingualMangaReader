@@ -42,7 +42,7 @@ class VocabularyViewHolder(itemView: View, private val listener: VocabularyCardL
         }
 
         title.text = Util.setVerticalText(vocabulary.word)
-        reading.text = vocabulary.reading + (if (vocabulary.revised) '¹' else "")
+        reading.text = vocabulary.reading + (if (!vocabulary.revised) '¹' else "")
         meaning.text = vocabulary.portuguese
         appear.text = itemView.context.getString(R.string.vocabulary_appear, vocabulary.appears)
 

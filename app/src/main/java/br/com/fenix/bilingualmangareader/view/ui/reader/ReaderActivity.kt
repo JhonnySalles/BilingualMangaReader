@@ -131,7 +131,9 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val theme = Themes.valueOf(GeneralConsts.getSharedPreferences(this).getString(GeneralConsts.KEYS.THEME.THEME_USED, Themes.ORIGINAL.toString())!!)
+        val theme = Themes.valueOf(
+            GeneralConsts.getSharedPreferences(this).getString(GeneralConsts.KEYS.THEME.THEME_USED, Themes.ORIGINAL.toString())!!
+        )
         setTheme(theme.getValue())
 
         super.onCreate(savedInstanceState)
@@ -492,7 +494,10 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     fun getMangaIconAdaptive(manga: Manga): Icon {
-        val image = ImageCoverController.instance.getMangaCover(this, manga, true) ?: return Icon.createWithResource(this, R.drawable.ic_shortcut_book)
+        val image = ImageCoverController.instance.getMangaCover(this, manga, true) ?: return Icon.createWithResource(
+            this,
+            R.drawable.ic_shortcut_book
+        )
         val bitmapDrawable: Drawable = BitmapDrawable(resources, image)
         val drawableIcon = AdaptiveIconDrawable(bitmapDrawable, bitmapDrawable)
         val result = Bitmap.createBitmap(drawableIcon.intrinsicWidth, drawableIcon.intrinsicHeight, Bitmap.Config.ARGB_8888)
@@ -731,7 +736,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     private fun showMenuFromButton(button: Button, view: View) {
         when (button.id) {
             R.id.btn_menu_ocr -> {
-                val popup = PopupMenu(this, view, 0,  R.attr.popupMenuStyle, R.style.PopupMenu)
+                val popup = PopupMenu(this, view, 0, R.attr.popupMenuStyle, R.style.PopupMenu)
                 popup.menuInflater.inflate(R.menu.menu_ocr, popup.menu)
                 popup.setOnMenuItemClickListener { menuItem: MenuItem ->
                     when (menuItem.itemId) {
@@ -748,6 +753,12 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     }
 
     override fun onBackPressed() {
+        if (mMenuPopupTranslate.visibility != View.GONE || mMenuPopupColor.visibility != View.GONE) {
+            mMenuPopupTranslate.visibility = View.GONE
+            mMenuPopupColor.visibility = View.GONE
+            return
+        }
+
         super.onBackPressed()
         finish()
     }

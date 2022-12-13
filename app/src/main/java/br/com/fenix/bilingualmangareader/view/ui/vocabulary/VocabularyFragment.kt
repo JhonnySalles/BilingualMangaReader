@@ -20,6 +20,7 @@ import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.entity.Vocabulary
 import br.com.fenix.bilingualmangareader.service.listener.VocabularyCardListener
 import br.com.fenix.bilingualmangareader.view.adapter.vocabulary.VocabularyCardAdapter
+import br.com.fenix.bilingualmangareader.view.adapter.vocabulary.VocabularyMangaListCardAdapter
 import br.com.fenix.bilingualmangareader.view.components.ComponentsUtil
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -227,6 +228,8 @@ class VocabularyFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     override fun onDestroy() {
+        VocabularyMangaListCardAdapter.clearImageList()
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             if (mHandler.hasCallbacks(mDismissUpButton))
                 mHandler.removeCallbacks(mDismissUpButton)

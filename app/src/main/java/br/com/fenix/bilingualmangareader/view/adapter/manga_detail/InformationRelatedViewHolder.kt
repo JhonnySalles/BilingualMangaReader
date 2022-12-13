@@ -40,12 +40,14 @@ class InformationRelatedViewHolder(itemView: View, private val listener: Informa
         alternativeTitles.text = Html.fromHtml(Util.setBold(itemView.context.getString(R.string.manga_detail_information_alternative_titles)) + " " + information.alternativeTitles)
         status.text = Html.fromHtml(Util.setBold(itemView.context.getString(R.string.manga_detail_information_status)) + " " + information.status)
         publish.text = Html.fromHtml(
-            Util.setBold(itemView.context.getString(R.string.manga_detail_information_publish)) + " " + Util.formatterDate(
-                itemView.context,
-                information.startDate
-            ) + " " + itemView.context.getString(R.string.manga_detail_information_publish_to) + " " + Util.formatterDate(
-                itemView.context,
-                information.endDate
+            itemView.context.getString(
+                R.string.manga_detail_information_publish, Util.formatterDate(
+                    itemView.context,
+                    information.startDate
+                ), Util.formatterDate(
+                    itemView.context,
+                    information.endDate
+                )
             )
         )
         volumes.text = Html.fromHtml(
