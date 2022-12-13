@@ -16,7 +16,7 @@ import java.util.*
 
 class LibraryViewModel(application: Application) : AndroidViewModel(application), Filterable {
 
-    private var mStackLibrary = mutableMapOf<String, Triple<Int,Library,MutableList<Manga>>>()
+    private var mStackLibrary = mutableMapOf<String, Triple<Int, Library, MutableList<Manga>>>()
     private var mLibrary: Library = Library(GeneralConsts.KEYS.LIBRARY.DEFAULT)
     private val mMangaRepository: MangaRepository = MangaRepository(application.applicationContext)
     private val mPreferences = GeneralConsts.getSharedPreferences(application.applicationContext)
@@ -42,9 +42,11 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         mPreferences.edit().putLong(GeneralConsts.KEYS.LIBRARY.LAST_LIBRARY, mLibrary.id ?: GeneralConsts.KEYS.LIBRARY.DEFAULT).apply()
     }
 
-    fun getLibrary() = mLibrary
+    fun getLibrary() =
+        mLibrary
 
-    fun existStack(id: String) : Boolean = mStackLibrary.contains(id)
+    fun existStack(id: String): Boolean =
+        mStackLibrary.contains(id)
 
     fun restoreLastStackLibrary(id: String) {
         if (mStackLibrary.contains(id)) {
@@ -60,9 +62,11 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    fun addStackLibrary(id: String, library: Library) = mStackLibrary.put(id, Triple(mStackLibrary.size +1, library, mListMangasFull.value!!))
+    fun addStackLibrary(id: String, library: Library) =
+        mStackLibrary.put(id, Triple(mStackLibrary.size + 1, library, mListMangasFull.value!!))
 
-    fun removeStackLibrary(id: String) = mStackLibrary.remove(id)
+    fun removeStackLibrary(id: String) =
+        mStackLibrary.remove(id)
 
     fun save(obj: Manga): Manga {
         if (obj.id == 0L)
@@ -246,11 +250,11 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
             val filteredList: MutableList<Manga> = mutableListOf()
 
             if (constraint == null || constraint.isEmpty()) {
-                filteredList.addAll(mListMangasFull.value!!)
+                filteredList.addAll(mListMangasFull.value!!.filter(Objects::nonNull))
             } else {
                 val filterPattern = constraint.toString().lowercase(Locale.getDefault()).trim()
 
-                filteredList.addAll(mListMangasFull.value!!.filter {
+                filteredList.addAll(mListMangasFull.value!!.filter(Objects::nonNull).filter {
                     it.name.lowercase(Locale.getDefault()).contains(filterPattern) ||
                             it.type.lowercase(Locale.getDefault()).contains(filterPattern)
                 })
