@@ -61,7 +61,7 @@ class VocabularyMangaListViewHolder(itemView: View) : RecyclerView.ViewHolder(it
                         imageList[m.id!!] = b
 
                     // Limit 2k in size
-                    if (imageList.size > 2000)
+                    if (imageList.size > 500)
                         imageList.remove(imageList.entries.first().key)
                 }
             }

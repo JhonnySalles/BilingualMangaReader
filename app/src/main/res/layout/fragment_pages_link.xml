@@ -129,6 +129,7 @@
                         <AutoCompleteTextView
                             android:id="@+id/pages_link_file_link_autocomplete"
                             style="@style/AutoCompleteDropMenu"
+                            android:focusable="false"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
 

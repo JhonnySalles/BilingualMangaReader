@@ -719,7 +719,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         val isLandscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
         val horizontalSize = resources.getDimensionPixelSize(R.dimen.reader_touch_demonstration_initial_horizontal)
-        val horizontal = (if (isLandscape) horizontalSize * 1.2 else horizontalSize * 3).toFloat()
+        val horizontal = (if (isLandscape) horizontalSize * 1.2 else horizontalSize * 1.5).toFloat()
 
         val x = e.x
         val y = e.y
