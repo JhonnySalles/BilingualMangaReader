@@ -9,11 +9,7 @@ import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.entity.Vocabulary
 import br.com.fenix.bilingualmangareader.model.entity.VocabularyManga
 import br.com.fenix.bilingualmangareader.model.enums.Languages
-import br.com.fenix.bilingualmangareader.util.constants.DataBaseConsts
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.slf4j.LoggerFactory
 import java.util.*
 import kotlin.streams.toList
@@ -25,7 +21,7 @@ class VocabularyRepository(context: Context) {
     private var mDataBaseDAO = mBase.getVocabularyDao()
     private val mMsgImport = context.getString(R.string.vocabulary_imported)
     private val mVocabImported = Toast.makeText(context, mMsgImport, Toast.LENGTH_SHORT)
-    private var mLastImport : Long? = null
+    private var mLastImport: Long? = null
 
     fun save(obj: Vocabulary): Long {
         val exist = mDataBaseDAO.exists(obj.word, obj.basicForm ?: "")
@@ -118,14 +114,15 @@ class VocabularyRepository(context: Context) {
         if (idManga == null || chapters.isEmpty() || idManga == mLastImport)
             return
 
+        val chaptersList = Collections
+            .synchronizedCollection(chapters.parallelStream()
+                .filter(Objects::nonNull)
+                .filter { it.language == Languages.JAPANESE && it.vocabulary.isNotEmpty() }
+                .toList())
+
         CoroutineScope(Dispatchers.IO).launch {
             async {
                 try {
-                    val chaptersList = chapters.parallelStream()
-                        .filter(Objects::nonNull)
-                        .filter { it.language == Languages.JAPANESE && it.vocabulary.isNotEmpty() }
-                        .toList()
-
                     val list = mutableSetOf<Vocabulary>()
                     val pages = mutableListOf<Vocabulary>()
 
@@ -144,8 +141,10 @@ class VocabularyRepository(context: Context) {
 
                             pages.parallelStream().forEach { v -> if (v == vocabulary) appears++ }
 
-                            vocabulary.id = save(vocabulary)
-                            vocabulary.id?.let { insert(idManga, it, appears) }
+                            withContext(Dispatchers.Main) {
+                                vocabulary.id = save(vocabulary)
+                                vocabulary.id?.let { insert(idManga, it, appears) }
+                            }
                         }
                     }
 
