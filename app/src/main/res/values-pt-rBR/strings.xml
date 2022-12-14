@@ -292,7 +292,7 @@
     <string name="history_today">Hoje</string>
     <string name="history_day_ago">%s dias atrás.</string>
     <string name="history_delete_description">Deseja realmente excluir o histórico?</string>
-    <string name="history_menu_library_all">Biblioteca</string>
+    <string name="history_menu_library">Biblioteca</string>
     <string name="history_menu_choice_library_all">Todos</string>
 
     <!-- PAGE LINK -->
