@@ -64,6 +64,8 @@
                 <AutoCompleteTextView
                     android:id="@+id/menu_autocomplete_library_path"
                     style="@style/AutoCompleteDropMenu"
+                    android:focusable="false"
+                    android:focusableInTouchMode="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 

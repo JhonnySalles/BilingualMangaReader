@@ -28,7 +28,7 @@
             android:id="@+id/menu_popup_translate"
             style="@style/AppBackground.Popup"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="500dp"
             android:layout_alignParentBottom="true"
             android:fitsSystemWindows="false"
             android:gravity="center_horizontal"
