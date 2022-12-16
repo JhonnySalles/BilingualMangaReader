@@ -241,6 +241,12 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
+    fun clearFilter() {
+        val newList: MutableList<Manga> = mutableListOf()
+        newList.addAll(mListMangasFull.value!!.filter(Objects::nonNull))
+        mListMangas.value = newList
+    }
+
     override fun getFilter(): Filter {
         return mMangaFilter
     }

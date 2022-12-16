@@ -196,9 +196,11 @@ abstract class VocabularyDAO : DataBaseDAO<Vocabulary> {
                 " FROM " + DataBaseConsts.VOCABULARY.TABLE_NAME + " V " +
                 " WHERE CASE WHEN 1 = :favorite THEN " + DataBaseConsts.VOCABULARY.COLUMNS.FAVORITE + " = :favorite ELSE 1 > 0 END " +
                 " GROUP BY " + DataBaseConsts.VOCABULARY.COLUMNS.WORD +
-                " ORDER BY " + DataBaseConsts.VOCABULARY.COLUMNS.APPEARS + " DESC, " + DataBaseConsts.VOCABULARY.COLUMNS.WORD
+                " ORDER BY  CASE WHEN 1 = :orderInverse THEN V." + DataBaseConsts.VOCABULARY.COLUMNS.APPEARS + " ELSE '' END ASC, " +
+                " CASE WHEN 0 = :orderInverse THEN V." + DataBaseConsts.VOCABULARY.COLUMNS.APPEARS + " ELSE '' END DESC, " +
+                DataBaseConsts.VOCABULARY.COLUMNS.WORD
     )
-    abstract fun list(favorite: Boolean): PagingSource<Int, Vocabulary>
+    abstract fun list(favorite: Boolean, orderInverse: Boolean): PagingSource<Int, Vocabulary>
 
     @Query(
         "SELECT V.* " +
@@ -206,9 +208,11 @@ abstract class VocabularyDAO : DataBaseDAO<Vocabulary> {
                 " WHERE (" + DataBaseConsts.VOCABULARY.COLUMNS.WORD + " LIKE '%' || :vocabulary || '%' OR " + DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM + " LIKE '%' || :basicForm || '%' )" +
                 " AND CASE WHEN 1 = :favorite THEN " + DataBaseConsts.VOCABULARY.COLUMNS.FAVORITE + " = :favorite ELSE 1 > 0 END " +
                 " GROUP BY " + DataBaseConsts.VOCABULARY.COLUMNS.WORD +
-                " ORDER BY " + DataBaseConsts.VOCABULARY.COLUMNS.APPEARS + " DESC, " + DataBaseConsts.VOCABULARY.COLUMNS.WORD
+                " ORDER BY  CASE WHEN 1 = :orderInverse THEN V." + DataBaseConsts.VOCABULARY.COLUMNS.APPEARS + " ELSE '' END ASC, " +
+                " CASE WHEN 0 = :orderInverse THEN V." + DataBaseConsts.VOCABULARY.COLUMNS.APPEARS + " ELSE '' END DESC, " +
+                DataBaseConsts.VOCABULARY.COLUMNS.WORD
     )
-    abstract fun list(vocabulary: String, basicForm: String, favorite: Boolean): PagingSource<Int, Vocabulary>
+    abstract fun list(vocabulary: String, basicForm: String, favorite: Boolean, orderInverse: Boolean): PagingSource<Int, Vocabulary>
 
     @Query(
         "SELECT V.*" +
@@ -218,9 +222,11 @@ abstract class VocabularyDAO : DataBaseDAO<Vocabulary> {
                 " WHERE CASE WHEN LENGTH(:manga) <> 0 THEN MG." + DataBaseConsts.MANGA.COLUMNS.TITLE + " LIKE '%' || :manga || '%' ELSE 1 > 0 END " +
                 " AND CASE WHEN 1 = :favorite THEN V." + DataBaseConsts.VOCABULARY.COLUMNS.FAVORITE + " = :favorite ELSE 1 > 0 END " +
                 " GROUP BY " + DataBaseConsts.VOCABULARY.COLUMNS.WORD +
-                " ORDER BY " + DataBaseConsts.VOCABULARY.COLUMNS.APPEARS + " DESC, " + DataBaseConsts.VOCABULARY.COLUMNS.WORD
+                " ORDER BY  CASE WHEN 1 = :orderInverse THEN V." + DataBaseConsts.VOCABULARY.COLUMNS.APPEARS + " ELSE '' END ASC, " +
+                " CASE WHEN 0 = :orderInverse THEN V." + DataBaseConsts.VOCABULARY.COLUMNS.APPEARS + " ELSE '' END DESC, " +
+                DataBaseConsts.VOCABULARY.COLUMNS.WORD
     )
-    abstract fun list(manga: String, favorite: Boolean): PagingSource<Int, Vocabulary>
+    abstract fun list(manga: String, favorite: Boolean, orderInverse: Boolean): PagingSource<Int, Vocabulary>
 
     @Query(
         "SELECT V.* " +
@@ -231,9 +237,11 @@ abstract class VocabularyDAO : DataBaseDAO<Vocabulary> {
                 " AND (V." + DataBaseConsts.VOCABULARY.COLUMNS.WORD + " LIKE '%' || :vocabulary || '%' OR V." + DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM + " LIKE '%' || :basicForm || '%' )" +
                 " AND CASE WHEN 1 = :favorite THEN V." + DataBaseConsts.VOCABULARY.COLUMNS.FAVORITE + " = :favorite ELSE 1 > 0 END " +
                 " GROUP BY " + DataBaseConsts.VOCABULARY.COLUMNS.WORD +
-                " ORDER BY " + DataBaseConsts.VOCABULARY.COLUMNS.APPEARS + " DESC, " + DataBaseConsts.VOCABULARY.COLUMNS.WORD
+                " ORDER BY  CASE WHEN 1 = :orderInverse THEN V." + DataBaseConsts.VOCABULARY.COLUMNS.APPEARS + " ELSE '' END ASC, " +
+                " CASE WHEN 0 = :orderInverse THEN V." + DataBaseConsts.VOCABULARY.COLUMNS.APPEARS + " ELSE '' END DESC, " +
+                DataBaseConsts.VOCABULARY.COLUMNS.WORD
     )
-    abstract fun list(manga: String, vocabulary: String, basicForm: String, favorite: Boolean): PagingSource<Int, Vocabulary>
+    abstract fun list(manga: String, vocabulary: String, basicForm: String, favorite: Boolean, orderInverse: Boolean): PagingSource<Int, Vocabulary>
 
     @Query("SELECT * FROM " + DataBaseConsts.VOCABULARY.TABLE_NAME + " WHERE " + DataBaseConsts.VOCABULARY.COLUMNS.ID + " = :id")
     abstract fun get(id: Long): Vocabulary

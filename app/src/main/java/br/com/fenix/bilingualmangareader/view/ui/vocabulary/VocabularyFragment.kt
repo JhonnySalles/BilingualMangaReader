@@ -7,7 +7,9 @@ import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
+import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
+import android.widget.SearchView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -22,7 +24,6 @@ import br.com.fenix.bilingualmangareader.service.listener.VocabularyCardListener
 import br.com.fenix.bilingualmangareader.view.adapter.vocabulary.VocabularyCardAdapter
 import br.com.fenix.bilingualmangareader.view.adapter.vocabulary.VocabularyMangaListCardAdapter
 import br.com.fenix.bilingualmangareader.view.components.ComponentsUtil
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -46,9 +47,10 @@ class VocabularyFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var mContent: LinearLayout
     private lateinit var mMangaName: TextInputLayout
     private lateinit var mMangaNameEditText: TextInputEditText
-    private lateinit var mVocabulary: TextInputLayout
-    private lateinit var mVocabularyEditText: TextInputEditText
-    private lateinit var mFavoriteButton: MaterialButton
+
+    private lateinit var mFavorite: MenuItem
+    private lateinit var miSearch: MenuItem
+    private lateinit var searchView: SearchView
 
     private lateinit var mListener: VocabularyCardListener
 
@@ -60,7 +62,7 @@ class VocabularyFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private val mSetQuery = Runnable {
         mViewModel.setQuery(
             mMangaNameEditText.text?.toString() ?: "",
-            mVocabularyEditText.text?.toString() ?: ""
+            searchView.query.toString()
         )
     }
 
@@ -72,6 +74,45 @@ class VocabularyFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_vocabulary, menu)
         super.onCreateOptionsMenu(menu, inflater)
+
+        mFavorite = menu.findItem(R.id.menu_vocabulary_favorite)
+
+        setFavorite(mViewModel.getFavorite())
+        mFavorite.setOnMenuItemClickListener {
+            mViewModel.setQueryFavorite(!mViewModel.getFavorite())
+            setFavorite(mViewModel.getFavorite())
+            true
+        }
+
+        val miOrder = menu.findItem(R.id.menu_vocabulary_list_order)
+        miOrder.setOnMenuItemClickListener {
+            mViewModel.setQueryOrder(!mViewModel.getOrder())
+            true
+        }
+
+        miSearch = menu.findItem(R.id.menu_vocabulary_search)
+        searchView = miSearch.actionView as SearchView
+        searchView.imeOptions = EditorInfo.IME_ACTION_DONE
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                mViewModel.setQuery(
+                    mMangaNameEditText.text?.toString() ?: "",
+                    query ?: ""
+                )
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+        })
+    }
+
+    override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
+        when (menuItem.itemId) {
+            R.id.menu_history_library -> {}
+        }
+        return super.onOptionsItemSelected(menuItem)
     }
 
     override fun onCreateView(
@@ -88,15 +129,16 @@ class VocabularyFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         mContent = root.findViewById(R.id.vocabulary_content)
         mMangaName = root.findViewById(R.id.vocabulary_manga_text)
         mMangaNameEditText = root.findViewById(R.id.vocabulary_manga_edittext)
-        mVocabulary = root.findViewById(R.id.vocabulary_find_text)
-        mVocabularyEditText = root.findViewById(R.id.vocabulary_find_edittext)
-        mFavoriteButton = root.findViewById(R.id.vocabulary_favorites)
 
         mScrollUp = root.findViewById(R.id.vocabulary_scroll_up)
         mScrollDown = root.findViewById(R.id.vocabulary_scroll_down)
 
         mScrollUp.visibility = View.GONE
         mScrollDown.visibility = View.GONE
+
+        mViewModel.isQuery.observe(viewLifecycleOwner) {
+            mRefreshLayout.isRefreshing = it
+        }
 
         mManga?.let {
             mMangaNameEditText.setText(it.name)
@@ -107,35 +149,7 @@ class VocabularyFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         mRefreshLayout.setOnRefreshListener(this)
         mRefreshLayout.isEnabled = true
 
-        mViewModel.isQuery.observe(viewLifecycleOwner) {
-            mRefreshLayout.isRefreshing = it
-        }
-
-        setFavorite(mViewModel.getFavorite())
-        mFavoriteButton.setOnClickListener {
-            mViewModel.setQuery(!mViewModel.getFavorite())
-            setFavorite(mViewModel.getFavorite())
-        }
-
         mMangaNameEditText.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(text: CharSequence?, start: Int, before: Int, count: Int) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    if (mHandler.hasCallbacks(mSetQuery))
-                        mHandler.removeCallbacks(mSetQuery)
-                } else
-                    mHandler.removeCallbacks(mSetQuery)
-
-                mHandler.postDelayed(mSetQuery, 1000)
-            }
-        })
-
-        mVocabularyEditText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
             }
 
@@ -244,10 +258,13 @@ class VocabularyFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun setFavorite(favorite: Boolean) {
-        mFavoriteButton.setIconResource(if (favorite) R.drawable.ic_favorite_mark else R.drawable.ic_favorite_unmark)
+        mFavorite.setIcon(if (favorite) R.drawable.ic_favorite_mark else R.drawable.ic_favorite_unmark)
     }
 
     override fun onRefresh() {
-        mViewModel.setQuery(mMangaNameEditText.text.toString(), mVocabularyEditText.text.toString(), mFavoriteButton.isChecked)
+        if (::searchView.isInitialized)
+            mViewModel.setQuery(mMangaNameEditText.text.toString(), searchView.query.toString(), mFavorite.isChecked)
+        else
+            mViewModel.setQuery(mMangaNameEditText.text.toString(), "", mFavorite.isChecked)
     }
 }
