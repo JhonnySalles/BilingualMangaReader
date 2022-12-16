@@ -10,13 +10,13 @@
 
     <TextView
         android:id="@+id/vocabulary_manga_list_appear"
+        style="@style/TextNormal.Vocabulary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:ellipsize="end"
         android:maxLines="1"
         android:textAppearance="?attr/textAppearanceHeadline6"
-        android:textColor="?attr/colorPrimaryInverse"
         android:textSize="@dimen/vocabulary_manga_appear_size" />
 
     <com.google.android.material.card.MaterialCardView

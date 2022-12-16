@@ -349,6 +349,10 @@
     <string name="vocabulary_appear">Frequency: %d</string>
     <string name="vocabulary_imported">Completed vocabulary import.</string>
 
+    <string name="menu_vocabulary_search">Search</string>
+    <string name="menu_vocabulary_order">Order</string>
+    <string name="menu_vocabulary_favorite">Favorite</string>
+
     <!-- KANJI -->
     <string name="kanji_jlpt"><b><i>jlpt:</i></b> N%d</string>
     <string name="kanji_grade"><b><i>grade:</i></b> %d</string>

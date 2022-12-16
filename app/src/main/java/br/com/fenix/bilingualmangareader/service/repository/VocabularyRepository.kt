@@ -9,6 +9,7 @@ import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.entity.Vocabulary
 import br.com.fenix.bilingualmangareader.model.entity.VocabularyManga
 import br.com.fenix.bilingualmangareader.model.enums.Languages
+import br.com.fenix.bilingualmangareader.view.ui.vocabulary.VocabularyViewModel
 import kotlinx.coroutines.*
 import org.slf4j.LoggerFactory
 import java.util.*
@@ -39,15 +40,15 @@ class VocabularyRepository(context: Context) {
         mDataBaseDAO.delete(obj)
     }
 
-    fun list(manga: String = "", vocabulary: String = "", favorite: Boolean = false): PagingSource<Int, Vocabulary> {
-        return if (manga.isNotEmpty() && vocabulary.isNotEmpty())
-            mDataBaseDAO.list(manga, vocabulary, vocabulary, favorite)
-        else if (manga.isNotEmpty())
-            mDataBaseDAO.list(manga, favorite)
-        else if (vocabulary.isNotEmpty())
-            mDataBaseDAO.list(vocabulary, vocabulary, favorite)
+    fun list(query: VocabularyViewModel.Query): PagingSource<Int, Vocabulary> {
+        return if (query.manga.isNotEmpty() && query.vocabulary.isNotEmpty())
+            mDataBaseDAO.list(query.manga, query.vocabulary, query.vocabulary, query.favorite, query.orderInverse)
+        else if (query.manga.isNotEmpty())
+            mDataBaseDAO.list(query.manga, query.favorite, query.orderInverse)
+        else if (query.vocabulary.isNotEmpty())
+            mDataBaseDAO.list(query.vocabulary, query.vocabulary, query.favorite, query.orderInverse)
         else
-            mDataBaseDAO.list(favorite)
+            mDataBaseDAO.list(query.favorite, query.orderInverse)
     }
 
     fun findByVocabulary(mangaName: String, vocabulary: Vocabulary): Vocabulary {
@@ -55,16 +56,16 @@ class VocabularyRepository(context: Context) {
         return vocabulary
     }
 
-
-    private val manga: Set<Manga> = mutableSetOf()
+    private val mMangaList = mutableMapOf<Long, Manga?>()
     private fun findByVocabulary(mangaName: String, idVocabulary: Long): List<VocabularyManga> {
         val list = mDataBaseDAO.findByVocabulary(mangaName, idVocabulary)
         list.forEach {
-            it.manga = manga.firstOrNull { m -> m.id == it.idManga }
+            if (mMangaList.containsKey(it.idManga))
+                it.manga = mMangaList[it.idManga]
 
             if (it.manga == null) {
                 it.manga = mDataBaseDAO.getManga(it.idManga)
-                manga.plus(it.manga)
+                mMangaList[it.idManga] = it.manga
             }
         }
         return list

@@ -66,8 +66,6 @@ class HistoryFragment : Fragment() {
                 return false
             }
         })
-
-        enableSearchView(searchView, true)
     }
 
     override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
@@ -237,16 +235,6 @@ class HistoryFragment : Fragment() {
     private fun observer() {
         mViewModel.listMangas.observe(viewLifecycleOwner) {
             updateList(it)
-        }
-    }
-
-    private fun enableSearchView(view: View, enabled: Boolean) {
-        view.isEnabled = enabled
-        if (view is ViewGroup) {
-            for (i in 0 until view.childCount) {
-                val child = view.getChildAt(i)
-                enableSearchView(child, enabled)
-            }
         }
     }
 

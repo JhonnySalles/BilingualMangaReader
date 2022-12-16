@@ -14,15 +14,16 @@ class VocabularyViewModel(application: Application) : AndroidViewModel(applicati
     private var mIsQuery = MutableLiveData(false)
     val isQuery: LiveData<Boolean> = mIsQuery
 
-    private val currentQuery = MutableLiveData(DEFAULT_QUERY)
+    inner class Query(var manga: String = "", var vocabulary: String = "", var favorite: Boolean = false, var orderInverse: Boolean = false)
 
-    private fun flowPager(query: Triple<String, String, Boolean>) =
+    private val currentQuery = MutableLiveData(Query())
+
+    private fun flowPager(query: Query) =
         Pager(PagingConfig(pageSize = 40)) {
-            val list = mDataBase.list(query.first, query.second, query.third)
-            list
+            mDataBase.list(query)
         }.liveData.map { live ->
             live.map { voc ->
-                mDataBase.findByVocabulary(query.first, voc)
+                mDataBase.findByVocabulary(query.manga, voc)
             }
         }
 
@@ -34,34 +35,38 @@ class VocabularyViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     fun setQuery(manga: String, vocabulary: String) {
-        currentQuery.value = Triple(manga, vocabulary, currentQuery.value?.third ?: false)
+        currentQuery.value = Query(manga, vocabulary, currentQuery.value?.favorite ?: false, currentQuery.value?.orderInverse ?: false)
     }
 
     fun setQueryVocabulary(vocabulary: String) {
-        currentQuery.value = Triple(currentQuery.value?.first ?: "", vocabulary, currentQuery.value?.third ?: false)
+        currentQuery.value = Query(currentQuery.value?.manga ?: "", vocabulary, currentQuery.value?.favorite ?: false, currentQuery.value?.orderInverse ?: false)
     }
 
     fun setQueryManga(manga: String) {
-        currentQuery.value = Triple(manga, currentQuery.value?.second ?: "", currentQuery.value?.third ?: false)
+        currentQuery.value = Query(manga, currentQuery.value?.vocabulary ?: "", currentQuery.value?.favorite ?: false, currentQuery.value?.orderInverse ?: false)
     }
 
-    fun setQuery(favorite: Boolean) {
-        currentQuery.value = Triple(currentQuery.value?.first ?: "", currentQuery.value?.second ?: "", favorite)
+    fun setQueryFavorite(favorite: Boolean) {
+        currentQuery.value = Query(currentQuery.value?.manga ?: "", currentQuery.value?.vocabulary ?: "", favorite, currentQuery.value?.orderInverse ?: false)
+    }
+
+    fun setQueryOrder(orderInverse: Boolean) {
+        currentQuery.value = Query(currentQuery.value?.manga ?: "", currentQuery.value?.vocabulary ?: "", currentQuery.value?.favorite ?: false, orderInverse)
     }
 
     fun setQuery(manga: String, vocabulary: String, favorite: Boolean) {
-        currentQuery.value = Triple(manga, vocabulary, favorite)
+        currentQuery.value = Query(manga, vocabulary, favorite)
     }
 
     fun clearQuery() {
-        currentQuery.value = DEFAULT_QUERY
+        currentQuery.value = Query()
     }
 
-    fun getFavorite() : Boolean = currentQuery.value?.third ?: false
+    fun getFavorite(): Boolean =
+        currentQuery.value?.favorite ?: false
 
-    companion object {
-        private val DEFAULT_QUERY = Triple("", "", false)
-    }
+    fun getOrder(): Boolean =
+        currentQuery.value?.orderInverse ?: false
 
     fun update(vocabulary: Vocabulary) {
         mDataBase.update(vocabulary)

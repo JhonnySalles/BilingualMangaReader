@@ -153,7 +153,7 @@
 
     <dimen name="pages_link_file_link_margin_toolbar">30dp</dimen>
     <dimen name="page_link_page_index_title_padding">15dp</dimen>
-    <dimen name="page_link_language_margin">3dp</dimen>
+    <dimen name="page_link_language_margin">1dp</dimen>
     <dimen name="page_link_fullscreen_size">50dp</dimen>
     <dimen name="page_link_pages_index">55dp</dimen>
     <dimen name="page_link_help_size">50dp</dimen>
