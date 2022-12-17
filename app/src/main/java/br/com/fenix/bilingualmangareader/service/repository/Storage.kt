@@ -59,17 +59,14 @@ class Storage(context: Context) {
     fun listDeleted(library: Library): List<Manga>? = mRepository.listDeleted(library)
 
     fun delete(manga: Manga) {
-        manga.lastAlteration = Date()
         mRepository.delete(manga)
     }
 
     fun updateBookMark(manga: Manga) {
-        manga.lastAlteration = Date()
         mRepository.updateBookMark(manga)
     }
 
     fun save(manga: Manga): Long {
-        manga.lastAlteration = Date()
         return if (manga.id != null) {
             mRepository.update(manga)
             manga.id!!

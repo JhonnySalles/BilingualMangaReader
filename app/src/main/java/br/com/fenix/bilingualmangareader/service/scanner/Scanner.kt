@@ -68,7 +68,7 @@ class Scanner(private val context: Context) {
     fun scanLibrary(library: Library) {
         if (mUpdateThread == null || mUpdateThread!!.state == Thread.State.TERMINATED) {
             mLibrary = library
-            val runnable = LibraryUpdateRunnable()
+            val runnable = LibraryUpdateRunnable(library)
             mUpdateThread = Thread(runnable)
             mUpdateThread!!.priority =
                 Process.THREAD_PRIORITY_DEFAULT + Process.THREAD_PRIORITY_LESS_FAVORABLE
@@ -139,11 +139,10 @@ class Scanner(private val context: Context) {
     private fun generateCover(parse: Parse, manga: Manga) =
         ImageCoverController.instance.getCoverFromFile(context, manga.file, parse)
 
-    private inner class LibraryUpdateRunnable : Runnable {
+    private inner class LibraryUpdateRunnable(var library: Library) : Runnable {
         override fun run() {
             var isProcess = false
             try {
-                val library = mLibrary
                 val libraryPath = library.path
                 if (libraryPath == "" || !File(libraryPath).exists()) return
 
