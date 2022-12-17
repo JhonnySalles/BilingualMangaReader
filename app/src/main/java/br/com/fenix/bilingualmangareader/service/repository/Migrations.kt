@@ -309,7 +309,25 @@ class Migrations {
 
                 mLOGGER.info("Start migration 12 - 13...")
 
+                database.execSQL(
+                    "CREATE INDEX index_" + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME
+                            + "_" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + "_" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY
+                            + " ON " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME +
+                            "(" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + ", " + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY + ")"
+                )
+
                 mLOGGER.info("Completed migration 12 - 13.")
+
+            }
+        }
+
+        // Migration version 13.
+        val MIGRATION_13_14 = object : Migration(13, 14) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+
+                mLOGGER.info("Start migration 13 - 14...")
+
+                mLOGGER.info("Completed migration 13 - 14.")
 
             }
         }

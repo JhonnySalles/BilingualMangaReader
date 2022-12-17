@@ -17,7 +17,7 @@
         app:showAsAction="always"/>
 
     <item android:id="@+id/menu_vocabulary_favorite"
-        android:title="@string/menu_vocabulary_order"
+        android:title="@string/menu_vocabulary_favorite"
         android:icon="@drawable/ic_favorite_unmark"
         android:checkable="true"
         android:checked="false"

@@ -13,7 +13,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.fenix.bilingualmangareader.MainActivity
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.enums.*
