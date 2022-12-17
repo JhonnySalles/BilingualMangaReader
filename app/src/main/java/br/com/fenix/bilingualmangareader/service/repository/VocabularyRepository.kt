@@ -2,7 +2,6 @@ package br.com.fenix.bilingualmangareader.service.repository
 
 import android.content.Context
 import android.widget.Toast
-import androidx.paging.PagingSource
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Chapter
 import br.com.fenix.bilingualmangareader.model.entity.Manga
@@ -40,15 +39,15 @@ class VocabularyRepository(context: Context) {
         mDataBaseDAO.delete(obj)
     }
 
-    fun list(query: VocabularyViewModel.Query): PagingSource<Int, Vocabulary> {
+    fun list(query: VocabularyViewModel.Query, padding: Int, size: Int): List<Vocabulary> {
         return if (query.manga.isNotEmpty() && query.vocabulary.isNotEmpty())
-            mDataBaseDAO.list(query.manga, query.vocabulary, query.vocabulary, query.favorite, query.orderInverse)
+            mDataBaseDAO.list(query.manga, query.vocabulary, query.vocabulary, query.favorite, query.orderInverse, padding, size)
         else if (query.manga.isNotEmpty())
-            mDataBaseDAO.list(query.manga, query.favorite, query.orderInverse)
+            mDataBaseDAO.list(query.manga, query.favorite, query.orderInverse, padding, size)
         else if (query.vocabulary.isNotEmpty())
-            mDataBaseDAO.list(query.vocabulary, query.vocabulary, query.favorite, query.orderInverse)
+            mDataBaseDAO.list(query.vocabulary, query.vocabulary, query.favorite, query.orderInverse, padding, size)
         else
-            mDataBaseDAO.list(query.favorite, query.orderInverse)
+            mDataBaseDAO.list(query.favorite, query.orderInverse, padding, size)
     }
 
     fun findByVocabulary(mangaName: String, vocabulary: Vocabulary): Vocabulary {
@@ -106,6 +105,9 @@ class VocabularyRepository(context: Context) {
             listOf()
         }
     }
+
+    fun getManga(idManga: Long) =
+        mDataBaseDAO.getManga(idManga)
 
     fun insert(idManga: Long, idVocabulary: Long, appears: Int) {
         mDataBaseDAO.insert(mBase.openHelper, idManga, idVocabulary, appears)

@@ -33,7 +33,6 @@ class MyAnimeListTracker(var mContext: Context) {
 
             call.enqueue(object : Callback<OAuth> {
                 override fun onResponse(call: Call<OAuth>, response: Response<OAuth>) {
-                    println(response)
                     if (response.code() == 200) {
                         oAuth = response.body()
                         token = response.body()?.access_token ?: ""

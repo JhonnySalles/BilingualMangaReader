@@ -11,15 +11,15 @@ import br.com.fenix.bilingualmangareader.model.entity.VocabularyManga
 class VocabularyMangaListCardAdapter : RecyclerView.Adapter<VocabularyMangaListViewHolder>() {
 
     companion object {
-        private var mImageList: MutableMap<Long, Bitmap> = mutableMapOf()
-        fun clearImageList() =
-            mImageList.clear()
+        private var mMangaList: MutableMap<Long, Bitmap?> = mutableMapOf()
+        fun clearVocabularyMangaList() =
+            mMangaList.clear()
     }
 
     private var mList: List<VocabularyManga> = listOf()
 
     override fun onBindViewHolder(holder: VocabularyMangaListViewHolder, position: Int) {
-        holder.bind(mList[position], mImageList)
+        holder.bind(mList[position], mMangaList)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VocabularyMangaListViewHolder {
@@ -33,7 +33,10 @@ class VocabularyMangaListCardAdapter : RecyclerView.Adapter<VocabularyMangaListV
 
     fun updateList(list: List<VocabularyManga>) {
         mList = list
-        notifyDataSetChanged()
+        if (list.size > 10)
+            notifyItemChanged(0, 10)
+        else
+            notifyItemChanged(0, list.size)
     }
 
 }

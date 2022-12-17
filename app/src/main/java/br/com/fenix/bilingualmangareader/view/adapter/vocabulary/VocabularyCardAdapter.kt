@@ -11,6 +11,7 @@ import br.com.fenix.bilingualmangareader.service.listener.VocabularyCardListener
 
 class VocabularyCardAdapter(var listener: VocabularyCardListener) :
     PagingDataAdapter<Vocabulary, VocabularyViewHolder>(DIFF_CALLBACK) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         VocabularyViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.line_card_vocabulary, parent, false), listener)
 

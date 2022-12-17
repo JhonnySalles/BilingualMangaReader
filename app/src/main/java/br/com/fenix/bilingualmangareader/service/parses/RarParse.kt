@@ -3,7 +3,6 @@ package br.com.fenix.bilingualmangareader.service.parses
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import com.github.junrar.Archive
 import com.github.junrar.exception.RarException
-import com.github.junrar.exception.UnsupportedRarV5Exception
 import com.github.junrar.rarfile.FileHeader
 import java.io.*
 

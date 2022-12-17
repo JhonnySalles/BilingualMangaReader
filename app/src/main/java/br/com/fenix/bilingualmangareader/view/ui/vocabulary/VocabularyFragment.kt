@@ -22,11 +22,13 @@ import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.entity.Vocabulary
 import br.com.fenix.bilingualmangareader.service.listener.VocabularyCardListener
 import br.com.fenix.bilingualmangareader.view.adapter.vocabulary.VocabularyCardAdapter
+import br.com.fenix.bilingualmangareader.view.adapter.vocabulary.VocabularyLoadState
 import br.com.fenix.bilingualmangareader.view.adapter.vocabulary.VocabularyMangaListCardAdapter
 import br.com.fenix.bilingualmangareader.view.components.ComponentsUtil
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
 
@@ -231,18 +233,18 @@ class VocabularyFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         }
 
         val adapter = VocabularyCardAdapter(mListener)
-        mRecyclerView.adapter = adapter
+        mRecyclerView.adapter = adapter.withLoadStateFooter(VocabularyLoadState())
         mRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         lifecycleScope.launch {
-            mViewModel.vocabularyPager.observe(viewLifecycleOwner) {
-                adapter.submitData(viewLifecycleOwner.lifecycle, it)
+            mViewModel.vocabularyPager().collectLatest {
+                adapter.submitData(it)
             }
         }
     }
 
     override fun onDestroy() {
-        VocabularyMangaListCardAdapter.clearImageList()
+        VocabularyMangaListCardAdapter.clearVocabularyMangaList()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             if (mHandler.hasCallbacks(mDismissUpButton))

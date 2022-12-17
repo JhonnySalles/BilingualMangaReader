@@ -17,7 +17,8 @@ import br.com.fenix.bilingualmangareader.util.constants.DataBaseConsts
         childColumns = arrayOf(DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY),
         onDelete = ForeignKey.NO_ACTION,
         onUpdate = ForeignKey.NO_ACTION
-    )]
+    )],
+    indices = [Index(value = [DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA, DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY])]
 )
 data class VocabularyManga(
     @PrimaryKey(autoGenerate = true)

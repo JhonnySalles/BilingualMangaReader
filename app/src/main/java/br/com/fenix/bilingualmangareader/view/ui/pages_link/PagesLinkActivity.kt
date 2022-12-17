@@ -82,7 +82,6 @@ class PagesLinkActivity : AppCompatActivity() {
 
                             val link = items.filter { file -> file.nameWithoutExtension.contains(GeneralConsts.FILE_LINK.FOLDER_LINK + "_") }
                             for (f in link) {
-                                println(f.nameWithoutExtension)
                                 f.listFiles()?.let { item ->
                                     for (i in item)
                                         i.delete()
