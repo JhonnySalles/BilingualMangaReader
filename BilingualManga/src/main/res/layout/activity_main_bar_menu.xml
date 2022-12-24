@@ -38,11 +38,11 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="230dp"
+        android:layout_height="250dp"
         android:layout_gravity="top|center"
         android:contentDescription="@string/about_app_name"
         android:scaleType="centerCrop"
-        android:src="@mipmap/main_header_cut_semi" />
+        android:src="@mipmap/main_header_semi" />
 
     <View
         android:id="@+id/main_detail_title_content"
