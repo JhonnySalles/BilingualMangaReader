@@ -2,7 +2,7 @@
 > Leitor de mangas offline, no qual possui compatibilidade com Tesseract e Google Vision para utilização de OCR, vínculo de dois arquivos em idiomas diferentes com facilidade na troca entre as páginas de ambos e compatibilidade com textos extraido e processado através do programa [MangaExtractor](https://github.com/JhonnySalles/MangaExtractor)
 
 <h4 align="center"> 
-	🚧  BilingualMangaReader 🚀 Em construção...  🚧
+	🚧  BilingualMangaReader 🛑 Descontinuado...  🚧
 </h4>
 
 [![Build Status][travis-image]][travis-url]
