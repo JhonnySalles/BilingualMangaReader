@@ -4,6 +4,9 @@
 <h4 align="center"> 
 	🚧  BilingualMangaReader 🛑 Descontinuado...  🚧
 </h4>
+<h4 align="center"> 
+	⚠  Projeto migrado à <a href="https://github.com/JhonnySalles/BilingualReader">BilingualReader</a>  🚸
+</h4>
 
 [![Build Status][travis-image]][travis-url]
 
