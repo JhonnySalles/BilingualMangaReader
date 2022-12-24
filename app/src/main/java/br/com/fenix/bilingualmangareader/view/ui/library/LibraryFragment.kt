@@ -40,7 +40,6 @@ import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.slf4j.LoggerFactory
 import java.util.*
-import kotlin.collections.HashMap
 import kotlin.math.max
 
 
@@ -87,8 +86,13 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             mViewModel.addStackLibrary(uniqueID, mViewModel.getLibrary())
     }
 
+    override fun onDestroyOptionsMenu() {
+        mViewModel.clearFilter()
+        super.onDestroyOptionsMenu()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.main_menu, menu)
+        inflater.inflate(R.menu.menu_library, menu)
         super.onCreateOptionsMenu(menu, inflater)
 
         miGridType = menu.findItem(R.id.menu_library_grid_type)

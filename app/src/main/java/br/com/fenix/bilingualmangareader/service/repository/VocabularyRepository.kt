@@ -2,25 +2,26 @@ package br.com.fenix.bilingualmangareader.service.repository
 
 import android.content.Context
 import android.widget.Toast
-import androidx.paging.PagingSource
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Chapter
 import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.entity.Vocabulary
 import br.com.fenix.bilingualmangareader.model.entity.VocabularyManga
 import br.com.fenix.bilingualmangareader.model.enums.Languages
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import br.com.fenix.bilingualmangareader.view.ui.vocabulary.VocabularyViewModel
+import kotlinx.coroutines.*
 import org.slf4j.LoggerFactory
+import java.util.*
+import kotlin.streams.toList
 
 class VocabularyRepository(context: Context) {
 
     private val mLOGGER = LoggerFactory.getLogger(VocabularyRepository::class.java)
     private val mBase = DataBase.getDataBase(context)
     private var mDataBaseDAO = mBase.getVocabularyDao()
-    private val mVocabImported = Toast.makeText(context, context.getString(R.string.vocabulary_imported), Toast.LENGTH_SHORT)
+    private val mMsgImport = context.getString(R.string.vocabulary_imported)
+    private val mVocabImported = Toast.makeText(context, mMsgImport, Toast.LENGTH_SHORT)
+    private var mLastImport: Long? = null
 
     fun save(obj: Vocabulary): Long {
         val exist = mDataBaseDAO.exists(obj.word, obj.basicForm ?: "")
@@ -38,33 +39,33 @@ class VocabularyRepository(context: Context) {
         mDataBaseDAO.delete(obj)
     }
 
-    fun list(manga: String = "", vocabulary: String = "", favorite: Boolean = false): PagingSource<Int, Vocabulary> {
-        return if (manga.isNotEmpty() && vocabulary.isNotEmpty())
-            mDataBaseDAO.list(manga, vocabulary, vocabulary, favorite)
-        else if (manga.isNotEmpty())
-            mDataBaseDAO.list(manga, favorite)
-        else if (vocabulary.isNotEmpty())
-            mDataBaseDAO.list(vocabulary, vocabulary, favorite)
+    fun list(query: VocabularyViewModel.Query, padding: Int, size: Int): List<Vocabulary> {
+        return if (query.manga.isNotEmpty() && query.vocabulary.isNotEmpty())
+            mDataBaseDAO.list(query.manga, query.vocabulary, query.vocabulary, query.favorite, query.orderInverse, padding, size)
+        else if (query.manga.isNotEmpty())
+            mDataBaseDAO.list(query.manga, query.favorite, query.orderInverse, padding, size)
+        else if (query.vocabulary.isNotEmpty())
+            mDataBaseDAO.list(query.vocabulary, query.vocabulary, query.favorite, query.orderInverse, padding, size)
         else
-            mDataBaseDAO.list(favorite)
+            mDataBaseDAO.list(query.favorite, query.orderInverse, padding, size)
     }
 
-    fun findByVocabulary(vocabulary: Vocabulary): Vocabulary {
-        vocabulary.vocabularyMangas = findByVocabulary(vocabulary.id!!)
-        vocabulary.appears = 0
-        vocabulary.vocabularyMangas.forEach { vocabulary.appears += it.appears }
+    fun findByVocabulary(mangaName: String, vocabulary: Vocabulary): Vocabulary {
+        vocabulary.vocabularyMangas = findByVocabulary(mangaName, vocabulary.id!!)
         return vocabulary
     }
 
-
-    private val manga: Set<Manga> = setOf()
-    private fun findByVocabulary(idVocabulary: Long): List<VocabularyManga> {
-        val list = mDataBaseDAO.findByVocabulary(idVocabulary)
+    private val mMangaList = mutableMapOf<Long, Manga?>()
+    private fun findByVocabulary(mangaName: String, idVocabulary: Long): List<VocabularyManga> {
+        val list = mDataBaseDAO.findByVocabulary(mangaName, idVocabulary)
         list.forEach {
-            it.manga = manga.firstOrNull { m -> m.id == it.idManga }
+            if (mMangaList.containsKey(it.idManga))
+                it.manga = mMangaList[it.idManga]
 
-            if (it.manga == null)
+            if (it.manga == null) {
                 it.manga = mDataBaseDAO.getManga(it.idManga)
+                mMangaList[it.idManga] = it.manga
+            }
         }
         return list
     }
@@ -105,39 +106,53 @@ class VocabularyRepository(context: Context) {
         }
     }
 
+    fun getManga(idManga: Long) =
+        mDataBaseDAO.getManga(idManga)
+
     fun insert(idManga: Long, idVocabulary: Long, appears: Int) {
         mDataBaseDAO.insert(mBase.openHelper, idManga, idVocabulary, appears)
     }
 
     fun processVocabulary(idManga: Long?, chapters: List<Chapter>) {
-        if (idManga == null || chapters.isEmpty())
+        if (idManga == null || chapters.isEmpty() || idManga == mLastImport)
             return
+
+        val chaptersList = Collections
+            .synchronizedCollection(chapters.parallelStream()
+                .filter(Objects::nonNull)
+                .filter { it.language == Languages.JAPANESE && it.vocabulary.isNotEmpty() }
+                .toList())
 
         CoroutineScope(Dispatchers.IO).launch {
             async {
                 try {
-                    val list = mutableListOf<Vocabulary>()
+                    val list = mutableSetOf<Vocabulary>()
+                    val pages = mutableListOf<Vocabulary>()
 
-                    chapters.parallelStream().filter { it.language == Languages.JAPANESE && it.vocabulary.isNotEmpty() }
+                    chaptersList.parallelStream()
                         .forEach {
                             for (vocabulary in it.vocabulary)
                                 if (!list.contains(vocabulary))
                                     list.add(vocabulary)
+
+                            it.pages.parallelStream().forEach { p -> pages.addAll(p.vocabulary) }
                         }
 
                     for (vocabulary in list) {
-                        var appears = 0
+                        if (vocabulary != null) {
+                            var appears = 0
 
-                        chapters.parallelStream().filter { it.language == Languages.JAPANESE && it.vocabulary.isNotEmpty() }
-                            .forEach { c ->
-                                c.pages.parallelStream()
-                                    .forEach { p -> p.vocabulary.parallelStream().forEach { v -> if (v == vocabulary) appears++ } }
+                            pages.parallelStream().forEach { v -> if (v == vocabulary) appears++ }
+
+                            withContext(Dispatchers.Main) {
+                                vocabulary.id = save(vocabulary)
+                                vocabulary.id?.let { insert(idManga, it, appears) }
                             }
-
-                        vocabulary.id = save(vocabulary)
-                        vocabulary.id?.let { insert(idManga, it, appears) }
+                        }
                     }
 
+                    mLastImport = idManga
+                    mVocabImported.setText("$mMsgImport\n${mDataBaseDAO.getManga(idManga).title}")
                     mVocabImported.show()
                 } catch (e: Exception) {
                     mLOGGER.error("Error process vocabulary. ", e)

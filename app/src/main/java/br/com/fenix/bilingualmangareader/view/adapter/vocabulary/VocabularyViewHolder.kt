@@ -18,7 +18,22 @@ import com.google.android.material.button.MaterialButton
 class VocabularyViewHolder(itemView: View, private val listener: VocabularyCardListener) :
     RecyclerView.ViewHolder(itemView) {
 
+    companion object {
+        private fun createLayout(context: Context): GridLayoutManager {
+            val layout = GridLayoutManager(context, 1)
+            layout.orientation = RecyclerView.HORIZONTAL
+            return layout
+        }
+
+        private fun createAdapter(): VocabularyMangaListCardAdapter =
+            VocabularyMangaListCardAdapter()
+    }
+
+    val layout: GridLayoutManager = createLayout(itemView.context)
+    val adapter: VocabularyMangaListCardAdapter = createAdapter()
+
     fun bind(vocabulary: Vocabulary) {
+        println("bind")
         val content = itemView.findViewById<LinearLayout>(R.id.vocabulary_content)
         val title = itemView.findViewById<TextView>(R.id.vocabulary_title)
         val reading = itemView.findViewById<TextView>(R.id.vocabulary_reading)
@@ -42,7 +57,7 @@ class VocabularyViewHolder(itemView: View, private val listener: VocabularyCardL
         }
 
         title.text = Util.setVerticalText(vocabulary.word)
-        reading.text = vocabulary.reading + (if (vocabulary.revised) '¹' else "")
+        reading.text = vocabulary.reading + (if (!vocabulary.revised) '¹' else "")
         meaning.text = vocabulary.portuguese
         appear.text = itemView.context.getString(R.string.vocabulary_appear, vocabulary.appears)
 
@@ -54,12 +69,9 @@ class VocabularyViewHolder(itemView: View, private val listener: VocabularyCardL
             listener.onClickFavorite(vocabulary)
         }
 
-        val lineAdapter = VocabularyMangaListCardAdapter()
-        mangaList.adapter = lineAdapter
-        val layout = GridLayoutManager(itemView.context, 1)
-        layout.orientation = RecyclerView.HORIZONTAL
+        mangaList.adapter = adapter
         mangaList.layoutManager = layout
-        lineAdapter.updateList(vocabulary.vocabularyMangas)
+        adapter.updateList(vocabulary.vocabularyMangas)
     }
 
 }

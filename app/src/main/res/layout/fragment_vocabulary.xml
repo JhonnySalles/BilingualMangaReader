@@ -62,45 +62,6 @@
                     android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/page_link_language_margin"
-                android:gravity="center">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/vocabulary_favorites"
-                    style="@style/Button.RoundedIconOnly"
-                    android:layout_width="@dimen/vocabulary_favorites_button_size"
-                    android:layout_height="@dimen/vocabulary_favorites_button_size"
-                    android:textColor="?attr/colorSecondary"
-                    android:contentDescription="@string/vocabulary_favorites"
-                    android:layout_marginEnd="5dp"
-                    app:iconTint="?attr/colorSecondary"
-                    app:icon="@drawable/ic_favorite_unmark"/>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/vocabulary_find_text"
-                    style="@style/TextInputEditText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:hint="@string/vocabulary_find"
-                    android:enabled="true"
-                    app:startIconDrawable="@drawable/ic_translate"  >
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/vocabulary_find_edittext"
-                        style="@style/TextFieldEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </LinearLayout>
-
         </LinearLayout>
 
         <!--                                Ended                                -->

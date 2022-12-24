@@ -170,34 +170,6 @@ class Migrations {
                 database.execSQL("ALTER TABLE " + DataBaseConsts.MANGA.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.MANGA.COLUMNS.FK_ID_LIBRARY + " INTEGER")
 
                 database.execSQL(
-                    "CREATE TABLE " + DataBaseConsts.VOCABULARY.TABLE_NAME + " (" +
-                            DataBaseConsts.VOCABULARY.COLUMNS.ID + " INTEGER PRIMARY KEY, " +
-                            DataBaseConsts.VOCABULARY.COLUMNS.WORD + " TEXT NOT NULL, " +
-                            DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM + " TEXT, " +
-                            DataBaseConsts.VOCABULARY.COLUMNS.READING + " TEXT, " +
-                            DataBaseConsts.VOCABULARY.COLUMNS.ENGLISH + " TEXT, " +
-                            DataBaseConsts.VOCABULARY.COLUMNS.PORTUGUESE + " TEXT, " +
-                            DataBaseConsts.VOCABULARY.COLUMNS.FAVORITE + "  INTEGER DEFAULT 0, " +
-                            DataBaseConsts.VOCABULARY.COLUMNS.REVISED + " INTEGER DEFAULT 0 NOT NULL)"
-                )
-
-                database.execSQL(
-                    "CREATE INDEX index_" + DataBaseConsts.VOCABULARY.TABLE_NAME
-                            + "_" + DataBaseConsts.VOCABULARY.COLUMNS.WORD + "_" + DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM
-                            + " ON " + DataBaseConsts.VOCABULARY.TABLE_NAME +
-                            "(" + DataBaseConsts.VOCABULARY.COLUMNS.WORD + ", " + DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM + ")"
-                )
-
-                database.execSQL(
-                    "CREATE TABLE " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + " (" +
-                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + " INTEGER UNIQUE, " +
-                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY + " INTEGER UNIQUE," +
-                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.APPEARS + "  INTEGER DEFAULT 0," +
-                            " FOREIGN KEY(" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA +") REFERENCES " + DataBaseConsts.MANGA.TABLE_NAME + "(" + DataBaseConsts.MANGA.COLUMNS.ID + ")," +
-                            " FOREIGN KEY(" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY +") REFERENCES " + DataBaseConsts.LIBRARIES.TABLE_NAME + "(" + DataBaseConsts.LIBRARIES.COLUMNS.ID + "))"
-                )
-
-                database.execSQL(
                     "CREATE TABLE " + DataBaseConsts.LIBRARIES.TABLE_NAME + " (" +
                             DataBaseConsts.LIBRARIES.COLUMNS.ID + " INTEGER PRIMARY KEY, " +
                             DataBaseConsts.LIBRARIES.COLUMNS.TITLE + " TEXT NOT NULL, " +
@@ -213,10 +185,41 @@ class Migrations {
                             "(" + DataBaseConsts.LIBRARIES.COLUMNS.TITLE + ")"
                 )
 
+                database.execSQL(
+                    "CREATE TABLE " + DataBaseConsts.VOCABULARY.TABLE_NAME + " (" +
+                            DataBaseConsts.VOCABULARY.COLUMNS.ID + " INTEGER PRIMARY KEY, " +
+                            DataBaseConsts.VOCABULARY.COLUMNS.WORD + " TEXT NOT NULL, " +
+                            DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM + " TEXT, " +
+                            DataBaseConsts.VOCABULARY.COLUMNS.READING + " TEXT, " +
+                            DataBaseConsts.VOCABULARY.COLUMNS.ENGLISH + " TEXT, " +
+                            DataBaseConsts.VOCABULARY.COLUMNS.PORTUGUESE + " TEXT, " +
+                            DataBaseConsts.VOCABULARY.COLUMNS.REVISED + " INTEGER DEFAULT 0 NOT NULL, " +
+                            DataBaseConsts.VOCABULARY.COLUMNS.FAVORITE + " INTEGER DEFAULT 0 NOT NULL, " +
+                            DataBaseConsts.VOCABULARY.COLUMNS.APPEARS + "  INTEGER DEFAULT 0 NOT NULL)"
+                )
+
+                database.execSQL(
+                    "CREATE INDEX index_" + DataBaseConsts.VOCABULARY.TABLE_NAME
+                            + "_" + DataBaseConsts.VOCABULARY.COLUMNS.WORD + "_" + DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM
+                            + " ON " + DataBaseConsts.VOCABULARY.TABLE_NAME +
+                            "(" + DataBaseConsts.VOCABULARY.COLUMNS.WORD + ", " + DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM + ")"
+                )
+
+                database.execSQL(
+                    "CREATE TABLE " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + " (" +
+                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID + " INTEGER PRIMARY KEY, " +
+                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + " INTEGER NOT NULL, " +
+                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY + " INTEGER NOT NULL," +
+                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.APPEARS + "  INTEGER DEFAULT 0 NOT NULL," +
+                            "CONSTRAINT " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + "_unique UNIQUE (" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + "," + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY + ")," +
+                            " FOREIGN KEY(" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA +") REFERENCES " + DataBaseConsts.MANGA.TABLE_NAME + "(" + DataBaseConsts.MANGA.COLUMNS.ID + ")," +
+                            " FOREIGN KEY(" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY +") REFERENCES " + DataBaseConsts.VOCABULARY.TABLE_NAME + "(" + DataBaseConsts.VOCABULARY.COLUMNS.ID + "))"
+                )
+
                 mLOGGER.info("Insert initial vocabulary data...")
 
-                val kanji = DataBase.mAssets.open("vocabulary.sql").bufferedReader().use(BufferedReader::readText)
-                database.execSQL(SQLINITIAL.VOCABULARY + kanji)
+                val vocabulary = DataBase.mAssets.open("vocabulary.sql").bufferedReader().use(BufferedReader::readText)
+                database.execSQL(SQLINITIAL.VOCABULARY + vocabulary)
                 database.execSQL( "UPDATE " + DataBaseConsts.VOCABULARY.TABLE_NAME + " SET " + DataBaseConsts.VOCABULARY.COLUMNS.REVISED + " = 1"  )
 
                 mLOGGER.info("Completed migration 8 - 9.")
@@ -227,18 +230,6 @@ class Migrations {
         val MIGRATION_9_10 = object : Migration(9, 10) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 mLOGGER.info("Start migration 9 - 10...")
-
-                try {
-                    database.execSQL("ALTER TABLE " + DataBaseConsts.VOCABULARY.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.VOCABULARY.COLUMNS.FAVORITE + "  INTEGER DEFAULT 0")
-                } catch (e: Exception) {
-                    // Has a Exception because it was shortened in the commit version, it will not be necessary to add the except because it already has the field.
-                }
-
-                try {
-                    database.execSQL("ALTER TABLE " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + " ADD COLUMN " + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.APPEARS + "  INTEGER DEFAULT 0")
-                } catch (e: Exception) {
-                    // Has a Exception because it was shortened in the commit version, it will not be necessary to add the except because it already has the field.
-                }
 
                 mLOGGER.info("Completed migration 9 - 10.")
             }
@@ -279,7 +270,8 @@ class Migrations {
                             DataBaseConsts.VOCABULARY.COLUMNS.ENGLISH + " TEXT, " +
                             DataBaseConsts.VOCABULARY.COLUMNS.PORTUGUESE + " TEXT, " +
                             DataBaseConsts.VOCABULARY.COLUMNS.REVISED + " INTEGER DEFAULT 0 NOT NULL, " +
-                            DataBaseConsts.VOCABULARY.COLUMNS.FAVORITE + " INTEGER DEFAULT 0 NOT NULL)"
+                            DataBaseConsts.VOCABULARY.COLUMNS.FAVORITE + " INTEGER DEFAULT 0 NOT NULL, " +
+                            DataBaseConsts.VOCABULARY.COLUMNS.APPEARS + "  INTEGER DEFAULT 0 NOT NULL)"
                 )
 
                 database.execSQL(
@@ -291,17 +283,19 @@ class Migrations {
 
                 database.execSQL(
                     "CREATE TABLE " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + " (" +
-                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + " INTEGER UNIQUE, " +
-                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY + " INTEGER UNIQUE," +
-                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.APPEARS + "  INTEGER DEFAULT 0," +
+                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID + " INTEGER PRIMARY KEY, " +
+                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + " INTEGER NOT NULL, " +
+                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY + " INTEGER NOT NULL," +
+                            DataBaseConsts.MANGA_VOCABULARY.COLUMNS.APPEARS + "  INTEGER DEFAULT 0 NOT NULL," +
+                            "CONSTRAINT " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + "_unique UNIQUE (" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + "," + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY + ")," +
                             " FOREIGN KEY(" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA +") REFERENCES " + DataBaseConsts.MANGA.TABLE_NAME + "(" + DataBaseConsts.MANGA.COLUMNS.ID + ")," +
-                            " FOREIGN KEY(" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY +") REFERENCES " + DataBaseConsts.LIBRARIES.TABLE_NAME + "(" + DataBaseConsts.LIBRARIES.COLUMNS.ID + "))"
+                            " FOREIGN KEY(" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY +") REFERENCES " + DataBaseConsts.VOCABULARY.TABLE_NAME + "(" + DataBaseConsts.VOCABULARY.COLUMNS.ID + "))"
                 )
 
                 mLOGGER.info("Insert initial vocabulary data...")
 
-                val kanji = DataBase.mAssets.open("vocabulary.sql").bufferedReader().use(BufferedReader::readText)
-                database.execSQL(SQLINITIAL.VOCABULARY + kanji)
+                val vocabulary = DataBase.mAssets.open("vocabulary.sql").bufferedReader().use(BufferedReader::readText)
+                database.execSQL(SQLINITIAL.VOCABULARY + vocabulary)
                 database.execSQL( "UPDATE " + DataBaseConsts.VOCABULARY.TABLE_NAME + " SET " + DataBaseConsts.VOCABULARY.COLUMNS.REVISED + " = 1"  )
 
                 mLOGGER.info("Completed migration 11 - 12.")
@@ -315,7 +309,25 @@ class Migrations {
 
                 mLOGGER.info("Start migration 12 - 13...")
 
+                database.execSQL(
+                    "CREATE INDEX index_" + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME
+                            + "_" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + "_" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY
+                            + " ON " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME +
+                            "(" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + ", " + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY + ")"
+                )
+
                 mLOGGER.info("Completed migration 12 - 13.")
+
+            }
+        }
+
+        // Migration version 13.
+        val MIGRATION_13_14 = object : Migration(13, 14) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+
+                mLOGGER.info("Start migration 13 - 14...")
+
+                mLOGGER.info("Completed migration 13 - 14.")
 
             }
         }

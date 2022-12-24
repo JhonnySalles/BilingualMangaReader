@@ -1,11 +1,9 @@
 package br.com.fenix.bilingualmangareader.view.ui.manga_detail
 
-import android.app.ActivityOptions
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.Html
-import android.util.Pair
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +17,6 @@ import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.model.entity.Information
 import br.com.fenix.bilingualmangareader.model.entity.Library
 import br.com.fenix.bilingualmangareader.model.entity.Manga
-import br.com.fenix.bilingualmangareader.model.enums.LibraryType
 import br.com.fenix.bilingualmangareader.service.controller.ImageController
 import br.com.fenix.bilingualmangareader.service.controller.ImageCoverController
 import br.com.fenix.bilingualmangareader.service.listener.InformationCardListener
@@ -27,12 +24,10 @@ import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
 import br.com.fenix.bilingualmangareader.util.helpers.FileUtil
 import br.com.fenix.bilingualmangareader.util.helpers.Util
 import br.com.fenix.bilingualmangareader.view.adapter.manga_detail.InformationRelatedCardAdapter
-import br.com.fenix.bilingualmangareader.view.ui.library.LibraryFragment
 import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity
 import br.com.fenix.bilingualmangareader.view.ui.vocabulary.VocabularyActivity
 import com.google.android.material.button.MaterialButton
 import org.slf4j.LoggerFactory
-import java.io.File
 
 
 class MangaDetailFragment : Fragment() {
@@ -57,7 +52,7 @@ class MangaDetailFragment : Fragment() {
     private lateinit var mMakReadButton: MaterialButton
     private lateinit var mClearHistoryButton: MaterialButton
     private lateinit var mDeleteButton: MaterialButton
-    private lateinit var mVocabularyButton:MaterialButton
+    private lateinit var mVocabularyButton: MaterialButton
     private lateinit var mChaptersList: ListView
     private lateinit var mFileLinkContent: LinearLayout
     private lateinit var mFileLinksList: ListView
@@ -268,12 +263,14 @@ class MangaDetailFragment : Fragment() {
                 mInformationAlternativeTitles.text = Html.fromHtml(Util.setBold(requireContext().getString(R.string.manga_detail_information_alternative_titles)) + " " + it.alternativeTitles)
                 mInformationStatus.text = Html.fromHtml(Util.setBold(requireContext().getString(R.string.manga_detail_information_status)) + " " + it.status)
                 mInformationPublish.text = Html.fromHtml(
-                    Util.setBold(requireContext().getString(R.string.manga_detail_information_publish)) + " " + Util.formatterDate(
-                        requireContext(),
-                        it.startDate
-                    ) + " " + requireContext().getString(R.string.manga_detail_information_publish_to) + " " + Util.formatterDate(
-                        requireContext(),
-                        it.endDate
+                    requireContext().getString(
+                        R.string.manga_detail_information_publish, Util.formatterDate(
+                            requireContext(),
+                            it.startDate
+                        ), Util.formatterDate(
+                            requireContext(),
+                            it.endDate
+                        )
                     )
                 )
                 mInformationVolumes.text = Html.fromHtml(

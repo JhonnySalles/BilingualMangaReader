@@ -192,40 +192,56 @@ abstract class PageLinkDAO : DataBaseDAO<PageLink> {
 abstract class VocabularyDAO : DataBaseDAO<Vocabulary> {
 
     @Query(
-        "SELECT * FROM " + DataBaseConsts.VOCABULARY.TABLE_NAME +
+        "SELECT V.* " +
+                " FROM " + DataBaseConsts.VOCABULARY.TABLE_NAME + " V " +
                 " WHERE CASE WHEN 1 = :favorite THEN " + DataBaseConsts.VOCABULARY.COLUMNS.FAVORITE + " = :favorite ELSE 1 > 0 END " +
-                " GROUP BY " + DataBaseConsts.VOCABULARY.COLUMNS.WORD + " ORDER BY " + DataBaseConsts.VOCABULARY.COLUMNS.WORD
+                " GROUP BY " + DataBaseConsts.VOCABULARY.COLUMNS.WORD +
+                " ORDER BY  CASE WHEN 1 = :orderInverse THEN V." + DataBaseConsts.VOCABULARY.COLUMNS.APPEARS + " ELSE '' END ASC, " +
+                " CASE WHEN 0 = :orderInverse THEN V." + DataBaseConsts.VOCABULARY.COLUMNS.APPEARS + " ELSE '' END DESC, " +
+                DataBaseConsts.VOCABULARY.COLUMNS.WORD + " LIMIT :size OFFSET :padding"
     )
-    abstract fun list(favorite: Boolean): PagingSource<Int, Vocabulary>
+    abstract fun list(favorite: Boolean, orderInverse: Boolean, padding: Int, size: Int): List<Vocabulary>
 
     @Query(
-        "SELECT * FROM " + DataBaseConsts.VOCABULARY.TABLE_NAME +
+        "SELECT V.* " +
+                " FROM " + DataBaseConsts.VOCABULARY.TABLE_NAME + " V " +
                 " WHERE (" + DataBaseConsts.VOCABULARY.COLUMNS.WORD + " LIKE '%' || :vocabulary || '%' OR " + DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM + " LIKE '%' || :basicForm || '%' )" +
                 " AND CASE WHEN 1 = :favorite THEN " + DataBaseConsts.VOCABULARY.COLUMNS.FAVORITE + " = :favorite ELSE 1 > 0 END " +
-                " GROUP BY " + DataBaseConsts.VOCABULARY.COLUMNS.WORD + " ORDER BY " + DataBaseConsts.VOCABULARY.COLUMNS.WORD
+                " GROUP BY " + DataBaseConsts.VOCABULARY.COLUMNS.WORD +
+                " ORDER BY  CASE WHEN 1 = :orderInverse THEN V." + DataBaseConsts.VOCABULARY.COLUMNS.APPEARS + " ELSE '' END ASC, " +
+                " CASE WHEN 0 = :orderInverse THEN V." + DataBaseConsts.VOCABULARY.COLUMNS.APPEARS + " ELSE '' END DESC, " +
+                DataBaseConsts.VOCABULARY.COLUMNS.WORD + " LIMIT :size OFFSET :padding"
     )
-    abstract fun list(vocabulary: String, basicForm: String, favorite: Boolean): PagingSource<Int, Vocabulary>
+    abstract fun list(vocabulary: String, basicForm: String, favorite: Boolean, orderInverse: Boolean, padding: Int, size: Int): List<Vocabulary>
 
     @Query(
-        "SELECT V.* FROM " + DataBaseConsts.VOCABULARY.TABLE_NAME + " V " +
+        "SELECT V.*" +
+                " FROM " + DataBaseConsts.VOCABULARY.TABLE_NAME + " V " +
                 " INNER JOIN " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + " MGV ON MGV." + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY + " = V." + DataBaseConsts.VOCABULARY.COLUMNS.ID +
                 " INNER JOIN " + DataBaseConsts.MANGA.TABLE_NAME + " MG ON MGV." + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + " = MG." + DataBaseConsts.MANGA.COLUMNS.ID +
                 " WHERE CASE WHEN LENGTH(:manga) <> 0 THEN MG." + DataBaseConsts.MANGA.COLUMNS.TITLE + " LIKE '%' || :manga || '%' ELSE 1 > 0 END " +
                 " AND CASE WHEN 1 = :favorite THEN V." + DataBaseConsts.VOCABULARY.COLUMNS.FAVORITE + " = :favorite ELSE 1 > 0 END " +
-                " GROUP BY " + DataBaseConsts.VOCABULARY.COLUMNS.WORD + " ORDER BY " + DataBaseConsts.VOCABULARY.COLUMNS.WORD
+                " GROUP BY " + DataBaseConsts.VOCABULARY.COLUMNS.WORD +
+                " ORDER BY  CASE WHEN 1 = :orderInverse THEN V." + DataBaseConsts.VOCABULARY.COLUMNS.APPEARS + " ELSE '' END ASC, " +
+                " CASE WHEN 0 = :orderInverse THEN V." + DataBaseConsts.VOCABULARY.COLUMNS.APPEARS + " ELSE '' END DESC, " +
+                DataBaseConsts.VOCABULARY.COLUMNS.WORD +  " LIMIT :size OFFSET :padding"
     )
-    abstract fun list(manga: String, favorite: Boolean): PagingSource<Int, Vocabulary>
+    abstract fun list(manga: String, favorite: Boolean, orderInverse: Boolean, padding: Int, size: Int): List<Vocabulary>
 
     @Query(
-        "SELECT V.* FROM " + DataBaseConsts.VOCABULARY.TABLE_NAME + " V " +
+        "SELECT V.* " +
+                " FROM " + DataBaseConsts.VOCABULARY.TABLE_NAME + " V " +
                 " INNER JOIN " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + " MGV ON MGV." + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY + " = V." + DataBaseConsts.VOCABULARY.COLUMNS.ID +
                 " INNER JOIN " + DataBaseConsts.MANGA.TABLE_NAME + " MG ON MGV." + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + " = MG." + DataBaseConsts.MANGA.COLUMNS.ID +
                 " WHERE CASE WHEN LENGTH(:manga) <> 0 THEN MG." + DataBaseConsts.MANGA.COLUMNS.TITLE + " LIKE '%' || :manga || '%' ELSE 1 > 0 END " +
                 " AND (V." + DataBaseConsts.VOCABULARY.COLUMNS.WORD + " LIKE '%' || :vocabulary || '%' OR V." + DataBaseConsts.VOCABULARY.COLUMNS.BASIC_FORM + " LIKE '%' || :basicForm || '%' )" +
                 " AND CASE WHEN 1 = :favorite THEN V." + DataBaseConsts.VOCABULARY.COLUMNS.FAVORITE + " = :favorite ELSE 1 > 0 END " +
-                " GROUP BY " + DataBaseConsts.VOCABULARY.COLUMNS.WORD + " ORDER BY " + DataBaseConsts.VOCABULARY.COLUMNS.WORD
+                " GROUP BY " + DataBaseConsts.VOCABULARY.COLUMNS.WORD +
+                " ORDER BY  CASE WHEN 1 = :orderInverse THEN V." + DataBaseConsts.VOCABULARY.COLUMNS.APPEARS + " ELSE '' END ASC, " +
+                " CASE WHEN 0 = :orderInverse THEN V." + DataBaseConsts.VOCABULARY.COLUMNS.APPEARS + " ELSE '' END DESC, " +
+                DataBaseConsts.VOCABULARY.COLUMNS.WORD + " LIMIT :size OFFSET :padding"
     )
-    abstract fun list(manga: String, vocabulary: String, basicForm: String, favorite: Boolean): PagingSource<Int, Vocabulary>
+    abstract fun list(manga: String, vocabulary: String, basicForm: String, favorite: Boolean, orderInverse: Boolean, padding: Int, size: Int): List<Vocabulary>
 
     @Query("SELECT * FROM " + DataBaseConsts.VOCABULARY.TABLE_NAME + " WHERE " + DataBaseConsts.VOCABULARY.COLUMNS.ID + " = :id")
     abstract fun get(id: Long): Vocabulary
@@ -248,8 +264,13 @@ abstract class VocabularyDAO : DataBaseDAO<Vocabulary> {
     )
     abstract fun exists(vocabulary: String, basicForm: String): Vocabulary?
 
-    @Query("SELECT * FROM " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + " WHERE " + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY + " = :idVocabulary GROUP BY " + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA)
-    abstract fun findByVocabulary(idVocabulary: Long): List<VocabularyManga>
+    @Query("SELECT V.*, (CASE WHEN LENGTH(:mangaName) <> 0 THEN M." + DataBaseConsts.MANGA.COLUMNS.TITLE + " LIKE :mangaName || '%' ELSE 0 END) AS Ord " +
+            " FROM " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + " V " +
+            " INNER JOIN " + DataBaseConsts.MANGA.TABLE_NAME + " M ON M." + DataBaseConsts.MANGA.COLUMNS.ID + " = V." + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA +
+            " WHERE " + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY + " = :idVocabulary " +
+            " GROUP BY " + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA +
+            " ORDER BY Ord DESC, M." + DataBaseConsts.MANGA.COLUMNS.TITLE + " ASC")
+    abstract fun findByVocabulary(mangaName: String, idVocabulary: Long): List<VocabularyManga>
 
     @Query("SELECT * FROM " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME + " WHERE " + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + " = :idManga GROUP BY " + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY)
     abstract fun findByManga(idManga: Long): List<VocabularyManga>
@@ -263,6 +284,13 @@ abstract class VocabularyDAO : DataBaseDAO<Vocabulary> {
             "INSERT OR REPLACE INTO " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME +
                     " (" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_MANGA + ',' + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY + ',' + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.APPEARS +
                     ") VALUES ($idManga, $idVocabulary, $appears)"
+        )
+
+        database.execSQL(
+            "UPDATE " + DataBaseConsts.VOCABULARY.TABLE_NAME + " SET " + DataBaseConsts.VOCABULARY.COLUMNS.APPEARS + " = (" +
+                    "    SELECT SUM(" + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.APPEARS + ") FROM " + DataBaseConsts.MANGA_VOCABULARY.TABLE_NAME +
+                    "    WHERE " + DataBaseConsts.MANGA_VOCABULARY.COLUMNS.ID_VOCABULARY + " = $idVocabulary) " +
+                    " WHERE " + DataBaseConsts.VOCABULARY.COLUMNS.ID + " = $idVocabulary"
         )
     }
 

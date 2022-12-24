@@ -186,15 +186,15 @@
                 app:icon="@drawable/ic_screen_rotation" />
 
             <Button
-                android:id="@+id/btn_floating_buttons"
+                android:id="@+id/btn_floating_popup"
                 style="@style/Button.ReaderButtons"
-                android:layout_width="@dimen/popup_reader_button_width"
+                android:layout_width="@dimen/reader_button_width"
                 android:layout_height="match_parent"
-                android:layout_marginEnd="5dp"
-                android:contentDescription="@string/reading_button_floating_buttons"
-                android:minHeight="@dimen/reader_button_width"
+                android:layout_marginEnd="20dp"
+                android:contentDescription="@string/reading_button_popup_floating"
+                android:minHeight="@dimen/popup_reader_button_min_height"
                 android:visibility="gone"
-                app:icon="@drawable/ic_floating_buttons" />
+                app:icon="@drawable/ic_floating_window" />
 
             <Button
                 android:id="@+id/btn_menu_ocr"
@@ -247,14 +247,14 @@
                 app:icon="@drawable/ic_file_link" />
 
             <Button
-                android:id="@+id/btn_floating_popup"
+                android:id="@+id/btn_floating_buttons"
                 style="@style/Button.ReaderButtons"
-                android:layout_width="@dimen/reader_button_width"
+                android:layout_width="@dimen/popup_reader_button_width"
                 android:layout_height="match_parent"
-                android:layout_marginEnd="20dp"
-                android:contentDescription="@string/reading_button_popup_floating"
-                android:minHeight="@dimen/popup_reader_button_min_height"
-                app:icon="@drawable/ic_floating_window" />
+                android:layout_marginEnd="5dp"
+                android:contentDescription="@string/reading_button_floating_buttons"
+                android:minHeight="@dimen/reader_button_width"
+                app:icon="@drawable/ic_floating_buttons" />
 
         </LinearLayout>
     </RelativeLayout>

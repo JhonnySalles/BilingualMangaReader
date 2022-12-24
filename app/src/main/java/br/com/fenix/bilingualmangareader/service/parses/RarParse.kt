@@ -15,11 +15,8 @@ class RarParse : Parse {
     private var mSubtitles = ArrayList<FileHeader>()
 
     override fun parse(file: File?) {
-        mArchive = try {
-            Archive(file)
-        } catch (e: RarException) {
-            throw IOException("Unable to open archive")
-        }
+        mArchive = Archive(file)
+
         var header = mArchive!!.nextFileHeader()
         while (header != null) {
             if (!header.isDirectory) {

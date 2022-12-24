@@ -59,9 +59,12 @@ class HistoryViewHolder(itemView: View, private val listener: MangaCardListener)
         } else
             mangaSubTitle.text = manga.subTitle
 
-        mangaLibrary.text = manga.library.title.uppercase()
+        mangaLibrary.text = if (manga.fkLibrary == GeneralConsts.KEYS.LIBRARY.DEFAULT)
+            itemView.context.getString(R.string.library_default).uppercase()
+        else
+            manga.library.title.uppercase()
         mangaFavorite.visibility = if (manga.favorite) View.VISIBLE else View.GONE
-        mangaSubtitle.visibility  = if (manga.hasSubtitle) View.VISIBLE else View.GONE
+        mangaSubtitle.visibility = if (manga.hasSubtitle) View.VISIBLE else View.GONE
 
         if (manga.excluded)
             cardView.setBackgroundResource(R.drawable.history_custom_ripple_item_deleted)

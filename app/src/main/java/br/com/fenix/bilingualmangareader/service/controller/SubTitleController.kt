@@ -49,6 +49,7 @@ class SubTitleController private constructor(private val context: Context) {
 
     private lateinit var mParse: Parse
     var mManga: Manga? = null
+
     private var mLanguages: MutableSet<Languages> = arraySetOf()
     private var mComboListInternal: HashMap<String, Chapter> = hashMapOf()
     private var mComboListSelected: HashMap<String, Chapter> = hashMapOf()
@@ -601,7 +602,6 @@ class SubTitleController private constructor(private val context: Context) {
                 }
 
                 if (mSelectedSubTitle.value?.pageCount != pageNumber) {
-                    isDrawing = false
                     var differ = pageNumber - mSelectedSubTitle.value?.pageCount!!
                     if (differ == 0) differ = 1
                     val run = if (mSelectedSubTitle.value?.pageCount!! < pageNumber)
@@ -628,19 +628,17 @@ class SubTitleController private constructor(private val context: Context) {
     }
 
     ///////////////////// DRAWING //////////////
-    private var imageBackup: Bitmap? = null
-    private var isDrawing = false
+    private var mImageBackup = mutableMapOf<Int, Bitmap>()
     private var target: MyTarget? = null
     fun drawSelectedText() {
         if (mReaderFragment == null || pageSelected.value == null || pageSelected.value?.texts!!.isEmpty())
             return
 
         val view: PageImageView = mReaderFragment!!.getCurrencyImageView() ?: return
-        if (isDrawing) {
+        if (mImageBackup.containsKey(ReaderFragment.mCurrentPage)) {
             val percentScroll = view.getScrollPercent()
-            view.setImageBitmap(imageBackup)
+            view.setImageBitmap(mImageBackup.remove(ReaderFragment.mCurrentPage))
             view.setScrollPercent(percentScroll)
-            isDrawing = false
         } else {
             target = MyTarget(view, true)
             mReaderFragment!!.loadImage(target!!, ReaderFragment.mCurrentPage, false)
@@ -649,17 +647,19 @@ class SubTitleController private constructor(private val context: Context) {
 
     private fun drawPageLinked(path: Uri) {
         val view: PageImageView = mReaderFragment!!.getCurrencyImageView() ?: return
-        if (isDrawing) {
+        if (mImageBackup.containsKey(ReaderFragment.mCurrentPage)) {
             val percentScroll = view.getScrollPercent()
-            view.setImageBitmap(imageBackup)
+            view.setImageBitmap(mImageBackup.remove(ReaderFragment.mCurrentPage))
             view.setScrollPercent(percentScroll)
-            isDrawing = false
             return
         }
 
         target = MyTarget(view)
         mReaderFragment!!.loadImage(target!!, path, false)
     }
+
+    fun clearImageBackup() = mImageBackup.clear()
+    fun removeImageBackup(pageNumber: Int) = mImageBackup.remove(pageNumber)
 
     inner class MyTarget(layout: View, isText: Boolean = false, isKeepScroll: Boolean = true) : Target {
         private val mLayout: WeakReference<View> = WeakReference(layout)
@@ -670,11 +670,12 @@ class SubTitleController private constructor(private val context: Context) {
             val layout = mLayout.get() ?: return
             val iv = layout.findViewById<View>(R.id.page_image_view) as PageImageView
             if (isText) {
-                imageBackup = bitmap
-                if (imageBackup == null)
+                if (bitmap == null)
                     return
 
-                val image: Bitmap = imageBackup!!.copy(imageBackup!!.config, true)
+                mImageBackup[ReaderFragment.mCurrentPage] = bitmap
+
+                val image: Bitmap = bitmap.copy(bitmap.config, true)
                 val canvas = Canvas(image)
                 val paint = Paint()
                 paint.color = Color.RED
@@ -704,7 +705,7 @@ class SubTitleController private constructor(private val context: Context) {
                 } else
                     iv.setImageBitmap(image)
             } else {
-                imageBackup = iv.drawable.toBitmap()
+                mImageBackup[ReaderFragment.mCurrentPage] = iv.drawable.toBitmap()
 
                 if (isKeepScroll) {
                     val percentScroll = iv.getScrollPercent()
@@ -713,7 +714,6 @@ class SubTitleController private constructor(private val context: Context) {
                 } else
                     iv.setImageBitmap(bitmap)
             }
-            isDrawing = true
         }
 
         override fun onBitmapFailed(e: Exception, errorDrawable: Drawable?) {
@@ -901,7 +901,7 @@ class SubTitleController private constructor(private val context: Context) {
         if (pageSelected.value == null)
             return
 
-        val point = if (!isDrawing && imageBackup == null) {
+        val point = if (!mImageBackup.containsKey(ReaderFragment.mCurrentPage)) {
             if (mOriginalSize == null) {
                 val input = BufferedInputStream(mParse.getPage(ReaderFragment.mCurrentPage))
                 val image = BitmapFactory.decodeStream(input)
@@ -927,12 +927,11 @@ class SubTitleController private constructor(private val context: Context) {
     }
 
     fun drawPageLinked() {
-        if (isDrawing) {
+        if (mImageBackup.containsKey(ReaderFragment.mCurrentPage)) {
             val view: PageImageView = mReaderFragment!!.getCurrencyImageView() ?: return
             val percentScroll = view.getScrollPercent()
-            view.setImageBitmap(imageBackup)
+            view.setImageBitmap(mImageBackup.remove(ReaderFragment.mCurrentPage))
             view.setScrollPercent(percentScroll)
-            isDrawing = false
         } else
             locateFileLink(ReaderFragment.mCurrentPage)
     }

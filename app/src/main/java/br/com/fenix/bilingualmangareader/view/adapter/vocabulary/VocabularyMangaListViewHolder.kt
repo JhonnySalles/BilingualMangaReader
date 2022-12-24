@@ -9,9 +9,9 @@ import android.widget.TextView
 import androidx.appcompat.widget.TooltipCompat
 import androidx.recyclerview.widget.RecyclerView
 import br.com.fenix.bilingualmangareader.R
+import br.com.fenix.bilingualmangareader.model.entity.Manga
 import br.com.fenix.bilingualmangareader.model.entity.VocabularyManga
 import br.com.fenix.bilingualmangareader.service.controller.ImageCoverController
-import br.com.fenix.bilingualmangareader.view.adapter.library.GridViewHolder
 import com.google.android.material.card.MaterialCardView
 
 class VocabularyMangaListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -32,7 +32,7 @@ class VocabularyMangaListViewHolder(itemView: View) : RecyclerView.ViewHolder(it
         mDefaultImageCover5 = BitmapFactory.decodeResource(itemView.resources, R.mipmap.book_cover_5)
     }
 
-    fun bind(vocabulary: VocabularyManga) {
+    fun bind(vocabulary: VocabularyManga, mangaList: MutableMap<Long, Bitmap?>) {
         val appear = itemView.findViewById<TextView>(R.id.vocabulary_manga_list_appear)
         val card = itemView.findViewById<MaterialCardView>(R.id.vocabulary_manga_list_image_card)
         val cover = itemView.findViewById<ImageView>(R.id.vocabulary_manga_list_image_cover)
@@ -45,15 +45,33 @@ class VocabularyMangaListViewHolder(itemView: View) : RecyclerView.ViewHolder(it
         appear.text = vocabulary.appears.toString()
 
         val image = when ((1..5).random()) {
-            1 -> GridViewHolder.mDefaultImageCover1
-            2 -> GridViewHolder.mDefaultImageCover2
-            3 -> GridViewHolder.mDefaultImageCover3
-            4 -> GridViewHolder.mDefaultImageCover4
-            else -> GridViewHolder.mDefaultImageCover5
+            1 -> mDefaultImageCover1
+            2 -> mDefaultImageCover2
+            3 -> mDefaultImageCover3
+            4 -> mDefaultImageCover4
+            else -> mDefaultImageCover5
         }
 
-        cover.setImageBitmap(image)
-        vocabulary.manga?.let { ImageCoverController.instance.setImageCoverAsync(itemView.context, it, cover) }
+        if (mangaList.contains(vocabulary.idManga)) {
+            mangaList[vocabulary.idManga]?.let {
+                cover.setImageBitmap(it)
+            }
+        } else {
+            cover.setImageBitmap(image)
+            setCover(cover, vocabulary.manga!!, mangaList)
+        }
     }
+
+    private fun setCover(cover: ImageView, manga: Manga, mangaList: MutableMap<Long, Bitmap?>) {
+        ImageCoverController.instance.setImageCoverAsync(itemView.context, manga, cover, true) { b ->
+            if (b != null) {
+                mangaList[manga.id!!] = b
+                // Limit 2k in size
+                if (mangaList.size > 2000)
+                    mangaList.remove(mangaList.entries.first().key)
+            }
+        }
+    }
+
 
 }

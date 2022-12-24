@@ -2,7 +2,7 @@
 > Leitor de mangas offline, no qual possui compatibilidade com Tesseract e Google Vision para utilização de OCR, vínculo de dois arquivos em idiomas diferentes com facilidade na troca entre as páginas de ambos e compatibilidade com textos extraido e processado através do programa [MangaExtractor](https://github.com/JhonnySalles/MangaExtractor)
 
 <h4 align="center"> 
-	🚧  BilingualMangaReader 🚀 Em construção...  🚧
+	🚧  BilingualMangaReader 🛑 Descontinuado...  🚧
 </h4>
 
 [![Build Status][travis-image]][travis-url]
@@ -48,6 +48,8 @@ Vinculo entre dois arquivos diferentes para realizar a troca de página entre os
   <li><a href="https://github.com/lofe90/FuriganaTextView">FuriganaTextView</a> - TextView personalizado para Android que renderiza texto em japonês com furigana. </li>
   <li><a href="https://github.com/adaptech-cz/Tesseract4Android">Tesseract4Android</a> - Poderosa biblioteca que faz a comunicação com o Tesseract OCR.</li>
   <li><a href="https://github.com/tony19/logback-android">LogBack</a> - Biblioteca que traz o poderoso logback para o android.</li>
+  <li><a href="https://github.com/sarajmunjal/two-way-backport">TwoWayView</a> - Biblioteca para apresentação de lista, grids e afins com formato horizontal e vertical.</li>
+  <li>Retrofit 2 - Popular biblioteca para HTTPs no Android.</li>
 </ul>
 
 
@@ -92,8 +94,8 @@ O aplicativo é também compatível com legendas extraidas e pré processadas co
     └── vocabulario            # Vocabulário do capitulo
         ├── palavra            
         ├── portugues          # Significado da palavra em português
-	├── ingles             # Significado da palavra em inglês
-	├── leitura            # Leitura em katakana
+	    ├── ingles             # Significado da palavra em inglês
+	    ├── leitura            # Leitura em katakana
         └── revisado           # Flag sinalizadora que o vocabulário foi revisado ou não.
   
          

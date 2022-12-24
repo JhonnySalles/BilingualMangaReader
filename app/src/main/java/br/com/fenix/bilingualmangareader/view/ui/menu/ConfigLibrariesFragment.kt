@@ -89,7 +89,6 @@ class ConfigLibrariesFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        println(item.itemId)
         return when (item.itemId) {
             android.R.id.home -> {
                 requireActivity().onBackPressed()
