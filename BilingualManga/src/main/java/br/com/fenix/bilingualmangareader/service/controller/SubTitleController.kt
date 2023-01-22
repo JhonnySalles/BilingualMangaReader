@@ -61,12 +61,12 @@ class SubTitleController private constructor(private val context: Context) {
     private var mPagesKeys: MutableLiveData<List<String>> = MutableLiveData()
     var pagesKeys: LiveData<List<String>> = mPagesKeys
 
-    private var mChapterSelected: MutableLiveData<Chapter> = MutableLiveData()
-    var chapterSelected: LiveData<Chapter> = mChapterSelected
-    private var mPageSelected: MutableLiveData<Page> = MutableLiveData()
-    var pageSelected: LiveData<Page> = mPageSelected
-    private var mTextSelected: MutableLiveData<Text> = MutableLiveData()
-    var textSelected: LiveData<Text> = mTextSelected
+    private var mChapterSelected: MutableLiveData<Chapter?> = MutableLiveData(null)
+    var chapterSelected: LiveData<Chapter?> = mChapterSelected
+    private var mPageSelected: MutableLiveData<Page?> = MutableLiveData(null)
+    var pageSelected: LiveData<Page?> = mPageSelected
+    private var mTextSelected: MutableLiveData<Text?> = MutableLiveData(null)
+    var textSelected: LiveData<Text?> = mTextSelected
 
     private var mForceExpandFloatingPopup: MutableLiveData<Boolean> = MutableLiveData(true)
     var forceExpandFloatingPopup: LiveData<Boolean> = mForceExpandFloatingPopup

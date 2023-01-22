@@ -28,8 +28,8 @@ class MangaDetailViewModel(application: Application) : AndroidViewModel(applicat
     private val mFileLinkRepository: FileLinkRepository = FileLinkRepository(application.applicationContext)
     private val cache = GeneralConsts.getCacheDir(application.applicationContext)
 
-    private var mManga = MutableLiveData<Manga>(null)
-    val manga: LiveData<Manga> = mManga
+    private var mManga = MutableLiveData<Manga?>(null)
+    val manga: LiveData<Manga?> = mManga
 
     private var mPaths: Map<String, Int> = mapOf()
 
@@ -42,8 +42,8 @@ class MangaDetailViewModel(application: Application) : AndroidViewModel(applicat
     private var mListSubtitles = MutableLiveData<MutableList<String>>(mutableListOf())
     val listSubtitles: LiveData<MutableList<String>> = mListSubtitles
 
-    private var mInformation = MutableLiveData<Information>(null)
-    val information: LiveData<Information> = mInformation
+    private var mInformation = MutableLiveData<Information?>(null)
+    val information: LiveData<Information?> = mInformation
 
     private var mInformationRelations = MutableLiveData<MutableList<Information>>(mutableListOf())
     val informationRelations: LiveData<MutableList<Information>> = mInformationRelations

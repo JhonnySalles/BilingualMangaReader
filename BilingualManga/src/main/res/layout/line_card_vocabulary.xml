@@ -62,7 +62,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/vocabulary_favorite"
-                style="@style/Button.IconOnly"
+                style="@style/Button.IconOnlyWithBackground"
                 android:layout_width="@dimen/vocabulary_content_favorite_button_size"
                 android:layout_height="@dimen/vocabulary_content_favorite_button_size"
                 android:textColor="?attr/colorSecondary"

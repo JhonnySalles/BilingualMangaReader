@@ -42,8 +42,8 @@ class PagesLinkViewModel(application: Application) : AndroidViewModel(applicatio
 
     private var mFileLinkImageList = ArrayList<Triple<Int, Boolean, Bitmap?>>(ArrayList())
     private var mManga: Manga? = null
-    private var mFileLink = MutableLiveData<FileLink>()
-    val fileLink: LiveData<FileLink> = mFileLink
+    private var mFileLink = MutableLiveData<FileLink?>(null)
+    val fileLink: LiveData<FileLink?> = mFileLink
     private var mPagesLink = MutableLiveData<ArrayList<PageLink>>(ArrayList())
     val pagesLink: LiveData<ArrayList<PageLink>> = mPagesLink
     private var mPagesNotLinked = MutableLiveData<ArrayList<PageLink>>(ArrayList())
