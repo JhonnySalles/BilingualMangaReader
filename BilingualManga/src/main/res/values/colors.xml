@@ -20,6 +20,7 @@
     <color name="main_header_background_top">#000000</color>
 
     <color name="reader_buttons">#FFFFFFFF</color>
+    <color name="reader_buttons_surface">#000000</color>
     <color name="reader_semi_transparent">#DD000000</color>
 
     <color name="button_close_ocr">#FFFFFF</color>

@@ -170,7 +170,7 @@
                         android:contentDescription="@string/page_link_page_index"
                         app:iconTint="?attr/colorSecondary"
                         android:tag=""
-                        app:icon="@drawable/ic_file_link_pages_index"/>
+                        app:icon="@drawable/ico_animated_file_link_pages_index"/>
 
                 </LinearLayout>
             </com.google.android.material.appbar.MaterialToolbar>
@@ -216,7 +216,8 @@
                 android:tag="not_used"
                 android:visibility="gone"
                 app:strokeWidth="0dp"
-                app:icon="@drawable/ic_help" />
+                app:iconTint="@null"
+                app:icon="@drawable/ico_animated_file_link_help" />
 
             <com.google.android.material.button.MaterialButtonToggleGroup
                 android:id="@+id/page_link_buttons_group"
@@ -235,7 +236,7 @@
                     android:layout_height="match_parent"
                     android:contentDescription="@string/page_link_reorder_auto"
                     android:text="@string/page_link_reorder_auto"
-                    app:icon="@drawable/ic_file_link_auto_process"/>
+                    app:icon="@drawable/ico_animated_file_link_auto_process"/>
 
                 <br.com.fenix.bilingualmangareader.view.components.MaterialButtonExpanded
                     android:id="@+id/pages_link_dual_page_button"
@@ -244,7 +245,7 @@
                     android:layout_height="match_parent"
                     android:contentDescription="@string/page_link_reorder_dual_page"
                     android:text="@string/page_link_reorder_dual_page"
-                    app:icon="@drawable/ic_file_link_dual_page"/>
+                    app:icon="@drawable/ico_animated_file_link_dual_page"/>
 
                 <br.com.fenix.bilingualmangareader.view.components.MaterialButtonExpanded
                     android:id="@+id/pages_link_single_page_button"
@@ -253,7 +254,7 @@
                     android:layout_height="match_parent"
                     android:contentDescription="@string/page_link_reorder_single_page"
                     android:text="@string/page_link_reorder_single_page"
-                    app:icon="@drawable/ic_file_link_single_page"/>
+                    app:icon="@drawable/ico_animated_file_link_single_page"/>
 
                 <br.com.fenix.bilingualmangareader.view.components.MaterialButtonExpanded
                     android:id="@+id/pages_link_reorder_button"
@@ -262,7 +263,7 @@
                     android:layout_height="match_parent"
                     android:contentDescription="@string/page_link_reorder_sorted_page"
                     android:text="@string/page_link_reorder_sorted_page"
-                    app:icon="@drawable/ic_file_link_reorder"/>
+                    app:icon="@drawable/ico_animated_file_link_reorder"/>
 
                 <br.com.fenix.bilingualmangareader.view.components.MaterialButtonExpanded
                     android:id="@+id/file_link_delete_button"
@@ -271,7 +272,7 @@
                     android:layout_height="match_parent"
                     android:contentDescription="@string/page_link_delete_file_link"
                     android:text="@string/page_link_delete_file_link"
-                    app:icon="@drawable/ic_file_link_delete"/>
+                    app:icon="@drawable/ico_animated_file_link_deleted"/>
 
                 <br.com.fenix.bilingualmangareader.view.components.MaterialButtonExpanded
                     android:id="@+id/pages_link_undo_changes_button"
@@ -281,7 +282,7 @@
                     android:contentDescription="@string/page_link_reorder_undo_changes"
                     android:text="@string/page_link_reorder_undo_changes"
                     android:enabled="false"
-                    app:icon="@drawable/ic_file_link_undo_changes"/>
+                    app:icon="@drawable/ico_animated_file_link_undo_changes"/>
 
                 <br.com.fenix.bilingualmangareader.view.components.MaterialButtonExpanded
                     android:id="@+id/pages_link_reload_button"
@@ -290,7 +291,7 @@
                     android:layout_height="match_parent"
                     android:contentDescription="@string/page_link_reload_file_link"
                     android:text="@string/page_link_reload_file_link"
-                    app:icon="@drawable/ic_file_link_reload"/>
+                    app:icon="@drawable/ico_animated_file_link_reload"/>
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
             <Button
@@ -339,7 +340,7 @@
                     android:layout_height="@dimen/page_link_fullscreen_size"
                     android:layout_width="@dimen/page_link_fullscreen_size"
                     android:contentDescription="@string/page_link_full_screen"
-                    app:icon="@drawable/ic_fullscreen"
+                    app:icon="@drawable/ico_animated_full_screen_enter"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -369,7 +370,7 @@
             android:layout_gravity="top|right"
             android:layout_margin="@dimen/page_link_scrolling_button_margin"
             android:contentDescription="@string/action_scroll_up"
-            android:src="@drawable/ic_up_arrow"
+            android:src="@drawable/ico_animated_scroll_up"
             android:visibility="gone"
             app:borderWidth="@dimen/page_link_up_border"
             app:fabCustomSize="@dimen/page_link_up_width"
@@ -385,7 +386,7 @@
             android:layout_gravity="bottom|right"
             android:layout_margin="@dimen/page_link_scrolling_button_margin"
             android:contentDescription="@string/action_scroll_down"
-            android:src="@drawable/ic_down_arrow"
+            android:src="@drawable/ico_animated_scroll_down"
             android:visibility="gone"
             app:borderWidth="@dimen/page_link_down_border"
             app:fabCustomSize="@dimen/page_link_down_width"

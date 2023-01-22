@@ -612,7 +612,7 @@ class MsgUtil {
 
         fun validPermission(context: Context, grantResults: IntArray) {
             if (!validPermission(grantResults))
-                AlertDialog.Builder(context, R.style.AppCompatAlertDialogStyle)
+                MaterialAlertDialogBuilder(context, R.style.AppCompatAlertDialogStyle)
                     .setTitle(context.getString(R.string.alert_permission_files_access_denied_title))
                     .setMessage(context.getString(R.string.alert_permission_files_access_denied))
                     .setPositiveButton(R.string.action_neutral) { _, _ -> }.create().show()
@@ -717,7 +717,7 @@ class ImageUtil {
                             .scaleY(1.0f)
                             .setDuration(300L)
                             .setListener(object : AnimatorListenerAdapter() {
-                                override fun onAnimationEnd(animation: Animator?) {
+                                override fun onAnimationEnd(animation: Animator) {
                                     super.onAnimationEnd(animation)
                                     mScaleFactor = 1.0f
                                     image.scaleX = mScaleFactor

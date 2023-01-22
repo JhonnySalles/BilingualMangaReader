@@ -80,7 +80,7 @@ class Scanner(private val context: Context) {
         if (libraries == null || libraries.isEmpty())
             return
 
-        val runnable = LibrariesUpdateRunnable(libraries)
+        val runnable = LibrariesUpdateRunnable(libraries, isSilent = true)
         val thread = Thread(runnable)
         thread.priority = Process.THREAD_PRIORITY_DEFAULT + Process.THREAD_PRIORITY_LESS_FAVORABLE
         thread.start()
@@ -237,7 +237,7 @@ class Scanner(private val context: Context) {
     }
 
 
-    private inner class LibrariesUpdateRunnable(val libraries: List<Library>) : Runnable {
+    private inner class LibrariesUpdateRunnable(val libraries: List<Library>, val isSilent: Boolean = false) : Runnable {
         override fun run() {
             try {
                 val storage = Storage(context)
@@ -294,7 +294,10 @@ class Scanner(private val context: Context) {
                                                     )
 
                                                     manga.excluded = false
-                                                    generateCover(parse, manga)
+
+                                                    if (!isSilent)
+                                                        generateCover(parse, manga)
+
                                                     manga.id = storage.save(manga)
                                                 }
                                         } finally {

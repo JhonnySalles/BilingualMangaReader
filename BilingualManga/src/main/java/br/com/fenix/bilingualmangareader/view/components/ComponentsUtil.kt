@@ -36,7 +36,7 @@ class ComponentsUtil {
 
             component.animate().alpha(finalAlpha).setDuration(duration)
                 .setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator?) {
+                    override fun onAnimationEnd(animation: Animator) {
                         super.onAnimationEnd(animation)
                         component.visibility = visibility
                     }
@@ -59,7 +59,7 @@ class ComponentsUtil {
 
                 component.animate().alpha(finalAlpha).setDuration(duration)
                     .setListener(object : AnimatorListenerAdapter() {
-                        override fun onAnimationEnd(animation: Animator?) {
+                        override fun onAnimationEnd(animation: Animator) {
                             super.onAnimationEnd(animation)
                             component.visibility = visibility
                         }

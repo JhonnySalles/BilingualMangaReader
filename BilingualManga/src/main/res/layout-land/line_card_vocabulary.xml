@@ -55,7 +55,7 @@
                 android:contentDescription="@string/vocabulary_favorite"
                 app:iconSize="25dp"
                 app:iconTint="?attr/colorSecondary"
-                app:icon="@drawable/ic_favorite_unmark"/>
+                app:icon="@drawable/ico_animated_favorited_unmarked"/>
         </LinearLayout>
 
         <TextView

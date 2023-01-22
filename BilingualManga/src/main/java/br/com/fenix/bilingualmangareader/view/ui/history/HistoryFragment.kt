@@ -21,6 +21,7 @@ import br.com.fenix.bilingualmangareader.util.helpers.FileUtil
 import br.com.fenix.bilingualmangareader.util.helpers.LibraryUtil
 import br.com.fenix.bilingualmangareader.view.adapter.history.HistoryCardAdapter
 import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.time.LocalDateTime
 
 
@@ -42,13 +43,13 @@ class HistoryFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
 
         val miLibrary = menu.findItem(R.id.menu_history_library)
-        miLibrary.subMenu.clear()
-        miLibrary.subMenu.add(requireContext().getString(R.string.history_menu_choice_library_all)).setOnMenuItemClickListener { _: MenuItem? ->
+        miLibrary.subMenu?.clear()
+        miLibrary.subMenu?.add(requireContext().getString(R.string.history_menu_choice_library_all))?.setOnMenuItemClickListener { _: MenuItem? ->
             filterLibrary(null)
             true
         }
         for (library in mViewModel.getLibraryList())
-            miLibrary.subMenu.add(library.title).setOnMenuItemClickListener { _: MenuItem? ->
+            miLibrary.subMenu?.add(library.title)?.setOnMenuItemClickListener { _: MenuItem? ->
                 filterLibrary(library)
                 true
             }
@@ -114,7 +115,7 @@ class HistoryFragment : Fragment() {
                         }
                     }
 
-                    AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
+                    MaterialAlertDialogBuilder(requireActivity(), R.style.AppCompatAlertDialogStyle)
                         .setTitle(getString(R.string.manga_excluded))
                         .setMessage(manga.file.path)
                         .setPositiveButton(
@@ -150,7 +151,7 @@ class HistoryFragment : Fragment() {
                         }
                         R.id.menu_book_delete -> {
                             val dialog: AlertDialog =
-                                AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
+                                MaterialAlertDialogBuilder(requireActivity(), R.style.AppCompatAlertDialogStyle)
                                     .setTitle(getString(R.string.library_menu_delete))
                                     .setMessage(getString(R.string.history_delete_description) + "\n" + manga.file.name)
                                     .setPositiveButton(
@@ -190,7 +191,7 @@ class HistoryFragment : Fragment() {
             val position = viewHolder.adapterPosition
             var excluded = false
             val dialog: AlertDialog =
-                AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
+                MaterialAlertDialogBuilder(requireActivity(), R.style.AppCompatAlertDialogStyle)
                     .setTitle(getString(R.string.library_menu_delete))
                     .setMessage(getString(R.string.history_delete_description) + "\n" + manga.file.name)
                     .setPositiveButton(

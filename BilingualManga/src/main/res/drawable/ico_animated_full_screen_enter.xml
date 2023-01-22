@@ -1,0 +1,101 @@
+<animated-vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            android:name="vector"
+            android:width="64dp"
+            android:height="64dp"
+            android:viewportWidth="64"
+            android:viewportHeight="64">
+            <group
+                android:name="top_left"
+                android:pivotX="17"
+                android:pivotY="17">
+                <path
+                    android:name="top_left_corner"
+                    android:pathData="M 7.49 26 L 7.49 7.5 L 25.99 7.5"
+                    android:fillAlpha="0"
+                    android:strokeColor="?attr/colorOnPrimaryContainer"
+                    android:strokeWidth="6"/>
+            </group>
+            <group
+                android:name="top_right"
+                android:pivotX="47"
+                android:pivotY="17">
+                <path
+                    android:name="top_rigth_corner"
+                    android:pathData="M 56.51 26 L 56.51 7.5 L 38.01 7.5"
+                    android:fillAlpha="0"
+                    android:strokeColor="?attr/colorOnPrimaryContainer"
+                    android:strokeWidth="6"/>
+            </group>
+            <group
+                android:name="bottom_left"
+                android:pivotX="17"
+                android:pivotY="47">
+                <path
+                    android:name="bottom_left_corner"
+                    android:pathData="M 7.53 38 L 7.53 56.5 L 26.02 56.5"
+                    android:fillAlpha="0"
+                    android:strokeColor="?attr/colorOnPrimaryContainer"
+                    android:strokeWidth="6"/>
+            </group>
+            <group
+                android:name="bottom_rigth"
+                android:pivotX="47"
+                android:pivotY="47">
+                <path
+                    android:name="bottom_rigth_corner"
+                    android:pathData="M 56.51 38 L 56.51 56.5 L 38.01 56.5"
+                    android:fillAlpha="0"
+                    android:strokeColor="?attr/colorOnPrimaryContainer"
+                    android:strokeWidth="6"/>
+            </group>
+        </vector>
+    </aapt:attr>
+    <target android:name="top_right">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="rotation"
+                android:duration="800"
+                android:valueFrom="0"
+                android:valueTo="-180"
+                android:valueType="floatType"
+                android:interpolator="@android:anim/overshoot_interpolator"/>
+        </aapt:attr>
+    </target>
+    <target android:name="top_left">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="rotation"
+                android:duration="800"
+                android:valueFrom="0"
+                android:valueTo="180"
+                android:valueType="floatType"
+                android:interpolator="@android:anim/overshoot_interpolator"/>
+        </aapt:attr>
+    </target>
+    <target android:name="bottom_left">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="rotation"
+                android:duration="800"
+                android:valueFrom="0"
+                android:valueTo="-180"
+                android:valueType="floatType"
+                android:interpolator="@android:anim/overshoot_interpolator"/>
+        </aapt:attr>
+    </target>
+    <target android:name="bottom_rigth">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="rotation"
+                android:duration="800"
+                android:valueFrom="0"
+                android:valueTo="180"
+                android:valueType="floatType"
+                android:interpolator="@android:anim/overshoot_interpolator"/>
+        </aapt:attr>
+    </target>
+</animated-vector>

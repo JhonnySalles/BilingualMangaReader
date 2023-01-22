@@ -325,7 +325,7 @@ open class PageImageView(context: Context, attributeSet: AttributeSet?) :
             return true
         }
 
-        override fun onLongPress(e: MotionEvent?) {
+        override fun onLongPress(e: MotionEvent) {
             super.onLongPress(e)
             mBitmap = this@PageImageView.drawToBitmap()
             mShader = BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)

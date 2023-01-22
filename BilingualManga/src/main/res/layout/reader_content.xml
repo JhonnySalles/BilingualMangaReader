@@ -13,6 +13,7 @@
     <RelativeLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+        xmlns:custom="http://schemas.android.com/apk/res/br.com.fenix.bilingualmangareader"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
@@ -49,7 +50,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/main_toolbar_background"
-            android:theme="@style/MainToolbarContentTheme" >
+            android:theme="@style/MainToolbarContentTheme"
+            app:elevation="0dp">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar_reader"
@@ -124,8 +126,8 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/title_small_size" />
 
-            <SeekBar
-                android:id="@+id/nav_reader_progress"
+            <br.com.fenix.bilingualmangareader.view.components.DottedSeekBar
+                android:id="@+id/reader_nav_reader_progress"
                 style="@style/SeekBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -135,7 +137,8 @@
                 android:paddingBottom="10dp"
                 android:progressDrawable="@drawable/reader_nav_progress"
                 android:thumb="@drawable/reader_nav_thumb"
-                android:thumbOffset="6dp" />
+                custom:dots_drawable="@drawable/ic_progress_dot"
+                android:thumbOffset="6dp"/>
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
@@ -147,7 +150,7 @@
             android:layout_marginStart="5dp"
             android:layout_marginBottom="85dp"
             android:contentDescription="@string/reading_button_previous_file"
-            app:icon="@drawable/ic_previous_file"
+            app:icon="@drawable/ico_animated_file_before"
             app:iconGravity="textStart"
             app:rippleColor="?attr/colorTertiary"
             tools:ignore="TouchTargetSizeCheck" />
@@ -162,7 +165,7 @@
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="85dp"
             android:contentDescription="@string/reading_button_next_file"
-            app:icon="@drawable/ic_next_file"
+            app:icon="@drawable/ico_animated_file_next"
             app:iconGravity="textStart"
             tools:ignore="TouchTargetSizeCheck" />
 
@@ -175,7 +178,7 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_screen_rotate"
                 style="@style/Button.ReaderButtons"
                 android:layout_width="@dimen/reader_button_width"
@@ -183,9 +186,9 @@
                 android:layout_marginEnd="5dp"
                 android:contentDescription="@string/reading_button_screen_rotate"
                 android:minHeight="@dimen/popup_reader_button_min_height"
-                app:icon="@drawable/ic_screen_rotation" />
+                app:icon="@drawable/ico_animated_screen_rotation_portrait" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_floating_popup"
                 style="@style/Button.ReaderButtons"
                 android:layout_width="@dimen/reader_button_width"
@@ -194,9 +197,9 @@
                 android:contentDescription="@string/reading_button_popup_floating"
                 android:minHeight="@dimen/popup_reader_button_min_height"
                 android:visibility="gone"
-                app:icon="@drawable/ic_floating_window" />
+                app:icon="@drawable/ico_animated_floating_window" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_menu_ocr"
                 style="@style/Button.ReaderButtons"
                 android:layout_width="@dimen/reader_button_width"
@@ -204,9 +207,10 @@
                 android:layout_marginEnd="5dp"
                 android:contentDescription="@string/reading_button_menu_ocr"
                 android:minHeight="@dimen/popup_reader_button_min_height"
-                app:icon="@drawable/ic_reader_ocr" />
+                app:iconTint="@null"
+                app:icon="@drawable/ico_animated_ocr" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_popup_subtitle"
                 style="@style/Button.ReaderButtons"
                 android:layout_width="@dimen/reader_button_width"
@@ -214,9 +218,10 @@
                 android:layout_marginEnd="5dp"
                 android:contentDescription="@string/reading_button_subtitle"
                 android:minHeight="@dimen/popup_reader_button_min_height"
-                app:icon="@drawable/ic_change_language" />
+                app:iconTint="@null"
+                app:icon="@drawable/ico_animated_translate" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_popup_color"
                 style="@style/Button.ReaderButtons"
                 android:layout_width="@dimen/reader_button_width"
@@ -226,7 +231,7 @@
                 android:minHeight="@dimen/popup_reader_button_min_height"
                 app:icon="@drawable/ic_color_settings"/>
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_menu_page_linked"
                 style="@style/Button.ReaderButtons"
                 android:layout_width="@dimen/reader_button_width"
@@ -234,9 +239,9 @@
                 android:layout_marginEnd="5dp"
                 android:contentDescription="@string/reading_button_page_linked"
                 android:minHeight="@dimen/popup_reader_button_min_height"
-                app:icon="@drawable/ic_page_linked" />
+                app:icon="@drawable/ico_animated_page_linked_insert" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_menu_file_link"
                 style="@style/Button.ReaderButtons"
                 android:layout_width="@dimen/reader_button_width"
@@ -244,9 +249,9 @@
                 android:layout_marginEnd="5dp"
                 android:contentDescription="@string/reading_button_file_link"
                 android:minHeight="@dimen/popup_reader_button_min_height"
-                app:icon="@drawable/ic_file_link" />
+                app:icon="@drawable/ico_animated_file_link" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_floating_buttons"
                 style="@style/Button.ReaderButtons"
                 android:layout_width="@dimen/popup_reader_button_width"
@@ -254,7 +259,7 @@
                 android:layout_marginEnd="5dp"
                 android:contentDescription="@string/reading_button_floating_buttons"
                 android:minHeight="@dimen/reader_button_width"
-                app:icon="@drawable/ic_floating_buttons" />
+                app:icon="@drawable/ico_animated_floating_buttons" />
 
         </LinearLayout>
     </RelativeLayout>

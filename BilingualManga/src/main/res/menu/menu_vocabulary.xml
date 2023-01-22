@@ -18,7 +18,7 @@
 
     <item android:id="@+id/menu_vocabulary_favorite"
         android:title="@string/menu_vocabulary_favorite"
-        android:icon="@drawable/ic_favorite_unmark"
+        android:icon="@drawable/ico_animated_favorited_unmarked"
         android:checkable="true"
         android:checked="false"
         android:orderInCategory="102"

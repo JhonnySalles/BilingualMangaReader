@@ -150,6 +150,7 @@
     <dimen name="help_title_size">18sp</dimen>
     <dimen name="help_content_size">12sp</dimen>
     <dimen name="help_image_width">200dp</dimen>
+    <dimen name="help_button_file_link_width">300dp</dimen>
 
     <dimen name="pages_link_file_link_margin_toolbar">30dp</dimen>
     <dimen name="page_link_page_index_title_padding">15dp</dimen>

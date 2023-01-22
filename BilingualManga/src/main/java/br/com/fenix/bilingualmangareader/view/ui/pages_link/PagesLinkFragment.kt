@@ -10,6 +10,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Point
 import android.graphics.Rect
+import android.graphics.drawable.AnimatedVectorDrawable
 import android.os.*
 import android.util.TypedValue
 import android.view.*
@@ -168,8 +169,12 @@ class PagesLinkFragment : Fragment() {
         mScrollUp.visibility = View.GONE
         mScrollDown.visibility = View.GONE
 
-        mScrollUp.setOnClickListener { mRecyclerPageLink.smoothScrollToPosition(0) }
+        mScrollUp.setOnClickListener {
+            (mScrollUp.drawable as AnimatedVectorDrawable).start()
+            mRecyclerPageLink.smoothScrollToPosition(0)
+        }
         mScrollDown.setOnClickListener {
+            (mScrollDown.drawable as AnimatedVectorDrawable).start()
             mRecyclerPageLink.smoothScrollToPosition((mRecyclerPageLink.adapter as RecyclerView.Adapter).itemCount)
         }
 
@@ -246,16 +251,35 @@ class PagesLinkFragment : Fragment() {
             .getBoolean(GeneralConsts.KEYS.PAGE_LINK.USE_DUAL_PAGE_CALCULATE, false)
 
         mSave.setOnClickListener { save() }
-        mReload.setOnClickListener { refresh() }
+        mReload.setOnClickListener {
+            (mReload.icon as AnimatedVectorDrawable).start()
+            refresh()
+        }
 
-        mAutoProcess.setOnClickListener { mViewModel.autoReorderDoublePages(Pages.LINKED, true) }
-        mReorderPages.setOnClickListener { mViewModel.reorderBySortPages() }
-        mSinglePages.setOnClickListener { mViewModel.reorderSimplePages() }
-        mDualPages.setOnClickListener { mViewModel.reorderDoublePages(mUseDualPageCalculate) }
-        mUndoChanges.setOnClickListener { mViewModel.returnBackup() }
+        mAutoProcess.setOnClickListener {
+            (mAutoProcess.icon as AnimatedVectorDrawable).start()
+            mViewModel.autoReorderDoublePages(Pages.LINKED, true)
+        }
+        mReorderPages.setOnClickListener {
+            (mReorderPages.icon as AnimatedVectorDrawable).start()
+            mViewModel.reorderBySortPages()
+        }
+        mSinglePages.setOnClickListener {
+            (mSinglePages.icon as AnimatedVectorDrawable).start()
+            mViewModel.reorderSimplePages()
+        }
+        mDualPages.setOnClickListener {
+            (mDualPages.icon as AnimatedVectorDrawable).start()
+            mViewModel.reorderDoublePages(mUseDualPageCalculate)
+        }
+        mUndoChanges.setOnClickListener {
+            (mUndoChanges.icon as AnimatedVectorDrawable).start()
+            mViewModel.returnBackup()
+        }
 
         mDelete.setOnClickListener {
-            AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
+            (mDelete.icon as AnimatedVectorDrawable).start()
+            MaterialAlertDialogBuilder(requireActivity(), R.style.AppCompatAlertDialogStyle)
                 .setTitle(getString(R.string.library_menu_delete))
                 .setMessage(getString(R.string.page_link_delete_description))
                 .setPositiveButton(
@@ -270,6 +294,7 @@ class PagesLinkFragment : Fragment() {
         }
 
         mHelp.setOnClickListener {
+            (mHelp.icon as AnimatedVectorDrawable).start()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 if (mHandler.hasCallbacks(mReduceSizeGroupButton))
                     mHandler.removeCallbacks(mReduceSizeGroupButton)
@@ -294,14 +319,18 @@ class PagesLinkFragment : Fragment() {
             )
 
             val image = if (visible)
-                R.drawable.ic_fullscreen
+                R.drawable.ico_animated_full_screen_exit
             else
-                R.drawable.ic_fullscreen_exit
+                R.drawable.ico_animated_full_screen_enter
 
             mFullScreen.icon = ContextCompat.getDrawable(requireContext(), image)
+            (mFullScreen.icon as AnimatedVectorDrawable).start()
         }
 
-        mPagesIndex.setOnClickListener { openMenuIndexes() }
+        mPagesIndex.setOnClickListener {
+            (mPagesIndex.icon as AnimatedVectorDrawable).start()
+            openMenuIndexes()
+        }
 
         mForceImageReload.setOnClickListener { mViewModel.reLoadImages() }
 
@@ -500,7 +529,7 @@ class PagesLinkFragment : Fragment() {
                             val msg = if (loaded == LoadFile.ERROR_FILE_WRONG) getString(R.string.page_link_load_file_wrong) else getString(
                                 R.string.page_link_load_error
                             )
-                            AlertDialog.Builder(requireContext(), R.style.AppCompatAlertDialogStyle)
+                            MaterialAlertDialogBuilder(requireContext(), R.style.AppCompatAlertDialogStyle)
                                 .setTitle(msg)
                                 .setMessage(path)
                                 .setPositiveButton(
@@ -523,7 +552,7 @@ class PagesLinkFragment : Fragment() {
                             val msg = if (loaded == LoadFile.ERROR_FILE_WRONG) getString(R.string.page_link_load_file_wrong) else getString(
                                 R.string.page_link_load_error
                             )
-                            AlertDialog.Builder(requireContext(), R.style.AppCompatAlertDialogStyle)
+                            MaterialAlertDialogBuilder(requireContext(), R.style.AppCompatAlertDialogStyle)
                                 .setTitle(msg)
                                 .setMessage(link.path)
                                 .setPositiveButton(
@@ -755,7 +784,7 @@ class PagesLinkFragment : Fragment() {
         val paths = mViewModel.getPagesIndex(isMangaIndexes)
 
         if (paths.isEmpty()) {
-            AlertDialog.Builder(requireContext(), R.style.AppCompatAlertDialogStyle)
+            MaterialAlertDialogBuilder(requireContext(), R.style.AppCompatAlertDialogStyle)
                 .setTitle(resources.getString(R.string.reading_page_index))
                 .setMessage(resources.getString(R.string.reading_page_empty))
                 .setPositiveButton(

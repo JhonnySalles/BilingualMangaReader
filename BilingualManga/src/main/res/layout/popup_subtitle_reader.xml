@@ -40,7 +40,7 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/nav_change_language"
             style="@style/Button.RoundedIconOnly"
             android:layout_width="@dimen/popup_reader_button_width"
@@ -49,14 +49,15 @@
             android:layout_marginBottom="1dp"
             android:minHeight="@dimen/popup_reader_button_min_height"
             android:tooltipText="@string/popup_reading_button_translate"
-            app:icon="@drawable/ic_translate"
+            app:icon="@drawable/ico_animated_translate"
+            app:iconTint="@null"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/nav_draw"
             app:layout_constraintTop_toBottomOf="@+id/cb_subtitle_page" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/nav_draw"
             style="@style/Button.RoundedIconOnly"
             android:layout_width="@dimen/popup_reader_button_width"
@@ -65,13 +66,13 @@
             android:layout_marginBottom="1dp"
             android:minHeight="@dimen/popup_reader_button_min_height"
             android:tooltipText="@string/popup_reading_button_draw"
-            app:icon="@drawable/ic_draw_text"
+            app:icon="@drawable/ico_animated_draw_text"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/nav_change_language"
             app:layout_constraintRight_toLeftOf="@+id/nav_refresh"
             app:layout_constraintTop_toBottomOf="@+id/cb_subtitle_page" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/nav_refresh"
             style="@style/Button.RoundedIconOnly"
             android:layout_width="@dimen/popup_reader_button_width"
@@ -80,12 +81,12 @@
             android:layout_marginBottom="1dp"
             android:minHeight="@dimen/popup_reader_button_min_height"
             android:tooltipText="@string/popup_reading_button_find"
-            app:icon="@drawable/ic_refresh"
+            app:icon="@drawable/ico_animated_text_refresh"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/nav_draw"
             app:layout_constraintRight_toLeftOf="@+id/nav_before_text"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/nav_before_text"
             style="@style/Button.RoundedIconOnly"
             android:layout_width="@dimen/popup_reader_button_width"
@@ -94,13 +95,13 @@
             android:layout_marginBottom="1dp"
             android:minHeight="@dimen/popup_reader_button_min_height"
             android:tooltipText="@string/popup_reading_button_before"
-            app:icon="@drawable/ic_navigate_before"
+            app:icon="@drawable/ico_animated_text_before"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/nav_refresh"
             app:layout_constraintRight_toLeftOf="@+id/nav_next_text"
             app:layout_constraintTop_toBottomOf="@+id/cb_subtitle_page" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/nav_next_text"
             style="@style/Button.RoundedIconOnly"
             android:layout_width="@dimen/popup_reader_button_width"
@@ -109,7 +110,7 @@
             android:layout_marginBottom="1dp"
             android:minHeight="@dimen/popup_reader_button_min_height"
             android:tooltipText="@string/popup_reading_button_next"
-            app:icon="@drawable/ic_navigate_next"
+            app:icon="@drawable/ico_animated_text_next"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/nav_before_text"
             app:layout_constraintRight_toRightOf="parent"

@@ -24,6 +24,7 @@ import br.com.fenix.bilingualmangareader.util.helpers.*
 import br.com.fenix.bilingualmangareader.view.adapter.themes.ThemesCardAdapter
 import br.com.fenix.bilingualmangareader.view.ui.menu.ConfigLibrariesViewModel
 import br.com.fenix.bilingualmangareader.view.ui.menu.MenuActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputLayout
 import org.lucasr.twowayview.TwoWayView
@@ -71,9 +72,6 @@ class ConfigFragment : Fragment() {
     private lateinit var mBackup: Button
     private lateinit var mRestore: Button
     private lateinit var mLastBackup: TextView
-
-    private lateinit var mMalMonitoring: LinearLayout
-    private lateinit var mMalMonitoringChecked: ImageView
 
     private var mDateSelect: String = GeneralConsts.CONFIG.DATA_FORMAT[0]
     private val mDatePattern = GeneralConsts.CONFIG.DATA_FORMAT
@@ -129,9 +127,6 @@ class ConfigFragment : Fragment() {
         mBackup = view.findViewById(R.id.btn_backup)
         mRestore = view.findViewById(R.id.btn_restore)
         mLastBackup = view.findViewById(R.id.txt_last_backup)
-
-        mMalMonitoring = view.findViewById(R.id.tracker_my_anime_list)
-        mMalMonitoringChecked = view.findViewById(R.id.tracker_checked)
 
         mLibraryPathAutoComplete.setOnClickListener {
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
@@ -307,8 +302,6 @@ class ConfigFragment : Fragment() {
             )
         }
 
-        mMalMonitoring.setOnClickListener { changeMonitoring() }
-
         prepareThemes()
         loadConfig()
 
@@ -418,7 +411,7 @@ class ConfigFragment : Fragment() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == GeneralConsts.REQUEST.PERMISSION_FILES_ACCESS && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-            AlertDialog.Builder(requireContext(), R.style.AppCompatAlertDialogStyle)
+            MaterialAlertDialogBuilder(requireContext(), R.style.AppCompatAlertDialogStyle)
                 .setTitle(requireContext().getString(R.string.alert_permission_files_access_denied_title))
                 .setMessage(requireContext().getString(R.string.alert_permission_files_access_denied))
                 .setPositiveButton(R.string.action_neutral) { _, _ -> }.create().show()
@@ -490,11 +483,6 @@ class ConfigFragment : Fragment() {
             this.putBoolean(
                 GeneralConsts.KEYS.PAGE_LINK.USE_PAGE_PATH_FOR_LINKED,
                 mUsePathNameForLinked.isChecked
-            )
-
-            this.putBoolean(
-                GeneralConsts.KEYS.MONITORING.MY_ANIME_LIST,
-                mMalMonitoringChecked.visibility == View.VISIBLE
             )
 
             this.putString(
@@ -633,12 +621,6 @@ class ConfigFragment : Fragment() {
             )
         }
 
-        mMalMonitoringChecked.visibility = if (sharedPreferences.getBoolean(
-                GeneralConsts.KEYS.MONITORING.MY_ANIME_LIST,
-                false
-            )
-        ) View.VISIBLE else View.GONE
-
         mThemeModeSelect = ThemeMode.valueOf(
             sharedPreferences.getString(
                 GeneralConsts.KEYS.THEME.THEME_MODE,
@@ -655,20 +637,7 @@ class ConfigFragment : Fragment() {
     }
 
     private fun changeMonitoring() {
-        if (mMalMonitoringChecked.visibility == View.GONE) {
 
-        } else {
-            val dialog: AlertDialog =
-                AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
-                    .setTitle(getString(R.string.library_menu_delete))
-                    .setMessage(getString(R.string.config_monitoring_disconnect, getString(R.string.config_monitoring_mal)))
-                    .setPositiveButton(
-                        R.string.action_disconnect
-                    ) { _, _ ->
-                        mMalMonitoringChecked.visibility = View.GONE
-                    }.create()
-            dialog.show()
-        }
     }
 
     private fun openLibraries() {

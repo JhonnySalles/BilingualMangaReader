@@ -103,6 +103,10 @@ class SevenZipParse : Parse {
         return paths
     }
 
+    override fun getChapters(): IntArray {
+        return getPagePaths().filter { it.value != 0 }.map { it.value }.toIntArray()
+    }
+
     override fun getPage(num: Int): InputStream {
         return ByteArrayInputStream(mEntries[num].bytes)
     }

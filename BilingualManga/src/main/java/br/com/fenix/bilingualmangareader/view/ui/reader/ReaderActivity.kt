@@ -8,10 +8,7 @@ import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.drawable.AdaptiveIconDrawable
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
-import android.graphics.drawable.Icon
+import android.graphics.drawable.*
 import android.net.Uri
 import android.os.*
 import android.provider.Settings
@@ -47,6 +44,8 @@ import br.com.fenix.bilingualmangareader.service.kanji.Formatter
 import br.com.fenix.bilingualmangareader.service.listener.ChapterCardListener
 import br.com.fenix.bilingualmangareader.service.ocr.GoogleVision
 import br.com.fenix.bilingualmangareader.service.ocr.OcrProcess
+import br.com.fenix.bilingualmangareader.service.parses.Parse
+import br.com.fenix.bilingualmangareader.service.parses.ParseFactory
 import br.com.fenix.bilingualmangareader.service.repository.LibraryRepository
 import br.com.fenix.bilingualmangareader.service.repository.MangaRepository
 import br.com.fenix.bilingualmangareader.service.repository.Storage
@@ -59,6 +58,7 @@ import br.com.fenix.bilingualmangareader.util.helpers.Util
 import br.com.fenix.bilingualmangareader.util.helpers.Util.Utils.getColorFromAttr
 import br.com.fenix.bilingualmangareader.view.adapter.reader.MangaChaptersCardAdapter
 import br.com.fenix.bilingualmangareader.view.components.ComponentsUtil
+import br.com.fenix.bilingualmangareader.view.components.DottedSeekBar
 import br.com.fenix.bilingualmangareader.view.ui.pages_link.PagesLinkActivity
 import br.com.fenix.bilingualmangareader.view.ui.pages_link.PagesLinkViewModel
 import br.com.fenix.bilingualmangareader.view.ui.window.FloatingButtons
@@ -79,7 +79,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
     private val mViewModel: ReaderViewModel by viewModels()
 
     private lateinit var mReaderTitle: TextView
-    private lateinit var mReaderProgress: SeekBar
+    private lateinit var mReaderProgress: DottedSeekBar
     private lateinit var mNavReader: LinearLayout
     private lateinit var mToolBar: Toolbar
     private lateinit var mToolbarTitle: TextView
@@ -163,7 +163,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         supportActionBar?.setDisplayShowTitleEnabled(true)
 
         mReaderTitle = findViewById(R.id.nav_reader_title)
-        mReaderProgress = findViewById(R.id.nav_reader_progress)
+        mReaderProgress = findViewById(R.id.reader_nav_reader_progress)
         mNavReader = findViewById(R.id.nav_reader)
         mMenuPopupTranslate = findViewById(R.id.menu_popup_translate)
         mMenuPopupColor = findViewById(R.id.menu_popup_color)
@@ -196,36 +196,74 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         findViewById<Button>(R.id.btn_menu_file_link).setOnClickListener { openFileLink() }
         findViewById<Button>(R.id.btn_popup_subtitle).setOnClickListener {
             mMenuPopupColor.visibility = View.GONE
-            if (!mMenuPopupBottomSheet)
-                mBottomSheetTranslate.state = BottomSheetBehavior.STATE_EXPANDED
             mMenuPopupTranslate.visibility = View.VISIBLE
+            if (!mMenuPopupBottomSheet) {
+                mBottomSheetTranslate.state = BottomSheetBehavior.STATE_EXPANDED
+                mMenuPopupTranslate.translationY = 100F
+                mMenuPopupTranslate.animate()
+                    .setDuration(200)
+                    .translationY(0f)
+            }
         }
         findViewById<Button>(R.id.btn_popup_color).setOnClickListener {
             mMenuPopupTranslate.visibility = View.GONE
-            if (!mMenuPopupBottomSheet)
-                mBottomSheetColor.state = BottomSheetBehavior.STATE_EXPANDED
             mMenuPopupColor.visibility = View.VISIBLE
-        }
-        findViewById<Button>(R.id.btn_floating_popup).setOnClickListener { openFloatingSubtitle() }
-        findViewById<Button>(R.id.btn_floating_buttons).setOnClickListener { openFloatingButtons() }
-        findViewById<Button>(R.id.btn_screen_rotate).setOnClickListener {
-            requestedOrientation = if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
-                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-            else
-                ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            if (!mMenuPopupBottomSheet) {
+                mBottomSheetColor.state = BottomSheetBehavior.STATE_EXPANDED
+                mMenuPopupColor.translationY = 100F
+                mMenuPopupColor.animate()
+                    .setDuration(200)
+                    .translationY(0f)
+            }
         }
 
-        val buttonOCR = findViewById<Button>(R.id.btn_menu_ocr)
+        val btnFloatingSubtitle = findViewById<MaterialButton>(R.id.btn_floating_popup)
+        btnFloatingSubtitle.setOnClickListener {
+            (btnFloatingSubtitle.icon as AnimatedVectorDrawable).start()
+            openFloatingSubtitle()
+        }
+        val btnFloatingButtons = findViewById<MaterialButton>(R.id.btn_floating_buttons)
+        btnFloatingButtons.setOnClickListener {
+            (btnFloatingButtons.icon as AnimatedVectorDrawable).start()
+            openFloatingButtons()
+        }
+        val btnRotate = findViewById<MaterialButton>(R.id.btn_screen_rotate)
+        btnRotate.setOnClickListener {
+            (btnRotate.icon as AnimatedVectorDrawable).start()
+            requestedOrientation =
+                if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
+                    ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                else
+                    ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        }
+
+        val buttonOCR = findViewById<MaterialButton>(R.id.btn_menu_ocr)
         buttonOCR.setOnClickListener {
+            (buttonOCR.icon as AnimatedVectorDrawable).start()
             showMenuFromButton(buttonOCR, it)
         }
 
-        findViewById<Button>(R.id.btn_menu_page_linked).setOnClickListener { mSubtitleController.drawPageLinked() }
+        val btnMenuPage = findViewById<MaterialButton>(R.id.btn_menu_page_linked)
+        btnMenuPage.setOnClickListener {
+            btnMenuPage.setIconResource(if (mSubtitleController.isDrawing()) R.drawable.ico_animated_page_linked_remove else R.drawable.ico_animated_page_linked_insert)
+            (btnMenuPage.icon as AnimatedVectorDrawable).start()
+            mSubtitleController.drawPageLinked()
+        }
 
         mLibrary = LibraryUtil.getDefault(this)
         mStorage = Storage(applicationContext)
-        findViewById<MaterialButton>(R.id.nav_previous_file).setOnClickListener { switchManga(false) }
-        findViewById<MaterialButton>(R.id.nav_next_file).setOnClickListener { switchManga(true) }
+
+        val previous = findViewById<MaterialButton>(R.id.nav_previous_file)
+        val next = findViewById<MaterialButton>(R.id.nav_next_file)
+
+        previous.setOnClickListener {
+            (previous.icon as AnimatedVectorDrawable).start()
+            switchManga(false)
+        }
+        next.setOnClickListener {
+            (next.icon as AnimatedVectorDrawable).start()
+            switchManga(true)
+        }
 
         mToolbarTitleContent.setOnClickListener { dialogPageIndex() }
         mToolbarTitleContent.setOnLongClickListener {
@@ -283,7 +321,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
             findViewById<ImageView>(R.id.menu_color_touch).setOnClickListener {
                 if (mBottomSheetColor.state == BottomSheetBehavior.STATE_COLLAPSED)
                     mBottomSheetColor.state = BottomSheetBehavior.STATE_EXPANDED
-                else
+                   else
                     mBottomSheetColor.state = BottomSheetBehavior.STATE_COLLAPSED
             }
         }
@@ -399,7 +437,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
 
         if (changeManga == null) {
             val content = if (isNext) R.string.switch_next_comic_last_comic else R.string.switch_prev_comic_first_comic
-            AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+            MaterialAlertDialogBuilder(this, R.style.AppCompatAlertDialogStyle)
                 .setTitle(getString(R.string.switch_next_comic_not_found))
                 .setMessage(content)
                 .setPositiveButton(
@@ -413,7 +451,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         val title = if (isNext) R.string.switch_next_comic else R.string.switch_prev_comic
 
         val dialog: AlertDialog =
-            AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+            MaterialAlertDialogBuilder(this, R.style.AppCompatAlertDialogStyle)
                 .setTitle(title)
                 .setMessage(changeManga.file.name)
                 .setPositiveButton(
@@ -466,6 +504,15 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         mManga = manga
         mRepository.updateLastAccess(manga)
         setShortCutManga()
+
+        var parse: Parse? = null
+        try {
+            parse = ParseFactory.create(manga.path)
+        } catch (e : Exception) {
+        } finally {
+            mReaderProgress.setDots(parse?.getChapters() ?: intArrayOf())
+            Util.destroyParse(parse)
+        }
     }
 
     private fun setShortCutManga() {
@@ -537,7 +584,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         val paths = parse.getPagePaths()
 
         if (paths.isEmpty()) {
-            AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+            MaterialAlertDialogBuilder(this, R.style.AppCompatAlertDialogStyle)
                 .setTitle(resources.getString(R.string.reading_page_index))
                 .setMessage(resources.getString(R.string.reading_page_empty))
                 .setPositiveButton(
@@ -781,11 +828,13 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         mManga?.favorite = !mManga!!.favorite
 
         val icon = if (mManga!!.favorite)
-            ContextCompat.getDrawable(this, R.drawable.ic_favorite_mark)
+            ContextCompat.getDrawable(this, R.drawable.ico_animated_favorited_marked)
         else
-            ContextCompat.getDrawable(this, R.drawable.ic_favorite_unmark)
+            ContextCompat.getDrawable(this, R.drawable.ico_animated_favorited_unmarked)
+
         icon?.setTint(getColorFromAttr(R.attr.colorSecondary))
         item.icon = icon
+        (item.icon as AnimatedVectorDrawable).start()
         mRepository.update(mManga!!)
     }
 
@@ -842,7 +891,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
             intent.putExtras(bundle)
             startActivity(intent)
         } else
-            AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+            MaterialAlertDialogBuilder(this, R.style.AppCompatAlertDialogStyle)
                 .setTitle(getString(R.string.page_link_manga_empty))
                 .setMessage(getString(R.string.page_link_manga_empty_description))
                 .setPositiveButton(
@@ -860,7 +909,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
                 else R.string.popup_reading_subtitle_embedded_empty
             )
 
-            AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle)
+            MaterialAlertDialogBuilder(this, R.style.AppCompatAlertDialogStyle)
                 .setTitle(getString(R.string.popup_reading_subtitle_empty))
                 .setMessage(message)
                 .setPositiveButton(
@@ -903,7 +952,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         mTouchView.alpha = 0.0f
         mTouchView.animate().alpha(1.0f).setDuration(300L)
             .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
+                override fun onAnimationEnd(animation: Animator) {
                     super.onAnimationEnd(animation)
                     mTouchView.visibility = View.VISIBLE
                 }
@@ -960,7 +1009,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         mTouchView.alpha = 1.0f
         mTouchView.animate().alpha(0.0f).setDuration(300L)
             .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
+                override fun onAnimationEnd(animation: Animator) {
                     super.onAnimationEnd(animation)
                     mTouchView.visibility = View.GONE
                 }
@@ -979,7 +1028,7 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
 
         mChapterContent.animate().alpha(finalAlpha).setDuration(300L)
             .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
+                override fun onAnimationEnd(animation: Animator) {
                     super.onAnimationEnd(animation)
                     mChapterContent.visibility = visibility
                 }

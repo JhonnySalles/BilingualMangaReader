@@ -67,7 +67,7 @@ class MangaDetailActivityTest {
             onView(withId(R.id.manga_detail_button_favorite)).check(
                 matches(
                     CustomMatchers.Button.withActionIconDrawable(
-                        R.drawable.ic_favorite_mark,
+                        R.drawable.ico_animated_favorited_marked,
                         true
                     )
                 )
@@ -76,7 +76,7 @@ class MangaDetailActivityTest {
             onView(withId(R.id.manga_detail_button_favorite)).check(
                 matches(
                     CustomMatchers.Button.withActionIconDrawable(
-                        R.drawable.ic_favorite_unmark,
+                        R.drawable.ico_animated_favorited_unmarked,
                         true
                     )
                 )

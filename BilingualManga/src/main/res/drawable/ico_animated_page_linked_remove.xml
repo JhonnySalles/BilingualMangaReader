@@ -1,0 +1,90 @@
+<animated-vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            android:name="vector"
+            android:width="512dp"
+            android:height="512dp"
+            android:viewportWidth="512"
+            android:viewportHeight="512">
+            <group
+                android:name="page1"
+                android:translateX="64">
+                <path
+                    android:name="sheet1"
+                    android:pathData="M 384 121.941 L 384 128 L 256 128 L 256 0 L 262.059 0 C 268.421 0 274.53 2.53 279.029 7.029 L 376.97 104.97 C 381.469 109.469 384 115.578 384 121.941 Z M 248 160 C 234.8 160 224 149.2 224 136 L 224 0 L 24 0 C 10.745 0 0 10.745 0 24 L 0 488 C 0 501.255 10.745 512 24 512 L 360 512 C 373.255 512 384 501.255 384 488 L 384 160 L 248 160 Z M 112.545 176 C 139.055 176 160.545 197.49 160.545 224 C 160.545 250.51 139.055 272 112.545 272 C 86.035 272 64.545 250.51 64.545 224 C 64.545 197.49 86.036 176 112.545 176 Z M 320.545 416 L 64.545 416 L 65.03 367.515 L 104.545 328 C 109.231 323.314 116.344 323.799 121.03 328.485 L 160.545 368 L 264.06 264.485 C 268.746 259.799 276.344 259.799 281.031 264.485 L 320.545 304 L 320.545 416 Z"
+                    android:fillColor="?attr/colorSecondary"/>
+            </group>
+            <group
+                android:name="page2"
+                android:translateX="64">
+                <path
+                    android:name="sheet2"
+                    android:pathData="M 384 121.941 L 384 128 L 256 128 L 256 0 L 262.059 0 C 268.421 0 274.53 2.53 279.029 7.029 L 376.97 104.97 C 381.469 109.469 384 115.578 384 121.941 Z M 248 160 C 234.8 160 224 149.2 224 136 L 224 0 L 24 0 C 10.745 0 0 10.745 0 24 L 0 488 C 0 501.255 10.745 512 24 512 L 360 512 C 373.255 512 384 501.255 384 488 L 384 160 L 248 160 Z M 112.545 176 C 139.055 176 160.545 197.49 160.545 224 C 160.545 250.51 139.055 272 112.545 272 C 86.035 272 64.545 250.51 64.545 224 C 64.545 197.49 86.036 176 112.545 176 Z M 320.545 416 L 64.545 416 L 65.03 367.515 L 104.545 328 C 109.231 323.314 116.344 323.799 121.03 328.485 L 160.545 368 L 264.06 264.485 C 268.746 259.799 276.344 259.799 281.031 264.485 L 320.545 304 L 320.545 416 Z"
+                    android:fillColor="?attr/colorSecondary"
+                    android:fillAlpha="0"/>
+            </group>
+        </vector>
+    </aapt:attr>
+    <target android:name="page1">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:propertyName="translateX"
+                    android:duration="500"
+                    android:valueFrom="0"
+                    android:valueTo="64"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                <objectAnimator
+                    android:propertyName="scaleX"
+                    android:duration="500"
+                    android:valueFrom="0.5"
+                    android:valueTo="1"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                <objectAnimator
+                    android:propertyName="scaleY"
+                    android:duration="500"
+                    android:valueFrom="0.5"
+                    android:valueTo="1"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+            </set>
+        </aapt:attr>
+    </target>
+    <target android:name="sheet1">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="fillAlpha"
+                android:duration="500"
+                android:valueFrom="0"
+                android:valueTo="1"
+                android:valueType="floatType"
+                android:interpolator="@android:interpolator/fast_out_slow_in"/>
+        </aapt:attr>
+    </target>
+    <target android:name="page2">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="translateX"
+                android:duration="500"
+                android:valueFrom="64"
+                android:valueTo="300"
+                android:valueType="floatType"
+                android:interpolator="@android:interpolator/fast_out_slow_in"/>
+        </aapt:attr>
+    </target>
+    <target android:name="sheet2">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="fillAlpha"
+                android:duration="500"
+                android:valueFrom="1"
+                android:valueTo="0"
+                android:valueType="floatType"
+                android:interpolator="@android:interpolator/fast_out_slow_in"/>
+        </aapt:attr>
+    </target>
+</animated-vector>

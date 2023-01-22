@@ -1,5 +1,6 @@
 package br.com.fenix.bilingualmangareader.view.ui.help
 
+import android.graphics.drawable.AnimatedVectorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -54,7 +55,10 @@ class HelpFragment : Fragment() {
         mScrollView = view.findViewById(R.id.help_scroll_view)
         mScrollUp = view.findViewById(R.id.help_scroll_up)
 
-        mScrollUp.setOnClickListener { mScrollView.smoothScrollTo(0, 0) }
+        mScrollUp.setOnClickListener {
+            (mScrollUp.drawable as AnimatedVectorDrawable).start()
+            mScrollView.smoothScrollTo(0, 0)
+        }
         mScrollUp.visibility = View.GONE
         mScrollView.setOnScrollChangeListener { _, _, yNew, _, yOld ->
             if ((yNew - yOld) < -150) {

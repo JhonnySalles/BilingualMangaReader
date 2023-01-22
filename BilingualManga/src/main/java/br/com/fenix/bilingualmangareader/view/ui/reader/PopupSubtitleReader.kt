@@ -3,6 +3,7 @@ package br.com.fenix.bilingualmangareader.view.ui.reader
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.graphics.drawable.AnimatedVectorDrawable
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import androidx.fragment.app.Fragment
 import br.com.fenix.bilingualmangareader.R
 import br.com.fenix.bilingualmangareader.service.controller.SubTitleController
 import br.com.fenix.bilingualmangareader.service.kanji.Formatter
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 
 
@@ -22,11 +24,11 @@ class PopupSubtitleReader : Fragment() {
     private lateinit var mSubtitlePageAutoComplete: AutoCompleteTextView
     private lateinit var mSubtitleTitle: TextView
     private lateinit var mSubtitleContent: TextView
-    private lateinit var mNavBeforeText: Button
-    private lateinit var mNavNextText: Button
-    private lateinit var mRefresh: Button
-    private lateinit var mDraw: Button
-    private lateinit var mChangeLanguage: Button
+    private lateinit var mNavBeforeText: MaterialButton
+    private lateinit var mNavNextText: MaterialButton
+    private lateinit var mRefresh: MaterialButton
+    private lateinit var mDraw: MaterialButton
+    private lateinit var mChangeLanguage: MaterialButton
     private lateinit var mLabelChapter: String
     private lateinit var mLabelText: String
 
@@ -71,13 +73,28 @@ class PopupSubtitleReader : Fragment() {
 
         mSubTitleController = SubTitleController.getInstance(requireContext())
 
-        mNavBeforeText.setOnClickListener { mSubTitleController.getBeforeText() }
-        mNavNextText.setOnClickListener { mSubTitleController.getNextText() }
+        mNavBeforeText.setOnClickListener {
+            (mNavBeforeText.icon as AnimatedVectorDrawable).start()
+            mSubTitleController.getBeforeText()
+        }
+        mNavNextText.setOnClickListener {
+            (mNavNextText.icon as AnimatedVectorDrawable).start()
+            mSubTitleController.getNextText()
+        }
 
-        mRefresh.setOnClickListener { mSubTitleController.findSubtitle() }
-        mDraw.setOnClickListener { mSubTitleController.drawSelectedText() }
+        mRefresh.setOnClickListener {
+            (mRefresh.icon as AnimatedVectorDrawable).start()
+            mSubTitleController.findSubtitle()
+        }
+        mDraw.setOnClickListener {
+            (mDraw.icon as AnimatedVectorDrawable).start()
+            mSubTitleController.drawSelectedText()
+        }
 
-        mChangeLanguage.setOnClickListener { mSubTitleController.changeLanguage() }
+        mChangeLanguage.setOnClickListener {
+            (mChangeLanguage.icon as AnimatedVectorDrawable).start()
+            mSubTitleController.changeLanguage()
+        }
 
         mSubtitlePageAutoComplete.setOnClickListener {
             mSubtitlePageAutoComplete.setText("", false)

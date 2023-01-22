@@ -3,7 +3,75 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/drawable-v21/custom_ripple.xml" value="0.365" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/drawable/custom_ripple.xml" value="0.365" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/drawable/ic_color_settings.xml" value="0.1965" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/drawable/ic_favorite_mark.xml" value="0.365" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/drawable/ic_favorite_unmark.xml" value="0.365" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/drawable/ic_library.xml" value="0.365" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/drawable/ic_next_file.xml" value="0.18" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/drawable/ic_progress_dot.xml" value="0.1965" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/drawable/ico_animated_bookmark.xml" value="0.346" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/drawable/ico_animated_ocr.xml" value="0.1745" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/drawable/ico_animated_translate.xml" value="0.346" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout-land/fragment_manga_detail.xml" value="0.20833333333333334" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout-land/fragment_pages_link.xml" value="0.31084656084656087" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout-land/grid_card_page_link.xml" value="0.15961199294532627" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout-land/grid_card_page_not_link.xml" value="0.15961199294532627" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout-land/line_card_vocabulary.xml" value="0.31084656084656087" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout-land/reader_content.xml" value="0.31084656084656087" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout-sw600dp-land/grid_card_page_link.xml" value="0.12115127175368139" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout-sw600dp/fragment_manga_detail.xml" value="0.275390625" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout-sw600dp/fragment_pages_link.xml" value="0.275390625" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout-sw600dp/grid_card_page_link.xml" value="0.14140625" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout-sw600dp/line_card_vocabulary.xml" value="0.275390625" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/activity_main.xml" value="0.3671875" />
         <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/activity_main_bar_menu.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/activity_main_content.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/activity_manga_detail.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/activity_menu.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/activity_pages_link.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/activity_vocabulary.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/floating_buttons.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/floating_subtitle_list_item.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/floating_subtitle_reader.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/floating_window_ocr.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/fragment_config.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/fragment_config_libraries.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/fragment_config_library.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/fragment_help.xml" value="0.1" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/fragment_history.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/fragment_kanji.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/fragment_library.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/fragment_manga_detail.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/fragment_pages_link.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/fragment_reader.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/fragment_reader_page.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/fragment_select_manga.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/fragment_vocabulary.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/grid_card_chapter.xml" value="0.18854166666666666" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/grid_card_manga.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/grid_card_theme.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/line_card_divider_history.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/line_card_history.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/line_card_library.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/line_card_manga.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/line_card_vocabulary.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/list_item.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/list_reader_chapters.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/loading_vocabulary.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/navigator_header_main.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/popup_page_link_image_detail.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/popup_reader_color_filter.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/popup_subtitle_configuration.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/popup_subtitle_reader.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/popup_subtitle_vocabulary.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/layout/reader_content.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/menu/main_menu_drawer.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/menu/menu_history.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/menu/menu_library.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/menu/menu_reader.xml" value="0.3671875" />
+        <entry key="..\:/ProjetoApp/MangaReader/BilingualManga/src/main/res/menu/menu_vocabulary.xml" value="0.3671875" />
       </map>
     </option>
   </component>

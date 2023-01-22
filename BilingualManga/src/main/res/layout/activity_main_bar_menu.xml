@@ -25,7 +25,8 @@
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         android:background="@drawable/main_toolbar_background"
-        android:theme="@style/MainToolbarContentTheme">
+        android:theme="@style/MainToolbarContentTheme"
+        app:elevation="0.1dp">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/main_toolbar"

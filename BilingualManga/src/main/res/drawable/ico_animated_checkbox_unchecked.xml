@@ -1,0 +1,30 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            android:width="30dp"
+            android:height="30dp"
+            android:viewportWidth="500"
+            android:viewportHeight="500">
+            <group android:name="_R_G">
+                <group
+                    android:name="_R_G_L_0_G"
+                    android:pivotX="250"
+                    android:pivotY="250"
+                    android:rotation="90">
+                    <group
+                        android:name="_R_G_L_0_G_L_0_G"
+                        android:translateX="250.067"
+                        android:translateY="249.578">
+                        <path
+                            android:name="_R_G_L_0_G_L_0_G_D_0_P_0"
+                            android:fillAlpha="0"
+                            android:fillColor="?attr/colorOnPrimaryContainer"
+                            android:fillType="nonZero"
+                            android:pathData=" M206.69 -8.12 C206.64,-8.22 206.59,-8.31 206.55,-8.41 C206.34,-8.89 206.11,-9.37 205.86,-9.84 C205.67,-10.2 205.45,-10.55 205.23,-10.9 C205.12,-11.09 205.01,-11.28 204.89,-11.47 C203.96,-12.88 202.85,-14.17 201.62,-15.31 C201.62,-15.31 118.94,-97.99 118.94,-97.99 C110.81,-106.12 97.69,-106.12 89.56,-97.99 C81.44,-89.87 81.44,-76.74 89.56,-68.62 C89.56,-68.62 137.27,-20.91 137.27,-20.91 C137.27,-20.91 -187.52,-20.91 -187.52,-20.91 C-198.98,-20.91 -208.35,-11.54 -208.35,-0.08 C-208.35,11.38 -198.98,20.76 -187.52,20.76 C-187.52,20.76 137.27,20.76 137.27,20.76 C137.27,20.76 89.35,68.67 89.35,68.67 C81.23,76.8 81.23,89.92 89.35,98.05 C93.52,102.01 98.73,104.09 104.15,104.09 C109.56,104.09 114.77,102.01 118.94,98.05 C118.94,98.05 202.27,14.71 202.27,14.71 C208.46,8.53 209.92,-0.55 206.69,-8.12c " />
+                    </group>
+                </group>
+            </group>
+        </vector>
+    </aapt:attr>
+</animated-vector>

@@ -1,0 +1,104 @@
+<animated-vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            android:name="vector"
+            android:width="24dp"
+            android:height="24dp"
+            android:viewportWidth="512"
+            android:viewportHeight="512">
+            <group android:name="windowsup">
+                <clip-path
+                    android:name="limit"
+                    android:pathData="M 472 32 L 40.668 29.484 C 27.42 29.499 16.684 40.236 16.668 53.484 L 16.668 118.484 L 160 121 L 380.147 120.609 L 406.762 120.609 L 406.762 127.172 L 408 339.143 L 408 480.588 L 472 481.217 C 485.248 481.201 495.985 470.465 496 457.217 L 496 56 C 495.985 42.752 485.248 32.015 472 32 Z"/>
+                <group android:name="windowsupline">
+                    <path
+                        android:name="windowup"
+                        android:pathData="M 472 32 L 152 32 C 145.64 32.007 139.535 34.54 135.038 39.038 C 130.54 43.535 128.007 49.64 128 56 L 128 121 L 160 121 L 160 64 L 464 64 L 464 339.143 L 408 339.143 L 408 371.143 L 472 371.143 C 478.36 371.136 484.465 368.603 488.962 364.105 C 493.46 359.608 495.993 353.503 496 347.143 L 496 56 C 495.993 49.64 493.46 43.535 488.962 39.038 C 484.465 34.54 478.36 32.007 472 32 Z"
+                        android:fillColor="?attr/colorSecondary"
+                        android:strokeWidth="1"/>
+                </group>
+            </group>
+            <group android:name="windowsbottom">
+                <path
+                    android:name="windowbottom"
+                    android:pathData="M 352 153 L 40.247 153 C 33.887 153.007 27.782 155.54 23.285 160.038 C 18.787 164.535 16.254 170.64 16.247 177 L 16.247 458 C 16.254 464.36 18.787 470.465 23.285 474.962 C 27.782 479.46 33.887 481.993 40.247 482 L 352 482 C 358.36 481.993 364.465 479.46 368.962 474.962 C 373.46 470.465 375.993 464.36 376 458 L 376 177 C 375.993 170.64 373.46 164.535 368.962 160.038 C 364.465 155.54 358.36 153.007 352 153 Z M 344 185 L 344 230.22 L 48.247 230.22 L 48.247 185 Z M 48.247 450 L 48.247 262.22 L 344 262.22 L 344 450 Z"
+                    android:fillColor="?attr/colorSecondary"
+                    android:strokeWidth="1"/>
+            </group>
+        </vector>
+    </aapt:attr>
+    <target android:name="windowsbottom">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:propertyName="translateY"
+                    android:duration="207"
+                    android:valueFrom="0"
+                    android:valueTo="-50"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                <objectAnimator
+                    android:propertyName="translateY"
+                    android:startOffset="393"
+                    android:duration="207"
+                    android:valueFrom="-50"
+                    android:valueTo="0"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                <objectAnimator
+                    android:propertyName="translateX"
+                    android:duration="207"
+                    android:valueFrom="0"
+                    android:valueTo="50"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                <objectAnimator
+                    android:propertyName="translateX"
+                    android:startOffset="393"
+                    android:duration="207"
+                    android:valueFrom="50"
+                    android:valueTo="0"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+            </set>
+        </aapt:attr>
+    </target>
+    <target android:name="windowsupline">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:propertyName="translateX"
+                    android:duration="207"
+                    android:valueFrom="0"
+                    android:valueTo="-60"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                <objectAnimator
+                    android:propertyName="translateX"
+                    android:startOffset="393"
+                    android:duration="207"
+                    android:valueFrom="-60"
+                    android:valueTo="0"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                <objectAnimator
+                    android:propertyName="translateY"
+                    android:duration="207"
+                    android:valueFrom="0"
+                    android:valueTo="60"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                <objectAnimator
+                    android:propertyName="translateY"
+                    android:startOffset="393"
+                    android:duration="207"
+                    android:valueFrom="60"
+                    android:valueTo="0"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+            </set>
+        </aapt:attr>
+    </target>
+</animated-vector>

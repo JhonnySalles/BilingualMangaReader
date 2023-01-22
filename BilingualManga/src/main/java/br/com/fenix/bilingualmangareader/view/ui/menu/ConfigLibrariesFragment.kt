@@ -111,7 +111,7 @@ class ConfigLibrariesFragment : Fragment() {
             val position = viewHolder.adapterPosition
             var excluded = false
             val dialog: AlertDialog =
-                AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
+                MaterialAlertDialogBuilder(requireActivity(), R.style.AppCompatAlertDialogStyle)
                     .setTitle(getString(R.string.config_libraries_delete_library))
                     .setMessage(getString(R.string.config_libraries_confirm_delete_library) + "\n" + library.title)
                     .setPositiveButton(

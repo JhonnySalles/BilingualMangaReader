@@ -26,4 +26,9 @@
     <declare-styleable name="PageLinkButtons">
         <attr name="state_expanded" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="DottedSeekBar">
+        <attr name="dots_positions" format="reference"/>
+        <attr name="dots_drawable" format="reference"/>
+    </declare-styleable>
 </resources>

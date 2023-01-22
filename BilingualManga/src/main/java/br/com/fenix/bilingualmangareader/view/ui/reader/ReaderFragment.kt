@@ -239,7 +239,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                     mLOGGER.info("Error in open file.")
             } else {
                 mLOGGER.info("File not founded.")
-                AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
+                MaterialAlertDialogBuilder(requireActivity(), R.style.AppCompatAlertDialogStyle)
                     .setTitle(getString(R.string.manga_excluded))
                     .setMessage(getString(R.string.file_not_found))
                     .setPositiveButton(
@@ -306,7 +306,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         mNextButton = requireActivity().findViewById(R.id.nav_next_file)
         mViewPager = view.findViewById<View>(R.id.fragment_reader) as PageViewPager
 
-        (mPageNavLayout.findViewById<View>(R.id.nav_reader_progress) as SeekBar).also {
+        (mPageNavLayout.findViewById<View>(R.id.reader_nav_reader_progress) as SeekBar).also {
             mPageSeekBar = it
         }
         mPageNavTextView = mPageNavLayout.findViewById<View>(R.id.nav_reader_title) as TextView
@@ -429,7 +429,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         v?.performClick()
-        return mGestureDetector.onTouchEvent(event)
+        return event?.let { mGestureDetector.onTouchEvent(it) } ?: true
     }
 
     fun getCurrentPage(): Int {
@@ -664,7 +664,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
 
     inner class MyTouchListener : SimpleOnGestureListener() {
 
-        override fun onLongPress(e: MotionEvent?) {
+        override fun onLongPress(e: MotionEvent) {
             super.onLongPress(e)
             if (e == null) return
             val view: PageImageView = getCurrencyImageView() ?: return
@@ -858,7 +858,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
 
         mPageNavLayout.animate().alpha(finalAlpha).setDuration(duration)
             .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
+                override fun onAnimationEnd(animation: Animator) {
                     super.onAnimationEnd(animation)
                     mPageNavLayout.visibility = visibility
                 }
@@ -866,7 +866,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
 
         mToolbarBottom.animate().alpha(finalAlpha).translationY(finalTranslation * -1)
             .setDuration(duration).setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
+                override fun onAnimationEnd(animation: Animator) {
                     super.onAnimationEnd(animation)
                     mToolbarBottom.visibility = visibility
                 }
@@ -874,7 +874,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
 
         mToolbarTop.animate().alpha(finalAlpha).translationY(finalTranslation)
             .setDuration(duration).setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
+                override fun onAnimationEnd(animation: Animator) {
                     super.onAnimationEnd(animation)
                     mToolbarTop.visibility = visibility
                 }
@@ -882,7 +882,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
 
         mNextButton.animate().alpha(finalAlpha).setDuration(duration)
             .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
+                override fun onAnimationEnd(animation: Animator) {
                     super.onAnimationEnd(animation)
                     mNextButton.visibility = visibility
                 }
@@ -890,7 +890,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
 
         mPreviousButton.animate().alpha(finalAlpha).setDuration(duration)
             .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
+                override fun onAnimationEnd(animation: Animator) {
                     super.onAnimationEnd(animation)
                     mPreviousButton.visibility = visibility
                 }
@@ -920,7 +920,7 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
         mNewManga = newManga
         mNewMangaTitle = titleRes
         val dialog: AlertDialog =
-            AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
+            MaterialAlertDialogBuilder(requireActivity(), R.style.AppCompatAlertDialogStyle)
                 .setTitle(titleRes)
                 .setMessage(newManga.file.name)
                 .setPositiveButton(
@@ -974,26 +974,27 @@ class ReaderFragment : Fragment(), View.OnTouchListener {
                         values.put(Images.Media.DATE_TAKEN, System.currentTimeMillis())
                         values.put(Images.Media.MIME_TYPE, "image/jpeg")
 
-                        val uri: Uri? = requireContext().contentResolver.insert(Images.Media.EXTERNAL_CONTENT_URI, values)
+                        val uri: Uri? = requireContext().contentResolver.insert(
+                            Images.Media.EXTERNAL_CONTENT_URI,
+                            values
+                        )
                         os = requireContext().contentResolver.openOutputStream(uri!!)!!
                         val bitmap = BitmapFactory.decodeStream(it)
                         bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, os)
 
                         if (language.equals(requireContext().getString(R.string.reading_choice_share_image), true)) {
-                            val image = File(uri.toString())
                             val shareIntent = Intent()
                             shareIntent.action = Intent.ACTION_SEND
                             shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                            shareIntent.type = "image/jpeg"
-                            shareIntent.putExtra(Intent.EXTRA_STREAM, image)
+                            shareIntent.type = "image/*"
                             shareIntent.putExtra(Intent.EXTRA_TEXT, fileName)
+                            shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
                             startActivity(
                                 Intent.createChooser(
                                     shareIntent,
                                     requireContext().getString(R.string.reading_choice_share_chose_app)
                                 )
                             )
-                            image.delete()
                         }
 
                         Util.closeOutputStream(os)

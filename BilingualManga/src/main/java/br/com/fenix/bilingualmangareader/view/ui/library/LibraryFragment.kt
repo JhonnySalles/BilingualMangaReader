@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.content.res.Resources
+import android.graphics.drawable.AnimatedVectorDrawable
 import android.os.*
 import android.util.Pair
 import android.view.*
@@ -37,6 +38,7 @@ import br.com.fenix.bilingualmangareader.view.adapter.library.MangaLineCardAdapt
 import br.com.fenix.bilingualmangareader.view.components.ComponentsUtil
 import br.com.fenix.bilingualmangareader.view.ui.manga_detail.MangaDetailActivity
 import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.slf4j.LoggerFactory
 import java.util.*
@@ -131,8 +133,6 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         }
 
         Scanner.getInstance(requireContext()).addUpdateHandler(mUpdateHandler)
-        if (Scanner.getInstance(requireContext()).isRunning())
-            setIsRefreshing(true)
 
         if (mViewModel.isEmpty())
             onRefresh()
@@ -142,7 +142,10 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     notifyDataSet(indexes)
             }
 
-        setIsRefreshing(false)
+        if (Scanner.getInstance(requireContext()).isRunning())
+            setIsRefreshing(true)
+        else
+            setIsRefreshing(false)
     }
 
     override fun onStop() {
@@ -277,12 +280,16 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun onChangeIconLayout() {
         val icon: Int = when (mGridType) {
-            LibraryType.GRID_SMALL -> R.drawable.ic_type_grid_small
-            LibraryType.GRID_BIG -> R.drawable.ic_type_grid_big
-            LibraryType.GRID_MEDIUM -> R.drawable.ic_type_grid_medium
-            else -> R.drawable.ic_type_list
+            LibraryType.GRID_SMALL -> R.drawable.ico_animated_type_grid_gridmedium_to_gridsmall
+            LibraryType.GRID_BIG -> R.drawable.ico_animated_type_grid_list_to_gridbig
+            LibraryType.GRID_MEDIUM -> R.drawable.ico_animated_type_grid_gridbig_to_gridmedium
+            else -> if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
+                R.drawable.ico_animated_type_grid_gridsmall_to_list
+            else
+                R.drawable.ico_animated_type_grid_gridmedium_to_list
         }
         miGridType.setIcon(icon)
+        (miGridType.icon as AnimatedVectorDrawable).start()
     }
 
     override fun onCreateView(
@@ -323,10 +330,12 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         mScrollDown.visibility = View.GONE
 
         mScrollUp.setOnClickListener {
+            (mScrollUp.drawable as AnimatedVectorDrawable).start()
             setAnimationRecycler(false)
             mRecyclerView.smoothScrollToPosition(0)
         }
         mScrollDown.setOnClickListener {
+            (mScrollDown.drawable as AnimatedVectorDrawable).start()
             setAnimationRecycler(false)
             mRecyclerView.smoothScrollToPosition((mRecyclerView.adapter as RecyclerView.Adapter).itemCount)
         }
@@ -399,7 +408,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 } else {
                     removeList(manga)
                     mViewModel.delete(manga)
-                    AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
+                    MaterialAlertDialogBuilder(requireActivity(), R.style.AppCompatAlertDialogStyle)
                         .setTitle(getString(R.string.manga_excluded))
                         .setMessage(getString(R.string.file_not_found))
                         .setPositiveButton(
@@ -634,7 +643,7 @@ class LibraryFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             val position = viewHolder.adapterPosition
             var excluded = false
             val dialog: AlertDialog =
-                AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
+                MaterialAlertDialogBuilder(requireActivity(), R.style.AppCompatAlertDialogStyle)
                     .setTitle(getString(R.string.library_menu_delete))
                     .setMessage(getString(R.string.library_menu_delete_description) + "\n" + manga.file.name)
                     .setPositiveButton(

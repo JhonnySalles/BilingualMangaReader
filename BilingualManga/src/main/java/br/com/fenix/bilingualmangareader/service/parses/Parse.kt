@@ -14,4 +14,5 @@ interface Parse {
     fun getSubtitlesNames(): Map<String, Int>
     fun getPagePath(num: Int): String?
     fun getPagePaths(): Map<String, Int>
+    fun getChapters(): IntArray
 }

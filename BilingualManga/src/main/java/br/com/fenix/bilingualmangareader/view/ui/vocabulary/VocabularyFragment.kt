@@ -1,5 +1,6 @@
 package br.com.fenix.bilingualmangareader.view.ui.vocabulary
 
+import android.graphics.drawable.AnimatedVectorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -81,8 +82,10 @@ class VocabularyFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         setFavorite(mViewModel.getFavorite())
         mFavorite.setOnMenuItemClickListener {
+            val favorite = !mViewModel.getFavorite()
+            mFavorite.setIcon(if (favorite) R.drawable.ico_animated_favorited_marked else R.drawable.ico_animated_favorited_unmarked)
+            (mFavorite.icon as AnimatedVectorDrawable).start()
             mViewModel.setQueryFavorite(!mViewModel.getFavorite())
-            setFavorite(mViewModel.getFavorite())
             true
         }
 
@@ -169,8 +172,12 @@ class VocabularyFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             }
         })
 
-        mScrollUp.setOnClickListener { mRecyclerView.smoothScrollToPosition(0) }
+        mScrollUp.setOnClickListener {
+            (mScrollUp.drawable as AnimatedVectorDrawable).start()
+            mRecyclerView.smoothScrollToPosition(0)
+        }
         mScrollDown.setOnClickListener {
+            (mScrollDown.drawable as AnimatedVectorDrawable).start()
             mRecyclerView.smoothScrollToPosition((mRecyclerView.adapter as RecyclerView.Adapter).itemCount)
         }
 

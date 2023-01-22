@@ -54,7 +54,7 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
         if (mCloseButton.visibility == View.VISIBLE) {
             mCloseButton.animate().alpha(0.0f).setDuration(300L)
                 .setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator?) {
+                    override fun onAnimationEnd(animation: Animator) {
                         super.onAnimationEnd(animation)
                         mCloseButton.visibility = View.GONE
                         layoutParams.width -= context.resources.getDimension(R.dimen.floating_ocr_button_close_size)
@@ -113,7 +113,7 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
         return Point(metrics.widthPixels, metrics.heightPixels)
     }
 
-    override fun onScroll(e1: MotionEvent?, e2: MotionEvent?, distanceX: Float, distanceY: Float): Boolean {
+    override fun onScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
         if (e1 == null || e2 == null) {
             return false
         }
@@ -125,36 +125,36 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
         return true
     }
 
-    override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
+    override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
         return false
     }
 
-    override fun onDoubleTap(e: MotionEvent?): Boolean {
+    override fun onDoubleTap(e: MotionEvent): Boolean {
         return false
     }
 
-    override fun onDoubleTapEvent(e: MotionEvent?): Boolean {
+    override fun onDoubleTapEvent(e: MotionEvent): Boolean {
         if (e?.action == MotionEvent.ACTION_DOWN)
             processTesseractAsync()
 
         return false
     }
 
-    private fun onUp(e: MotionEvent?): Boolean {
+    private fun onUp(e: MotionEvent): Boolean {
         return false
     }
 
-    override fun onDown(e: MotionEvent?): Boolean {
+    override fun onDown(e: MotionEvent): Boolean {
         return false
     }
 
-    override fun onShowPress(e: MotionEvent?) {}
+    override fun onShowPress(e: MotionEvent) {}
 
-    override fun onSingleTapUp(e: MotionEvent?): Boolean {
+    override fun onSingleTapUp(e: MotionEvent): Boolean {
         return false
     }
 
-    override fun onLongPress(e: MotionEvent?) {
+    override fun onLongPress(e: MotionEvent) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             if (mHandler.hasCallbacks(mDismissCloseButton))
                 mHandler.removeCallbacks(mDismissCloseButton)
@@ -167,7 +167,7 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
             mCloseButton.visibility = View.VISIBLE
             mCloseButton.alpha = 0.0f
             mCloseButton.animate().alpha(1.0f).setDuration(300L).setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
+                override fun onAnimationEnd(animation: Animator) {
                     super.onAnimationEnd(animation)
                     mCloseButton.visibility = View.VISIBLE
                 }
@@ -179,7 +179,7 @@ class FloatingWindowOcr constructor(private val context: Context, private val ac
         }
     }
 
-    override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
+    override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
         if (e1 != null && e2 != null)
             if (abs(velocityX) > 200 && (e1.x - e2.x > 100 || e2.x - e1.x > 100))
                 dismiss()

@@ -94,6 +94,10 @@ class RarParse : Parse {
         return paths
     }
 
+    override fun getChapters(): IntArray {
+        return getPagePaths().filter { it.value != 0 }.map { it.value }.toIntArray()
+    }
+
     override fun getPage(num: Int): InputStream {
         if (mArchive!!.mainHeader.isSolid) {
             synchronized(this) {

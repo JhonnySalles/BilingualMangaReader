@@ -6,7 +6,8 @@
     style="@style/AppBackground.Card"
     android:layout_width="@dimen/manga_grid_card_layout_width"
     android:layout_height="@dimen/manga_grid_card_layout_height"
-    android:layout_margin="8dp">
+    android:layout_margin="8dp"
+    app:strokeWidth="0.0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         style="@style/Card"
@@ -49,7 +50,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/manga_grid_title_size"
-                android:text="asdfasdfasdfasd"
                 android:transitionName="transition_manga_title"/>
 
             <TextView
@@ -59,18 +59,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:layout_marginBottom="2dp"
-                android:text="asdfasdfasdfasd"
                 android:singleLine="true"
                 android:textSize="@dimen/manga_grid_sub_title" />
 
-            <ProgressBar
-                android:id="@+id/manga_grid_progress"
-                style="@style/ProgressBar"
-                android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:transitionName="transition_progress_bar"/>
-
         </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/manga_grid_progress"
+            style="@style/ProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:transitionName="transition_progress_bar"
+            android:layout_marginBottom="1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,6 +1,7 @@
 package br.com.fenix.bilingualmangareader.view.ui.manga_detail
 
 import android.content.Intent
+import android.graphics.drawable.AnimatedVectorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.text.Html
@@ -27,6 +28,7 @@ import br.com.fenix.bilingualmangareader.view.adapter.manga_detail.InformationRe
 import br.com.fenix.bilingualmangareader.view.ui.reader.ReaderActivity
 import br.com.fenix.bilingualmangareader.view.ui.vocabulary.VocabularyActivity
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.slf4j.LoggerFactory
 
 
@@ -115,11 +117,23 @@ class MangaDetailFragment : Fragment() {
         mRelatedRelatedList = root.findViewById(R.id.manga_detail_relations_lists)
         mRelatedOrigin = root.findViewById(R.id.manga_detail_relations_origin)
 
-        mMakReadButton.setOnClickListener { markRead() }
-        mDeleteButton.setOnClickListener { deleteFile() }
         mFavoriteButton.setOnClickListener { favorite() }
-        mClearHistoryButton.setOnClickListener { clearHistory() }
-        mVocabularyButton.setOnClickListener { openVocabulary() }
+        mMakReadButton.setOnClickListener {
+            (mMakReadButton.icon as AnimatedVectorDrawable).start()
+            markRead()
+        }
+        mDeleteButton.setOnClickListener {
+            (mDeleteButton.icon as AnimatedVectorDrawable).start()
+            deleteFile()
+        }
+        mClearHistoryButton.setOnClickListener {
+            (mClearHistoryButton.icon as AnimatedVectorDrawable).start()
+            clearHistory()
+        }
+        mVocabularyButton.setOnClickListener {
+            (mVocabularyButton.icon as AnimatedVectorDrawable).start()
+            openVocabulary()
+        }
 
         mSubtitlesList.adapter = ArrayAdapter(requireContext(), R.layout.list_item_all_text, mSubtitles)
         mFileLinksList.adapter = ArrayAdapter(requireContext(), R.layout.list_item_all_text, mFileLinks)
@@ -190,10 +204,11 @@ class MangaDetailFragment : Fragment() {
                 mProgress.max = it.pages
                 mProgress.setProgress(it.bookMark, false)
 
-                if (it.favorite)
-                    mFavoriteButton.setIconResource(R.drawable.ic_favorite_mark)
-                else
-                    mFavoriteButton.setIconResource(R.drawable.ic_favorite_unmark)
+                if (mFavoriteButton.tag != it.favorite) {
+                    mFavoriteButton.setIconResource(if (it.favorite) R.drawable.ico_animated_favorited_marked else R.drawable.ico_animated_favorited_unmarked)
+                    (mFavoriteButton.icon as AnimatedVectorDrawable).start()
+                }
+                mFavoriteButton.tag = it.favorite
 
                 if (it.excluded) {
                     mDeleted.text = getString(R.string.manga_detail_manga_deleted)
@@ -305,7 +320,7 @@ class MangaDetailFragment : Fragment() {
 
     private fun deleteFile() {
         val manga = mViewModel.manga.value ?: return
-        AlertDialog.Builder(requireActivity(), R.style.AppCompatAlertDialogStyle)
+        MaterialAlertDialogBuilder(requireActivity(), R.style.AppCompatAlertDialogStyle)
             .setTitle(getString(R.string.library_menu_delete))
             .setMessage(getString(R.string.library_menu_delete_description) + "\n" + manga.file.name)
             .setPositiveButton(

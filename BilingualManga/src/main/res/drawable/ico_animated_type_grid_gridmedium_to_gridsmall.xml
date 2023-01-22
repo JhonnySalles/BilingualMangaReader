@@ -1,0 +1,72 @@
+<animated-vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            android:name="vector"
+            android:width="24dp"
+            android:height="24dp"
+            android:viewportWidth="24"
+            android:viewportHeight="24">
+            <group
+                android:name="gridmedium_to_gridsmall"
+                android:pivotX="12"
+                android:pivotY="12">
+                <path
+                    android:name="gridmedium1"
+                    android:pathData="M 5 11 L 8 11 C 8.55 11 9 10.55 9 10 L 9 6 C 9 5.45 8.55 5 8 5 L 5 5 C 4.45 5 4 5.45 4 6 L 4 10 C 4 10.55 4.45 11 5 11 Z M 5 18 L 8 18 C 8.55 18 9 17.55 9 17 L 9 13 C 9 12.45 8.55 12 8 12 L 5 12 C 4.45 12 4 12.45 4 13 L 4 17 C 4 17.55 4.45 18 5 18 Z M 11 18 L 14 18 C 14.55 18 15 17.55 15 17 L 15 13 C 15 12.45 14.55 12 14 12 L 11 12 C 10.45 12 10 12.45 10 13 L 10 17 C 10 17.55 10.45 18 11 18 Z M 17 18 L 20 18 C 20.55 18 21 17.55 21 17 L 21 13 C 21 12.45 20.55 12 20 12 L 17 12 C 16.45 12 16 12.45 16 13 L 16 17 C 16 17.55 16.45 18 17 18 Z M 11 11 L 14 11 C 14.55 11 15 10.55 15 10 L 15 6 C 15 5.45 14.55 5 14 5 L 11 5 C 10.45 5 10 5.45 10 6 L 10 10 C 10 10.55 10.45 11 11 11 Z M 16 6 L 16 10 C 16 10.55 16.45 11 17 11 L 20 11 C 20.55 11 21 10.55 21 10 L 21 6 C 21 5.45 20.55 5 20 5 L 17 5 C 16.45 5 16 5.45 16 6 Z"
+                    android:fillColor="#ffffff"/>
+            </group>
+        </vector>
+    </aapt:attr>
+    <target android:name="gridmedium1">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="pathData"
+                android:startOffset="42"
+                android:duration="558"
+                android:valueFrom="M 16 13 C 16 12.45 16.45 12 17 12 L 18.773 12 L 18.667 18 L 17 18 L 17 18 C 16.45 18 16 17.55 16 17 L 16 13 M 18.773 12 L 20 12 C 20.55 12 21 12.45 21 13 C 21 14.333 21 15.667 21 17 C 21 17.55 20.55 18 20 18 L 18.667 18 L 18.773 12 M 16 8.107 L 16 10 C 16 10.55 16.45 11 17 11 L 20 11 C 20.55 11 21 10.55 21 10 L 21 8 L 16 8.107 M 17 5 L 18.5 5 L 20 5 C 20.55 5 21 5.45 21 6 L 21 8 L 16 8.107 L 16 6 L 16 6 C 16 5.45 16.45 5 17 5 M 12.693 15 L 12.693 16.5 L 12.693 18 L 14 18 C 14.55 18 15 17.55 15 17 L 15 13 C 15 12.45 14.55 12 14 12 L 12.693 12 L 12.693 13.5 L 12.693 15 M 10 13 C 10 12.45 10.45 12 11 12 L 11.564 12 L 12.129 12 L 12.693 12 L 12.693 18 L 11 18 L 11 18 C 10.45 18 10 17.55 10 17 L 10 13 M 12.693 5 L 12.693 11 L 14 11 C 14.55 11 15 10.55 15 10 L 15 8.667 L 15 7.333 L 15 6 C 15 5.725 14.887 5.475 14.706 5.294 C 14.525 5.112 14.275 5 14 5 L 12.693 5 M 10 6 C 10 5.45 10.45 5 11 5 L 12.693 5 L 12.693 7 L 12.693 9 L 12.693 11 L 11 11 L 11 11 C 10.45 11 10 10.55 10 10 L 10 6 M 4 8 L 4 10 C 4 10.55 4.45 11 5 11 L 5 11 L 5.75 11 L 6.5 11 L 7.25 11 L 8 11 C 8.55 11 9 10.55 9 10 L 9 8.107 L 4 8 L 4 8 M 5 5 C 4.45 5 4 5.45 4 6 L 4 6.667 L 4 7.333 L 4 8 L 5.667 8.036 L 7.333 8.071 L 9 8.107 L 9 6 C 9 5.45 8.55 5 8 5 L 5 5 M 6.4 12 L 8 12 C 8.55 12 9 12.45 9 13 L 9 17 C 9 17.55 8.55 18 8 18 L 6.4 18 L 6.4 12 M 4 17 C 4 17.55 4.45 18 5 18 L 5 18 L 6.4 18 L 6.4 12 L 5 12 C 4.45 12 4 12.45 4 13 L 4 17"
+                android:valueTo="M 13 15 C 14.333 15 15.667 15 17 15 L 17 19 L 13 19 L 13 19 L 13 17.667 C 13 17.222 13 16.778 13 16.333 L 13 15 M 18 15 L 22 15 C 22 15.667 22 16.333 22 17 C 22 18.1 21.1 19 20 19 C 19.333 19 18.667 19 18 19 L 18 19 L 18 15 M 18 10 L 18 14 C 18 14 18 14 18 14 L 22 14 C 22 12.667 22 11.333 22 10 L 20 10 L 18 10 M 18 5 L 18 5 L 20 5 C 21.1 5 22 5.9 22 7 L 22 9 L 18 9 L 18 7.667 L 18 6.333 C 18 5.889 18 5.444 18 5 M 13 11.6 L 13 12.4 L 13 13.2 L 13 14 C 13 14 13 14 13 14 L 17 14 C 17 12.667 17 11.333 17 10 L 13 10 L 13 10.8 L 13 11.6 M 8 12.4 C 8 12.133 8 11.867 8 11.6 L 8 10.8 L 8 10 L 12 10 L 12 14 L 8 14 L 8 14 C 8 13.733 8 13.467 8 13.2 L 8 12.4 M 13 5 L 13 9 L 17 9 C 17 8.733 17 8.467 17 8.2 L 17 7.4 L 17 6.6 L 17 5.8 C 17 5.533 17 5.267 17 5 C 15.667 5 14.333 5 13 5 L 13 5 M 8 5 C 9.333 5 10.667 5 12 5 L 12 5.8 L 12 6.6 L 12 7.4 L 12 8.2 L 12 9 L 8 9 C 8 9 8 9 8 9 L 8 5 M 3 10 L 3 10.8 C 3 11.067 3 11.333 3 11.6 L 3 12.4 L 3 13.2 L 3 14 L 3 14 L 7 14 C 7 12.667 7 11.333 7 10 L 5.667 10 L 4.333 10 L 3 10 M 5 5 C 3.9 5 3 5.9 3 7 L 3 9 L 3 9 L 4 9 L 5 9 L 6 9 L 7 9 L 7 7 C 7 6.333 7 5.667 7 5 L 5 5 M 8 15 L 12 15 C 12 16.333 12 17.667 12 19 L 10 19 C 9.333 19 8.667 19 8 19 L 8 19 L 8 15 M 3 17 C 3 18.1 3.9 19 5 19 L 5 19 L 7 19 L 7 15 L 5 15 C 4.333 15 3.667 15 3 15 L 3 17"
+                android:valueType="pathType"
+                android:interpolator="@android:interpolator/fast_out_slow_in"/>
+        </aapt:attr>
+    </target>
+    <target android:name="gridmedium_to_gridsmall">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:propertyName="scaleX"
+                    android:startOffset="42"
+                    android:duration="270"
+                    android:valueFrom="1"
+                    android:valueTo="0.3"
+                    android:valueType="floatType"
+                    android:interpolator="@android:anim/accelerate_decelerate_interpolator"/>
+                <objectAnimator
+                    android:propertyName="scaleY"
+                    android:startOffset="42"
+                    android:duration="270"
+                    android:valueFrom="1"
+                    android:valueTo="0.3"
+                    android:valueType="floatType"
+                    android:interpolator="@android:anim/accelerate_decelerate_interpolator"/>
+                <objectAnimator
+                    android:propertyName="scaleY"
+                    android:startOffset="312"
+                    android:duration="288"
+                    android:valueFrom="0.3"
+                    android:valueTo="1"
+                    android:valueType="floatType"
+                    android:interpolator="@android:anim/accelerate_decelerate_interpolator"/>
+                <objectAnimator
+                    android:propertyName="scaleX"
+                    android:startOffset="312"
+                    android:duration="288"
+                    android:valueFrom="0.3"
+                    android:valueTo="1"
+                    android:valueType="floatType"
+                    android:interpolator="@android:anim/accelerate_decelerate_interpolator"/>
+            </set>
+        </aapt:attr>
+    </target>
+</animated-vector>
