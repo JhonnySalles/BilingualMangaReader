@@ -1,6 +1,5 @@
 package br.com.fenix.bilingualmangareader.service.repository
 
-import androidx.paging.PagingSource
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteOpenHelper
 import br.com.fenix.bilingualmangareader.model.entity.*

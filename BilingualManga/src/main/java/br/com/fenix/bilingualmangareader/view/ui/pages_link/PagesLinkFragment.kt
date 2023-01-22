@@ -15,7 +15,6 @@ import android.os.*
 import android.util.TypedValue
 import android.view.*
 import android.widget.*
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat

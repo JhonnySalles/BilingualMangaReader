@@ -3,7 +3,6 @@ package br.com.fenix.bilingualmangareader.service.ocr
 import android.content.Context
 import android.graphics.Bitmap
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import br.com.fenix.bilingualmangareader.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.mlkit.vision.common.InputImage
