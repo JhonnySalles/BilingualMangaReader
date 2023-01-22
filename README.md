@@ -184,7 +184,9 @@ O aplicativo é também compatível com legendas extraidas e pré processadas co
     * Correção no vocabulário para aceitar a tradução em português e inglês.
     * Correção para a troca da página entre os arquivos vinculado esteja mantendo a posição da leitura.
 * 0.2.19
-    * Em progresso.
+    * Atualizado as bibliotecas.
+    * Adicionado animações nos botões.
+    * Adicionado capitulos na barra de progresso.
 
 ### Features
 
