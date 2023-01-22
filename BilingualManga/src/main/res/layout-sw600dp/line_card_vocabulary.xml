@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/vocabulary_content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:layout_marginStart="@dimen/margin"
+    android:layout_marginEnd="@dimen/margin"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/vocabulary_title"
+        style="@style/TextNormal.Vocabulary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/vocabulary_title_size"
+        android:ellipsize="none"/>
+
+    <LinearLayout
+        android:layout_width="@dimen/vocabulary_content_text_width_tablet"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="@dimen/margin">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/vocabulary_reading"
+                    style="@style/TextNormal.Vocabulary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/vocabulary_content_text_normal_size"/>
+
+                <TextView
+                    android:id="@+id/vocabulary_appear"
+                    style="@style/TextNormal.Vocabulary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="@dimen/vocabulary_content_text_normal_size"/>
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/vocabulary_favorite"
+                style="@style/Button.IconOnlyWithBackground"
+                android:layout_width="@dimen/vocabulary_content_favorite_button_size"
+                android:layout_height="@dimen/vocabulary_content_favorite_button_size"
+                android:textColor="?attr/colorSecondary"
+                android:contentDescription="@string/vocabulary_favorite"
+                app:iconSize="25dp"
+                app:iconTint="?attr/colorSecondary"
+                app:icon="@drawable/ico_animated_favorited_unmarked"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/vocabulary_meaning"
+            style="@style/TextNormal.Vocabulary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/vocabulary_content_text_big_size"/>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/vocabulary_manga_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="horizontal"
+        android:layout_marginStart="@dimen/margin"/>
+
+</LinearLayout>

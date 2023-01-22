@@ -1,0 +1,322 @@
+<animated-vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            android:name="vector"
+            android:width="320dp"
+            android:height="300dp"
+            android:viewportWidth="320"
+            android:viewportHeight="300">
+            <group
+                android:name="group"
+                android:translateX="10">
+                <group android:name="topicextra2">
+                    <path
+                        android:name="topicextraselected"
+                        android:pathData="M 64.048 216.749 L 4.076 216.749 C 2.419 216.749 1.076 218.093 1.076 219.749 L 1.076 279.722 C 1.076 281.38 2.419 282.722 4.076 282.722 L 64.048 282.722 C 65.704 282.722 67.048 281.38 67.048 279.722 L 67.048 219.749 C 67.048 218.093 65.704 216.749 64.048 216.749 Z"
+                        android:fillColor="?attr/colorSecondary"
+                        android:fillAlpha="0"/>
+                </group>
+                <group android:name="topicextra1">
+                    <path
+                        android:name="topicextraiunselected"
+                        android:pathData="M 64.048 17.675 L 4.076 17.675 C 1.825 17.675 0 19.499 0 21.749 L 0 81.722 C 0 83.974 1.825 85.798 4.076 85.798 L 64.048 85.798 C 66.299 85.798 68.123 83.974 68.123 81.722 L 68.123 21.749 C 68.123 19.499 66.299 17.675 64.048 17.675 Z M 19.138 66.661 L 19.138 36.809 L 48.987 36.809 L 48.987 66.661 L 19.138 66.661 Z"
+                        android:fillColor="?attr/colorSecondary"
+                        android:fillAlpha="0"/>
+                </group>
+                <group android:name="topicselect">
+                    <path
+                        android:name="topicicon3"
+                        android:pathData="M 64.048 216.749 L 4.076 216.749 C 2.419 216.749 1.076 218.093 1.076 219.749 L 1.076 279.722 C 1.076 281.38 2.419 282.722 4.076 282.722 L 64.048 282.722 C 65.704 282.722 67.048 281.38 67.048 279.722 L 67.048 219.749 C 67.048 218.093 65.704 216.749 64.048 216.749 Z"
+                        android:fillColor="?attr/colorSecondary"/>
+                </group>
+                <group android:name="topic1">
+                    <path
+                        android:name="topicicon1"
+                        android:pathData="M 64.048 17.675 L 4.076 17.675 C 1.825 17.675 0 19.499 0 21.749 L 0 81.722 C 0 83.974 1.825 85.798 4.076 85.798 L 64.048 85.798 C 66.299 85.798 68.123 83.974 68.123 81.722 L 68.123 21.749 C 68.123 19.499 66.299 17.675 64.048 17.675 Z M 19.138 66.661 L 19.138 36.809 L 48.987 36.809 L 48.987 66.661 L 19.138 66.661 Z"
+                        android:fillColor="?attr/colorSecondary"/>
+                </group>
+                <group android:name="topic2">
+                    <path
+                        android:name="topicicon2"
+                        android:pathData="M 64.048 116.675 L 4.076 116.675 C 1.825 116.675 0 118.499 0 120.749 L 0 180.722 C 0 182.974 1.825 184.798 4.076 184.798 L 64.048 184.798 C 66.299 184.798 68.123 182.974 68.123 180.722 L 68.123 120.749 C 68.123 118.499 66.299 116.675 64.048 116.675 Z M 19.138 165.661 L 19.138 135.809 L 48.987 135.809 L 48.987 165.661 L 19.138 165.661 Z"
+                        android:fillColor="?attr/colorSecondary"/>
+                </group>
+                <group
+                    android:name="barbottom"
+                    android:pivotX="108">
+                    <path
+                        android:name="bar3"
+                        android:pathData="M 297.396 231.036 L 110.726 231.036 C 109.069 231.036 107.726 232.378 107.726 234.036 L 107.726 265.436 C 107.726 267.092 109.069 268.436 110.726 268.436 L 297.396 268.436 C 299.052 268.436 300.396 267.092 300.396 265.436 L 300.396 234.036 C 300.396 232.378 299.053 231.036 297.396 231.036 Z"
+                        android:fillColor="?attr/colorSecondary"/>
+                </group>
+                <group
+                    android:name="barcenter"
+                    android:pivotX="108">
+                    <path
+                        android:name="bar2"
+                        android:pathData="M 110.729 169.438 L 297.396 169.438 C 299.052 169.438 300.396 168.096 300.396 166.438 L 300.396 135.032 C 300.396 133.376 299.052 132.032 297.396 132.032 L 110.729 132.032 C 109.072 132.032 107.729 133.376 107.729 135.032 L 107.729 166.438 C 107.729 168.097 109.071 169.438 110.729 169.438 Z"
+                        android:fillColor="?attr/colorSecondary"/>
+                </group>
+                <group
+                    android:name="bartop"
+                    android:pivotX="108">
+                    <path
+                        android:name="bar1"
+                        android:pathData="M 110.729 70.438 L 297.396 70.438 C 299.052 70.438 300.396 69.096 300.396 67.438 L 300.396 36.032 C 300.396 34.376 299.052 33.032 297.396 33.032 L 110.729 33.032 C 109.072 33.032 107.729 34.376 107.729 36.032 L 107.729 67.438 C 107.729 69.097 109.071 70.438 110.729 70.438 Z"
+                        android:fillColor="?attr/colorSecondary"/>
+                </group>
+            </group>
+        </vector>
+    </aapt:attr>
+    <target android:name="barbottom">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:propertyName="scaleX"
+                    android:duration="247"
+                    android:valueFrom="1"
+                    android:valueTo="0.3"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                <objectAnimator
+                    android:propertyName="scaleX"
+                    android:startOffset="451"
+                    android:duration="309"
+                    android:valueFrom="0.3"
+                    android:valueTo="1"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+            </set>
+        </aapt:attr>
+    </target>
+    <target android:name="barcenter">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:propertyName="scaleX"
+                    android:startOffset="127"
+                    android:duration="247"
+                    android:valueFrom="1"
+                    android:valueTo="0.3"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                <objectAnimator
+                    android:propertyName="scaleX"
+                    android:startOffset="566"
+                    android:duration="309"
+                    android:valueFrom="0.3"
+                    android:valueTo="1"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+            </set>
+        </aapt:attr>
+    </target>
+    <target android:name="bartop">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:propertyName="scaleX"
+                    android:startOffset="225"
+                    android:duration="247"
+                    android:valueFrom="1"
+                    android:valueTo="0.3"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                <objectAnimator
+                    android:propertyName="scaleX"
+                    android:startOffset="691"
+                    android:duration="309"
+                    android:valueFrom="0.3"
+                    android:valueTo="1"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+            </set>
+        </aapt:attr>
+    </target>
+    <target android:name="topic2">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:propertyName="translateY"
+                    android:duration="1"
+                    android:valueFrom="0"
+                    android:valueTo="100"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                <objectAnimator
+                    android:propertyName="translateY"
+                    android:startOffset="746"
+                    android:duration="1"
+                    android:valueFrom="100"
+                    android:valueTo="0"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+            </set>
+        </aapt:attr>
+    </target>
+    <target android:name="topic1">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:propertyName="translateY"
+                    android:duration="1"
+                    android:valueFrom="0"
+                    android:valueTo="100"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                <objectAnimator
+                    android:propertyName="translateY"
+                    android:startOffset="375"
+                    android:duration="1"
+                    android:valueFrom="100"
+                    android:valueTo="0"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+            </set>
+        </aapt:attr>
+    </target>
+    <target android:name="topicselect">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:propertyName="translateY"
+                    android:duration="1"
+                    android:valueFrom="0"
+                    android:valueTo="-200"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                <objectAnimator
+                    android:propertyName="translateY"
+                    android:startOffset="375"
+                    android:duration="1"
+                    android:valueFrom="-200"
+                    android:valueTo="-100"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                <objectAnimator
+                    android:propertyName="translateY"
+                    android:startOffset="746"
+                    android:duration="1"
+                    android:valueFrom="-100"
+                    android:valueTo="0"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+            </set>
+        </aapt:attr>
+    </target>
+    <target android:name="topicextra1">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:propertyName="translateY"
+                    android:startOffset="375"
+                    android:duration="1"
+                    android:valueFrom="0"
+                    android:valueTo="100"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                <objectAnimator
+                    android:propertyName="translateY"
+                    android:startOffset="746"
+                    android:duration="1"
+                    android:valueFrom="100"
+                    android:valueTo="200"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+            </set>
+        </aapt:attr>
+    </target>
+    <target android:name="topicextraselected">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:propertyName="fillAlpha"
+                    android:duration="253"
+                    android:valueFrom="1"
+                    android:valueTo="0"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                <objectAnimator
+                    android:propertyName="fillAlpha"
+                    android:startOffset="376"
+                    android:duration="253"
+                    android:valueFrom="1"
+                    android:valueTo="0"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                <objectAnimator
+                    android:propertyName="fillAlpha"
+                    android:startOffset="747"
+                    android:duration="253"
+                    android:valueFrom="1"
+                    android:valueTo="0"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+            </set>
+        </aapt:attr>
+    </target>
+    <target android:name="topicextra2">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:propertyName="translateY"
+                    android:startOffset="375"
+                    android:duration="1"
+                    android:valueFrom="0"
+                    android:valueTo="-200"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                <objectAnimator
+                    android:propertyName="translateY"
+                    android:startOffset="746"
+                    android:duration="1"
+                    android:valueFrom="-200"
+                    android:valueTo="-100"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+            </set>
+        </aapt:attr>
+    </target>
+    <target android:name="topicextraiunselected">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="fillAlpha"
+                android:duration="1"
+                android:valueFrom="0"
+                android:valueTo="1"
+                android:valueType="floatType"
+                android:interpolator="@android:interpolator/fast_out_slow_in"/>
+        </aapt:attr>
+    </target>
+    <target android:name="topicicon3">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:propertyName="fillAlpha"
+                    android:duration="253"
+                    android:valueFrom="0"
+                    android:valueTo="1"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                <objectAnimator
+                    android:propertyName="fillAlpha"
+                    android:startOffset="376"
+                    android:duration="253"
+                    android:valueFrom="0"
+                    android:valueTo="1"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                <objectAnimator
+                    android:propertyName="fillAlpha"
+                    android:startOffset="747"
+                    android:duration="253"
+                    android:valueFrom="0"
+                    android:valueTo="1"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+            </set>
+        </aapt:attr>
+    </target>
+</animated-vector>

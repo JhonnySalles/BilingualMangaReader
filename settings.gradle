@@ -8,5 +8,5 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "BilingualMangaReader"
-include ':app'
+include ':BilingualManga'
 

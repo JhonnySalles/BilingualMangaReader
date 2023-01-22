@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frame_vocabulary_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".view.ui.vocabulary.VocabularyFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/vocabulary_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="@dimen/default_navigator_header_margin_top"
+        android:layout_marginStart="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_small"
+        android:layout_marginBottom="@dimen/margin_small">
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/vocabulary_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/page_link_list_link_margin_top"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/vocabulary_content">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/vocabulary_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+                android:scrollbarStyle="outsideOverlay"
+                app:layout_constraintVertical_bias="0"/>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <LinearLayout
+            android:id="@+id/vocabulary_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/vocabulary_manga_text"
+                style="@style/TextInputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/vocabulary_manga"
+                android:enabled="true"
+                app:startIconDrawable="@drawable/ic_file">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/vocabulary_manga_edittext"
+                    style="@style/TextFieldEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <!--                                Ended                                -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/vocabulary_scroll_up"
+            style="@style/FloatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center"
+            android:layout_margin="@dimen/page_link_scrolling_button_margin"
+            android:contentDescription="@string/action_scroll_up"
+            android:visibility="gone"
+            android:src="@drawable/ico_animated_scroll_up"
+            app:borderWidth="@dimen/page_link_up_border"
+            app:fabCustomSize="@dimen/page_link_up_width"
+            app:maxImageSize="@dimen/page_link_up_image_width"
+            app:layout_constraintTop_toTopOf="@+id/vocabulary_refresh"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/vocabulary_scroll_down"
+            style="@style/FloatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_margin="@dimen/page_link_scrolling_button_margin"
+            android:contentDescription="@string/action_scroll_down"
+            android:visibility="gone"
+            android:src="@drawable/ico_animated_scroll_down"
+            app:borderWidth="@dimen/page_link_down_border"
+            app:fabCustomSize="@dimen/page_link_down_width"
+            app:maxImageSize="@dimen/page_link_down_image_width"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

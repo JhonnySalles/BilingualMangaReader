@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- - - - - - - - - - - - - - - - - - - - -  JLPT Colors  - - - - - - - - - - - - - - - - - - - - -->
+    <color name="JLPT0">#b3b3b3</color>
+    <color name="JLPT1">#ff4d4d</color>
+    <color name="JLPT2">#ffc266</color>
+    <color name="JLPT3">#66ff66</color>
+    <color name="JLPT4">#668cff</color>
+    <color name="JLPT5">#b366ff</color>
+    <color name="VOCABULARY">#00ff00</color>
+
+    <!-- - - - - - - - - - - - - - - - - - - - -  Used  - - - - - - - - - - - - - - - - - - - - -->
+    <color name="file_link_buttons">#55000000</color>
+    <color name="file_link_buttons_expanded">#AA000000</color>
+    <color name="file_link_buttons_disabled">#44484848</color>
+    <color name="title_background">#DD000000</color>
+
+    <color name="title_background_semitransparent">#55000000</color>
+    <color name="chapter_page_semitransparent">#CE212121</color>
+    <color name="main_header_background_top">#000000</color>
+
+    <color name="reader_buttons">#FFFFFFFF</color>
+    <color name="reader_buttons_surface">#000000</color>
+    <color name="reader_semi_transparent">#DD000000</color>
+
+    <color name="button_close_ocr">#FFFFFF</color>
+    <color name="button_close_ocr_background">#000000</color>
+
+    <color name="floating_list_item_selected">#6600ff00</color>
+    <color name="floating_list_divider">#66000000</color>
+
+    <color name="history_item_background">#77000000</color>
+    <color name="history_item_deleted">#77cc0000</color>
+
+    <color name="manga_detail_title_background">#212121</color>
+    <color name="manga_detail_title_background_top">#000000</color>
+    <color name="manga_detail_title_background_center">#DD000000</color>
+    <color name="manga_detail_title_background_bottom">#00000000</color>
+
+    <color name="manga_detail_list_divider">#484848</color>
+
+    <color name="floating_background_semi_transparent">#BF000000</color>
+    <color name="floating_button_color">#FFFFFF</color>
+    <color name="floating_button_subtitle_background_selected">#000000</color>
+    <color name="floating_button_subtitle_background">#275201</color>
+    <color name="floating_text_color">#FFFFFF</color>
+    <color name="floating_title_color">#79b700</color>
+
+    <color name="card_number">#000000</color>
+    <color name="page_border">#000000</color>
+    <color name="status_bar_color">#000000</color>
+
+    <color name="clock_text">#FFFFFF</color>
+    <color name="touch_demonstration_text">#FFFFFF</color>
+
+    <color name="shadow">#000000</color>
+    <color name="shadow_inverse">#FFFFFF</color>
+    <color name="transparent">#00000000</color>
+    <color name="translucent">#55000000</color>
+
+    <!--
+        colorPrimary, colorOnPrimary = Text color white/green
+
+        colorSecondary, colorOnSecondary = Title, Icon, Hint
+
+        colorOutline = Divider
+
+        colorTertiary = Ripple / Number Page
+
+        colorSurface = Background system
+        colorOnSurface = Background accent, background text box
+        colorOnBackground = Background accent
+        colorOnSurfaceInverse = Background card
+
+        colorSurfaceVariant, colorOnSurfaceVariant = Menu colors
+
+        colorOnTertiary, colorTertiaryContainer = Card text and background semi transparent
+
+        colorPrimaryContainer, colorOnPrimaryContainer = Button, ProgressBar, selected page
+        colorSecondaryContainer, colorOnSecondaryContainer = Floating popup, button and background
+        colorOnTertiaryContainer = NotLinked background semi transparent
+
+        colorPrimaryInverse = text white
+        colorSurfaceInverse = touch color
+
+        colorError, colorOnError = erros, excluded
+        colorErrorContainer, colorOnErrorContainer = erros acent
+     -->
+
+    <!-- - - - - - - - - - - - - - - - - - - - -  Default Colors  - - - - - - - - - - - - - - - - - - - - -->
+    <color name="manga_reader_theme_light_primary">#000000</color>
+    <color name="manga_reader_theme_light_onPrimary">#1d9902</color>
+    <color name="manga_reader_theme_light_primaryContainer">#73e600</color>
+    <color name="manga_reader_theme_light_onPrimaryContainer">#000000</color>
+    <color name="manga_reader_theme_light_secondary">#479900</color>
+    <color name="manga_reader_theme_light_onSecondary">#0B2000</color>
+    <color name="manga_reader_theme_light_secondaryContainer">#FFFFFF</color>
+    <color name="manga_reader_theme_light_onSecondaryContainer">#275201</color>
+    <color name="manga_reader_theme_light_tertiary">#47d147</color>
+    <color name="manga_reader_theme_light_onTertiary">#FFFFFF</color>
+    <color name="manga_reader_theme_light_tertiaryContainer">#CE1d9902</color>
+    <color name="manga_reader_theme_light_onTertiaryContainer">#CE212121</color>
+    <color name="manga_reader_theme_light_error">#BA1A1A</color>
+    <color name="manga_reader_theme_light_errorContainer">#FFDAD6</color>
+    <color name="manga_reader_theme_light_onError">#FFFFFF</color>
+    <color name="manga_reader_theme_light_onErrorContainer">#410002</color>
+    <color name="manga_reader_theme_light_background">#ffffff</color>
+    <color name="manga_reader_theme_light_onBackground">#e6e6e6</color>
+    <color name="manga_reader_theme_light_surface">#f3f3f1</color>
+    <color name="manga_reader_theme_light_onSurface">#cdcfc9</color>
+    <color name="manga_reader_theme_light_surfaceVariant">#FFFFFF</color>
+    <color name="manga_reader_theme_light_onSurfaceVariant">#5fcc00</color>
+    <color name="manga_reader_theme_light_outline">#33cc33</color>
+    <color name="manga_reader_theme_light_inverseOnSurface">#d9dbd7</color>
+    <color name="manga_reader_theme_light_inverseSurface">#79f300</color>
+    <color name="manga_reader_theme_light_inversePrimary">#FFFFFF</color>
+    <color name="manga_reader_theme_light_shadow">#000000</color>
+    <color name="manga_reader_theme_light_surfaceTint">#326B00</color>
+    <color name="manga_reader_theme_light_surfaceTintColor">#326B00</color>
+
+    <color name="manga_reader_theme_dark_primary">#FFFFFF</color>
+    <color name="manga_reader_theme_dark_onPrimary">#79f300</color>
+    <color name="manga_reader_theme_dark_primaryContainer">#79f300</color>
+    <color name="manga_reader_theme_dark_onPrimaryContainer">#000000</color>
+    <color name="manga_reader_theme_dark_secondary">#84FF1D</color>
+    <color name="manga_reader_theme_dark_onSecondary">#79f300</color>
+    <color name="manga_reader_theme_dark_secondaryContainer">#FFFFFF</color>
+    <color name="manga_reader_theme_dark_onSecondaryContainer">#275201</color>
+    <color name="manga_reader_theme_dark_tertiary">#1d9902</color>
+    <color name="manga_reader_theme_dark_onTertiary">#FFFFFF</color>
+    <color name="manga_reader_theme_dark_tertiaryContainer">#CE1d9902</color>
+    <color name="manga_reader_theme_dark_onTertiaryContainer">#CE212121</color>
+    <color name="manga_reader_theme_dark_error">#FFB4AB</color>
+    <color name="manga_reader_theme_dark_errorContainer">#93000A</color>
+    <color name="manga_reader_theme_dark_onError">#690005</color>
+    <color name="manga_reader_theme_dark_onErrorContainer">#FFDAD6</color>
+    <color name="manga_reader_theme_dark_background">#000000</color>
+    <color name="manga_reader_theme_dark_onBackground">#212121</color>
+    <color name="manga_reader_theme_dark_surface">#000000</color>
+    <color name="manga_reader_theme_dark_onSurface">#1A1C18</color>
+    <color name="manga_reader_theme_dark_surfaceVariant">#FFFFFF</color>
+    <color name="manga_reader_theme_dark_onSurfaceVariant">#84FF1D</color>
+    <color name="manga_reader_theme_dark_outline">#84FF1D</color>
+    <color name="manga_reader_theme_dark_inverseOnSurface">#1A1C18</color>
+    <color name="manga_reader_theme_dark_inverseSurface">#E3E3DC</color>
+    <color name="manga_reader_theme_dark_inversePrimary">#FFFFFF</color>
+    <color name="manga_reader_theme_dark_shadow">#000000</color>
+    <color name="manga_reader_theme_dark_surfaceTint">#6FE000</color>
+    <color name="manga_reader_theme_dark_surfaceTintColor">#6FE000</color>
+</resources>

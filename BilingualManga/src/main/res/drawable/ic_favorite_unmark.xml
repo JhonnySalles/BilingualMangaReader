@@ -1,0 +1,22 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:tint="?attr/colorPrimary"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="400"
+    android:viewportHeight="400">
+  <group
+      android:name="_R_G_L_1_G"
+      android:scaleX="1.5"
+      android:scaleY="1.5"
+      android:translateX="200"
+      android:translateY="200">
+    <path
+        android:name="_R_G_L_1_G_D_0_P_0"
+        android:pathData=" M-49.25 -89.75 C-82.75,-89.75 -103.75,-55.5 -103.75,-35 C-103.75,-14.5 -89,0.75 -89,0.75 C-89,0.75 0,89.75 0,89.75 C0,89.75 89.5,2 89.5,2 C89.5,2 104.25,-9.5 104.25,-35.5 C104.25,-61.5 79.75,-89.5 49.5,-89.5 C19.25,-89.5 -0.25,-63.25 -0.25,-63.25 C-0.25,-63.25 -15.75,-89.75 -49.25,-89.75c "
+        android:strokeWidth="15"
+        android:strokeAlpha="1"
+        android:strokeColor="?attr/colorPrimary"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+  </group>
+</vector>

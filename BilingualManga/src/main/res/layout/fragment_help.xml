@@ -1,0 +1,914 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frame_help_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:paddingTop="@dimen/default_navigator_header_margin_top"
+    android:clipToPadding="false"
+    android:clipChildren="false"
+    tools:context=".view.ui.help.HelpFragment">
+
+    <ScrollView
+        android:id="@+id/help_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin"
+            android:layout_marginBottom="@dimen/margin_bottom"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/help_content_title"
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:text="@string/help_content"
+                android:textSize="@dimen/help_title_size" />
+
+            <TextView
+                android:id="@+id/help_library_content"
+                style="@style/TextTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_library_content"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                android:id="@+id/help_reader_content"
+                style="@style/TextTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_reader_content"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                android:id="@+id/help_file_link_content"
+                style="@style/TextTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_file_link_content"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                android:id="@+id/help_subtitle_content"
+                style="@style/TextTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_subtitle_content"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                android:id="@+id/help_subtitle_import_content"
+                style="@style/TextTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_subtitle_import_content"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                android:id="@+id/help_subtitle_data_content"
+                style="@style/TextTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_subtitle_data_content"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                android:id="@+id/help_subtitle_vocabulary_content"
+                style="@style/TextTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_subtitle_vocabulary_content"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                android:id="@+id/help_vocabulary_content"
+                style="@style/TextTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_vocabulary_content"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                android:id="@+id/help_kanjis_content"
+                style="@style/TextTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_kanji_content"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                android:id="@+id/help_floating_popup_content"
+                style="@style/TextTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_floating_popup_content"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                android:id="@+id/help_language_support_content"
+                style="@style/TextTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_languages_support_content"
+                android:textSize="@dimen/help_content_size" />
+
+            <com.google.android.material.divider.MaterialDivider
+                style="@style/MaterialDivider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin"/>
+
+            <TextView
+                android:id="@+id/help_library_title"
+                style="@style/TextTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="@string/help_library_title"
+                android:textSize="@dimen/help_title_size" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_library_description_1"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_library_description_2"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_library_description_3"
+                android:textSize="@dimen/help_content_size" />
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_library" />
+
+            <com.google.android.material.divider.MaterialDivider
+                style="@style/MaterialDivider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin"/>
+
+            <TextView
+                android:id="@+id/help_reader_title"
+                style="@style/TextTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="@string/help_reader_title"
+                android:textSize="@dimen/help_title_size" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_reader_description_1"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_reader_description_2"
+                android:textSize="@dimen/help_content_size" />
+
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_reader_description_3"
+                android:textSize="@dimen/help_content_size" />
+
+
+            <com.google.android.material.divider.MaterialDivider
+                style="@style/MaterialDivider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin" />
+
+            <TextView
+                android:id="@+id/help_file_link_title"
+                style="@style/TextTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="@string/help_file_link_title"
+                android:textSize="@dimen/help_title_size" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_file_link_description_1"
+                android:textSize="@dimen/help_content_size" />
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_file_link" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_file_link_description_2"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_file_link_description_3"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_file_link_description_button_auto_reorder"
+                android:textSize="@dimen/help_content_size" />
+
+            <br.com.fenix.bilingualmangareader.view.components.MaterialButtonExpanded
+                style="@style/Button.PageLinkFunction"
+                android:layout_width="@dimen/help_button_file_link_width"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/margin"
+                android:contentDescription="@string/page_link_reorder_auto"
+                android:text="@string/page_link_reorder_auto"
+                app:icon="@drawable/ico_animated_file_link_auto_process"/>
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_file_link_description_button_dual_page"
+                android:textSize="@dimen/help_content_size" />
+
+            <br.com.fenix.bilingualmangareader.view.components.MaterialButtonExpanded
+                style="@style/Button.PageLinkFunction"
+                android:layout_width="@dimen/help_button_file_link_width"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/margin"
+                android:contentDescription="@string/page_link_reorder_dual_page"
+                android:text="@string/page_link_reorder_dual_page"
+                app:icon="@drawable/ico_animated_file_link_dual_page"/>
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_file_link_description_button_single_page"
+                android:textSize="@dimen/help_content_size" />
+
+            <br.com.fenix.bilingualmangareader.view.components.MaterialButtonExpanded
+                style="@style/Button.PageLinkFunction"
+                android:layout_width="@dimen/help_button_file_link_width"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/margin"
+                android:contentDescription="@string/page_link_reorder_single_page"
+                android:text="@string/page_link_reorder_single_page"
+                app:icon="@drawable/ico_animated_file_link_single_page"/>
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_file_link_description_button_page_sequence"
+                android:textSize="@dimen/help_content_size" />
+
+            <br.com.fenix.bilingualmangareader.view.components.MaterialButtonExpanded
+                style="@style/Button.PageLinkFunction"
+                android:layout_width="@dimen/help_button_file_link_width"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/margin"
+                android:contentDescription="@string/page_link_reorder_sorted_page"
+                android:text="@string/page_link_reorder_sorted_page"
+                app:icon="@drawable/ico_animated_file_link_reorder" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_file_link_description_button_undo_last_reorder"
+                android:textSize="@dimen/help_content_size" />
+
+            <br.com.fenix.bilingualmangareader.view.components.MaterialButtonExpanded
+                style="@style/Button.PageLinkFunction"
+                android:layout_width="@dimen/help_button_file_link_width"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/margin"
+                android:contentDescription="@string/page_link_reorder_undo_changes"
+                android:text="@string/page_link_reorder_undo_changes"
+                app:icon="@drawable/ico_animated_file_link_undo_changes"/>
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_file_link_description_button_refresh_file_link"
+                android:textSize="@dimen/help_content_size" />
+
+            <br.com.fenix.bilingualmangareader.view.components.MaterialButtonExpanded
+                style="@style/Button.PageLinkFunction"
+                android:layout_width="@dimen/help_button_file_link_width"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/margin"
+                android:contentDescription="@string/page_link_reload_file_link"
+                android:text="@string/page_link_reload_file_link"
+                app:icon="@drawable/ico_animated_file_link_reload" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_file_link_description_5"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_file_link_description_6"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_file_link_description_7"
+                android:textSize="@dimen/help_content_size" />
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_file_link_double_page" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_file_link_description_8"
+                android:textSize="@dimen/help_content_size" />
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_file_link_full_screen" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_file_link_description_9"
+                android:textSize="@dimen/help_content_size" />
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_file_link_menu_item" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_file_link_description_10"
+                android:textSize="@dimen/help_content_size" />
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_file_not_linked" />
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_file_link_move" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_file_link_description_11"
+                android:textSize="@dimen/help_content_size" />
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_file_link_example" />
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_file_link_example_changed" />
+
+
+            <com.google.android.material.divider.MaterialDivider
+                style="@style/MaterialDivider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin" />
+
+            <TextView
+                android:id="@+id/help_subtitle_title"
+                style="@style/TextTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="@string/help_subtitle_title"
+                android:textSize="@dimen/help_title_size" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_subtitle_description_1"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_subtitle_description_2"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                android:id="@+id/help_subtitle_import_title"
+                style="@style/TextTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="@string/help_subtitle_import_title"
+                android:textSize="@dimen/help_subtitle_size" />
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_import" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_subtitle_description_external_subtitle"
+                android:textSize="@dimen/help_content_size" />
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_choice_json" />
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_choice_json_selected" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_subtitle_description_chapters"
+                android:textSize="@dimen/help_content_size" />
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_choice_json_option" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_subtitle_description_translate"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                android:id="@+id/help_subtitle_data_title"
+                style="@style/TextTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="@string/help_subtitle_data_title"
+                android:textSize="@dimen/help_subtitle_size" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_subtitle_data"
+                android:textSize="@dimen/help_content_size" />
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_subtitle" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_subtitle_data_page"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_subtitle_data_button"
+                android:textSize="@dimen/help_content_size" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="@dimen/margin"
+                android:gravity="center|start"
+                android:orientation="horizontal">
+
+                <ImageView
+                    style="IconHelp"
+                    android:layout_width="@dimen/help_button_example_width"
+                    android:layout_height="@dimen/help_button_example_width"
+                    android:layout_margin="@dimen/margin"
+                    app:srcCompat="@drawable/ic_translate" />
+
+                <TextView
+                    style="@style/TextNormal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/help_subtitle_data_button_translate"
+                    android:textSize="@dimen/help_content_size" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="@dimen/margin"
+                android:gravity="center|start"
+                android:orientation="horizontal">
+
+                <ImageView
+                    style="IconHelp"
+                    android:layout_width="@dimen/help_button_example_width"
+                    android:layout_height="@dimen/help_button_example_width"
+                    android:layout_margin="@dimen/margin"
+                    app:srcCompat="@drawable/ic_draw_text" />
+
+                <TextView
+                    style="@style/TextNormal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/help_subtitle_data_button_draw"
+                    android:textSize="@dimen/help_content_size" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_draw" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:gravity="center|start"
+                android:orientation="horizontal">
+
+                <ImageView
+                    style="IconHelp"
+                    android:layout_width="@dimen/help_button_example_width"
+                    android:layout_height="@dimen/help_button_example_width"
+                    android:layout_margin="@dimen/margin"
+                    app:srcCompat="@drawable/ic_refresh" />
+
+                <TextView
+                    style="@style/TextNormal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/help_subtitle_data_button_find"
+                    android:textSize="@dimen/help_content_size" />
+            </LinearLayout>
+
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_search" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:gravity="center|start"
+                android:orientation="horizontal">
+
+                <ImageView
+                    style="IconHelp"
+                    android:layout_width="@dimen/help_button_example_width"
+                    android:layout_height="@dimen/help_button_example_width"
+                    android:layout_margin="@dimen/margin"
+                    app:srcCompat="@drawable/ic_navigate_before" />
+
+                <ImageView
+                    style="IconHelp"
+                    android:layout_width="@dimen/help_button_example_width"
+                    android:layout_height="@dimen/help_button_example_width"
+                    android:layout_marginRight="@dimen/margin"
+                    app:srcCompat="@drawable/ic_navigate_next" />
+
+                <TextView
+                    style="@style/TextNormal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/help_subtitle_data_button_next_before"
+                    android:textSize="@dimen/help_content_size" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/help_subtitle_vocabulary_title"
+                style="@style/TextTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="@string/help_subtitle_vocabulary_title"
+                android:textSize="@dimen/help_subtitle_size" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_subtitle_data"
+                android:textSize="@dimen/help_content_size" />
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_vocabulary" />
+
+            <com.google.android.material.divider.MaterialDivider
+                style="@style/MaterialDivider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin" />
+
+            <TextView
+                android:id="@+id/help_vocabulary_title"
+                style="@style/TextTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="@string/help_vocabulary_title"
+                android:textSize="@dimen/help_title_size" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_vocabulary_description"
+                android:textSize="@dimen/help_content_size" />
+
+            <com.google.android.material.divider.MaterialDivider
+                style="@style/MaterialDivider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin" />
+
+            <TextView
+                android:id="@+id/help_kanjis_title"
+                style="@style/TextTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="@string/help_kanji_title"
+                android:textSize="@dimen/help_title_size" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_kanji_description"
+                android:textSize="@dimen/help_content_size" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_kanji_use"
+                android:textSize="@dimen/help_content_size" />
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_kanji" />
+
+            <com.google.android.material.divider.MaterialDivider
+                style="@style/MaterialDivider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin"/>
+
+            <TextView
+                android:id="@+id/help_floating_popup_title"
+                style="@style/TextTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="@string/help_floating_popup_title"
+                android:textSize="@dimen/help_title_size" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_floating_popup_description"
+                android:textSize="@dimen/help_content_size" />
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_popup" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_floating_popup_resource"
+                android:textSize="@dimen/help_content_size" />
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_popup_draw" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_floating_popup_control"
+                android:textSize="@dimen/help_content_size" />
+
+            <ImageView
+                android:layout_width="@dimen/help_image_width"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:srcCompat="@mipmap/tutorial_popup_small" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_floating_popup_gesture"
+                android:textSize="@dimen/help_content_size" />
+
+            <com.google.android.material.divider.MaterialDivider
+                style="@style/MaterialDivider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin" />
+
+            <TextView
+                android:id="@+id/help_language_support_title"
+                style="@style/TextTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="@string/help_languages_support_title"
+                android:textSize="@dimen/help_title_size" />
+
+            <TextView
+                style="@style/TextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/help_languages_support_description"
+                android:textSize="@dimen/help_content_size" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/help_scroll_up"
+        style="@style/FloatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center"
+        android:layout_margin="@dimen/help_scrolling_button_margin"
+        android:contentDescription="@string/action_scroll_up"
+        app:borderWidth="@dimen/help_scroll_up_border"
+        android:src="@drawable/ico_animated_scroll_up"
+        app:fabCustomSize="@dimen/help_scroll_up_width"
+        app:maxImageSize="@dimen/help_scroll_up_image_width" />
+
+</FrameLayout>

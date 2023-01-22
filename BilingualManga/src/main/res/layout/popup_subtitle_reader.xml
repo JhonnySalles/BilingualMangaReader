@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppBackground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/margin_small"
+    android:paddingTop="@dimen/margin_small"
+    android:paddingRight="@dimen/margin_small"
+    android:paddingBottom="@dimen/margin_bottom"
+    tools:context=".view.ui.reader.PopupSubtitleReader">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/material_button_toggle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/cb_subtitle_page"
+            style="@style/TextInputDropMenu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/popup_reading_subtitle_page"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <AutoCompleteTextView
+                android:id="@+id/menu_autocomplete_subtitle_Page"
+                style="@style/AutoCompleteDropMenu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:ellipsize="start"
+                android:inputType="none"
+                android:maxLines="1"
+                tools:ignore="LabelFor" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/nav_change_language"
+            style="@style/Button.RoundedIconOnly"
+            android:layout_width="@dimen/popup_reader_button_width"
+            android:layout_height="@dimen/popup_reader_button_width"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="1dp"
+            android:minHeight="@dimen/popup_reader_button_min_height"
+            android:tooltipText="@string/popup_reading_button_translate"
+            app:icon="@drawable/ico_animated_translate"
+            app:iconTint="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/nav_draw"
+            app:layout_constraintTop_toBottomOf="@+id/cb_subtitle_page" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/nav_draw"
+            style="@style/Button.RoundedIconOnly"
+            android:layout_width="@dimen/popup_reader_button_width"
+            android:layout_height="@dimen/popup_reader_button_width"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="1dp"
+            android:minHeight="@dimen/popup_reader_button_min_height"
+            android:tooltipText="@string/popup_reading_button_draw"
+            app:icon="@drawable/ico_animated_draw_text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/nav_change_language"
+            app:layout_constraintRight_toLeftOf="@+id/nav_refresh"
+            app:layout_constraintTop_toBottomOf="@+id/cb_subtitle_page" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/nav_refresh"
+            style="@style/Button.RoundedIconOnly"
+            android:layout_width="@dimen/popup_reader_button_width"
+            android:layout_height="@dimen/popup_reader_button_width"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="1dp"
+            android:minHeight="@dimen/popup_reader_button_min_height"
+            android:tooltipText="@string/popup_reading_button_find"
+            app:icon="@drawable/ico_animated_text_refresh"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/nav_draw"
+            app:layout_constraintRight_toLeftOf="@+id/nav_before_text"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/nav_before_text"
+            style="@style/Button.RoundedIconOnly"
+            android:layout_width="@dimen/popup_reader_button_width"
+            android:layout_height="@dimen/popup_reader_button_width"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="1dp"
+            android:minHeight="@dimen/popup_reader_button_min_height"
+            android:tooltipText="@string/popup_reading_button_before"
+            app:icon="@drawable/ico_animated_text_before"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/nav_refresh"
+            app:layout_constraintRight_toLeftOf="@+id/nav_next_text"
+            app:layout_constraintTop_toBottomOf="@+id/cb_subtitle_page" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/nav_next_text"
+            style="@style/Button.RoundedIconOnly"
+            android:layout_width="@dimen/popup_reader_button_width"
+            android:layout_height="@dimen/popup_reader_button_width"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="1dp"
+            android:minHeight="@dimen/popup_reader_button_min_height"
+            android:tooltipText="@string/popup_reading_button_next"
+            app:icon="@drawable/ico_animated_text_next"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/nav_before_text"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cb_subtitle_page"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/txt_subtitle_title"
+        style="@style/TextTitle.SubtitleReader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="2dp"
+        android:textSize="@dimen/popup_reader_title" />
+
+    <TextView
+        android:id="@+id/txt_subtitle_content"
+        style="@style/TextNormal.SubtitleReader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="1dp"
+        android:textSize="@dimen/popup_reader_text" />
+
+</LinearLayout>
