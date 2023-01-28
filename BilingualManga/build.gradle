@@ -41,6 +41,7 @@ android {
             excludes += ['META-INF/CONTRIBUTORS.md', 'META-INF/LICENSE.md']
         }
     }
+    buildToolsVersion '31.0.0'
 }
 
 kapt {
