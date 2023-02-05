@@ -15,6 +15,7 @@
 
     <style name="ThemeBackground.Card.ContentBackground">
         <item name="android:background">?attr/colorTertiaryContainer</item>
+        <item name="android:alpha">0.7</item>
     </style>
 
     <style name="ThemeTextTitle" parent="Theme.MangaReader">
@@ -404,6 +405,7 @@
         <item name="android:textColor">?attr/colorOnTertiary</item>
         <item name="android:maxLines">3</item>
         <item name="android:ellipsize">start</item>
+        <item name="android:alpha">0.7</item>
     </style>
 
     <style name="TextNormal.Card.NumberPage" parent="TextNormal">
@@ -607,6 +609,7 @@
         <item name="android:layout_gravity">bottom</item>
         <item name="android:background">?attr/colorTertiaryContainer</item>
         <item name="android:orientation">vertical</item>
+        <item name="android:alpha">0.6</item>
     </style>
 
     <style name="ClockBattery" >

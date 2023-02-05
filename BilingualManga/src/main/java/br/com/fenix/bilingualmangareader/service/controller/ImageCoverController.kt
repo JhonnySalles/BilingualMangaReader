@@ -15,6 +15,7 @@ import br.com.fenix.bilingualmangareader.util.helpers.Util
 import kotlinx.coroutines.*
 import org.slf4j.LoggerFactory
 import java.io.File
+import java.io.IOException
 import java.io.InputStream
 
 
@@ -189,8 +190,10 @@ class ImageCoverController private constructor() {
             } catch (m: OutOfMemoryError) {
                 System.gc()
                 mLOGGER.error("Memory full, cleaning", m)
+            } catch (m: IOException) {
+                mLOGGER.error("Error to load image async: " + manga.name, m)
             } catch (e: Exception) {
-                mLOGGER.error("Error to load image async", e)
+                mLOGGER.error("Error to load image async: " + manga.name, e)
             }
         }
     }

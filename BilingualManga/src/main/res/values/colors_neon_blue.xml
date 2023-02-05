@@ -12,7 +12,7 @@
     <color name="blue_neon_theme_light_tertiary">#99ccff</color>
     <color name="blue_neon_theme_light_onTertiary">#FFFFFF</color>
     <color name="blue_neon_theme_light_tertiaryContainer">#3366cc</color>
-    <color name="blue_neon_theme_light_onTertiaryContainer">#CE212121</color>
+    <color name="blue_neon_theme_light_onTertiaryContainer">#212121</color>
     <color name="blue_neon_theme_light_error">#BA1A1A</color>
     <color name="blue_neon_theme_light_errorContainer">#FFDAD6</color>
     <color name="blue_neon_theme_light_onError">#FFFFFF</color>
@@ -42,7 +42,7 @@
     <color name="blue_neon_theme_dark_tertiary">#BAC6EA</color>
     <color name="blue_neon_theme_dark_onTertiary">#001a1a</color>
     <color name="blue_neon_theme_dark_tertiaryContainer">#3366cc</color>
-    <color name="blue_neon_theme_dark_onTertiaryContainer">#CE212121</color>
+    <color name="blue_neon_theme_dark_onTertiaryContainer">#212121</color>
     <color name="blue_neon_theme_dark_error">#FFB4AB</color>
     <color name="blue_neon_theme_dark_errorContainer">#93000A</color>
     <color name="blue_neon_theme_dark_onError">#690005</color>

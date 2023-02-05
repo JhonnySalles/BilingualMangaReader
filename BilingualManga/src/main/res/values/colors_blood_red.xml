@@ -11,8 +11,8 @@
     <color name="blood_theme_light_onSecondaryContainer">#800004</color>
     <color name="blood_theme_light_tertiary">#ff554d</color>
     <color name="blood_theme_light_onTertiary">#FFFFFF</color>
-    <color name="blood_theme_light_tertiaryContainer">#CE800004</color>
-    <color name="blood_theme_light_onTertiaryContainer">#CE212121</color>
+    <color name="blood_theme_light_tertiaryContainer">#800004</color>
+    <color name="blood_theme_light_onTertiaryContainer">#212121</color>
     <color name="blood_theme_light_error">#BA1A1A</color>
     <color name="blood_theme_light_errorContainer">#FFDAD6</color>
     <color name="blood_theme_light_onError">#FFFFFF</color>
@@ -42,7 +42,7 @@
     <color name="blood_theme_dark_tertiary">#ff8080</color>
     <color name="blood_theme_dark_onTertiary">#ffcccc</color>
     <color name="blood_theme_dark_tertiaryContainer">#b30000</color>
-    <color name="blood_theme_dark_onTertiaryContainer">#CE212121</color>
+    <color name="blood_theme_dark_onTertiaryContainer">#212121</color>
     <color name="blood_theme_dark_error">#FFB4AB</color>
     <color name="blood_theme_dark_errorContainer">#93000A</color>
     <color name="blood_theme_dark_onError">#690005</color>

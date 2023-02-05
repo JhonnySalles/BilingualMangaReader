@@ -12,7 +12,7 @@
     <color name="ocean_theme_light_tertiary">#b3b3ff</color>
     <color name="ocean_theme_light_onTertiary">#FFFFFF</color>
     <color name="ocean_theme_light_tertiaryContainer">#262673</color>
-    <color name="ocean_theme_light_onTertiaryContainer">#CE212121</color>
+    <color name="ocean_theme_light_onTertiaryContainer">#212121</color>
     <color name="ocean_theme_light_error">#BA1A1A</color>
     <color name="ocean_theme_light_errorContainer">#FFDAD6</color>
     <color name="ocean_theme_light_onError">#FFFFFF</color>
@@ -42,7 +42,7 @@
     <color name="ocean_theme_dark_tertiary">#66ffff</color>
     <color name="ocean_theme_dark_onTertiary">#99cfff</color>
     <color name="ocean_theme_dark_tertiaryContainer">#003d99</color>
-    <color name="ocean_theme_dark_onTertiaryContainer">#CE212121</color>
+    <color name="ocean_theme_dark_onTertiaryContainer">#212121</color>
     <color name="ocean_theme_dark_error">#FFB4AB</color>
     <color name="ocean_theme_dark_errorContainer">#93000A</color>
     <color name="ocean_theme_dark_onError">#690005</color>
