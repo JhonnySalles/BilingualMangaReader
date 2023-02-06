@@ -220,8 +220,10 @@ class ImageCoverController private constructor() {
             } catch (m: OutOfMemoryError) {
                 System.gc()
                 mLOGGER.error("Memory full, cleaning", m)
+            } catch (m: IOException) {
+                mLOGGER.error("Error to load image async: " + manga.name, m)
             } catch (e: Exception) {
-                mLOGGER.error("Error to load image array async", e)
+                mLOGGER.error("Error to load image async: " + manga.name, e)
             }
         }
     }
@@ -248,8 +250,10 @@ class ImageCoverController private constructor() {
             } catch (m: OutOfMemoryError) {
                 System.gc()
                 mLOGGER.error("Memory full, cleaning", m)
+            } catch (m: IOException) {
+                mLOGGER.error("Error to load image async: " + manga.name, m)
             } catch (e: Exception) {
-                mLOGGER.error("Error to load image array async", e)
+                mLOGGER.error("Error to load image async: " + manga.name, e)
             }
         }
     }

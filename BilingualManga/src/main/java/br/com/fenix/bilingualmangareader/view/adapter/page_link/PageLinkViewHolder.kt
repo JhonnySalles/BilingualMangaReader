@@ -85,6 +85,10 @@ class PageLinkViewHolder(itemView: View, private val listener: PageLinkCardListe
         mangaRoot.setOnClickListener(getDoubleClick(mangaRoot, page, true))
         pageRoot.setOnClickListener(getDoubleClick(pageRoot, page))
 
+        mangaName.background.alpha = 180
+        pageName.background.alpha = 180
+        dualPageName.background.alpha = 180
+
         mangaNumber.text = page.mangaPage.toString()
         mangaName.text = if (mUsePagePath && page.mangaPage != PageLinkConsts.VALUES.PAGE_EMPTY)
             page.mangaPagePath + "\\" + page.mangaPageName

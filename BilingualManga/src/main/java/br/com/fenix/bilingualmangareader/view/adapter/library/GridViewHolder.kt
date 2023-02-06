@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -64,6 +65,8 @@ class GridViewHolder(itemView: View, private val listener: MangaCardListener) :
         val cardView = itemView.findViewById<MaterialCardView>(R.id.manga_grid_card)
         val favorite = itemView.findViewById<ImageView>(R.id.manga_grid_favorite)
         val subtitle = itemView.findViewById<ImageView>(R.id.manga_grid_has_subtitle)
+
+        itemView.findViewById<LinearLayout>(R.id.manga_grid_detail).background.alpha = 150
 
         if (manga.favorite)
             favorite.visibility = View.VISIBLE
