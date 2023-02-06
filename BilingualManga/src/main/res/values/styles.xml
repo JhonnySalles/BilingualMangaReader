@@ -606,7 +606,7 @@
 
     <style name="Card.Detail" parent="Card">
         <item name="android:layout_gravity">bottom</item>
-        <item name="android:background">?attr/colorTertiaryContainer</item>
+        <item name="android:background">@drawable/grid_card_title_background</item>
         <item name="android:orientation">vertical</item>
     </style>
 

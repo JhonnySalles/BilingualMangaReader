@@ -15,6 +15,7 @@ import br.com.fenix.bilingualmangareader.model.enums.LibraryType
 import br.com.fenix.bilingualmangareader.service.controller.ImageCoverController
 import br.com.fenix.bilingualmangareader.service.listener.MangaCardListener
 import br.com.fenix.bilingualmangareader.util.constants.GeneralConsts
+import br.com.fenix.bilingualmangareader.view.components.TextViewWithBorder
 import br.com.fenix.bilingualmangareader.view.ui.library.LibraryFragment
 import com.google.android.material.card.MaterialCardView
 
@@ -59,14 +60,14 @@ class GridViewHolder(itemView: View, private val listener: MangaCardListener) :
 
     fun bind(manga: Manga) {
         val mangaImage = itemView.findViewById<ImageView>(R.id.manga_grid_image_cover)
-        val mangaTitle = itemView.findViewById<TextView>(R.id.manga_grid_text_title)
-        val mangaSubTitle = itemView.findViewById<TextView>(R.id.manga_grid_sub_title)
+        val mangaTitle = itemView.findViewById<TextViewWithBorder>(R.id.manga_grid_text_title)
+        val mangaSubTitle = itemView.findViewById<TextViewWithBorder>(R.id.manga_grid_sub_title)
         val mangaProgress = itemView.findViewById<ProgressBar>(R.id.manga_grid_progress)
         val cardView = itemView.findViewById<MaterialCardView>(R.id.manga_grid_card)
         val favorite = itemView.findViewById<ImageView>(R.id.manga_grid_favorite)
         val subtitle = itemView.findViewById<ImageView>(R.id.manga_grid_has_subtitle)
 
-        itemView.findViewById<LinearLayout>(R.id.manga_grid_detail).background.alpha = 150
+        //itemView.findViewById<LinearLayout>(R.id.manga_grid_detail).background.alpha = 150
 
         if (manga.favorite)
             favorite.visibility = View.VISIBLE

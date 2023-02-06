@@ -44,7 +44,7 @@
             app:layout_constraintRight_toRightOf="parent">
 
             <!-- Title, secondary and supporting text -->
-            <TextView
+            <br.com.fenix.bilingualmangareader.view.components.TextViewWithBorder
                 android:id="@+id/manga_grid_text_title"
                 style="@style/TextNormal.Card.Title"
                 android:layout_width="wrap_content"
@@ -52,7 +52,7 @@
                 android:textSize="@dimen/manga_grid_title_size"
                 android:transitionName="transition_manga_title"/>
 
-            <TextView
+            <br.com.fenix.bilingualmangareader.view.components.TextViewWithBorder
                 android:id="@+id/manga_grid_sub_title"
                 style="@style/TextNormal.Card"
                 android:layout_width="wrap_content"
@@ -60,7 +60,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginBottom="2dp"
                 android:singleLine="true"
-                android:textSize="@dimen/manga_grid_sub_title" />
+                android:textSize="@dimen/manga_grid_sub_title"/>
 
         </LinearLayout>
 
