@@ -498,12 +498,16 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         mViewModel.selectPage(page)
     }
 
-    private fun setManga(manga: Manga) {
-        changePage(manga.title, "", manga.bookMark)
-        mViewModel.clearChapter()
+    private fun setManga(manga: Manga, isRestore : Boolean = false) {
+        if (!isRestore) {
+            mViewModel.clearChapter()
+            mManga = manga
+            mRepository.updateLastAccess(manga)
+            setShortCutManga()
+        }
+
         mManga = manga
-        mRepository.updateLastAccess(manga)
-        setShortCutManga()
+        changePage(manga.title, "", manga.bookMark)
 
         var parse: Parse? = null
         try {
@@ -649,10 +653,8 @@ class ReaderActivity : AppCompatActivity(), OcrProcess {
         mLibrary = savedInstanceState.getSerializable(GeneralConsts.KEYS.OBJECT.LIBRARY) as Library
 
         val manga = (savedInstanceState.getSerializable(GeneralConsts.KEYS.OBJECT.MANGA) as Manga?)
-        if (manga != null) {
-            mManga = manga
-            changePage(manga.title, "", manga.bookMark)
-        }
+        if (manga != null)
+            setManga(manga, true)
     }
 
     private var mLastFloatingWindowOcr = false
